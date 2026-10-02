@@ -2,8 +2,8 @@
   "state": "WY",
   "stateName": "Wyoming",
   "draftedAt": "2026-04-13T21:50:19.573Z",
-  "total": 3,
-  "successful": 3,
+  "total": 4,
+  "successful": 4,
   "programs": [
     {
       "id": "state-parks-senior-discounts",
@@ -478,6 +478,109 @@
       "sourceUrl": "https://www.lincolninst.edu/app/uploads/legacy-files/gwipp/upload/sources/Wyoming/2017/WY_Tax_Refund_for_Elderly_and_Disabled_Wyoming_Department_of_Health_2013.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "National Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support Program",
+      "tagline": "It gives family caregivers temporary breaks, support group connections and help with specific needed services.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through 12 local providers (senior centers and community organizations); not available in 7 counties",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "National Family Caregiver Support Program helps unpaid family caregivers keep going. It gives family caregivers temporary breaks, support group connections and help with specific needed services.\n\nHelp can include respite care, support groups and help with specific needed services.\n\nServices are delivered locally, through 12 local providers (senior centers and community organizations); not available in 7 counties.\n\nCall the local caregiver provider listed for your area on the Wyoming Department of Health program page (mostly senior centers), or call the Community Living Section. Wyoming has no Area Agencies on Aging.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Adult (18+) caregiver of someone 60+",
+          "Adult (18+) caregiver of someone of any age with Alzheimer's disease or a related dementia",
+          "Not available in Albany, Niobrara, Park, Platte, Sublette, Washakie or Weston counties",
+          "In Johnson, Laramie and Sheridan counties only: relative caregivers 55+ raising children 17 or younger, or helping an adult 18-59 with a disability"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Adult (18+) caregiver of someone 60+",
+          "Adult (18+) caregiver of someone of any age with Alzheimer's disease or a related dementia",
+          "Not available in Albany, Niobrara, Park, Platte, Sublette, Washakie or Weston counties",
+          "In Johnson, Laramie and Sheridan counties only: relative caregivers 55+ raising children 17 or younger, or helping an adult 18-59 with a disability"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the local caregiver provider listed for your area on the Wyoming Department of Health program page (mostly senior centers), or call the Community Living Section. Wyoming has no Area Agencies on Aging.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the local caregiver provider listed for your area on the Wyoming Department of Health program page (mostly senior centers), or call the Community Living Section. Wyoming has no Area Agencies on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "National Family Caregiver Support Program (with local provider list)",
+            "url": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/"
+          },
+          {
+            "label": "Services by county",
+            "url": "https://health.wyo.gov/aging/communityliving/service-area-maps/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "WDH Community Living Section (toll-free)",
+          "phone": "(800) 442-2766",
+          "hours": null
+        },
+        {
+          "label": "WDH Community Living Section",
+          "phone": "(307) 777-7995",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

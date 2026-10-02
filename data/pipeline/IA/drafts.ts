@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.519Z
+ * Last updated: 2026-10-02T02:22:51.910Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1784,6 +1784,102 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-18"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Iowa Family Caregiver Support Program",
+      "shortName": "Family Caregiver Program",
+      "tagline": "Helps family caregivers with information, counseling, support groups, training and respite through Iowa's Area Agencies on Aging.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through six Area Agencies on Aging covering all 99 counties",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Iowa Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers with information, counseling, support groups, training and respite through Iowa's Area Agencies on Aging.\n\nHelp can include information about available services, help identifying needs and reaching services, family caregiver counseling, caregiver training, support groups, respite care, help finding ways to pay for respite and limited supplemental services.\n\nServices are delivered locally, through six Area Agencies on Aging covering all 99 counties.\n\nCall your local Area Agency on Aging. If you don't know which one serves your county, call the Iowa Aging and Disability Resource Center line (Iowa Compass) to speak to a system navigator.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Family caregiver aged 18+, or another adult chosen by the care recipient, giving informal care at home or in the community",
+          "Caring for someone 60+, or someone of any age with Alzheimer's disease or a related disorder",
+          "Grandparents or relatives 55+ raising a child 18 or younger, or an adult child 19-59 with a disability (may be limited by funds)"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Family caregiver aged 18+, or another adult chosen by the care recipient, giving informal care at home or in the community",
+          "Caring for someone 60+, or someone of any age with Alzheimer's disease or a related disorder",
+          "Grandparents or relatives 55+ raising a child 18 or younger, or an adult child 19-59 with a disability (may be limited by funds)"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your local Area Agency on Aging. If you don't know which one serves your county, call the Iowa Aging and Disability Resource Center line (Iowa Compass) to speak to a system navigator.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call your local Area Agency on Aging. If you don't know which one serves your county, call the Iowa Aging and Disability Resource Center line (Iowa Compass) to speak to a system navigator."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Iowa HHS Caregiver Resources",
+            "url": "https://hhs.iowa.gov/health-prevention/aging-services/caregiver-resources"
+          },
+          {
+            "label": "Find your Iowa Area Agency on Aging",
+            "url": "https://hhs.iowa.gov/family-community/aging-services/iowa-area-agencies-aging"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Iowa Aging and Disability Resource Center (Iowa Compass)",
+          "phone": "(800) 779-2001",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://hhs.iowa.gov/health-prevention/aging-services/caregiver-resources",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

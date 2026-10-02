@@ -2,8 +2,8 @@
   "state": "ND",
   "stateName": "North Dakota",
   "draftedAt": "2026-04-13T21:50:19.551Z",
-  "total": 3,
-  "successful": 3,
+  "total": 4,
+  "successful": 4,
   "programs": [
     {
       "id": "basic-care-assistance-program",
@@ -470,6 +470,99 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-18"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "North Dakota Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support Program",
+      "tagline": "Help for unpaid caregivers, including a caregiver coordinator, counseling, training, respite breaks and some supplies.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": []
+      },
+      "intro": "North Dakota Family Caregiver Support Program helps unpaid family caregivers keep going. Help for unpaid caregivers, including a caregiver coordinator, counseling, training, respite breaks and some supplies.\n\nHelp can include information about local services, a trained caregiver coordinator, counseling, support groups and training, respite care for caregivers who provide 24-hour care and supplemental services such as incontinence supplies and shower benches.\n\nCall the ND Aging and Disability Resource-LINK (TTY 711), email carechoice@nd.gov, or apply online at ND Care Choice. Services are free to qualifying people; caregivers may choose to contribute.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Caring for an adult age 60 or older",
+          "Caring for a person with Alzheimer's or another dementia, any age",
+          "Relative caregivers 55+ caring for a grandchild or other young relative 18 or younger",
+          "Relative caregivers 55+ caring for an adult child age 19-59 with a disability"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Caring for an adult age 60 or older",
+          "Caring for a person with Alzheimer's or another dementia, any age",
+          "Relative caregivers 55+ caring for a grandchild or other young relative 18 or younger",
+          "Relative caregivers 55+ caring for an adult child age 19-59 with a disability"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the ND Aging and Disability Resource-LINK (TTY 711), email carechoice@nd.gov, or apply online at ND Care Choice. Services are free to qualifying people; caregivers may choose to contribute.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the ND Aging and Disability Resource-LINK (TTY 711), email carechoice@nd.gov, or apply online at ND Care Choice. Services are free to qualifying people; caregivers may choose to contribute."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Family Caregiver Support Program (ND HHS)",
+            "url": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program"
+          },
+          {
+            "label": "Apply online (ND Care Choice)",
+            "url": "https://carechoice.nd.assistguide.net/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "ND Aging and Disability Resource-LINK (1-855-GO2LINK), toll-free",
+          "phone": "(855) 462-5465",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

@@ -10,6 +10,7 @@ import { pipelineDrafts } from "@/data/pipeline-drafts";
 import { allEpisodes } from "@/lib/aging-in-america-data";
 import { shouldIndexBenefitsProgram } from "@/lib/benefits/program-content-quality";
 import { listBrands, BRANDS_BASE_PATH } from "@/lib/brands";
+import { withoutDuplicates } from "@/lib/benefits/program-duplicates";
 
 export const dynamic = "force-dynamic";
 
@@ -169,7 +170,7 @@ export async function GET(request: Request) {
         if (!allStates.some((s) => s.id === slug)) {
           entries.push(xmlEntry(`${SITE_URL}/benefits/${slug}`, 0.5, "monthly"));
         }
-        for (const draft of drafts.programs ?? []) {
+        for (const draft of withoutDuplicates(abbrev, drafts.programs ?? [])) {
           if (!shouldIndexBenefitsProgram(draft)) continue;
           entries.push(xmlEntry(`${SITE_URL}/benefits/${slug}/${draft.id}`, 0.4, "monthly"));
         }

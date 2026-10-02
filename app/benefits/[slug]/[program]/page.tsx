@@ -7,6 +7,7 @@ import { ContentViewTracker } from "@/components/analytics/ContentViewTracker";
 import { getRelatedArticles } from "@/lib/content";
 import { getDisplayName } from "@/lib/program-name";
 import { getEnrichedProgram, findCanonicalDraftFor } from "@/lib/program-data";
+import { duplicateTarget } from "@/lib/benefits/program-duplicates";
 import {
   benefitsNoindexRobots,
   shouldDiscoverBenefitsProgram,
@@ -196,6 +197,10 @@ function canonicalRedirectFor(slug: string, programId: string): string | null {
 
 export default async function BenefitsProgramPage({ params }: Props) {
   const { slug, program: programId } = await params;
+  // A program held twice in the data: send its second page to the kept one.
+  const abbrev = getStateById(slug)?.abbreviation;
+  const kept = abbrev ? duplicateTarget(abbrev, programId) : null;
+  if (kept) permanentRedirect(`/benefits/${slug}/${kept}`);
   const canonical = canonicalRedirectFor(slug, programId);
   if (canonical) permanentRedirect(canonical);
   const resolved = resolveProgram(slug, programId);

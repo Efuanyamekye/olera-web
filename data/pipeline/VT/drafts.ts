@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.381Z
+ * Last updated: 2026-10-02T02:22:51.939Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2537,6 +2537,100 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.seniorsolutionsvt.org/services/veterans/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "National Family Caregiver Program (NFCP)",
+      "shortName": "Family Caregiver Support",
+      "tagline": "Vermont's five Area Agencies on Aging help family caregivers with respite, support and grants for services like in-home care and adult day.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through Vermont's five Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "National Family Caregiver Program (NFCP) helps unpaid family caregivers keep going. Vermont's five Area Agencies on Aging help family caregivers with respite, support and grants for services like in-home care and adult day.\n\nHelp can include respite care, in-home care, homemaker services, adult day services, caregiver education and training, support groups and counseling referrals.\n\nServices are delivered locally, through Vermont's five Area Agencies on Aging.\n\nCall the Vermont Helpline; it connects you to your local Area Agency on Aging, each of which runs a caregiver support program and handles both the NFCP and Dementia Respite Grants.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Family caregiver of an older Vermonter (60+)",
+          "Dementia Respite Grant: unpaid caregiver of someone with irreversible dementia"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Family caregiver of an older Vermonter (60+)",
+          "Dementia Respite Grant: unpaid caregiver of someone with irreversible dementia"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Vermont Helpline; it connects you to your local Area Agency on Aging, each of which runs a caregiver support program and handles both the NFCP and Dementia Respite Grants.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the Vermont Helpline; it connects you to your local Area Agency on Aging, each of which runs a caregiver support program and handles both the NFCP and Dementia Respite Grants."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Dementia Care & Family Caregiver Support (DAIL)",
+            "url": "https://asd.vermont.gov/services/dementia-family"
+          },
+          {
+            "label": "Vermont's five Area Agencies on Aging (DAIL)",
+            "url": "https://asd.vermont.gov/services/aaa-oaa-services"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Vermont Older Adults Helpline (routes to your local Area Agency on Aging)",
+          "phone": "(800) 642-5119",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://asd.vermont.gov/services/dementia-family",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

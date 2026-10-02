@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-22T10:37:49.041Z
+ * Last updated: 2026-10-02T02:22:51.928Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -943,6 +943,100 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "National Family Caregiver Support Program (NFCSP)",
+      "shortName": "Caregiver Support Program",
+      "tagline": "The state's aging help line connects family caregivers of older adults with respite, training, counseling and other support.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through New Mexico's Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "National Family Caregiver Support Program (NFCSP) helps unpaid family caregivers keep going. The state's aging help line connects family caregivers of older adults with respite, training, counseling and other support.\n\nHelp can include respite care (adult day care, in-home care), caregiver training, information and referral, counseling, support groups, homemaker services and care coordination.\n\nServices are delivered locally, through New Mexico's Area Agencies on Aging.\n\nCall the Aging and Disability Resource Center or use live chat on the ALTSD site. They connect you with caregiver services through your local Area Agency on Aging.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Family caregivers of older adults",
+          "No income or asset limits for Older Americans Act Title III services"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Family caregivers of older adults",
+          "No income or asset limits for Older Americans Act Title III services"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Aging and Disability Resource Center or use live chat on the ALTSD site. They connect you with caregiver services through your local Area Agency on Aging.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the Aging and Disability Resource Center or use live chat on the ALTSD site. They connect you with caregiver services through your local Area Agency on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Caregiver Support (ALTSD)",
+            "url": "https://www.aging.nm.gov/long-term-care/caregiver-resources/caregiver-support/"
+          },
+          {
+            "label": "Aging Network Services and Area Agencies on Aging",
+            "url": "https://www.aging.nm.gov/aging-network/aging-network-services/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Aging and Disability Resource Center (ADRC), toll-free",
+          "phone": "(800) 432-2080",
+          "hours": "Mon-Fri 7:45am-5pm MT"
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://www.aging.nm.gov/long-term-care/caregiver-resources/caregiver-support/",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

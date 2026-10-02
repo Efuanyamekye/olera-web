@@ -21,10 +21,11 @@
 
 import crypto from "crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getEnrichedProgram, getCanonicalProgramIds, getStateSlug } from "./program-data";
+import { getEnrichedProgram, getCanonicalProgramIds, getStateSlug, getStateAbbrev } from "./program-data";
 import { US_STATES } from "./us-states";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { matchesCareNeed, type CareNeed } from "./benefits/match-care-need";
+import { duplicateTarget } from "@/lib/benefits/program-duplicates";
 
 /**
  * Generate a 16-character base64url token. Uses crypto.randomBytes for
@@ -111,9 +112,17 @@ export async function lookupResultByToken(
   // Everyone else keeps the care-need list.
   const finderIds = (profile.metadata as { benefits_results?: { finder_program_ids?: unknown } } | null)
     ?.benefits_results?.finder_program_ids;
+  // An id saved before a duplicate was folded into its kept program reads as
+  // the kept one (and appears once), instead of silently dropping.
+  const abbrev = getStateAbbrev(stateId);
   const finderList = Array.isArray(finderIds)
-    ? finderIds
-        .filter((id): id is string => typeof id === "string")
+    ? [
+        ...new Set(
+          finderIds
+            .filter((id): id is string => typeof id === "string")
+            .map((id) => duplicateTarget(abbrev, id) ?? id),
+        ),
+      ]
         .map((id) => allPrograms.find((p) => p.id === id))
         .filter((p): p is WaiverProgram => !!p)
     : [];

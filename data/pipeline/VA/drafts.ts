@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.486Z
+ * Last updated: 2026-10-02T02:22:51.939Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -832,6 +832,103 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dars.virginia.gov/aging/senior-employment-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Caregiver Support (Area Agencies on Aging)",
+      "shortName": "Caregiver Support",
+      "tagline": "Your local Area Agency on Aging helps family caregivers with respite, support groups and counseling.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through 25 local Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Caregiver Support (Area Agencies on Aging) helps unpaid family caregivers keep going. Your local Area Agency on Aging helps family caregivers with respite, support groups and counseling.\n\nHelp can include respite care, caregiver support groups, individual counseling and a caregiver resource guide.\n\nServices are delivered locally, through 25 local Area Agencies on Aging.\n\nContact your local Area Agency on Aging (25 statewide), the front door to aging services in Virginia. Use the DARS 'Find Your Local Area Agency on Aging' page or call the Division for Aging Services toll-free line.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Eligibility criteria apply and vary by Area Agency on Aging"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Eligibility criteria apply and vary by Area Agency on Aging"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Contact your local Area Agency on Aging (25 statewide), the front door to aging services in Virginia. Use the DARS 'Find Your Local Area Agency on Aging' page or call the Division for Aging Services toll-free line.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Contact your local Area Agency on Aging (25 statewide), the front door to aging services in Virginia. Use the DARS 'Find Your Local Area Agency on Aging' page or call the Division for Aging Services toll-free line."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Caregiver Support (DARS)",
+            "url": "https://dars.virginia.gov/aging/caregiver-support/"
+          },
+          {
+            "label": "Find Your Local Area Agency on Aging",
+            "url": "https://dars.virginia.gov/aging/home-community/find-local-aaa/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "DARS Division for Aging Services (toll-free)",
+          "phone": "(800) 552-3402",
+          "hours": null
+        },
+        {
+          "label": "DARS Division for Aging Services",
+          "phone": "(804) 662-9333",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://dars.virginia.gov/aging/caregiver-support/",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {
