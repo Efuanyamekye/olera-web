@@ -20,6 +20,8 @@
 
 **Where I was wrong (corrected same day).** Headline "families don't answer" and the call sheet ignored `family_touches`, where Ces had already logged calls to nearly every family. "30 Sep gate not done" was wrong: the 30 Sep entry below records it. Cause: never read `family_touches`; grepped SCRATCHPAD with `tail` (oldest end). Fixed both in `.claude/commands/ad-boost-audit.md`. Also briefly mangled two `admin_note`s (shell `read` ate `\n`); restored from pre-write copy and verified all 15.
 
+**Post-mortem.** Logged in `docs/POSTMORTEMS.md` (2 Oct): audit missed `family_touches` and read SCRATCHPAD with `tail`. Command fixed in #2323 (added based on this post-mortem). The admin-merge classifier denial is TJ's settings call, not a command change.
+
 **Next Up.**
 - TJ: Graceful Google at $150 (by 4 Oct). Share the call sheet with Ces; consider a short correction in the #careseeker-support thread (the posted message implied she hadn't called them).
 - Ces: call Sarah, Susan (Hoop, 1 Oct) and Lisa (Cleveland). If Sarah/Susan numbers also fail, Hoop v3 is collecting stale Facebook-prefilled numbers; fix before Liz's 15 Oct renewal.
