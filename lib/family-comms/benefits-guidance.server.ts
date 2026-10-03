@@ -334,15 +334,11 @@ export async function getProgramsForFamily(
     if (p.requires_veteran === true && facts.veteranStatus === "no") continue;
     if (p.requires_medicaid && (facts.medicaidStatus === "doesNotHave" || facts.medicaidStatus === "denied")) continue;
     if (p.min_age != null && ageMeetsMin({ exact: facts.age, band: facts.ageBand }, p.min_age) === false) continue;
-    // Income: exclude only when the band's FLOOR clears the program limit —
-    // a held fact, not a guess (Phase 3 real-situation capture). Suppressed
-    // entirely when a spouse lives in the household, because the band is the
-    // recipient's income and the limit is a household one. See
-    // incomeBandIsHouseholdScoped.
-    if (incomeUsable) {
-      const floor = incomeBandFloor(facts.incomeBand);
-      if (floor != null && p.max_income_single != null && floor > p.max_income_single) continue;
-    }
+    // Income: max_income_single is the March 2026 seed, which disagrees with
+    // the fact-checked drafts on 91 of 136 programs (DC Safe at Home carried
+    // $6,046 against a real $8,300). The finder stopped excluding on it on
+    // 2 Oct 2026; this path does the same, so a family tapping an email chip
+    // sees the same programs as the quiz. The column still boosts below.
     // Don't LEAD with veteran-only programs when veteran status is unknown —
     // the quiz asks; a wrong guess here reads as "they don't know us at all".
     if (p.requires_veteran === true && facts.veteranStatus !== "yes") continue;
