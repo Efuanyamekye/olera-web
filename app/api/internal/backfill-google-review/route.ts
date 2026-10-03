@@ -1,72 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
-import { fetchGoogleReviews } from "@/lib/google-places";
+import { refreshGoogleReviews } from "@/lib/providers";
 
 /**
  * POST /api/internal/backfill-google-review
  *
- * On-demand backfill: called (non-blocking) when a provider page is viewed
- * and the provider has a place_id but no cached google_reviews_data.
+ * Fired (non-blocking) from a provider page view in two cases:
+ *  - the provider has a Place ID but no cached Google data (min_days 0), or
+ *  - the page is claimed and its cache is over 90 days old (min_days 90), so a
+ *    provider's own page never shows a count months out of date between
+ *    monthly cron runs (two claimed providers wrote in on 2 Oct 2026).
  *
- * Supports both olera-providers (source=ios) and business_profiles (source=bp).
+ * `min_days` guards repeat views: Google is called only when the cache is at
+ * least that old. When Google returns nothing for a page with no cache, an
+ * empty record is written so later views stop re-triggering the fetch.
  */
 export async function POST(request: NextRequest) {
   try {
-    const { provider_id, place_id, source } = await request.json();
-
+    const { provider_id, place_id, source, min_days } = await request.json();
     if (!provider_id || !place_id) {
       return NextResponse.json({ error: "Missing provider_id or place_id" }, { status: 400 });
     }
-
-    const data = await fetchGoogleReviews(place_id);
-
-    // If Google returns null (no reviews, or API error), still write a sentinel so
-    // subsequent visits don't re-trigger this route. The cost of a stale "no reviews"
-    // marker on transient errors is far lower than a per-pageview re-fetch loop.
-    const cacheValue = data ?? {
-      rating: 0,
-      review_count: 0,
-      reviews: [],
-      last_synced: new Date().toISOString(),
-    };
-
-    const db = getServiceClient();
-
-    if (source === "bp") {
-      // Business profile — store in metadata.google_reviews_data
-      const { data: bp } = await db
-        .from("business_profiles")
-        .select("metadata")
-        .eq("id", provider_id)
-        .single();
-
-      const existingMeta = (bp?.metadata as Record<string, unknown>) ?? {};
-      const { error } = await db
-        .from("business_profiles")
-        .update({ metadata: { ...existingMeta, google_reviews_data: cacheValue } })
-        .eq("id", provider_id);
-
-      if (error) {
-        console.error(`[backfill-google-review] BP update failed for ${provider_id}:`, error);
-        return NextResponse.json({ error: "DB update failed" }, { status: 500 });
-      }
-    } else {
-      // olera-providers — store in google_reviews_data column
-      const { error } = await db
-        .from("olera-providers")
-        .update({ google_reviews_data: cacheValue })
-        .eq("provider_id", provider_id);
-
-      if (error) {
-        console.error(`[backfill-google-review] Update failed for ${provider_id}:`, error);
-        return NextResponse.json({ error: "DB update failed" }, { status: 500 });
-      }
-    }
-
-    return NextResponse.json({
-      message: data ? "Backfilled" : "Backfilled (no reviews)",
-      provider_id,
-    });
+    const outcome = await refreshGoogleReviews(
+      getServiceClient(),
+      { source: source === "bp" ? "bp" : "ios", providerId: String(provider_id), placeId: String(place_id) },
+      { minDays: Number(min_days) > 0 ? Number(min_days) : 0, writeSentinel: true },
+    );
+    return NextResponse.json({ provider_id, refreshed: outcome.refreshed, reason: outcome.refreshed ? undefined : outcome.reason });
   } catch (err) {
     console.error("[backfill-google-review] Error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
