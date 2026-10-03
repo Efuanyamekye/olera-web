@@ -162,7 +162,10 @@ for (const st of states) {
           applied = true;
         } else if (f.field === 'phone') {
           const to = fmtPhone(f.verifiedValue);
-          if (draft.contacts && draft.contacts.length && draft.contacts[0].phone) draft.contacts[0].phone = to; else draft.phone = to;
+          // The page's call button dials program.phone and the letter names
+          // contacts[0].phone; both must move, or the lint flags the split.
+          if (draft.contacts && draft.contacts.length && draft.contacts[0].phone) draft.contacts[0].phone = to;
+          draft.phone = to;
           applied = true;
         }
         if (applied) {
