@@ -7,6 +7,30 @@
 
 ## Current Focus
 
+### 2026-10-03 — Google review counts: cron fixed, refresh buttons, inbox page in prod (`graceful-franklin`, #2338 → #2345, #2347 → #2348)
+
+**Trigger:** Ces flagged two claimed providers (Happy Sunflower Senior Living, Preferred Care at Home of Denton) whose Olera pages showed 5 and 2 Google reviews against 14 and 39 on Google. Caches were from March and May.
+
+**Root cause:** `getProvidersForReviewRefresh` had `.limit(5000)`, unordered, on 70,390 providers, so the monthly cron saw ~7% of the directory; and "claimed" was matched by slug, which differs for ~10% of claimed accounts. 781 of 828 claimed providers were >90d stale while the cron spent ~$116/month mostly on unclaimed listings.
+
+**Shipped (#2347, prod #2348):**
+- `lib/providers/review-refresh-plan.ts`: pure plan, claimed (by `source_provider_id`) first, then viewed-in-30d, then long tail, cap `GOOGLE_REVIEWS_REFRESH_CAP` (5,000 ≈ $125). Checked by `scripts/check-google-reviews-refresh.ts`.
+- `refreshGoogleReviews` in `lib/providers/reviews.server.ts` behind every surface: provider "Refresh reviews" in account settings (7-day wait), admin button on `/admin/directory/[providerId]` (Google Rating section, `force`), on-view refresh of a claimed page >90d stale, the no-cache backfill.
+- Pre-test found two UI/data bugs, fixed: a claimed account can hold its own stale Google copy (322 of 937) that shadowed the directory row (`newerGoogleReviews` in adapters, newer wins); 468 of 937 claimed accounts keep their Place ID on the directory row only, so the settings button was hidden (now shows whenever a cached count exists).
+- One-off refresh of all stale claimed providers, TJ-approved, ~$19: 659 updated, 116 Google-empty (no rating or bad Place ID; cron retries 1 Nov), 0 errors. 0 claimed providers with a working Place ID are stale now.
+
+**Also in prod today:** `/admin/inbox/today` (#2338 → #2345): the day's numbered Cortex items in the browser, approve/edit/check/skip, providers drafted first, cap 6.
+
+**Sent:** Robbie (ZIP list received; launch date + referral tracking owed "by next week"). Heather Buck, Concierge Care, 14 FL locations (Fort Myers entry duplicates Daytona; offered a call). Ces: two reply drafts + "fix is live" with the one-click instructions.
+
+**Non-obvious:** Google's `userRatingCount` includes star-only ratings, so a provider's own count can be lower than Olera's (Yanxia: 8 vs 14). Say so, don't "fix" it. Happy Sunflower's public page title still reads the directory name ("Cottage") though the claimed display_name is "Senior Living"; untouched.
+
+**Next Up:**
+1. **Heather's 14 listings** (we said we'd set them up and send links): compare against `olera-providers`, create the missing, link the existing, send her the links. Multi-location under one login is a real product gap.
+2. **Robbie:** launch date + referral tracking by next week; needs a new North Texas Meta form from his 243 ZIPs (spend = TJ's call).
+3. Read the first Slack + organic daily report (3 Oct, 8 AM Bangkok) for noise and false "owed" items; try one item on `/admin/inbox/today`.
+4. The 116 Google-empty claimed providers: likely bad Place IDs; worth a pass when someone has an hour.
+
 ### 2026-10-02 (night) — Cortex daily report: one message, Slack + organic, inbox on a web page (`graceful-franklin`)
 
 **In production:**
