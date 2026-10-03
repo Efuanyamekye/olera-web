@@ -214,6 +214,41 @@ function AccountSettingsContent() {
   // listing sits at the profile's own street address, so this is a guarded
   // change, not the old "contact support" dead end.
   const [googleChanging, setGoogleChanging] = useState(false);
+  // "Refresh reviews": the provider re-syncs their own Google rating and
+  // review count, at most once a week. Two claimed providers wrote to support
+  // for this on 2 Oct 2026.
+  type GoogleReviewStatus = { rating: number | null; review_count: number | null; last_synced: string | null; can_refresh: boolean; next_allowed_at: string | null };
+  const [googleReviewStatus, setGoogleReviewStatus] = useState<GoogleReviewStatus | null>(null);
+  const [googleRefreshing, setGoogleRefreshing] = useState(false);
+  const [googleRefreshMessage, setGoogleRefreshMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  useEffect(() => {
+    if (!isProvider) return;
+    let cancelled = false;
+    fetch("/api/provider/google-business/refresh")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => { if (!cancelled && json) setGoogleReviewStatus(json as GoogleReviewStatus); })
+      .catch(() => { /* status is a nicety; the button still works */ });
+    return () => { cancelled = true; };
+  }, [isProvider, activeProfile?.id]);
+  const handleGoogleRefresh = async () => {
+    setGoogleRefreshing(true);
+    setGoogleRefreshMessage(null);
+    try {
+      const res = await fetch("/api/provider/google-business/refresh", { method: "POST" });
+      const json = await res.json();
+      if (res.ok) {
+        setGoogleReviewStatus(json as GoogleReviewStatus);
+        setGoogleRefreshMessage({ ok: true, text: `Updated. Your page now shows ${json.rating} stars and ${json.review_count} Google reviews.` });
+      } else {
+        if (json.last_synced !== undefined) setGoogleReviewStatus(json as GoogleReviewStatus);
+        setGoogleRefreshMessage({ ok: false, text: json.error ?? "Refresh failed. Try again in a minute." });
+      }
+    } catch {
+      setGoogleRefreshMessage({ ok: false, text: "Network error. Try again in a minute." });
+    } finally {
+      setGoogleRefreshing(false);
+    }
+  };
 
 
   const savingNotification = useRef(false);
@@ -851,6 +886,34 @@ function AccountSettingsContent() {
                           </div>
                         )}
                       </div>
+                    )}
+                    {/* Refresh row: shown whenever Olera holds a cached Google count for this
+                        listing, connected or not. 468 of 937 claimed accounts (2 Oct 2026) keep
+                        their Place ID on the linked directory row, not in account metadata. */}
+                    {googleReviewStatus?.review_count != null && (
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div className="flex items-center justify-between gap-4">
+                        <p className="text-sm text-gray-600">
+                          {googleReviewStatus?.review_count != null
+                            ? <>Olera shows <span className="font-semibold text-gray-900">{googleReviewStatus.rating} stars, {googleReviewStatus.review_count} Google reviews</span>{googleReviewStatus.last_synced ? `, synced ${new Date(googleReviewStatus.last_synced).toLocaleDateString("en-US", { month: "short", day: "numeric" })}` : ""}.</>
+                            : "Your Google rating and review count are pulled from this listing."}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={handleGoogleRefresh}
+                          disabled={googleRefreshing || googleReviewStatus?.can_refresh === false}
+                          className="text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {googleRefreshing ? "Refreshing..." : "Refresh reviews"}
+                        </button>
+                      </div>
+                      {googleReviewStatus?.can_refresh === false && googleReviewStatus.next_allowed_at && !googleRefreshMessage && (
+                        <p className="mt-1 text-xs text-gray-500">Refreshed recently. Available again {new Date(googleReviewStatus.next_allowed_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}.</p>
+                      )}
+                      {googleRefreshMessage && (
+                        <p className={`mt-1 text-xs ${googleRefreshMessage.ok ? "text-gray-600" : "text-red-700"}`}>{googleRefreshMessage.text}</p>
+                      )}
+                    </div>
                     )}
                   </div>
                 )}

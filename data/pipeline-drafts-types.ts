@@ -100,6 +100,9 @@ export interface AppliedCorrection {
   flaggedAt: string;
   appliedAt: string;
   appliedBy: string;
+  /** Why a person applied it, when the judge did not (e.g. an annual
+   *  figure stored monthly). */
+  note?: string;
 }
 
 export interface ReviewItem {

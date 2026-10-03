@@ -643,12 +643,21 @@ export default async function ProviderPage({
       .or("last_viewed_at.is.null,last_viewed_at.lt." + new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       .then(() => { /* fire and forget */ });
 
-    // Task 7: On-demand backfill if provider has place_id but no cached reviews
-    if (providerPlaceId && !googleReviewsData) {
+    // Task 7: On-demand Google refresh. Two cases: no cached reviews at all, or
+    // a claimed page whose cache is over 90 days old (claimed providers notice;
+    // two wrote in on 2 Oct 2026). A claimed page inherits its cache from the
+    // linked directory row, so the refresh is written there, not to the account.
+    const reviewsStale = !googleReviewsData?.last_synced
+      || Date.parse(googleReviewsData.last_synced) < Date.now() - 90 * 24 * 60 * 60 * 1000;
+    const isClaimedPage = actualClaimState === "claimed";
+    if (providerPlaceId && (!googleReviewsData || (isClaimedPage && reviewsStale))) {
+      const target = profile.source_provider_id
+        ? { provider_id: profile.source_provider_id, source: "ios" }
+        : { provider_id: rawProviderId, source: providerSource };
       fetch(new URL("/api/internal/backfill-google-review", process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider_id: rawProviderId, place_id: providerPlaceId, source: providerSource }),
+        body: JSON.stringify({ ...target, place_id: providerPlaceId, min_days: googleReviewsData ? 90 : 0 }),
       }).catch(() => { /* fire and forget */ });
     }
   }

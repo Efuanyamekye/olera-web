@@ -43,6 +43,26 @@ export default function AdminDirectoryDetailPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [googleRefreshing, setGoogleRefreshing] = useState(false);
+  const [googleRefreshResult, setGoogleRefreshResult] = useState<{ ok: boolean; text: string; canForce?: boolean } | null>(null);
+  async function refreshGoogleReviews(force: boolean) {
+    setGoogleRefreshing(true);
+    setGoogleRefreshResult(null);
+    try {
+      const res = await fetch(`/api/admin/google-reviews/refresh?provider_id=${encodeURIComponent(providerId)}${force ? "&force=1" : ""}`);
+      const json = await res.json();
+      if (res.ok) {
+        setGoogleRefreshResult({ ok: true, text: `Updated: ${json.rating} stars, ${json.review_count} reviews on Google.` });
+        if (json.rating != null) updateField("google_rating", json.rating);
+      } else {
+        setGoogleRefreshResult({ ok: false, text: json.error ?? `Refresh failed (${res.status}).`, canForce: res.status === 429 });
+      }
+    } catch {
+      setGoogleRefreshResult({ ok: false, text: "Network error. Try again." });
+    } finally {
+      setGoogleRefreshing(false);
+    }
+  }
   const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [originalData, setOriginalData] = useState<Record<string, unknown>>({});
   const [images, setImages] = useState<ImageMetadata[]>([]);
@@ -786,6 +806,27 @@ export default function AdminDirectoryDetailPage() {
         <Section title="Google Rating">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <FieldInput label="Google Rating" value={formData.google_rating as string} onChange={(v) => updateField("google_rating", v === "" ? null : Number(v))} type="number" step="0.1" />
+          </div>
+          {/* The cached rating and review count the public page shows. A provider
+              writing in "Olera shows 2 reviews, Google has 39" is fixed here. */}
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled={!formData.place_id || googleRefreshing}
+              onClick={() => void refreshGoogleReviews(false)}
+              className="px-3 py-1.5 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {googleRefreshing ? "Refreshing from Google..." : "Refresh reviews from Google"}
+            </button>
+            {googleRefreshResult && (
+              <span className={`text-sm ${googleRefreshResult.ok ? "text-gray-700" : "text-red-700"}`}>
+                {googleRefreshResult.text}
+                {!googleRefreshResult.ok && googleRefreshResult.canForce && (
+                  <button type="button" className="ml-2 underline" onClick={() => void refreshGoogleReviews(true)}>Refresh anyway</button>
+                )}
+              </span>
+            )}
+            {!formData.place_id && <span className="text-sm text-gray-500">Set a Google Place ID above first.</span>}
           </div>
         </Section>
 

@@ -931,7 +931,7 @@ export const CRON_REGISTRY: CronJob[] = [
   {
     id: "google-reviews",
     name: "Google reviews refresh",
-    description: "Monthly tiered refresh of Google review data: Tier 1 claimed/verified (>30d stale), Tier 2 recently-viewed (>30d stale), Tier 3 long tail (>90d stale or never synced).",
+    description: "Monthly refresh of cached Google ratings and review counts, every provider considered (paged, not the first 5,000): claimed providers over 90 days stale first, then recently viewed, then the long tail, cut at GOOGLE_REVIEWS_REFRESH_CAP fetches (default 5,000, about $125). Providers and admins can also refresh one listing on demand.",
     recipientCohort: "(No recipients — a data refresh job.)",
     audience: "Data & maintenance",
     fn: "refresh",

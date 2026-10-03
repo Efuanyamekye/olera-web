@@ -1,27 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { fetchGoogleReviews } from "@/lib/google-places";
-import type { GoogleReviewsData } from "@/lib/types";
 import { withCronRun } from "@/lib/crons/run";
-import {
-  getClaimedProviderSlugs,
-  getProvidersForReviewRefresh,
-  updateProviderGoogleReviews,
-} from "@/lib/providers";
+import { getClaimedProviderIds, getProvidersForReviewRefresh, updateProviderGoogleReviews } from "@/lib/providers";
+import { DEFAULT_REFRESH_CAP, planReviewRefresh } from "@/lib/providers/review-refresh-plan";
 
 /**
  * GET /api/cron/google-reviews
  *
- * Tiered monthly cron — refreshes Google review data for providers based on activity.
+ * Monthly refresh of cached Google ratings and review counts, claimed
+ * providers first. The plan (lib/providers/review-refresh-plan.ts) orders
+ * every stale provider: claimed, then viewed in the last 30 days, then the
+ * long tail, and cuts at a budget. Before 2 Oct 2026 the cron read only the
+ * first 5,000 of 70,390 providers and matched "claimed" on a slug that differs
+ * for one in ten claimed accounts, so claimed providers stayed stale for
+ * months (two wrote in). Runs the 1st of each month at 3 AM UTC.
  *
- * Tier 1: Claimed/verified providers — refresh if >90 days stale
- * Tier 2: Recently viewed providers (last 30 days) — refresh if >90 days stale
- * Tier 3: Long tail — refresh if >90 days stale or never synced
- *
- * Runs 1st of each month at 3 AM UTC. Reviews change slowly, so a 90-day
- * staleness window across all tiers is plenty fresh and ~cuts recurring cost.
- * The `reviews` field is the Places Enterprise+Atmosphere SKU (~$25/1K).
+ * Budget: GOOGLE_REVIEWS_REFRESH_CAP fetches per run (default 5,000, about
+ * $125 at the Places reviews SKU). Claimed providers with a Place ID numbered
+ * 828 on 2 Oct, so they always fit.
  */
+export const maxDuration = 300;
+
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -29,97 +29,45 @@ export async function GET(request: NextRequest) {
   }
 
   return withCronRun("google-reviews", async () => {
-  const db = getServiceClient();
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000).toISOString();
+    const db = getServiceClient();
+    const cap = Number(process.env.GOOGLE_REVIEWS_REFRESH_CAP) > 0 ? Number(process.env.GOOGLE_REVIEWS_REFRESH_CAP) : DEFAULT_REFRESH_CAP;
 
-  const stats = { tier1: 0, tier2: 0, tier3: 0, updated: 0, errors: 0, skipped: 0 };
-
-  try {
-    // ── Tier 1: Claimed providers with stale data ──
-    // These are providers who've claimed their page (have a matching business_profile)
-    const claimedSlugSet = await getClaimedProviderSlugs(db);
-
-    // ── Fetch all providers needing refresh ──
-    // Single query: has place_id, not deleted, stale or never synced
-    let providers;
+    let plan;
     try {
-      providers = await getProvidersForReviewRefresh(db);
-    } catch {
-      // getProvidersForReviewRefresh already logged the underlying error.
+      const [claimedIds, providers] = await Promise.all([getClaimedProviderIds(db), getProvidersForReviewRefresh(db)]);
+      plan = planReviewRefresh(providers, claimedIds, new Date(), cap);
+    } catch (err) {
+      console.error("[google-reviews-cron] Could not plan the refresh:", err);
       return NextResponse.json({ error: "DB error" }, { status: 500 });
     }
 
-    if (!providers.length) {
-      return NextResponse.json({ message: "No providers to refresh", stats });
-    }
+    const stats = { ...plan.counts, updated: 0, empty: 0, errors: 0 };
+    if (!plan.items.length) return NextResponse.json({ message: "No providers to refresh", stats });
 
-    // Categorize into tiers
-    const toRefresh: { provider_id: string; place_id: string; tier: number }[] = [];
-
-    for (const p of providers) {
-      const existing = p.google_reviews_data as GoogleReviewsData | null;
-      const lastSynced = existing?.last_synced ? new Date(existing.last_synced) : null;
-      const isClaimed = claimedSlugSet.has(p.slug as string);
-      const wasViewedRecently = p.last_viewed_at && new Date(p.last_viewed_at) > new Date(thirtyDaysAgo);
-
-      if (isClaimed && (!lastSynced || lastSynced < new Date(ninetyDaysAgo))) {
-        toRefresh.push({ provider_id: p.provider_id, place_id: p.place_id, tier: 1 });
-        stats.tier1++;
-      } else if (wasViewedRecently && (!lastSynced || lastSynced < new Date(ninetyDaysAgo))) {
-        toRefresh.push({ provider_id: p.provider_id, place_id: p.place_id, tier: 2 });
-        stats.tier2++;
-      } else if (!lastSynced || lastSynced < new Date(ninetyDaysAgo)) {
-        toRefresh.push({ provider_id: p.provider_id, place_id: p.place_id, tier: 3 });
-        stats.tier3++;
-      } else {
-        stats.skipped++;
-      }
-    }
-
-    // Process in batches (50 at a time, 200ms delay)
+    // 50 at a time with a short pause: the same pace the cron has always run at.
     const BATCH_SIZE = 50;
     const DELAY_MS = 200;
-
-    for (let i = 0; i < toRefresh.length; i += BATCH_SIZE) {
-      const batch = toRefresh.slice(i, i + BATCH_SIZE);
-
+    for (let i = 0; i < plan.items.length; i += BATCH_SIZE) {
+      const batch = plan.items.slice(i, i + BATCH_SIZE);
       const results = await Promise.allSettled(
         batch.map(async (p) => {
           const data = await fetchGoogleReviews(p.place_id);
           if (!data) return null;
-
           await updateProviderGoogleReviews(p.provider_id, data, db);
           return p.provider_id;
         }),
       );
-
       for (const r of results) {
-        if (r.status === "fulfilled" && r.value) stats.updated++;
-        else if (r.status === "rejected") stats.errors++;
+        if (r.status === "rejected") stats.errors++;
+        else if (r.value) stats.updated++;
+        else stats.empty++;
       }
-
-      // Rate limit between batches
-      if (i + BATCH_SIZE < toRefresh.length) {
-        await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
-      }
+      if (i + BATCH_SIZE < plan.items.length) await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
     }
 
-    // `reviews` is the Places Enterprise+Atmosphere SKU (~$25/1K), not $5/1K.
-    const costEstimate = ((stats.tier1 + stats.tier2 + stats.tier3) / 1000) * 25;
-    console.log(
-      `[google-reviews-cron] Done. T1:${stats.tier1} T2:${stats.tier2} T3:${stats.tier3} updated:${stats.updated} errors:${stats.errors} skipped:${stats.skipped} est_cost:$${costEstimate.toFixed(2)}`,
-    );
-
-    return NextResponse.json({
-      message: "Google reviews refresh complete",
-      stats,
-      estimated_cost: `$${costEstimate.toFixed(2)}`,
-    });
-  } catch (err) {
-    console.error("[google-reviews-cron] Unexpected error:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
+    // The `reviews` field is the Places Enterprise+Atmosphere SKU, about $25/1K.
+    const costEstimate = (plan.items.length / 1000) * 25;
+    console.log(`[google-reviews-cron] Done. T1:${stats.tier1} T2:${stats.tier2} T3:${stats.tier3} updated:${stats.updated} empty:${stats.empty} errors:${stats.errors} skipped:${stats.skipped} over_budget:${stats.overBudget} est_cost:$${costEstimate.toFixed(2)}`);
+    return NextResponse.json({ message: "Google reviews refresh complete", stats, estimated_cost: `$${costEstimate.toFixed(2)}` });
   });
 }
