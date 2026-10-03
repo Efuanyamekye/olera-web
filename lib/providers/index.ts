@@ -15,7 +15,7 @@
  *  - PR #3 (sitemap): `countActiveProviders` / `getActiveProviderGeoByCategory`
  *    / `getActiveProvidersForSitemapShard` / `getActiveClaimedProviderSlugs`.
  *  - Crons A (aggregate-views + google-reviews): `getProviderDimensionsByIdentifiers`
- *    + `getClaimedProviderSlugs` / `getProvidersForReviewRefresh` /
+ *    + `getClaimedProviderIds` / `getProvidersForReviewRefresh` / `refreshGoogleReviews` /
  *    `updateProviderGoogleReviews` (first provider-table WRITE behind the door).
  *  - Crons B (weekly-provider-digest): the 9 `digest.server` readers.
  *  - Crons C (family-nudges): `fetchFamilyProfilesPage` + provider-rec readers
@@ -32,11 +32,13 @@ export {
 } from "./resolve.server";
 export type { ProviderMeta, ClaimedAccount, ProviderDimensions } from "./resolve.server";
 export {
-  getClaimedProviderSlugs,
+  getClaimedProviderIds,
   getProvidersForReviewRefresh,
+  readGoogleReviews,
+  refreshGoogleReviews,
   updateProviderGoogleReviews,
 } from "./reviews.server";
-export type { ReviewRefreshProvider } from "./reviews.server";
+export type { ReviewRefreshProvider, RefreshTarget, RefreshOutcome } from "./reviews.server";
 export { searchProviders } from "./search.server";
 export type { ProviderSearchResponse } from "./search.server";
 export { countDirectory, listDirectory, exportDirectoryRows } from "./directory.server";

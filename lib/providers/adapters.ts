@@ -40,6 +40,26 @@ export function directoryRowToProvider(row: IOSProvider): ProviderView {
  * "prefer the claimed record" and the side-channel data silently went null with
  * it. Claiming a listing should not blank a provider's star rating.
  */
+/**
+ * A claimed account can hold its own cached Google copy (the on-view backfill
+ * wrote one whenever the page rendered the account row), while every refresh
+ * of a claimed listing writes to the linked directory row. Taking the account
+ * copy first meant 322 claimed pages (2 Oct 2026) would keep showing a stale
+ * count after a refresh. The newer sync wins, whichever table holds it.
+ */
+export function newerGoogleReviews(
+  account: GoogleReviewsData | null,
+  directory: GoogleReviewsData | null,
+): GoogleReviewsData | null {
+  if (!account) return directory;
+  if (!directory) return account;
+  const a = Date.parse(account.last_synced ?? "");
+  const d = Date.parse(directory.last_synced ?? "");
+  if (Number.isNaN(a)) return directory;
+  if (Number.isNaN(d)) return account;
+  return d > a ? directory : account;
+}
+
 export function accountRowToProvider(
   row: Profile,
   directoryRow: IOSProvider | null = null,
@@ -59,7 +79,7 @@ export function accountRowToProvider(
     source: "account",
     rawProviderId: row.id,
     placeId: gm?.place_id ?? directoryRow?.place_id ?? null,
-    googleReviewsData: bpGoogleReviews ?? directoryRow?.google_reviews_data ?? null,
+    googleReviewsData: newerGoogleReviews(bpGoogleReviews ?? null, directoryRow?.google_reviews_data ?? null),
     cmsData: directoryRow?.cms_data ?? null,
     aiTrustSignals: directoryRow?.ai_trust_signals ?? null,
     parentOrganization: directoryRow?.parent_organization ?? null,
