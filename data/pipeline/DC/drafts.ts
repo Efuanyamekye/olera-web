@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T23:34:41.684Z
+ * Last updated: 2026-10-03T00:12:50.206Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -444,7 +444,7 @@ export const drafts: PipelineStateDrafts = {
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Age 65+ or 18-64 with disability",
+          "Age 60+ or 18-59 with disability",
           "DC resident",
           "Income under $2,743/month",
           "Assets under $4,000",
