@@ -49,3 +49,17 @@ assert.deepEqual(manualRefreshAllowed(daysAgo(2), now), { allowed: false, nextAl
 assert.deepEqual(manualRefreshAllowed(daysAgo(2), now, true), { allowed: true });
 
 console.log("google reviews refresh checks passed");
+
+// The page shows whichever cached copy is newer: a claimed account's own copy
+// used to shadow every refresh written to the linked directory row.
+{
+  const { newerGoogleReviews } = require("../lib/providers/adapters") as typeof import("../lib/providers/adapters");
+  const old = { rating: 5, review_count: 2, reviews: [], last_synced: daysAgo(150) };
+  const fresh = { rating: 5, review_count: 39, reviews: [], last_synced: daysAgo(1) };
+  assert.equal(newerGoogleReviews(old, fresh)?.review_count, 39, "directory refresh beats a stale account copy");
+  assert.equal(newerGoogleReviews(fresh, old)?.review_count, 39, "and the reverse");
+  assert.equal(newerGoogleReviews(null, old)?.review_count, 2);
+  assert.equal(newerGoogleReviews(old, null)?.review_count, 2);
+  assert.equal(newerGoogleReviews(null, null), null);
+  console.log("newer-copy checks passed");
+}
