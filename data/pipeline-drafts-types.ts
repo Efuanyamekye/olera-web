@@ -82,6 +82,7 @@ export interface PipelineDraft {
   appliedCorrections?: AppliedCorrection[] | null;
   /** Flags the judge would not apply, for a person to decide. Replaced on each run. */
   reviewQueue?: ReviewItem[] | null;
+  dismissedFlags?: DismissedFlag[] | null;
   geographicScope?: { type: string; stateVariation?: boolean; localEntities?: { name: string; type: string; phone?: string; address?: string; url?: string }[] };
 }
 
@@ -113,6 +114,16 @@ export interface ReviewItem {
   severity: string;
   why: string;
   flaggedAt: string;
+}
+
+/** A flag a person or the page verifier rejected, so the judge does not
+ *  re-queue the same proposal every weekly run. */
+export interface DismissedFlag {
+  field: string;
+  proposed: string;
+  source: string | null;
+  reason: string;
+  dismissedAt: string;
 }
 
 export interface PipelineStateOverview {

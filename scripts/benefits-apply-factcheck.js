@@ -107,11 +107,16 @@ for (const st of states) {
   for (const pr of fc.programs || []) {
     const draft = byId.get(pr.programId);
     if (!draft) { plan.skipped++; continue; }
-    const already = new Set((draft.appliedCorrections || []).map((c) => `${c.field}:${c.flaggedAt}`));
+    // The page verifier records an added second contact as phone_added; for
+    // this flag it is settled the same as an applied phone.
+    const already = new Set((draft.appliedCorrections || []).map((c) => `${c.field === 'phone_added' ? 'phone' : c.field}:${c.flaggedAt}`));
+    // A proposal a person or the page verifier already rejected stays rejected.
+    const dismissed = new Set((draft.dismissedFlags || []).map((d) => `${d.field}:${d.proposed}`));
     for (const f of pr.flags || []) {
       if (f.severity === 'info') continue;
       const key = `${f.field}:${fc.checkedAt}`;
       if (already.has(key)) continue;
+      if (dismissed.has(`${f.field}:${String(f.verifiedValue)}`)) continue;
       const src = sourceFor(pr.verified, f.field);
       const item = { state: st, programId: pr.programId, program: pr.programName, field: f.field, severity: f.severity, from: f.draftValue, to: f.verifiedValue, source: src, official: isOfficial(src) };
       let decision = 'review', why = '';

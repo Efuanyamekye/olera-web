@@ -1014,7 +1014,18 @@
       "sourceUrl": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-04T00:51:38.093Z"
+        }
+      ]
     },
     {
       "id": "alzheimers-adult-day-services",
@@ -1175,19 +1186,15 @@
       "sourceUrl": "https://www.nj.gov/humanservices/doas/documents/Adult%20Day%20Services%20Program%20Brochure%20(Web-English).pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8772223737",
-            "211"
-          ],
-          "to": "18772223733",
-          "source": "https://nj.gov/humanservices/doas/documents/ADSP%20Brochure%20(Print%20-%20English).pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:42.493Z"
+          "proposed": "6094384733",
+          "source": "https://www.nj.gov/humanservices/doas/services/a-k/aads/",
+          "reason": "page also lists ours ((877) 222-3737)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -1436,5 +1443,5 @@
     ],
     "resourcesVsBenefits": "Most New Jersey senior programs are qualification-based benefits requiring specific income limits, age requirements, or care needs. For example, PAAD requires income under $54,943/year, while JACC requires nursing-level care assessment. Only one program (Senior Freeze) functions as a general resource with broader eligibility. Unlike some states that offer universal information services, New Jersey focuses on targeted financial assistance for those who meet specific criteria."
   },
-  "factcheckedAt": "2026-10-02T07:42:42.493Z"
+  "factcheckedAt": "2026-10-04T00:51:38.093Z"
 }

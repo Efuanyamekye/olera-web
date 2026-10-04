@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.928Z
+ * Last updated: 2026-10-04T02:03:26.945Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -205,16 +205,16 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-07",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "age",
           "from": 21,
           "to": 55,
-          "source": "https://www.pa.gov/agencies/dhs/resources/medicaid/chc",
+          "source": "https://www.pa.gov/services/dhs/apply-for-community-healthchoices",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "flaggedAt": "2026-10-04T00:53:36.830Z"
         },
         {
           "field": "assets_individual",
@@ -223,19 +223,16 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
           "severity": "high",
           "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
-        },
+          "flaggedAt": "2026-10-04T00:53:36.830Z"
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "18775504227",
-            "211"
-          ],
-          "to": "18448243655",
+          "proposed": "18448243655",
           "source": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "reason": "page also lists ours ((877) 550-4227)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -307,6 +304,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "717-783-1550",
           "description": "Help finding the LIFE provider that serves your county",
           "hours": "Monday–Friday, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 550-4227",
+          "description": "Number listed on pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -343,17 +346,29 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.pa.gov/agencies/aging/aging-programs-and-services.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-06-19",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7177831550"
           ],
-          "to": "18775504227",
+          "to": "(877) 550-4227",
           "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "flaggedAt": "2026-10-02T07:44:57.351Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "lastVerifiedDate": "2026-10-04",
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "18775504227",
+          "source": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts",
+          "reason": "page also lists ours ((877) 550-4227)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -743,37 +758,15 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1350,
-          "to": 1816,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1824,
-          "to": 2455,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
-        },
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8665504355",
-            "8006927462"
-          ],
-          "to": "8006334227",
-          "source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "proposed": "8007837067",
+          "source": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pa-medi-medicare-counseling",
+          "reason": "page also lists ours ((866) 550-4355)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -1305,11 +1298,11 @@ export const drafts: PipelineStateDrafts = {
             "7177719610",
             "8149461235"
           ],
-          "to": "7177831550",
-          "source": "https://www.palottery.pa.gov/Benefits/Local-Services-Senior-Centers-Meals.aspx",
+          "to": "7177806130",
+          "source": "https://www.dauphincounty.gov/government/human-services/area-agency-on-aging/services/Meals-on-Wheels",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "flaggedAt": "2026-10-04T00:53:36.830Z"
         }
       ]
     },
@@ -1630,20 +1623,17 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8777277529",
-            "211"
-          ],
-          "to": "7177831550",
+          "proposed": "7177831550",
           "source": "https://www.pa.gov/services/aging/apply-for-the-older-pennsylvanians-legal-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "reason": "page also lists ours ((877) 727-7529)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "ltc-ombudsman",

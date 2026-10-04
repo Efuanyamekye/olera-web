@@ -7,6 +7,60 @@
 
 ## Current Focus
 
+### 2026-10-03 (late) — William Snowden case (Pascagoula, Hoop Cares ad): Ces nudged to call; case-page label fix (`graceful-franklin`, #2352 open)
+
+**The case:** Meta instant form 2 Oct 4:55 PM CT → qualifying text 5:00 → "100% Disabled Veteran" 5:48 → classifier care_seeker, handed to Hoop 5:50 → Liz wrote on the shared thread 5:52 ("when's a good time to talk?") → auto check-in Sat 2:20 PM. Silent since. One thread, three views: admin case `/admin/relationships/families/284c1199-…`, Hoop's inbox (`/portal/inbox?role=provider&ad=<lead>`, rendered via `getAdFamily`, read-only), family `/f/thread/<token>`.
+
+**Done:** Ces nudged in #careseeker-support (call, confirm Liz's message, get a call window, ask VA enrollment; log on the case page). Logged on the case as a note with next action "Ces calls William…" owner Ces, due Mon 5 Oct. Hoop's thread only pulls `channel=call` touches, so the note stays internal.
+
+**Bug found + PR #2352:** case page labelled any touch "reached them" if the word "reached" appeared anywhere in its status line (which carries the next action). Label now reads the outcome segment only.
+
+**Still owed:** qualification replies consumed by the city-ads step (e.g. William's "100% Disabled Veteran") are never marked `handled_at` in `sms_inbound`, so the SMS inbox shows "needs Olera reply" when nothing is owed. Small fix in the qualification handler.
+
+**Notes:** 100% disabled veteran = likely VA Homemaker/Home Health Aide eligibility; that changes what Hoop can offer. No "view as provider" in admin; `getAdFamily(db, leadId, [profileId], name)` reproduces her panel read-only.
+
+### 2026-10-03 — Google review counts: cron fixed, refresh buttons, inbox page in prod (`graceful-franklin`, #2338 → #2345, #2347 → #2348)
+
+**Trigger:** Ces flagged two claimed providers (Happy Sunflower Senior Living, Preferred Care at Home of Denton) whose Olera pages showed 5 and 2 Google reviews against 14 and 39 on Google. Caches were from March and May.
+
+**Root cause:** `getProvidersForReviewRefresh` had `.limit(5000)`, unordered, on 70,390 providers, so the monthly cron saw ~7% of the directory; and "claimed" was matched by slug, which differs for ~10% of claimed accounts. 781 of 828 claimed providers were >90d stale while the cron spent ~$116/month mostly on unclaimed listings.
+
+**Shipped (#2347, prod #2348):**
+- `lib/providers/review-refresh-plan.ts`: pure plan, claimed (by `source_provider_id`) first, then viewed-in-30d, then long tail, cap `GOOGLE_REVIEWS_REFRESH_CAP` (5,000 ≈ $125). Checked by `scripts/check-google-reviews-refresh.ts`.
+- `refreshGoogleReviews` in `lib/providers/reviews.server.ts` behind every surface: provider "Refresh reviews" in account settings (7-day wait), admin button on `/admin/directory/[providerId]` (Google Rating section, `force`), on-view refresh of a claimed page >90d stale, the no-cache backfill.
+- Pre-test found two UI/data bugs, fixed: a claimed account can hold its own stale Google copy (322 of 937) that shadowed the directory row (`newerGoogleReviews` in adapters, newer wins); 468 of 937 claimed accounts keep their Place ID on the directory row only, so the settings button was hidden (now shows whenever a cached count exists).
+- One-off refresh of all stale claimed providers, TJ-approved, ~$19: 659 updated, 116 Google-empty (no rating or bad Place ID; cron retries 1 Nov), 0 errors. 0 claimed providers with a working Place ID are stale now.
+
+**Also in prod today:** `/admin/inbox/today` (#2338 → #2345): the day's numbered Cortex items in the browser, approve/edit/check/skip, providers drafted first, cap 6.
+
+**Sent:** Robbie (ZIP list received; launch date + referral tracking owed "by next week"). Heather Buck, Concierge Care, 14 FL locations (Fort Myers entry duplicates Daytona; offered a call). Ces: two reply drafts + "fix is live" with the one-click instructions.
+
+**Non-obvious:** Google's `userRatingCount` includes star-only ratings, so a provider's own count can be lower than Olera's (Yanxia: 8 vs 14). Say so, don't "fix" it. Happy Sunflower's public page title still reads the directory name ("Cottage") though the claimed display_name is "Senior Living"; untouched.
+
+**Next Up:**
+1. **Heather's 14 listings** (we said we'd set them up and send links): compare against `olera-providers`, create the missing, link the existing, send her the links. Multi-location under one login is a real product gap.
+2. **Robbie:** launch date + referral tracking by next week; needs a new North Texas Meta form from his 243 ZIPs (spend = TJ's call).
+3. Read the first Slack + organic daily report (3 Oct, 8 AM Bangkok) for noise and false "owed" items; try one item on `/admin/inbox/today`.
+4. The 116 Google-empty claimed providers: likely bad Place IDs; worth a pass when someone has an hour.
+
+### 2026-10-02 (night) — Cortex daily report: one message, Slack + organic, inbox on a web page (`graceful-franklin`)
+
+**In production:**
+- Inbox pass runs once a day, 01:00 UTC (8 AM Bangkok). Telegram gets a one-screen synopsis; the full digest is the day's "Inbox report" in `cortex_handoffs` (#2322 via #2325).
+- Approving an email sends from support@ only for a thread matched to an Olera provider account. Everything else, families and job seekers included, stays a Gmail draft. The classifier's "provider" label covers job seekers, a dental office and senior-living sales mail, so it isn't enough to send on.
+- Slack replies owed (channels + TJ's DMs) and a daily organic read in the same report (#2331 via #2332). Migrations 268-270 applied. Slack user token connected 2 Oct (`cortex_slack_user_tokens`, founder-only connect). Slack replies and the organic action need their number named; "approve all" leaves them out.
+- First run with Slack + organic: 3 Oct, 8 AM Bangkok.
+
+**Open:** PR #2338 `/admin/inbox/today`: work the numbered items in the browser (approve, edit, check, skip), providers drafted first, cap 6. Built, Vercel to confirm; not merged.
+
+**Sent tonight:** Robbie (ZIP list received; launch date + tracking "by next week"; owed). Heather Buck, Concierge Care, 14 FL locations (Fort Myers entry duplicates Daytona; asked for correct details; offered a call).
+
+**Next Up:**
+1. **Heather's listings.** We told her we'd set up the new ones and connect the existing ones, then send links. Actually do it: compare her 14 against `olera-providers`, create the missing, link the existing, send her the links. Multi-location under one login is a real product gap.
+2. **Robbie:** launch date + referral tracking by next week; needs a new North Texas Meta form from his 243 ZIPs (spend = TJ's call).
+3. Merge/promote #2338 and try one item from the page.
+4. Read the first Slack + organic report (3 Oct) for noise and false "owed" items before trusting it.
+
 ### 2026-10-02 — Benefits: the AI caseworker is the direction; accuracy + data cleanup in PROD; founding doc with 6 phases (`jolly-ramanujan`, #2307 #2324 → promotions #2321 #2327)
 
 **THE DECISION.** Olera builds an AI benefits *caseworker*, not a better finder. Settled with TJ: the finder becomes a conversation (rules stay in code; AI asks and explains); we go as far into "doing" (pre-filled applications, callbacks, appeals) as we thoughtfully can, with family approval on every send and a person reachable; dementia caregivers first. Measure: dollars secured per family and days to first benefit, not completions.

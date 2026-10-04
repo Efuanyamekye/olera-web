@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.904Z
+ * Last updated: 2026-10-04T01:16:13.722Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1318,6 +1318,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Backup routing if the Elder Helpline cannot be reached, and a source for other local emergency cooling and utility help",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(850) 414-2000",
+          "description": "Number listed on elderaffairs.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1377,18 +1383,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-08-18",
       "lastVerifiedDate": "2026-08-18",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18009635337",
             "211"
           ],
-          "to": "8504142000",
+          "to": "(850) 414-2000",
           "source": "https://elderaffairs.org/programs-and-services/emergency-home-energy-assistance-for-the-elderly-program/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:35:32.324Z"
+          "flaggedAt": "2026-10-02T07:35:32.324Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2306,6 +2314,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General information and referrals to local SCSEP providers",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(850) 414-2000",
+          "description": "Number listed on elderaffairs.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2370,19 +2384,21 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cess",
       "lastVerifiedDate": "2026-05-05",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8558502525",
             "8665006587",
             "211"
           ],
-          "to": "8504142000",
+          "to": "(850) 414-2000",
           "source": "https://elderaffairs.org/programs-and-services/senior-community-service-employment-program-scsep/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:35:32.324Z"
+          "flaggedAt": "2026-10-02T07:35:32.324Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

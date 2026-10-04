@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.911Z
+ * Last updated: 2026-10-04T01:16:13.823Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1999,6 +1999,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "913-826-2830",
           "description": "In-person consultations at Matt Ross Community Center",
           "hours": "By appointment"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(316) 267-3975",
+          "description": "Number listed on kansaslegalservices.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2035,22 +2041,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.kansaslegalservices.org/page/57/programs-seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18883535337",
             "18007236953",
             "9138263160",
             "9138262830"
           ],
-          "to": "3162673975",
+          "to": "(316) 267-3975",
           "source": "https://www.kansaslegalservices.org/page/57/programs-seniors",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:38.319Z"
+          "flaggedAt": "2026-10-02T07:37:38.319Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "long-term-care-ombudsman",

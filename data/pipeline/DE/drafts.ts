@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.903Z
+ * Last updated: 2026-10-04T01:16:13.696Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -693,6 +693,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General assistance finding social services and benefits",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 843-7212",
+          "description": "Number listed on medicaid.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -775,18 +781,21 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
           "flaggedAt": "2026-10-02T07:35:04.265Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008529089",
             "211"
           ],
-          "to": "8668437212",
+          "to": "(866) 843-7212",
           "source": "https://medicaid.gov/about-us/where-can-people-get-help-medicaid-chip",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-02T07:35:04.265Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

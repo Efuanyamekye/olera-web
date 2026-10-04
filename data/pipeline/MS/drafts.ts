@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.919Z
+ * Last updated: 2026-10-04T01:16:13.973Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -524,6 +524,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General social services information and referrals",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 822-4622",
+          "description": "Number listed on mdhs.ms.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -599,19 +605,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8004212408",
             "8009483090",
             "211"
           ],
-          "to": "8448224622",
+          "to": "(844) 822-4622",
           "source": "https://www.mdhs.ms.gov/post/navigating-medicare-made-easy-with-ship/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:25.485Z"
+          "flaggedAt": "2026-10-02T07:40:25.485Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

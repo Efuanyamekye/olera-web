@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ND/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.921Z
+ * Last updated: 2026-10-04T01:02:46.983Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -277,7 +277,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "NDSU Extension Service",
-          "phone": null,
+          "phone": "(701) 231-5948",
           "description": "Contact your local NDSU Extension office to connect with AIC project coordinators",
           "hours": "Varies by office"
         },
@@ -330,23 +330,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "warm"
       },
       "icon": "Users",
-      "phone": null,
+      "phone": "(701) 231-5948",
       "sourceUrl": "https://www.ndsu.edu/agriculture/extension/programs/aging-community-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "7012315948",
+          "to": "(701) 231-5948",
           "source": "https://www.ndsu.edu/agriculture/extension/impact-stories/ndsu-extensions-aging-community-project-brings-care-rural-communities",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:13.679Z"
+          "flaggedAt": "2026-10-02T07:41:13.679Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "assistive-senior-safety-program",
