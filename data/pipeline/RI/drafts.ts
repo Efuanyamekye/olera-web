@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/RI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.929Z
+ * Last updated: 2026-10-04T02:03:26.962Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -198,17 +198,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
-        {
-          "field": "assets_couple",
-          "from": 8000,
-          "to": 6000,
-          "source": "https://eohhs.ri.gov/consumer/health-care/long-term-services-and-supports",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "class-waiver",
@@ -394,11 +384,11 @@ export const drafts: PipelineStateDrafts = {
             "8556974347",
             "211"
           ],
-          "to": "4014623000",
+          "to": "4014624444",
           "source": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -608,7 +598,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://eohhs.ri.gov/consumer/older-adults",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -820,11 +810,11 @@ export const drafts: PipelineStateDrafts = {
             "4014620311",
             "211"
           ],
-          "to": "18556974347",
-          "source": "https://eohhs.ri.gov/Consumer/ProgramsServices/MedicarePremiumPaymentProgram.aspx",
+          "to": "4014625300",
+          "source": "https://oha.ri.gov/what-we-do/access/health-insurance-counseling/benefits-enrollment-center",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -1038,26 +1028,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2608,
-          "to": 2461,
-          "source": "https://dhs.ri.gov/media/12206/download?language=en",
-          "severity": "medium",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3540,
-          "to": 3337,
-          "source": "https://dhs.ri.gov/media/12206/download?language=en",
-          "severity": "medium",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 185% FPL 2026",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -1268,7 +1239,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://liheapch.acf.hhs.gov/profiles/RI.htm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -1448,11 +1419,11 @@ export const drafts: PipelineStateDrafts = {
             "211",
             "4017234520"
           ],
-          "to": "4014626400",
-          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "to": "18556974347",
+          "source": "https://dhs.ri.gov/media/7941/download?language=en",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -1913,7 +1884,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://oha.ri.gov/resources/caregiver-supportsrespite",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -2109,7 +2080,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -2286,7 +2257,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://ribar.com/?pg=PublicServiceProgramsHome",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -2592,17 +2563,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oha.ri.gov/resources/health-insurance-health-care-cost-assistance/drug-cost-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 65,
-          "to": 55,
-          "source": "https://oha.ri.gov/media/2966/download?language=en",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "at-home-cost-share-program",
@@ -2819,20 +2780,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1569,
-          "to": 1249,
+          "to": 2583,
           "source": "https://oha.ri.gov/resources/home-care/home-cost-share",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 133% FPL 2022 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         },
         {
           "field": "income_2",
           "from": 2129,
-          "to": 1691,
+          "to": 3497,
           "source": "https://oha.ri.gov/resources/home-care/home-cost-share",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -2963,10 +2924,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 60,
           "to": 55,
-          "source": "https://oha.ri.gov/media/2886/download?language=en",
+          "source": "https://oha.ri.gov/media/2891/download?language=en",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:45:20.664Z"
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
     },
@@ -3167,7 +3128,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 2266,
+          "source": "https://oha.ri.gov/media/2766/download?language=en",
+          "severity": "high",
+          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-04T00:53:58.349Z"
+        }
+      ]
     }
   ],
   "stateOverview": null

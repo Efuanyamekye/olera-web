@@ -1,14 +1,14 @@
 {
   "state": "NM",
   "stateName": "New Mexico",
-  "checkedAt": "2026-10-02T07:42:51.020Z",
+  "checkedAt": "2026-10-04T00:51:46.068Z",
   "total": 6,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 3,
   "totalFlags": 4,
-  "highSeverityFlags": 3,
+  "highSeverityFlags": 1,
   "programs": [
     {
       "programId": "centennial-care-community-benefit",
@@ -33,15 +33,15 @@
         "assets_couple": null,
         "phone": "18002834465",
         "sources": {
-          "age": "https://www.medicaid.gov/sites/default/files/2023-12/nm-centennial-care-appvl-12152023.pdf",
+          "age": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "income": "https://www.hca.nm.gov/community-benefit-program/",
           "assets": "https://www.hca.nm.gov/community-benefit-program/",
           "phone": "https://www.hca.nm.gov/community-benefit-program/"
         },
-        "notes": "Current official NM HCA materials indicate the Community Benefit serves age 65+ or disabled adults; no separate senior income/assets thresholds were found in the retrieved sources. Program name is now presented under Centennial Care / Community Benefit."
+        "notes": "Official program page does not state a senior age threshold directly; a current secondary source describing the senior pathway cites age 65+. No separate income or asset limits were found for this program on retrievable sources; program is tied to Medicaid nursing facility level of care rather than a standalone means test."
       },
       "flags": [],
-      "notes": "Current official NM HCA materials indicate the Community Benefit serves age 65+ or disabled adults; no separate senior income/assets thresholds were found in the retrieved sources. Program name is now presented under Centennial Care / Community Benefit."
+      "notes": "Official program page does not state a senior age threshold directly; a current secondary source describing the senior pathway cites age 65+. No separate income or asset limits were found for this program on retrievable sources; program is tied to Medicaid nursing facility level of care rather than a standalone means test."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -66,14 +66,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002834465",
+        "phone": "8662612954",
         "sources": {
-          "age": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
+          "age": "https://www.hca.nm.gov/lookingforinformation/pace/",
           "income": null,
           "assets": null,
-          "phone": "https://www.hsd.state.nm.us/lookingforinformation/pace/"
+          "phone": "https://www.hca.nm.gov/lookingforinformation/pace/"
         },
-        "notes": "PACE is active in New Mexico and the senior eligibility age is 55+. No official income or asset test was found in the retrieved sources."
+        "notes": "PACE in New Mexico is current and age 55+; no income or asset test was found in the official source provided, and the official state page lists a help number for InnovAge New Mexico PACE."
       },
       "flags": [
         {
@@ -85,10 +85,10 @@
             "711",
             "18004322080"
           ],
-          "verifiedValue": "8002834465"
+          "verifiedValue": "8662612954"
         }
       ],
-      "notes": "PACE is active in New Mexico and the senior eligibility age is 55+. No official income or asset test was found in the retrieved sources."
+      "notes": "PACE in New Mexico is current and age 55+; no income or asset test was found in the official source provided, and the official state page lists a help number for InnovAge New Mexico PACE."
     },
     {
       "programId": "community-benefit-program",
@@ -112,14 +112,14 @@
         "income_2": 1491,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "8002834465",
+        "phone": "18004322080",
         "sources": {
           "age": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "income": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "assets": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "phone": "https://www.hca.nm.gov/community-benefit-program/"
         },
-        "notes": "Community Benefit is the current Medicaid long-term services and supports program in New Mexico; the senior pathway uses age 65+ and Medicaid institutional-care financial limits."
+        "notes": "Community Benefit is part of New Mexico Medicaid/Turquoise Care long-term services; the cited eligibility figures were published for 2026 by a non-government source that cites official program rules. Official HCA page confirms the program and contact number, but does not publish the thresholds directly."
       },
       "flags": [
         {
@@ -130,7 +130,7 @@
           "pctDiff": 15.4
         }
       ],
-      "notes": "Community Benefit is the current Medicaid long-term services and supports program in New Mexico; the senior pathway uses age 65+ and Medicaid institutional-care financial limits."
+      "notes": "Community Benefit is part of New Mexico Medicaid/Turquoise Care long-term services; the cited eligibility figures were published for 2026 by a non-government source that cites official program rules. Official HCA page confirms the program and contact number, but does not publish the thresholds directly."
     },
     {
       "programId": "senior-farmers-market-nutrition",
@@ -151,8 +151,8 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 1986,
-        "income_2": 2686,
+        "income_1": 2461,
+        "income_2": 3337,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "5054690548",
@@ -162,25 +162,25 @@
           "assets": null,
           "phone": "https://www.nmwic.org/fmnp/"
         },
-        "notes": "Current New Mexico senior SFMNP appears active in 2026; official materials show 60+ for non-Native American seniors and 55+ for Native American seniors, with income at or below 185% FPL. No asset test was found in current official materials."
+        "notes": "Current New Mexico SFMNP appears active; official state program page lists 60+ for non-Native Americans and 55+ for Native Americans, with monthly income limits published for 185% FPL. No asset test found."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 2739,
-          "verifiedValue": 1986,
-          "pctDiff": 27.5
+          "verifiedValue": 2461,
+          "pctDiff": 10.1
         },
         {
           "field": "income_2",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 3706,
-          "verifiedValue": 2686,
-          "pctDiff": 27.5
+          "verifiedValue": 3337,
+          "pctDiff": 10
         }
       ],
-      "notes": "Current New Mexico senior SFMNP appears active in 2026; official materials show 60+ for non-Native American seniors and 55+ for Native American seniors, with income at or below 185% FPL. No asset test was found in current official materials."
+      "notes": "Current New Mexico SFMNP appears active; official state program page lists 60+ for non-Native Americans and 55+ for Native Americans, with monthly income limits published for 185% FPL. No asset test found."
     },
     {
       "programId": "senior-employment-training-program",
@@ -208,14 +208,14 @@
         "phone": "8004322080",
         "sources": {
           "age": "https://www.aging.nm.gov/aging-network/senior-centers/",
-          "income": "https://www.aging.nm.gov/aging-network/senior-centers/",
-          "assets": "null",
+          "income": null,
+          "assets": null,
           "phone": "https://www.aging.nm.gov/aging-network/senior-centers/"
         },
-        "notes": "Current New Mexico SCSEP eligibility uses age 55+ and a low-income/unemployed test; no separate assets test found in the available official source."
+        "notes": "SCSEP is current in New Mexico; official state sources indicate a minimum age of 55 and no upper age limit. No separate income or asset limit values were found in the retrieved official sources beyond a reference to low-income eligibility."
       },
       "flags": [],
-      "notes": "Current New Mexico SCSEP eligibility uses age 55+ and a low-income/unemployed test; no separate assets test found in the available official source."
+      "notes": "SCSEP is current in New Mexico; official state sources indicate a minimum age of 55 and no upper age limit. No separate income or asset limit values were found in the retrieved official sources beyond a reference to low-income eligibility."
     },
     {
       "programId": "family-caregiver-support",
@@ -244,10 +244,10 @@
           "assets": null,
           "phone": "https://www.aging.nm.gov/long-term-care/caregiver-resources/caregiver-support/"
         },
-        "notes": "NFCSP in New Mexico appears to have no age, income, or asset test for caregivers; the statewide help line for caregiver support is the ADRC at 1-800-432-2080."
+        "notes": "No age, income, or asset test found for NFCSP senior-caregiver access; official New Mexico Aging page lists ADRC/ALTSD help line 800-432-2080."
       },
       "flags": [],
-      "notes": "NFCSP in New Mexico appears to have no age, income, or asset test for caregivers; the statewide help line for caregiver support is the ADRC at 1-800-432-2080."
+      "notes": "No age, income, or asset test found for NFCSP senior-caregiver access; official New Mexico Aging page lists ADRC/ALTSD help line 800-432-2080."
     }
   ]
 }

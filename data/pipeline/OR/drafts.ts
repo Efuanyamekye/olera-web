@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.121Z
+ * Last updated: 2026-10-04T02:03:26.927Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -208,16 +208,25 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
+          "field": "assets_individual",
+          "from": 103645,
+          "to": 94523,
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-04T00:53:23.578Z"
+        },
+        {
           "field": "phone",
           "from": [
             "8556732372",
             "211"
           ],
           "to": "5039455600",
-          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-scm-checklist.docx",
+          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-income-resource-standards.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-04T00:53:23.578Z"
         }
       ]
     },
@@ -385,10 +394,10 @@ export const drafts: PipelineStateDrafts = {
             "18556732372"
           ],
           "to": "8442247223",
-          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/pace-fact-sheet.pdf",
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-04T00:53:23.578Z"
         }
       ]
     },
@@ -616,7 +625,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -630,6 +639,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8556732372",
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
+          "reason": "page also lists ours ((855) 673-2372)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -1596,7 +1614,16 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-10-04",
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8556732372",
+          "source": "https://www.oregon.gov/odhs/food/pages/default.aspx",
+          "reason": "page also lists ours ((855) 673-2372)",
+          "dismissedAt": "2026-10-04"
+        }
+      ]
     },
     {
       "id": "family-caregiver-assistance-support",
@@ -2036,6 +2063,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(503) 224-4086",
           "description": "Number listed on lasoregon.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(503) 224-4094",
+          "description": "Number listed on lasoregon.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2086,6 +2119,22 @@ export const drafts: PipelineStateDrafts = {
           "to": "(503) 224-4086",
           "source": "https://lasoregon.org/locations/portland-regional-office/",
           "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "5032242640",
+            "5032445204",
+            "5419268678",
+            "5413856944",
+            "18006786944"
+          ],
+          "to": "(503) 224-4094",
+          "source": "https://lasoregon.org/about/",
+          "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
@@ -2376,7 +2425,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-04T00:53:23.578Z"
         }
       ]
     },
@@ -2503,6 +2552,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 547-8887",
           "description": "Number listed on pdx.edu",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(541) 737-4331",
+          "description": "Number listed on registrar.oregonstate.edu",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2567,6 +2622,19 @@ export const drafts: PipelineStateDrafts = {
           "to": "(800) 547-8887",
           "source": "https://www.pdx.edu/senior-adult-learning-center/salc-history",
           "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "9717226111",
+            "5033250910"
+          ],
+          "to": "(541) 737-4331",
+          "source": "https://registrar.oregonstate.edu/how-register/audit-registration",
+          "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
@@ -2742,19 +2810,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/oha/hsd/medicaid-policy/pages/hrsn.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8002730557",
-            "211"
-          ],
-          "to": "9716731222",
-          "source": "https://sharedsystems.dhsoha.state.or.us/DHSForms/Served/le-991901.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "proposed": "18888344304",
+          "source": "https://www.oregon.gov/oha/hsd/ohp/pages/housing.aspx",
+          "reason": "page also lists ours ((800) 273-0557)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     }

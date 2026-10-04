@@ -1,14 +1,14 @@
 {
   "state": "OK",
   "stateName": "Oklahoma",
-  "checkedAt": "2026-10-02T07:44:21.822Z",
+  "checkedAt": "2026-10-04T00:53:06.885Z",
   "total": 13,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 10,
-  "highSeverityFlags": 5,
+  "programsWithFlags": 3,
+  "totalFlags": 9,
+  "highSeverityFlags": 2,
   "programs": [
     {
       "programId": "medicaid-soonercare",
@@ -26,22 +26,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": null,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8009877767",
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18009877767",
         "sources": {
-          "age": "https://oklahoma.gov/okdhs/services/health/soonercare.html",
-          "income": "https://oklahoma.gov/okdhs/services/health/soonercare.html",
-          "assets": "https://oklahoma.gov/okdhs/services/health/soonercare.html",
+          "age": null,
+          "income": null,
+          "assets": "https://www.medicaidlongtermcare.org/eligibility/oklahoma/",
           "phone": "https://oklahoma.gov/ohca/contact-us.html"
         },
-        "notes": "Current official Oklahoma sources show the senior pathway begins at age 65 and mention financial criteria, but this search did not surface a current authoritative countable asset limit for seniors."
+        "notes": "Could not find an authoritative official source for a senior-specific minimum age threshold; Oklahoma SoonerCare eligibility for aged/disabled or long-term care pathways is generally based on category rather than a separate senior age floor. Asset values reflect the senior/ABD or long-term care pathway; official phone number confirmed from Oklahoma OHCA."
       },
       "flags": [],
-      "notes": "Current official Oklahoma sources show the senior pathway begins at age 65 and mention financial criteria, but this search did not surface a current authoritative countable asset limit for seniors."
+      "notes": "Could not find an authoritative official source for a senior-specific minimum age threshold; Oklahoma SoonerCare eligibility for aged/disabled or long-term care pathways is generally based on category rather than a separate senior age floor. Asset values reflect the senior/ABD or long-term care pathway; official phone number confirmed from Oklahoma OHCA."
     },
     {
       "programId": "advantage-waiver-hcbs",
@@ -63,26 +63,18 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 4000,
+        "assets_couple": 3000,
         "phone": "8004354711",
         "sources": {
-          "age": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/advantage-program-services.html",
-          "income": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/determining-financial-eligibility-for-advantage-program-services.html",
-          "assets": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/determining-financial-eligibility-for-advantage-program-services.html",
+          "age": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
+          "income": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/general-financial-eligibility-requirements-for-the-advantage-program.html",
+          "assets": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/advantage-program-services.html",
           "phone": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html"
         },
-        "notes": "Program is current; the senior pathway age threshold is 65. Income limit not retrievable from the accessible sources; assets are tied to Soonercare/ABD resource standards and may require checking Schedule VIII for the exact current dollar figures."
+        "notes": "Program is current and active; official Oklahoma rules say financial eligibility follows SoonerCare/ABD resource standards. Senior pathway age is 65+."
       },
-      "flags": [
-        {
-          "field": "assets_couple",
-          "severity": "high",
-          "draftValue": 3000,
-          "verifiedValue": 4000,
-          "pctDiff": 25
-        }
-      ],
-      "notes": "Program is current; the senior pathway age threshold is 65. Income limit not retrievable from the accessible sources; assets are tied to Soonercare/ABD resource standards and may require checking Schedule VIII for the exact current dollar figures."
+      "flags": [],
+      "notes": "Program is current and active; official Oklahoma rules say financial eligibility follows SoonerCare/ABD resource standards. Senior pathway age is 65+."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -109,15 +101,15 @@
         "assets_couple": null,
         "phone": "4055227044",
         "sources": {
-          "age": "https://oklahoma.gov/ohca/individuals/programs-of-all-inclusive-care-for-the-elderly-pace.html",
+          "age": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/programs-of-all-inclusive-care-for-the-elderly-pace-/eligibility-criteria.html",
           "income": "https://oklahoma.gov/ohca/individuals/programs-of-all-inclusive-care-for-the-elderly-pace.html",
-          "assets": "https://oklahoma.gov/ohca/individuals/programs-of-all-inclusive-care-for-the-elderly-pace.html",
+          "assets": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/programs-of-all-inclusive-care-for-the-elderly-pace-/eligibility-criteria.html",
           "phone": "https://oklahoma.gov/ohca/individuals/programs-of-all-inclusive-care-for-the-elderly-pace.html"
         },
-        "notes": "Current Oklahoma PACE eligibility shows a 55+ senior threshold and an income test tied to 300% of SSI Medicaid coverage; no separate countable asset limit was found in the official source."
+        "notes": "PACE is active in Oklahoma; official Oklahoma sources state age 55+ and financial eligibility consistent with SoonerCare ADvantage/HCBS rules, but the countable asset dollar limits were not explicitly retrievable from the cited PACE pages."
       },
       "flags": [],
-      "notes": "Current Oklahoma PACE eligibility shows a 55+ senior threshold and an income test tied to 300% of SSI Medicaid coverage; no separate countable asset limit was found in the official source."
+      "notes": "PACE is active in Oklahoma; official Oklahoma sources state age 55+ and financial eligibility consistent with SoonerCare ADvantage/HCBS rules, but the countable asset dollar limits were not explicitly retrievable from the cited PACE pages."
     },
     {
       "programId": "medicare-savings-programs",
@@ -137,33 +129,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1816,
-        "income_2": 2455,
+        "income_1": 1350,
+        "income_2": 1824,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "4055213679",
+        "phone": "8007632828",
         "sources": {
           "age": null,
-          "income": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
-          "assets": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
-          "phone": "https://oklahoma.gov/okdhs/services/health/medicare.html"
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "phone": "https://www.oid.ok.gov/65-and-over/"
         },
-        "notes": "Oklahoma Medicare Savings Programs (QMB/SLMB/QI) still use income and resource limits; no age minimum was found in the retrieved official sources. The income and asset figures reflect the current Oklahoma DHS MIPPA page as of 2026."
+        "notes": "Oklahoma’s Medicare Savings Programs are current for 2026; official Medicare.gov 2026 limits match the Oklahoma state page for QMB/SLMB/QI. No separate age minimum was found for the senior pathway."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 1235,
-          "verifiedValue": 1816,
-          "pctDiff": 32
+          "verifiedValue": 1350,
+          "pctDiff": 8.5
         },
         {
           "field": "income_2",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 1663,
-          "verifiedValue": 2455,
-          "pctDiff": 32.3
+          "verifiedValue": 1824,
+          "pctDiff": 8.8
         },
         {
           "field": "assets_individual",
@@ -187,10 +179,10 @@
             "4055225050",
             "211"
           ],
-          "verifiedValue": "4055213679"
+          "verifiedValue": "8007632828"
         }
       ],
-      "notes": "Oklahoma Medicare Savings Programs (QMB/SLMB/QI) still use income and resource limits; no age minimum was found in the retrieved official sources. The income and asset figures reflect the current Oklahoma DHS MIPPA page as of 2026."
+      "notes": "Oklahoma’s Medicare Savings Programs are current for 2026; official Medicare.gov 2026 limits match the Oklahoma state page for QMB/SLMB/QI. No separate age minimum was found for the senior pathway."
     },
     {
       "programId": "snap-food-benefits",
@@ -209,34 +201,34 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
-        "income_1": 1739,
-        "income_2": 2345,
+        "age": null,
+        "income_1": 1696,
+        "income_2": 2296,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8664111877",
         "sources": {
-          "age": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
-          "income": "https://www.fns.usda.gov/snap-recipient/eligibility",
-          "assets": "null",
-          "phone": "https://oklahoma.gov/okdhs/services/snap.html"
+          "age": "https://oklahoma.gov/okdhs/services/snap.html",
+          "income": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
+          "assets": null,
+          "phone": "https://oklahoma.gov/okdhs/contact-us.html"
         },
-        "notes": "SNAP in Oklahoma has no separate asset test in the retrieved authoritative sources for the senior pathway; elderly households are treated under the 60+ rule and may qualify under special income standards."
+        "notes": "SNAP has no senior minimum age; Oklahoma uses age 60+ only for special household-income rules, not for program eligibility. Monthly income limits reflect Oklahoma DHS Appendix C-3 gross monthly standards effective in 2026; no asset test value was found in the retrieved official source."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1330,
-          "verifiedValue": 1739,
-          "pctDiff": 23.5
+          "verifiedValue": 1696,
+          "pctDiff": 21.6
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 1804,
-          "verifiedValue": 2345,
-          "pctDiff": 23.1
+          "verifiedValue": 2296,
+          "pctDiff": 21.4
         },
         {
           "field": "phone",
@@ -249,7 +241,7 @@
           "verifiedValue": "8664111877"
         }
       ],
-      "notes": "SNAP in Oklahoma has no separate asset test in the retrieved authoritative sources for the senior pathway; elderly households are treated under the 60+ rule and may qualify under special income standards."
+      "notes": "SNAP has no senior minimum age; Oklahoma uses age 60+ only for special household-income rules, not for program eligibility. Monthly income limits reflect Oklahoma DHS Appendix C-3 gross monthly standards effective in 2026; no asset test value was found in the retrieved official source."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -275,14 +267,14 @@
         "phone": "4055225050",
         "sources": {
           "age": null,
-          "income": "https://oklahoma.gov/content/dam/ok/en/okdhs/documents/searchcenter/okdhsformresults/c-7.pdf",
+          "income": "https://oklahoma.gov/okdhs/newsroom/2026/january/comm01062026.html",
           "assets": null,
           "phone": "https://oklahoma.gov/okdhs/services/liheap/utilityservicesliheapmain.html"
         },
-        "notes": "LIHEAP remains active in Oklahoma in 2026; no separate age or asset test was found in the official sources reviewed. Income limits are monthly and based on 130% of FPL."
+        "notes": "Oklahoma LIHEAP uses gross income at 130% of the federal poverty guideline; no asset test was found in current official sources. Senior-specific pathway not separated in the official materials reviewed."
       },
       "flags": [],
-      "notes": "LIHEAP remains active in Oklahoma in 2026; no separate age or asset test was found in the official sources reviewed. Income limits are monthly and based on 130% of FPL."
+      "notes": "Oklahoma LIHEAP uses gross income at 130% of the federal poverty guideline; no asset test was found in current official sources. Senior-specific pathway not separated in the official materials reviewed."
     },
     {
       "programId": "home-delivered-meals",
@@ -305,14 +297,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002112116",
+        "phone": "4055225050",
         "sources": {
           "age": "https://oklahoma.gov/okdhs/services/cap/older-americans-act.html",
           "income": null,
           "assets": null,
-          "phone": "https://oklahoma.gov/okdhs/services/aging/titleiii.html"
+          "phone": "https://oklahoma.gov/okdhs/services/cap.html"
         },
-        "notes": "Current Oklahoma Title III home-delivered meals program serves seniors 60+; no income or asset test found in official source. Statewide Aging and Disability Info-Line is 1-800-211-2116."
+        "notes": "Oklahoma home-delivered meals are generally for seniors age 60+; no income or asset test found in the official state source."
       },
       "flags": [
         {
@@ -322,10 +314,10 @@
             "211",
             "8002522412"
           ],
-          "verifiedValue": "8002112116"
+          "verifiedValue": "4055225050"
         }
       ],
-      "notes": "Current Oklahoma Title III home-delivered meals program serves seniors 60+; no income or asset test found in official source. Statewide Aging and Disability Info-Line is 1-800-211-2116."
+      "notes": "Oklahoma home-delivered meals are generally for seniors age 60+; no income or asset test found in the official state source."
     },
     {
       "programId": "respite-voucher-programs",
@@ -351,17 +343,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8774410434",
+        "phone": "18002112116",
         "sources": {
           "age": "https://oklahoma.gov/okdhs/services/aging/titleiii.html",
           "income": "https://oklahoma.gov/okdhs/services/aging/titleiii.html",
           "assets": "https://oklahoma.gov/okdhs/services/aging/titleiii.html",
-          "phone": "https://soonersuccess.ouhsc.edu/Services-Programs/Respite/OKDHS-Respite-Voucher-Program"
+          "phone": "https://oklahoma.gov/okdhs/services/aging/titleiii.html"
         },
-        "notes": "Current Oklahoma senior-caregiver respite voucher pathway appears to be the Lifespan Respite Grant Voucher Program through Sooner SUCCESS; the official contact number found is 1-877-441-0434. The program has no income limit for caregivers of persons 60+ and grandparents 55+ raising grandchildren, so income/assets values are null for this senior pathway."
+        "notes": "Current Oklahoma respite voucher options for senior caregivers do not show a single age/income/assets test for the main senior pathway; the Senior Info-Line is listed for help. The official page indicates no income limit for caregivers of individuals 60 and older and grandparents 55+ raising grandchildren."
       },
       "flags": [],
-      "notes": "Current Oklahoma senior-caregiver respite voucher pathway appears to be the Lifespan Respite Grant Voucher Program through Sooner SUCCESS; the official contact number found is 1-877-441-0434. The program has no income limit for caregivers of persons 60+ and grandparents 55+ raising grandchildren, so income/assets values are null for this senior pathway."
+      "notes": "Current Oklahoma respite voucher options for senior caregivers do not show a single age/income/assets test for the main senior pathway; the Senior Info-Line is listed for help. The official page indicates no income limit for caregivers of individuals 60 and older and grandparents 55+ raising grandchildren."
     },
     {
       "programId": "scsep-employment-program",
@@ -380,21 +372,21 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 125,
+        "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "4055212281",
         "sources": {
-          "age": "https://oklahoma.gov/okdhs/services/aging/scommsep.html",
-          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "age": "https://oklahoma.gov/okdhs/services/cap/scsep.html",
+          "income": null,
           "assets": null,
-          "phone": "https://oklahoma.gov/okdhs/services/aging/scommsep.html"
+          "phone": "https://oklahoma.gov/okdhs/services/cap.html"
         },
-        "notes": "Current Oklahoma SCSEP materials identify the senior pathway as age 55+ with income below 125% of the federal poverty level; no asset test was found in authoritative current sources."
+        "notes": "SCSEP is active in Oklahoma and serves low-income, unemployed adults age 55+; no separate asset values were found in current official Oklahoma sources."
       },
       "flags": [],
-      "notes": "Current Oklahoma SCSEP materials identify the senior pathway as age 55+ with income below 125% of the federal poverty level; no asset test was found in authoritative current sources."
+      "notes": "SCSEP is active in Oklahoma and serves low-income, unemployed adults age 55+; no separate asset values were found in current official Oklahoma sources."
     },
     {
       "programId": "legal-assistance-seniors",
@@ -420,15 +412,15 @@
         "assets_couple": null,
         "phone": "8554886814",
         "sources": {
-          "age": "https://legalaidok.org/programs/senior-legal-help/",
+          "age": "https://oklahoma.gov/okdhs/services/cap/legal-services.html",
           "income": null,
           "assets": null,
           "phone": "https://legalaidok.org/programs/senior-legal-help/"
         },
-        "notes": "Current official LASO OKSPLASH senior pathway is for persons age 60 and over; no separate income/assets test found on the official senior page."
+        "notes": "Current senior pathway appears to be OK-SPLASH/OKSPLASH through Legal Aid Services of Oklahoma; official source says age 60+ and provides the 855-488-6814 helpline."
       },
       "flags": [],
-      "notes": "Current official LASO OKSPLASH senior pathway is for persons age 60 and over; no separate income/assets test found on the official senior page."
+      "notes": "Current senior pathway appears to be OK-SPLASH/OKSPLASH through Legal Aid Services of Oklahoma; official source says age 60+ and provides the 855-488-6814 helpline."
     },
     {
       "programId": "advantage-waiver-program",
@@ -451,18 +443,18 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
+        "assets_couple": 4000,
         "phone": "8004354711",
         "sources": {
-          "age": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
-          "income": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
-          "assets": "https://medicaidplanningassistance.org/oklahoma-advantage-waiver/amp/",
+          "age": "https://oklahoma.gov/ohca/individuals/programs/advantage-waiver-program.html",
+          "income": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/general-financial-eligibility-requirements-for-the-advantage-program.html",
+          "assets": "https://www.medicaidplanningassistance.org/oklahoma-advantage-waiver/",
           "phone": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html"
         },
-        "notes": "Program appears current; official Oklahoma source gives age 65+ for seniors and 1-800-435-4711. No separate current official countable asset limit was found in the retrieved state pages, so the $2,000 figure comes from a current non-government source citing program rules."
+        "notes": "Official Oklahoma pages confirm age 65+ for the senior pathway and the main help number 800-435-4711; current countable resource limits were not stated on the retrieved official pages, so the asset values come from a current nonprofit guide citing Medicaid rules."
       },
       "flags": [],
-      "notes": "Program appears current; official Oklahoma source gives age 65+ for seniors and 1-800-435-4711. No separate current official countable asset limit was found in the retrieved state pages, so the $2,000 figure comes from a current non-government source citing program rules."
+      "notes": "Official Oklahoma pages confirm age 65+ for the senior pathway and the main help number 800-435-4711; current countable resource limits were not stated on the retrieved official pages, so the asset values come from a current nonprofit guide citing Medicaid rules."
     },
     {
       "programId": "chore-services-title-iii",
@@ -487,12 +479,12 @@
           "age": "https://oklahoma.gov/okdhs/services/cap/older-americans-act.html",
           "income": "https://oklahoma.gov/okdhs/services/cap/older-americans-act.html",
           "assets": null,
-          "phone": "https://oklahoma.gov/okdhs/services/cap/older-americans-act.html"
+          "phone": "https://oklahoma.gov/okdhs/services/aging/titleiii.html"
         },
-        "notes": "Current Oklahoma Title III chore services are for seniors 60+; no current income or asset test found in authoritative source."
+        "notes": "Current Oklahoma Title III chore services are for seniors 60+; no income or asset test is stated for this service pathway, though income may be asked to screen for other programs."
       },
       "flags": [],
-      "notes": "Current Oklahoma Title III chore services are for seniors 60+; no current income or asset test found in authoritative source."
+      "notes": "Current Oklahoma Title III chore services are for seniors 60+; no income or asset test is stated for this service pathway, though income may be asked to screen for other programs."
     },
     {
       "programId": "senior-farmers-market-nutrition-program",
@@ -512,17 +504,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "9185799477",
+        "phone": "4055213076",
         "sources": {
-          "age": "https://incog.org/Agency_on_Aging/aaa_services.html",
-          "income": "https://www.usda.gov/sites/default/files/guidance-documents/fns.sfmnp-ieg-2026-27.pdf",
+          "age": "https://www.fna.usda.gov/sfmnp/senior-farmers-market-nutrition-program",
+          "income": "https://www.fna.usda.gov/sfmnp/senior-farmers-market-nutrition-program",
           "assets": null,
-          "phone": "https://incog.org/Agency_on_Aging/aaa_services.html"
+          "phone": "https://www.fna.usda.gov/fns-contact/oklahoma-department-human-services-0"
         },
-        "notes": "Oklahoma SFMNP appears current and invitation-based; I could verify the senior age threshold and federal income rule, but no authoritative Oklahoma source with asset limits was found."
+        "notes": "Oklahoma SFMNP is current; no separate asset test found in the retrieved official sources. Income is described only as 185% of federal poverty guidelines, but no Oklahoma-specific dollar amount was retrieved."
       },
       "flags": [],
-      "notes": "Oklahoma SFMNP appears current and invitation-based; I could verify the senior age threshold and federal income rule, but no authoritative Oklahoma source with asset limits was found."
+      "notes": "Oklahoma SFMNP is current; no separate asset test found in the retrieved official sources. Income is described only as 185% of federal poverty guidelines, but no Oklahoma-specific dollar amount was retrieved."
     }
   ]
 }

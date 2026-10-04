@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.097Z
+ * Last updated: 2026-10-04T02:03:26.909Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -387,17 +387,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "assets_couple",
-          "from": 3000,
-          "to": 4000,
-          "source": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/determining-financial-eligibility-for-advantage-program-services.html",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "pace-comprehensive-care",
@@ -640,11 +630,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1235
+            "monthlyLimit": 1350
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1663
+            "monthlyLimit": 1824
           },
           {
             "householdSize": 1,
@@ -750,6 +740,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for all social services and benefits",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 763-2828",
+          "description": "Number listed on oid.ok.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -848,40 +844,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 1235,
-          "to": 1816,
-          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1663,
-          "to": 2455,
-          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
-        },
-        {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "flaggedAt": "2026-10-04T00:53:06.885Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "flaggedAt": "2026-10-04T00:53:06.885Z"
         }
       ],
       "dismissedFlags": [
@@ -891,6 +869,40 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://oklahoma.gov/okdhs/services/health/medicare.html",
           "reason": "page also lists ours ((405) 522-5050)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 1235,
+          "to": 1350,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "flaggedAt": "2026-10-04T00:53:06.885Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "income_2",
+          "from": 1663,
+          "to": 1824,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "flaggedAt": "2026-10-04T00:53:06.885Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "4055213646",
+            "4055225050",
+            "211"
+          ],
+          "to": "(800) 763-2828",
+          "source": "https://www.oid.ok.gov/65-and-over/",
+          "flaggedAt": "2026-10-04T00:53:06.885Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1052,6 +1064,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 823-4369",
           "description": "Questions about using your EBT card or finding stores that accept SNAP",
           "hours": "Monday-Friday 6am-10pm CT, weekends 8am-6pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 411-1877",
+          "description": "Number listed on oklahoma.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1119,33 +1137,36 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1739,
-          "source": "https://www.fns.usda.gov/snap-recipient/eligibility",
+          "to": 1696,
+          "source": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-04T00:53:06.885Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2345,
-          "source": "https://www.fns.usda.gov/snap-recipient/eligibility",
+          "to": 2296,
+          "source": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
-        },
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-04T00:53:06.885Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8777600114",
             "211",
             "8778234369"
           ],
-          "to": "8664111877",
-          "source": "https://oklahoma.gov/okdhs/services/snap.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "to": "(866) 411-1877",
+          "source": "https://oklahoma.gov/okdhs/contact-us.html",
+          "flaggedAt": "2026-10-04T00:53:06.885Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1545,7 +1566,16 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-10-04",
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "4055225050",
+          "source": "https://oklahoma.gov/okdhs/services/cap.html",
+          "reason": "page also lists ours ((800) 211-2116)",
+          "dismissedAt": "2026-10-04"
+        }
+      ]
     },
     {
       "id": "respite-voucher-programs",

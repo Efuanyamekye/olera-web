@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NJ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.923Z
+ * Last updated: 2026-10-04T02:03:26.818Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1010,7 +1010,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-04T00:51:38.093Z"
+        }
+      ]
     },
     {
       "id": "alzheimers-adult-day-services",
@@ -1171,19 +1182,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.nj.gov/humanservices/doas/documents/Adult%20Day%20Services%20Program%20Brochure%20(Web-English).pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8772223737",
-            "211"
-          ],
-          "to": "18772223733",
-          "source": "https://nj.gov/humanservices/doas/documents/ADSP%20Brochure%20(Print%20-%20English).pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:42.493Z"
+          "proposed": "6094384733",
+          "source": "https://www.nj.gov/humanservices/doas/services/a-k/aads/",
+          "reason": "page also lists ours ((877) 222-3737)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

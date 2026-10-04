@@ -1,14 +1,14 @@
 {
   "state": "NH",
   "stateName": "New Hampshire",
-  "checkedAt": "2026-10-02T07:42:24.535Z",
+  "checkedAt": "2026-10-04T00:51:28.671Z",
   "total": 18,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 11,
-  "totalFlags": 16,
-  "highSeverityFlags": 5,
+  "totalFlags": 18,
+  "highSeverityFlags": 6,
   "programs": [
     {
       "programId": "medicaid-aged-blind-disabled",
@@ -29,18 +29,25 @@
         "age": 65,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8442753447",
         "sources": {
-          "age": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/carepath-cb-choices-booklet.pdf",
+          "age": "https://www.medicareresources.org/states/new-hampshire-guide-content/",
           "income": null,
-          "assets": null,
-          "phone": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip"
+          "assets": "https://www.medicaid.gov/medicaid/spa/downloads/NH-26-0001.pdf",
+          "phone": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents/2021-11/bfa-77c.pdf"
         },
-        "notes": "Current official source found for senior pathway age and state help line; no authoritative retrievable source found in the gathered results for the ABD countable asset limit or income limit, so those are null."
+        "notes": "NH ABD-related senior pathway appears to use age 65+ for aged eligibility; income limits were not reliably retrievable from an authoritative current source in the gathered results."
       },
       "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 7500,
+          "verifiedValue": 2000,
+          "pctDiff": 73.3
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -51,7 +58,7 @@
           "verifiedValue": "8442753447"
         }
       ],
-      "notes": "Current official source found for senior pathway age and state help line; no authoritative retrievable source found in the gathered results for the ABD countable asset limit or income limit, so those are null."
+      "notes": "NH ABD-related senior pathway appears to use age 65+ for aged eligibility; income limits were not reliably retrievable from an authoritative current source in the gathered results."
     },
     {
       "programId": "cfi-waiver",
@@ -75,14 +82,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8666349412",
+        "phone": "18666349412",
         "sources": {
           "age": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/NH",
           "income": null,
           "assets": null,
           "phone": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/carepath-cb-choices-booklet.pdf"
         },
-        "notes": "Current CFI waiver serves seniors 65+ and adults 18-64 with disabilities; no income or asset threshold found in the retrieved sources."
+        "notes": "Current CFI waiver factsheet identifies the senior pathway as ages 65+; no authoritative income or asset test values were found in the retrieved sources."
       },
       "flags": [
         {
@@ -92,7 +99,7 @@
           "verifiedValue": 65
         }
       ],
-      "notes": "Current CFI waiver serves seniors 65+ and adults 18-64 with disabilities; no income or asset threshold found in the retrieved sources."
+      "notes": "Current CFI waiver factsheet identifies the senior pathway as ages 65+; no authoritative income or asset test values were found in the retrieved sources."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -118,12 +125,12 @@
         "assets_couple": null,
         "phone": "8446427223",
         "sources": {
-          "age": "https://www.nhpace.org/do-i-qualify/",
+          "age": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
           "income": null,
           "assets": null,
           "phone": "https://www.nhpace.org/do-i-qualify/"
         },
-        "notes": "Current Neighborhood PACE NH appears active; no income or asset test was found on the retrieved official site."
+        "notes": "New Hampshire does not currently appear to have a state-run PACE program; current NH-facing PACE contact appears to be a neighboring program/organization. No income or asset test was found in the retrieved sources."
       },
       "flags": [
         {
@@ -137,7 +144,7 @@
           "verifiedValue": "8446427223"
         }
       ],
-      "notes": "Current Neighborhood PACE NH appears active; no income or asset test was found on the retrieved official site."
+      "notes": "New Hampshire does not currently appear to have a state-run PACE program; current NH-facing PACE contact appears to be a neighboring program/organization. No income or asset test was found in the retrieved sources."
     },
     {
       "programId": "medicare-savings-programs",
@@ -155,33 +162,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1350,
-        "income_2": 1824,
+        "income_1": 1330,
+        "income_2": 1803,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "18442753447",
+        "phone": "8442753447",
         "sources": {
           "age": null,
-          "income": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
-          "assets": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
-          "phone": "https://www.dhhs.nh.gov/medicaid-contact-directory"
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "phone": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip"
         },
-        "notes": "NH Medicare Savings Program (QMB/SLMB/QI) uses income and resource limits; no separate age minimum found for the senior pathway. Current 2026 limits appear consistent across QMB/SLMB/QI resource rules in the retrieved sources."
+        "notes": "Program is current in New Hampshire as Medicare Savings Programs (QMB, SLMB, QI/SLMB-135); 2026 federal income/resource limits apply."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1660,
-          "verifiedValue": 1350,
-          "pctDiff": 18.7
+          "verifiedValue": 1330,
+          "pctDiff": 19.9
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 2239,
-          "verifiedValue": 1824,
-          "pctDiff": 18.5
+          "verifiedValue": 1803,
+          "pctDiff": 19.5
         },
         {
           "field": "assets_individual",
@@ -203,10 +210,10 @@
           "draftValue": [
             "8006334227"
           ],
-          "verifiedValue": "18442753447"
+          "verifiedValue": "8442753447"
         }
       ],
-      "notes": "NH Medicare Savings Program (QMB/SLMB/QI) uses income and resource limits; no separate age minimum found for the senior pathway. Current 2026 limits appear consistent across QMB/SLMB/QI resource rules in the retrieved sources."
+      "notes": "Program is current in New Hampshire as Medicare Savings Programs (QMB, SLMB, QI/SLMB-135); 2026 federal income/resource limits apply."
     },
     {
       "programId": "snap-food-benefits",
@@ -224,19 +231,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2608,
-        "income_2": 3524,
+        "age": 60,
+        "income_1": 2609,
+        "income_2": 3525,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6032719700",
+        "phone": "18442753447",
         "sources": {
-          "age": null,
-          "income": "https://www.nhfoodbank.org/what-we-do/snap-supplemental-nutrition-assistance-program/",
-          "assets": "https://www.nhfoodbank.org/what-we-do/snap-supplemental-nutrition-assistance-program/",
+          "age": "https://benefitscheckup.org/program/nutrition_nh_snap_program",
+          "income": "https://benefitscheckup.org/program/nutrition_nh_snap_program",
+          "assets": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/bfa-form-800a-bfa-programs-and-services-guide.pdf",
           "phone": "https://www.dhhs.nh.gov/programs-services/food-meals-assistance/supplemental-nutrition-assistance-program-snap"
         },
-        "notes": "SNAP in New Hampshire appears current; for most households the resource test was removed, while older/disabled households over the income threshold may still face a resource test. No senior-specific minimum age test was found for SNAP."
+        "notes": "SNAP in New Hampshire is current; senior pathway generally uses age 60+ rules. New Hampshire appears to have no countable asset limit for many SNAP households, but the retrieved official source snippet did not provide a clean senior-specific countable asset cap, so assets are set to null."
       },
       "flags": [
         {
@@ -246,10 +253,10 @@
             "8773477627",
             "211"
           ],
-          "verifiedValue": "6032719700"
+          "verifiedValue": "18442753447"
         }
       ],
-      "notes": "SNAP in New Hampshire appears current; for most households the resource test was removed, while older/disabled households over the income threshold may still face a resource test. No senior-specific minimum age test was found for SNAP."
+      "notes": "SNAP in New Hampshire is current; senior pathway generally uses age 60+ rules. New Hampshire appears to have no countable asset limit for many SNAP households, but the retrieved official source snippet did not provide a clean senior-specific countable asset cap, so assets are set to null."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -277,11 +284,11 @@
         "phone": "6032713670",
         "sources": {
           "age": null,
-          "income": "https://liheapch.acf.hhs.gov/profiles/NH.htm",
+          "income": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "assets": null,
-          "phone": "https://liheapch.acf.hhs.gov/profiles/NH.htm"
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "LIHEAP in New Hampshire uses 60% State Median Income; no asset test found in the retrieved official source. Phone listed is the LIHEAP public inquiries number."
+        "notes": "New Hampshire LIHEAP is the Fuel Assistance Program; no authoritative age or asset test source was found. Income values are monthly equivalents from the official 2025-2026 NH Energy Assistance brochure, and the main LIHEAP help number is the state contact listed by ACF."
       },
       "flags": [
         {
@@ -296,7 +303,7 @@
           "verifiedValue": "6032713670"
         }
       ],
-      "notes": "LIHEAP in New Hampshire uses 60% State Median Income; no asset test found in the retrieved official source. Phone listed is the LIHEAP public inquiries number."
+      "notes": "New Hampshire LIHEAP is the Fuel Assistance Program; no authoritative age or asset test source was found. Income values are monthly equivalents from the official 2025-2026 NH Energy Assistance brochure, and the main LIHEAP help number is the state contact listed by ACF."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -319,14 +326,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6036688010",
+        "phone": "6032713670",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://caphr.org/system/files/2021-01/uploads/file/2017_08_WEATHERIZATION_BROCHURE_4c1.pdf"
+          "phone": "https://www.energy.nh.gov/consumers/help-energy-and-utility-bills/weatherization-assistance-program"
         },
-        "notes": "No authoritative senior-specific age, income, or asset test found in the retrieved sources; New Hampshire WAP appears to use local Community Action Agency intake. Main contact found for Southern New Hampshire Services is 603-668-8010."
+        "notes": "No authoritative age, income, or asset test found for NH WAP; priority is given to elderly households, but not a fixed age threshold. Program appears active in 2026."
       },
       "flags": [
         {
@@ -336,10 +343,10 @@
             "6034352500",
             "211"
           ],
-          "verifiedValue": "6036688010"
+          "verifiedValue": "6032713670"
         }
       ],
-      "notes": "No authoritative senior-specific age, income, or asset test found in the retrieved sources; New Hampshire WAP appears to use local Community Action Agency intake. Main contact found for Southern New Hampshire Services is 603-668-8010."
+      "notes": "No authoritative age, income, or asset test found for NH WAP; priority is given to elderly households, but not a fixed age threshold. Program appears active in 2026."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -368,10 +375,10 @@
           "assets": null,
           "phone": "https://www.cms.gov/about-cms/contact/directory/nh-ship-servicelink-resource-center/1562141"
         },
-        "notes": "SHIP is a Medicare counseling/assistance program with no age, income, or asset test for the senior pathway; current official phone number found."
+        "notes": "SHIP is a Medicare counseling program for people with Medicare or those preparing to enroll; no age, income, or asset eligibility test found in current authoritative sources."
       },
       "flags": [],
-      "notes": "SHIP is a Medicare counseling/assistance program with no age, income, or asset test for the senior pathway; current official phone number found."
+      "notes": "SHIP is a Medicare counseling program for people with Medicare or those preparing to enroll; no age, income, or asset eligibility test found in current authoritative sources."
     },
     {
       "programId": "meals-on-wheels",
@@ -394,14 +401,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6032719203",
+        "phone": "6034249967",
         "sources": {
-          "age": "https://www.hcsservices.org/services/nutrition-for-seniors/",
+          "age": "https://www.hcmow.org/services",
           "income": null,
           "assets": null,
-          "phone": "https://staging.nhfv.org/resources/bureau-of-elderly-and-adult-services/"
+          "phone": "https://www.hcmow.org/home-delivered-meals"
         },
-        "notes": "Senior pathway appears to use age 60+; no income or asset test found for Meals on Wheels/Elderly Nutrition Program in the retrieved sources."
+        "notes": "Current source found for Hillsborough County Meals on Wheels/Older Americans Act nutrition pathway; no income or asset test located in retrieved sources."
       },
       "flags": [
         {
@@ -411,10 +418,10 @@
             "8666349412",
             "211"
           ],
-          "verifiedValue": "6032719203"
+          "verifiedValue": "6034249967"
         }
       ],
-      "notes": "Senior pathway appears to use age 60+; no income or asset test found for Meals on Wheels/Elderly Nutrition Program in the retrieved sources."
+      "notes": "Current source found for Hillsborough County Meals on Wheels/Older Americans Act nutrition pathway; no income or asset test located in retrieved sources."
     },
     {
       "programId": "family-caregiver-support",
@@ -433,29 +440,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8666349412",
         "sources": {
-          "age": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/inline-documents/sonh/rfa-2024-dltss-03-adrcs-app-e-appendix-e-nhfcsp-program-operations.pdf",
+          "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.caregiver.org/connecting-caregivers/services-by-state/new-hampshire/"
         },
-        "notes": "Senior pathway age threshold is 55 for grandparents/relative caregivers; other senior caregiving pathways may use 60+. No income or asset test found in authoritative sources."
+        "notes": "Could not find an authoritative current official source for a senior-specific minimum age; available materials indicate the program serves caregivers of eligible care recipients and that older adults caring for adults with disabilities are included, but the senior threshold is not clearly stated. No income or asset test found."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 18,
-          "verifiedValue": 55
-        }
-      ],
-      "notes": "Senior pathway age threshold is 55 for grandparents/relative caregivers; other senior caregiving pathways may use 60+. No income or asset test found in authoritative sources."
+      "flags": [],
+      "notes": "Could not find an authoritative current official source for a senior-specific minimum age; available materials indicate the program serves caregivers of eligible care recipients and that older adults caring for adults with disabilities are included, but the senior threshold is not clearly stated. No income or asset test found."
     },
     {
       "programId": "scsep-employment",
@@ -478,17 +478,27 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18778725627",
+        "phone": "6032064400",
         "sources": {
           "age": "https://www.dol.gov/agencies/eta/seniors",
           "income": "https://www.dol.gov/agencies/eta/seniors",
           "assets": null,
-          "phone": "https://www.dol.gov/agencies/eta/seniors"
+          "phone": "https://operationable.net/scsep-new-hampshire-residents/"
         },
-        "notes": "SCSEP is active in New Hampshire; federal DOL page gives the current age, income limit, and national help line."
+        "notes": "SCSEP is current and active in New Hampshire; no asset test found in authoritative current sources, and the program uses a 125% FPL income limit."
       },
-      "flags": [],
-      "notes": "SCSEP is active in New Hampshire; federal DOL page gives the current age, income limit, and national help line."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8778725627",
+            "211"
+          ],
+          "verifiedValue": "6032064400"
+        }
+      ],
+      "notes": "SCSEP is current and active in New Hampshire; no asset test found in authoritative current sources, and the program uses a 125% FPL income limit."
     },
     {
       "programId": "legal-assistance-seniors",
@@ -512,17 +522,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18883539944",
+        "phone": "8883539944",
         "sources": {
           "age": "https://www.nhla.org/services",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.nhla.org/services"
+          "income": "https://www.nhla.org/",
+          "assets": "https://www.nhla.org/",
+          "phone": "https://www.nhla.org/contact-us"
         },
-        "notes": "Current senior pathway appears to be NH Legal Assistance's Senior Law Project; age 60+ and the listed senior help line is 1-888-353-9944."
+        "notes": "Current official NH Legal Assistance senior pathway appears to be the Justice in Aging/Senior Law Project for adults age 60+; no income or asset test was found in the retrieved official pages, and current help line is listed on the contact page."
       },
       "flags": [],
-      "notes": "Current senior pathway appears to be NH Legal Assistance's Senior Law Project; age 60+ and the listed senior help line is 1-888-353-9944."
+      "notes": "Current official NH Legal Assistance senior pathway appears to be the Justice in Aging/Senior Law Project for adults age 60+; no income or asset test was found in the retrieved official pages, and current help line is listed on the contact page."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -552,10 +562,10 @@
           "assets": null,
           "phone": "https://www.cms.gov/about-cms/contact/directory/long-term-care-ombudsman-new-hampshire/1553901"
         },
-        "notes": "No age, income, or asset eligibility test found for the Long-Term Care Ombudsman Program; the program is a complaint/help resource for long-term care residents. Phone number verified from CMS directory."
+        "notes": "Program appears active and current; no age, income, or asset eligibility test found for the Long-Term Care Ombudsman Program. Official contact phone is the toll-free number listed by CMS."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility test found for the Long-Term Care Ombudsman Program; the program is a complaint/help resource for long-term care residents. Phone number verified from CMS directory."
+      "notes": "Program appears active and current; no age, income, or asset eligibility test found for the Long-Term Care Ombudsman Program. Official contact phone is the toll-free number listed by CMS."
     },
     {
       "programId": "adult-day-services",
@@ -573,21 +583,27 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 18,
+        "age": 60,
         "income_1": 1646,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8003511888",
         "sources": {
-          "age": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/bdshcbctransitionplandraft122018.pdf",
+          "age": "https://www.gc.nh.gov/LBA/Budget/House_Finance_Division_III/3-8-21/Final_for_DLTSS_DIV_III.pdf",
           "income": "https://www.gc.nh.gov/rules/state_agencies/he-e500.html",
           "assets": null,
-          "phone": "https://www.dhhs.nh.gov/programs-services/adult-aging-care"
+          "phone": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/final-draft-2024-2027-nh-state-plan-on-aging.pdf"
         },
-        "notes": "Program appears to be a service category rather than a single means-tested program; official sources found an age threshold for adult day program participants and a monthly income cap for one-person Title XX eligibility, but no countable-asset limit for the senior pathway was located in retrievable official sources."
+        "notes": "New Hampshire adult day services appears to be a service category rather than a single means-tested program; official sources found an age/income rule for Title XX/older-adult adult day services, but no authoritative current asset test for the senior pathway."
       },
       "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 60
+        },
         {
           "field": "income_1",
           "severity": "high",
@@ -605,7 +621,7 @@
           "verifiedValue": "8003511888"
         }
       ],
-      "notes": "Program appears to be a service category rather than a single means-tested program; official sources found an age threshold for adult day program participants and a monthly income cap for one-person Title XX eligibility, but no countable-asset limit for the senior pathway was located in retrievable official sources."
+      "notes": "New Hampshire adult day services appears to be a service category rather than a single means-tested program; official sources found an age/income rule for Title XX/older-adult adult day services, but no authoritative current asset test for the senior pathway."
     },
     {
       "programId": "easterseals-in-home-care",
@@ -635,10 +651,10 @@
           "assets": null,
           "phone": "https://eastersealsnh.org/programs/senior-services/in-home-care-health-services/"
         },
-        "notes": "No age, income, or asset test found for this program. The page indicates the in-home services are being continued through June 30, 2027 for certain counties, and the official contact number listed is 603.845.9318."
+        "notes": "No age, income, or asset eligibility limits were found for this senior in-home care program; current official phone listed on the program page is 603.845.9318."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for this program. The page indicates the in-home services are being continued through June 30, 2027 for certain counties, and the official contact number listed is 603.845.9318."
+      "notes": "No age, income, or asset eligibility limits were found for this senior in-home care program; current official phone listed on the program page is 603.845.9318."
     },
     {
       "programId": "caregiver-respite-volunteer-programs",
@@ -667,7 +683,7 @@
           "assets": null,
           "phone": "https://www.strathamnh.gov/Documents/Departments/Parks%20and%20Recreation/Senior%20Services/stratham_seniorresourceguide_final.pdf?t=202512231130030"
         },
-        "notes": "Senior Companion Program NH appears current and serves adults 55+; no separate income or asset thresholds were found in the retrieved authoritative material."
+        "notes": "Senior Companion Program NH appears current as a statewide respite/friendly visitation program; age threshold is 55+ and no current authoritative income or asset limits were retrievable from the available source."
       },
       "flags": [
         {
@@ -679,7 +695,7 @@
           "verifiedValue": "6032253295"
         }
       ],
-      "notes": "Senior Companion Program NH appears current and serves adults 55+; no separate income or asset thresholds were found in the retrieved authoritative material."
+      "notes": "Senior Companion Program NH appears current as a statewide respite/friendly visitation program; age threshold is 55+ and no current authoritative income or asset limits were retrievable from the available source."
     },
     {
       "programId": "americorps-senior-companion",
@@ -710,10 +726,10 @@
           "assets": null,
           "phone": "https://capbm.org/Senior-Companion"
         },
-        "notes": "Current New Hampshire Senior Companion Program page indicates applicants must be 55+ and meet income requirements; no authoritative current income or asset thresholds were found. Phone number sourced from the program page."
+        "notes": "Current program page indicates applicants must be 55+ and meet income requirements; no retrievable official source found for specific income/assets thresholds."
       },
       "flags": [],
-      "notes": "Current New Hampshire Senior Companion Program page indicates applicants must be 55+ and meet income requirements; no authoritative current income or asset thresholds were found. Phone number sourced from the program page."
+      "notes": "Current program page indicates applicants must be 55+ and meet income requirements; no retrievable official source found for specific income/assets thresholds."
     },
     {
       "programId": "monadnock-at-home-community-services",
@@ -731,22 +747,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 62,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "6033710809",
         "sources": {
-          "age": "https://monadnockcommunityhospital.com/wp-content/uploads/2018/12/CHNA_2015.pdf",
+          "age": null,
           "income": null,
           "assets": null,
           "phone": "https://monadnockathome.org/content/info2510"
         },
-        "notes": "Current authoritative source for the senior pathway age threshold is unavailable from a live official page; the retrievable source states ages 62+ and the main contact number is published by Monadnock at Home. No income or asset test found."
+        "notes": "No authoritative age, income, or asset eligibility requirements were found for the senior pathway; the program appears to be a membership-based senior services program. Official phone found on program site."
       },
       "flags": [],
-      "notes": "Current authoritative source for the senior pathway age threshold is unavailable from a live official page; the retrievable source states ages 62+ and the main contact number is published by Monadnock at Home. No income or asset test found."
+      "notes": "No authoritative age, income, or asset eligibility requirements were found for the senior pathway; the program appears to be a membership-based senior services program. Official phone found on program site."
     }
   ]
 }
