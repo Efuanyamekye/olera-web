@@ -7,6 +7,18 @@
 
 ## Current Focus
 
+### 2026-10-03 (late) — William Snowden case (Pascagoula, Hoop Cares ad): Ces nudged to call; case-page label fix (`graceful-franklin`, #2352 open)
+
+**The case:** Meta instant form 2 Oct 4:55 PM CT → qualifying text 5:00 → "100% Disabled Veteran" 5:48 → classifier care_seeker, handed to Hoop 5:50 → Liz wrote on the shared thread 5:52 ("when's a good time to talk?") → auto check-in Sat 2:20 PM. Silent since. One thread, three views: admin case `/admin/relationships/families/284c1199-…`, Hoop's inbox (`/portal/inbox?role=provider&ad=<lead>`, rendered via `getAdFamily`, read-only), family `/f/thread/<token>`.
+
+**Done:** Ces nudged in #careseeker-support (call, confirm Liz's message, get a call window, ask VA enrollment; log on the case page). Logged on the case as a note with next action "Ces calls William…" owner Ces, due Mon 5 Oct. Hoop's thread only pulls `channel=call` touches, so the note stays internal.
+
+**Bug found + PR #2352:** case page labelled any touch "reached them" if the word "reached" appeared anywhere in its status line (which carries the next action). Label now reads the outcome segment only.
+
+**Still owed:** qualification replies consumed by the city-ads step (e.g. William's "100% Disabled Veteran") are never marked `handled_at` in `sms_inbound`, so the SMS inbox shows "needs Olera reply" when nothing is owed. Small fix in the qualification handler.
+
+**Notes:** 100% disabled veteran = likely VA Homemaker/Home Health Aide eligibility; that changes what Hoop can offer. No "view as provider" in admin; `getAdFamily(db, leadId, [profileId], name)` reproduces her panel read-only.
+
 ### 2026-10-03 — Google review counts: cron fixed, refresh buttons, inbox page in prod (`graceful-franklin`, #2338 → #2345, #2347 → #2348)
 
 **Trigger:** Ces flagged two claimed providers (Happy Sunflower Senior Living, Preferred Care at Home of Denton) whose Olera pages showed 5 and 2 Google reviews against 14 and 39 on Google. Caches were from March and May.
