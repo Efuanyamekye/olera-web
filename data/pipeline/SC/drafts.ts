@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.930Z
+ * Last updated: 2026-10-04T01:02:47.825Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1856,19 +1856,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "18883465592",
-            "8037996653"
-          ],
-          "to": "18008689095",
+          "proposed": "18008689095",
           "source": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "reason": "page also lists ours ((803) 799-6653)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

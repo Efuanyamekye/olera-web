@@ -539,6 +539,12 @@
           "phone": "(844) 640-6446",
           "description": "Medicaid eligibility and application assistance",
           "hours": "Mon-Fri 7am-8pm, Sat 8am-5pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 246-5678",
+          "description": "Number listed on aging.ohio.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -601,19 +607,21 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8446406446",
             "5138627223",
             "8888957223"
           ],
-          "to": "8662465678",
+          "to": "(866) 246-5678",
           "source": "https://aging.ohio.gov/see-news-and-events/news/oam-2024",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-04T00:52:48.023Z"
+          "flaggedAt": "2026-10-04T00:52:48.023Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1345,6 +1353,12 @@
           "phone": "(419) 784-5393",
           "description": "Weatherization services for northwestern Ohio counties",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 848-1300",
+          "description": "Number listed on bridgescap.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1408,20 +1422,22 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8002820880",
             "6142522799",
             "7405948499",
             "4197845393"
           ],
-          "to": "8008481300",
+          "to": "(800) 848-1300",
           "source": "https://www.bridgescap.org/hwap",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:52:48.023Z"
+          "flaggedAt": "2026-10-04T00:52:48.023Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2098,22 +2114,15 @@
       "sourceUrl": "https://aging.ohio.gov/care-and-living/staying-active/staying-active-catalog/senior-community-services-employment-program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "6144665500",
-            "9378400055",
-            "3308327220",
-            "7403535238",
-            "3307820978"
-          ],
-          "to": "3302534597",
-          "source": "https://vantageaging.org/programs-and-services/workforce-solutions/scsep-service-area/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:52:48.023Z"
+          "proposed": "3302534597",
+          "source": "https://vantageaging.org/about-us/our-locations/",
+          "reason": "page also lists ours ((937) 840-0055, (330) 832-7220, (740) 353-5238)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

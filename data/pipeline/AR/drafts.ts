@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.899Z
+ * Last updated: 2026-10-04T01:16:13.633Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -549,6 +549,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 482-8988",
           "description": "Find your nearest office for in-person help",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 372-1084",
+          "description": "Number listed on search.arkansas211.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -658,6 +664,18 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:33:22.568Z",
           "appliedAt": "2026-10-02",
           "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8004828988"
+          ],
+          "to": "(855) 372-1084",
+          "source": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949",
+          "flaggedAt": "2026-10-02T07:33:22.568Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
       "reviewQueue": [
@@ -677,17 +695,6 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8004828988"
-          ],
-          "to": "8553721084",
-          "source": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949",
-          "severity": "medium",
-          "why": "aggregator source",
           "flaggedAt": "2026-10-02T07:33:22.568Z"
         }
       ]
@@ -1673,6 +1680,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for referrals to local senior services and Area Agencies on Aging",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 482-6359",
+          "description": "Number listed on search.arkansas211.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1735,20 +1748,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.arkansas.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5016822441",
             "211"
           ],
-          "to": "8004826359",
+          "to": "(800) 482-6359",
           "source": "https://search.arkansas211.org/search/2157d3ff-8296-5962-b65f-a3cbc7f1eea2",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-02T07:33:22.568Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "family-caregiver-support",

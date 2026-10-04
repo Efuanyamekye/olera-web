@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.900Z
+ * Last updated: 2026-10-04T01:16:13.669Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -542,6 +542,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Find local CBAS centers and Medi-Cal managed care plans in your area",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(916) 419-7545",
+          "description": "Number listed on aging.ca.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -596,20 +602,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9164407400",
             "211"
           ],
-          "to": "9164197545",
+          "to": "(916) 419-7545",
           "source": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
+          "flaggedAt": "2026-10-02T07:33:59.830Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "calfresh-food-benefits",
@@ -2809,6 +2818,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Find your local center at caregivercalifornia.org",
           "hours": "Online 24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 510-2020",
+          "description": "Number listed on aging.ca.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2862,20 +2877,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.caregivercalifornia.org/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8006756694",
             "9095141404"
           ],
-          "to": "8005102020",
+          "to": "(800) 510-2020",
           "source": "https://aging.ca.gov/Aging_Resources/Caring_for_the_Caregivers/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
+          "flaggedAt": "2026-10-02T07:33:59.830Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "cbas-adult-day-services",
@@ -3060,19 +3078,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "9164407400",
-            "211"
-          ],
-          "to": "9164197545",
+          "proposed": "9164197545",
           "source": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
+          "reason": "page also lists ours ((916) 419-7545)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     }

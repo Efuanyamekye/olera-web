@@ -1186,19 +1186,15 @@
       "sourceUrl": "https://www.nj.gov/humanservices/doas/documents/Adult%20Day%20Services%20Program%20Brochure%20(Web-English).pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8772223737",
-            "211"
-          ],
-          "to": "6094384733",
+          "proposed": "6094384733",
           "source": "https://www.nj.gov/humanservices/doas/services/a-k/aads/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:51:38.093Z"
+          "reason": "page also lists ours ((877) 222-3737)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

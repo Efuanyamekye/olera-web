@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.935Z
+ * Last updated: 2026-10-04T01:16:14.315Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1487,6 +1487,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(509) 452-7145",
           "description": "Local weatherization provider for Adams County",
           "hours": "Contact for hours, each county agency has different schedules"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(360) 725-2857",
+          "description": "Number listed on dcyf.wa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1548,19 +1554,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.commerce.wa.gov/weatherization/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5094527145"
           ],
-          "to": "3607252857",
+          "to": "(360) 725-2857",
           "source": "https://dcyf.wa.gov/services/housing-basic-needs/basic-needs-community-resource-directory",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "flaggedAt": "2026-10-02T07:48:08.854Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "ship-medicare-counseling",
@@ -2169,6 +2178,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General information about social services and local SCSEP providers",
           "hours": "Mon-Fri 9am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 872-5627",
+          "description": "Number listed on dol.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2232,18 +2247,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4253664457",
             "211"
           ],
-          "to": "18778725627",
+          "to": "(877) 872-5627",
           "source": "https://www.dol.gov/agencies/eta/seniors",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "flaggedAt": "2026-10-02T07:48:08.854Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2465,6 +2482,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "See waombudsman.org",
           "description": "Regional contacts for all other Washington counties",
           "hours": "Varies by region"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 562-6028",
+          "description": "Number listed on waombudsman.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2501,19 +2524,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://waombudsman.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "2537983789"
           ],
-          "to": "8005626028",
+          "to": "(800) 562-6028",
           "source": "https://www.waombudsman.org/about/staff/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "flaggedAt": "2026-10-02T07:48:08.854Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "state-parks-senior-limited-income-pass",

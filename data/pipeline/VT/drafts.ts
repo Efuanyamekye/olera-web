@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.934Z
+ * Last updated: 2026-10-04T01:16:14.291Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1713,6 +1713,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(802) 224-1825",
           "description": "Melissa Marden, MOW Program Specialist for under-60 individuals with disabilities",
           "hours": "Contact for current hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 642-5119",
+          "description": "Number listed on agewellvt.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1773,20 +1779,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://agewellvt.org/services/food-meal-delivery/meals-on-wheels/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8024657293",
             "8022241825"
           ],
-          "to": "8006425119",
+          "to": "(800) 642-5119",
           "source": "https://www.agewellvt.org/services/food-meal-delivery/meals-on-wheels/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "flaggedAt": "2026-10-02T07:47:39.066Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "caregiver-support-program",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T00:52:12.225Z
+ * Last updated: 2026-10-04T02:03:26.854Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -212,21 +212,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "7756874210",
-            "211",
-            "8005252395"
-          ],
-          "to": "8776383472",
-          "source": "https://www.medicaid.nv.gov/contactinfo",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "hcbs-waiver",
@@ -648,26 +634,7 @@ export const drafts: PipelineStateDrafts = {
           "appliedBy": "factcheck-judge"
         }
       ],
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 9090,
-          "to": 9950,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 13630,
-          "to": 14910,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -891,44 +858,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2608,
-          "to": 1729,
-          "source": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3526,
-          "to": 2345,
-          "source": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        },
-        {
-          "field": "assets_individual",
-          "from": 3200,
-          "to": 4250,
-          "source": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 3200,
-          "to": 4250,
-          "source": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "energy-assistance-eap-liheap",
@@ -1051,6 +981,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(775) 684-0500",
           "description": "General information about energy assistance programs",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 992-0900",
+          "description": "Number listed on dss.nv.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1095,18 +1031,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dss.nv.gov/programs/energy/apply-for-assistance/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "7756840500"
           ],
-          "to": "8009920900",
-          "source": "https://www.dws.nv.gov/uploadedFiles/dwssnvgov/content/Home/Features/Forms/2824-EL_Energy%20Assistance%20Application-Large%20Print.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "to": "(800) 992-0900",
+          "source": "https://www.dss.nv.gov/contact/eap-office-south/",
+          "flaggedAt": "2026-10-04T00:52:12.168Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1339,20 +1277,35 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2660,
-          "to": 1550,
-          "source": "https://housing.nv.gov/Programs/Weatherization/",
+          "to": 1310,
+          "source": "https://housing.nv.gov/programs/Weatherization/",
           "severity": "high",
           "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "flaggedAt": "2026-10-04T00:52:12.168Z"
         },
         {
           "field": "income_2",
           "from": 3607,
-          "to": 2098,
-          "source": "https://housing.nv.gov/Programs/Weatherization/",
+          "to": 1778,
+          "source": "https://housing.nv.gov/programs/Weatherization/",
           "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 120% FPL 2026",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
+          "flaggedAt": "2026-10-04T00:52:12.168Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "7024864311",
+            "7757866023",
+            "7027950575",
+            "8664045204",
+            "211"
+          ],
+          "to": "7756842941",
+          "source": "https://www.dss.nv.gov/contentassets/b3bcdb93ea2d4b3f8dc252451a34cbe4/nevada-fund-for-energy-assistance-and-conservation-state-plan-fy2027_remediated.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-04T00:52:12.168Z"
         }
       ]
     },
@@ -1824,7 +1777,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(775) 358-2768",
       "sourceUrl": "https://seniorsinservicenevada.org/respite-voucher-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7753582768",
+            "211"
+          ],
+          "to": "7026337264",
+          "source": "https://adsd.nv.gov/uploadedUploadedFiles/agingnvgov/content/Resources/PAC%20Resource%20Guide%20(January%202021).pdf",
+          "severity": "medium",
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-04T00:52:12.168Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -1940,6 +1907,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(775) 687-4210",
           "description": "State agency monitoring SCSEP programs statewide",
           "hours": "Mon-Fri 8am-5pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 850-2525",
+          "description": "Number listed on my.aarpfoundation.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2003,19 +1976,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7753232243",
             "211",
             "7756874210"
           ],
-          "to": "7026483356",
-          "source": "https://www.aarp.org/states/nevada/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "to": "(855) 850-2525",
+          "source": "https://my.aarpfoundation.org/locator/scsep/",
+          "flaggedAt": "2026-10-04T00:52:12.168Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2159,13 +2134,23 @@ export const drafts: PipelineStateDrafts = {
             "7756874210",
             "211"
           ],
-          "to": "7024863545",
-          "source": "https://www.pebp.nv.gov/resources/community-resources/",
+          "to": "7027500055",
+          "source": "https://www.bbb.org/us/nv/las-vegas/profile/senior-services/nevada-advocates-1086-90054672",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-04T00:52:12.168Z"
         }
-      ]
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "7024863545",
+          "source": "https://www.pebp.nv.gov/resources/community-resources/",
+          "reason": "page also lists ours ((775) 687-4210)",
+          "dismissedAt": "2026-10-04"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2473,26 +2458,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adsd.nv.gov/programs/seniors/seniorrx/srrxprog/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2763,
-          "to": 27746,
-          "source": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/SeniorRx/FAQ%20-%20Members.pdf",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3683,
-          "to": 37222,
-          "source": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/SeniorRx/FAQ%20-%20Members.pdf",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "hcbw-fe-waiver",
@@ -2680,20 +2646,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-22",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "7756874210",
-            "211"
-          ],
-          "to": "8663036323",
-          "source": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "personal-care-services-program",

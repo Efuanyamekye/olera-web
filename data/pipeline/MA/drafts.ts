@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.913Z
+ * Last updated: 2026-10-04T01:16:13.874Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -976,6 +976,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(978) 459-0551",
           "description": "Serves Lowell area and surrounding communities",
           "hours": "Mon-Fri 8am-4:30pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(617) 573-1100",
+          "description": "Number listed on mass.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1038,20 +1044,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/info-details/weatherization-assistance-program-wap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6173576000",
             "9784590551"
           ],
-          "to": "6175731100",
+          "to": "(617) 573-1100",
           "source": "https://www.mass.gov/info-details/weatherization-assistance-program-wap",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:36.005Z"
+          "flaggedAt": "2026-10-02T07:38:36.005Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "shine-health-insurance-counseling",
@@ -2382,6 +2391,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General referral for housing assistance programs",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 500-5599",
+          "description": "Number listed on mass.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2444,20 +2459,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/home-modification-loan-program-hmlp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6177277001",
             "211"
           ],
-          "to": "18665005599",
+          "to": "(866) 500-5599",
           "source": "https://www.mass.gov/home-modification-loan-program-hmlp",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:36.005Z"
+          "flaggedAt": "2026-10-02T07:38:36.005Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "home-care-program",
@@ -3011,6 +3029,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 772-1213",
           "description": "Asset documentation and benefit letters",
           "hours": "Mon-Fri standard hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 537-5816",
+          "description": "Number listed on mass.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3073,21 +3097,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/senior-care-options",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008412900",
             "8006334227",
             "8007721213"
           ],
-          "to": "8885375816",
+          "to": "(888) 537-5816",
           "source": "https://www.mass.gov/info-details/senior-care-options-plans",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:36.005Z"
+          "flaggedAt": "2026-10-02T07:38:36.005Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     }
   ],
   "stateOverview": {

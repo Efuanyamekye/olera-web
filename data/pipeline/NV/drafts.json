@@ -976,6 +976,12 @@
           "phone": "(775) 684-0500",
           "description": "General information about energy assistance programs",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 992-0900",
+          "description": "Number listed on dss.nv.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1020,18 +1026,20 @@
       "sourceUrl": "https://www.dss.nv.gov/programs/energy/apply-for-assistance/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "7756840500"
           ],
-          "to": "8009920900",
+          "to": "(800) 992-0900",
           "source": "https://www.dss.nv.gov/contact/eap-office-south/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:52:12.168Z"
+          "flaggedAt": "2026-10-04T00:52:12.168Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1894,6 +1902,12 @@
           "phone": "(775) 687-4210",
           "description": "State agency monitoring SCSEP programs statewide",
           "hours": "Mon-Fri 8am-5pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 850-2525",
+          "description": "Number listed on my.aarpfoundation.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1957,19 +1971,21 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7753232243",
             "211",
             "7756874210"
           ],
-          "to": "8558502525",
+          "to": "(855) 850-2525",
           "source": "https://my.aarpfoundation.org/locator/scsep/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:52:12.168Z"
+          "flaggedAt": "2026-10-04T00:52:12.168Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2119,7 +2135,17 @@
           "why": "aggregator source",
           "flaggedAt": "2026-10-04T00:52:12.168Z"
         }
-      ]
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "7024863545",
+          "source": "https://www.pebp.nv.gov/resources/community-resources/",
+          "reason": "page also lists ours ((775) 687-4210)",
+          "dismissedAt": "2026-10-04"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "long-term-care-ombudsman",

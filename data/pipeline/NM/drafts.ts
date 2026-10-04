@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T00:51:46.125Z
+ * Last updated: 2026-10-04T02:03:26.835Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -362,11 +362,11 @@ export const drafts: PipelineStateDrafts = {
             "711",
             "18004322080"
           ],
-          "to": "8002834465",
-          "source": "https://www.hsd.state.nm.us/lookingforinformation/pace/",
+          "to": "8662612954",
+          "source": "https://www.hca.nm.gov/lookingforinformation/pace/",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
@@ -586,7 +586,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
@@ -789,20 +789,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2739,
-          "to": 1986,
+          "to": 2461,
           "source": "https://www.nmwic.org/fmnp/",
-          "severity": "high",
+          "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         },
         {
           "field": "income_2",
           "from": 3706,
-          "to": 2686,
+          "to": 3337,
           "source": "https://www.nmwic.org/fmnp/",
-          "severity": "high",
+          "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
