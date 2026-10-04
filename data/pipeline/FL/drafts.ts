@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.153Z
+ * Last updated: 2026-10-04T01:16:13.722Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1382,7 +1382,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://elderaffairs.org/programs-and-services/emergency-home-energy-assistance-for-the-elderly-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-08-18",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-18",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -2383,7 +2383,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-05-05",
       "reviewQueue": null,
       "appliedCorrections": [
         {

@@ -164,7 +164,7 @@ rows; they stay as dollars until then.
 - [x] The weekly rotation runs on its own (`benefits-factcheck.yml`; first real run 4 Oct opened #2354 for NH NJ NM NV NY OH OK OR PA RI).
 - [x] `dismissedFlags` on the draft, honoured by the judge, so a rejected proposal stops recurring.
 - [x] Page verifier for phones (`scripts/benefits-verify-queue.js`); 76 of 232 settled on the first run.
-- [ ] A person clears what the verifier cannot: 156 phones (118 behind PDFs, 403s and dead links; a browser fetch would read most of the 403s), 131 income tier disputes, 52 asset limits, 32 age strings.
+- [ ] A person clears what the verifier cannot: 156 phones (118 behind PDFs, 403s and dead links; the 403 hosts block headless Chrome too, 9 of 10 tried, so those need a person or a signed-in browser), 131 income tier disputes, 52 asset limits, 32 age strings.
 - [ ] The verifier's "second contact" cards (label "Program web page") get a person's swap-or-keep decision; the evidence is in `appliedCorrections` as `phone_added`.
 - [ ] The email brief now judges seed rows with the finder engine (#2351, 4 Oct). 325 of 528 state seed rows and 63 of 75 federal rows have no draft to judge against, mostly a naming mismatch ("Alaska SNAP" vs "SNAP"); the federal table is seeded in triplicate. Fix the join, then retire the seed.
 - [ ] Add the SMI basis and per-tier rows (LIHEAP, Medicare Savings) so those tables become rules too.

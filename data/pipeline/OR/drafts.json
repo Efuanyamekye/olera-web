@@ -611,7 +611,7 @@
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -1591,7 +1591,7 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "family-caregiver-assistance-support",
@@ -2086,7 +2086,7 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2567,7 +2567,7 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "hrsn-health-social-needs",

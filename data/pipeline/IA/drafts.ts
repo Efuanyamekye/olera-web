@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.098Z
+ * Last updated: 2026-10-04T01:16:13.773Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -826,7 +826,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/assistance-programs/food-assistance/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-14",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -1055,7 +1055,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://iuc.iowa.gov/customer-assistance/how-do-i-apply-energy-assistance-liheap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-04",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1442,7 +1442,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "legal-aid-seniors",
@@ -1708,7 +1708,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "state-supplementary-assistance",

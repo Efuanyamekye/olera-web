@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.647Z
+ * Last updated: 2026-10-04T01:16:14.267Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -945,7 +945,7 @@ export const drafts: PipelineStateDrafts = {
       "contentSections": [],
       "faqs": [],
       "sourceUrl": "https://dars.virginia.gov/aging/caregiver-support/",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-10-02",
       "reviewedBy": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-02",

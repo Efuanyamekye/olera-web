@@ -192,7 +192,7 @@
       "sourceUrl": "https://www.healthcare.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -749,7 +749,7 @@
       "sourceUrl": "https://www.dhhs.nh.gov/health-care/medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1036,7 +1036,7 @@
       "sourceUrl": "https://www.dhhs.nh.gov/programs-services/food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-14",
       "reviewQueue": null,
       "appliedCorrections": [
         {

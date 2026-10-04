@@ -1922,7 +1922,7 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "senior-community-service-employment-program",
@@ -2446,7 +2446,7 @@
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/idaho-home-choice",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

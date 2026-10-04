@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.304Z
+ * Last updated: 2026-10-04T01:16:13.947Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -215,7 +215,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/seniors.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -841,7 +841,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/help-with-medicare-costs.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

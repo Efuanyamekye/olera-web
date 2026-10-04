@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ID/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.125Z
+ * Last updated: 2026-10-04T01:16:13.799Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1921,7 +1921,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "senior-community-service-employment-program",
@@ -2445,7 +2445,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/idaho-home-choice",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

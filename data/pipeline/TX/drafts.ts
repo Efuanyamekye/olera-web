@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.569Z
+ * Last updated: 2026-10-04T01:16:14.219Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -499,7 +499,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -1862,7 +1862,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/long-term-care/home-community-based-care/community-based-alternatives-cba",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {

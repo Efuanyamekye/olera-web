@@ -494,7 +494,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -1857,7 +1857,7 @@
       "sourceUrl": "https://www.hhs.texas.gov/services/long-term-care/home-community-based-care/community-based-alternatives-cba",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {

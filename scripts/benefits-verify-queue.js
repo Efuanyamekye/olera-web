@@ -130,7 +130,11 @@ async function main() {
 
   if (APPLY) {
     const touched = new Map();
-    const settle = (job, item) => { const { draft } = job; draft.reviewQueue = (draft.reviewQueue || []).filter((q) => q !== item); if (!draft.reviewQueue.length) draft.reviewQueue = null; draft.lastVerifiedDate = TODAY; touched.set(job.st, job); };
+    // lastVerifiedDate moves only when the page confirmed what the draft
+    // says (apply, dismiss). An added card means the page did NOT show the
+    // draft's number, so stamping it verified would be a lie the lint
+    // then counts as progress (it did, on the first run: 59 programs).
+    const settle = (job, item, verified) => { const { draft } = job; draft.reviewQueue = (draft.reviewQueue || []).filter((q) => q !== item); if (!draft.reviewQueue.length) draft.reviewQueue = null; if (verified) draft.lastVerifiedDate = TODAY; touched.set(job.st, job); };
     for (const { job } of out.apply) {
       const { draft, item } = job;
       const toFmt = fmt(digits(item.to));
@@ -139,7 +143,7 @@ async function main() {
       draft.phone = toFmt;
       if (draft.contacts && draft.contacts.length) draft.contacts[0].phone = toFmt;
       (draft.appliedCorrections = draft.appliedCorrections || []).push({ field: 'phone', from: item.from, to: toFmt, source: item.source, flaggedAt: item.flaggedAt, appliedAt: TODAY, appliedBy: 'page-verifier', note: `The number appears on the cited official page; the draft had no usable number${replaced ? ` (replaced in ${replaced} field${replaced === 1 ? '' : 's'})` : ''}.` });
-      settle(job, item);
+      settle(job, item, true);
     }
     for (const { job } of out.add) {
       const { draft, item } = job;
@@ -147,12 +151,12 @@ async function main() {
       const host = item.source.replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
       (draft.contacts = draft.contacts || []).push({ label: 'Program web page', phone: toFmt, description: `Number listed on ${host}`, hours: null });
       (draft.appliedCorrections = draft.appliedCorrections || []).push({ field: 'phone_added', from: item.from, to: toFmt, source: item.source, flaggedAt: item.flaggedAt, appliedAt: TODAY, appliedBy: 'page-verifier', note: `The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them.` });
-      settle(job, item);
+      settle(job, item, false);
     }
     for (const { job, why } of out.dismiss) {
       const { draft, item } = job;
       (draft.dismissedFlags = draft.dismissedFlags || []).push({ field: 'phone', proposed: String(item.to), source: item.source, reason: why, dismissedAt: TODAY });
-      settle(job, item);
+      settle(job, item, true);
     }
     for (const [st, job] of touched) {
       fs.writeFileSync(job.draftsPath, JSON.stringify(job.drafts, null, 2) + '\n');

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.207Z
+ * Last updated: 2026-10-04T01:16:13.848Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1334,7 +1334,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.kyhousing.org/programs/weatherization",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {

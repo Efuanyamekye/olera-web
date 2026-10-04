@@ -210,7 +210,7 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/seniors.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -842,7 +842,7 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/help-with-medicare-costs.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

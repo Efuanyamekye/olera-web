@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.441Z
+ * Last updated: 2026-10-04T01:16:14.071Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -596,7 +596,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.health.ny.gov/health_care/managed_care/mltc/mltcplans.htm",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-09",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -2180,7 +2180,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "legal-services-seniors",

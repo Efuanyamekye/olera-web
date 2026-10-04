@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.415Z
+ * Last updated: 2026-10-04T01:16:14.046Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -197,7 +197,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.healthcare.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -754,7 +754,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/health-care/medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1041,7 +1041,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/programs-services/food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-14",
       "reviewQueue": null,
       "appliedCorrections": [
         {

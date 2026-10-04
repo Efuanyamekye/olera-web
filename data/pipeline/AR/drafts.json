@@ -640,7 +640,7 @@
       "sourceUrl": "https://humanservices.arkansas.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-10-02",
       "appliedCorrections": [
         {
           "field": "income_1",
@@ -1759,7 +1759,7 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "family-caregiver-support",

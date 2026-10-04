@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.014Z
+ * Last updated: 2026-10-04T01:16:13.633Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -645,7 +645,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-10-02",
       "appliedCorrections": [
         {
           "field": "income_1",
@@ -1764,7 +1764,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "family-caregiver-support",

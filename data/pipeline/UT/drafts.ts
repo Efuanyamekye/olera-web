@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.596Z
+ * Last updated: 2026-10-04T01:16:14.242Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1855,7 +1855,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://daas.utah.gov/services/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-23",
       "reviewQueue": [
         {
           "field": "age",
@@ -2119,7 +2119,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "legal-services-seniors",
@@ -2285,7 +2285,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.utahlegalservices.org/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

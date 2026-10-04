@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.255Z
+ * Last updated: 2026-10-04T01:16:13.898Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -543,7 +543,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-14",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-14",
       "reviewQueue": null,
       "appliedCorrections": [
         {

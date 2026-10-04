@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.545Z
+ * Last updated: 2026-10-04T01:16:14.170Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -202,7 +202,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.sd.gov/economicassistance/medical_eligibility.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -995,7 +995,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "lieap-energy-assistance",
@@ -1711,7 +1711,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dakotaathome.sd.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-11",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -2830,7 +2830,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.073Z
+ * Last updated: 2026-10-04T01:16:13.696Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -762,7 +762,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://regulations.delaware.gov/board/division-of-medicaid-and-medical-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": [
         {
           "field": "income_1",

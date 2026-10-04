@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.331Z
+ * Last updated: 2026-10-04T01:16:13.997Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2016,7 +2016,7 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": null
     },
     {
       "id": "big-sky-waiver-respite",
@@ -2387,7 +2387,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://wsd.dli.mt.gov/_docs/wsd-policy/scsep-policy.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": null,
       "reviewQueue": null,
       "appliedCorrections": [
         {

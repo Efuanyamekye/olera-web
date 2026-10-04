@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.721Z
+ * Last updated: 2026-10-04T01:16:14.341Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -232,7 +232,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://bms.wv.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-09-28",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -2428,7 +2428,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://wvdrs.org/adults/specialized-services/visions/amp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-07",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -2614,7 +2614,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.wvadrc.com/assistance-programs.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-08-18",
       "reviewQueue": null,
       "appliedCorrections": [
         {
