@@ -320,17 +320,47 @@ function draftsBySeedRow(stateCode: string | null, rows: BenefitProgram[]): Map<
   const slug = stateCode ? getStateSlug(stateCode) : undefined;
   if (!slug) return out;
   const stateName = US_STATES.find((st) => st.value === stateCode)?.label ?? stateCode;
-  for (const id of getCanonicalProgramIds(slug)) {
-    const d = getEnrichedProgram(slug, id);
-    if (!d || d.programType !== "benefit") continue;
+  const verdictOf = (d: NonNullable<ReturnType<typeof getEnrichedProgram>>): ProgramForVerdict => ({
+    name: d.name,
+    ageRequirement: d.structuredEligibility?.ageRequirement,
+    eligibilitySummary: d.structuredEligibility?.summary,
+    incomeLimitSingle: incomeLimitFromTable(d.structuredEligibility?.incomeTable),
+  });
+  const benefits = getCanonicalProgramIds(slug)
+    .map((id) => getEnrichedProgram(slug, id))
+    .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
+  // Draft side: each benefit draft claims its seed row (the finder's join).
+  for (const d of benefits) {
     const row = resolveSbfRow(rows as unknown as SbfEligibilityRow[], d.name, stateName) as (SbfEligibilityRow & { id?: string }) | null;
     if (!row?.id || out.has(row.id)) continue;
-    out.set(row.id, {
-      name: d.name,
-      ageRequirement: d.structuredEligibility?.ageRequirement,
-      eligibilitySummary: d.structuredEligibility?.summary,
-      incomeLimitSingle: incomeLimitFromTable(d.structuredEligibility?.incomeTable),
-    });
+    out.set(row.id, verdictOf(d));
+  }
+  // Row side: a seed row the draft side left unclaimed resolves against the
+  // state's benefit drafts, many rows to one draft. This is what joins the
+  // federal rows ("Supplemental Nutrition Assistance Program (SNAP)",
+  // "Qualified Medicare Beneficiary") to the state's own fact-checked draft;
+  // the draft side only ever claimed one row per draft, and the state row
+  // came first. 684 federal-row joins with age or income facts, 4 Oct 2026.
+  //
+  // A row-side pairing must not cross a line the draft's name decides, since
+  // the verdict reads the draft's name: federal "Respite Care" landed on
+  // Montana's "Respite Care (via Big Sky Waiver)", which would have read as
+  // Medicaid-gated; federal SSI on a state's "SSI Supplement", a different
+  // program with different limits; federal "Medicaid HCBS" on Hawaii's
+  // non-Medicaid aging services.
+  // Medicare Savings is Medicaid-administered, so a state may prefix it
+  // "Medicaid" (the engine's medicaidGatedName makes the same exemption).
+  const msp = /medicare savings|\bqmb\b|\bslmb\b|qualified medicare|qualifying individual/i;
+  const sameSide = (row: string, draft: string) =>
+    (msp.test(row) && msp.test(draft)) ||
+    [/medicaid|medi-cal/i, /waiver/i, /supplement(?!al)/i].every((re) => re.test(row) === re.test(draft));
+  const asRows = benefits.map((d) => ({ id: d.id, name: d.name }) as unknown as SbfEligibilityRow);
+  const byId = new Map(benefits.map((d) => [d.id, d]));
+  for (const r of rows) {
+    if (out.has(r.id)) continue;
+    const hit = resolveSbfRow(asRows, r.name, stateName) as (SbfEligibilityRow & { id?: string }) | null;
+    const d = hit?.id ? byId.get(hit.id) : undefined;
+    if (d && sameSide(r.name, d.name)) out.set(r.id, verdictOf(d));
   }
   return out;
 }
