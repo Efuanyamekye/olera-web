@@ -65,6 +65,8 @@ jobs:
         run: |
           STATES="$(echo '${{ steps.pick.outputs.states }}' | tr ' ' ',' | sed 's/,*$//')"
           node scripts/benefits-apply-factcheck.js --apply --states "$STATES" | tail -20
+          # Settle phone flags against the page each one cites (free, no model).
+          node scripts/benefits-verify-queue.js --apply --states "$STATES" | sed -n '/^phone flags/,/^-- apply/p'
           # The review list is the PR body, written outside the checkout so
           # it is never committed.
           node scripts/benefits-apply-factcheck.js --review --states "$STATES" > "$RUNNER_TEMP/review-queue.txt" || true
