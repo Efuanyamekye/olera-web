@@ -566,9 +566,13 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
         }
         if (row.type === "call") {
           const it = row.item;
-          const missed = !!it.status && /did not reach|no answer|voicemail/i.test(it.status);
+          // The status line is "<outcome> · next: <action>". Only the outcome
+          // says whether we reached them; on 3 Oct a note whose next action
+          // read "log reached or not" rendered as "Note · reached them".
+          const outcome = (it.status ?? "").split(" · ").find((part) => !part.startsWith("next:")) ?? "";
+          const missed = /did not reach|no answer|voicemail/i.test(outcome);
           const kind = it.channel === "call" ? "Call" : it.channel === "meeting" ? "Meeting" : "Note";
-          const label = missed ? `${kind} · didn't reach them` : it.status?.includes("spoke") || it.status?.includes("reached") ? `${kind} · reached them` : kind;
+          const label = missed ? `${kind} · didn't reach them` : /^spoke to them/.test(outcome) ? `${kind} · reached them` : kind;
           return (
             <div key={it.id}>
               {dayHeader(it.occurred_at)}
