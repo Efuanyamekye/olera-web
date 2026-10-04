@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/HI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.907Z
+ * Last updated: 2026-10-04T01:02:46.945Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1743,6 +1743,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline for all social services including meal programs",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(808) 768-7700",
+          "description": "Number listed on keikitokupuna.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1805,22 +1811,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8083568519",
             "8089886747",
             "8082150073",
             "211"
           ],
-          "to": "8087687700",
+          "to": "(808) 768-7700",
           "source": "https://keikitokupuna.org/about/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-02T07:36:18.771Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "caregiver-support-eoa",
@@ -2017,20 +2026,18 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "aggregator source",
           "flaggedAt": "2026-10-02T07:36:18.771Z"
-        },
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8087687700",
-            "8089618626"
-          ],
-          "to": "8085860100",
+          "proposed": "8085860100",
           "source": "https://health.hawaii.gov/eoa/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "reason": "page also lists ours ((808) 768-7700, (808) 961-8626)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "scsep-employment-training",
@@ -2154,6 +2161,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for all social services and program referrals",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(808) 768-7700",
+          "description": "Number listed on elderlyaffairs.com",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2216,21 +2229,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://labor.hawaii.gov/wdd/job-seekers/scsep/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8089618730",
             "8083234320",
             "211"
           ],
-          "to": "8087687700",
+          "to": "(808) 768-7700",
           "source": "https://elderlyaffairs.com/about-us/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-02T07:36:18.771Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "senior-legal-helpline",
@@ -3016,7 +3032,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Med-QUEST Hawaii",
-          "phone": null,
+          "phone": "(808) 586-0100",
           "description": "Hawaii Medicaid program for application and eligibility",
           "hours": "Online at medquest.hawaii.gov"
         },
@@ -3084,22 +3100,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": null,
+      "phone": "(808) 586-0100",
       "sourceUrl": "https://medquest.hawaii.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8085860100",
+          "to": "(808) 586-0100",
           "source": "https://health.hawaii.gov/eoa/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-02T07:36:18.771Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },

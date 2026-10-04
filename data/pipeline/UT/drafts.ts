@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.933Z
+ * Last updated: 2026-10-04T01:02:47.596Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1787,6 +1787,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(801) 625-3866",
           "description": "Care for the Caregiver Program serving Weber and Morgan Counties",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(801) 538-3910",
+          "description": "Number listed on daas.utah.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1849,7 +1855,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://daas.utah.gov/services/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "age",
@@ -1859,20 +1865,23 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "field age is applied by hand",
           "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18774244640",
             "8014682460",
             "8014513377",
             "8016253866"
           ],
-          "to": "8015383910",
+          "to": "(801) 538-3910",
           "source": "https://daas.utah.gov/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-02T07:47:00.310Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2007,6 +2016,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General information about employment and social services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(801) 538-3910",
+          "description": "Number listed on daas.utah.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2087,20 +2102,24 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
           "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8007712153",
             "211"
           ],
-          "to": "8015383910",
+          "to": "(801) 538-3910",
           "source": "https://daas.utah.gov/seniors/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-02T07:47:00.310Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "legal-services-seniors",
@@ -2216,6 +2235,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "24/7 helpline for all social services and referrals",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(801) 328-8891",
+          "description": "Number listed on utahlegalservices.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2260,20 +2285,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.utahlegalservices.org/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8013288849",
             "8016498895",
             "211"
           ],
-          "to": "8013288891",
+          "to": "(801) 328-8891",
           "source": "https://www.utahlegalservices.org/contact",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-02T07:47:00.310Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2401,19 +2428,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://daas.utah.gov/long-term-care-ombudsman/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8012293809"
-          ],
-          "to": "3852221273",
+          "proposed": "3852221273",
           "source": "https://daas.utah.gov/ombudsman-locations-3/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "reason": "page also lists ours ((801) 229-3809)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "aging-waiver",

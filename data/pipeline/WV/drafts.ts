@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.936Z
+ * Last updated: 2026-10-04T01:02:47.721Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -152,6 +152,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "In-person application assistance and document submission",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 716-1212",
+          "description": "Number listed on bms.wv.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -226,18 +232,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://bms.wv.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "3045870105"
           ],
-          "to": "18777161212",
+          "to": "(877) 716-1212",
           "source": "https://bms.wv.gov/members/applying-healthcare",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "flaggedAt": "2026-10-02T07:48:35.284Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2361,6 +2369,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for all social services and disability resources",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 642-8207",
+          "description": "Number listed on wvdrs.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2414,19 +2428,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://wvdrs.org/adults/specialized-services/visions/amp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18006423021",
             "211"
           ],
-          "to": "8006428207",
+          "to": "(800) 642-8207",
           "source": "https://wvdrs.org/adults/specialized-services/services-for-the-blind-and-impaired/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "flaggedAt": "2026-10-02T07:48:35.284Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2538,6 +2554,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "304-720-6861",
           "description": "Same office as the toll-free number.",
           "hours": "Business hours, Mon-Fri"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(304) 558-3317",
+          "description": "Number listed on wv.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2592,19 +2614,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.wvadrc.com/assistance-programs.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8669812372",
             "3047206861"
           ],
-          "to": "3045583317",
+          "to": "(304) 558-3317",
           "source": "https://www.wv.gov/agencies/senior-services-bureau",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "flaggedAt": "2026-10-02T07:48:35.284Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     }

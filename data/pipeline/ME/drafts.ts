@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.916Z
+ * Last updated: 2026-10-04T01:02:47.281Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -715,6 +715,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General referral to local Community Action Agencies",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(207) 626-4600",
+          "description": "Number listed on maine.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -777,21 +783,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mainehousing.org/programs-services/HomeImprovement/homeimprovementdetail/weatherization",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "2072061261",
             "2079742407",
             "211"
           ],
-          "to": "2076264600",
+          "to": "(207) 626-4600",
           "source": "https://www.maine.gov/energy/winter-heating-resources",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:10.236Z"
+          "flaggedAt": "2026-10-02T07:39:10.236Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "ship-medicare-counseling",
@@ -881,6 +890,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "State office, use shiphelp.org to connect with local counselors",
           "hours": "Mon-Fri business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 353-3771",
+          "description": "Number listed on maine.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -922,19 +937,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/ship-medicare-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "2073966524"
           ],
-          "to": "8773533771",
+          "to": "(877) 353-3771",
           "source": "https://www.maine.gov/pfr/insurance/consumers/medicare-supplement-insurance/where-to-get-help",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:10.236Z"
+          "flaggedAt": "2026-10-02T07:39:10.236Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "home-delivered-meals",
@@ -1042,6 +1060,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free 24/7 helpline for all social services and local referrals",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 353-3771",
+          "description": "Number listed on maine.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1110,20 +1134,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "2072879200",
             "211"
           ],
-          "to": "18773533771",
+          "to": "(877) 353-3771",
           "source": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:10.236Z"
+          "flaggedAt": "2026-10-02T07:39:10.236Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "legal-services-elderly",

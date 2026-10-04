@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.931Z
+ * Last updated: 2026-10-04T01:02:47.545Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -133,6 +133,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "In-person assistance and application submission",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 597-1603",
+          "description": "Number listed on dss.sd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -196,18 +202,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.sd.gov/economicassistance/medical_eligibility.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8552566742"
           ],
-          "to": "8005971603",
+          "to": "(800) 597-1603",
           "source": "https://dss.sd.gov/medicaid/contact/PhoneList.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:04.688Z"
+          "flaggedAt": "2026-10-02T07:46:04.688Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -903,6 +911,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Find local food assistance and other senior services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(605) 773-3413",
+          "description": "Number listed on doe.sd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -965,20 +979,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://doe.sd.gov/cans/csfp.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6058533656",
             "211"
           ],
-          "to": "6057733413",
+          "to": "(605) 773-3413",
           "source": "https://doe.sd.gov/cans/csfp.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:04.688Z"
+          "flaggedAt": "2026-10-02T07:46:04.688Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "lieap-energy-assistance",
@@ -1636,6 +1653,12 @@ export const drafts: PipelineStateDrafts = {
           "label": "Active Generations (Sioux Falls and Sioux Empire area only)",
           "phone": "(605) 333-3305",
           "hours": "Mon-Fri 8am-4:30pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(605) 394-6002",
+          "description": "Number listed on dakotaathome.sd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1688,19 +1711,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dakotaathome.sd.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6053333305",
             "8336639673"
           ],
-          "to": "6053946002",
+          "to": "(605) 394-6002",
           "source": "https://dakotaathome.sd.gov/search/c0c77b9b-3b90-5b03-931d-3fb09ced81bb",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:04.688Z"
+          "flaggedAt": "2026-10-02T07:46:04.688Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2746,6 +2771,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(605) 886-4030",
           "description": "Serves Clark, Codington, Deuel, Grant, and Hamlin Counties",
           "hours": "Call for current distribution schedule"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(605) 773-3413",
+          "description": "Number listed on doe.sd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2782,21 +2813,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.fns.usda.gov/csfp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6053322331",
             "6052257410",
             "6058864030"
           ],
-          "to": "6057733413",
+          "to": "(605) 773-3413",
           "source": "https://doe.sd.gov/cans/csfp.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:04.688Z"
+          "flaggedAt": "2026-10-02T07:46:04.688Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     }
   ],
   "stateOverview": {

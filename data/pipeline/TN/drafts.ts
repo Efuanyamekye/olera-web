@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.932Z
+ * Last updated: 2026-10-04T01:02:47.620Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1401,6 +1401,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(865) 691-2551 ext 4212",
           "description": "Legal Assistance for the Elderly Program, call directly for in-person appointments",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 435-7486",
+          "description": "Number listed on help4tn.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1441,21 +1447,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tals.org/page/453/free-senior-legal-helpline",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18444",
             "18002381443",
             "86569125514212"
           ],
-          "to": "8444357486",
+          "to": "(844) 435-7486",
           "source": "https://www.help4tn.org/node/1500/free-senior-legal-helpline",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "flaggedAt": "2026-10-02T07:46:20.995Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "long-term-care-ombudsman",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.915Z
+ * Last updated: 2026-10-04T01:02:47.255Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -489,6 +489,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(410) 767-1100",
           "hours": "",
           "description": "The state office that sets the rules and the funding. It does not take applications, so use this only for general questions about how the program works. Toll-free: 800-243-3425."
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 313-1234",
+          "description": "Number listed on howardcountymd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -537,19 +543,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-14",
-      "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18446275465",
             "4107671100"
           ],
-          "to": "4103131234",
+          "to": "(410) 313-1234",
           "source": "https://www.howardcountymd.gov/soar",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-02T07:38:57.033Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2688,20 +2696,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/pages/state-long-term-care-ombudsman.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "4103136423",
-            "2407773005"
-          ],
-          "to": "4107671100",
+          "proposed": "4107671100",
           "source": "https://aging.maryland.gov/programs-and-services/long-term-care-ombudsman",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "reason": "page also lists ours ((410) 313-6423)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "senior-call-check-program",

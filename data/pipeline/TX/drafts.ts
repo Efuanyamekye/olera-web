@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.932Z
+ * Last updated: 2026-10-04T01:02:47.569Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -403,6 +403,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "877-782-6440",
           "description": "HHSC line for choosing or changing a STAR+PLUS health plan. It does not handle the interest list.",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 964-2777",
+          "description": "Number listed on fhb.hhs.texas.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -493,20 +499,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18774385658",
             "211",
             "8777826440"
           ],
-          "to": "8009642777",
+          "to": "(800) 964-2777",
           "source": "https://fhb.hhs.texas.gov/handbooks/starplus-handbook/3300-administrative-procedures",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-02T07:46:40.083Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1765,6 +1773,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 541-7905",
           "description": "Medicaid and waiver program questions",
           "hours": "Mon-Fri 8am-6pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 438-5658",
+          "description": "Number listed on txp2p.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1848,19 +1862,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/long-term-care/home-community-based-care/community-based-alternatives-cba",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "8775417905"
           ],
-          "to": "8774385658",
+          "to": "(877) 438-5658",
           "source": "https://www.txp2p.org/services/services-for-parents-pathway-to-adulthood/services-and-supports",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-02T07:46:40.083Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2032,7 +2048,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/health/support-caregivers",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-08-04",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "age",
@@ -2042,18 +2058,15 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "aggregator source",
           "flaggedAt": "2026-10-02T07:46:40.083Z"
-        },
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "18559372372",
-            "8775417905"
-          ],
-          "to": "18002529240",
+          "proposed": "18002529240",
           "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "reason": "page also lists ours ((855) 937-2372)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

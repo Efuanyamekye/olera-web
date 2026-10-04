@@ -141,6 +141,12 @@
           "phone": "2-1-1",
           "description": "Free helpline for all health and social services information",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 657-3672",
+          "description": "Number listed on mn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -204,19 +210,21 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/seniors.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8553667873",
             "211"
           ],
-          "to": "8006573672",
+          "to": "(800) 657-3672",
           "source": "https://mn.gov/dhs/health-care/contact-us/consumer-support/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "flaggedAt": "2026-10-02T07:39:39.575Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -588,19 +596,15 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/msho.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "6514312670",
-            "9528837979"
-          ],
-          "to": "6514312517",
+          "proposed": "6514312517",
           "source": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "reason": "page also lists ours ((651) 431-2670)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -763,6 +767,12 @@
           "phone": null,
           "description": "Find your county human services office for in-person help",
           "hours": "Varies by county"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 333-2466",
+          "description": "Number listed on mn.db101.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -832,19 +842,21 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/help-with-medicare-costs.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "6514312670",
             "8006573739"
           ],
-          "to": "8663332466",
+          "to": "(866) 333-2466",
           "source": "https://mn.db101.org/mn/programs/health_coverage/medicare2/program2b.htm",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "flaggedAt": "2026-10-02T07:39:39.575Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1774,20 +1786,15 @@
       "sourceUrl": "https://mn.gov/deed/programs-services/dislocated-worker/scsep/index.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8325990872",
-            "5073456822",
-            "6512597114"
-          ],
-          "to": "6512597581",
+          "proposed": "6512597581",
           "source": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "reason": "page also lists ours ((832) 599-0872)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

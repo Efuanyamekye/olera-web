@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.934Z
+ * Last updated: 2026-10-04T01:02:47.647Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -932,6 +932,12 @@ export const drafts: PipelineStateDrafts = {
           "label": "DARS Division for Aging Services",
           "phone": "(804) 662-9333",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(703) 746-5999",
+          "description": "Number listed on dars.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [],
@@ -939,7 +945,7 @@ export const drafts: PipelineStateDrafts = {
       "contentSections": [],
       "faqs": [],
       "sourceUrl": "https://dars.virginia.gov/aging/caregiver-support/",
-      "lastVerifiedDate": "2026-10-02",
+      "lastVerifiedDate": "2026-10-04",
       "reviewedBy": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-02",
@@ -951,18 +957,20 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       },
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8005523402",
             "8046629333"
           ],
-          "to": "7037465999",
+          "to": "(703) 746-5999",
           "source": "https://dars.virginia.gov/aging/home-community/find-local-aaa/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:11.494Z"
+          "flaggedAt": "2026-10-02T07:47:11.494Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     }

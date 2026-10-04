@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.908Z
+ * Last updated: 2026-10-04T01:02:47.098Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -583,19 +583,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8009722017",
-            "211"
-          ],
-          "to": "5152705000",
+          "proposed": "5152705000",
           "source": "https://hhs.iowa.gov/medicaid/plans-programs/program-all-inclusive-care-elderly-pace",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "reason": "page also lists ours ((800) 972-2017)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -762,6 +758,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "Contact varies by county",
           "description": "County-specific SNAP applications and interviews",
           "hours": "Varies by office"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -824,19 +826,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/assistance-programs/food-assistance/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8558897985",
             "211"
           ],
-          "to": "8009722017",
+          "to": "(800) 972-2017",
           "source": "https://hhs.iowa.gov/assistance-programs/food-assistance",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-02T07:36:32.766Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -990,6 +994,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Mail applications to: LIHEAP, Iowa Department of Health & Human Services, Capitol Complex, Des Moines, IA 50319",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1045,7 +1055,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://iuc.iowa.gov/customer-assistance/how-do-i-apply-energy-assistance-liheap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1064,18 +1074,21 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
           "flaggedAt": "2026-10-02T07:36:32.766Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "5633828436"
           ],
-          "to": "8009722017",
+          "to": "(800) 972-2017",
           "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-02T07:36:32.766Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1344,6 +1357,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(515) 725-3333",
           "description": "Statewide referrals to local providers",
           "hours": "Mon-Fri 8am-4:30pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 779-2001",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1405,22 +1424,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.legis.iowa.gov/docs/iac/rule/02-05-2025.17.7.21.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8554106222",
             "3193380515",
             "5156993243",
             "5157253333"
           ],
-          "to": "8007792001",
+          "to": "(800) 779-2001",
           "source": "https://hhs.iowa.gov/family-community/aging-services/iowa-area-agencies-aging",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-02T07:36:32.766Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "legal-aid-seniors",
@@ -1629,6 +1651,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "Varies by location",
           "description": "Contact information posted in every long-term care facility",
           "hours": "Varies by local office"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 236-1430",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1665,19 +1693,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/health-prevention/aging-services/ltcombudsman",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8005323213"
           ],
-          "to": "8662361430",
+          "to": "(866) 236-1430",
           "source": "https://hhs.iowa.gov/family-community/aging-services/ltc-ombudsman",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-02T07:36:32.766Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "state-supplementary-assistance",

@@ -351,6 +351,12 @@
           "phone": "2-1-1",
           "description": "Free helpline for all NC social services and aging programs",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 245-0179",
+          "description": "Number listed on medicaid.ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -413,20 +419,23 @@
       "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care/program-all-inclusive-care-elderly-pace",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9198554340",
             "211"
           ],
-          "to": "8882450179",
+          "to": "(888) 245-0179",
           "source": "https://medicaid.ncdhhs.gov/beneficiaries/long-term-services-and-supports/program-all-inclusive-care-elderly",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-02T07:41:04.679Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "medicare-savings-programs",

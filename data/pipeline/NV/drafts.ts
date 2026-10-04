@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.924Z
+ * Last updated: 2026-10-04T01:02:47.776Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2152,20 +2152,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://nvapros.com/our-services/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "7756874210",
-            "211"
-          ],
-          "to": "7024863545",
+          "proposed": "7024863545",
           "source": "https://www.pebp.nv.gov/resources/community-resources/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:19.448Z"
+          "reason": "page also lists ours ((775) 687-4210)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "long-term-care-ombudsman",
