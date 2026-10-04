@@ -1,14 +1,14 @@
 {
   "state": "PA",
   "stateName": "Pennsylvania",
-  "checkedAt": "2026-10-02T07:44:57.351Z",
+  "checkedAt": "2026-10-04T00:53:36.830Z",
   "total": 10,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 5,
-  "totalFlags": 9,
-  "highSeverityFlags": 4,
+  "totalFlags": 7,
+  "highSeverityFlags": 2,
   "programs": [
     {
       "programId": "community-healthchoices-chc",
@@ -33,12 +33,12 @@
         "assets_couple": null,
         "phone": "18448243655",
         "sources": {
-          "age": "https://www.pa.gov/agencies/dhs/resources/medicaid/chc",
-          "income": null,
+          "age": "https://www.pa.gov/services/dhs/apply-for-community-healthchoices",
+          "income": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
           "assets": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
           "phone": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts"
         },
-        "notes": "CHC is a Medicaid LTSS managed-care program; the senior-specific pathway is 55+ mainly for LIFE as an alternative, while CHC itself applies at 21+ for eligible Medicaid participants. No separate income cap was retrievable from the official sources reviewed."
+        "notes": "CHC itself is not age-based for all seniors, but the senior pathway includes LIFE as an alternative for age 55+; the main CHC eligibility threshold is 21+. The official CHC eligibility PDF gives a $2,000 countable-resource limit for an individual; no authoritative couple-specific CHC countable-asset limit was found in the retrieved official sources."
       },
       "flags": [
         {
@@ -64,7 +64,7 @@
           "verifiedValue": "18448243655"
         }
       ],
-      "notes": "CHC is a Medicaid LTSS managed-care program; the senior-specific pathway is 55+ mainly for LIFE as an alternative, while CHC itself applies at 21+ for eligible Medicaid participants. No separate income cap was retrievable from the official sources reviewed."
+      "notes": "CHC itself is not age-based for all seniors, but the senior pathway includes LIFE as an alternative for age 55+; the main CHC eligibility threshold is 21+. The official CHC eligibility PDF gives a $2,000 countable-resource limit for an individual; no authoritative couple-specific CHC countable-asset limit was found in the retrieved official sources."
     },
     {
       "programId": "life-program",
@@ -88,12 +88,12 @@
         "assets_couple": null,
         "phone": "18775504227",
         "sources": {
-          "age": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
-          "income": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
-          "assets": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
-          "phone": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life"
+          "age": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts"
         },
-        "notes": "Current Pennsylvania LIFE program eligibility page shows age 55+ and provides the main state application/help phone number; no authoritative income/assets dollar limits were found in the retrieved official source because eligibility is based on financial requirements determined by the County Assistance Office or private pay."
+        "notes": "Current Pennsylvania LIFE program eligibility for seniors is age 55+; no authoritative current income or asset thresholds were found in the retrieved official sources."
       },
       "flags": [
         {
@@ -105,7 +105,7 @@
           "verifiedValue": "18775504227"
         }
       ],
-      "notes": "Current Pennsylvania LIFE program eligibility page shows age 55+ and provides the main state application/help phone number; no authoritative income/assets dollar limits were found in the retrieved official source because eligibility is based on financial requirements determined by the County Assistance Office or private pay."
+      "notes": "Current Pennsylvania LIFE program eligibility for seniors is age 55+; no authoritative current income or asset thresholds were found in the retrieved official sources."
     },
     {
       "programId": "pace-prescription-assistance",
@@ -125,21 +125,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 14500,
-        "income_2": 17700,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8002257223",
         "sources": {
-          "age": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
-          "income": "https://www.pa.gov/content/dam/copapwp-pagov/en/aging/documents/publications/benefits-and-rights/documents/benefits%20and%20rights%202023%20reprint%208-2024.pdf",
+          "age": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pace-program",
+          "income": null,
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly"
         },
-        "notes": "PACE is current and active in Pennsylvania; official state sources show senior eligibility at age 65+. No asset test found in the retrieved official sources."
+        "notes": "PACE/PACENET is current and serves residents age 65+; no authoritative income or asset limits were found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "PACE is current and active in Pennsylvania; official state sources show senior eligibility at age 65+. No asset test found in the retrieved official sources."
+      "notes": "PACE/PACENET is current and serves residents age 65+; no authoritative income or asset limits were found in the retrieved official sources."
     },
     {
       "programId": "healthy-horizons-qmb-slmb-qi",
@@ -158,34 +158,20 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1816,
-        "income_2": 2455,
+        "income_1": 1350,
+        "income_2": 1824,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "8006334227",
+        "phone": "8007837067",
         "sources": {
-          "age": "https://www.pacodeandbulletin.gov/secure/pacode/data/055/chapter140/subchapBtoc.html",
-          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "phone": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities"
+          "age": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
+          "income": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
+          "assets": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
+          "phone": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pa-medi-medicare-counseling"
         },
-        "notes": "Healthy Horizons is the Pennsylvania Medicare Savings Program (QMB/SLMB/QI). No senior-specific age test is listed in the official eligibility rules; Medicare eligibility applies, so age 65 is used for the senior pathway. Income and asset limits reflect 2026 Medicare Savings Program figures; QI/SLMB/QMB share the same resource limits."
+        "notes": "Healthy Horizons is the older name used for Pennsylvania Medicare Savings Program pathways (QMB/SLMB/QI). Income and resource limits reflect the 2026 Medicare Savings Program figures surfaced in current Pennsylvania guidance; QI/SLMB/QMB use the same resource limit in current materials."
       },
       "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1350,
-          "verifiedValue": 1816,
-          "pctDiff": 25.7
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 1824,
-          "verifiedValue": 2455,
-          "pctDiff": 25.7
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -193,10 +179,10 @@
             "8665504355",
             "8006927462"
           ],
-          "verifiedValue": "8006334227"
+          "verifiedValue": "8007837067"
         }
       ],
-      "notes": "Healthy Horizons is the Pennsylvania Medicare Savings Program (QMB/SLMB/QI). No senior-specific age test is listed in the official eligibility rules; Medicare eligibility applies, so age 65 is used for the senior pathway. Income and asset limits reflect 2026 Medicare Savings Program figures; QI/SLMB/QMB share the same resource limits."
+      "notes": "Healthy Horizons is the older name used for Pennsylvania Medicare Savings Program pathways (QMB/SLMB/QI). Income and resource limits reflect the 2026 Medicare Savings Program figures surfaced in current Pennsylvania guidance; QI/SLMB/QMB use the same resource limit in current materials."
     },
     {
       "programId": "snap-food-benefits",
@@ -217,19 +203,20 @@
         "age": 60,
         "income_1": 2610,
         "income_2": 3526,
-        "assets_individual": 4500,
-        "assets_couple": 4500,
-        "phone": "8006927462",
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18006927462",
         "sources": {
           "age": "https://www.pa.gov/agencies/dhs/resources/snap/snap-older-adults",
           "income": "https://www.pa.gov/agencies/dhs/resources/snap/snap-income-limits",
-          "assets": "https://www.pa.gov/agencies/dhs/resources/snap/snap-older-adults",
-          "phone": "https://www.pa.gov/agencies/dhs/resources/snap"
+          "assets": null,
+          "phone": "https://www.pa.gov/agencies/dhs/resources/snap",
+          "notes": "Pennsylvania SNAP is current; official DHS pages show age 60+ for older-adult pathway and 2025-2026 income limits. No official countable financial asset limit was found on the retrieved PA DHS pages."
         },
-        "notes": "Pennsylvania SNAP is current for 2026; older-adult pathway uses age 60+ for simplified application and federal elderly rules. Pennsylvania generally has no asset test for most households, but official page notes elderly/disabled households may use federal resource rules when needed; the clearest current public source found gives a $4,500 resource limit for that pathway."
+        "notes": "Pennsylvania SNAP remains active; senior pathway uses age 60+ and official DHS pages do not show a countable asset test for SNAP."
       },
       "flags": [],
-      "notes": "Pennsylvania SNAP is current for 2026; older-adult pathway uses age 60+ for simplified application and federal elderly rules. Pennsylvania generally has no asset test for most households, but official page notes elderly/disabled households may use federal resource rules when needed; the clearest current public source found gives a $4,500 resource limit for that pathway."
+      "notes": "Pennsylvania SNAP remains active; senior pathway uses age 60+ and official DHS pages do not show a countable asset test for SNAP."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -259,10 +246,10 @@
           "assets": null,
           "phone": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pa-medi-medicare-counseling"
         },
-        "notes": "PA MEDI (Pennsylvania's SHIP) is a Medicare counseling program for Medicare-eligible individuals, not a means-tested benefit; no age/income/asset eligibility test found. Official helpline: 1-800-783-7067."
+        "notes": "PA MEDI is Pennsylvania’s SHIP program for Medicare help; no age, income, or asset test was found for the senior pathway. Current statewide helpline is 1-800-783-7067."
       },
       "flags": [],
-      "notes": "PA MEDI (Pennsylvania's SHIP) is a Medicare counseling program for Medicare-eligible individuals, not a means-tested benefit; no age/income/asset eligibility test found. Official helpline: 1-800-783-7067."
+      "notes": "PA MEDI is Pennsylvania’s SHIP program for Medicare help; no age, income, or asset test was found for the senior pathway. Current statewide helpline is 1-800-783-7067."
     },
     {
       "programId": "home-delivered-meals",
@@ -285,14 +272,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7177831550",
+        "phone": "7177806130",
         "sources": {
           "age": "https://www.pa.gov/agencies/aging/aging-programs-and-services/meals-and-food-assistance",
           "income": null,
           "assets": null,
-          "phone": "https://www.palottery.pa.gov/Benefits/Local-Services-Senior-Centers-Meals.aspx"
+          "phone": "https://www.dauphincounty.gov/government/human-services/area-agency-on-aging/services/Meals-on-Wheels"
         },
-        "notes": "Pennsylvania home-delivered meals for seniors are administered through local Area Agencies on Aging; no statewide income or asset test was found in the official state sources reviewed."
+        "notes": "Statewide Pennsylvania home-delivered meals for seniors are served through the Department of Aging at age 60+; no official statewide income or asset test was found. Program is still active in 2026."
       },
       "flags": [
         {
@@ -302,10 +289,10 @@
             "7177719610",
             "8149461235"
           ],
-          "verifiedValue": "7177831550"
+          "verifiedValue": "7177806130"
         }
       ],
-      "notes": "Pennsylvania home-delivered meals for seniors are administered through local Area Agencies on Aging; no statewide income or asset test was found in the official state sources reviewed."
+      "notes": "Statewide Pennsylvania home-delivered meals for seniors are served through the Department of Aging at age 60+; no official statewide income or asset test was found. Program is still active in 2026."
     },
     {
       "programId": "caregiver-support-program",
@@ -335,10 +322,10 @@
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program"
         },
-        "notes": "Official Pennsylvania Caregiver Support Program phone found; no statewide age, income, or asset test identified in the retrieved official source for the senior caregiver pathway."
+        "notes": "Official Pennsylvania Caregiver Support Program page directs applicants to call the Department of Aging at 717-783-1550 or contact the local AAA; no authoritative statewide age, income, or asset test was found for the senior caregiver pathway."
       },
       "flags": [],
-      "notes": "Official Pennsylvania Caregiver Support Program phone found; no statewide age, income, or asset test identified in the retrieved official source for the senior caregiver pathway."
+      "notes": "Official Pennsylvania Caregiver Support Program page directs applicants to call the Department of Aging at 717-783-1550 or contact the local AAA; no authoritative statewide age, income, or asset test was found for the senior caregiver pathway."
     },
     {
       "programId": "oplap-legal-assistance",
@@ -368,7 +355,7 @@
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/apply-for-the-older-pennsylvanians-legal-assistance-program"
         },
-        "notes": "Current Pennsylvania Department of Aging page says the program is open to residents age 60 and older; no income or asset test was found on the retrieved official source."
+        "notes": "Current Pennsylvania Department of Aging page states the program is open to residents age 60+; no income or asset test was found in the retrieved official source."
       },
       "flags": [
         {
@@ -381,7 +368,7 @@
           "verifiedValue": "7177831550"
         }
       ],
-      "notes": "Current Pennsylvania Department of Aging page says the program is open to residents age 60 and older; no income or asset test was found on the retrieved official source."
+      "notes": "Current Pennsylvania Department of Aging page states the program is open to residents age 60+; no income or asset test was found in the retrieved official source."
     },
     {
       "programId": "ltc-ombudsman",
@@ -411,10 +398,10 @@
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/request-assistance-from-a-long-term-care-ombudsman"
         },
-        "notes": "This program does not appear to have age, income, or asset eligibility tests; it serves long-term care residents and families. Official Pennsylvania source lists the main phone number as 717-783-8975."
+        "notes": "No age, income, or asset eligibility tests found for the Pennsylvania Long-Term Care Ombudsman Program; program is a complaint-resolution/advocacy service for long-term care residents. Current state contact phone is 717-783-8975."
       },
       "flags": [],
-      "notes": "This program does not appear to have age, income, or asset eligibility tests; it serves long-term care residents and families. Official Pennsylvania source lists the main phone number as 717-783-8975."
+      "notes": "No age, income, or asset eligibility tests found for the Pennsylvania Long-Term Care Ombudsman Program; program is a complaint-resolution/advocacy service for long-term care residents. Current state contact phone is 717-783-8975."
     }
   ]
 }

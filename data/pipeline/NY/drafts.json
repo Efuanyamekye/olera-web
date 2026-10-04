@@ -377,7 +377,21 @@
       "phone": "(866) 946-9733",
       "sourceUrl": "https://opwdd.ny.gov/providers/home-and-community-based-services-waiver",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8669469733",
+            "211"
+          ],
+          "to": "8005412831",
+          "source": "https://www.health.ny.gov/health_care/medicaid/members/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
+        }
+      ]
     },
     {
       "id": "pace-elderly-care",
@@ -586,22 +600,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18884016582",
-            "8554574636",
-            "8662639083",
-            "8332522737"
-          ],
-          "to": "8887287223",
-          "source": "https://pacecny.org/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-program-qmb-slmb-qi",
@@ -811,19 +810,19 @@
           "field": "income_1",
           "from": 2494,
           "to": 1856,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
           "severity": "high",
           "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         },
         {
           "field": "income_2",
           "from": 3375,
           "to": 2509,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
           "severity": "high",
           "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         },
         {
           "field": "phone",
@@ -832,11 +831,11 @@
             "5857868900",
             "1800"
           ],
-          "to": "8005412831",
-          "source": "https://www.health.ny.gov/forms/instructions/doh-4328_instructions.pdf",
+          "to": "8006334227",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         }
       ]
     },
@@ -1461,10 +1460,10 @@
             "211"
           ],
           "to": "311",
-          "source": "https://www.nyc.gov/html/mancb2/downloads/pdf/cb2seniorserviceguide2013.pdf",
+          "source": "https://www.nyc.gov/html/records/pdf/govpub/moved/pubadvocate/SeniorGuide07final.pdf",
           "severity": "medium",
-          "why": "source dated 2013",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "why": "not a 10-digit number",
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         }
       ]
     },
@@ -2140,11 +2139,11 @@
         {
           "field": "income_1",
           "from": 1663,
-          "to": 1575,
+          "to": 15753,
           "source": "https://aging.ny.gov/senior-community-service-employment-program-scsep",
-          "severity": "medium",
-          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         },
         {
           "field": "phone",
@@ -2152,10 +2151,10 @@
             "2122446469"
           ],
           "to": "18778725627",
-          "source": "https://www.dol.gov/agencies/eta/seniors/contact",
+          "source": "https://www.dol.gov/agencies/eta/seniors",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-04T00:52:31.794Z"
         }
       ]
     },
@@ -2517,19 +2516,7 @@
       "sourceUrl": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "311"
-          ],
-          "to": "2126399675",
-          "source": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "scrie-rent-freeze",
@@ -3205,5 +3192,5 @@
     ],
     "resourcesVsBenefits": "New York's programs split into two categories: income-qualified benefits that provide direct financial assistance (like Community Medicaid, SNAP, or HEAP), and free resources available to all seniors regardless of income (like HIICAP Medicare counseling, Legal Services, and Golden Park access). Start with benefits if your loved one's income is under $2,000/month, but don't skip the free resources, HIICAP alone can save hundreds by optimizing Medicare coverage, and legal services can prevent costly evictions or benefit denials."
   },
-  "factcheckedAt": "2026-10-02T07:43:40.306Z"
+  "factcheckedAt": "2026-10-04T00:52:31.794Z"
 }

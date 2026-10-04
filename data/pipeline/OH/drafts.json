@@ -214,15 +214,22 @@
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "phone",
-          "from": [
-            "8003248680"
-          ],
-          "to": "18446406446",
-          "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Resources/Publications/Forms/ODM07216fillx.pdf",
+          "field": "income_1",
+          "from": 994,
+          "to": 943,
+          "source": "https://www.cuyahogacounty.gov/docs/default-source/outreachpublications/cjfs/medicaid.pdf?sfvrsn=a5bab1b7_6",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
+          "why": "verified value is an older year (100% SSI 2025) than the draft (100% SSI 2026)",
+          "flaggedAt": "2026-10-04T00:52:48.023Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1491,
+          "to": 1415,
+          "source": "https://www.cuyahogacounty.gov/docs/default-source/outreachpublications/cjfs/medicaid.pdf?sfvrsn=a5bab1b7_6",
+          "severity": "medium",
+          "why": "value fits more than one tier (100% FPL 2022 or 100% SSI 2026 or 100% SSI 2025)",
+          "flaggedAt": "2026-10-04T00:52:48.023Z"
         }
       ]
     },
@@ -602,11 +609,11 @@
             "5138627223",
             "8888957223"
           ],
-          "to": "18002664346",
-          "source": "https://dam.assets.ohio.gov/image/upload/aging.ohio.gov/rules/Chapter_173-50_COMMENT_PERIOD_2025-11-19.pdf",
+          "to": "8662465678",
+          "source": "https://aging.ohio.gov/see-news-and-events/news/oam-2024",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-04T00:52:48.023Z"
         }
       ]
     },
@@ -859,38 +866,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1350,
-          "to": 1816,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1824,
-          "to": 2455,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "18003248680",
-            "18446406446"
-          ],
-          "to": "8006861578",
-          "source": "https://insurance.ohio.gov/wps/wcm/connect/gov/7b4bb533-6c62-4576-9ae7-2185fbf2ff60/MedSavProg_2019.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-7b4bb533-6c62-4576-9ae7-2185fbf2ff60-mS82ox.",
-          "severity": "medium",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -1442,10 +1418,10 @@
             "4197845393"
           ],
           "to": "8008481300",
-          "source": "https://www.occ.ohio.gov/factsheet/home-weatherization-assistance-program-hwap",
+          "source": "https://www.bridgescap.org/hwap",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-04T00:52:48.023Z"
         }
       ]
     },
@@ -1913,20 +1889,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8662435678",
-            "211"
-          ],
-          "to": "8002664346",
-          "source": "https://www.ohio.gov/home/caregiver",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "scsep-employment",
@@ -2147,10 +2110,10 @@
             "3307820978"
           ],
           "to": "3302534597",
-          "source": "https://vantageaging.org/about-us/our-locations/",
+          "source": "https://vantageaging.org/programs-and-services/workforce-solutions/scsep-service-area/",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
+          "flaggedAt": "2026-10-04T00:52:48.023Z"
         }
       ]
     },
@@ -2368,5 +2331,5 @@
     ],
     "resourcesVsBenefits": "Most Ohio programs require income and asset limits, like SNAP (grocery assistance) or PASSPORT (home care) which have strict financial requirements. However, Ohio Senior Health Insurance Information Program (OSHIIP) provides free Medicare counseling to any Ohio senior regardless of income, and some meal programs serve anyone 60+ without income testing."
   },
-  "factcheckedAt": "2026-10-02T07:43:59.200Z"
+  "factcheckedAt": "2026-10-04T00:52:48.023Z"
 }

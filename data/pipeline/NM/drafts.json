@@ -357,11 +357,11 @@
             "711",
             "18004322080"
           ],
-          "to": "8002834465",
-          "source": "https://www.hsd.state.nm.us/lookingforinformation/pace/",
+          "to": "8662612954",
+          "source": "https://www.hca.nm.gov/lookingforinformation/pace/",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
@@ -581,7 +581,7 @@
           "source": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
@@ -784,20 +784,20 @@
         {
           "field": "income_1",
           "from": 2739,
-          "to": 1986,
+          "to": 2461,
           "source": "https://www.nmwic.org/fmnp/",
-          "severity": "high",
+          "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         },
         {
           "field": "income_2",
           "from": 3706,
-          "to": 2686,
+          "to": 3337,
           "source": "https://www.nmwic.org/fmnp/",
-          "severity": "high",
+          "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:42:51.020Z"
+          "flaggedAt": "2026-10-04T00:51:46.068Z"
         }
       ]
     },
@@ -1140,5 +1140,5 @@
     ],
     "resourcesVsBenefits": "Most New Mexico programs for seniors are qualification-based benefits requiring specific income limits or care needs assessments. For example, Centennial Care Community Benefit Program requires Medicaid eligibility, while SCSEP requires income below $19,000-$25,500 annually. The Senior Farmers' Market program targets seniors on fixed incomes. Only PACE provides comprehensive services regardless of specific income thresholds, but requires meeting nursing home level care criteria."
   },
-  "factcheckedAt": "2026-10-02T07:42:51.020Z"
+  "factcheckedAt": "2026-10-04T00:51:46.068Z"
 }
