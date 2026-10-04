@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.926Z
+ * Last updated: 2026-10-04T01:02:47.801Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2134,22 +2134,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ohio.gov/care-and-living/staying-active/staying-active-catalog/senior-community-services-employment-program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-04",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "6144665500",
-            "9378400055",
-            "3308327220",
-            "7403535238",
-            "3307820978"
-          ],
-          "to": "3302534597",
+          "proposed": "3302534597",
           "source": "https://vantageaging.org/about-us/our-locations/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:43:59.200Z"
+          "reason": "page also lists ours ((937) 840-0055, (330) 832-7220, (740) 353-5238)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },

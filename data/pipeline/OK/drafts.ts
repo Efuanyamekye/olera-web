@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.926Z
+ * Last updated: 2026-10-04T01:16:14.097Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -845,7 +845,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/health/help.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -882,19 +882,15 @@ export const drafts: PipelineStateDrafts = {
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
           "flaggedAt": "2026-10-02T07:44:21.822Z"
-        },
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "4055213646",
-            "4055225050",
-            "211"
-          ],
-          "to": "4055213679",
+          "proposed": "4055213679",
           "source": "https://oklahoma.gov/okdhs/services/health/medicare.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "reason": "page also lists ours ((405) 522-5050)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -1459,6 +1455,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 252-2412",
           "description": "For ADvantage Waiver meal services if parent needs nursing home level of care",
           "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 211-2116",
+          "description": "Number listed on oklahoma.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1527,20 +1529,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/cap/meals.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "8002522412"
           ],
-          "to": "8002112116",
+          "to": "(800) 211-2116",
           "source": "https://oklahoma.gov/okdhs/services/aging/titleiii.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:21.822Z"
+          "flaggedAt": "2026-10-02T07:44:21.822Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "respite-voucher-programs",

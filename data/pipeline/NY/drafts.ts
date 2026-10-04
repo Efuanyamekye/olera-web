@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.925Z
+ * Last updated: 2026-10-04T01:16:14.071Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -536,6 +536,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(833) 252-2737",
           "description": "PACE operator intake.",
           "hours": "Hours not published"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 728-7223",
+          "description": "Number listed on pacecny.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -591,20 +597,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18884016582",
             "8554574636",
             "8662639083",
             "8332522737"
           ],
-          "to": "8887287223",
+          "to": "(888) 728-7223",
           "source": "https://pacecny.org/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-02T07:43:40.306Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2079,6 +2087,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(212) 244-6469",
           "description": "NYC residents call and ask for employment services referral",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 872-5627",
+          "description": "Number listed on dol.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2150,19 +2164,23 @@ export const drafts: PipelineStateDrafts = {
           "severity": "medium",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
           "flaggedAt": "2026-10-02T07:43:40.306Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "2122446469"
           ],
-          "to": "18778725627",
+          "to": "(877) 872-5627",
           "source": "https://www.dol.gov/agencies/eta/seniors/contact",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:43:40.306Z"
+          "flaggedAt": "2026-10-02T07:43:40.306Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "legal-services-seniors",

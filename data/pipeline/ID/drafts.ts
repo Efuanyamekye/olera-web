@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ID/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.909Z
+ * Last updated: 2026-10-04T01:16:13.799Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1837,6 +1837,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(208) 334-3833",
           "description": "State-level program information and regional office referrals",
           "hours": "Mon-Fri 8am-5pm MT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 926-2588",
+          "description": "Number listed on healthandwelfare.idaho.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1899,20 +1905,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.idaho.gov/stay-at-home/national-family-caregiver-support-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "2083343833"
           ],
-          "to": "8009262588",
+          "to": "(800) 926-2588",
           "source": "https://healthandwelfare.idaho.gov/services-programs/211",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:48.416Z"
+          "flaggedAt": "2026-10-02T07:36:48.416Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "senior-community-service-employment-program",
@@ -2375,6 +2384,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 456-1233",
           "description": "Medicaid eligibility and benefits questions",
           "hours": "Mon-Fri 8am-5pm MT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(208) 455-7118",
+          "description": "Number listed on healthandwelfare.idaho.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2431,18 +2446,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8774561233",
             "211"
           ],
-          "to": "2084557118",
+          "to": "(208) 455-7118",
           "source": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/idaho-home-choice",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:48.416Z"
+          "flaggedAt": "2026-10-02T07:36:48.416Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     }

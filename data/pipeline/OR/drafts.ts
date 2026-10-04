@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.927Z
+ * Last updated: 2026-10-04T01:16:14.121Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -517,6 +517,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-282-8096",
           "description": "General information about all aging and disability services",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 673-2372",
+          "description": "Number listed on oregon.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -611,17 +617,19 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18002828096"
           ],
-          "to": "8556732372",
+          "to": "(855) 673-2372",
           "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1510,6 +1518,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(503) 945-5811",
           "description": "General information and referrals to local providers",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 673-2372",
+          "description": "Number listed on oregon.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1564,22 +1578,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/meals-nutrition.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5039455811",
             "5033642856",
             "8004698772",
             "5033043400"
           ],
-          "to": "8556732372",
+          "to": "(855) 673-2372",
           "source": "https://www.oregon.gov/odhs/food/pages/default.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "family-caregiver-assistance-support",
@@ -2013,6 +2030,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-678-6944",
           "description": "Central Oregon regional office toll-free",
           "hours": "Mon-Thu 10am-12pm, 1-4pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(503) 224-4086",
+          "description": "Number listed on lasoregon.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2049,9 +2072,10 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://lasoregon.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5032242640",
             "5032445204",
@@ -2059,13 +2083,15 @@ export const drafts: PipelineStateDrafts = {
             "5413856944",
             "18006786944"
           ],
-          "to": "5032244086",
+          "to": "(503) 224-4086",
           "source": "https://lasoregon.org/locations/portland-regional-office/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2471,6 +2497,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(503) 325-0910",
           "description": "Present proof of age for senior tuition waiver",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 547-8887",
+          "description": "Number listed on pdx.edu",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2524,20 +2556,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregonlegislature.gov/bills_laws/ors/ors341.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9717226111",
             "5033250910"
           ],
-          "to": "8005478887",
+          "to": "(800) 547-8887",
           "source": "https://www.pdx.edu/senior-adult-learning-center/salc-history",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:44:40.858Z"
+          "flaggedAt": "2026-10-02T07:44:40.858Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "hrsn-health-social-needs",

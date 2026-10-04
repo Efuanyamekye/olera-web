@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.922Z
+ * Last updated: 2026-10-04T01:16:14.046Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -128,6 +128,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 318-2596",
           "description": "Federal marketplace assistance for online applications",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 275-3447",
+          "description": "Number listed on medicaid.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -192,18 +198,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008523345",
             "8003182596"
           ],
-          "to": "8442753447",
+          "to": "(844) 275-3447",
           "source": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:24.535Z"
+          "flaggedAt": "2026-10-02T07:42:24.535Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -672,6 +680,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 633-4227",
           "description": "Federal Medicare questions and savings program information",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 275-3447",
+          "description": "Number listed on dhhs.nh.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -777,17 +791,20 @@ export const drafts: PipelineStateDrafts = {
           "severity": "medium",
           "why": "aggregator source",
           "flaggedAt": "2026-10-02T07:42:24.535Z"
-        },
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8006334227"
           ],
-          "to": "18442753447",
+          "to": "(844) 275-3447",
           "source": "https://www.dhhs.nh.gov/medicaid-contact-directory",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:24.535Z"
+          "flaggedAt": "2026-10-02T07:42:24.535Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -956,6 +973,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "In-person applications and document submission",
           "hours": "Find locations at dhhs.nh.gov"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(603) 271-9700",
+          "description": "Number listed on dhhs.nh.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1019,18 +1042,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8773477627",
             "211"
           ],
-          "to": "6032719700",
+          "to": "(603) 271-9700",
           "source": "https://www.dhhs.nh.gov/programs-services/food-meals-assistance/supplemental-nutrition-assistance-program-snap",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:42:24.535Z"
+          "flaggedAt": "2026-10-02T07:42:24.535Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

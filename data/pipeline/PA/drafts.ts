@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.928Z
+ * Last updated: 2026-10-04T01:16:14.145Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -205,7 +205,7 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-07",
+      "lastVerifiedDate": "2026-10-04",
       "reviewQueue": [
         {
           "field": "age",
@@ -224,18 +224,15 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "outside sanity bounds (3x)",
           "flaggedAt": "2026-10-02T07:44:57.351Z"
-        },
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "18775504227",
-            "211"
-          ],
-          "to": "18448243655",
+          "proposed": "18448243655",
           "source": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "reason": "page also lists ours ((877) 550-4227)",
+          "dismissedAt": "2026-10-04"
         }
       ]
     },
@@ -307,6 +304,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "717-783-1550",
           "description": "Help finding the LIFE provider that serves your county",
           "hours": "Monday–Friday, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 550-4227",
+          "description": "Number listed on pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -343,19 +346,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.pa.gov/agencies/aging/aging-programs-and-services.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-06-19",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7177831550"
           ],
-          "to": "18775504227",
+          "to": "(877) 550-4227",
           "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "flaggedAt": "2026-10-02T07:44:57.351Z",
+          "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
-      ]
+      ],
+      "lastVerifiedDate": null
     },
     {
       "id": "pace-prescription-assistance",
@@ -1630,20 +1636,17 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8777277529",
-            "211"
-          ],
-          "to": "7177831550",
+          "proposed": "7177831550",
           "source": "https://www.pa.gov/services/aging/apply-for-the-older-pennsylvanians-legal-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:44:57.351Z"
+          "reason": "page also lists ours ((877) 727-7529)",
+          "dismissedAt": "2026-10-04"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-04"
     },
     {
       "id": "ltc-ombudsman",
