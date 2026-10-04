@@ -21,6 +21,15 @@ import type { BenefitProgram } from "@/lib/types/benefits";
 import type { QuizQuestion } from "@/lib/claim-tokens";
 import { normalizeCareLabel } from "@/lib/provider-highlights";
 import { readCareAge, ageMeetsMin, type AgeBand } from "@/lib/benefits/age";
+import {
+  evaluateProgramForFamily,
+  incomeLimitFromTable,
+  resolveSbfRow,
+  type ProgramForVerdict,
+  type SbfEligibilityRow,
+} from "@/lib/benefits/eligibility.server";
+import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { US_STATES } from "@/lib/us-states";
 
 /**
  * A care label safe to drop into prose ("how families pay for memory care").
@@ -300,6 +309,33 @@ function firstSentence(text: string, maxLen = 160): string {
 }
 
 /**
+ * The fact-checked draft behind each seed row, keyed by the row's id, so the
+ * brief can judge a seed program on the draft's own age and income facts.
+ * Same join the finder makes in the other direction (resolveSbfRow). A row
+ * with no draft gets the name-only verdict: Medicaid by name, veteran by
+ * the seed, nothing else can rule it out.
+ */
+function draftsBySeedRow(stateCode: string | null, rows: BenefitProgram[]): Map<string, ProgramForVerdict> {
+  const out = new Map<string, ProgramForVerdict>();
+  const slug = stateCode ? getStateSlug(stateCode) : undefined;
+  if (!slug) return out;
+  const stateName = US_STATES.find((st) => st.value === stateCode)?.label ?? stateCode;
+  for (const id of getCanonicalProgramIds(slug)) {
+    const d = getEnrichedProgram(slug, id);
+    if (!d || d.programType !== "benefit") continue;
+    const row = resolveSbfRow(rows as unknown as SbfEligibilityRow[], d.name, stateName) as (SbfEligibilityRow & { id?: string }) | null;
+    if (!row?.id || out.has(row.id)) continue;
+    out.set(row.id, {
+      name: d.name,
+      ageRequirement: d.structuredEligibility?.ageRequirement,
+      eligibilitySummary: d.structuredEligibility?.summary,
+      incomeLimitSingle: incomeLimitFromTable(d.structuredEligibility?.incomeTable),
+    });
+  }
+  return out;
+}
+
+/**
  * Pick up to `limit` programs the family plausibly qualifies for, from what we
  * already know. Hard-excludes only on facts we HOLD (unknowns stay in — the
  * micro-quiz narrows them later). State programs outrank federal at equal
@@ -321,28 +357,24 @@ export async function getProgramsForFamily(
   const affinity = careSettingAffinity(facts.careTypes) ?? careSettingFromNeed(facts.careNeed);
   const seen = new Set<string>();
   const scored: { program: BenefitProgram; isState: boolean; score: number }[] = [];
-  // Whether the stored income band may be compared to a program limit at all.
-  // Constant across the loop — facts do not change per program.
-  const incomeUsable = incomeBandIsHouseholdScoped(facts);
+  const allRows = [...statePrograms, ...federalPrograms].map(({ p }) => p);
+  const drafts = draftsBySeedRow(facts.state, allRows);
 
   for (const { p, isState } of [...statePrograms, ...federalPrograms]) {
     const key = p.name.toLowerCase().trim();
     if (seen.has(key)) continue;
     seen.add(key);
 
-    // Hard exclusions only on facts we actually hold.
-    if (p.requires_veteran === true && facts.veteranStatus === "no") continue;
-    if (p.requires_medicaid && (facts.medicaidStatus === "doesNotHave" || facts.medicaidStatus === "denied")) continue;
-    if (p.min_age != null && ageMeetsMin({ exact: facts.age, band: facts.ageBand }, p.min_age) === false) continue;
-    // Income: exclude only when the band's FLOOR clears the program limit —
-    // a held fact, not a guess (Phase 3 real-situation capture). Suppressed
-    // entirely when a spouse lives in the household, because the band is the
-    // recipient's income and the limit is a household one. See
-    // incomeBandIsHouseholdScoped.
-    if (incomeUsable) {
-      const floor = incomeBandFloor(facts.incomeBand);
-      if (floor != null && p.max_income_single != null && floor > p.max_income_single) continue;
-    }
+    // Eligibility is the finder's verdict, so a family sees the same programs
+    // from an email chip as from the quiz. The seed's min_age, income and
+    // requires_medicaid columns are the March 2026 seed and disagree with the
+    // fact-checked drafts more often than not (age 72%, income 51%, Medicaid
+    // 57% of the exclusions they made, measured 4 Oct 2026 over 2,725
+    // families), so they boost but never exclude; the draft's own facts and
+    // the program's name do the ruling out. Rows with no draft can only be
+    // ruled out by name (Medicaid) or the veteran flag.
+    const verdict = evaluateProgramForFamily(drafts.get(p.id) ?? { name: p.name }, p as unknown as SbfEligibilityRow, facts);
+    if (verdict.ruledOut) continue;
     // Don't LEAD with veteran-only programs when veteran status is unknown —
     // the quiz asks; a wrong guess here reads as "they don't know us at all".
     if (p.requires_veteran === true && facts.veteranStatus !== "yes") continue;
@@ -376,16 +408,11 @@ export async function getProgramsForFamily(
       if (setting === affinity) score += 8;
       else if (setting !== "any") score -= 8;
     }
-    if (isMedicaidGated(p) && facts.medicaidStatus === "alreadyHas") score += 6;
     if (facts.financialPath === "c" && isMedicaidGated(p)) score += 8;
-    // The within-income boost is the false-positive path: a recipient-only
-    // band read against a household limit floats premium-help programs to the
-    // top of a plan for a household that is thousands over. Never score it
-    // when a spouse is in the picture.
-    if (incomeUsable) {
-      const ceiling = incomeBandCeiling(facts.incomeBand);
-      if (ceiling != null && p.max_income_single != null && ceiling <= p.max_income_single) score += 6;
-    }
+    // Income under the limit, age met, Medicaid already held: the engine's
+    // boosts, with its spouse and seed-noise guards, replace the ones this
+    // ranker used to compute from the seed alone.
+    score += verdict.boost;
     scored.push({ program: p, isState, score });
   }
 
