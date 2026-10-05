@@ -154,26 +154,45 @@ export interface NextQuestion {
 }
 
 /**
- * The unknown fact that settles the most programs, averaged over its answers.
- * Null when no remaining question would change any program: stop asking.
+ * How likely each answer is, and how often families say "not sure". Defaults
+ * are even with no "not sure"; a caller passes real rates when it has them.
+ */
+export interface AnswerPriors {
+  weights?: { [K in FactKey]?: Partial<Record<NonNullable<KnownFacts[K]>, number>> };
+  notSure?: Partial<Record<FactKey, number>>;
+}
+
+/**
+ * The unknown fact that settles the most programs, in expectation over its
+ * answers and discounted by how often families can't answer it. Facts already
+ * asked (answered or "not sure") are never asked again. Null when no
+ * remaining question would change any program: stop asking.
  * `weight` lets a caller count a program more (e.g. one that pays for care).
  */
-export function nextQuestion(programs: ProgramRules[], f: KnownFacts, weight: (r: ProgramRules) => number = () => 1): NextQuestion | null {
+export function nextQuestion(
+  programs: ProgramRules[],
+  f: KnownFacts,
+  weight: (r: ProgramRules) => number = () => 1,
+  opts: { asked?: ReadonlySet<FactKey>; priors?: AnswerPriors } = {},
+): NextQuestion | null {
   const now = programs.map((r) => statusOf(r, f));
   let best: NextQuestion | null = null;
   for (const fact of Object.keys(ANSWERS) as FactKey[]) {
-    if (f[fact] != null) continue;
-    // Disability only matters for someone under a program's age floor.
+    if (f[fact] != null || opts.asked?.has(fact)) continue;
+    const answers = ANSWERS[fact] as string[];
+    const w = (opts.priors?.weights?.[fact] || {}) as Record<string, number>;
+    const sum = answers.reduce((x, a) => x + (w[a] ?? 1), 0);
     let total = 0;
     const touched = new Set<string>();
-    for (const a of ANSWERS[fact]) {
+    for (const a of answers) {
+      const pa = (w[a] ?? 1) / sum;
       const g = { ...f, [fact]: a } as KnownFacts;
       programs.forEach((r, i) => {
         if (now[i] !== "check") return;
-        if (statusOf(r, g) !== "check") { total += weight(r); touched.add(r.name); }
+        if (statusOf(r, g) !== "check") { total += pa * weight(r); touched.add(r.name); }
       });
     }
-    const settles = total / ANSWERS[fact].length;
+    const settles = total * (1 - (opts.priors?.notSure?.[fact] ?? 0));
     if (settles > 0 && (!best || settles > best.settles)) best = { fact, settles, turnsOn: [...touched] };
   }
   return best;
