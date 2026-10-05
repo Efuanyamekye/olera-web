@@ -1,30 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zipToState } from "@/lib/benefits/zip-lookup";
 import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
-import { emptyFinderAnswers, type FinderAnswers, type FinderNeed, type FinderWho } from "@/lib/benefits/finder-answers";
+import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, type FinderProgram, type FinderResult, type FinderWho } from "@/lib/benefits/finder-answers";
+import { telHref } from "@/lib/benefits/call-script";
 
 /**
- * The benefits conversation, first screen (Phase 3, 5 Oct 2026).
+ * The benefits conversation (Phase 3, 5 Oct 2026), redesigned the same day
+ * after TJ's read of the first build: "feels like a chore, lifeless, the
+ * final page is an overwhelming mess".
  *
- * One question per screen, the reason under it, the programs firming up as
- * the family answers. The question engine (on the server) picks each question
- * from the state's fact-checked rules; this page only asks and shows. It ends
- * by handing the answers to the finder's plan, so the call, the script and
- * "send me this plan" are the finder's, unchanged.
+ * One question per screen with one grey line under it, a segmented bar, and
+ * the programs held in a single pill so the question stays on top. When an
+ * answer moves a program, a card says so for about a second. It ends on one
+ * reveal ("5 programs look likely for your parent") and its own calm result:
+ * one card with the first call, then the other likely programs as plain rows.
  *
- * The plan reads daily help and savings too (finder-engine conversationFacts),
- * so it agrees with the list the family watched settle.
+ * The question engine (server) picks each question from the state's
+ * fact-checked rules; the finder's engine builds the first call, reading the
+ * same daily-help and savings answers so the two agree.
  */
 
-type Step = "who" | "zip" | "need" | "engine" | "medicaid" | "done";
+type Step = "who" | "need" | "zip" | "engine" | "reveal" | "result";
 
 const EMPTY: KnownFacts = { age: null, income: null, medicaid: null, veteran: null, dailyHelp: null, savings: null, disability: null, household: null };
 const FINDER_KEY = "olera-finder-v2";
+const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
 
 const WHO: { value: FinderWho; label: string }[] = [
   { value: "parent", label: "My mom or dad" },
@@ -32,41 +37,69 @@ const WHO: { value: FinderWho; label: string }[] = [
   { value: "me", label: "Me" },
   { value: "other", label: "Someone else" },
 ];
-// Objects only on this screen: choosing between kinds of help is where a
-// picture is recognised faster than a phrase. Money and age questions keep
-// words; the number is the answer. Fluent 3D emoji, the hub's object family.
-const NEEDS: { value: FinderNeed; label: string; icon: string }[] = [
+// Objects only where choosing between kinds of help: a picture is recognised
+// faster than a phrase. Money and age questions keep words.
+const NEEDS: { value: FinderNeed; label: string; icon: string; wide?: boolean }[] = [
   { value: "care", label: "Paying for care at home", icon: "house-with-garden" },
-  { value: "memory", label: "Memory care or dementia", icon: "puzzle-piece" },
+  { value: "memory", label: "Memory care", icon: "puzzle-piece" },
   { value: "bills", label: "Everyday bills", icon: "receipt" },
   { value: "health", label: "Medicare and health costs", icon: "stethoscope" },
-  { value: "urgent", label: "Something urgent this week", icon: "alarm-clock" },
+  { value: "urgent", label: "Something urgent this week", icon: "alarm-clock", wide: true },
 ];
+
+/** The object a program is shown with in the reward card, the reveal and the list. */
+function iconFor(name: string): string {
+  if (/memory|alzheim|dementia/i.test(name)) return "puzzle-piece";
+  if (/meal|snap|food|nutrition|calfresh|commodit/i.test(name)) return "pot-of-food";
+  if (/medicare|health|prescri|extra help|\bship\b|\bmsp\b/i.test(name)) return "stethoscope";
+  if (/energy|liheap|weatheriz|utilit|bill|lifeline|phone|tax/i.test(name)) return "receipt";
+  return "house-with-garden";
+}
+
+function Obj({ name, size = 40 }: { name: string; size?: number }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={`/images/benefits-conversation/${name}.svg`} alt="" width={size} height={size} style={{ width: size, height: size }} className="shrink-0" />;
+}
 
 interface Snapshot { step: Step; facts: KnownFacts; asked: FactKey[] }
 
 export default function BenefitsConversationPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("who");
+  const [whoFromLink, setWhoFromLink] = useState(false);
   const [who, setWho] = useState<FinderWho | null>(null);
+  const [need, setNeed] = useState<FinderNeed | null>(null);
   const [zip, setZip] = useState("");
   const [stateCode, setStateCode] = useState<string | null>(null);
-  const [need, setNeed] = useState<FinderNeed | null>(null);
   const [facts, setFacts] = useState<KnownFacts>(EMPTY);
   const [asked, setAsked] = useState<FactKey[]>([]);
-  const [medicaid, setMedicaid] = useState<FinderAnswers["medicaid"]>(null);
   const [turn, setTurn] = useState<ConversationTurn | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<Snapshot[]>([]);
-  // What "About N left" last showed. The engine's count is an upper bound
-  // that can hold still for a step; shown, that reads as stuck, so the line
-  // only ever counts down.
   const [leftShown, setLeftShown] = useState<number | null>(null);
+  const [reward, setReward] = useState<string[] | null>(null);
+  const [pillOpen, setPillOpen] = useState(false);
+  const [plan, setPlan] = useState<FinderResult | null>(null);
+  const rewardTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
+  const v = finderVoice(who);
+  const them = who === "me" || !who ? "you" : v.subject;
 
-  const ask = useCallback(async (f: KnownFacts, a: FactKey[]) => {
+  // A link from an email or the hub can say who it's for (?who=parent).
+  useEffect(() => {
+    const w = new URLSearchParams(window.location.search).get("who");
+    if (w && (WHO_VALUES as readonly string[]).includes(w)) {
+      setWho(w as FinderWho);
+      setWhoFromLink(true);
+      setStep("need");
+    }
+  }, []);
+
+  useEffect(() => () => { if (rewardTimer.current) clearTimeout(rewardTimer.current); }, []);
+
+  const ask = useCallback(async (f: KnownFacts, a: FactKey[], before: ConversationProgram[] | null) => {
     if (!stateCode) return;
     setLoading(true);
     setError(null);
@@ -79,12 +112,21 @@ export default function BenefitsConversationPage() {
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || "We couldn't load the next question.");
       const t = body as ConversationTurn;
+      // The reward: programs this answer just made likely.
+      const was = new Set((before || []).filter((p) => p.status === "likely").map((p) => p.id));
+      const fresh = before ? t.programs.filter((p) => p.status === "likely" && !was.has(p.id)).map((p) => p.name) : [];
+      if (fresh.length) {
+        setReward(fresh);
+        if (rewardTimer.current) clearTimeout(rewardTimer.current);
+        rewardTimer.current = setTimeout(() => setReward(null), 1300);
+      }
       setTurn(t);
       if (t.question) {
-        const n = t.left + 1;
+        const n = t.left;
         setLeftShown((prev) => (prev == null ? n : Math.max(1, Math.min(prev - 1, n))));
+      } else {
+        setStep("reveal");
       }
-      if (!(body as ConversationTurn).question) setStep("medicaid");
     } catch (e) {
       setError(e instanceof Error ? e.message : "We couldn't load the next question.");
     } finally {
@@ -93,7 +135,7 @@ export default function BenefitsConversationPage() {
   }, [stateCode]);
 
   useEffect(() => {
-    if (step === "engine" && !turn && stateCode) void ask(facts, asked);
+    if (step === "engine" && !turn && stateCode) void ask(facts, asked, null);
   }, [step, turn, stateCode, facts, asked, ask]);
 
   const remember = () => setHistory((h) => [...h, { step, facts, asked }]);
@@ -104,83 +146,132 @@ export default function BenefitsConversationPage() {
     const a = [...asked, fact];
     setFacts(f);
     setAsked(a);
-    void ask(f, a);
+    setPillOpen(false);
+    void ask(f, a, turn?.programs ?? null);
   };
 
   const back = () => {
     const prev = history[history.length - 1];
     if (!prev) return;
     setHistory((h) => h.slice(0, -1));
+    setReward(null);
+    setLeftShown(null);
     setStep(prev.step);
     setFacts(prev.facts);
     setAsked(prev.asked);
-    setLeftShown(null);
-    if (prev.step === "engine") void ask(prev.facts, prev.asked);
+    if (prev.step === "engine") void ask(prev.facts, prev.asked, null);
   };
 
-  /** Hand everything to the finder's plan: same engine, same call, same "send me this plan". */
-  const seePlan = async () => {
-    if (!stateCode) return;
+  const finderAnswers = (): FinderAnswers => ({
+    ...emptyFinderAnswers(),
+    who,
+    zip,
+    stateCode,
+    place: stateName,
+    age: facts.age,
+    needs: need ? [need] : ["care"],
+    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
+    income: facts.income ?? (asked.includes("income") ? "unsure" : null),
+    medicaid: null,
+    veteran: facts.veteran ?? "no",
+    dailyHelp: facts.dailyHelp,
+    savings: facts.savings,
+  });
+
+  /** The first call comes from the finder's engine, which reads the same answers. */
+  const openResult = async () => {
+    remember();
+    setStep("result");
     setLoading(true);
     setError(null);
-    const answers: FinderAnswers = {
-      ...emptyFinderAnswers(),
-      who,
-      zip,
-      stateCode,
-      place: stateName,
-      age: facts.age,
-      needs: need ? [need] : ["care"],
-      household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
-      income: facts.income ?? (asked.includes("income") ? "unsure" : null),
-      medicaid,
-      veteran: facts.veteran ?? "no",
-      dailyHelp: facts.dailyHelp,
-      savings: facts.savings,
-    };
     try {
-      const res = await fetch("/api/benefits/finder", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(answers) });
+      const res = await fetch("/api/benefits/finder", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(finderAnswers()) });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body.error || "We couldn't load your plan.");
-      try {
-        localStorage.setItem(FINDER_KEY, JSON.stringify({ answers, stepIndex: 99, phase: "results", result: body, cohort: null, savedAt: Date.now() }));
-      } catch {
-        // Storage blocked: the finder will open on its first question instead.
-      }
-      router.push("/benefits/finder");
+      if (!res.ok) throw new Error(body.error || "We couldn't load your first call.");
+      setPlan(body as FinderResult);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "We couldn't load your plan.");
+      setError(e instanceof Error ? e.message : "We couldn't load your first call.");
+    } finally {
       setLoading(false);
     }
+  };
+
+  /** "Text me this" uses the finder's send-plan form, unchanged. */
+  const textMe = () => {
+    if (!plan) return;
+    try {
+      localStorage.setItem(FINDER_KEY, JSON.stringify({ answers: finderAnswers(), stepIndex: 99, phase: "results", result: plan, cohort: null, savedAt: Date.now() }));
+    } catch {
+      // Storage blocked: the finder opens on its first question instead.
+    }
+    router.push("/benefits/finder");
   };
 
   const programs = turn?.programs ?? [];
   const likely = programs.filter((p) => p.status === "likely");
   const checking = programs.filter((p) => p.status === "check");
-  const out = programs.filter((p) => p.status === "out");
-  const answeredCount = asked.length;
+
+  // Segmented progress: the opening screens, the engine's answers, and its
+  // (only ever shrinking) estimate of what's left.
+  const opening = (whoFromLink ? 0 : 1) + 2;
+  const done =
+    (step === "who" ? 0 : step === "need" ? (whoFromLink ? 0 : 1) : step === "zip" ? opening - 1 : opening) + asked.length;
+  const total = step === "engine" ? done + (leftShown ?? 1) : opening + 4;
+  const segments = Math.max(total, done + 1);
+  const showBar = step !== "reveal" && step !== "result";
 
   return (
-    <div className="flex flex-col gap-7">
-      <div className="flex items-center justify-between text-sm text-gray-500 min-h-[24px]">
-        {history.length ? (
-          <button type="button" onClick={back} className="bg-transparent border-none p-0 text-primary-800 font-medium cursor-pointer">
-            ← Back
-          </button>
-        ) : <span />}
-        <span>{progressLine(step, turn, leftShown)}</span>
-      </div>
+    <div className="flex flex-col gap-6 min-h-[70vh]">
+      <style>{`
+        @keyframes convRise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+        @keyframes convPop { 0% { opacity: 0; transform: translateY(8px) scale(.97) } 100% { opacity: 1; transform: none } }
+        .conv-rise { animation: convRise .32s cubic-bezier(.16,1,.3,1) both }
+        .conv-pop { animation: convPop .28s cubic-bezier(.16,1,.3,1) both }
+        @media (prefers-reduced-motion: reduce) { .conv-rise, .conv-pop { animation: none } }
+      `}</style>
+
+      {showBar && (
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-1" aria-hidden="true">
+            {Array.from({ length: segments }).map((_, i) => (
+              <span key={i} className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= done ? "bg-primary-700" : "bg-gray-200"}`} />
+            ))}
+          </div>
+          <div className="flex items-center justify-between text-[14px] text-gray-500 min-h-[22px]">
+            {history.length ? (
+              <button type="button" onClick={back} className="bg-transparent border-none p-0 text-gray-600 font-medium cursor-pointer">← Back</button>
+            ) : <span />}
+            <span>{step === "engine" ? `${done + 1} of ${segments}` : "About 2 minutes"}</span>
+          </div>
+        </div>
+      )}
 
       {step === "who" && (
-        <Question title="Who are you looking into benefits for?" why="So I can talk about the right person.">
-          {WHO.map((o) => (
-            <Chip key={o.value} label={o.label} onClick={() => { remember(); setWho(o.value); setStep("zip"); }} />
-          ))}
-        </Question>
+        <Screen key="who" title="Who are you looking into benefits for?">
+          {WHO.map((o) => <Choice key={o.value} label={o.label} onClick={() => { remember(); setWho(o.value); setStep("need"); }} />)}
+        </Screen>
+      )}
+
+      {step === "need" && (
+        <Screen key="need" title={`What would help ${them} most right now?`}>
+          <div className="grid grid-cols-2 gap-2.5">
+            {NEEDS.map((o) => (
+              <button
+                key={o.value}
+                type="button"
+                onClick={() => { remember(); setNeed(o.value); setStep("zip"); }}
+                className={`text-left bg-white border border-gray-200 rounded-[18px] p-3.5 cursor-pointer active:scale-[.98] transition-transform [@media(hover:hover)]:hover:border-primary-600 ${o.wide ? "col-span-2 flex items-center gap-3" : "flex flex-col gap-2.5"}`}
+              >
+                <Obj name={o.icon} size={o.wide ? 36 : 44} />
+                <span className="text-[15px] font-semibold text-gray-900 leading-snug">{o.label}</span>
+              </button>
+            ))}
+          </div>
+        </Screen>
       )}
 
       {step === "zip" && (
-        <Question title={who === "me" ? "What's your ZIP code?" : "What ZIP code do they live in?"} why="Most programs are run by the state, and some by the county.">
+        <Screen key="zip" title={who === "me" || !who ? "What's your ZIP code?" : "What ZIP code do they live in?"} sub="Most programs are run by the state.">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -189,9 +280,10 @@ export default function BenefitsConversationPage() {
               setError(null);
               remember();
               setStateCode(st);
-              setStep("need");
+              setTurn(null);
+              setStep("engine");
             }}
-            className="flex gap-3"
+            className="flex gap-2.5"
           >
             <input
               id="conversation-zip"
@@ -200,66 +292,75 @@ export default function BenefitsConversationPage() {
               maxLength={5}
               value={zip}
               onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-              className="flex-1 min-h-[56px] rounded-2xl border-[1.5px] border-gray-300 bg-white px-4 text-xl tracking-wide focus:border-primary-700 focus:outline-none"
+              className="flex-1 min-w-0 min-h-[58px] rounded-2xl border border-gray-300 bg-white px-4 text-[20px] tracking-wide focus:border-primary-700 focus:outline-none"
               aria-label="ZIP code"
             />
-            <button type="submit" className="min-h-[56px] px-6 rounded-2xl bg-primary-800 text-white font-semibold border-none cursor-pointer hover:bg-primary-700">
-              Next
-            </button>
+            <button type="submit" className="min-h-[58px] px-6 rounded-2xl bg-gray-900 text-white font-semibold border-none cursor-pointer">Next</button>
           </form>
-        </Question>
-      )}
-
-      {step === "need" && (
-        <Question title="What would help most right now?" why="This decides which program I point you to first.">
-          {NEEDS.map((o) => (
-            <Chip key={o.value} label={o.label} icon={o.icon} onClick={() => { remember(); setNeed(o.value); setStep("engine"); }} />
-          ))}
-        </Question>
+        </Screen>
       )}
 
       {step === "engine" && (
-        <>
-          {answeredCount > 0 && <ProgramList likely={likely} checking={checking} out={out} stateName={stateName} compact />}
-          {turn?.question && !loading ? (() => {
-            const c = questionCopy(turn.question.fact, who, turn.question.turnsOn, stateName);
-            return (
-              <Question title={c.title} why={c.why}>
-                {c.choices.map((o) => <Chip key={o.value} label={o.label} onClick={() => answerFact(turn.question!.fact, o.value)} />)}
-                <Chip label="I'm not sure" ghost onClick={() => answerFact(turn.question!.fact, null)} />
-              </Question>
-            );
-          })() : <Thinking />}
-        </>
+        reward ? (
+          <div key={reward.join("|")} className="conv-pop flex-1 flex items-center justify-center py-16">
+            <div className="flex items-center gap-3.5 bg-white border border-gray-200 rounded-[20px] px-4 py-4 shadow-[0_12px_32px_rgba(0,0,0,0.08)] max-w-[420px]">
+              <Obj name={iconFor(reward[0])} size={44} />
+              <div>
+                <p className="m-0 text-[16px] font-semibold text-gray-900">
+                  {reward.length === 1
+                    ? `${shortName(reward[0], stateName)} looks likely`
+                    : `${reward.slice(0, 2).map((n) => shortName(n, stateName)).join(" and ")}${reward.length > 2 ? ` and ${reward.length - 2} more` : ""} look likely`}
+                </p>
+                <p className="m-0 text-[14px] text-gray-500">Based on what you just told us.</p>
+              </div>
+            </div>
+          </div>
+        ) : turn?.question && !loading ? (() => {
+          const c = questionCopy(turn.question.fact, who, turn.question.turnsOn, stateName);
+          return (
+            <Screen
+              key={turn.question.fact}
+              title={c.title}
+              sub={c.why}
+              pill={
+                <button type="button" onClick={() => likely.length && setPillOpen((o) => !o)} className="self-start bg-primary-50 text-primary-800 text-[13px] font-semibold rounded-full px-3 py-1.5 border-none cursor-pointer">
+                  {likely.length ? `${likely.length} look${likely.length === 1 ? "s" : ""} likely` : "Nothing settled yet"}
+                  {likely.length ? <span aria-hidden="true"> {pillOpen ? "▴" : "▾"}</span> : null}
+                </button>
+              }
+              pillList={pillOpen && likely.length ? likely.map((p) => p.name) : null}
+            >
+              {c.choices.map((o) => <Choice key={o.value} label={o.label} onClick={() => answerFact(turn.question!.fact, o.value)} />)}
+              <Choice label="I'm not sure" ghost onClick={() => answerFact(turn.question!.fact, null)} />
+            </Screen>
+          );
+        })() : error ? null : <Thinking text="One moment…" />
       )}
 
-      {step === "medicaid" && (
-        <>
-          <ProgramList likely={likely} checking={checking} out={out} stateName={stateName} compact />
-          <Question
-            title={who === "me" || !who ? "Last one: do you have Medicaid now?" : `Last one: does ${who === "parent" ? "your parent" : who === "spouse" ? "your spouse" : "the person you help"} have Medicaid now?`}
-            why="It doesn't change which programs fit. It changes what to say when you call."
-          >
-            {([["alreadyHas", "Yes"], ["doesNotHave", "No"], ["applying", "Applying now"], ["notSure", "I'm not sure"]] as const).map(([v, l]) => (
-              <Chip key={v} label={l} ghost={v === "notSure"} onClick={() => { remember(); setMedicaid(v); setStep("done"); }} />
-            ))}
-          </Question>
-        </>
-      )}
-
-      {step === "done" && (
-        <div className="flex flex-col gap-6">
-          <h1 className="font-display text-[30px] leading-tight text-gray-900 m-0">Here&apos;s where things stand</h1>
-          <ProgramList likely={likely} checking={checking} out={out} stateName={stateName} />
-          <button
-            type="button"
-            onClick={() => void seePlan()}
-            disabled={loading}
-            className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-lg font-semibold border-none cursor-pointer hover:bg-primary-700 disabled:opacity-60"
-          >
-            {loading ? "Building your plan…" : "See your first call"}
-          </button>
+      {step === "reveal" && (
+        <div className="conv-rise flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-5 py-10">
+            <div className="flex gap-2">
+              {[...new Set((likely.length ? likely : checking).map((p) => iconFor(p.name)))].slice(0, 3).map((i) => <Obj key={i} name={i} size={60} />)}
+            </div>
+            <h1 className="font-display text-[38px] sm:text-[44px] leading-[1.05] text-gray-900 m-0 max-w-[14ch] [text-wrap:balance]">
+              {likely.length
+                ? `${likely.length} program${likely.length === 1 ? "" : "s"} look${likely.length === 1 ? "s" : ""} likely for ${them}.`
+                : `${checking.length} program${checking.length === 1 ? " is" : "s are"} worth checking.`}
+            </h1>
+            <p className="m-0 text-[15px] text-gray-500">The first call takes about ten minutes.</p>
+          </div>
+          <div className="flex flex-col gap-3 pb-4">
+            <button type="button" onClick={() => void openResult()} className="min-h-[58px] rounded-full bg-gray-900 text-white text-[17px] font-semibold border-none cursor-pointer">
+              See your first call
+            </button>
+            {likely.length && checking.length ? <p className="m-0 text-center text-[14px] text-gray-500">{checking.length} more worth checking</p> : null}
+          </div>
         </div>
+      )}
+
+      {step === "result" && (
+        loading || !plan ? (error ? null : <Thinking text="Putting your first call together…" />) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} />
       )}
 
       {error && <p role="alert" className="text-[15px] text-red-700 m-0">{error}</p>}
@@ -267,92 +368,123 @@ export default function BenefitsConversationPage() {
   );
 }
 
-/** "About N left" from the engine's upper bound, plus the Medicaid question. */
-function progressLine(step: Step, turn: ConversationTurn | null, leftShown: number | null): string {
-  if (step === "who" || step === "zip" || step === "need") return "About 2 minutes";
-  if (step === "engine" && turn?.question) {
-    const n = leftShown ?? turn.left + 1;
-    return `About ${n} question${n === 1 ? "" : "s"} left`;
-  }
-  if (step === "medicaid") return "Last question";
-  return "";
-}
-
-function Question({ title, why, children }: { title: string; why: string; children: React.ReactNode }) {
+function Screen({ title, sub, pill, pillList, children }: { title: string; sub?: string; pill?: React.ReactNode; pillList?: string[] | null; children: React.ReactNode }) {
   return (
-    <section key={title} className="flex flex-col gap-4">
-      <h1 className="font-display text-[28px] sm:text-[32px] leading-[1.15] text-gray-900 m-0 [text-wrap:balance]">{title}</h1>
-      <p className="text-[15px] text-gray-600 m-0 border-l-2 border-primary-600 pl-3">
-        <span className="font-medium text-gray-800">Why I&apos;m asking: </span>{why}
-      </p>
-      <div className="flex flex-col gap-2.5">{children}</div>
+    <section className="conv-rise flex flex-col gap-4">
+      {pill}
+      {pillList ? (
+        <ul className="list-none m-0 p-0 -mt-1">
+          {pillList.map((n) => <li key={n} className="text-[14px] text-gray-600 py-1">{n}</li>)}
+        </ul>
+      ) : null}
+      <h1 className="text-[26px] sm:text-[30px] font-bold tracking-[-0.01em] leading-[1.2] text-gray-900 m-0 [text-wrap:balance]">{title}</h1>
+      {sub ? <p className="text-[15px] text-gray-500 m-0 -mt-2">{sub}</p> : null}
+      <div className="flex flex-col gap-2.5 mt-1">{children}</div>
     </section>
   );
 }
 
-function Chip({ label, onClick, ghost, icon }: { label: string; onClick: () => void; ghost?: boolean; icon?: string }) {
+function Choice({ label, onClick, ghost }: { label: string; onClick: () => void; ghost?: boolean }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`min-h-[56px] w-full text-left px-4 rounded-2xl border-[1.5px] bg-transparent text-[17px] cursor-pointer transition-colors flex items-center gap-3.5 ${icon ? "py-2.5" : ""} ${
-        // Hover only where there is a mouse: on a phone the tint sticks after a
-        // tap or Back and the next screen looks pre-answered (TJ's iPhone, 5 Oct).
-        ghost ? "border-gray-200 text-gray-600 font-medium [@media(hover:hover)]:hover:border-gray-300" : "border-primary-700 text-primary-800 font-semibold [@media(hover:hover)]:hover:bg-primary-50 active:bg-primary-50"
+      className={`min-h-[56px] w-full text-left px-4 rounded-2xl border text-[17px] cursor-pointer transition-colors active:bg-primary-800 active:text-white ${
+        ghost ? "bg-transparent border-transparent text-gray-500 font-medium" : "bg-white border-gray-200 text-gray-900 font-semibold [@media(hover:hover)]:hover:border-primary-600"
       }`}
     >
-      {icon ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={`/images/benefits-conversation/${icon}.svg`} alt="" width={40} height={40} className="w-10 h-10 shrink-0" />
-      ) : null}
-      <span>{label}</span>
+      {label}
     </button>
   );
 }
 
-function Thinking() {
+function Thinking({ text }: { text: string }) {
   return (
-    <div className="py-10 flex items-center gap-3 text-gray-600" role="status">
-      <div className="w-6 h-6 border-[3px] border-primary-600 border-t-transparent rounded-full animate-spin" />
-      Checking the programs…
+    <div className="py-16 flex items-center justify-center gap-3 text-gray-500" role="status">
+      <div className="w-5 h-5 border-[2.5px] border-primary-600 border-t-transparent rounded-full animate-spin" />
+      {text}
     </div>
   );
 }
 
-function ProgramList({ likely, checking, out, stateName, compact }: { likely: ConversationProgram[]; checking: ConversationProgram[]; out: ConversationProgram[]; stateName: string | null; compact?: boolean }) {
-  const row = (p: ConversationProgram, label: string, tone: string) => (
-    <li key={p.id} className="grid grid-cols-[84px_minmax(0,1fr)] gap-3 py-2.5 border-b border-gray-200 last:border-b-0">
-      <span className={`text-[11px] font-semibold tracking-wider uppercase pt-1 ${tone}`}>{label}</span>
-      <span className="text-[15px] text-gray-900">
-        {shortName(p.name, stateName)}
-        {p.why && !compact ? <span className="block text-[13px] text-gray-500">{p.why}</span> : null}
-      </span>
-    </li>
-  );
-  if (compact) {
-    return (
-      <ul className="list-none m-0 p-0 border-t border-gray-200">
-        {likely.map((p) => row(p, "Likely", "text-primary-700"))}
-        {checking.length ? (
-          <li className="grid grid-cols-[84px_minmax(0,1fr)] gap-3 py-2.5 border-b border-gray-200">
-            <span className="text-[11px] font-semibold tracking-wider uppercase pt-1 text-gray-500">Checking</span>
-            <span className="text-[15px] text-gray-600">{checking.length} program{checking.length === 1 ? "" : "s"}</span>
-          </li>
-        ) : null}
-        {out.length ? (
-          <li className="grid grid-cols-[84px_minmax(0,1fr)] gap-3 py-2.5">
-            <span className="text-[11px] font-semibold tracking-wider uppercase pt-1 text-red-700">Not a fit</span>
-            <span className="text-[15px] text-gray-600">{out.length}</span>
-          </li>
-        ) : null}
-      </ul>
-    );
-  }
+function ResultView({ plan, callFor, onBack, onTextMe }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void }) {
+  const [open, setOpen] = useState<"say" | "ready" | "more" | null>(null);
+  const first: FinderProgram | null = plan.firstStep;
+  const likelyRest = plan.programs.filter((p) => p.tier === "likely");
+  const checkRest = plan.programs.filter((p) => p.tier === "check");
+  if (!first) return <p className="text-gray-600">We couldn&apos;t find a first call for this state yet.</p>;
+  const isAgency = first.id === "local-agency";
+  const script = isAgency
+    ? `Hi, I'm looking for help finding benefits ${callFor}. Could you tell me what we might qualify for?`
+    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?`;
+
   return (
-    <ul className="list-none m-0 p-0 border-t border-gray-200">
-      {likely.map((p) => row(p, "Likely", "text-primary-700"))}
-      {checking.map((p) => row(p, "Checking", "text-gray-500"))}
-      {out.map((p) => row(p, "Not a fit", "text-red-700"))}
-    </ul>
+    <div className="conv-rise flex flex-col gap-5">
+      <div className="flex items-center justify-between text-[14px]">
+        <button type="button" onClick={onBack} className="bg-transparent border-none p-0 text-gray-600 font-medium cursor-pointer">← Back</button>
+        <button type="button" onClick={onTextMe} className="bg-transparent border-none p-0 text-primary-800 font-semibold cursor-pointer">Text me this</button>
+      </div>
+
+      <article className="bg-white border border-gray-200 rounded-[24px] p-5 flex flex-col gap-3.5">
+        <span className="text-[13px] font-semibold text-primary-700">Start here</span>
+        <h1 className="font-display text-[32px] leading-[1.05] text-gray-900 m-0">{first.shortName}</h1>
+        {first.what ? <p className="m-0 text-[15px] text-gray-600">{first.what}</p> : null}
+        {first.phone ? (
+          <a href={telHref(first.phone)} className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline">
+            Call {first.phone}
+          </a>
+        ) : null}
+        <div className="flex flex-col">
+          <Fold label="What to say" open={open === "say"} onToggle={() => setOpen(open === "say" ? null : "say")}>
+            <p className="m-0 text-[15px] text-gray-700">&ldquo;{script}&rdquo;</p>
+          </Fold>
+          {first.docs.length ? (
+            <Fold label={`Have ready: ${first.docs.length} thing${first.docs.length === 1 ? "" : "s"}`} open={open === "ready"} onToggle={() => setOpen(open === "ready" ? null : "ready")}>
+              <ul className="m-0 pl-5 flex flex-col gap-1.5 text-[15px] text-gray-700">{first.docs.map((d) => <li key={d}>{d}</li>)}</ul>
+            </Fold>
+          ) : null}
+        </div>
+      </article>
+
+      {likelyRest.length ? (
+        <section className="flex flex-col">
+          <h2 className="text-[15px] font-semibold text-gray-900 m-0 mb-1">Also likely</h2>
+          {likelyRest.map((p) => <Row key={p.id} p={p} />)}
+        </section>
+      ) : null}
+
+      {checkRest.length ? (
+        <section className="flex flex-col border-t border-gray-200">
+          <button type="button" onClick={() => setOpen(open === "more" ? null : "more")} aria-expanded={open === "more"} className="text-left bg-transparent border-none p-0 py-3 text-[15px] text-gray-500 cursor-pointer">
+            {checkRest.length} more worth checking {open === "more" ? "▴" : "▾"}
+          </button>
+          {open === "more" ? checkRest.map((p) => <Row key={p.id} p={p} />) : null}
+        </section>
+      ) : null}
+    </div>
+  );
+}
+
+function Fold({ label, open, onToggle, children }: { label: string; open: boolean; onToggle: () => void; children: React.ReactNode }) {
+  return (
+    <div className="border-t border-gray-100">
+      <button type="button" onClick={onToggle} aria-expanded={open} className="w-full flex justify-between items-center bg-transparent border-none px-0 py-3 text-[15px] text-gray-900 font-medium cursor-pointer text-left">
+        <span>{label}</span>
+        <span className="text-gray-400" aria-hidden="true">{open ? "−" : "+"}</span>
+      </button>
+      {open ? <div className="pb-3">{children}</div> : null}
+    </div>
+  );
+}
+
+function Row({ p }: { p: FinderProgram }) {
+  return (
+    <a href={p.url} className="flex items-center gap-3 py-3 border-t border-gray-200 no-underline">
+      <Obj name={iconFor(p.name)} size={32} />
+      <span className="flex-1 min-w-0">
+        <span className="block text-[16px] text-gray-900">{p.shortName}</span>
+        {p.what ? <span className="block text-[13px] text-gray-500 truncate">{p.what}</span> : null}
+      </span>
+    </a>
   );
 }
