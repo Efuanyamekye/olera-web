@@ -92,6 +92,9 @@ export default function BenefitsConversationPage() {
   const [plan, setPlan] = useState<FinderResult | null>(null);
   const rewardTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stepShownAt = useRef<number>(Date.now());
+  // True once the link's ?who= has been read, so the first screen logged is
+  // the one the family actually sees.
+  const [ready, setReady] = useState(false);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
   const v = finderVoice(who);
@@ -121,6 +124,7 @@ export default function BenefitsConversationPage() {
       setWhoFromLink(true);
       setStep("need");
     }
+    setReady(true);
   }, []);
 
   useEffect(() => () => { if (rewardTimer.current) clearTimeout(rewardTimer.current); }, []);
@@ -128,7 +132,7 @@ export default function BenefitsConversationPage() {
   // The step a family is looking at: the opening screens by name, then each
   // engine question by the fact it asks ("dailyHelp", "savings"), then the
   // reveal and the result. Fired once per screen shown.
-  const viewName = step === "engine" ? (turn?.question && !loading && !reward ? turn.question.fact : null) : step === "result" ? (plan ? "results" : null) : step;
+  const viewName = !ready ? null : step === "engine" ? (turn?.question && !loading && !reward ? turn.question.fact : null) : step === "result" ? (plan ? "results" : null) : step;
   const entryTracked = useRef(false);
   const lastViewed = useRef<string | null>(null);
   useEffect(() => {
