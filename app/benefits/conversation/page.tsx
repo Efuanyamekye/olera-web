@@ -32,12 +32,15 @@ const WHO: { value: FinderWho; label: string }[] = [
   { value: "me", label: "Me" },
   { value: "other", label: "Someone else" },
 ];
-const NEEDS: { value: FinderNeed; label: string }[] = [
-  { value: "care", label: "Paying for care at home" },
-  { value: "memory", label: "Memory care or dementia" },
-  { value: "bills", label: "Everyday bills" },
-  { value: "health", label: "Medicare and health costs" },
-  { value: "urgent", label: "Something urgent this week" },
+// Objects only on this screen: choosing between kinds of help is where a
+// picture is recognised faster than a phrase. Money and age questions keep
+// words; the number is the answer. Fluent 3D emoji, the hub's object family.
+const NEEDS: { value: FinderNeed; label: string; icon: string }[] = [
+  { value: "care", label: "Paying for care at home", icon: "house-with-garden" },
+  { value: "memory", label: "Memory care or dementia", icon: "puzzle-piece" },
+  { value: "bills", label: "Everyday bills", icon: "receipt" },
+  { value: "health", label: "Medicare and health costs", icon: "stethoscope" },
+  { value: "urgent", label: "Something urgent this week", icon: "alarm-clock" },
 ];
 
 interface Snapshot { step: Step; facts: KnownFacts; asked: FactKey[] }
@@ -155,7 +158,7 @@ export default function BenefitsConversationPage() {
             ← Back
           </button>
         ) : <span />}
-        {step === "engine" && answeredCount > 0 ? <span>{answeredCount} answered</span> : null}
+        <span>{progressLine(step, turn)}</span>
       </div>
 
       {step === "who" && (
@@ -200,7 +203,7 @@ export default function BenefitsConversationPage() {
       {step === "need" && (
         <Question title="What would help most right now?" why="This decides which program I point you to first.">
           {NEEDS.map((o) => (
-            <Chip key={o.value} label={o.label} onClick={() => { remember(); setNeed(o.value); setStep("engine"); }} />
+            <Chip key={o.value} label={o.label} icon={o.icon} onClick={() => { remember(); setNeed(o.value); setStep("engine"); }} />
           ))}
         </Question>
       )}
@@ -254,6 +257,17 @@ export default function BenefitsConversationPage() {
   );
 }
 
+/** "About N left" from the engine's upper bound, plus the Medicaid question. */
+function progressLine(step: Step, turn: ConversationTurn | null): string {
+  if (step === "who" || step === "zip" || step === "need") return "About 2 minutes";
+  if (step === "engine" && turn?.question) {
+    const n = turn.left + 1;
+    return `About ${n} question${n === 1 ? "" : "s"} left`;
+  }
+  if (step === "medicaid") return "Last question";
+  return "";
+}
+
 function Question({ title, why, children }: { title: string; why: string; children: React.ReactNode }) {
   return (
     <section key={title} className="flex flex-col gap-4">
@@ -266,18 +280,22 @@ function Question({ title, why, children }: { title: string; why: string; childr
   );
 }
 
-function Chip({ label, onClick, ghost }: { label: string; onClick: () => void; ghost?: boolean }) {
+function Chip({ label, onClick, ghost, icon }: { label: string; onClick: () => void; ghost?: boolean; icon?: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`min-h-[56px] w-full text-left px-4 rounded-2xl border-[1.5px] bg-transparent text-[17px] cursor-pointer transition-colors ${
+      className={`min-h-[56px] w-full text-left px-4 rounded-2xl border-[1.5px] bg-transparent text-[17px] cursor-pointer transition-colors flex items-center gap-3.5 ${icon ? "py-2.5" : ""} ${
         // Hover only where there is a mouse: on a phone the tint sticks after a
         // tap or Back and the next screen looks pre-answered (TJ's iPhone, 5 Oct).
         ghost ? "border-gray-200 text-gray-600 font-medium [@media(hover:hover)]:hover:border-gray-300" : "border-primary-700 text-primary-800 font-semibold [@media(hover:hover)]:hover:bg-primary-50 active:bg-primary-50"
       }`}
     >
-      {label}
+      {icon ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={`/images/benefits-conversation/${icon}.svg`} alt="" width={40} height={40} className="w-10 h-10 shrink-0" />
+      ) : null}
+      <span>{label}</span>
     </button>
   );
 }

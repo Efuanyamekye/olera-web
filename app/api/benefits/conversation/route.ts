@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
-import { rulesOf, explain, nextQuestion, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesOf, explain, nextQuestion, questionsLeft, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine, type ConversationTurn } from "@/lib/benefits/conversation";
 import { isWaiverPath } from "@/lib/benefits/eligibility.server";
 
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
   const order = { likely: 0, check: 1, out: 2 } as const;
   const turn: ConversationTurn = {
     question: q ? { fact: q.fact, turnsOn: q.turnsOn.map((n) => short.get(n) ?? n) } : null,
+    left: q ? questionsLeft(rules, facts, asked) : 0,
     programs: rules
       .map((r) => {
         const e = explain(r, facts);

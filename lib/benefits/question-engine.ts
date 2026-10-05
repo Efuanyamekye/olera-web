@@ -246,3 +246,19 @@ export function explain(r: ProgramRules, f: KnownFacts): { status: Status; faile
   const c = checks(r, f);
   return { status: statusOf(r, f), failed: c.filter((x) => x.result === "fail").map((x) => x.rule), met: c.filter((x) => x.result === "pass").map((x) => x.rule) };
 }
+
+/** How many more questions could still change a program: an upper bound on
+ *  what the conversation has left to ask, for its "about N left" line. */
+export function questionsLeft(programs: ProgramRules[], f: KnownFacts, asked: ReadonlySet<FactKey>): number {
+  const now = programs.map((r) => statusOf(r, f));
+  let n = 0;
+  for (const fact of Object.keys(ANSWERS) as FactKey[]) {
+    if (f[fact] != null || asked.has(fact)) continue;
+    const moves = (ANSWERS[fact] as string[]).some((a) => {
+      const g = { ...f, [fact]: a } as KnownFacts;
+      return programs.some((r, i) => now[i] === "check" && statusOf(r, g) !== "check");
+    });
+    if (moves) n++;
+  }
+  return n;
+}
