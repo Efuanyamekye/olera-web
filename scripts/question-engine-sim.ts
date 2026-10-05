@@ -37,9 +37,11 @@ const MIX: Required<AnswerPriors>["weights"] = {
   dailyHelp: { none: 25, some: 40, lots: 35 }, // ASSUMED: families looking for care
   savings: { under2000: 40, under10000: 30, over10000: 30 }, // ASSUMED
   disability: { yes: 30, no: 70 }, // ASSUMED
+  household: { alone: 60, couple: 40 }, // ASSUMED
 };
-const BASE_NOT_SURE: Record<FactKey, number> = { age: 0.02, income: 0.15, medicaid: 0.18, veteran: 0.02, dailyHelp: 0.05, savings: 0.3, disability: 0.1 };
-const FORM_FACTS: FactKey[] = ["age", "income", "medicaid", "veteran"];
+const BASE_NOT_SURE: Record<FactKey, number> = { age: 0.02, income: 0.15, medicaid: 0.18, veteran: 0.02, dailyHelp: 0.05, savings: 0.3, disability: 0.1, household: 0.01 };
+// The form asks household too ("How many people live in the home?").
+const FORM_FACTS: FactKey[] = ["age", "income", "medicaid", "veteran", "household"];
 
 let seed = 7;
 const rand = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
@@ -91,5 +93,5 @@ for (const savings of [0.15, 0.3, 0.5]) {
   console.log(`\nsavings "not sure" ${savings * 100}% · ${r.n} families · engine questions ${r.asked}`);
   for (const k of ["form", "engine"] as const) console.log(`  ${k.padEnd(6)} worth checking ${r.pct(r[k].check)} | likely ${r.pct(r[k].likely)} | ruled out ${r.pct(r[k].out)}`);
 }
-const none = run({ age: 0, income: 0, medicaid: 0, veteran: 0, dailyHelp: 0, savings: 0, disability: 0 });
+const none = run({ age: 0, income: 0, medicaid: 0, veteran: 0, dailyHelp: 0, savings: 0, disability: 0, household: 0 });
 console.log(`\nno "not sure" at all (same mix): form ${none.pct(none.form.check)} vs engine ${none.pct(none.engine.check)} worth checking`);

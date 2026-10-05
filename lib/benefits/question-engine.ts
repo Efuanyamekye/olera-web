@@ -31,11 +31,16 @@ export interface KnownFacts {
   dailyHelp: DailyHelp | null;
   savings: Savings | null;
   disability: "yes" | "no" | null;
+  /** "couple" when a spouse lives with them. Income and savings limits here
+   *  are one-person figures, so they rule a program out only for someone we
+   *  know lives alone (stricter than the finder, which also uses them when
+   *  household is unknown; the finder always asks it). */
+  household: "alone" | "couple" | null;
 }
 
 export type FactKey = keyof KnownFacts;
 
-export const EMPTY_FACTS: KnownFacts = { age: null, income: null, medicaid: null, veteran: null, dailyHelp: null, savings: null, disability: null };
+export const EMPTY_FACTS: KnownFacts = { age: null, income: null, medicaid: null, veteran: null, dailyHelp: null, savings: null, disability: null, household: null };
 
 /** The answers each question offers ("not sure" is always added in the UI). */
 export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
@@ -46,9 +51,13 @@ export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
   dailyHelp: ["none", "some", "lots"],
   savings: ["under2000", "under10000", "over10000"],
   disability: ["yes", "no"],
+  household: ["alone", "couple"],
 };
 
 const AGE_RANGE: Record<AgeBucket, [number, number]> = { under_60: [0, 59], "60_64": [60, 64], "65_74": [65, 74], "75_84": [75, 84], "85_plus": [85, 120] };
+// Read as today's quiz labels them ("$1,000 to $1,500"). The finder's rule-out
+// table floors under1500 at 0 because answers saved before the 30 Sep 2026
+// redesign used the same code for "under $1,500"; never pass one of those here.
 const INCOME_RANGE: Record<IncomeBucket, [number, number]> = { under1000: [0, 1000], under1500: [1000, 1500], under2500: [1500, 2500], under4000: [2500, 4000], over4000: [4000, Infinity] };
 const SAVINGS_RANGE: Record<Savings, [number, number]> = { under2000: [0, 2000], under10000: [2000, 10000], over10000: [10000, Infinity] };
 
@@ -89,13 +98,21 @@ export function rulesOf(d: DraftLike): ProgramRules {
   return {
     id: d.id,
     name: d.name,
-    minAge: draftMinAge(se.ageRequirement) ?? (() => { const m = (se.ageRequirement || "").match(/(\d{2})\s*\+/); return m ? parseInt(m[1], 10) : null; })(),
+    // The finder's own parse: an age text with any other pathway ("60+ (18+
+    // with verified dementia diagnosis)", Florida's ADI) yields no floor, so
+    // it never rules anyone out. A local fallback here once read 60 from it
+    // and excluded an under-60 person with dementia, the audience this is for.
+    minAge: draftMinAge(se.ageRequirement),
     disabilityPathway: /disab|blind|18\s*[-–]\s*(59|64)/i.test(text),
     incomeLimit: incomeLimitFromTable(se.incomeTable),
     assetLimit: typeof assets === "number" && assets > 0 ? assets : null,
     medicaidGated: medicaidGatedName(d.name),
     veteranOnly: /\bveteran|\bVA\b/.test(d.name),
-    dailyHelp: lots.test(fn) ? "lots" : some.test(fn) ? "some" : null,
+    dailyHelp: /no functional (requirement|criteria|assessment)|no (daily[- ]help|functional) (is )?required/i.test(fn)
+      ? null
+      : lots.test(fn) && !/level of care (is )?not required|not (require|need)[^.]{0,30}level of care/i.test(fn)
+        ? "lots"
+        : some.test(fn) ? "some" : null,
   };
 }
 
@@ -116,12 +133,14 @@ function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[]
   }
   if (r.incomeLimit != null) {
     let res: Tri = "unknown";
-    if (f.income) { const [lo, hi] = INCOME_RANGE[f.income]; if (hi <= r.incomeLimit) res = "pass"; else if (lo > r.incomeLimit) res = "fail"; }
+    // Under the one-person limit is under a couple's too, so it passes either
+    // way; over it rules out only someone we know lives alone.
+    if (f.income) { const [lo, hi] = INCOME_RANGE[f.income]; if (hi <= r.incomeLimit) res = "pass"; else if (lo > r.incomeLimit && f.household === "alone") res = "fail"; }
     out.push({ rule: "income", result: res });
   }
   if (r.assetLimit != null) {
     let res: Tri = "unknown";
-    if (f.savings) { const [lo, hi] = SAVINGS_RANGE[f.savings]; if (hi <= r.assetLimit) res = "pass"; else if (lo >= r.assetLimit) res = "fail"; }
+    if (f.savings) { const [lo, hi] = SAVINGS_RANGE[f.savings]; if (hi <= r.assetLimit) res = "pass"; else if (lo >= r.assetLimit && f.household === "alone") res = "fail"; }
     out.push({ rule: "savings", result: res });
   }
   if (r.medicaidGated) out.push({ rule: "medicaid", result: f.medicaid === "has" ? "pass" : f.medicaid === "no" ? "fail" : "unknown" });
