@@ -256,7 +256,7 @@ export default function BenefitsConversationPage() {
 
 function Question({ title, why, children }: { title: string; why: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4">
+    <section key={title} className="flex flex-col gap-4">
       <h1 className="font-display text-[28px] sm:text-[32px] leading-[1.15] text-gray-900 m-0 [text-wrap:balance]">{title}</h1>
       <p className="text-[15px] text-gray-600 m-0 border-l-2 border-primary-600 pl-3">
         <span className="font-medium text-gray-800">Why I&apos;m asking: </span>{why}
@@ -272,7 +272,9 @@ function Chip({ label, onClick, ghost }: { label: string; onClick: () => void; g
       type="button"
       onClick={onClick}
       className={`min-h-[56px] w-full text-left px-4 rounded-2xl border-[1.5px] bg-transparent text-[17px] cursor-pointer transition-colors ${
-        ghost ? "border-gray-200 text-gray-600 font-medium hover:border-gray-300" : "border-primary-700 text-primary-800 font-semibold hover:bg-primary-50"
+        // Hover only where there is a mouse: on a phone the tint sticks after a
+        // tap or Back and the next screen looks pre-answered (TJ's iPhone, 5 Oct).
+        ghost ? "border-gray-200 text-gray-600 font-medium [@media(hover:hover)]:hover:border-gray-300" : "border-primary-700 text-primary-800 font-semibold [@media(hover:hover)]:hover:bg-primary-50 active:bg-primary-50"
       }`}
     >
       {label}
