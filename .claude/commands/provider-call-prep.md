@@ -36,7 +36,7 @@ Keep this order. Every section is short. Leave a section out rather than pad it.
 4. **Where they stand.** Three facts at most: families delivered, job seekers screened out, families reached. Counts only.
 5. **The families.** One row each with a status chip, using `family_touches` for what really happened.
 6. **What we did for them.** Concrete actions, named specifically. No self-blame ("that's on us") and no apology.
-7. **Questions, in order.** How did the families go on your side. What a great client looks like (minimum hours, how they pay, which towns or offices). Where they want families from. How fast they reach a new family, and by call or text. What would make the next month worth it (write the answer down; it's the bar for renewal). Add one line under each saying why it matters for this provider.
+7. **Questions, in order.** How did the families go on your side. What a great client looks like (minimum hours, how they pay, which towns or offices). Where they want families from. How fast they reach a new family, and by call or text. **What rules a family out** (payer, service area, minimum hours). This was the most useful question on the Jacob call: Medicaid and the service-area edges became screener rules. **Volume or strict quality?** Most want volume with each family flagged as a strong fit or uncertain. **Who should have the login and get alerts.** Olera has one login per agency; extra people get alert emails via `metadata.alert_emails`. What would make the next month worth it (write the answer down; it's the bar for renewal). Add one line under each saying why it matters for this provider.
 8. **How we're different from A Place for Mom.** Most providers ask; let them raise it if they will. Always include:
    - **One family, one agency.** Olera never sends the same family to several agencies at once.
    - **We pre-qualify.** Screener questions filter out job seekers and people not looking for care before the provider sees them.
@@ -59,4 +59,4 @@ Keep this order. Every section is short. Leave a section out rather than pad it.
 
 ## 4. Publish
 
-Load the `artifact-design` skill, copy the layout of the most recent sheet (one narrow column, fact tiles, family rows with chips, a red "Hold back on" box), and publish. Title: `<Contact first name> Call Prep`. Then give TJ the link and a few lines on what matters most for this call. Offer to log the meeting as a `provider_touches` row with `/touch` once the call is done.
+Load the `artifact-design` skill, copy the layout of the most recent sheet (one narrow column, fact tiles, family rows with chips, a red "Hold back on" box), and publish. Title: `<Contact first name> Call Prep`. Then give TJ the link and a few lines on what matters most for this call. After the call, read the Notion meeting note (transcript included), log it as a `provider_touches` meeting row, turn disqualifiers into screener or targeting changes, and draft the recap email for TJ's approval.
