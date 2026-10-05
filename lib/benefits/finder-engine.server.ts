@@ -31,6 +31,7 @@ import {
   incomeLimitFromTable,
   draftMinAge,
   medicaidGatedName,
+  isWaiverPath,
   isMedicaidDoor,
 } from "@/lib/benefits/eligibility.server";
 import {
@@ -227,6 +228,12 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
     return { tier: "check", reason: "A past no often doesn't decide this. Medicaid for care at home uses different income rules." };
   }
 
+  // A care waiver is a way into Medicaid, not something to hold first, so a
+  // family without it (or turned down for regular Medicaid) keeps it, judged
+  // on the waiver's own income, savings and level-of-care rules.
+  if (gated && !hasMedicaid && isWaiverPath(p.name)) {
+    return { tier: "check", reason: withAlso(`Applying for this can also get ${v.subject} Medicaid. The state looks at income, savings and how much help ${v.subject} ${v.subject === "you" ? "need" : "needs"}.`) };
+  }
   // Open questions first: each one keeps the program at "worth checking".
   if (gated && !hasMedicaid) {
     if (a.medicaid === "applying") {

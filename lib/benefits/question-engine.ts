@@ -15,7 +15,7 @@
  * Conservative like the finder engine: only a fact the family gave can rule a
  * program out, and "not sure" is always an answer that settles nothing.
  */
-import { draftMinAge, incomeLimitFromTable, medicaidGatedName } from "@/lib/benefits/eligibility.server";
+import { draftMinAge, incomeLimitFromTable, medicaidGatedName, isWaiverPath } from "@/lib/benefits/eligibility.server";
 
 export type DailyHelp = "none" | "some" | "lots";
 export type Savings = "under2000" | "under10000" | "over10000";
@@ -106,7 +106,9 @@ export function rulesOf(d: DraftLike): ProgramRules {
     disabilityPathway: /disab|blind|18\s*[-–]\s*(59|64)/i.test(text),
     incomeLimit: incomeLimitFromTable(se.incomeTable),
     assetLimit: typeof assets === "number" && assets > 0 ? assets : null,
-    medicaidGated: medicaidGatedName(d.name),
+    // A care waiver is a way into Medicaid (isWaiverPath), so not having
+    // Medicaid yet never rules it out; income and savings do.
+    medicaidGated: medicaidGatedName(d.name) && !isWaiverPath(d.name),
     veteranOnly: /\bveteran|\bVA\b/.test(d.name),
     dailyHelp: /no functional (requirement|criteria|assessment)|no (daily[- ]help|functional) (is )?required/i.test(fn)
       ? null
