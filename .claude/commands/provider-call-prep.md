@@ -42,6 +42,7 @@ Keep this order. Every section is short. Leave a section out rather than pad it.
    - **We pre-qualify.** Screener questions filter out job seekers and people not looking for care before the provider sees them.
    - **We help families who can't pay.** The benefits finder walks families through programs like Medicaid waivers and VA benefits. Connect it to the payments this provider accepts.
    - **We stay on the family.** Ces follows up by phone, text and email until the family answers, and keeps the provider posted.
+   - **A tech company, not a placement agency.** Olera tests ads across channels (Google, Meta instant forms, others) and uses the data to find what works best for each provider. Point to this provider's own result where there is one (which channel brought their families).
    - **No per-lead fees.** Families from their own ads are theirs; no per-lead charge, no resale.
    - Robbie's framing, if useful: Olera sits between a registry like A Place for Mom and a full care manager, a credentialed network with a human touch.
 9. **Things to close out.** Open loops specific to them (a language need, missing real photos, a gallery item that isn't theirs).
