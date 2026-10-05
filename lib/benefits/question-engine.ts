@@ -160,7 +160,10 @@ function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[]
 export function statusOf(r: ProgramRules, f: KnownFacts): Status {
   const c = checks(r, f);
   if (c.some((x) => x.result === "fail")) return "out";
-  if (c.every((x) => x.result === "pass")) return "likely";
+  // A program with no rule we can read is unknown, not a fit: "likely" needs
+  // at least one rule met. (Weatherization with no parsed rule read "likely"
+  // before a single answer, found building the first mock on 5 Oct 2026.)
+  if (c.length && c.every((x) => x.result === "pass")) return "likely";
   return "check";
 }
 
