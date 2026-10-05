@@ -228,6 +228,8 @@ export interface ThreadProvider {
    * committing to a monthly amount" while Richard sat in his inbox all along.
    */
   via: "campaign" | "inbox";
+  /** How she came to hold the family: from her own ad, or an offer she took. Wording only. */
+  source: "own_ad" | "offer";
 }
 
 /**
@@ -269,6 +271,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
     email,
     alertEmails,
     via: holderId || p?.account_id ? "inbox" : "campaign",
+    source: holderId ? "offer" : "own_ad",
   };
 }
 
@@ -429,10 +432,7 @@ export async function notifyProviderOfReply(db: SupabaseClient, lead: ThreadLead
     subject: `${first} replied`,
     headline: `${first} replied`,
     quote: words.slice(0, 400),
-    body:
-      provider.via === "inbox"
-        ? `${first} is the family you took through Olera. Their reply is in your inbox, with everything they told us.`
-        : `${first} is one of the families from your ad. Their reply is on your campaign page, with everything else we know about them.`,
+    body: `${provider.source === "offer" ? `${first} is the family you took through Olera.` : `${first} is one of the families from your ad.`} Their reply is ${provider.via === "inbox" ? "in your inbox" : "on your campaign page"}, with everything they told us.`,
     emailType: "city_thread_family_reply_provider",
   });
   await sendSlackAlert(`💬 ${first} replied (city lead ${lead.id.slice(0, 8)}, with ${provider.name}): "${words.slice(0, 200)}"`);
