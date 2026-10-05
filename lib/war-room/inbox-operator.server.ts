@@ -696,26 +696,55 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
   const proposal = pass.items.find((item) => item.kind === "proposal");
   const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
   const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
-  const actionable = pass.items.filter((item) => item.kind !== "question");
-  const quick = actionable.filter((item) => !needsNamedApproval(item));
-  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${sendsOnApproval(item) ? " (sends)" : ""}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
-  const parts = [
-    `*Inbox, ${day}:* ${actionable.length} to approve.`,
-    triage.length ? `Clear: ${triage.map((item) => `${item.number} ${triagePhrase(item)}`).join(" · ")}` : "",
-    texts.length ? `Texts: ${line(texts)}` : "",
-    emails.length ? `Emails: ${line(emails)}` : "",
-    calls ? `Calls: ${((calls.target.threadIds as unknown[] | undefined) ?? []).length} voicemails worth a call back.` : "",
-    slack.length ? `Slack: ${slack.length} ${slack.length === 1 ? "reply" : "replies"} owed (${slackWho(slack)}), ${numberSpan(slack)}` : "",
-    ...(pass.extras?.organic?.synopsis ?? []).slice(0, 3).map((line, i) => (i === 0 ? `Organic: ${line}` : line)),
-    proposal ? `Try: ${proposal.number} ${clip(proposal.summary.split(". ")[0], 70)}` : "",
-    ...questions.map((item) => `${item.number}. ${item.summary}`),
+  const quick = pass.items.filter((item) => item.kind !== "question" && !needsNamedApproval(item));
+  // One draft per line. On 5 Oct seven emails ran together into a four-line
+  // paragraph with "(sends) (same draft)" after each; TJ: "unreadable".
+  const draftLine = (item: StoredItem) => `${item.number}  ${shortWho(item)}${sendsOnApproval(item) ? "  · sends" : ""}${item.target?.carried ? "  · same draft" : ""}`;
+  const counts = [
+    `${quick.length} to approve`,
+    slack.length ? `${slack.length} Slack ${slack.length === 1 ? "reply" : "replies"}` : "",
+    proposal ? "1 organic action" : "",
+  ].filter(Boolean).join(", ");
+  const organic = (pass.extras?.organic?.synopsis ?? []).slice(0, 2).map((line) => firstSentence(line, 125));
+  const sections = [
+    `*Inbox, ${day}:* ${counts}.`,
+    triage.length ? `*Clear*\n${triage.map((item) => `${item.number}  ${triagePhrase(item)}`).join("\n")}` : "",
+    texts.length ? `*Texts*\n${texts.map(draftLine).join("\n")}` : "",
+    emails.length ? `*Emails*\n${emails.map(draftLine).join("\n")}` : "",
+    slack.length ? `*Slack*\n${slack.length} ${slack.length === 1 ? "reply" : "replies"} owed (${slackWho(slack)}), items ${numberSpan(slack)}` : "",
+    calls ? `*Calls*\n${((calls.target.threadIds as unknown[] | undefined) ?? []).length} voicemails worth a call back (item ${calls.number})` : "",
+    organic.length || proposal
+      ? `*Organic*${organic.length ? `\n${organic.join("\n")}` : ""}${proposal ? `\nTry ${proposal.number}: ${firstSentence(proposal.summary, 90)}` : ""}`
+      : "",
+    ...questions.map((item) => `*Question*\n${item.number}. ${item.summary}`),
   ].filter(Boolean);
   const more = [
     pass.waitingElsewhere ? `${pass.waitingElsewhere} more need a person in the inbox.` : "",
     pass.draftsInGmail ? `${pass.draftsInGmail} approved ${pass.draftsInGmail === 1 ? "draft is" : "drafts are"} in Gmail waiting for you to send.` : "",
   ].filter(Boolean).join(" ");
-  const how = actionable.length ? `Drafts and lists are in today's inbox report: /handoff on your computer. ${quick.length ? ` Or reply here, "approve ${quick.map((item) => item.number).join(" ")}".` : ""}${actionable.length > quick.length ? " Slack replies and the organic action go by number once you've read them." : ""}` : "";
-  return [parts.join("\n"), [how, more].filter(Boolean).join(" ")].filter(Boolean).join("\n\n");
+  const how = [
+    quick.length ? `Reply "approve ${quick.map((item) => item.number).join(" ")}" for the quick ones.` : "",
+    slack.length || proposal ? "Slack and the organic action go by number once you've read them." : "",
+    "Full drafts: /handoff on your computer, or olera.care/admin/inbox/today.",
+  ].filter(Boolean).join(" ");
+  return [...sections, [how, more].filter(Boolean).join(" ")].join("\n\n");
+}
+
+/** The first sentence, cut at a word if it still runs long. Never ends mid-word with "...". */
+export function firstSentence(text: string, max: number): string {
+  const sentence = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?])\s+/)[0] ?? "";
+  if (sentence.length <= max) return sentence;
+  const cut = sentence.slice(0, max);
+  return cut.slice(0, Math.max(cut.lastIndexOf(" "), max / 2)).replace(/[,;:]$/, "") + "…";
+}
+
+/**
+ * A name short enough for a phone line: a provider's "Assisting Hands Home
+ * Care - Dallas, Richardson & Surrounding Areas" is "Assisting Hands Home Care".
+ */
+export function shortWho(item: StoredItem): string {
+  const who = whoFor(item).replace(/\.{3}$/, "");
+  return clip(who.split(/\s+[-–]\s+|,\s/)[0], 32);
 }
 
 /** The full digest as a handoff: what each item is, and how a Claude Code session carries out his choices. */
