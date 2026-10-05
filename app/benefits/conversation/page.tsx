@@ -59,6 +59,10 @@ export default function BenefitsConversationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<Snapshot[]>([]);
+  // What "About N left" last showed. The engine's count is an upper bound
+  // that can hold still for a step; shown, that reads as stuck, so the line
+  // only ever counts down.
+  const [leftShown, setLeftShown] = useState<number | null>(null);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
 
@@ -74,7 +78,12 @@ export default function BenefitsConversationPage() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || "We couldn't load the next question.");
-      setTurn(body as ConversationTurn);
+      const t = body as ConversationTurn;
+      setTurn(t);
+      if (t.question) {
+        const n = t.left + 1;
+        setLeftShown((prev) => (prev == null ? n : Math.max(1, Math.min(prev - 1, n))));
+      }
       if (!(body as ConversationTurn).question) setStep("medicaid");
     } catch (e) {
       setError(e instanceof Error ? e.message : "We couldn't load the next question.");
@@ -105,6 +114,7 @@ export default function BenefitsConversationPage() {
     setStep(prev.step);
     setFacts(prev.facts);
     setAsked(prev.asked);
+    setLeftShown(null);
     if (prev.step === "engine") void ask(prev.facts, prev.asked);
   };
 
@@ -158,7 +168,7 @@ export default function BenefitsConversationPage() {
             ← Back
           </button>
         ) : <span />}
-        <span>{progressLine(step, turn)}</span>
+        <span>{progressLine(step, turn, leftShown)}</span>
       </div>
 
       {step === "who" && (
@@ -258,10 +268,10 @@ export default function BenefitsConversationPage() {
 }
 
 /** "About N left" from the engine's upper bound, plus the Medicaid question. */
-function progressLine(step: Step, turn: ConversationTurn | null): string {
+function progressLine(step: Step, turn: ConversationTurn | null, leftShown: number | null): string {
   if (step === "who" || step === "zip" || step === "need") return "About 2 minutes";
   if (step === "engine" && turn?.question) {
-    const n = turn.left + 1;
+    const n = leftShown ?? turn.left + 1;
     return `About ${n} question${n === 1 ? "" : "s"} left`;
   }
   if (step === "medicaid") return "Last question";
