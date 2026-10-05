@@ -256,7 +256,7 @@ export default function BenefitsConversationPage() {
       )}
 
       {step === "need" && (
-        <Screen key="need" title={`What would help ${them} most right now?`}>
+        <Screen key="need" title={`What would help ${who === "other" ? "them" : them} most right now?`}>
           <div className="grid grid-cols-2 gap-2.5">
             {NEEDS.map((o) => (
               <button
@@ -279,7 +279,7 @@ export default function BenefitsConversationPage() {
             onSubmit={(e) => {
               e.preventDefault();
               const st = zip.length === 5 ? zipToState(zip) : null;
-              if (!st) { setError("That ZIP code doesn't match a state. Check the five digits."); return; }
+              if (!st) { setError(zip.length === 5 ? "We can only look up programs in the 50 states and DC so far. Check the five digits." : "Enter all five digits."); return; }
               setError(null);
               remember();
               setStateCode(st);
@@ -344,6 +344,9 @@ export default function BenefitsConversationPage() {
 
       {step === "reveal" && (
         <div className="conv-rise flex-1 flex flex-col">
+          {/* The bar row (and its Back) is hidden here, but the last answer
+              must stay changeable (pre-test, 5 Oct). */}
+          <button type="button" onClick={back} className="self-start bg-transparent border-none p-0 text-[14px] text-gray-600 font-medium cursor-pointer">← Back</button>
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-5 py-10">
             <div className="flex gap-2">
               {[...new Set((likely.length ? likely : checking).map((p) => iconFor(p.name)))].slice(0, 3).map((i) => <Obj key={i} name={i} size={60} />)}
@@ -365,7 +368,14 @@ export default function BenefitsConversationPage() {
       )}
 
       {step === "result" && (
-        loading || !plan ? (error ? null : <Thinking text="Putting your first call together…" />) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} />
+        loading || !plan ? (
+          error ? (
+            <div className="flex gap-3">
+              <button type="button" onClick={back} className="min-h-[52px] px-5 rounded-2xl border border-gray-200 bg-white text-gray-800 font-medium cursor-pointer">← Back</button>
+              <button type="button" onClick={() => { setHistory((h) => h.slice(0, -1)); void openResult(); }} className="min-h-[52px] px-5 rounded-2xl bg-gray-900 text-white font-semibold border-none cursor-pointer">Try again</button>
+            </div>
+          ) : <Thinking text="Putting your first call together…" />
+        ) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} />
       )}
 
       {error && <p role="alert" className="text-[15px] text-red-700 m-0">{error}</p>}
