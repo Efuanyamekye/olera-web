@@ -53,11 +53,11 @@ assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it.")
   ] };
   const synopsis = renderSynopsis(pass, at);
   assert.match(synopsis, /^\*Inbox, Fri 2 Oct:\* 4 to approve\./);
-  assert.match(synopsis, /Clear: 15 archive 3 noise emails · 16 archive 2 old voicemails/);
-  assert.match(synopsis, /Texts: 9 a family ending 1234/);
-  assert.match(synopsis, /Emails: 11 Blue Water Homecare \(same draft\)/);
-  assert.match(synopsis, /Calls: 10 voicemails worth a call back\./);
-  assert.match(synopsis, /20\. A family texted something that reads as a crisis/, "a crisis is never hidden behind the report");
+  assert.match(synopsis, /\*Clear\*\n15  archive 3 noise emails\n16  archive 2 old voicemails/, "one clear-out per line");
+  assert.match(synopsis, /\*Texts\*\n9  a family ending 1234/);
+  assert.match(synopsis, /\*Emails\*\n11  Blue Water Homecare  · same draft/);
+  assert.match(synopsis, /\*Calls\*\n10 voicemails worth a call back \(item 14\)/);
+  assert.match(synopsis, /\*Question\*\n20\. A family texted something that reads as a crisis/, "a crisis is never hidden behind the report");
   assert.ok(!synopsis.includes("Thank you for the detailed") && !synopsis.includes("Chris Lane"), "no draft text or voicemail lists on the phone");
   assert.match(synopsis, /"approve 15 16 9 11"/);
   assert.equal(whoFor(pass.items[3]), "Blue Water Homecare");
@@ -80,7 +80,7 @@ assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provide
   const prov = { ...fam, id: "p2", number: 5, category: "email:draft:provider", summary: 'Email Optimized Senior Living re "access". Provider', target: { threadId: "u", matchedProvider: true } } as StoredItem;
   const applicant = { ...fam, id: "p3", number: 6, category: "email:draft:provider", summary: 'Email an LPN applicant re "job". Job applicant', target: { threadId: "v", matchedProvider: false } } as StoredItem;
   const pass = { passId: "p", items: [fam, prov, applicant], waitingElsewhere: 0, costUsd: 0 };
-  assert.match(renderSynopsis(pass, at), /Emails: 4 Marti Carroll · 5 Optimized Senior Living \(sends\) · 6 an LPN applicant$/m);
+  assert.match(renderSynopsis(pass, at), /\*Emails\*\n4  Marti Carroll\n5  Optimized Senior Living  · sends\n6  an LPN applicant/, "one email per line, sends marked");
   const full = inboxReportBody(pass, at).body;
   assert.equal((full.match(/\(Saved as a Gmail draft when you approve\. You send it\.\)/g) ?? []).length, 2);
   assert.equal((full.match(/\(Provider account: sent from support@ when you approve\.\)/g) ?? []).length, 1);
@@ -105,11 +105,11 @@ assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provide
   const pass = { passId: "p", waitingElsewhere: 0, costUsd: 0, items: [mk(21, items[0]), mk(22, items[1]), mk(25, proposal!)],
     extras: { slackCoverage: owed.coverage, organic: { synopsis: ["Provider sessions -17.3% (5,755 vs 6,963).", "Benefit +41.3%.", "CTR halved on stable-rank pages."], section: "Full read here." } } };
   const synopsis = renderSynopsis(pass, at);
-  assert.match(synopsis, /Slack: 2 replies owed \(Ces, your threads\), 21, 22/, "a count by person, not a list of names");
-  assert.match(synopsis, /Organic: Provider sessions -17\.3%/);
-  assert.match(synopsis, /Try: 25 Restore rich-snippet schema on provider pages/);
+  assert.match(synopsis, /\*Slack\*\n2 replies owed \(Ces, your threads\), items 21, 22/, "a count by person, not a list of names");
+  assert.match(synopsis, /\*Organic\*\nProvider sessions -17\.3%/);
+  assert.match(synopsis, /Try 25: Restore rich-snippet schema on provider pages/);
   assert.ok(!/"approve [^"]*2[125]/.test(synopsis), "Slack replies and the proposal are never in the approve-all line");
-  assert.match(synopsis, /Slack replies and the organic action go by number once you've read them\./);
+  assert.match(synopsis, /Slack and the organic action go by number once you've read them\./);
   assert.equal(needsNamedApproval({ kind: "slack_draft" }) && needsNamedApproval({ kind: "proposal" }) && !needsNamedApproval({ kind: "email_draft" }), true);
   const full = inboxReportBody(pass, at).body;
   assert.match(full, /### Slack: replies you owe/);
@@ -121,6 +121,15 @@ assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provide
   assert.ok(!withHeading.includes("## Organic\n\n**What"), "the module's own heading is not repeated");
   assert.ok(withHeading.includes("**What's broken**") && !withHeading.includes("### *What"), "bold labels stay bold, not headings");
   assert.match(full, /Approving turns this into a \/handoff brief/);
+}
+{
+  const { firstSentence, shortWho } = require("../lib/war-room/inbox-operator.server") as typeof import("../lib/war-room/inbox-operator.server");
+  assert.equal(firstSentence("Provider pages lost 1208 sessions. Spread across 1080 URLs.", 200), "Provider pages lost 1208 sessions.");
+  const long = firstSentence("/benefits/virginia impressions fell 71876->27052 (-62%) while position stuck at 42.3; last 2 rewrites did not fix it anywhere", 60);
+  assert.ok(long.endsWith("…") && !/\S…$/.test(long.replace(/\s…$/, "x…")) || long.endsWith("…"), "cut at a word");
+  assert.ok(!/\.\.\.$/.test(long), "never the three-dot clip");
+  const robbie = { id: "r", pass_id: "p", number: 20, kind: "email_draft", category: "email:draft:provider", summary: 'Email Assisting Hands Home Care - Dallas, Richardson & Surrounding Areas re "New family from your ad: Richard". Provider', target: { threadId: "t", matchedProvider: true }, body: "x", status: "proposed", created_at: "2026-10-05T01:00:00Z" } as StoredItem;
+  assert.equal(shortWho(robbie), "Assisting Hands Home Care", "provider names cut at the first dash or comma");
 }
 console.log("synopsis checks passed");
 
