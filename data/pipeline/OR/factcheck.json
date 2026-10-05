@@ -1,13 +1,13 @@
 {
   "state": "OR",
   "stateName": "Oregon",
-  "checkedAt": "2026-10-04T00:53:23.578Z",
+  "checkedAt": "2026-10-05T18:19:59.332Z",
   "total": 15,
   "skipped": 2,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 8,
-  "totalFlags": 9,
+  "programsWithFlags": 6,
+  "totalFlags": 8,
   "highSeverityFlags": 0,
   "programs": [
     {
@@ -27,18 +27,18 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 5320,
-        "income_2": null,
+        "income_1": 5217,
+        "income_2": 5217,
         "assets_individual": 94523,
-        "assets_couple": null,
+        "assets_couple": 94523,
         "phone": "5039455600",
         "sources": {
-          "age": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
-          "income": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-income-resource-standards.pdf",
-          "assets": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
-          "phone": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-income-resource-standards.pdf"
+          "age": "https://secure.sos.state.or.us/oard/displayDivisionRules.action;JSESSIONID_OARD=mMpAzQ_R-aJ_S92k7w48-DFgSDbV7OgUqGqFSu8iAqvGoXRYOeEg!99228750?selectedDivision=7202",
+          "income": "https://secure.sos.state.or.us/oard/displayDivisionRules.action;JSESSIONID_OARD=mMpAzQ_R-aJ_S92k7w48-DFgSDbV7OgUqGqFSu8iAqvGoXRYOeEg!99228750?selectedDivision=7202",
+          "assets": "https://secure.sos.state.or.us/oard/displayDivisionRules.action;JSESSIONID_OARD=mMpAzQ_R-aJ_S92k7w48-DFgSDbV7OgUqGqFSu8iAqvGoXRYOeEg!99228750?selectedDivision=7202",
+          "phone": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-scm-checklist.docx"
         },
-        "notes": "OPI-M is current and active; senior pathway appears to use age 60+ in Oregon’s current OPI-M materials. No separate couple asset limit was found in authoritative current sources; current official resource limit is stated as a combined savings/assets limit for one person."
+        "notes": "OPI-M is age 18+ overall, but the senior pathway uses the 60+ older-adult threshold; income is 400% FPL and assets are capped at six months of nursing-facility cost. No separate couple-specific asset cap was found, so the same resource limit is used for an individual and couple."
       },
       "flags": [
         {
@@ -58,7 +58,7 @@
           "verifiedValue": "5039455600"
         }
       ],
-      "notes": "OPI-M is current and active; senior pathway appears to use age 60+ in Oregon’s current OPI-M materials. No separate couple asset limit was found in authoritative current sources; current official resource limit is stated as a combined savings/assets limit for one person."
+      "notes": "OPI-M is age 18+ overall, but the senior pathway uses the 60+ older-adult threshold; income is 400% FPL and assets are capped at six months of nursing-facility cost. No separate couple-specific asset cap was found, so the same resource limit is used for an individual and couple."
     },
     {
       "programId": "pace-elderly-care",
@@ -87,7 +87,7 @@
           "assets": null,
           "phone": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx"
         },
-        "notes": "PACE is active in Oregon; the state page lists age 55+ and the ODHS PACE coordinator toll-free contact."
+        "notes": "PACE in Oregon is current and age-based at 55+; no separate income or asset test found in authoritative Oregon sources, and eligibility may depend on Medicaid/Medicare status or private pay."
       },
       "flags": [
         {
@@ -99,7 +99,7 @@
           "verifiedValue": "8442247223"
         }
       ],
-      "notes": "PACE is active in Oregon; the state page lists age 55+ and the ODHS PACE coordinator toll-free contact."
+      "notes": "PACE in Oregon is current and age-based at 55+; no separate income or asset test found in authoritative Oregon sources, and eligibility may depend on Medicaid/Medicare status or private pay."
     },
     {
       "programId": "medicare-savings-programs",
@@ -111,7 +111,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "18002828096"
+          "18002828096",
+          "8556732372"
         ],
         "hasVerifiableFacts": true
       },
@@ -121,26 +122,27 @@
         "income_2": 1804,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8556732372",
+        "phone": "18554470155",
         "sources": {
-          "age": null,
+          "age": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
           "income": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
           "assets": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
-          "phone": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx"
+          "phone": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/Documents/mippa-training-pp.pdf"
         },
-        "notes": "Oregon MSP has income limits that change annually; the cited ODHS page shows March 2026-February 2027 limits. No asset limits were found on the official Oregon source."
+        "notes": "Oregon MSP has no asset/resource test; current income limits shown by Oregon for March 2026-February 2027. No age minimum listed on the official program page."
       },
       "flags": [
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
-            "18002828096"
+            "18002828096",
+            "8556732372"
           ],
-          "verifiedValue": "8556732372"
+          "verifiedValue": "18554470155"
         }
       ],
-      "notes": "Oregon MSP has income limits that change annually; the cited ODHS page shows March 2026-February 2027 limits. No asset limits were found on the official Oregon source."
+      "notes": "Oregon MSP has no asset/resource test; current income limits shown by Oregon for March 2026-February 2027. No age minimum listed on the official program page."
     },
     {
       "programId": "snap-food-benefits",
@@ -159,22 +161,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 2660,
         "income_2": 3607,
-        "assets_individual": 4500,
-        "assets_couple": 4500,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8006999075",
         "sources": {
-          "age": "https://www.oregon.gov/odhs/food/pages/snap.aspx",
+          "age": null,
           "income": "https://www.oregon.gov/odhs/food/pages/snap.aspx",
-          "assets": "https://www.oregon.gov/odhs/food/pages/snap.aspx",
-          "phone": "https://www.oregon.gov/odhs/food/pages/snap-help.aspx"
+          "assets": null,
+          "phone": "https://www.oregon.gov/odhs/food/pages/snap.aspx"
         },
-        "notes": "SNAP in Oregon uses 60+ as the older-adult threshold; Oregon’s SNAP page lists the senior/disabled resource limit as $4,500 and monthly gross income limits effective March 2026 through February 2027."
+        "notes": "SNAP has no separate senior age cutoff for eligibility; Oregon uses household income limits. Official Oregon DHS page shows March 2026-February 2027 monthly limits and the main application/help phone number."
       },
       "flags": [],
-      "notes": "SNAP in Oregon uses 60+ as the older-adult threshold; Oregon’s SNAP page lists the senior/disabled resource limit as $4,500 and monthly gross income limits effective March 2026 through February 2027."
+      "notes": "SNAP has no separate senior age cutoff for eligibility; Oregon uses household income limits. Official Oregon DHS page shows March 2026-February 2027 monthly limits and the main application/help phone number."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -193,8 +195,8 @@
       },
       "verified": {
         "age": null,
-        "income_1": 3199,
-        "income_2": 4183,
+        "income_1": 2786,
+        "income_2": 3643,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18004535511",
@@ -204,10 +206,25 @@
           "assets": null,
           "phone": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx"
         },
-        "notes": "OEAP/LIHEAP in Oregon uses 60% of State Median Income for FFY 2026; no separate age or asset test found for the senior pathway. Monthly limits are derived from the official annual figures by dividing by 12 and rounding to the nearest integer."
+        "notes": "Oregon energy assistance/LIHEAP uses 60% of State Median Income for Federal Fiscal Year 2026; no age or asset test was found in the retrieved official source. Income values are monthly equivalents from the official table."
       },
-      "flags": [],
-      "notes": "OEAP/LIHEAP in Oregon uses 60% of State Median Income for FFY 2026; no separate age or asset test found for the senior pathway. Monthly limits are derived from the official annual figures by dividing by 12 and rounding to the nearest integer."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "medium",
+          "draftValue": 3198,
+          "verifiedValue": 2786,
+          "pctDiff": 12.9
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 4183,
+          "verifiedValue": 3643,
+          "pctDiff": 12.9
+        }
+      ],
+      "notes": "Oregon energy assistance/LIHEAP uses 60% of State Median Income for Federal Fiscal Year 2026; no age or asset test was found in the retrieved official source. Income values are monthly equivalents from the official table."
     },
     {
       "programId": "weatherization-assistance-wap",
@@ -243,12 +260,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://shiba.oregon.gov/get-help/pages/shiba-help.aspx"
+          "phone": "https://shiba.oregon.gov/get-help/Pages/shiba-help.aspx"
         },
-        "notes": "No age, income, or asset eligibility applies; SHIBA is a free Medicare counseling program. Main statewide phone number confirmed from Oregon SHIBA and CMS."
+        "notes": "SHIBA is a free Oregon Medicare counseling program and does not appear to have age, income, or asset eligibility tests; the senior pathway is Medicare-related, not means-tested."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility applies; SHIBA is a free Medicare counseling program. Main statewide phone number confirmed from Oregon SHIBA and CMS."
+      "notes": "SHIBA is a free Oregon Medicare counseling program and does not appear to have age, income, or asset eligibility tests; the senior pathway is Medicare-related, not means-tested."
     },
     {
       "programId": "meals-on-wheels",
@@ -263,7 +280,8 @@
           "5039455811",
           "5033642856",
           "8004698772",
-          "5033043400"
+          "5033043400",
+          "8556732372"
         ],
         "hasVerifiableFacts": true
       },
@@ -278,24 +296,12 @@
           "age": "https://www.oregon.gov/oha/hsd/ohp/pages/community-resources.aspx",
           "income": "https://www.oregon.gov/oha/hsd/ohp/pages/community-resources.aspx",
           "assets": "https://www.oregon.gov/oha/hsd/ohp/pages/community-resources.aspx",
-          "phone": "https://www.oregon.gov/odhs/food/pages/default.aspx"
+          "phone": "https://www.ocwcog.org/seniors-disability/meals/"
         },
-        "notes": "Statewide Oregon Meals on Wheels / ADRC older adult meals program: age 60+ and no income requirements."
+        "notes": "Current Oregon ADRC/ODHS source says Anyone 60+ can receive these meals and there are no income requirements; no asset test found. Phone listed is the statewide ADRC help line for Meals on Wheels assistance."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "5039455811",
-            "5033642856",
-            "8004698772",
-            "5033043400"
-          ],
-          "verifiedValue": "8556732372"
-        }
-      ],
-      "notes": "Statewide Oregon Meals on Wheels / ADRC older adult meals program: age 60+ and no income requirements."
+      "flags": [],
+      "notes": "Current Oregon ADRC/ODHS source says Anyone 60+ can receive these meals and there are no income requirements; no asset test found. Phone listed is the statewide ADRC help line for Meals on Wheels assistance."
     },
     {
       "programId": "family-caregiver-assistance-support",
@@ -319,15 +325,15 @@
         "assets_couple": null,
         "phone": "8556732372",
         "sources": {
-          "age": null,
+          "age": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/Documents/fcsp-standards.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://www.oregon.gov/odhs/aging-disability-services/pages/caregivers.aspx"
+          "phone": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/pages/family-caregiver-program.aspx"
         },
-        "notes": "No age, income, or asset test found for Oregon FCSP senior caregiver pathway; official state source directs caregivers to the ADRC at 855-673-2372."
+        "notes": "FCSP is an assistance/support program for caregivers, not a means-tested benefit; no income or asset test found in authoritative Oregon sources. Current statewide help line appears to be ADRC 855-673-2372."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for Oregon FCSP senior caregiver pathway; official state source directs caregivers to the ADRC at 855-673-2372."
+      "notes": "FCSP is an assistance/support program for caregivers, not a means-tested benefit; no income or asset test found in authoritative Oregon sources. Current statewide help line appears to be ADRC 855-673-2372."
     },
     {
       "programId": "scsep-senior-employment",
@@ -353,15 +359,15 @@
         "assets_couple": null,
         "phone": "5032285100",
         "sources": {
-          "age": "https://oregon.gov/odhs/providers-partners/community-services-supports/pages/senior-employment.aspx",
+          "age": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/pages/senior-employment.aspx",
           "income": null,
           "assets": null,
           "phone": "https://oregon.easterseals.com/get-support/areas-of-support/employment-job-training/senior-community-service-employment-program"
         },
-        "notes": "Current Oregon SCSEP appears active through Easterseals Oregon; official state page gives 55+ eligibility and redirects to Easterseals Oregon for contact/help."
+        "notes": "SCSEP in Oregon is an age 55+ senior employment program; no current income or asset test was found in the official Oregon source beyond low-income language, and the official program page lists 503-228-5100 for contact."
       },
       "flags": [],
-      "notes": "Current Oregon SCSEP appears active through Easterseals Oregon; official state page gives 55+ eligibility and redirects to Easterseals Oregon for contact/help."
+      "notes": "SCSEP in Oregon is an age 55+ senior employment program; no current income or asset test was found in the official Oregon source beyond low-income language, and the official program page lists 503-228-5100 for contact."
     },
     {
       "programId": "legal-aid-services-laso",
@@ -377,40 +383,29 @@
           "5032445204",
           "5419268678",
           "5413856944",
-          "18006786944"
+          "18006786944",
+          "5032244086",
+          "5032244094"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5032244094",
+        "phone": "5032244086",
         "sources": {
-          "age": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/pages/legal-assistance.aspx",
+          "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://lasoregon.org/about/"
+          "phone": "https://lasoregon.org/locations/portland-regional-office/"
         },
-        "notes": "No income or asset test found for the senior pathway in the retrieved sources; LASO appears current and active."
+        "notes": "No authoritative senior-specific age threshold or income/assets test was found for LASO; the main Portland office phone is listed on the official LASO site."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "5032242640",
-            "5032445204",
-            "5419268678",
-            "5413856944",
-            "18006786944"
-          ],
-          "verifiedValue": "5032244094"
-        }
-      ],
-      "notes": "No income or asset test found for the senior pathway in the retrieved sources; LASO appears current and active."
+      "flags": [],
+      "notes": "No authoritative senior-specific age threshold or income/assets test was found for LASO; the main Portland office phone is listed on the official LASO site."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -447,7 +442,7 @@
           "assets": null,
           "phone": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf"
         },
-        "notes": "ERA appears current in Oregon; official materials state the senior threshold is 58+ and list OHCS Homeless Services Section at (503) 986-2000 for program help."
+        "notes": "Current Oregon OHCS ERA materials show the senior threshold is 58 years old; no authoritative asset test found. The program appears active in 2026."
       },
       "flags": [
         {
@@ -460,7 +455,7 @@
           "verifiedValue": "5039862000"
         }
       ],
-      "notes": "ERA appears current in Oregon; official materials state the senior threshold is 58+ and list OHCS Homeless Services Section at (503) 986-2000 for program help."
+      "notes": "Current Oregon OHCS ERA materials show the senior threshold is 58 years old; no authoritative asset test found. The program appears active in 2026."
     },
     {
       "programId": "senior-tuition-audit",
@@ -473,7 +468,9 @@
         "assets_couple": null,
         "phones": [
           "9717226111",
-          "5033250910"
+          "5033250910",
+          "8005478887",
+          "5417374331"
         ],
         "hasVerifiableFacts": true
       },
@@ -483,27 +480,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5417374331",
+        "phone": "8005478887",
         "sources": {
-          "age": "https://oregon.public.law/statutes/ors_352.303",
+          "age": "https://www.pdx.edu/senior-adult-learning-center/",
           "income": null,
           "assets": null,
-          "phone": "https://registrar.oregonstate.edu/how-register/audit-registration"
+          "phone": "https://www.pdx.edu/senior-adult-learning-center/"
         },
-        "notes": "Program appears to be the Oregon senior citizen audit tuition waiver; I could confirm the 65+ threshold and a university main contact number, but I could not find an official statewide phone number specifically for this program."
+        "notes": "No official Oregon statewide program titled exactly 'Oregon Senior Free Tuition Audit Program' was found; current evidence points to the PSU Senior Adult Learning Center senior audit pathway for Oregon residents age 65+."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "9717226111",
-            "5033250910"
-          ],
-          "verifiedValue": "5417374331"
-        }
-      ],
-      "notes": "Program appears to be the Oregon senior citizen audit tuition waiver; I could confirm the 65+ threshold and a university main contact number, but I could not find an official statewide phone number specifically for this program."
+      "flags": [],
+      "notes": "No official Oregon statewide program titled exactly 'Oregon Senior Free Tuition Audit Program' was found; current evidence points to the PSU Senior Adult Learning Center senior audit pathway for Oregon residents age 65+."
     },
     {
       "programId": "hrsn-health-social-needs",
@@ -521,19 +508,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18888344304",
+        "phone": "8888344304",
         "sources": {
-          "age": "https://www.oregon.gov/oha/hsd/ohp/pages/housing.aspx",
-          "income": "https://www.oregon.gov/oha/hsd/medicaid-policy/pages/hrsn.aspx",
+          "age": null,
+          "income": null,
           "assets": null,
-          "phone": "https://www.oregon.gov/oha/hsd/ohp/pages/housing.aspx"
+          "phone": "https://ohpopencard.org/hrsn/"
         },
-        "notes": "Current Oregon HRSN housing benefits use a senior pathway age threshold of 65+. No authoritative source found for separate income or asset limits for the senior pathway; program appears to use other clinical/social criteria instead."
+        "notes": "Could not find authoritative current age, income, or asset rules for the senior pathway from retrievable official sources; current help phone found for HRSN/Open Card services."
       },
       "flags": [
         {
@@ -543,10 +530,10 @@
             "8002730557",
             "211"
           ],
-          "verifiedValue": "18888344304"
+          "verifiedValue": "8888344304"
         }
       ],
-      "notes": "Current Oregon HRSN housing benefits use a senior pathway age threshold of 65+. No authoritative source found for separate income or asset limits for the senior pathway; program appears to use other clinical/social criteria instead."
+      "notes": "Could not find authoritative current age, income, or asset rules for the senior pathway from retrievable official sources; current help phone found for HRSN/Open Card services."
     }
   ]
 }

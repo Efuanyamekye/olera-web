@@ -1015,17 +1015,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 18,
-          "to": 60,
-          "source": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-04T00:51:38.093Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "alzheimers-adult-day-services",
@@ -1443,5 +1433,5 @@
     ],
     "resourcesVsBenefits": "Most New Jersey senior programs are qualification-based benefits requiring specific income limits, age requirements, or care needs. For example, PAAD requires income under $54,943/year, while JACC requires nursing-level care assessment. Only one program (Senior Freeze) functions as a general resource with broader eligibility. Unlike some states that offer universal information services, New Jersey focuses on targeted financial assistance for those who meet specific criteria."
   },
-  "factcheckedAt": "2026-10-04T00:51:38.093Z"
+  "factcheckedAt": "2026-10-05T18:18:17.760Z"
 }

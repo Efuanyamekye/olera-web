@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.945Z
+ * Last updated: 2026-10-05T18:20:48.117Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -140,6 +140,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General assistance finding local County Assistance Office and Area Agency on Aging",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 550-4355",
+          "description": "Number listed on pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -206,26 +212,7 @@ export const drafts: PipelineStateDrafts = {
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
       "lastVerifiedDate": "2026-10-04",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 21,
-          "to": 55,
-          "source": "https://www.pa.gov/services/dhs/apply-for-community-healthchoices",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-04T00:53:36.830Z"
-        },
-        {
-          "field": "assets_individual",
-          "from": 8000,
-          "to": 2000,
-          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-04T00:53:36.830Z"
-        }
-      ],
+      "reviewQueue": null,
       "dismissedFlags": [
         {
           "field": "phone",
@@ -233,6 +220,21 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts",
           "reason": "page also lists ours ((877) 550-4227)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18775504227",
+            "211"
+          ],
+          "to": "(866) 550-4355",
+          "source": "https://www.pa.gov/services/dhs/apply-for-community-healthchoices",
+          "flaggedAt": "2026-10-05T18:20:13.875Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1227,6 +1229,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "Contact local AAA",
           "description": "Statewide program information and local office referrals",
           "hours": "Varies by county"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(717) 783-1550",
+          "description": "Number listed on palottery.pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1291,18 +1299,20 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7177719610",
             "8149461235"
           ],
-          "to": "7177806130",
-          "source": "https://www.dauphincounty.gov/government/human-services/area-agency-on-aging/services/Meals-on-Wheels",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:36.830Z"
+          "to": "(717) 783-1550",
+          "source": "https://www.palottery.pa.gov/Benefits/Local-Services-Senior-Centers-Meals.aspx",
+          "flaggedAt": "2026-10-05T18:20:13.875Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

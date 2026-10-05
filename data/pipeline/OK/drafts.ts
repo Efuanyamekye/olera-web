@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.909Z
+ * Last updated: 2026-10-05T18:20:48.075Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -387,7 +387,17 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 3000,
+          "to": 2000,
+          "source": "https://www.medicaidplanningassistance.org/oklahoma-advantage-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:19:43.263Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -847,19 +857,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://oklahoma.gov/content/dam/ok/en/okdhs/documents/searchcenter/okdhsformresults/c-1.pdf",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:53:06.885Z"
+          "flaggedAt": "2026-10-05T18:19:43.263Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://oklahoma.gov/content/dam/ok/en/okdhs/documents/searchcenter/okdhsformresults/c-1.pdf",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:53:06.885Z"
+          "flaggedAt": "2026-10-05T18:19:43.263Z"
         }
       ],
       "dismissedFlags": [
@@ -1132,25 +1142,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28",
+      "lastVerifiedDate": "2026-10-05",
       "reviewQueue": [
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1696,
-          "source": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
+          "to": 1729,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:53:06.885Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:43.263Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2296,
-          "source": "https://oklahoma.gov/okdhs/searchcenter/okdhsformresults/c-3.html",
+          "to": 2345,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:53:06.885Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:43.263Z"
         }
       ],
       "appliedCorrections": [
@@ -1167,6 +1177,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "4055225050",
+          "source": "https://oklahoma.gov/okdhs/contact-us.html",
+          "reason": "page also lists ours ((866) 411-1877)",
+          "dismissedAt": "2026-10-05"
         }
       ]
     },
@@ -1687,6 +1706,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 441-0434",
           "description": "Ages birth-59 needing daily assistance",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(405) 522-5050",
+          "description": "Number listed on oklahoma.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1731,7 +1756,26 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oklahoma.gov/okdhs/services/aging/titleiii.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18002112116",
+            "8005221064",
+            "8005221075",
+            "4052712710",
+            "8774410434"
+          ],
+          "to": "(405) 522-5050",
+          "source": "https://oklahoma.gov/okdhs/services/dds/rvpp.html",
+          "flaggedAt": "2026-10-05T18:19:43.263Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "scsep-employment-program",

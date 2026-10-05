@@ -1,14 +1,14 @@
 {
   "state": "NJ",
   "stateName": "New Jersey",
-  "checkedAt": "2026-10-04T00:51:38.093Z",
+  "checkedAt": "2026-10-05T18:18:17.760Z",
   "total": 8,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 2,
-  "totalFlags": 2,
-  "highSeverityFlags": 1,
+  "programsWithFlags": 1,
+  "totalFlags": 1,
+  "highSeverityFlags": 0,
   "programs": [
     {
       "programId": "stay-nj-property-tax-relief",
@@ -38,10 +38,10 @@
           "assets": null,
           "phone": "https://www.nj.gov/treasury/news/2026/02092026.shtml"
         },
-        "notes": "Current official NJ Treasury materials show Stay NJ is active and for homeowners age 65+ with income up to $200,000; no asset test found in current official sources."
+        "notes": "Current official Stay NJ guidance shows a senior age threshold of 65+, an income cap of $200,000, and no asset test located; the program is current and administered through the NJ Division of Taxation."
       },
       "flags": [],
-      "notes": "Current official NJ Treasury materials show Stay NJ is active and for homeowners age 65+ with income up to $200,000; no asset test found in current official sources."
+      "notes": "Current official Stay NJ guidance shows a senior age threshold of 65+, an income cap of $200,000, and no asset test located; the program is current and administered through the NJ Division of Taxation."
     },
     {
       "programId": "senior-freeze-property-tax",
@@ -61,21 +61,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 168268,
-        "income_2": 172475,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8008826597",
+        "phone": "18008826597",
         "sources": {
-          "age": "https://www.nj.gov/treasury/taxation/ptr/eligibility.shtml",
-          "income": "https://www.nj.gov/treasury/taxation/ptr/eligibility.shtml",
+          "age": "https://www.nj.gov/treasury/taxation/propertytaxrelieffaq.shtml",
+          "income": null,
           "assets": null,
           "phone": "https://www20.state.nj.us/TYTR_PTR_INQ/jsp/PTRLogin.jsp"
         },
-        "notes": "Current New Jersey Senior Freeze (Property Tax Reimbursement) program; no asset test found in the official eligibility materials."
+        "notes": "Current NJ Senior Freeze (Property Tax Reimbursement) senior pathway uses age 65+; no asset test found in current official source, and income limits were not retrievable from the gathered sources."
       },
       "flags": [],
-      "notes": "Current New Jersey Senior Freeze (Property Tax Reimbursement) program; no asset test found in the official eligibility materials."
+      "notes": "Current NJ Senior Freeze (Property Tax Reimbursement) senior pathway uses age 65+; no asset test found in current official source, and income limits were not retrievable from the gathered sources."
     },
     {
       "programId": "jacc-community-caregiving",
@@ -99,17 +99,17 @@
         "income_2": 6582,
         "assets_individual": 40000,
         "assets_couple": 60000,
-        "phone": "8772223737",
+        "phone": "18772223737",
         "sources": {
           "age": "https://www.nj.gov/humanservices/doas/services/a-k/jacc/",
           "income": "https://www.nj.gov/humanservices/doas/services/a-k/jacc/",
           "assets": "https://www.nj.gov/humanservices/doas/services/a-k/jacc/",
           "phone": "https://www.nj.gov/humanservices/doas/services/a-k/jacc/"
         },
-        "notes": "Current NJ.gov JACC page shows the program is active in 2026, with age 60+ and financial thresholds of 365% FPL plus $40,000/$60,000 countable assets; the main application/help line is the ADRC toll-free number."
+        "notes": "Current NJ.gov JACC page shows the program is for age 60+ and lists 2026 income and asset limits; application help is via the ADRC toll-free number."
       },
       "flags": [],
-      "notes": "Current NJ.gov JACC page shows the program is active in 2026, with age 60+ and financial thresholds of 365% FPL plus $40,000/$60,000 countable assets; the main application/help line is the ADRC toll-free number."
+      "notes": "Current NJ.gov JACC page shows the program is for age 60+ and lists 2026 income and asset limits; application help is via the ADRC toll-free number."
     },
     {
       "programId": "paad-prescription-assistance",
@@ -129,21 +129,36 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 4578,
-        "income_2": 5200,
+        "income_1": 54943,
+        "income_2": 62390,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18007929745",
+        "phone": "8007929745",
         "sources": {
           "age": "https://www.nj.gov/humanservices/doas/services/l-p/paad/",
           "income": "https://www.nj.gov/humanservices/doas/services/l-p/paad/",
           "assets": null,
           "phone": "https://www.nj.gov/humanservices/doas/services/l-p/paad/"
         },
-        "notes": "Current NJ PAAD appears active for 2026; official page gives 2026 income limits and a 65+ senior threshold. No assets test found in the official source."
+        "notes": "Current NJ PAAD program is active; no asset test found in the official source reviewed. Income limits shown are annual on the state page and left as published because the requested monthly conversion would not reflect the official figure."
       },
-      "flags": [],
-      "notes": "Current NJ PAAD appears active for 2026; official page gives 2026 income limits and a 65+ senior threshold. No assets test found in the official source."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "info",
+          "draftValue": 4579,
+          "verifiedValue": 54943,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "income_2",
+          "severity": "info",
+          "draftValue": 5199,
+          "verifiedValue": 62390,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        }
+      ],
+      "notes": "Current NJ PAAD program is active; no asset test found in the official source reviewed. Income limits shown are annual on the state page and left as published because the requested monthly conversion would not reflect the official figure."
     },
     {
       "programId": "lifeline-utility-credit",
@@ -170,10 +185,10 @@
           "assets": null,
           "phone": "https://www.nj.gov/humanservices/doas/services/l-p/lifeline-utility/"
         },
-        "notes": "Current NJ Lifeline Credit program appears active; senior pathway is age 65+ and uses income limits, with no asset test found in current official materials."
+        "notes": "Current NJ Lifeline Credit/Lifeline Utility Assistance appears active in 2026; senior pathway age is 65+, income limits are listed for 2026, and no asset test was found in the official source."
       },
       "flags": [],
-      "notes": "Current NJ Lifeline Credit program appears active; senior pathway is age 65+ and uses income limits, with no asset test found in current official materials."
+      "notes": "Current NJ Lifeline Credit/Lifeline Utility Assistance appears active in 2026; senior pathway age is 65+, income limits are listed for 2026, and no asset test was found in the official source."
     },
     {
       "programId": "statewide-respite-care",
@@ -191,29 +206,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 2982,
         "income_2": 5964,
         "assets_individual": 40000,
         "assets_couple": 60000,
         "phone": "18772223737",
         "sources": {
-          "age": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
+          "age": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/",
           "income": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/",
           "assets": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/",
           "phone": "https://www.nj.gov/humanservices/doas/services/q-z/srcp/"
         },
-        "notes": "Current New Jersey Statewide Respite Care Program eligibility appears active for 2026; senior pathway age is 60+, with income and liquid-asset limits published in 2026 state sources."
+        "notes": "No senior-specific minimum age threshold is published; the program is for functionally impaired adults and older adults, with no age test for seniors. Current official NJ source lists 2026 income and liquid asset limits and the ADRC contact number."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 18,
-          "verifiedValue": 60
-        }
-      ],
-      "notes": "Current New Jersey Statewide Respite Care Program eligibility appears active for 2026; senior pathway age is 60+, with income and liquid-asset limits published in 2026 state sources."
+      "flags": [],
+      "notes": "No senior-specific minimum age threshold is published; the program is for functionally impaired adults and older adults, with no age test for seniors. Current official NJ source lists 2026 income and liquid asset limits and the ADRC contact number."
     },
     {
       "programId": "alzheimers-adult-day-services",
@@ -231,19 +239,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "6094384733",
         "sources": {
-          "age": null,
-          "income": null,
+          "age": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
+          "income": "https://www.nj.gov/disabilities/resources-by-life-stages/older-adults/",
           "assets": "https://www.nj.gov/humanservices/dds/hottopics/longtermservices/",
           "phone": "https://www.nj.gov/humanservices/doas/services/a-k/aads/"
         },
-        "notes": "Current NJ.gov pages describe eligibility as dementia diagnosis, community residence, unpaid caregiver support, and financial guidelines, but no authoritative numeric age/income/assets thresholds were found; program appears active under the Alzheimer’s Adult Day Services Program name."
+        "notes": "Current NJ.gov sources show the program is active; income guidelines are mentioned but no numeric thresholds were retrievable from the available sources. No separate asset limit was retrievable for this program; official sources say financial guidelines include income and assets."
       },
       "flags": [
         {
@@ -256,7 +264,7 @@
           "verifiedValue": "6094384733"
         }
       ],
-      "notes": "Current NJ.gov pages describe eligibility as dementia diagnosis, community residence, unpaid caregiver support, and financial guidelines, but no authoritative numeric age/income/assets thresholds were found; program appears active under the Alzheimer’s Adult Day Services Program name."
+      "notes": "Current NJ.gov sources show the program is active; income guidelines are mentioned but no numeric thresholds were retrievable from the available sources. No separate asset limit was retrievable for this program; official sources say financial guidelines include income and assets."
     },
     {
       "programId": "senior-ezpass-discount",
@@ -280,17 +288,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8882886865",
+        "phone": "18882886865",
         "sources": {
           "age": "https://www.njta.gov/toll-discounts/",
           "income": null,
           "assets": null,
           "phone": "https://www.njta.gov/toll-discounts/"
         },
-        "notes": "Current official NJ Turnpike Authority senior discount program; no income or asset test found."
+        "notes": "Current Senior Citizen Discount Program in New Jersey requires age 65+; no income or asset test found for the senior pathway."
       },
       "flags": [],
-      "notes": "Current official NJ Turnpike Authority senior discount program; no income or asset test found."
+      "notes": "Current Senior Citizen Discount Program in New Jersey requires age 65+; no income or asset test found for the senior pathway."
     }
   ]
 }

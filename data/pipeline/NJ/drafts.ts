@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NJ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.818Z
+ * Last updated: 2026-10-05T18:18:17.862Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
