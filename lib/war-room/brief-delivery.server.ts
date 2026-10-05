@@ -15,6 +15,7 @@ import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { loadReactionSummary, recordMove, resolveReactions } from "@/lib/war-room/moves.server";
 import { loadBlindSpots, loadLookupGaps, loadManagedAdsLedger } from "@/lib/war-room/lookups.server";
 import { buildPriorityLines, priorityFor } from "@/lib/war-room/priorities";
+import { loadShippedSince, shippedLine } from "@/lib/war-room/shipped.server";
 import { openItems } from "@/lib/war-room/inbox-operator.server";
 import { loadCalendar } from "@/lib/war-room/calendar.server";
 import type { WarRoomDiscoveryRun, WarRoomProbeReading } from "@/lib/war-room/types";
@@ -492,10 +493,12 @@ export async function deliverWarRoomBrief(
         move = { ...(await phraseMove(chosen, rules)), title: chosen.title, kind: chosen.kind };
       }
       const lastBriefAt = (state as { last_success_at?: string | null } | null)?.last_success_at ?? null;
-      const [ledger, inbox] = await Promise.all([
+      const [ledger, inbox, shipped] = await Promise.all([
         loadManagedAdsLedger(db).catch(() => null),
         openItems(db).catch(() => []),
+        loadShippedSince(lastBriefAt),
       ]);
+      const sinceLabel = lastBriefAt ? shortDate(lastBriefAt) : null;
       const renewalShort = renewalText(renewal)?.replace(/^_|_$/g, "") ?? null;
       priorityLines = buildPriorityLines({
         payingProviders: ledger?.payingProviders ? ledger.payingProviders.length : null,
@@ -508,7 +511,13 @@ export async function deliverWarRoomBrief(
         renewal: renewalShort,
         providerEmailsWaiting: momentCandidates.length,
         inboxItemsWaiting: inbox.filter((item) => item.kind !== "question").length,
-        since: lastBriefAt ? shortDate(lastBriefAt) : null,
+        since: sinceLabel,
+        shipped: {
+          crp: shippedLine(shipped.crp, sinceLabel),
+          benefits: shippedLine(shipped.benefits, sinceLabel),
+          providers: shippedLine(shipped.providers, sinceLabel),
+          operations: shippedLine(shipped.operations, sinceLabel),
+        },
       });
       const investigations = (investigationResult.data ?? []) as InvestigationRow[];
       open = investigations.filter((row) => row.status === "investigating").length;

@@ -120,17 +120,25 @@ export function buildPriorityLines(input: {
   inboxItemsWaiting: number;
   /** "Sep 26": the last brief, for "no change since". */
   since: string | null;
+  /** One line per priority on what merged since the last brief (shipped.server.ts), or null. */
+  shipped?: Partial<Record<PriorityKey, string | null>>;
   now?: Date;
 }): string[] {
   const moved = (key: PriorityKey) => input.movers
     .filter((reading) => priorityFor(reading.label) === key)
     .slice(0, 1)
     .map(compactMove);
-  const quiet = input.since ? `No change since ${input.since}.` : "Nothing new measured.";
+  // "No measured number moved", not "no change": only readings are measured,
+  // and no reading covers the Benefits Finder, so a week of shipped Benefits
+  // work read as "No change since Oct 3" (TJ, 2026-10-05: "This is wrong").
+  // A priority with nothing measured says what shipped, when anything did.
+  const quiet = input.since ? `No measured number moved since ${input.since}.` : "Nothing new measured.";
   const line = (key: PriorityKey, parts: Array<string | null | false>) => {
     const label = OLERA_PRIORITIES.find((priority) => priority.key === key)!.label;
     const said = parts.filter((part): part is string => Boolean(part));
-    return `*${label}:* ${said.length ? said.join(" ") : quiet}`;
+    const shipped = input.shipped?.[key] ?? null;
+    if (said.length) return `*${label}:* ${said.join(" ")}${shipped ? ` ${shipped}` : ""}`;
+    return `*${label}:* ${shipped ?? quiet}`;
   };
   const weeks = weeksToCrp(input.now);
   return [
