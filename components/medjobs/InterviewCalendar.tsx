@@ -22,6 +22,7 @@ import {
   getAvailableTimeSlots,
   formatTimeSlot,
 } from "@/lib/medjobs/availability-utils";
+import { getStudentTimezone, dateTimeToISO, getTimezoneLabel } from "@/lib/medjobs/timezone";
 
 /* ── Types ── */
 
@@ -632,19 +633,23 @@ function InterviewDetailModal({
   const [rescheduleDate, setRescheduleDate] = useState("");
   const [rescheduleTime, setRescheduleTime] = useState("");
 
+  // Get student timezone for proper timestamp conversion
+  const studentTimezone = getStudentTimezone(interview.student?.metadata);
+
   // Filtered date/time options based on student availability
   const rescheduleDateOptions = useMemo(
-    () => getDateOptions(studentAvailability),
-    [studentAvailability]
+    () => getDateOptions(studentAvailability, studentTimezone),
+    [studentAvailability, studentTimezone]
   );
   const rescheduleTimeOptions = useMemo(() => {
     if (!rescheduleDate) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(rescheduleDate + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(rescheduleDate + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, studentTimezone);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [rescheduleDate, studentAvailability]);
+  }, [rescheduleDate, studentAvailability, studentTimezone]);
 
   // Clear time if it's no longer valid after date change
   useEffect(() => {
@@ -656,7 +661,8 @@ function InterviewDetailModal({
   const canReschedule = !!rescheduleDate && !!rescheduleTime && !isLoading;
   const handleReschedule = async () => {
     if (!canReschedule) return;
-    const iso = new Date(`${rescheduleDate}T${rescheduleTime}`).toISOString();
+    // Interpret selected time in student's timezone, not browser's local timezone
+    const iso = dateTimeToISO(rescheduleDate, rescheduleTime, studentTimezone);
     await onUpdateStatus(interview.id, "rescheduled", iso);
     onClose();
   };
@@ -714,6 +720,9 @@ function InterviewDetailModal({
               ))}
             </select>
           </div>
+          <p className="text-xs text-gray-500 -mt-1">
+            Times shown in {getTimezoneLabel(studentTimezone)}
+          </p>
           <button
             type="button"
             onClick={handleReschedule}

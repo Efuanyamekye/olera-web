@@ -7,6 +7,7 @@ import UpgradeModal from "@/components/medjobs/UpgradeModal";
 import { useCitySearch } from "@/hooks/use-city-search";
 import OrganizationSearch, { type SelectedOrg } from "@/components/shared/OrganizationSearch";
 import type { StudentMetadata } from "@/lib/types";
+import { getStudentTimezone, dateTimeToISO, getTimezoneLabel } from "@/lib/medjobs/timezone";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -419,6 +420,9 @@ export default function QuickScheduleModal({
     setError("");
   }, []);
 
+  // Get student timezone for proper timestamp creation
+  const studentTimezone = getStudentTimezone(candidate.metadata);
+
   const handleSubmit = useCallback(async () => {
     if (!canSubmit) return;
 
@@ -426,8 +430,9 @@ export default function QuickScheduleModal({
     setError("");
 
     try {
-      const proposedTime = new Date(`${selectedDate}T${selectedTime}`).toISOString();
-      const alternativeTime = altDate && altTime ? new Date(`${altDate}T${altTime}`).toISOString() : undefined;
+      // Interpret selected time in student's timezone, not browser's local timezone
+      const proposedTime = dateTimeToISO(selectedDate, selectedTime, studentTimezone);
+      const alternativeTime = altDate && altTime ? dateTimeToISO(altDate, altTime, studentTimezone) : undefined;
 
       const res = await fetch("/api/medjobs/interviews/quick", {
         method: "POST",
@@ -476,7 +481,7 @@ export default function QuickScheduleModal({
     } finally {
       setSubmitting(false);
     }
-  }, [canSubmit, selectedDate, selectedTime, altDate, altTime, format, notes, candidate.id, email, organization, city, state, selectedOrg, termsAcceptedAt]);
+  }, [canSubmit, selectedDate, selectedTime, altDate, altTime, format, notes, candidate.id, email, organization, city, state, selectedOrg, termsAcceptedAt, studentTimezone]);
 
   const handleCitySelect = useCallback((selectedCity: string, selectedState: string) => {
     setCity(selectedCity);
@@ -596,6 +601,9 @@ export default function QuickScheduleModal({
           />
         </div>
       </div>
+      <p className="text-xs text-gray-500 -mt-2">
+        Times shown in {getTimezoneLabel(studentTimezone)}
+      </p>
 
       {/* Alternative time - progressive disclosure */}
       <div className="mt-6">

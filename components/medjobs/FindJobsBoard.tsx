@@ -11,6 +11,7 @@ import ProviderBottomSheet from "@/components/medjobs/ProviderBottomSheet";
 import Pagination from "@/components/ui/Pagination";
 import { useNavbar } from "@/components/shared/NavbarContext";
 import { PARTNER_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
+import { getTimezoneBySlug } from "@/lib/medjobs/timezone";
 import { calculateCompleteness } from "@/lib/medjobs-completeness";
 import type { ProviderCard } from "@/app/api/medjobs/providers/route";
 import type { StudentMetadata } from "@/lib/types";
@@ -492,6 +493,7 @@ export default function FindJobsBoard() {
             setRequested((prev) => new Set([...prev, scheduleTarget.id]));
             setScheduleTarget(null);
           }}
+          studentTimezone={getTimezoneBySlug(student.campus)}
         />
       )}
     </div>

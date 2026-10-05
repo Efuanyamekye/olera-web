@@ -28,6 +28,11 @@ export interface PartnerUniversity {
   city: string;     // university's own city
   state: string;
   /**
+   * IANA timezone for this university (e.g., "America/Chicago").
+   * Used to interpret student availability times and format times in emails.
+   */
+  timezone: string;
+  /**
    * Campus coordinates. When present, the catchment is measured as a
    * radius from here and `catchment` becomes a safety net rather than the
    * definition — see `matchesCatchment` in lib/medjobs/catchment.ts.
@@ -64,6 +69,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Texas at Austin",
     city: "Austin",
     state: "TX",
+    timezone: "America/Chicago",
     catchment: [
       { city: "Austin", state: "TX" },
       { city: "Round Rock", state: "TX" },
@@ -82,6 +88,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Texas A&M University",
     city: "College Station",
     state: "TX",
+    timezone: "America/Chicago",
     catchment: [
       { city: "College Station", state: "TX" },
       { city: "Bryan", state: "TX" },
@@ -98,6 +105,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Houston / Rice",
     city: "Houston",
     state: "TX",
+    timezone: "America/Chicago",
     catchment: [
       { city: "Houston", state: "TX" },
       { city: "Sugar Land", state: "TX" },
@@ -119,6 +127,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Florida",
     city: "Gainesville",
     state: "FL",
+    timezone: "America/New_York",
     lat: 29.6483,
     lon: -82.3494,
     catchment: [
@@ -139,6 +148,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Florida State University",
     city: "Tallahassee",
     state: "FL",
+    timezone: "America/New_York",
     lat: 30.4419,
     lon: -84.2985,
     catchment: [
@@ -156,6 +166,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Georgia",
     city: "Athens",
     state: "GA",
+    timezone: "America/New_York",
     catchment: [
       { city: "Athens", state: "GA" },
       { city: "Watkinsville", state: "GA" },
@@ -172,6 +183,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Emory University",
     city: "Atlanta",
     state: "GA",
+    timezone: "America/New_York",
     catchment: [
       { city: "Atlanta", state: "GA" },
       { city: "Decatur", state: "GA" },
@@ -195,6 +207,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of North Carolina at Chapel Hill",
     city: "Chapel Hill",
     state: "NC",
+    timezone: "America/New_York",
     catchment: [
       { city: "Chapel Hill", state: "NC" },
       { city: "Carrboro", state: "NC" },
@@ -212,6 +225,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Duke University",
     city: "Durham",
     state: "NC",
+    timezone: "America/New_York",
     catchment: [
       { city: "Durham", state: "NC" },
       { city: "Chapel Hill", state: "NC" },
@@ -232,6 +246,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Virginia",
     city: "Charlottesville",
     state: "VA",
+    timezone: "America/New_York",
     catchment: [
       { city: "Charlottesville", state: "VA" },
       { city: "Crozet", state: "VA" },
@@ -249,6 +264,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Virginia Tech",
     city: "Blacksburg",
     state: "VA",
+    timezone: "America/New_York",
     catchment: [
       { city: "Blacksburg", state: "VA" },
       { city: "Christiansburg", state: "VA" },
@@ -267,6 +283,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Vanderbilt University",
     city: "Nashville",
     state: "TN",
+    timezone: "America/Chicago",
     catchment: [
       { city: "Nashville", state: "TN" },
       { city: "Brentwood", state: "TN" },
@@ -286,6 +303,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Tennessee Knoxville",
     city: "Knoxville",
     state: "TN",
+    timezone: "America/New_York",
     catchment: [
       { city: "Knoxville", state: "TN" },
       { city: "Maryville", state: "TN" },
@@ -306,6 +324,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Kentucky",
     city: "Lexington",
     state: "KY",
+    timezone: "America/New_York",
     catchment: [
       { city: "Lexington", state: "KY" },
       { city: "Nicholasville", state: "KY" },
@@ -326,6 +345,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Ohio State University",
     city: "Columbus",
     state: "OH",
+    timezone: "America/New_York",
     catchment: [
       { city: "Columbus", state: "OH" },
       { city: "Dublin", state: "OH" },
@@ -348,6 +368,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Michigan",
     city: "Ann Arbor",
     state: "MI",
+    timezone: "America/Detroit",
     catchment: [
       { city: "Ann Arbor", state: "MI" },
       { city: "Ypsilanti", state: "MI" },
@@ -368,6 +389,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Michigan State University",
     city: "East Lansing",
     state: "MI",
+    timezone: "America/Detroit",
     catchment: [
       { city: "East Lansing", state: "MI" },
       { city: "Lansing", state: "MI" },
@@ -388,6 +410,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Penn State University",
     city: "State College",
     state: "PA",
+    timezone: "America/New_York",
     catchment: [
       { city: "State College", state: "PA" },
       { city: "Bellefonte", state: "PA" },
@@ -408,6 +431,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Wisconsin-Madison",
     city: "Madison",
     state: "WI",
+    timezone: "America/Chicago",
     lat: 43.0753,
     lon: -89.4034,
     catchment: [
@@ -430,6 +454,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Minnesota",
     city: "Minneapolis",
     state: "MN",
+    timezone: "America/Chicago",
     catchment: [
       { city: "Minneapolis", state: "MN" },
       { city: "St. Paul", state: "MN" },
@@ -453,6 +478,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Illinois Urbana-Champaign",
     city: "Champaign",
     state: "IL",
+    timezone: "America/Chicago",
     catchment: [
       { city: "Champaign", state: "IL" },
       { city: "Urbana", state: "IL" },
@@ -472,6 +498,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Indiana University Bloomington",
     city: "Bloomington",
     state: "IN",
+    timezone: "America/Indiana/Indianapolis",
     lat: 39.1653,
     lon: -86.5264,
     catchment: [
@@ -492,6 +519,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Colorado Boulder",
     city: "Boulder",
     state: "CO",
+    timezone: "America/Denver",
     catchment: [
       { city: "Boulder", state: "CO" },
       { city: "Lafayette", state: "CO" },
@@ -511,6 +539,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "Arizona State University",
     city: "Tempe",
     state: "AZ",
+    timezone: "America/Phoenix",
     lat: 33.4242,
     lon: -111.9281,
     catchment: [
@@ -535,6 +564,7 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
     name: "University of Utah",
     city: "Salt Lake City",
     state: "UT",
+    timezone: "America/Denver",
     lat: 40.7649,
     lon: -111.8421,
     catchment: [

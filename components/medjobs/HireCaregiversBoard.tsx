@@ -12,6 +12,7 @@ import { SAMPLE_CANDIDATES, isSampleSlug } from "@/lib/medjobs/demo-candidate";
 import CandidateBottomSheet from "@/components/medjobs/CandidateBottomSheet";
 import ScheduleInterviewModal, { type JobDetails } from "@/components/medjobs/ScheduleInterviewModal";
 import { PARTNER_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import { DEMAND_PROFILE_KEY, type DemandProfile } from "@/lib/medjobs/eligibility";
 import { REQUIREMENTS_KEY, type MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import type { CandidateData } from "@/components/medjobs/CandidateRow";
@@ -363,6 +364,7 @@ export default function HireCaregiversBoard() {
           onScheduled={() => setScheduleTarget(null)}
           jobDetails={jobDetails}
           studentAvailability={scheduleTarget.metadata?.availability_schedule}
+          studentTimezone={getStudentTimezone(scheduleTarget.metadata)}
         />
       )}
 

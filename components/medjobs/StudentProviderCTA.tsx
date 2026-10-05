@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient } from "@/lib/supabase/client";
 import ScheduleInterviewModal from "@/components/medjobs/ScheduleInterviewModal";
 import { calculateCompleteness } from "@/lib/medjobs-completeness";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import type { StudentMetadata } from "@/lib/types";
 
 /**
@@ -206,6 +207,7 @@ export default function StudentProviderCTA({
             setRequested(true);
             setResolvedId(null);
           }}
+          studentTimezone={getStudentTimezone(freshProfile?.metadata)}
         />
       )}
     </>

@@ -24,6 +24,7 @@ import {
   getAvailableTimeSlots,
   formatTimeSlot,
 } from "@/lib/medjobs/availability-utils";
+import { getStudentTimezone, dateTimeToISO, getTimezoneLabel } from "@/lib/medjobs/timezone";
 
 type ViewState = "profile" | "schedule" | "success";
 
@@ -153,26 +154,29 @@ export default function CandidateBottomSheet({
   const [error, setError] = useState("");
 
   const studentAvailability = candidate.metadata?.availability_schedule;
+  const studentTimezone = getStudentTimezone(candidate.metadata);
   const dateOptions = useMemo(
-    () => getDateOptions(studentAvailability),
-    [studentAvailability]
+    () => getDateOptions(studentAvailability, studentTimezone),
+    [studentAvailability, studentTimezone]
   );
   const timeOptions = useMemo(() => {
     if (!date) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(date + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(date + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, studentTimezone);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [date, studentAvailability]);
+  }, [date, studentAvailability, studentTimezone]);
   const altTimeOptions = useMemo(() => {
     if (!altDate) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(altDate + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(altDate + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, studentTimezone);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [altDate, studentAvailability]);
+  }, [altDate, studentAvailability, studentTimezone]);
 
   // Clear time selection if it's no longer valid after date change
   useEffect(() => {
@@ -278,8 +282,9 @@ export default function CandidateBottomSheet({
     setError("");
     setSubmitting(true);
 
-    const proposedTime = new Date(`${date}T${time}`).toISOString();
-    const alternativeTime = altDate && altTime ? new Date(`${altDate}T${altTime}`).toISOString() : undefined;
+    // Interpret selected time in student's timezone, not browser's local timezone
+    const proposedTime = dateTimeToISO(date, time, studentTimezone);
+    const alternativeTime = altDate && altTime ? dateTimeToISO(altDate, altTime, studentTimezone) : undefined;
 
     try {
       // Record terms acceptance
@@ -429,6 +434,7 @@ export default function CandidateBottomSheet({
               agreed={agreed}
               setAgreed={setAgreed}
               error={error}
+              studentTimezone={studentTimezone}
             />
           )}
 
@@ -851,6 +857,7 @@ interface ScheduleContentProps {
   agreed: boolean;
   setAgreed: (v: boolean) => void;
   error: string;
+  studentTimezone: string;
 }
 
 function ScheduleContent({
@@ -875,6 +882,7 @@ function ScheduleContent({
   agreed,
   setAgreed,
   error,
+  studentTimezone,
 }: ScheduleContentProps) {
   return (
     <div className="px-5 py-5 space-y-5">
@@ -939,6 +947,9 @@ function ScheduleContent({
           </select>
         </div>
       </div>
+      <p className="text-xs text-gray-500 -mt-1">
+        Times shown in {getTimezoneLabel(studentTimezone)}
+      </p>
 
       {/* Alternative Time */}
       {!showAltTime ? (

@@ -6,6 +6,7 @@ import Link from "next/link";
 import ScheduleInterviewModal, { type JobDetails } from "@/components/medjobs/ScheduleInterviewModal";
 import TermsModal from "@/components/medjobs/TermsModal";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import { DEMAND_PROFILE_KEY, type DemandProfile } from "@/lib/medjobs/eligibility";
 import { REQUIREMENTS_KEY, type MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import type { StudentMetadata } from "@/lib/types";
@@ -143,6 +144,8 @@ export default function ContactSection({
       onClose={() => setShowSchedule(false)}
       onScheduled={() => setShowSchedule(false)}
       jobDetails={jobDetails}
+      studentAvailability={candidate.metadata?.availability_schedule}
+      studentTimezone={getStudentTimezone(candidate.metadata)}
     />
   ) : null;
   const termsModal = showTerms ? (
