@@ -211,13 +211,14 @@ export default function BenefitsConversationPage() {
   const likely = programs.filter((p) => p.status === "likely");
   const checking = programs.filter((p) => p.status === "check");
 
-  // Segmented progress: the opening screens, the engine's answers, and its
-  // (only ever shrinking) estimate of what's left.
+  // Progress fills forward and never shows a count: a total that grew
+  // ("6 of 6", "7 of 7", "8 of 8" on the first walk-through) reads as
+  // endless. Done over done-plus-left only rises, because "left" only shrinks.
   const opening = (whoFromLink ? 0 : 1) + 2;
   const done =
     (step === "who" ? 0 : step === "need" ? (whoFromLink ? 0 : 1) : step === "zip" ? opening - 1 : opening) + asked.length;
-  const total = step === "engine" ? done + (leftShown ?? 1) : opening + 4;
-  const segments = Math.max(total, done + 1);
+  const left = step === "engine" ? (leftShown ?? 3) : opening - done + 4;
+  const fill = Math.min(0.95, (done + 0.5) / (done + left + 1));
   const showBar = step !== "reveal" && step !== "result";
 
   return (
@@ -232,16 +233,14 @@ export default function BenefitsConversationPage() {
 
       {showBar && (
         <div className="flex flex-col gap-3">
-          <div className="flex gap-1" aria-hidden="true">
-            {Array.from({ length: segments }).map((_, i) => (
-              <span key={i} className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= done ? "bg-primary-700" : "bg-gray-200"}`} />
-            ))}
+          <div className="h-1 rounded-full bg-gray-200 overflow-hidden" aria-hidden="true">
+            <div className="h-full rounded-full bg-primary-700 transition-[width] duration-500 ease-out" style={{ width: `${Math.round(fill * 100)}%` }} />
           </div>
           <div className="flex items-center justify-between text-[14px] text-gray-500 min-h-[22px]">
             {history.length ? (
               <button type="button" onClick={back} className="bg-transparent border-none p-0 text-gray-600 font-medium cursor-pointer">← Back</button>
             ) : <span />}
-            <span>{step === "engine" ? `${done + 1} of ${segments}` : "About 2 minutes"}</span>
+            <span>{step === "engine" ? ((leftShown ?? 3) <= 1 ? "Almost done" : "") : "About 2 minutes"}</span>
           </div>
         </div>
       )}
@@ -309,7 +308,9 @@ export default function BenefitsConversationPage() {
                 <p className="m-0 text-[16px] font-semibold text-gray-900">
                   {reward.length === 1
                     ? `${shortName(reward[0], stateName)} looks likely`
-                    : `${reward.slice(0, 2).map((n) => shortName(n, stateName)).join(" and ")}${reward.length > 2 ? ` and ${reward.length - 2} more` : ""} look likely`}
+                    : reward.length === 2
+                      ? `${shortName(reward[0], stateName)} and ${shortName(reward[1], stateName)} look likely`
+                      : `${shortName(reward[0], stateName)}, ${shortName(reward[1], stateName)} and ${reward.length - 2} more look likely`}
                 </p>
                 <p className="m-0 text-[14px] text-gray-500">Based on what you just told us.</p>
               </div>
