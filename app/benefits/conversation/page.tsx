@@ -8,6 +8,8 @@ import { questionCopy, shortName, type ConversationTurn, type ConversationProgra
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
 import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, type FinderProgram, type FinderResult, type FinderWho } from "@/lib/benefits/finder-answers";
 import { telHref } from "@/lib/benefits/call-script";
+import { trackBenefitsEvent } from "@/lib/analytics/track-step";
+import { getOrCreateSessionId } from "@/lib/analytics/session";
 
 /**
  * The benefits conversation (Phase 3, 5 Oct 2026), redesigned the same day
@@ -30,6 +32,13 @@ type Step = "who" | "need" | "zip" | "engine" | "reveal" | "result";
 const EMPTY: KnownFacts = { age: null, income: null, medicaid: null, veteran: null, dailyHelp: null, savings: null, disability: null, household: null };
 const FINDER_KEY = "olera-finder-v2";
 const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
+// Same events and key as the finder (hooks/use-finder.ts), a different
+// variant, so one query compares the two funnels step by step: the Phase 3
+// test is "caregivers complete it at least as often as the form".
+const TRACKING_KEY = "benefits-finder";
+const VARIANT = "conversation_v1";
+const ENTRY_SOURCE = "/benefits/conversation";
+type TrackEvent = "benefits_entry_viewed" | "benefits_step_viewed" | "benefits_step_completed";
 
 const WHO: { value: FinderWho; label: string }[] = [
   { value: "parent", label: "My mom or dad" },
@@ -82,10 +91,30 @@ export default function BenefitsConversationPage() {
   const [pillOpen, setPillOpen] = useState(false);
   const [plan, setPlan] = useState<FinderResult | null>(null);
   const rewardTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stepShownAt = useRef<number>(Date.now());
+  // True once the link's ?who= has been read, so the first screen logged is
+  // the one the family actually sees.
+  const [ready, setReady] = useState(false);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
   const v = finderVoice(who);
   const them = who === "me" || !who ? "you" : v.subject;
+
+  const track = useCallback((event: TrackEvent, stepName: string, stepNumber: number) => {
+    trackBenefitsEvent({
+      event,
+      sessionId: getOrCreateSessionId(),
+      stateCode,
+      stateName: null,
+      providerName: null,
+      providerSlug: TRACKING_KEY,
+      variant: VARIANT,
+      stepName,
+      stepNumber,
+      timeOnStepMs: event === "benefits_step_completed" ? Date.now() - stepShownAt.current : undefined,
+      entrySource: ENTRY_SOURCE,
+    });
+  }, [stateCode]);
 
   // A link from an email or the hub can say who it's for (?who=parent).
   useEffect(() => {
@@ -95,9 +124,31 @@ export default function BenefitsConversationPage() {
       setWhoFromLink(true);
       setStep("need");
     }
+    setReady(true);
   }, []);
 
   useEffect(() => () => { if (rewardTimer.current) clearTimeout(rewardTimer.current); }, []);
+
+  // The step a family is looking at: the opening screens by name, then each
+  // engine question by the fact it asks ("dailyHelp", "savings"), then the
+  // reveal and the result. Fired once per screen shown.
+  const viewName = !ready ? null : step === "engine" ? (turn?.question && !loading && !reward ? turn.question.fact : null) : step === "result" ? (plan ? "results" : null) : step;
+  const entryTracked = useRef(false);
+  const lastViewed = useRef<string | null>(null);
+  useEffect(() => {
+    if (!entryTracked.current) {
+      entryTracked.current = true;
+      track("benefits_entry_viewed", "entry", 0);
+    }
+  }, [track]);
+  useEffect(() => {
+    if (!viewName || viewName === lastViewed.current) return;
+    lastViewed.current = viewName;
+    stepShownAt.current = Date.now();
+    track("benefits_step_viewed", viewName, history.length + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewName]);
+  const completed = (name: string) => track("benefits_step_completed", name, history.length + 1);
 
   const ask = useCallback(async (f: KnownFacts, a: FactKey[], before: ConversationProgram[] | null) => {
     if (!stateCode) return;
@@ -141,6 +192,7 @@ export default function BenefitsConversationPage() {
   const remember = () => setHistory((h) => [...h, { step, facts, asked }]);
 
   const answerFact = (fact: FactKey, value: string | null) => {
+    completed(value ? fact : `${fact}:not_sure`);
     remember();
     const f = value ? ({ ...facts, [fact]: value } as KnownFacts) : facts;
     const a = [...asked, fact];
@@ -180,6 +232,7 @@ export default function BenefitsConversationPage() {
 
   /** The first call comes from the finder's engine, which reads the same answers. */
   const openResult = async () => {
+    completed("reveal");
     remember();
     setStep("result");
     setLoading(true);
@@ -199,6 +252,9 @@ export default function BenefitsConversationPage() {
   /** "Text me this" uses the finder's send-plan form, unchanged. */
   const textMe = () => {
     if (!plan) return;
+    // "contact" is the finder's name for asking for the plan; the track route
+    // turns it into a lead_started growth event.
+    completed("contact");
     try {
       localStorage.setItem(FINDER_KEY, JSON.stringify({ answers: finderAnswers(), stepIndex: 99, phase: "results", result: plan, cohort: null, savedAt: Date.now() }));
     } catch {
@@ -251,7 +307,7 @@ export default function BenefitsConversationPage() {
 
       {step === "who" && (
         <Screen key="who" title="Who are you looking into benefits for?">
-          {WHO.map((o) => <Choice key={o.value} label={o.label} onClick={() => { remember(); setWho(o.value); setStep("need"); }} />)}
+          {WHO.map((o) => <Choice key={o.value} label={o.label} onClick={() => { completed("who"); remember(); setWho(o.value); setStep("need"); }} />)}
         </Screen>
       )}
 
@@ -262,7 +318,7 @@ export default function BenefitsConversationPage() {
               <button
                 key={o.value}
                 type="button"
-                onClick={() => { remember(); setNeed(o.value); setStep("zip"); }}
+                onClick={() => { completed("need"); remember(); setNeed(o.value); setStep("zip"); }}
                 className={`text-left bg-white border border-gray-200 rounded-[18px] p-3.5 cursor-pointer active:scale-[.98] transition-transform [@media(hover:hover)]:hover:border-primary-600 ${o.wide ? "col-span-2 flex items-center gap-3" : "flex flex-col gap-2.5"}`}
               >
                 <Obj name={o.icon} size={o.wide ? 36 : 44} />
@@ -281,6 +337,7 @@ export default function BenefitsConversationPage() {
               const st = zip.length === 5 ? zipToState(zip) : null;
               if (!st) { setError(zip.length === 5 ? "We can only look up programs in the 50 states and DC so far. Check the five digits." : "Enter all five digits."); return; }
               setError(null);
+              completed("zip");
               remember();
               setStateCode(st);
               setTurn(null);
@@ -375,7 +432,7 @@ export default function BenefitsConversationPage() {
               <button type="button" onClick={() => { setHistory((h) => h.slice(0, -1)); void openResult(); }} className="min-h-[52px] px-5 rounded-2xl bg-gray-900 text-white font-semibold border-none cursor-pointer">Try again</button>
             </div>
           ) : <Thinking text="Putting your first call together…" />
-        ) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} />
+        ) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} onCall={() => completed("call")} />
       )}
 
       {error && <p role="alert" className="text-[15px] text-red-700 m-0">{error}</p>}
@@ -422,7 +479,7 @@ function Thinking({ text }: { text: string }) {
   );
 }
 
-function ResultView({ plan, callFor, onBack, onTextMe }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void }) {
+function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void; onCall: () => void }) {
   const [open, setOpen] = useState<"say" | "ready" | "more" | null>(null);
   const first: FinderProgram | null = plan.firstStep;
   const likelyRest = plan.programs.filter((p) => p.tier === "likely");
@@ -445,7 +502,7 @@ function ResultView({ plan, callFor, onBack, onTextMe }: { plan: FinderResult; c
         <h1 className="font-display text-[32px] leading-[1.05] text-gray-900 m-0">{first.shortName}</h1>
         {first.what ? <p className="m-0 text-[15px] text-gray-600">{first.what}</p> : null}
         {first.phone ? (
-          <a href={telHref(first.phone)} className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline">
+          <a href={telHref(first.phone)} onClick={onCall} className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline">
             Call {first.phone}
           </a>
         ) : null}

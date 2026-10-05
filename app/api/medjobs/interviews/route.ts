@@ -11,6 +11,7 @@ import { interviewProposedEmail, interviewConfirmedEmail, interviewCancelledEmai
 import { studentInterestColdEmail, interviewRequestSentEmail } from "@/lib/medjobs-email-templates";
 import { getUniversityBySlug } from "@/lib/staffing-outreach/partner-universities";
 import { MEDJOBS_INTERVIEW_OPEN_LOOP } from "@/lib/medjobs/flags";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import type { InterviewStatus } from "@/lib/types";
 
 function getAdminClient() {
@@ -119,7 +120,7 @@ export async function POST(request: NextRequest) {
 
     const { data: callerProfiles } = await admin
       .from("business_profiles")
-      .select("id, type, display_name, email")
+      .select("id, type, display_name, email, metadata")
       .eq("account_id", account.id);
 
     if (!callerProfiles?.length) {
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
     let resolvedStudentId: string;
     let proposedById: string;
     let providerProfile: { id: string; display_name: string; email: string; slug?: string };
-    let studentProfile: { id: string; display_name: string; email: string; slug?: string };
+    let studentProfile: { id: string; display_name: string; email: string; slug?: string; metadata?: Record<string, unknown> };
 
     // Track if interview should be held for verification
     let isPendingVerification = false;
@@ -168,7 +169,7 @@ export async function POST(request: NextRequest) {
 
       const { data: target } = await admin
         .from("business_profiles")
-        .select("id, display_name, email, slug")
+        .select("id, display_name, email, slug, metadata")
         .eq("id", studentProfileId)
         .eq("type", "student")
         .single();
@@ -178,7 +179,7 @@ export async function POST(request: NextRequest) {
       resolvedStudentId = target.id;
       proposedById = callerProvider.id;
       providerProfile = callerProvider as typeof providerProfile;
-      studentProfile = target;
+      studentProfile = target as typeof studentProfile;
     } else {
       // Student → Provider flow
       const callerStudent = callerProfiles.find((p) => p.type === "student");
@@ -325,16 +326,18 @@ export async function POST(request: NextRequest) {
     if (!isPendingVerification) {
       try {
         const typeLabel = type === "video" ? "Video" : type === "in_person" ? "In-Person" : "Phone";
+        // Use student's university timezone for email formatting
+        const studentTimezone = getStudentTimezone(studentProfile.metadata);
         const time = new Date(proposedTime).toLocaleString("en-US", {
           weekday: "long", month: "long", day: "numeric",
           hour: "numeric", minute: "2-digit", timeZoneName: "short",
-          timeZone: "America/Chicago",
+          timeZone: studentTimezone,
         });
         const formattedAltTime = alternativeTime
           ? new Date(alternativeTime).toLocaleString("en-US", {
               weekday: "long", month: "long", day: "numeric",
               hour: "numeric", minute: "2-digit", timeZoneName: "short",
-              timeZone: "America/Chicago",
+              timeZone: studentTimezone,
             })
           : null;
 
@@ -538,7 +541,7 @@ export async function PATCH(request: NextRequest) {
       .select(`
         *,
         provider:business_profiles!interviews_provider_profile_id_fkey(id, display_name, email, slug),
-        student:business_profiles!interviews_student_profile_id_fkey(id, display_name, email, slug)
+        student:business_profiles!interviews_student_profile_id_fkey(id, display_name, email, slug, metadata)
       `)
       .eq("id", interviewId)
       .single();
@@ -613,7 +616,9 @@ export async function PATCH(request: NextRequest) {
 
     // Send emails based on status change
     const provider = interview.provider as { display_name: string; email: string; slug: string };
-    const student = interview.student as { display_name: string; email: string; slug: string };
+    const student = interview.student as { display_name: string; email: string; slug: string; metadata?: Record<string, unknown> };
+    // Use student's university timezone for email formatting
+    const studentTimezone = getStudentTimezone(student.metadata);
 
     if (status === "confirmed") {
       const confirmedTime = new Date(interview.proposed_time);
@@ -634,7 +639,7 @@ export async function PATCH(request: NextRequest) {
       const time = confirmedTime.toLocaleString("en-US", {
         weekday: "long", month: "long", day: "numeric",
         hour: "numeric", minute: "2-digit", timeZoneName: "short",
-        timeZone: "America/Chicago",
+        timeZone: studentTimezone,
       });
 
       // Generate view URLs - both parties get a one-click magic link for auto-sign-in
@@ -717,7 +722,7 @@ export async function PATCH(request: NextRequest) {
           const interviewTime = new Date(interview.confirmed_time || interview.proposed_time).toLocaleString("en-US", {
             weekday: "long", month: "long", day: "numeric",
             hour: "numeric", minute: "2-digit", timeZoneName: "short",
-            timeZone: "America/Chicago",
+            timeZone: studentTimezone,
           });
           const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/admin/caregivers/${student.slug || interview.student_profile_id}`;
           await sendEmail({
@@ -740,7 +745,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Reschedule: a new time was proposed (status was flipped back to "proposed"
-    // above). Notify the OTHER party so they can review it like a fresh request
+    // above). Notify the OTHER party so they can review the suggested new time.
     // [H3] — without this the rescheduled time silently never reaches them.
     if (status === "rescheduled" && newTime) {
       try {
@@ -752,7 +757,7 @@ export async function PATCH(request: NextRequest) {
         const time = new Date(newTime).toLocaleString("en-US", {
           weekday: "long", month: "long", day: "numeric",
           hour: "numeric", minute: "2-digit", timeZoneName: "short",
-          timeZone: "America/Chicago",
+          timeZone: studentTimezone,
         });
 
         // Recipient gets a one-click magic link to their respective surface.
@@ -785,6 +790,7 @@ export async function PATCH(request: NextRequest) {
               alternativeTime: null,
               notes: interview.notes || null,
               viewUrl: recipientViewUrl,
+              isReschedule: true,
             }),
             emailType: "interview_proposed",
             recipientType: callerIsProvider ? "student" : "provider",

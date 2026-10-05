@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { generateProviderSlug } from "@/lib/slugify";
 import { LADDERS, type ContactField, type SectionKey } from "@/lib/medjobs/ladders";
 import {
   SKIPPED,
@@ -93,6 +94,7 @@ type Body =
     }
   | { op: "unarchive_record"; recordId: string }
   | { op: "clear_flag"; recordId: string }
+  | { op: "revert_status"; recordId: string }
   | { op: "delete_record"; recordId: string; reason?: string }
   | {
       op: "save_fields";
@@ -293,7 +295,52 @@ async function createFound(
   // Migration 074 requires a provider row to say where it came from, and a
   // swept one has no directory behind it. 235 accepts manual_entry for
   // exactly this.
-  if (provider) research.manual_entry = true;
+  if (provider) {
+    research.manual_entry = true;
+
+    // Create a directory entry so the provider is linkable from MedJobs.
+    // This makes manually added providers show up in the directory and
+    // enables the "View in directory" link.
+    const baseSlug = generateProviderSlug(found.name, null);
+
+    // Only create directory entry if we can generate a valid slug
+    // (names like "!!!" would produce an empty slug)
+    if (baseSlug) {
+      const providerId = crypto.randomUUID();
+
+      // Ensure slug uniqueness
+      let slug = baseSlug;
+      const { data: existing } = await db
+        .from("olera-providers")
+        .select("provider_id")
+        .eq("slug", baseSlug)
+        .limit(1);
+      if (existing && existing.length > 0) {
+        slug = `${baseSlug}-${Math.random().toString(36).slice(2, 7)}`;
+      }
+
+      const { error: dirError } = await db.from("olera-providers").insert({
+        provider_id: providerId,
+        provider_name: found.name.slice(0, 200),
+        provider_category: "Home Care (Non-medical)", // Default for MedJobs providers
+        slug,
+        deleted: false,
+        deleted_at: null,
+        phone: found.phone?.trim() ? formatPhone(found.phone) : null,
+        email: found.email?.trim() || null,
+        website: found.website?.trim() || null,
+        address: found.address?.trim() || null,
+      });
+
+      if (!dirError) {
+        // Store the directory link so the provider can be opened in the directory
+        research.olera_provider_id = providerId;
+        research.olera_provider_slug = slug;
+      }
+      // If directory creation fails, continue anyway — the MedJobs record is
+      // still useful, just without a directory link.
+    }
+  }
   if (found.website?.trim()) research.website = found.website.trim();
   if (found.address?.trim()) research.address = found.address.trim();
   if (found.date?.trim()) research.date = found.date.trim();
@@ -960,6 +1007,8 @@ export async function POST(req: Request) {
             archived_reason: body.reason ?? null,
             archived_by: user.id,
             archived_at: new Date().toISOString(),
+            // Preserve the original status so unarchive can restore it.
+            archived_from_status: outreach.status,
           },
         })
         .eq("id", outreach.id);
@@ -987,23 +1036,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    case "unarchive_record": {
-      const research = { ...((outreach.research_data ?? {}) as Record<string, unknown>) };
-      delete research.archived_reason;
-      delete research.archived_by;
-      delete research.archived_at;
-
+    // ── clear a finished status ──────────────────────────────────────────────
+    // Undo a "ready for students" or other finished state so the record can
+    // be worked again. This is for when somebody reached the goal by mistake
+    // or the situation changed.
+    case "revert_status": {
       const { error } = await db
         .from("student_outreach")
-        .update({ ...stamp(user.id), status: "researched", research_data: research })
+        .update({ ...stamp(user.id), status: "in_progress" })
         .eq("id", outreach.id);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-      // Give it something to do again, but only if nothing is open already.
-      // A provider restarts at rung 0, which is now Research: a record that
-      // has been off the board wants looking at before it is called. An
-      // advisor starts at 1, because rung 0 there is the fan-out that found
-      // it in the first place.
+      // Give it a task to pick up from, starting at the first rung. A record
+      // whose status was cleared probably needs to be re-confirmed rather
+      // than picked up mid-ladder.
       const { count } = await db
         .from("student_outreach_tasks")
         .select("id", { count: "exact", head: true })
@@ -1017,6 +1063,56 @@ export async function POST(req: Request) {
           due_at: new Date().toISOString().slice(0, 10),
           payload: { step: outreach.kind === "provider" ? 0 : 1, round: 0 },
         });
+      }
+      return NextResponse.json({ ok: true, cleared: outreach.organization_name });
+    }
+
+    case "unarchive_record": {
+      const research = { ...((outreach.research_data ?? {}) as Record<string, unknown>) };
+      // Restore the original status if it was a "finished" state, otherwise
+      // reset to researched. A provider who was ready_for_students before
+      // archiving should stay that way — they completed the ladder.
+      const FINISHED_STATUSES = new Set([
+        "active_partner",
+        "ready_for_students",
+        "not_interested",
+        "no_response_closed",
+        "do_not_contact",
+        "wrong_contact",
+      ]);
+      const originalStatus = research.archived_from_status as string | undefined;
+      const restoredStatus =
+        originalStatus && FINISHED_STATUSES.has(originalStatus) ? originalStatus : "researched";
+
+      delete research.archived_reason;
+      delete research.archived_by;
+      delete research.archived_at;
+      delete research.archived_from_status;
+
+      const { error } = await db
+        .from("student_outreach")
+        .update({ ...stamp(user.id), status: restoredStatus, research_data: research })
+        .eq("id", outreach.id);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+      // Give it something to do again, but only if:
+      // 1. Nothing is open already, AND
+      // 2. The record wasn't in a finished state (finished records are done climbing)
+      if (restoredStatus === "researched") {
+        const { count } = await db
+          .from("student_outreach_tasks")
+          .select("id", { count: "exact", head: true })
+          .eq("outreach_id", outreach.id)
+          .eq("status", "pending");
+        if (!count) {
+          await db.from("student_outreach_tasks").insert({
+            outreach_id: outreach.id,
+            task_type: "outreach_contact",
+            status: "pending",
+            due_at: new Date().toISOString().slice(0, 10),
+            payload: { step: outreach.kind === "provider" ? 0 : 1, round: 0 },
+          });
+        }
       }
       return NextResponse.json({ ok: true, restored: outreach.organization_name });
     }

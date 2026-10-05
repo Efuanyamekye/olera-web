@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuth } from "@/components/auth/AuthProvider";
 import DrDuBoseWelcome from "@/components/medjobs/DrDuBoseWelcome";
 import ScheduleInterviewModal, { type JobDetails } from "@/components/medjobs/ScheduleInterviewModal";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import { DEMAND_PROFILE_KEY, type DemandProfile } from "@/lib/medjobs/eligibility";
 import { REQUIREMENTS_KEY, type MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import { createClient } from "@/lib/supabase/client";
@@ -673,6 +674,8 @@ function CandidateBrowseInner() {
           onClose={() => setScheduleTarget(null)}
           onScheduled={() => setScheduleTarget(null)}
           jobDetails={jobDetails}
+          studentAvailability={scheduleTarget.metadata?.availability_schedule}
+          studentTimezone={getStudentTimezone(scheduleTarget.metadata)}
         />
       )}
 

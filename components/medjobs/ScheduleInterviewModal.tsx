@@ -16,6 +16,7 @@ import {
   getAvailableTimeSlots,
   formatTimeSlot,
 } from "@/lib/medjobs/availability-utils";
+import { getTimezoneLabel, DEFAULT_TIMEZONE, dateTimeToISO } from "@/lib/medjobs/timezone";
 
 export interface ScheduleFormData {
   type: "video" | "in_person" | "phone";
@@ -56,6 +57,8 @@ interface ScheduleInterviewModalProps {
   jobDetails?: JobDetails;
   /** Student's availability schedule - used to filter date/time options (provider → student only) */
   studentAvailability?: AvailabilitySchedule;
+  /** Student's timezone (IANA format) - displayed for clarity. Defaults to America/Chicago. */
+  studentTimezone?: string;
 }
 
 const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[] = [
@@ -200,6 +203,7 @@ export default function ScheduleInterviewModal({
   onScheduledUnverified,
   jobDetails,
   studentAvailability,
+  studentTimezone,
 }: ScheduleInterviewModalProps) {
   // Pre-fill notes with job description if provided and no initial notes
   const defaultNotes = initialValues?.notes ?? jobDetails?.job_description ?? "";
@@ -221,9 +225,11 @@ export default function ScheduleInterviewModal({
   const firstName = otherName.split(" ")[0];
 
   // Date and time options for dropdowns - filtered by student availability when provided
+  // Use student's timezone to determine "today" and day-of-week correctly
+  const tz = studentTimezone ?? DEFAULT_TIMEZONE;
   const dateOptions = useMemo(
-    () => getDateOptions(studentAvailability),
-    [studentAvailability]
+    () => getDateOptions(studentAvailability, tz),
+    [studentAvailability, tz]
   );
 
   // Time options filtered by selected date's availability windows
@@ -232,20 +238,22 @@ export default function ScheduleInterviewModal({
       // No date selected yet - show all times (will be filtered once date is picked)
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(date + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(date + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, tz);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [date, studentAvailability]);
+  }, [date, studentAvailability, tz]);
 
   // Time options for alternative time (same filtering logic)
   const altTimeOptions = useMemo(() => {
     if (!altDate) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(altDate + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(altDate + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, tz);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [altDate, studentAvailability]);
+  }, [altDate, studentAvailability, tz]);
 
   // Clear time selection if it's no longer valid after date change
   useEffect(() => {
@@ -300,8 +308,10 @@ export default function ScheduleInterviewModal({
       }
     }
 
-    const proposedTime = new Date(`${date}T${time}`).toISOString();
-    const alternativeTime = altDate && altTime ? new Date(`${altDate}T${altTime}`).toISOString() : undefined;
+    // Interpret selected date/time in the student's timezone, not browser's local timezone
+    const tz = studentTimezone ?? DEFAULT_TIMEZONE;
+    const proposedTime = dateTimeToISO(date, time, tz);
+    const alternativeTime = altDate && altTime ? dateTimeToISO(altDate, altTime, tz) : undefined;
 
     try {
       // Provider → student: record the one-time Terms acceptance (the scheduling
@@ -519,6 +529,11 @@ export default function ScheduleInterviewModal({
             />
           </div>
         </div>
+
+        {/* Timezone indicator */}
+        <p className="text-xs text-gray-500 -mt-3">
+          Times shown in {getTimezoneLabel(studentTimezone ?? DEFAULT_TIMEZONE)}
+        </p>
 
         {/* Alternative time - progressive disclosure */}
         {!showAltTime ? (

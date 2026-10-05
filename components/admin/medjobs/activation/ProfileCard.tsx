@@ -24,6 +24,8 @@ export interface ProfileRow {
   detail?: string | null;
   /** Red dot: something is due on this row today. */
   due?: boolean;
+  /** Slug for linking to the admin directory page. */
+  directorySlug?: string | null;
 }
 
 export default function ProfileCard({
@@ -37,6 +39,7 @@ export default function ProfileCard({
   addLabel,
   onAdd,
   onOpenRow,
+  onOpenDirectory,
 }: {
   title: string;
   /** Null renders a dash — the metric exists but is not instrumented. */
@@ -49,6 +52,8 @@ export default function ProfileCard({
   addLabel?: string;
   onAdd?: () => void;
   onOpenRow?: (id: string) => void;
+  /** Opens the provider's directory page. Called with the slug. */
+  onOpenDirectory?: (slug: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const n = (v: number | null) => (v == null ? "—" : String(v));
@@ -79,10 +84,17 @@ export default function ProfileCard({
             <ul className="divide-y divide-gray-100">
               {rows.map((r) => (
                 <li key={r.id}>
-                  <button
-                    type="button"
+                  <div
+                    role={onOpenRow ? "button" : undefined}
+                    tabIndex={onOpenRow ? 0 : undefined}
                     onClick={() => onOpenRow?.(r.id)}
-                    className="flex w-full items-center gap-2 py-2 text-left hover:bg-gray-50"
+                    onKeyDown={(e) => {
+                      if (onOpenRow && (e.key === "Enter" || e.key === " ")) {
+                        e.preventDefault();
+                        onOpenRow(r.id);
+                      }
+                    }}
+                    className={`flex w-full items-center gap-2 py-2 text-left${onOpenRow ? " cursor-pointer hover:bg-gray-50" : ""}`}
                   >
                     <span className="w-2 shrink-0">
                       {r.due ? (
@@ -90,13 +102,26 @@ export default function ProfileCard({
                       ) : null}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13px] text-gray-900">{r.name}</span>
+                      {r.directorySlug && onOpenDirectory ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenDirectory(r.directorySlug!);
+                          }}
+                          className="block truncate text-[13px] text-gray-900 hover:text-primary-700 text-left"
+                        >
+                          {r.name}
+                        </button>
+                      ) : (
+                        <span className="block truncate text-[13px] text-gray-900">{r.name}</span>
+                      )}
                       {r.detail ? (
                         <span className="block truncate text-[11px] text-gray-500">{r.detail}</span>
                       ) : null}
                     </span>
                     <span className="shrink-0 text-[11px] text-gray-500">{r.state}</span>
-                  </button>
+                  </div>
                 </li>
               ))}
             </ul>

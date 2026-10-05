@@ -4498,13 +4498,20 @@ export function interviewProposedEmail(opts: {
   alternativeTime?: string | null;
   notes: string | null;
   viewUrl: string;
+  isReschedule?: boolean;
 }): string {
   const safeProposerName = escapeHtml(opts.proposerName);
+  const headline = opts.isReschedule
+    ? "New interview time suggested"
+    : "You have an interview request";
+  const bodyText = opts.isReschedule
+    ? `<strong>${safeProposerName}</strong> has suggested a new time for your ${escapeHtml(opts.interviewType.toLowerCase())} interview.`
+    : `<strong>${safeProposerName}</strong> would like to schedule a ${escapeHtml(opts.interviewType.toLowerCase())} interview with you.`;
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">You have an interview request</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      <strong>${safeProposerName}</strong> would like to schedule a ${escapeHtml(opts.interviewType.toLowerCase())} interview with you.
+      ${bodyText}
     </p>
     <div style="background:#f9fafb;border-radius:12px;padding:20px;margin:0 0 24px;">
       <p style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px;">Interview Details</p>
@@ -4520,11 +4527,13 @@ export function interviewProposedEmail(opts: {
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
       Review the details and respond to let them know if you're available.
     </p>
-    <div style="margin:0 0 24px;">${button("View Full Job Details", opts.viewUrl)}</div>
+    <div style="margin:0 0 24px;">${button("View Interview Details", opts.viewUrl)}</div>
     <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">
       Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
     </p>
-  `, `${opts.proposerName} wants to schedule an interview with you`);
+  `, opts.isReschedule
+    ? `${opts.proposerName} suggested a new interview time`
+    : `${opts.proposerName} wants to schedule an interview with you`);
 }
 
 /** Email sent to provider when they schedule an interview (confirmation that it was sent) */

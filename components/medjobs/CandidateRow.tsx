@@ -42,6 +42,8 @@ export interface CandidateData {
   updated_at?: string;
   lat?: number | null;
   lng?: number | null;
+  /** Placement status with the current provider (if authenticated) */
+  placementStatus?: "offered" | "accepted" | "confirmed" | null;
 }
 
 interface CandidateRowProps {

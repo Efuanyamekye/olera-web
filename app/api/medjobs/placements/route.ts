@@ -129,8 +129,8 @@ export async function POST(request: Request) {
   // Send placement offer email to student
   if (studentProfile?.email && providerProfile?.display_name) {
     try {
-      // Use generic student portal URL (authenticates and redirects to MedJobs portal)
-      const studentViewUrl = generateStudentPortalUrl(studentProfile.email, "/portal/medjobs");
+      // Route to interviews page where placements are displayed
+      const studentViewUrl = generateStudentPortalUrl(studentProfile.email, "/portal/medjobs/interviews");
 
       await sendEmail({
         to: studentProfile.email,
@@ -246,9 +246,9 @@ export async function PATCH(request: Request) {
         });
       }
 
-      // Send confirmation to student
+      // Send confirmation to student — route to interviews page where placements are shown
       if (studentProfile.email) {
-        const studentViewUrl = generateStudentPortalUrl(studentProfile.email, "/portal/medjobs");
+        const studentViewUrl = generateStudentPortalUrl(studentProfile.email, "/portal/medjobs/interviews");
 
         await sendEmail({
           to: studentProfile.email,
@@ -301,7 +301,7 @@ export async function PATCH(request: Request) {
     }
 
     if (body.action === "cancel" && studentProfile && providerProfile) {
-      // Provider cancelled — notify student
+      // Provider cancelled — route student back to their profile
       if (studentProfile.email) {
         const studentViewUrl = generateStudentPortalUrl(studentProfile.email, "/portal/medjobs");
 

@@ -24,6 +24,7 @@ import {
   getAvailableTimeSlots,
   formatTimeSlot,
 } from "@/lib/medjobs/availability-utils";
+import { getStudentTimezone, dateTimeToISO, getTimezoneLabel } from "@/lib/medjobs/timezone";
 
 type ViewState = "profile" | "schedule" | "success";
 
@@ -153,26 +154,29 @@ export default function CandidateBottomSheet({
   const [error, setError] = useState("");
 
   const studentAvailability = candidate.metadata?.availability_schedule;
+  const studentTimezone = getStudentTimezone(candidate.metadata);
   const dateOptions = useMemo(
-    () => getDateOptions(studentAvailability),
-    [studentAvailability]
+    () => getDateOptions(studentAvailability, studentTimezone),
+    [studentAvailability, studentTimezone]
   );
   const timeOptions = useMemo(() => {
     if (!date) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(date + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(date + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, studentTimezone);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [date, studentAvailability]);
+  }, [date, studentAvailability, studentTimezone]);
   const altTimeOptions = useMemo(() => {
     if (!altDate) {
       return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
     }
-    const selectedDate = new Date(altDate + "T00:00:00");
-    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    // Use UTC noon to avoid timezone day-boundary issues
+    const selectedDate = new Date(altDate + "T12:00:00Z");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability, studentTimezone);
     return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
-  }, [altDate, studentAvailability]);
+  }, [altDate, studentAvailability, studentTimezone]);
 
   // Clear time selection if it's no longer valid after date change
   useEffect(() => {
@@ -278,8 +282,9 @@ export default function CandidateBottomSheet({
     setError("");
     setSubmitting(true);
 
-    const proposedTime = new Date(`${date}T${time}`).toISOString();
-    const alternativeTime = altDate && altTime ? new Date(`${altDate}T${altTime}`).toISOString() : undefined;
+    // Interpret selected time in student's timezone, not browser's local timezone
+    const proposedTime = dateTimeToISO(date, time, studentTimezone);
+    const alternativeTime = altDate && altTime ? dateTimeToISO(altDate, altTime, studentTimezone) : undefined;
 
     try {
       // Record terms acceptance
@@ -429,6 +434,7 @@ export default function CandidateBottomSheet({
               agreed={agreed}
               setAgreed={setAgreed}
               error={error}
+              studentTimezone={studentTimezone}
             />
           )}
 
@@ -443,19 +449,32 @@ export default function CandidateBottomSheet({
             className="px-5 py-4 border-t border-gray-200 bg-white shrink-0"
             style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setError(""); // Clear any previous errors
-                setView("schedule");
-              }}
-              className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-              Schedule interview
-            </button>
+            {candidate.placementStatus ? (
+              // Student is already hired by this provider
+              <a
+                href="/provider/caregivers"
+                className="w-full py-3.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {candidate.placementStatus === "offered" ? "Offer pending" : "Already hired"} — View interviews
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setError(""); // Clear any previous errors
+                  setView("schedule");
+                }}
+                className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+                Schedule interview
+              </button>
+            )}
           </div>
         )}
 
@@ -851,6 +870,7 @@ interface ScheduleContentProps {
   agreed: boolean;
   setAgreed: (v: boolean) => void;
   error: string;
+  studentTimezone: string;
 }
 
 function ScheduleContent({
@@ -875,6 +895,7 @@ function ScheduleContent({
   agreed,
   setAgreed,
   error,
+  studentTimezone,
 }: ScheduleContentProps) {
   return (
     <div className="px-5 py-5 space-y-5">
@@ -939,6 +960,9 @@ function ScheduleContent({
           </select>
         </div>
       </div>
+      <p className="text-xs text-gray-500 -mt-1">
+        Times shown in {getTimezoneLabel(studentTimezone)}
+      </p>
 
       {/* Alternative Time */}
       {!showAltTime ? (

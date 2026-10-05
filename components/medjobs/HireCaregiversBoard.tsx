@@ -12,6 +12,7 @@ import { SAMPLE_CANDIDATES, isSampleSlug } from "@/lib/medjobs/demo-candidate";
 import CandidateBottomSheet from "@/components/medjobs/CandidateBottomSheet";
 import ScheduleInterviewModal, { type JobDetails } from "@/components/medjobs/ScheduleInterviewModal";
 import { PARTNER_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import { DEMAND_PROFILE_KEY, type DemandProfile } from "@/lib/medjobs/eligibility";
 import { REQUIREMENTS_KEY, type MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import type { CandidateData } from "@/components/medjobs/CandidateRow";
@@ -328,10 +329,18 @@ export default function HireCaregiversBoard() {
                         setSelectedCandidate(c);
                       }
                     }}
-                    className={`cursor-pointer rounded-2xl transition-shadow ${
+                    className={`cursor-pointer rounded-2xl transition-shadow relative ${
                       selectedCandidate?.id === c.id ? "ring-2 ring-primary-500 shadow-md" : ""
-                    }`}
+                    } ${c.placementStatus ? "ring-2 ring-emerald-300" : ""}`}
                   >
+                    {c.placementStatus && (
+                      <div className="absolute top-3 right-3 z-10 px-2.5 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        {c.placementStatus === "offered" ? "Offer sent" : "Hired"}
+                      </div>
+                    )}
                     <BrowseCard
                       provider={candidateToCardFormat(c)}
                       variant="candidate"
@@ -363,6 +372,7 @@ export default function HireCaregiversBoard() {
           onScheduled={() => setScheduleTarget(null)}
           jobDetails={jobDetails}
           studentAvailability={scheduleTarget.metadata?.availability_schedule}
+          studentTimezone={getStudentTimezone(scheduleTarget.metadata)}
         />
       )}
 

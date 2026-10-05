@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ScheduleInterviewModal, { type JobDetails } from "@/components/medjobs/ScheduleInterviewModal";
 import TermsModal from "@/components/medjobs/TermsModal";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { getStudentTimezone } from "@/lib/medjobs/timezone";
 import { DEMAND_PROFILE_KEY, type DemandProfile } from "@/lib/medjobs/eligibility";
 import { REQUIREMENTS_KEY, type MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import type { StudentMetadata } from "@/lib/types";
@@ -45,9 +46,36 @@ export default function ContactSection({
   const { profiles, refreshAccountData } = useAuth();
   const [showSchedule, setShowSchedule] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [placementStatus, setPlacementStatus] = useState<"offered" | "accepted" | "confirmed" | null>(null);
   const providerProfile = profiles.find(
     (p) => p.type === "organization" || p.type === "caregiver",
   );
+
+  // Check if this provider has an active placement with this student
+  useEffect(() => {
+    if (!providerProfile?.id || !candidate.id || isSample) return;
+
+    const checkPlacement = async () => {
+      try {
+        const res = await fetch("/api/medjobs/placements");
+        if (!res.ok) return;
+        const data = await res.json();
+        // Find active placement with this specific student
+        const activePlacement = data.placements?.find(
+          (p: { student_profile_id: string; status: string }) =>
+            p.student_profile_id === candidate.id &&
+            ["offered", "accepted", "confirmed"].includes(p.status)
+        );
+        if (activePlacement) {
+          setPlacementStatus(activePlacement.status);
+        }
+      } catch {
+        // Ignore errors - just don't show placement status
+      }
+    };
+
+    void checkPlacement();
+  }, [providerProfile?.id, candidate.id, isSample]);
   const providerMeta = useMemo(
     () => (providerProfile?.metadata ?? {}) as Record<string, unknown>,
     [providerProfile?.metadata]
@@ -143,6 +171,8 @@ export default function ContactSection({
       onClose={() => setShowSchedule(false)}
       onScheduled={() => setShowSchedule(false)}
       jobDetails={jobDetails}
+      studentAvailability={candidate.metadata?.availability_schedule}
+      studentTimezone={getStudentTimezone(candidate.metadata)}
     />
   ) : null;
   const termsModal = showTerms ? (
@@ -175,6 +205,18 @@ export default function ContactSection({
     cta = (
       <Link href="/medjobs/candidates?activate=1" className={ctaClass}>
         Schedule an interview →
+      </Link>
+    );
+  } else if (!isSample && placementStatus) {
+    // Real candidate with active placement — show "Already hired" with link to interviews
+    const hiredCtaClass =
+      "flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-sm font-semibold text-emerald-700 transition-colors";
+    cta = (
+      <Link href="/provider/caregivers" className={hiredCtaClass}>
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {placementStatus === "offered" ? "Offer pending" : "Already hired"} — View interviews
       </Link>
     );
   } else if (!isSample) {

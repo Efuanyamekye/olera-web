@@ -107,6 +107,7 @@ export default function RecordView({
   onNext,
   onRevive,
   onArchive,
+  onRevertStatus,
   onDelete,
   onClearFlag,
   campus,
@@ -137,6 +138,8 @@ export default function RecordView({
   onNext?: (() => void) | null;
   onRevive: () => void;
   onArchive: () => void;
+  /** Clear the finished status (ready for students, etc.) so the record can be worked again. */
+  onRevertStatus?: () => void;
   /** Take the manager-review flag off, once the team has sorted it. */
   onClearFlag: () => void;
   /** Destroys the record. The caller confirms first. */
@@ -222,6 +225,18 @@ export default function RecordView({
               )}
             </h3>
           )}
+          {/* View in directory link — explicit navigation to the full provider profile */}
+          {record.directorySlug && (
+            <a
+              href={`/admin/directory/${record.directorySlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 inline-flex items-center gap-1 text-[12.5px] font-medium text-primary-700 hover:text-primary-800 hover:underline"
+            >
+              <OpenIcon />
+              View in directory
+            </a>
+          )}
           {record.state && (
             <p className="mt-0.5 text-[12.5px] text-gray-500">{record.state}</p>
           )}
@@ -230,7 +245,15 @@ export default function RecordView({
         {position && position.of > 1 && (
           <Neighbours position={position} onPrev={onPrev} onNext={onNext} />
         )}
-        {!fixed && <RecordMenu onArchive={onArchive} onDelete={onDelete} disabled={busy} />}
+        {!fixed && (
+          <RecordMenu
+            onArchive={onArchive}
+            onRevertStatus={onRevertStatus}
+            onDelete={onDelete}
+            disabled={busy}
+            hasFinishedState={Boolean(record.state && record.step === null)}
+          />
+        )}
       </div>
 
       {record.flaggedOn && (
@@ -949,12 +972,17 @@ function Neighbours({
  */
 function RecordMenu({
   onArchive,
+  onRevertStatus,
   onDelete,
   disabled,
+  hasFinishedState,
 }: {
   onArchive: () => void;
+  onRevertStatus?: () => void;
   onDelete: () => void;
   disabled?: boolean;
+  /** True when the record has a finished state (ready for students, etc.) that can be cleared. */
+  hasFinishedState?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
@@ -1004,6 +1032,19 @@ function RecordMenu({
           >
             Archive
           </button>
+          {hasFinishedState && onRevertStatus && (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                onRevertStatus();
+              }}
+              className="block w-full px-3 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
+            >
+              Clear status
+            </button>
+          )}
           <button
             type="button"
             role="menuitem"

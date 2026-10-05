@@ -369,6 +369,8 @@ export interface BoardRecord {
   deadAt?: { step: number; round: number };
   reschedules?: number;
   tasks: BoardTask[];
+  /** Providers only: slug for linking to the admin directory page. */
+  directorySlug?: string | null;
 }
 
 /**
