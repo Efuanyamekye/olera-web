@@ -7,6 +7,19 @@
 
 ## Current Focus
 
+### 2026-10-04 — Robbie's first pilot family (Richard, Dallas ad): reply sent, no Cortex (`graceful-franklin`, no app code)
+
+**What happened:** Richard Etchepareborde filled in the Olera-run Dallas Meta form (`olera-dallas-native-sep26`) Sat 3 Oct 12:49 PM CT, spouse care, ZIP 75474 (Quinlan). Auto text at 12:50; handed to Assisting Hands at 1:50 PM with no qualification reply; "New family from your ad: Richard" email to Robbie at 1:50; Robbie replied to support@ at 1:56: "I don't understand this process." First live family under the pilot, before the launch note TJ promised "by next week" (2 Oct). Robbie has a login (last sign-in 29 Sep), so the campaign page link works; his inbox shows Richard's number and thread.
+
+**Sent (TJ-approved, via the admin inbox's own Send from TJ's browser, not Cortex):** in Robbie's thread from support@, signed TJ, 11:36 PM CT Sat. Says: first family from the pilot; what we did; the "campaign page" is his Olera inbox; some families go quiet and we're adding qualifying steps, expect the first batch below his 30% benchmark; one-line replies (reached / not reached / client); launch + tracking note still coming this week; happy to hop on a call. Gmail id `1a1053318ffd99df`; thread handled; Cortex item 14 skipped so its draft can't go.
+
+**Voice rule from TJ (saved as memory `fb:no_apology_openers`):** no "that one is on us / my bad / sorry" openers in any draft, partners included. Lead with what happened.
+
+**Open:**
+- Is 75474 (Quinlan) inside Robbie's 243 ZIPs? If not, the Dallas ad targeting needs his CSV applied before more families route to him.
+- Dallas leads hand to Robbie after ~1h even with no qualification reply (William in Pascagoula was handed only after classification). Decide whether unqualified leads should hand at all; this is the "go quiet" problem Robbie was warned about.
+- TJ owes Robbie the launch date + tracking note this week, and the 14 Oct check-in call is booked.
+
 ### 2026-10-03 (late) — William Snowden case (Pascagoula, Hoop Cares ad): Ces nudged to call; case-page label fix (`graceful-franklin`, #2352 open)
 
 **The case:** Meta instant form 2 Oct 4:55 PM CT → qualifying text 5:00 → "100% Disabled Veteran" 5:48 → classifier care_seeker, handed to Hoop 5:50 → Liz wrote on the shared thread 5:52 ("when's a good time to talk?") → auto check-in Sat 2:20 PM. Silent since. One thread, three views: admin case `/admin/relationships/families/284c1199-…`, Hoop's inbox (`/portal/inbox?role=provider&ad=<lead>`, rendered via `getAdFamily`, read-only), family `/f/thread/<token>`.
