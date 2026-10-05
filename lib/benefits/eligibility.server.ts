@@ -140,6 +140,25 @@ export function resolveSbfRow(
  *  Programs are exempt even when a state's draft prefixes them "Medicaid":
  *  MSP is Medicaid-ADMINISTERED help that families apply to directly —
  *  requiring Medicaid first would be factually wrong. */
+/**
+ * Is this a home and community waiver, the kind a person can enter Medicaid
+ * through rather than having to hold it first?
+ *
+ * The gate below once treated every waiver as "join only once you are
+ * eligible", and read "eligible" as "already enrolled". They differ: a care
+ * waiver carries its own Medicaid eligibility group (a special income limit,
+ * commonly 300% of the SSI rate, plus an asset limit and a level-of-care
+ * assessment), and families apply for both together. Ruling STAR+PLUS out for
+ * a Texas family with dementia because they "have no Medicaid" steered them
+ * off the program built for them (found building the conversation mock, 5 Oct
+ * 2026). So a waiver stays "worth checking" for a family without Medicaid,
+ * and their income and savings decide it. Services that sit on top of regular
+ * Medicaid (Washington's Medicaid Personal Care, Oregon's OPI-M) stay gated.
+ */
+export function isWaiverPath(name: string): boolean {
+  return /waivers?\b|home (and|&) community|\bhcbs\b|community[- ]based|star\+plus|long[- ]term (care|services)/i.test(name);
+}
+
 export function medicaidGatedName(name: string): boolean {
   if (archetypeOf(name) === "msp") return false;
   if (isMedicaidDoor(name)) return false;
@@ -250,7 +269,7 @@ export function evaluateProgramForFamily(
   // applied, so a program that genuinely requires it is out of reach either
   // way. What differs between the two is the letter, not the program.
   const noMedicaid = facts.medicaidStatus === "doesNotHave" || facts.medicaidStatus === "denied";
-  if (noMedicaid && gatedName) {
+  if (noMedicaid && gatedName && !isWaiverPath(program.name)) {
     return { ruledOut: true, reason: "Needs Medicaid first", boost: 0, fits: [] };
   }
   if (sbf?.requires_veteran === true && facts.veteranStatus === "no") {
