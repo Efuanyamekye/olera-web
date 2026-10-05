@@ -221,3 +221,28 @@ export function nextQuestion(
   }
   return best;
 }
+
+/**
+ * Answer mix and "not sure" rates for weighing questions. Income, Medicaid
+ * and veteran are real (the 75 families who used the finder before the 30 Sep
+ * 2026 redesign); daily help, savings, disability and household are assumed.
+ */
+export const DEFAULT_PRIORS: AnswerPriors = {
+  weights: {
+    age: { under_60: 5, "60_64": 8, "65_74": 30, "75_84": 35, "85_plus": 22 },
+    income: { under1000: 20, under1500: 23, under2500: 28, under4000: 9, over4000: 6 },
+    medicaid: { has: 32, no: 49 },
+    veteran: { yes: 5, no: 93 },
+    dailyHelp: { none: 25, some: 40, lots: 35 },
+    savings: { under2000: 40, under10000: 30, over10000: 30 },
+    disability: { yes: 30, no: 70 },
+    household: { alone: 60, couple: 40 },
+  },
+  notSure: { age: 0.02, income: 0.15, medicaid: 0.18, veteran: 0.02, dailyHelp: 0.05, savings: 0.3, disability: 0.1, household: 0.01 },
+};
+
+/** Status plus the rules behind it, for the one-line reason on each program. */
+export function explain(r: ProgramRules, f: KnownFacts): { status: Status; failed: string[]; met: string[] } {
+  const c = checks(r, f);
+  return { status: statusOf(r, f), failed: c.filter((x) => x.result === "fail").map((x) => x.rule), met: c.filter((x) => x.result === "pass").map((x) => x.rule) };
+}
