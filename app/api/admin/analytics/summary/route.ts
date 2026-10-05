@@ -555,10 +555,16 @@ async function fetchWindow(
   // upstream events all live on provider_activity with metadata.session_id +
   // metadata.variant. Stages distinguished by event_type for `started`, and
   // by metadata.step_name within `benefits_step_completed` for the rest.
+  // Provider pages only. The standalone finder and the benefits conversation
+  // log the same events under provider_id "benefits-finder", and their step
+  // names collide with this funnel's ("age", "contact"): over the 30 days to
+  // 5 Oct 2026 all 3 of this funnel's "saved" sessions were finder sessions,
+  // while provider pages had 23,063 impressions and none.
   let benefitsQ = db
     .from("provider_activity")
     .select("event_type, metadata")
     .in("event_type", ["benefits_entry_viewed", "benefits_started", "benefits_step_completed"])
+    .neq("provider_id", "benefits-finder")
     .order("created_at", { ascending: false })
     .limit(50000);
   if (from) benefitsQ = benefitsQ.gte("created_at", from);
