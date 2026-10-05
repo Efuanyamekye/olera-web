@@ -278,6 +278,30 @@ export async function GET(req: NextRequest) {
     // Otherwise return the DB count
     const effectiveTotal = hasMetadataFilters ? candidates.length : (count || 0);
 
+    // Enrich candidates with placement status for the authenticated provider
+    // This allows the UI to show "Already Hired" instead of "Schedule Interview"
+    if (auth?.providerProfile?.id && candidates.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const candidateIds = (candidates as any[]).map((c) => c.id);
+      const { data: placements } = await supabaseAdmin
+        .from("medjobs_placements")
+        .select("student_profile_id, status")
+        .eq("provider_profile_id", auth.providerProfile.id)
+        .in("student_profile_id", candidateIds)
+        .in("status", ["offered", "accepted", "confirmed"]);
+
+      if (placements && placements.length > 0) {
+        const placementMap = new Map(
+          placements.map((p) => [p.student_profile_id, p.status])
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        candidates = (candidates as any[]).map((c) => ({
+          ...c,
+          placementStatus: placementMap.get(c.id) || null,
+        }));
+      }
+    }
+
     return NextResponse.json({
       candidates,
       total: effectiveTotal,

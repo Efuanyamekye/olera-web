@@ -449,19 +449,32 @@ export default function CandidateBottomSheet({
             className="px-5 py-4 border-t border-gray-200 bg-white shrink-0"
             style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setError(""); // Clear any previous errors
-                setView("schedule");
-              }}
-              className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-              Schedule interview
-            </button>
+            {candidate.placementStatus ? (
+              // Student is already hired by this provider
+              <a
+                href="/provider/caregivers"
+                className="w-full py-3.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {candidate.placementStatus === "offered" ? "Offer pending" : "Already hired"} — View interviews
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setError(""); // Clear any previous errors
+                  setView("schedule");
+                }}
+                className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+                Schedule interview
+              </button>
+            )}
           </div>
         )}
 

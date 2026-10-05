@@ -745,7 +745,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Reschedule: a new time was proposed (status was flipped back to "proposed"
-    // above). Notify the OTHER party so they can review it like a fresh request
+    // above). Notify the OTHER party so they can review the suggested new time.
     // [H3] — without this the rescheduled time silently never reaches them.
     if (status === "rescheduled" && newTime) {
       try {
@@ -790,6 +790,7 @@ export async function PATCH(request: NextRequest) {
               alternativeTime: null,
               notes: interview.notes || null,
               viewUrl: recipientViewUrl,
+              isReschedule: true,
             }),
             emailType: "interview_proposed",
             recipientType: callerIsProvider ? "student" : "provider",
