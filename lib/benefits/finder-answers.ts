@@ -38,6 +38,11 @@ export interface FinderAnswers {
   income: FinderIncome | null;
   medicaid: MedicaidStatus | null;
   veteran: FinderVeteran | null;
+  /** From the benefits conversation only (5 Oct 2026); the nine-question
+   *  finder never asks these. Daily-help and savings rules settle most care
+   *  programs, so the plan reads them when present. */
+  dailyHelp?: "none" | "some" | "lots" | null;
+  savings?: "under2000" | "under10000" | "over10000" | null;
 }
 
 export function emptyFinderAnswers(): FinderAnswers {

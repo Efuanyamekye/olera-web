@@ -17,8 +17,8 @@ import { emptyFinderAnswers, type FinderAnswers, type FinderNeed, type FinderWho
  * by handing the answers to the finder's plan, so the call, the script and
  * "send me this plan" are the finder's, unchanged.
  *
- * Known gap: the finder's plan does not yet read daily help or savings, so the
- * list here can be sharper than the plan it hands to.
+ * The plan reads daily help and savings too (finder-engine conversationFacts),
+ * so it agrees with the list the family watched settle.
  */
 
 type Step = "who" | "zip" | "need" | "engine" | "medicaid" | "done";
@@ -122,6 +122,8 @@ export default function BenefitsConversationPage() {
       income: facts.income ?? (asked.includes("income") ? "unsure" : null),
       medicaid,
       veteran: facts.veteran ?? "no",
+      dailyHelp: facts.dailyHelp,
+      savings: facts.savings,
     };
     try {
       const res = await fetch("/api/benefits/finder", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(answers) });
@@ -222,7 +224,7 @@ export default function BenefitsConversationPage() {
         <>
           <ProgramList likely={likely} checking={checking} out={out} stateName={stateName} compact />
           <Question
-            title={who === "me" || !who ? "Last one: do you have Medicaid now?" : "Last one: does your family member have Medicaid now?"}
+            title={who === "me" || !who ? "Last one: do you have Medicaid now?" : `Last one: does ${who === "parent" ? "your parent" : who === "spouse" ? "your spouse" : "the person you help"} have Medicaid now?`}
             why="It doesn't change which programs fit. It changes what to say when you call."
           >
             {([["alreadyHas", "Yes"], ["doesNotHave", "No"], ["applying", "Applying now"], ["notSure", "I'm not sure"]] as const).map(([v, l]) => (

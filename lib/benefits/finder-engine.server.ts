@@ -18,6 +18,8 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { rulesOf, explain, type KnownFacts } from "@/lib/benefits/question-engine";
+import { whyLine } from "@/lib/benefits/conversation";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
@@ -281,6 +283,24 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
   return { tier: "check", reason: mainRule(p) || "We don't have enough to say more. It's worth a call." };
 }
 
+/** The conversation's facts in the question engine's terms, or null when the
+ *  family came through the nine-question finder (no daily help, no savings). */
+function conversationFacts(a: FinderAnswers): KnownFacts | null {
+  const dailyHelp = a.dailyHelp && ["none", "some", "lots"].includes(a.dailyHelp) ? a.dailyHelp : null;
+  const savings = a.savings && ["under2000", "under10000", "over10000"].includes(a.savings) ? a.savings : null;
+  if (!dailyHelp && !savings) return null;
+  return {
+    age: a.age && a.age !== "unsure" ? a.age : null,
+    income: a.income && a.income !== "unsure" ? a.income : null,
+    medicaid: a.medicaid === "alreadyHas" ? "has" : a.medicaid === "doesNotHave" || a.medicaid === "denied" ? "no" : null,
+    veteran: a.veteran === "yes" || a.veteran === "no" ? a.veteran : null,
+    dailyHelp,
+    savings,
+    disability: null,
+    household: a.household === "1" ? "alone" : a.household ? "couple" : null,
+  };
+}
+
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   const helping = isHelpingSomeone(a);
   const wants = (re: RegExp | null, category?: BenefitCategory[]) => (s: Screened) =>
@@ -364,7 +384,18 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
 
   // Someone who already has Medicaid doesn't need the Medicaid application.
   const alreadyCovered = rankedKept.filter(({ item }) => a.medicaid === "alreadyHas" && isMedicaidDoor(item.name));
-  const kept = rankedKept.filter((k) => !alreadyCovered.includes(k));
+  // Daily help and savings come only from the benefits conversation. When
+  // present, the question engine's rules read them, so the plan agrees with
+  // the list the family just watched settle: a program those answers rule out
+  // leaves the plan, and one they make likely says so.
+  const conv = conversationFacts(a);
+  const convOf = (item: WaiverProgram) => {
+    if (!conv) return null;
+    const rules = rulesOf(item as Parameters<typeof rulesOf>[0]);
+    return { rules, e: explain(rules, conv) };
+  };
+  const convOut = conv ? rankedKept.filter(({ item }) => !alreadyCovered.some((c) => c.item === item) && convOf(item)!.e.status === "out") : [];
+  const kept = rankedKept.filter((k) => !alreadyCovered.includes(k) && !convOut.includes(k));
 
   const wanted = new Set(a.needs.flatMap((n) => NEED_CATEGORIES[n] || []));
   if (helping && a.caregiverNeeds.some((n) => n !== "ok")) wanted.add("caregiver");
@@ -372,7 +403,17 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   const screened: Screened[] = kept.map(({ item, verdict }, idx) => {
     const category = programCategory(item);
     const contact = pickCallContact(item.contacts);
-    const { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
+    let { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
+    const c = convOf(item);
+    if (c && c.e.status === "likely" && tier === "check") {
+      tier = "likely";
+      reason = whyLine("likely", c.e.failed, c.e.met) ?? reason;
+      // A waiver or a nursing-level program still needs the state's assessment.
+      if (isWaiverPath(item.name) || c.rules.dailyHelp === "lots") {
+        reason = `${reason} The state also checks income and does a care assessment.`;
+        fitsButAssess = true;
+      }
+    }
     let score = verdict.boost - idx * 0.01;
     if (wanted.has(category)) score += 15;
     if (a.needs.includes("memory") && /alzheimer|dementia|memory|respite|adult day/i.test(item.name)) score += 10;
@@ -418,6 +459,10 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       reason: verdict.reason || "Not a match for what you told us.",
     })),
     ...alreadyCovered.map(({ item }) => ({ id: item.id, name: stripParen(item.name), reason: "Already has Medicaid" })),
+    ...convOut.map(({ item }) => {
+      const e = convOf(item)!.e;
+      return { id: item.id, name: stripParen(item.name), reason: whyLine("out", e.failed, e.met) || "Not a match for what you told us." };
+    }),
   ];
 
   const agency: FinderAgency | null = aaa?.agency?.phone
