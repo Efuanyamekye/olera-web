@@ -60,7 +60,7 @@ export interface ActivationUniversity {
     /** Null until "what makes a client" is instrumented. Renders as a dash. */
     clients: number | null;
     catchment: number;
-    rows: Array<{ id: string; name: string; state: string; detail: string | null }>;
+    rows: Array<{ id: string; name: string; state: string; detail: string | null; directorySlug: string | null }>;
   };
   students?: {
     applicants: number;

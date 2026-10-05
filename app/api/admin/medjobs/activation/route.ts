@@ -145,14 +145,16 @@ export async function GET(req: NextRequest) {
     organization_name: string;
     status: string;
     research_data: Record<string, unknown> | null;
+    provider_business_profile_id: string | null;
   };
   let providerRows: ProviderRow[] = [];
+  let providerSlugs: Map<string, string> = new Map();
   let studentCount = 0;
   if (slug) {
     const [provRes, studRes] = await Promise.all([
       db
         .from("student_outreach")
-        .select("id, organization_name, status, research_data")
+        .select("id, organization_name, status, research_data, provider_business_profile_id")
         .eq("campus_id", wanted[0].id)
         .eq("kind", "provider")
         .order("organization_name"),
@@ -172,6 +174,20 @@ export async function GET(req: NextRequest) {
     }
     providerRows = (provRes.data ?? []) as ProviderRow[];
     studentCount = studRes.count ?? 0;
+
+    // Fetch slugs for providers that have a linked business_profile
+    const bpIds = providerRows
+      .map((r) => r.provider_business_profile_id)
+      .filter((id): id is string => id != null);
+    if (bpIds.length > 0) {
+      const { data: bpData } = await db
+        .from("business_profiles")
+        .select("id, slug")
+        .in("id", bpIds);
+      for (const bp of bpData ?? []) {
+        if (bp.slug) providerSlugs.set(bp.id, bp.slug);
+      }
+    }
   }
 
   const chans = (channels ?? []) as ChannelRow[];
@@ -277,6 +293,13 @@ export async function GET(req: NextRequest) {
               detail:
                 (r.research_data as { general_contact?: { phone?: string } } | null)
                   ?.general_contact?.phone ?? null,
+              // Try business_profiles slug first, fall back to olera_provider_slug or olera_provider_id
+              directorySlug: r.provider_business_profile_id
+                ? providerSlugs.get(r.provider_business_profile_id) ?? null
+                : (r.research_data as { olera_provider_slug?: string; olera_provider_id?: string } | null)
+                    ?.olera_provider_slug
+                  ?? (r.research_data as { olera_provider_id?: string } | null)?.olera_provider_id
+                  ?? null,
             })),
           }
         : undefined,

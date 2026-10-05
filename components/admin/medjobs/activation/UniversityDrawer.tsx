@@ -132,9 +132,13 @@ export default function UniversityDrawer({
               name: r.name,
               state: r.state,
               detail: r.detail,
+              directorySlug: r.directorySlug,
             }))}
             emptyText="No providers for this campus yet."
             onOpenRow={onOpenProvider}
+            onOpenDirectory={(slug) => {
+              window.open(`/admin/directory/${slug}`, "_blank", "noopener,noreferrer");
+            }}
           />
           <ProfileCard
             title="Students"

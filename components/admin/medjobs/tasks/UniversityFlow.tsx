@@ -756,6 +756,20 @@ export default function UniversityFlow({
                 else setView({ kind: "summary" });
               });
           }}
+          onRevertStatus={() => {
+            void send(
+              { op: "revert_status", recordId: record.id },
+              `Status cleared for ${record.name}`,
+              { keepBoard: true },
+            ).then(({ ok }) => {
+              if (!ok) return;
+              // Clear the local state too so the UI updates immediately.
+              record.state = null;
+              record.step = 0;
+              record.round = 0;
+              redraw();
+            });
+          }}
           onDelete={() => {
             // Destroying a record takes its call history with it, so the
             // name has to be in front of the person clicking.

@@ -207,12 +207,19 @@ export default function SummaryView({
                         .sort((a, b) => a.dueAt.localeCompare(b.dueAt))[0];
                       const dead = r.state && /^(archived|stopped|declined)/.test(r.state);
                       return (
-                        <button
+                        <div
                           key={r.id}
                           id={`board-record-${r.id}`}
-                          type="button"
+                          role="button"
+                          tabIndex={0}
                           onClick={() => onOpenRecord(r)}
-                          className={`flex w-full items-center gap-2 border-b border-gray-100 py-2 text-left last:border-b-0 hover:bg-gray-50 ${
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              onOpenRecord(r);
+                            }
+                          }}
+                          className={`flex w-full cursor-pointer items-center gap-2 border-b border-gray-100 py-2 text-left last:border-b-0 hover:bg-gray-50 ${
                             r.id === cameFrom ? "bg-primary-25" : ""
                           }`}
                         >
@@ -234,8 +241,21 @@ export default function SummaryView({
                               </svg>
                             </span>
                           )}
-                          <span className="min-w-0 flex-1 truncate text-[13px] text-gray-900">
-                            {r.name}
+                          <span className="min-w-0 flex-1 text-[13px]">
+                            {r.directorySlug ? (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`/admin/directory/${r.directorySlug}`, "_blank", "noopener,noreferrer");
+                                }}
+                                className="block max-w-full truncate text-left text-gray-900 hover:text-primary-700"
+                              >
+                                {r.name}
+                              </button>
+                            ) : (
+                              <span className="block truncate text-gray-900">{r.name}</span>
+                            )}
                             {/* An applicant nobody has opened. It arrived on
                                 its own, so unlike every other record on this
                                 board there was nothing to tell anybody it was
@@ -259,7 +279,7 @@ export default function SummaryView({
                           >
                             {n ? n : r.state ? r.state : soon ? dueLabel(soon.dueAt) : ""}
                           </span>
-                        </button>
+                        </div>
                       );
                     })
                   )}
