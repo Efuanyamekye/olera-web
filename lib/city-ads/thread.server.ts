@@ -217,11 +217,19 @@ export interface ThreadProvider {
    */
   alertEmails?: string[];
   /**
-   * Where she works this family. "campaign": the lead came from her own ad and
-   * sits on her campaign page. "inbox": she took it as an offer, so it lives
-   * in her inbox only.
+   * Where she works this family. "inbox": she has an Olera account, and the
+   * family is in her inbox whether it came from her own ad or an offer she
+   * took. "campaign": no account yet, so the campaign page is all there is.
+   *
+   * Until 4 Oct 2026 own-ad families always said "campaign" and the email
+   * button opened /provider/boost. For a provider on an Olera-paid flight that
+   * page leads with the optional monthly plan and does not list the family, so
+   * Robbie (Assisting Hands) read it as "I cannot proceed to the lead without
+   * committing to a monthly amount" while Richard sat in his inbox all along.
    */
   via: "campaign" | "inbox";
+  /** How she came to hold the family: from her own ad, or an offer she took. Wording only. */
+  source: "own_ad" | "offer";
 }
 
 /**
@@ -249,7 +257,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   const primary = holderId ? null : await resolvePrimaryCampaign(db, lead);
   const id = holderId ?? primary?.providerId ?? null;
   if (!id) return null;
-  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email, metadata").eq("id", id).maybeSingle();
+  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email, metadata, account_id").eq("id", id).maybeSingle();
   const email = (p?.email as string | null) ?? null;
   const extra = (p?.metadata as { alert_emails?: unknown } | null)?.alert_emails;
   const alertEmails = Array.isArray(extra)
@@ -262,7 +270,8 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
     phone: p?.phone ? normalizeUSPhone(p.phone as string) : null,
     email,
     alertEmails,
-    via: holderId ? "inbox" : "campaign",
+    via: holderId || p?.account_id ? "inbox" : "campaign",
+    source: holderId ? "offer" : "own_ad",
   };
 }
 
@@ -423,10 +432,7 @@ export async function notifyProviderOfReply(db: SupabaseClient, lead: ThreadLead
     subject: `${first} replied`,
     headline: `${first} replied`,
     quote: words.slice(0, 400),
-    body:
-      provider.via === "inbox"
-        ? `${first} is the family you took through Olera. Their reply is in your inbox, with everything they told us.`
-        : `${first} is one of the families from your ad. Their reply is on your campaign page, with everything else we know about them.`,
+    body: `${provider.source === "offer" ? `${first} is the family you took through Olera.` : `${first} is one of the families from your ad.`} Their reply is ${provider.via === "inbox" ? "in your inbox" : "on your campaign page"}, with everything they told us.`,
     emailType: "city_thread_family_reply_provider",
   });
   await sendSlackAlert(`💬 ${first} replied (city lead ${lead.id.slice(0, 8)}, with ${provider.name}): "${words.slice(0, 200)}"`);
