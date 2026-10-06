@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NJ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.393Z
+ * Last updated: 2026-10-06T09:18:23.565Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1011,17 +1011,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 18,
-          "to": 60,
-          "source": "https://www.nj.gov/humanservices/doas/documents/DoAS%20Program%20Guide.pdf",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-04T00:51:38.093Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "alzheimers-adult-day-services",

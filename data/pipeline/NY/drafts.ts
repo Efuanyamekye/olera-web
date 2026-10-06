@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.397Z
+ * Last updated: 2026-10-06T09:18:23.567Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -389,7 +389,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://opwdd.ny.gov/providers/home-and-community-based-services-waiver",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8669469733",
+            "211",
+            "8005412831"
+          ],
+          "to": "5184745271",
+          "source": "https://www.health.ny.gov/forms/doh-5729",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -757,6 +771,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-MEDICARE",
           "description": "General Medicare questions and eligibility verification",
           "hours": "24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 701-0501",
+          "description": "Number listed on aging.ny.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -845,33 +865,36 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2494,
-          "to": 1856,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "to": 1846,
+          "source": "https://aging.ny.gov/medicare-savings-program",
           "severity": "high",
-          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
         },
         {
           "field": "income_2",
           "from": 3375,
           "to": 2509,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "source": "https://aging.ny.gov/medicare-savings-program",
           "severity": "high",
           "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
-        },
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8886926116",
             "5857868900",
             "1800"
           ],
-          "to": "8006334227",
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "to": "(800) 701-0501",
+          "source": "https://aging.ny.gov/medicare-savings-program",
+          "flaggedAt": "2026-10-05T18:19:09.800Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1097,7 +1120,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 342-3009",
       "sourceUrl": "https://otda.ny.gov/programs/snap/",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1663,
+          "to": 2660,
+          "source": "https://www.ny.gov/services/apply-snap",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2254,
+          "to": 3607,
+          "source": "https://www.ny.gov/services/apply-snap",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
+        }
+      ]
     },
     {
       "id": "heap-energy-assistance",
@@ -1495,11 +1538,11 @@ export const drafts: PipelineStateDrafts = {
             "7166619430",
             "211"
           ],
-          "to": "311",
-          "source": "https://www.nyc.gov/html/records/pdf/govpub/moved/pubadvocate/SeniorGuide07final.pdf",
+          "to": "8003423009",
+          "source": "https://ag.ny.gov/sites/default/files/publications/Senior_Housing_Guide.pdf",
           "severity": "medium",
-          "why": "not a 10-digit number",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
         }
       ]
     },
@@ -2181,11 +2224,11 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1663,
-          "to": 15753,
+          "to": 1575,
           "source": "https://aging.ny.gov/senior-community-service-employment-program-scsep",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
         }
       ],
       "appliedCorrections": [
@@ -2323,6 +2366,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 342-9871",
           "description": "Information, referrals, and connections to local aging services, benefits, long-term care supports, and county-based resources across New York.",
           "hours": "Mon-Fri, 8:00 AM-4:00 PM"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 481-0973",
+          "description": "Number listed on elderjusticeny.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2362,7 +2411,34 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(212) 244-6469",
       "sourceUrl": "https://aging.ny.gov/legal-services-initiative",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://www.elderjusticeny.org/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:19:09.800Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "2122446469",
+            "8454862555",
+            "8003429871"
+          ],
+          "to": "(844) 481-0973",
+          "source": "https://www.elderjusticeny.org/",
+          "flaggedAt": "2026-10-05T18:19:09.800Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nyc-senior-homeowners-exemption",

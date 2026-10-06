@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.394Z
+ * Last updated: 2026-10-06T09:18:23.566Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -291,6 +291,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-432-2080",
           "description": "General information about PACE and other senior services",
           "hours": "Mon-Fri 8am-5pm MT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(505) 924-2650",
+          "description": "Number listed on sharenm.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -353,20 +359,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hca.nm.gov/lookingforinformation/pace/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8449450467",
             "5059161932",
             "711",
             "18004322080"
           ],
-          "to": "8662612954",
-          "source": "https://www.hca.nm.gov/lookingforinformation/pace/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:51:46.068Z"
+          "to": "(505) 924-2650",
+          "source": "https://www.sharenm.org/innovage-pace-program-of-all-inclusive-care-for-the-elderly",
+          "flaggedAt": "2026-10-05T18:18:26.253Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -580,13 +588,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-08-07",
       "reviewQueue": [
         {
+          "field": "income_1",
+          "from": 1000,
+          "to": 2982,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/Section-07-Community-Benefits-MC-Policy-Manual_Eff-07.01.24-Rev.-04.19.24-2.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 100% SSI 2026 vs verified 300% SSI 2026",
+          "flaggedAt": "2026-10-05T18:18:26.253Z"
+        },
+        {
           "field": "income_2",
           "from": 1262,
-          "to": 1491,
-          "source": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
+          "to": 4035,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/Section-07-Community-Benefits-MC-Policy-Manual_Eff-07.01.24-Rev.-04.19.24-2.pdf",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:51:46.068Z"
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-05T18:18:26.253Z"
         }
       ]
     },
@@ -722,6 +739,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(866) 867-3124",
           "description": "Also reachable at doh.fmnp@doh.nm.gov, the shared program mailbox.",
           "hours": "Mon-Fri 8am-5pm MT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(505) 316-5292",
+          "description": "Number listed on aging.nm.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -785,24 +808,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-11",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "income_1",
-          "from": 2739,
-          "to": 2461,
-          "source": "https://www.nmwic.org/fmnp/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:51:46.068Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3706,
-          "to": 3337,
-          "source": "https://www.nmwic.org/fmnp/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:51:46.068Z"
+          "field": "phone_added",
+          "from": [
+            "5054690548",
+            "5054870904",
+            "5755285197",
+            "8668673124"
+          ],
+          "to": "(505) 316-5292",
+          "source": "https://www.aging.nm.gov/oiea/oiea-resources/",
+          "flaggedAt": "2026-10-05T18:18:26.253Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

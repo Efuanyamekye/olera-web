@@ -206,10 +206,10 @@
           "field": "assets_individual",
           "from": 103645,
           "to": 94523,
-          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
+          "source": "https://secure.sos.state.or.us/oard/displayDivisionRules.action;JSESSIONID_OARD=mMpAzQ_R-aJ_S92k7w48-DFgSDbV7OgUqGqFSu8iAqvGoXRYOeEg!99228750?selectedDivision=7202",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
         },
         {
           "field": "phone",
@@ -218,10 +218,10 @@
             "211"
           ],
           "to": "5039455600",
-          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-income-resource-standards.pdf",
+          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-scm-checklist.docx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
         }
       ]
     },
@@ -392,7 +392,7 @@
           "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
         }
       ]
     },
@@ -621,7 +621,20 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-10-04",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18002828096",
+            "8556732372"
+          ],
+          "to": "18554470155",
+          "source": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/Documents/mippa-training-pp.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1065,7 +1078,27 @@
       "phone": "(800) 453-5511",
       "sourceUrl": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 3198,
+          "to": 2786,
+          "source": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
+          "severity": "medium",
+          "why": "draft fits a federal formula (250% FPL 2025); verified value fits none",
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
+        },
+        {
+          "field": "income_2",
+          "from": 4183,
+          "to": 3643,
+          "source": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
+          "severity": "medium",
+          "why": "value fits more than one tier (250% FPL 2024 or 250% FPL 2023 or 300% SSI 2024 or 300% SSI 2023)",
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-wap",
@@ -2420,7 +2453,7 @@
           "source": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-05T18:19:59.332Z"
         }
       ]
     },
@@ -2743,6 +2776,12 @@
           "phone": null,
           "description": "Referral form for HRSN services",
           "hours": "Online referral system"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 834-4304",
+          "description": "Number listed on ohpopencard.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2814,6 +2853,21 @@
           "source": "https://www.oregon.gov/oha/hsd/ohp/pages/housing.aspx",
           "reason": "page also lists ours ((800) 273-0557)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8002730557",
+            "211"
+          ],
+          "to": "(888) 834-4304",
+          "source": "https://ohpopencard.org/hrsn/",
+          "flaggedAt": "2026-10-05T18:19:59.332Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -3132,5 +3186,5 @@
     ],
     "resourcesVsBenefits": "Oregon offers both income-qualified benefits and free resources for all seniors. Benefits like SNAP, energy assistance, and home care require meeting income limits (typically under $1,800-2,200/month). But resources like SHIBA Medicare counseling, Legal Aid Services, and the Long-term Care Ombudsman are free to all Oregon residents regardless of income, use these first for expert guidance, then apply for financial benefits based on your loved one's situation."
   },
-  "factcheckedAt": "2026-10-04T00:53:23.578Z"
+  "factcheckedAt": "2026-10-05T18:19:59.332Z"
 }
