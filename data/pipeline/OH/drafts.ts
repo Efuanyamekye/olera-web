@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.399Z
+ * Last updated: 2026-10-06T09:18:23.568Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -219,22 +219,24 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 994,
-          "to": 943,
-          "source": "https://www.cuyahogacounty.gov/docs/default-source/outreachpublications/cjfs/medicaid.pdf?sfvrsn=a5bab1b7_6",
-          "severity": "medium",
-          "why": "verified value is an older year (100% SSI 2025) than the draft (100% SSI 2026)",
-          "flaggedAt": "2026-10-04T00:52:48.023Z"
-        },
-        {
           "field": "income_2",
           "from": 1491,
-          "to": 1415,
-          "source": "https://www.cuyahogacounty.gov/docs/default-source/outreachpublications/cjfs/medicaid.pdf?sfvrsn=a5bab1b7_6",
+          "to": 1306,
+          "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Families,%20Individuals/Programs/whoQualifies/2026_Aged_Blind_Disabled_Individuals.pdf",
           "severity": "medium",
           "why": "value fits more than one tier (100% FPL 2022 or 100% SSI 2026 or 100% SSI 2025)",
-          "flaggedAt": "2026-10-04T00:52:48.023Z"
+          "flaggedAt": "2026-10-05T18:19:25.030Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8003248680"
+          ],
+          "to": "18446406446",
+          "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Resources/Publications/Forms/ODM07216fillx.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-05T18:19:25.030Z"
         }
       ]
     },
@@ -873,7 +875,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 1616,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:25.030Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2184,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-05T18:19:25.030Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -1169,6 +1190,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Because HEAP is administered locally, find the agency serving your exact county at development.ohio.gov/individual/energy-assistance/energy-assistance-providers",
           "hours": "Online, any time"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 742-5622",
+          "description": "Number listed on occ.ohio.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1232,7 +1259,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://jfs.ohio.gov/public-assistance/energy-and-community-assistance",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18002820880",
+            "711"
+          ],
+          "to": "(877) 742-5622",
+          "source": "https://www.occ.ohio.gov/factsheet/home-energy-assistance-program-heap",
+          "flaggedAt": "2026-10-05T18:19:25.030Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1358,6 +1400,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 848-1300",
           "description": "Number listed on bridgescap.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 742-5622",
+          "description": "Number listed on occ.ohio.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1435,6 +1483,22 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.bridgescap.org/hwap",
           "flaggedAt": "2026-10-04T00:52:48.023Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8002820880",
+            "6142522799",
+            "7405948499",
+            "4197845393",
+            "8008481300"
+          ],
+          "to": "(877) 742-5622",
+          "source": "https://www.occ.ohio.gov/factsheet/home-weatherization-assistance-program-hwap",
+          "flaggedAt": "2026-10-05T18:19:25.030Z",
+          "appliedAt": "2026-10-05",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -1848,6 +1912,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "24/7 helpline for all social services including caregiver support",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(419) 382-0624",
+          "description": "Number listed on areaofficeonaging.com",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1904,7 +1974,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13",
-      "reviewQueue": null
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8662435678",
+            "211"
+          ],
+          "to": "(419) 382-0624",
+          "source": "https://areaofficeonaging.com/programs",
+          "flaggedAt": "2026-10-05T18:19:25.030Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "scsep-employment",
