@@ -115,8 +115,7 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Provider never replied", tone: "act", age: said };
   }
   if (r.flags.includes("check_provider") && r.handed_to) {
-    const n = Math.floor((Date.now() - new Date(r.handed_to.at).getTime()) / 86_400_000);
-    return { phrase: "Check with provider", tone: "warn", age: `handed over ${days(n)} ago` };
+    return { phrase: "Check with provider", tone: "warn", age: handedAge(r.handed_to.at) };
   }
   if (r.episode.state === "closed") {
     // The reason goes in the small line. "Closed — no connection formed" is 29
@@ -245,15 +244,29 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
     return "Told us the provider never got back to them.";
   }
 
-  if (r.flags.includes("check_provider") && r.handed_to) {
-    return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
-  }
+  if (r.flags.includes("check_provider")) return checkLine(r);
 
   if (r.benefits?.letter_to_read) {
     return r.benefits.letter_reason ? `Letter waiting for your read: ${r.benefits.letter_reason}.` : "Letter waiting for your read.";
   }
 
   return null;
+}
+
+/**
+ * The Check with the provider queue's own line. A family in that queue often
+ * carries a more urgent flag too (a call we owe them), and the row normally
+ * shows the most urgent thing, so without this five of the first nine rows
+ * never named the provider to ask. Inside that queue, the queue's question wins.
+ */
+export function checkLine(r: SeekerRelationshipRow): string | null {
+  if (!r.handed_to) return null;
+  return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
+}
+
+export function handedAge(at: string): string {
+  const n = Math.floor((Date.now() - new Date(at).getTime()) / 86_400_000);
+  return `handed over ${days(n)} ago`;
 }
 
 function shortEt(iso: string): string {
