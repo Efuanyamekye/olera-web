@@ -1,0 +1,37 @@
+[
+  {
+    "state": "ME",
+    "id": "me-mainecare-aged-blind-disabled",
+    "name": "MaineCare Aged, Blind, and Disabled",
+    "legacyId": "mainecare-aged-blind-and-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "ME",
+    "id": "me-mainecare-ead-waiver",
+    "name": "MaineCare Elderly and Adults with Disabilities Waiver",
+    "legacyId": "mainecare-elderly-and-adults-with-disabilities-waiver",
+    "programType": "benefit"
+  },
+  {
+    "state": "ME",
+    "id": "me-mainecare-medicare-savings-programs",
+    "name": "MaineCare Medicare Savings Programs",
+    "legacyId": "mainecare-medicare-savings-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "ME",
+    "id": "me-state-ssi-supplement",
+    "name": "Maine State SSI Supplement",
+    "legacyId": "maine-state-ssi-supplement",
+    "programType": "benefit"
+  },
+  {
+    "state": "ME",
+    "id": "me-property-tax-stabilization-seniors",
+    "name": "Maine Property Tax Stabilization for Seniors",
+    "legacyId": "maine-property-tax-stabilization-for-seniors",
+    "programType": "resource"
+  }
+]

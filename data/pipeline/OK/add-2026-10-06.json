@@ -1,0 +1,142 @@
+{
+  "state": "OK",
+  "addedAt": "2026-10-06T06:32:10.162Z",
+  "dive": {
+    "state": "OK",
+    "stateName": "Oklahoma",
+    "diveAt": "2026-10-06T06:31:03.906Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "National Family Caregiver Support Program",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limits are stated for Oklahoma’s NFCSP caregiver supports. The published Oklahoma respite voucher guide says, 'No income restrictions apply' for the OAA NFCSP. The care recipient generally must be a frail older adult age 60+ who needs help with at least two activities of daily living or has Alzheimer’s/dementia or other cognitive/mental impairment requiring substantial supervision. The caregiver can also qualify if they are a grandparent age 55+ raising a grandchild or other child, or another relative caregiver of a child or person not more than 18 years of age.",
+          "asset_limits": "No asset limit is stated in the Oklahoma materials located for NFCSP. The state materials do not describe countable assets, exempt assets, or any means test.",
+          "other_requirements": [
+            "Caregiver must generally be an adult family member or other informal caregiver.",
+            "For older-adult care, the care recipient must be age 60 or older and have difficulty with at least two activities of daily living or need supervision because of cognitive or other mental impairment.",
+            "For grandparent/relative caregiver services, the caregiver must be age 55 or older and be a grandparent, step-grandparent, or other relative caregiver of a child or a person not more than 18 years of age, or a person with a disability.",
+            "Services are delivered through the local Area Agency on Aging (AAA), not as a statewide direct-pay entitlement."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Supportive services may include caregiver case management, information and assistance, counseling, support groups, information services, respite care (in-home, out-of-home, and out-of-home overnight), supplemental services, and training. Oklahoma materials also mention caregiver support through vouchers for respite in some local AAA programs. No statewide dollar amount or fixed number of hours is specified in the official materials located.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call your local Area Agency on Aging (AAA); Oklahoma directs applicants to their AAA for information and to apply.",
+            "Statewide information line: 1-800-211-2116",
+            "Oklahoma Human Services main line: (405) 522-5050",
+            "Online: Oklahoma Human Services caregiver supports page at https://oklahoma.gov/okdhs/services/cap/fcs.html",
+            "In-person or local AAA contact through the regional AAA serving your county"
+          ],
+          "processing_time": "No official statewide processing-time standard is published in the materials located.",
+          "waitlist": "A statewide waitlist is not described in the official materials located. Availability may depend on local AAA funding and service capacity.",
+          "forms": [],
+          "documents": [
+            "Proof of the care recipient’s age",
+            "Proof of relationship if applying as a grandparent/relative caregiver",
+            "Information about the care recipient’s functional limitations or dementia/cognitive impairment",
+            "Basic contact information for the caregiver and care recipient",
+            "Any local AAA intake paperwork requested by the provider"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Administered through Oklahoma Area Agencies on Aging; eligibility and service access depend on local AAA service area.",
+          "regional_variations": "Yes. The core program is statewide, but the local AAA is the actual access point, and local AAAs may offer different service mixes, voucher practices, contact processes, and availability. Oklahoma materials and AAA pages show local contact numbers and local program details.",
+          "offices_or_providers": [
+            "Area Agencies on Aging across Oklahoma",
+            "INCOG AAA for Creek, Osage, and Tulsa Counties",
+            "Southwestern Oklahoma Development Authority AAA",
+            "Southern Oklahoma Development Association AAA"
+          ]
+        },
+        "official_source": "https://oklahoma.gov/okdhs/library/policy/current/oac-340/chapter-105/subchapter-10/parts-7/national-family-caregiver-support-program.html",
+        "gotchas": [
+          "This is not a cash benefit for the family caregiver; it is primarily a service program delivered through local AAAs.",
+          "There is no income test in the Oklahoma materials located, so families should not assume they are disqualified because of income.",
+          "The older-adult eligibility test is functional, not just age-based: the care recipient must generally need help with at least two ADLs or require supervision due to cognitive impairment.",
+          "For grandparent/relative caregiver support, the caregiver age rule is specific: age 55 or older.",
+          "Benefits are not standardized statewide; what a family receives can vary by local AAA and available funding.",
+          "Some services are voucher-based in local programs, so families should ask the AAA exactly how respite is authorized and paid."
+        ],
+        "data_shape_notes": "This program has no statewide income limit and no single fixed dollar benefit; eligibility is caregiver-and-care-recipient specific, and actual services are administered locally through Area Agencies on Aging with regional variation.",
+        "_raw": "{\n  \"name\": \"National Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limits are stated for Oklahoma’s NFCSP caregiver supports. The published Oklahoma respite voucher guide says, 'No income restrictions apply' for the OAA NFCSP. The care recipient generally must be a frail older adult age 60+ who needs help with at least two activities of daily living or has Alzheimer’s/dementia or other cognitive/mental impairment requiring substantial supervision. The caregiver can also qualify if they are a grandparent age 55+ raising a grandchild or other child, or another relative caregiver of a child or person not more than 18 years of age.\",\n    \"asset_limits\": \"No asset limit is stated in the Oklahoma materials located for NFCSP. The state materials do not describe countable assets, exempt assets, or any means test.\",\n    \"other_requirements\": [\n      \"Caregiver must generally be an adult family member or other informal caregiver.\",\n      \"For older-adult care, the care recipient must be age 60 or older and have difficulty with at least two activities of daily living or need supervision because of cognitive or other mental impairment.\",\n      \"For grandparent/relative caregiver services, the caregiver must be age 55 or older and be a grandparent, step-grandparent, or other relative caregiver of a child or a person not more than 18 years of age, or a person with a disability.\",\n      \"Services are delivered through the local Area Agency on Aging (AAA), not as a statewide direct-pay entitlement.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Supportive services may include caregiver case management, information and assistance, counseling, support groups, information services, respite care (in-home, out-of-home, and out-of-home overnight), supplemental services, and training. Oklahoma materials also mention caregiver support through vouchers for respite in some local AAA programs. No statewide dollar amount or fixed number of hours is specified in the official materials located.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call your local Area Agency on Aging (AAA); Oklahoma directs applicants to their AAA for information and to apply.\",\n      \"Statewide information line: 1-800-211-2116\",\n      \"Oklahoma Human Services main line: (405) 522-5050\",\n      \"Online: Oklahoma Human Services caregiver supports page at https://oklahoma.gov/okdhs/services/cap/fcs.html\",\n      \"In-person or local AAA contact through the regional AAA serving your county\"\n    ],\n    \"processing_time\": \"No official statewide processing-time standard is published in the materials located.\",\n    \"waitlist\": \"A statewide waitlist is not described in the official materials located. Availability may depend on local AAA funding and service capacity.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of the care recipient’s age\",\n      \"Proof of relationship if applying as a grandparent/relative caregiver\",\n      \"Information about the care recipient’s functional limitations or dementia/cognitive impairment\",\n      \"Basic contact information for the caregiver and care recipient\",\n      \"Any local AAA intake paperwork requested by the provider\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Administered through Oklahoma Area Agencies on Aging; eligibility and service access depend on local AAA service area.\",\n    \"regional_variations\": \"Yes. The core program is statewide, but the local AAA is the actual access point, and local AAAs may offer different service mixes, voucher practices, contact processes, and availability. Oklahoma materials and AAA pages show local contact numbers and local program details.\",\n    \"offices_or_providers\": [\n      \"Area Agencies on Aging across Oklahoma\",\n      \"INCOG AAA for Creek, Osage, and Tulsa Counties\",\n      \"Southwestern Oklahoma Development Authority AAA\",\n      \"Southern Oklahoma Development Association AAA\"\n    ]\n  },\n  \"official_source\": \"https://oklahoma.gov/okdhs/library/policy/current/oac-340/chapter-105/subchapter-10/parts-7/national-family-caregiver-support-program.html\",\n  \"gotchas\": [\n    \"This is not a cash benefit for the family caregiver; it is primarily a service program delivered through local AAAs.\",\n    \"There is no income test in the Oklahoma materials located, so families should not assume they are disqualified because of income.\",\n    \"The older-adult eligibility test is functional, not just age-based: the care recipient must generally need help with at least two ADLs or require supervision due to cognitive impairment.\",\n    \"For grandparent/relative caregiver support, the caregiver age rule is specific: age 55 or older.\",\n    \"Benefits are not standardized statewide; what a family receives can vary by local AAA and available funding.\",\n    \"Some services are voucher-based in local programs, so families should ask the AAA exactly how respite is authorized and paid.\"\n  ],\n  \"data_shape_notes\": \"This program has no statewide income limit and no single fixed dollar benefit; eligibility is caregiver-and-care-recipient specific, and actual services are administered locally through Area Agencies on Aging with regional variation.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "OK",
+    "stateName": "Oklahoma",
+    "classifiedAt": "2026-10-06T06:31:03.911Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "National Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Area Agencies on Aging across Oklahoma",
+              "type": "service-area"
+            },
+            {
+              "name": "INCOG AAA for Creek, Osage, and Tulsa Counties",
+              "type": "service-area"
+            },
+            {
+              "name": "Southwestern Oklahoma Development Authority AAA",
+              "type": "service-area"
+            },
+            {
+              "name": "Southern Oklahoma Development Association AAA",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "OK",
+      "id": "ok-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program",
+      "legacyId": "national-family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

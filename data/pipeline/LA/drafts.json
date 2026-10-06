@@ -2,8 +2,8 @@
   "state": "LA",
   "stateName": "Louisiana",
   "draftedAt": "2026-04-13T21:50:19.541Z",
-  "total": 9,
-  "successful": 9,
+  "total": 13,
+  "successful": 13,
   "programs": [
     {
       "id": "medicaid-long-term-care",
@@ -1881,6 +1881,807 @@
           "flaggedAt": "2026-10-02T07:38:10.855Z"
         }
       ]
+    },
+    {
+      "id": "la-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "Full Medicaid health coverage for Louisiana seniors and adults with disabilities who meet income and resource limits, including a pathway for those who earn too much to qualify the standard way.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Louisiana Medicaid local offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Medicaid Application Centers statewide",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or has a qualifying disability, and their income and savings are limited, Louisiana's Aged, Blind, and Disabled Medicaid program can cover doctor visits, hospital stays, prescription drugs, and potentially long-term care services. This is not the same Medicaid your parent may have heard about for younger adults. It is a separate pathway built specifically for seniors and people with disabilities, with its own income and resource rules.\n\nThere are two ways to qualify financially. The first is the standard (categorically needy) pathway, which requires income at or below 100% of the Federal Poverty Level. The second is the medically needy pathway, which helps people whose income is above the standard limit but who have high medical expenses. Louisiana also automatically extends Medicaid to people who receive SSI, though many SSI recipients still need to file a separate Medicaid application.\n\nThe program covers a broad set of medical services, and for seniors or adults with disabilities who need nursing home care, it can cover that too if your parent meets additional medical criteria. Resource limits apply: Louisiana uses a $2,000 limit for individuals under SSI-style rules. The home your parent lives in is generally not counted against that limit, but other savings and assets are. Understanding what counts and what does not is one of the most important steps before you apply.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Medicaid is a coverage program, not a cash benefit. The value depends entirely on what medical and long-term care services your parent uses.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or blind, or meets SSA disability criteria",
+          "Louisiana resident",
+          "Income at or below 100% of the Federal Poverty Level (standard pathway)",
+          "Countable resources at or below $2,000 for an individual",
+          "Medically needy pathway available if income exceeds the standard limit"
+        ],
+        "ageRequirement": "65+ (or any age if blind or SSA-defined disabled)",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Cash",
+            "Bank account balances",
+            "Stocks and bonds",
+            "Other countable liquid resources"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For nursing facility services, your parent must meet the Nursing Facility Level of Care standard: a clinical assessment determining they need daily help with activities like bathing, dressing, or medication management. This is a separate review from the financial eligibility determination.",
+        "otherRequirements": [
+          "Must be a Louisiana resident",
+          "Must meet citizenship or eligible immigration status requirements",
+          "Must have a Social Security number or proof of having applied for one",
+          "For disability-based cases, must meet SSA disability standards; blindness is evaluated under SSA visual criteria",
+          "SSI recipients are automatically eligible but may still need to file a separate Louisiana Medicaid application"
+        ],
+        "povertyLevelReference": "100% FPL (standard categorically needy pathway); medically needy income level for the second pathway"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online, by phone at 1-888-342-6207, by mail, or in person at a local Medicaid Application Center statewide.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you contact anyone",
+            "description": "You will need your parent's Social Security card, proof of age, income statements (Social Security award letter, pension letters), and current bank account balances. Having these ready before you call or log in will prevent delays. See the full document list on this page."
+          },
+          {
+            "step": 2,
+            "title": "Choose your application method",
+            "description": "Online: Use the Louisiana Medicaid Self-Service Portal at medicaid.la.gov. By phone: Call 1-888-342-6207 Monday through Friday during business hours. By mail: Send a completed Application for Health Coverage to Louisiana Department of Health Medicaid Application Office, P.O. Box 91030, Baton Rouge, LA 70821-9030. In person: Visit a local Medicaid office or Medicaid Application Center. Find your nearest location at ldh.la.gov/medicaid."
+          },
+          {
+            "step": 3,
+            "title": "Submit the Application for Health Coverage",
+            "description": "This is the standard Louisiana Medicaid application form. If your parent already receives SSI, do not assume they are automatically enrolled. Louisiana requires many SSI recipients to submit a separate Medicaid application. Confirm their enrollment status when you call."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional documentation",
+            "description": "If your parent is applying on the basis of disability rather than age, Louisiana may request medical records or documentation to verify the disability. Respond to these requests promptly. Missing documents are the most common reason applications stall."
+          },
+          {
+            "step": 5,
+            "title": "Watch for your parent's Medicaid card or approval notice",
+            "description": "Louisiana does not publish a single standard processing time for aged, blind, and disabled Medicaid applications in their official materials. Ask the caseworker for an expected timeline when you submit. If your parent has an urgent medical situation, tell the worker immediately; expedited processing may be available."
+          }
+        ],
+        "processingTime": "Louisiana's official materials do not state a single standard processing time for ABD Medicaid. Ask the caseworker for an expected timeline at the time of application.",
+        "waitlist": null,
+        "tip": "If your parent receives SSI, call 1-888-342-6207 to confirm whether their Medicaid enrollment is already active. Louisiana reports that SSI recipients are automatically eligible, but many still need a separate application. Do not assume SSI equals automatic enrollment without verifying.",
+        "urls": [
+          {
+            "label": "Louisiana Medicaid Self-Service Portal",
+            "url": "https://medicaid.la.gov"
+          },
+          {
+            "label": "Louisiana Department of Health Medicaid",
+            "url": "https://ldh.la.gov/medicaid"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (shows current monthly benefit amount)",
+        "Proof of Louisiana residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Social Security card for your parent",
+        "Proof of age (birth certificate or passport)",
+        "Proof of blindness or disability if applying on that basis (SSA disability award letter or medical documentation)",
+        "Pension or retirement income statements showing current payment amounts",
+        "Current balances for any checking or savings accounts (Louisiana uses SSI-style resource rules; be prepared to provide current account information)",
+        "Documentation of any stocks, bonds, or other liquid investments",
+        "Life insurance policy information, including face values",
+        "Medicare card if your parent has Medicare (Part A or B, or both)",
+        "Proof of citizenship or eligible immigration status (U.S. passport, birth certificate, or immigration documents)",
+        "Legal documents if a representative or power of attorney is applying on your parent's behalf",
+        "Medical records or physician statements if disability documentation is requested by the caseworker"
+      ],
+      "contacts": [
+        {
+          "label": "Louisiana Medicaid Enrollment Line",
+          "phone": "1-888-342-6207",
+          "description": "Apply for ABD Medicaid, ask eligibility questions, and confirm whether an SSI recipient needs a separate application. This is the primary application door.",
+          "hours": "Monday through Friday, business hours (confirm current hours when you call)"
+        },
+        {
+          "label": "Louisiana Department of Health Medicaid (online and mail)",
+          "phone": null,
+          "description": "Apply online at medicaid.la.gov or mail your application to: Louisiana Department of Health Medicaid Application Office, P.O. Box 91030, Baton Rouge, LA 70821-9030.",
+          "hours": "Online portal available 24 hours; mail processing during business days"
+        },
+        {
+          "label": "Louisiana 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline that can help you locate your nearest Medicaid Application Center or local Medicaid office. This line provides referrals and does not process Medicaid applications itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in the hospital or a nursing facility, apply immediately. Medicaid can sometimes cover costs retroactively to the month of application. Ask the facility's social worker to help initiate the process before discharge.",
+        "The medically needy pathway is specifically for people whose income is above the standard 100% FPL limit. If a caseworker says your parent earns too much, ask explicitly about the medically needy pathway before accepting that answer as final.",
+        "Resource limits are enforced strictly under SSI-style rules. A $2,000 individual limit means savings above that amount must be addressed before approval. Talk to the caseworker about what assets are countable and which may be exempt.",
+        "For nursing home coverage, financial eligibility is only the first step. Your parent will also need a separate medical assessment to confirm they meet the Nursing Facility Level of Care standard. Ask the caseworker to explain both tracks when you apply."
+      ],
+      "relatedPrograms": [
+        "Louisiana PACE (Program of All-Inclusive Care for the Elderly)",
+        "Louisiana Elderly and Disabled Adult Waiver (New Opportunities Waiver)",
+        "Supplemental Security Income (SSI)",
+        "Louisiana Medicare Savings Programs (Extra Help with Medicare costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two income pathways: which one fits your parent?",
+          "body": "Standard (categorically needy) pathway: income at or below 100% of the Federal Poverty Level. Your parent qualifies based on income alone if they also meet resource and other requirements.\n\nMedically needy pathway: for people whose income exceeds the standard limit but who have significant medical expenses. Louisiana applies the medically needy income level to this group. If your parent was told they earn too much, ask specifically about the medically needy pathway."
+        },
+        {
+          "type": "prose",
+          "title": "What the $2,000 resource limit actually means",
+          "body": "Louisiana applies SSI-style resource rules to ABD Medicaid. For an individual, countable resources cannot exceed $2,000. Countable resources include cash, bank account balances, stocks, bonds, and other liquid assets. The home your parent lives in is generally not counted. However, the full list of exempt assets was not published in the official materials available for this page. Before assuming an asset disqualifies your parent, ask the caseworker specifically whether it is countable or exempt. This question is worth asking before you spend down any savings."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent receives SSI. Do they still need to apply for Medicaid separately?",
+          "answer": "Possibly yes. Louisiana says SSI recipients are automatically eligible for Medicaid, but the state also reports that many aged, blind, and disabled applicants must file a separate Medicaid application even if they receive SSI. Do not assume SSI equals active Medicaid enrollment. Call 1-888-342-6207 and ask a caseworker to confirm your parent's current Medicaid status before their next medical appointment."
+        },
+        {
+          "question": "My parent's income is above the limit. Is there any other way they can qualify?",
+          "answer": "Yes. Louisiana has a medically needy pathway for people age 65 or older, or disabled, whose income exceeds the standard 100% FPL threshold but who have significant medical expenses. Under this pathway, Louisiana applies the medically needy income level rather than the standard limit. If a caseworker tells you your parent earns too much, ask explicitly about the medically needy pathway before accepting that answer."
+        },
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "The home your parent lives in is generally exempt from the resource calculation under SSI-style rules, which Louisiana uses for this program. The $2,000 individual resource limit applies to countable assets like bank accounts, stocks, and bonds, not to the primary residence. However, the complete list of exempt assets was not published in the official materials available here. Ask the caseworker to confirm which specific assets in your parent's situation are counted and which are not."
+        },
+        {
+          "question": "Can a family member or adult child apply on behalf of an aging parent?",
+          "answer": "Yes. You can apply on behalf of your parent if you have legal authority to do so, such as a power of attorney. You will need to bring documentation of that legal authority when you apply in person or include it with a mailed application. If you are applying online through the Louisiana Medicaid Self-Service Portal at medicaid.la.gov, call 1-888-342-6207 first to ask how to properly designate yourself as the applicant representative."
+        },
+        {
+          "question": "Does this program cover nursing home care?",
+          "answer": "It can, but not automatically. Your parent must meet two separate requirements: financial eligibility for ABD Medicaid, and the Nursing Facility Level of Care standard. The second is a clinical assessment of whether your parent needs daily help with things like bathing, dressing, or medication management. Ask the caseworker about both requirements when you apply, or ask the nursing facility's social worker to help coordinate the clinical review."
+        },
+        {
+          "question": "How long will it take to get approved?",
+          "answer": "Louisiana's official materials do not publish a single standard processing time for ABD Medicaid applications. Ask the caseworker for an estimated timeline when you submit the application. If your parent has an urgent medical need, tell the caseworker immediately. If your parent is in a hospital or nursing facility, apply now and let the facility's social worker know you are doing so. Some situations may allow for faster processing or retroactive coverage back to the month of application."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and the Medicare Savings Program at the same time?",
+          "answer": "Yes, and if your parent has Medicare, you should. The Medicare Savings Program (a separate Louisiana program) can help pay Medicare premiums and cost-sharing for people who qualify. Applying for both at once through the Louisiana Medicaid enrollment line at 1-888-342-6207 is more efficient than filing separately. Tell the caseworker your parent has Medicare when you call."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their income or health situation changes?",
+          "answer": "Louisiana requires Medicaid recipients to report changes in income, resources, household composition, and living situation. If your parent's financial situation changes, contact 1-888-342-6207 to report it. Louisiana conducts periodic eligibility renewals, and missing a renewal notice or failing to return paperwork is a common reason people lose coverage unexpectedly. Watch your parent's mail for renewal forms and respond promptly."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "1-888-342-6207",
+      "sourceUrl": "https://ldh.la.gov/medicaid",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "la-liheap-energy-assistance",
+      "name": "LIHEAP (Low-Income Home Energy Assistance Program)",
+      "shortName": "Home Energy Assistance",
+      "tagline": "If your parent pays their own electric or gas bill in Louisiana and earns under $30,618/year as a single person, they may qualify for up to $800 toward that bill.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Louisiana Housing Corporation Energy Assistance Department, 11637 Industriplex Blvd., Baton Rouge, LA 70809",
+            "type": "service-area"
+          },
+          {
+            "name": "Public inquiries: 1-888-454-2001",
+            "type": "service-area"
+          },
+          {
+            "name": "Louisiana LIHEAP state contact: (225) 763-8700",
+            "type": "service-area"
+          },
+          {
+            "name": "Examples of local providers listed in state materials include Quad Area Community Action Agency, Cameron Community Action Agency, Union Community Action Agency, and parish-specific offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on a fixed income and struggling to keep up with Louisiana's summer cooling or winter heating bills, LIHEAP may pay a portion of that utility bill directly to the utility company on their behalf. One parish example cited in state materials shows benefits of up to $800 toward heating costs. The payment goes to the utility company, not as cash to your parent.\n\nThe income limit for a single-person household is $30,618/year (FFY 2026), based on 60% of Louisiana's State Median Income. A two-person household can earn up to $40,039/year and still qualify. There is no asset test: owning a home or having savings does not disqualify your parent.\n\nThis is a federally funded program administered locally in Louisiana. That means the process, intake dates, and available funding depend on your parent's parish. Some parishes use local community action agencies; others route applications through the Louisiana Housing Corporation's online portal. Applications processed through the online portal during the most recent announced window were scheduled for payment between May 1 and July 15, 2026. Funding is not guaranteed, so applying early matters.",
+      "savingsRange": "Up to $800 toward heating or cooling costs (one parish example cited in official state materials; a universal statewide benefit amount is not published)",
+      "savingsSource": "Louisiana Housing Corporation LIHEAP page (lhc.la.gov/energy-assistance); the $800 figure reflects a parish-level example cited in official state materials, not a guaranteed statewide maximum.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Single-person household income under $30,618/year (FFY 2026)",
+          "Must be responsible for paying the household energy bill",
+          "Must have an active heating or cooling utility account",
+          "No asset limit identified in official Louisiana LIHEAP materials",
+          "Must apply through Louisiana Housing Corporation or a local parish administering agency"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2552
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3337
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4122
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4907
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5692
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6477
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 6624
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6771
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 6919
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 7066
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Applicant must be the person responsible for paying the household energy bill.",
+          "Applicant must have an active heating or cooling utility account in their name.",
+          "Application must be submitted through the Louisiana Housing Corporation's LIHEAP system or through a local administering agency in your parent's parish.",
+          "Funding availability is not guaranteed; applying during open intake periods improves the chance of receiving assistance."
+        ],
+        "povertyLevelReference": "60% of Louisiana State Median Income (FFY 2026)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest route is the Louisiana Housing Corporation's online portal at lhc.la.gov/energy-assistance, though local parish agencies also accept applications and intake schedules vary by location.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the income limit for your parent's household size",
+            "description": "Use the income table above. A single person must earn under $30,618/year. A two-person household must earn under $40,039/year. These are annual gross income limits for FFY 2026."
+          },
+          {
+            "step": 2,
+            "title": "Confirm your parent is responsible for the utility bill",
+            "description": "The energy bill must be in your parent's name, or they must be the person responsible for paying it. Grab the most recent utility bill before you start the application."
+          },
+          {
+            "step": 3,
+            "title": "Gather required documents",
+            "description": "You will need: proof of income, a government-issued photo ID, Social Security cards for all household members, and a current utility bill or printout from the utility company. Have these ready before you begin."
+          },
+          {
+            "step": 4,
+            "title": "Apply online or contact your local agency",
+            "description": "Apply online at lhc.la.gov/energy-assistance. If you prefer in-person help or your parent's parish uses a local agency (such as Quad Area Community Action Agency, Cameron Community Action Agency, or Union Community Action Agency), call 1-888-454-2001 to find the administering agency in your parish."
+          },
+          {
+            "step": 5,
+            "title": "Track the payment window",
+            "description": "Online portal applications from the most recently announced intake period were scheduled for payment between May 1 and July 15, 2026. The state does not publish an exact turnaround time. Follow up with your local agency or call (225) 763-8700 if you have not heard back."
+          }
+        ],
+        "processingTime": "Online portal applications from the most recent announced intake were scheduled for payment between May 1 and July 15, 2026. Exact processing time is not published statewide.",
+        "waitlist": "The Louisiana Housing Corporation states that availability is not guaranteed. No formal statewide waitlist process was identified in official materials. Applying as early as possible during an open intake window is the best way to improve the chance of receiving funds.",
+        "tip": "Benefit payments go directly to the utility company, not to your parent. Make sure the utility account is active and in your parent's name (or that they are confirmed as the responsible party) before submitting the application, or the payment may not process correctly.",
+        "urls": [
+          {
+            "label": "Louisiana Housing Corporation LIHEAP Application Portal",
+            "url": "https://www.lhc.la.gov/energy-assistance"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Government-issued photo ID for the applicant (driver's license, state ID, or passport)",
+        "Current utility bill or official utility company printout showing the account holder's name and service address",
+        "Proof of income for all household members (Social Security award letter, SSI letter, pension statement, pay stubs, or most recent tax return)",
+        "Social Security cards for all household members",
+        "If income includes Social Security or SSI: the most recent benefit award letter from the Social Security Administration"
+      ],
+      "contacts": [
+        {
+          "label": "Louisiana Housing Corporation LIHEAP Public Inquiry Line",
+          "phone": "1-888-454-2001",
+          "description": "Primary line for LIHEAP questions, finding your local parish administering agency, and application help.",
+          "hours": "Hours not published; call during standard business hours Monday through Friday."
+        },
+        {
+          "label": "Louisiana Housing Corporation State Office",
+          "phone": "(225) 763-8700",
+          "description": "State-level LIHEAP contact for escalated questions or if the public inquiry line does not resolve your issue.",
+          "hours": "Hours not published; call during standard business hours Monday through Friday."
+        }
+      ],
+      "applicationNotes": [
+        "Funding is not guaranteed. Louisiana LIHEAP operates on a limited federal allocation. Once funds are exhausted for a program period, new applications may not be processed. Apply during the announced open intake window.",
+        "Local administration matters. Your parent's parish may use a community action agency (such as Quad Area Community Action Agency or Cameron Community Action Agency) rather than the statewide online portal. The intake location, schedule, and process can differ. Call 1-888-454-2001 to confirm how applications are handled in your parent's parish before assuming the online portal is the right route.",
+        "The benefit is paid directly to the utility company. Your parent will not receive a check. If the utility account is not current or is not in their name, the payment may not apply correctly. Resolve any account issues before applying.",
+        "If your parent receives a disconnection notice, ask about priority or crisis assistance when you call. Some local agencies have expedited processing for households facing active shutoff. This is handled locally, not uniformly statewide."
+      ],
+      "relatedPrograms": [
+        "Weatherization Assistance Program (Louisiana)",
+        "Louisiana Community Development Block Grant energy-related assistance",
+        "SNAP (Supplemental Nutrition Assistance Program) Louisiana",
+        "Medicaid (Louisiana Healthy Louisiana)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is a utility payment, not a cash benefit",
+          "body": "LIHEAP does not send money to your parent. The benefit is paid directly to the utility company toward the heating or cooling bill. Your parent must have an active account and be the person responsible for that bill. If the utility is in a landlord's name and the landlord pays it, your parent likely does not qualify unless they can show they pay it themselves."
+        },
+        {
+          "type": "prose",
+          "title": "How benefit amounts are determined",
+          "body": "Louisiana does not publish a single statewide benefit amount for LIHEAP. The research behind this page found one parish-level example citing up to $800 toward heating costs. Actual benefit amounts depend on factors including household priority tier, local administering agency, and remaining funding availability. The state uses income relative to 60% of State Median Income to set eligibility, but the specific benefit your parent receives is determined during the application review. We cannot tell you in advance what your parent will receive; the local administering agency will communicate the benefit amount after processing."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's utility bill is in my name because I set it up for them. Can they still apply?",
+          "answer": "LIHEAP requires the applicant to be responsible for the household energy bill. If your parent lives in the home but the account is in your name, they may not qualify as the account holder. Contact your local administering agency at 1-888-454-2001 to ask whether responsibility can be documented in another way or whether the account needs to be transferred to your parent's name before applying."
+        },
+        {
+          "question": "My parent owns their home and has some savings. Does that disqualify them?",
+          "answer": "No. Louisiana's official LIHEAP materials do not identify an asset limit. Owning a home or having savings does not appear to affect eligibility. The only income test is whether gross household income falls below the limit for their household size (for example, $30,618/year for a single person in FFY 2026)."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot manage the process themselves?",
+          "answer": "The Louisiana Housing Corporation's materials do not explicitly describe a formal authorized representative process in the sources reviewed. Call 1-888-454-2001 to ask what documentation is needed to apply on your parent's behalf. Bring your own ID and any legal documents such as a power of attorney if you have one."
+        },
+        {
+          "question": "My parent's utility was recently shut off. Is there emergency help?",
+          "answer": "Some local administering agencies offer crisis or emergency processing for households facing active disconnection. This is handled at the parish level, not uniformly statewide. When you call 1-888-454-2001, tell them the utility has been disconnected or that a shutoff notice is active and ask specifically about crisis assistance. The standard processing timeline may not apply in those cases."
+        },
+        {
+          "question": "Can my parent apply for LIHEAP and also apply for the Weatherization Assistance Program?",
+          "answer": "Yes. LIHEAP and the Weatherization Assistance Program are separate programs. Weatherization can reduce energy costs long-term by improving insulation, sealing leaks, and upgrading equipment. Receiving LIHEAP does not disqualify a household from Weatherization, and many families benefit from both. Ask about Weatherization when you contact the Louisiana Housing Corporation."
+        },
+        {
+          "question": "How will my parent know if the application was approved and when the payment will happen?",
+          "answer": "The Louisiana Housing Corporation does not publish a specific statewide notification timeline. Online portal applications from the most recently announced intake were scheduled for payment between May 1 and July 15, 2026. If your parent has not received confirmation or seen the payment reflected on their utility bill after that window, call (225) 763-8700 to follow up."
+        },
+        {
+          "question": "What if my parent applies but funding runs out before their application is processed?",
+          "answer": "The Louisiana Housing Corporation states that availability is not guaranteed. If funds are exhausted before an application is processed, your parent may not receive assistance in that program period. There is no formal statewide waitlist described in official materials reviewed. The most reliable way to improve the chances of receiving a benefit is to apply as early as possible during an announced open intake window."
+        },
+        {
+          "question": "Does my parent need to reapply every year?",
+          "answer": "Yes. LIHEAP is not a continuous benefit. Your parent must apply during each program intake period. The Louisiana Housing Corporation announces intake windows; the most recently documented online portal window had payments scheduled between May 1 and July 15, 2026. Check lhc.la.gov/energy-assistance or call 1-888-454-2001 to learn when the next intake period opens."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-888-454-2001",
+      "sourceUrl": "https://www.lhc.la.gov/energy-assistance",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "la-home-delivered-meals",
+      "name": "Home-Delivered Meals (Nutrition Program)",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60 or older and can't easily shop or cook for themselves, Louisiana can arrange for hot, nutritious meals delivered to their door, often at no required cost.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Governor's Office of Elderly Affairs agency directory",
+            "type": "service-area"
+          },
+          {
+            "name": "Area Agencies on Aging directory",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Councils on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "New Orleans Council on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Jefferson Council on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Lafourche Council on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Lafayette Council on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent struggles to get to the grocery store, stand long enough to cook, or simply eat consistently, Louisiana's Home-Delivered Meals program can send a hot, ready-to-eat meal to their home, typically five days a week. Meals are designed to provide at least one-third of the recommended daily nutritional requirements. There is no required payment for the meal, though some local providers encourage a voluntary donation.\n\nThe program is for adults 60 and older who are homebound or otherwise unable to prepare or obtain their own meals. There is no statewide income test and no asset limit. The practical question local providers ask is whether your parent genuinely cannot manage meals on their own, not how much money they have.\n\nThis program is run locally, not statewide. Each parish has its own Council on Aging or Area Agency on Aging that manages routes, schedules, and intake. That means the first step is finding the right office for your parent's parish, then calling them directly. What you get may differ by parish: some deliver hot meals five days a week, others may offer frozen or alternative formats depending on local capacity.",
+      "savingsRange": "",
+      "savingsSource": "Free service; no required payment identified statewide. Some local providers suggest a voluntary donation.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound or unable to prepare or obtain meals independently",
+          "No income test statewide",
+          "No asset test statewide",
+          "Priority given to frail, isolated, or disabled older adults at some parishes"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound or unable to purchase, prepare, or procure meals for themselves. Local providers may ask about mobility, ability to shop or cook, and any health conditions that create that barrier. This is not a formal clinical scoring system statewide; it is a practical needs assessment conducted by the local parish provider.",
+        "otherRequirements": [
+          "Must live in the service area of a participating parish provider.",
+          "Route and delivery capacity must be available in the parish; waiting lists can exist locally.",
+          "Some parishes prioritize frail, disabled, or socially isolated older adults when capacity is limited."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Council on Aging or Area Agency on Aging that serves your parent's parish; they conduct intake over the phone and can tell you immediately whether there is a waitlist.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find the right office for your parent's parish",
+            "description": "Go to the Governor's Office of Elderly Affairs agency directory at goea.louisiana.gov/agency-directory to identify the Council on Aging or Area Agency on Aging that covers your parent's parish. Each parish has its own provider; using the wrong office will delay things."
+          },
+          {
+            "step": 2,
+            "title": "Call the local Council on Aging directly",
+            "description": "Call the parish provider and say you are looking to enroll a parent in the home-delivered meals program. As an example, the Lafayette Council on Aging can be reached at (337) 262-5990. Your parent's parish will have its own number listed in the GOEA directory."
+          },
+          {
+            "step": 3,
+            "title": "Complete the intake assessment",
+            "description": "The intake coordinator will ask about your parent's age, home address, mobility or health limitations that prevent them from preparing meals, and emergency contact information. Have a photo ID or birth certificate handy in case proof of age is requested."
+          },
+          {
+            "step": 4,
+            "title": "Ask about the waitlist and start date",
+            "description": "Ask directly: Is there a waitlist? How long? Capacity is route-based, so availability can differ even within the same metro area. If there is a wait, ask to be added to the list that day so the clock starts."
+          }
+        ],
+        "processingTime": "No statewide processing timeline is published. Timing depends on the parish provider and available route capacity. Ask the local office for an estimate when you call.",
+        "waitlist": "No statewide waitlist was identified, but local providers may have waiting lists when route capacity is full. Availability varies by parish.",
+        "tip": "If your parent lives near a parish boundary, ask whether the neighboring parish's program has shorter wait times. Eligibility is based on residence, but it is worth understanding your options.",
+        "urls": [
+          {
+            "label": "Governor's Office of Elderly Affairs Agency Directory",
+            "url": "https://goea.louisiana.gov/agency-directory/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (driver's license, state ID, birth certificate, or passport)",
+        "Home address and contact information for your parent",
+        "Brief description of why your parent cannot prepare or obtain meals (mobility issues, recent surgery, health condition, and so on)",
+        "Emergency contact name and phone number",
+        "Any intake or assessment form the local parish provider sends or requests"
+      ],
+      "contacts": [
+        {
+          "label": "Lafayette Council on Aging",
+          "phone": "(337) 262-5990",
+          "description": "Direct intake for home-delivered meals in Lafayette Parish. If your parent lives in a different parish, use the GOEA agency directory to find the correct local number.",
+          "hours": "Contact local office for hours"
+        },
+        {
+          "label": "Governor's Office of Elderly Affairs (GOEA)",
+          "phone": "(225) 342-7100",
+          "description": "State office that oversees the agency directory. Can help you identify the correct parish-level Council on Aging if you cannot locate it online.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "This program is not administered centrally. If you call a statewide number and are told there is no record of your parent, that is because intake happens at the parish level. Use the GOEA agency directory to find the right local office.",
+        "Some parishes have waiting lists when delivery routes are full. Ask to be added to the list the same day you call, even if a spot is not immediately available.",
+        "Donations may be suggested by some local providers, but meals are not withheld if your parent cannot or does not contribute. The program is not means-tested statewide."
+      ],
+      "relatedPrograms": [
+        "Congregate Meals (Senior Center Nutrition Program)",
+        "Louisiana SNAP (Supplemental Nutrition Assistance Program)",
+        "Louisiana Medicaid Home and Community-Based Services Waiver",
+        "CACFP (Child and Adult Care Food Program) for adult day programs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What the meals actually look like",
+          "body": "Most parishes deliver hot, ready-to-eat meals Monday through Friday. Meals are designed to meet at least one-third of the recommended daily nutritional requirements. Some providers may deliver frozen meals or other formats depending on local operations. Ask your parish provider what their delivery format is when you call."
+        },
+        {
+          "type": "prose",
+          "title": "Why this varies by parish",
+          "body": "Louisiana's home-delivered meals program is funded through the Older Americans Act and administered locally by each parish's Council on Aging or Area Agency on Aging. Because routes, staffing, and funding are managed at the parish level, what you receive, how often, and how long you wait can differ sharply from one parish to the next. Two siblings in neighboring parishes might have different delivery schedules and different wait times. This is normal; it is how the program is structured. The right move is to contact your specific parish provider and ask directly what they offer."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has a decent income and some savings. Does that disqualify them?",
+          "answer": "No. Louisiana's home-delivered meals program does not have a statewide income limit or an asset test. The qualifying factor is need: whether your parent is homebound or unable to prepare or obtain meals on their own. A local provider may ask about that need during intake, but they are not looking at bank accounts or income figures."
+        },
+        {
+          "question": "What if there is a waitlist in my parent's parish?",
+          "answer": "Ask to be added to the waitlist the same day you call. Waitlist length is not published statewide because it depends on local route capacity. If your parent's situation is urgent, say so clearly when you call. Some providers prioritize frail, isolated, or recently hospitalized older adults. You can also ask whether any neighboring parish with an overlapping service area has shorter availability, though eligibility is based on where your parent lives."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or does my parent have to call themselves?",
+          "answer": "Yes, you can call on your parent's behalf. Most local Councils on Aging routinely take intake from adult children and other family caregivers. Have your parent's home address, date of birth, and a brief description of their situation ready when you call."
+        },
+        {
+          "question": "Will my parent be charged for the meals?",
+          "answer": "There is no required payment statewide. Some local providers suggest or encourage a voluntary donation, but the meals are not withheld if your parent cannot or chooses not to contribute. If you are asked about payment, clarify that you are asking whether meals are available without it."
+        },
+        {
+          "question": "My parent is in the hospital right now. Can we start the process before they come home?",
+          "answer": "Yes, and it is a good idea. Call the parish Council on Aging now, explain that your parent will be returning home and will need meal delivery. Discharge planners at the hospital may also be able to initiate or support the referral. Getting on the list before discharge means less gap in care once your parent is home."
+        },
+        {
+          "question": "What happens if my parent moves to a different parish?",
+          "answer": "Enrollment in one parish does not transfer automatically. If your parent moves, you will need to contact the Council on Aging in the new parish and go through intake again. The new parish may have different meal formats, delivery schedules, or wait times. Contact the new provider as early as possible to minimize any gap in service."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "(337) 262-5990",
+      "sourceUrl": "https://goea.louisiana.gov/agency-directory/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "la-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program",
+      "shortName": "Caregiver Support Program",
+      "tagline": "If you are caring for an aging parent or relative in Louisiana, this program can connect you with free respite care, counseling, support groups, and in-home help so you don't have to do this alone.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Governor's Office of Elderly Affairs, (225) 342-7100",
+            "type": "service-area"
+          },
+          {
+            "name": "Louisiana Answers / Information Station, 1-800-738-2256",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Area Agencies on Aging listed in the GOEA directory",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Caring for an aging parent is a full-time responsibility that most families take on without any outside help. Louisiana's National Family Caregiver Support Program (NFCSP) exists specifically for you, the caregiver, not just your parent. Through your local Area Agency on Aging, this program can connect you with in-home respite care (temporary relief so you can rest or handle other obligations), caregiver counseling, support groups, sitter services, and educational resources.\n\nThis program is funded under the federal Older Americans Act and administered in Louisiana through the Governor's Office of Elderly Affairs and a statewide network of local aging agencies. There is no fixed income test or asset limit that disqualifies you. The key question is whether you are an active family caregiver for an older adult, or a grandparent or relative caregiver raising a child.\n\nWhat you can actually receive depends on your parish. Each local Area Agency on Aging controls its own service mix, funding levels, and intake process. Some parishes offer in-home respite directly; others refer you to partner providers. Call your local agency first to find out exactly what is available where you live.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The NFCSP provides support services at no cost to eligible caregivers. No dollar benefit amount is published by the Louisiana Governor's Office of Elderly Affairs because services are administered locally and vary by parish.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You are the primary caregiver for an older adult or a relative caregiver for a child",
+          "No income limit or asset test identified in Louisiana's official program materials",
+          "Care recipient must be an older adult or, for grandparent/relative track, a child or older relative",
+          "Services are available statewide but vary by parish through local aging agencies",
+          "Eligibility is assessed through a local intake process, not a statewide form"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "A local Area Agency on Aging staff member will conduct a caregiver intake assessment to understand your caregiving situation: how much care your parent needs, what tasks you are helping with, and what support would be most useful. This is not a clinical test; it is a structured conversation that determines which services are available to you locally.",
+        "otherRequirements": [
+          "You must be actively providing unpaid care for an older adult, OR be a grandparent or relative caregiver for a child or older relative as defined by the program",
+          "Services are coordinated through the Louisiana Governor's Office of Elderly Affairs and local Area Agencies on Aging; contact your parish agency to begin",
+          "Service availability and specific offerings depend on local provider capacity and available funding at the time you apply"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your local Area Agency on Aging or Louisiana Answers at 1-800-738-2256 to start the intake process; there is no statewide processing timeline, so timing depends on your parish.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call Louisiana Answers to find your local agency",
+            "description": "Call 1-800-738-2256 (Louisiana Answers / Information Station). Tell them you are a family caregiver looking for the National Family Caregiver Support Program in your parish. They will connect you with your local Council on Aging or Area Agency on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Complete a caregiver intake assessment",
+            "description": "Your local agency will conduct a caregiver intake assessment, either by phone or in person. Be ready to describe who you are caring for, your relationship to them, what kind of help you are providing, and what support you most need (respite, counseling, sitter help, education, or something else)."
+          },
+          {
+            "step": 3,
+            "title": "Submit any documents your local agency requests",
+            "description": "Most local agencies will ask for basic identification and information about the care recipient. The NFCSP Intake Assessment Form is the primary document. Your local agency will tell you exactly what they need at intake."
+          },
+          {
+            "step": 4,
+            "title": "Receive a service plan and next steps",
+            "description": "After intake, the agency will tell you which services are currently available in your parish, whether there is a waitlist, and how to access what you qualify for. Keep the contact name and number of your caseworker for follow-up."
+          }
+        ],
+        "processingTime": "No official statewide processing time has been published. Timing depends on your local Area Agency on Aging, the intake assessment, and current service availability in your parish.",
+        "waitlist": "No statewide waitlist policy has been published. Some local services may have limited capacity depending on parish funding and provider availability. Ask your local agency directly about current wait times when you call.",
+        "tip": "When you call, say specifically that you are looking for the National Family Caregiver Support Program. Mentioning the program by name helps staff route your call to the right intake team rather than a general information queue.",
+        "urls": [
+          {
+            "label": "Governor's Office of Elderly Affairs: Agency Overview",
+            "url": "https://goea.louisiana.gov/about-us/agency-overview/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your name, address, and contact information (needed to begin intake)",
+        "The name, age, and your relationship to the person you are caring for",
+        "A brief description of your caregiving situation: what tasks you help with and what kind of support you are looking for",
+        "Government-issued photo ID for yourself, if requested by your local agency",
+        "Proof of the care recipient's age or identity, such as a birth certificate or Medicare card, if requested during intake",
+        "Any medical or service records relevant to your parent's care needs, if your local agency asks for them during the assessment"
+      ],
+      "contacts": [
+        {
+          "label": "Governor's Office of Elderly Affairs",
+          "phone": "(225) 342-7100",
+          "description": "Statewide program office for NFCSP in Louisiana. Call here for program information and to be directed to your regional Area Agency on Aging.",
+          "hours": "Mon-Fri, standard business hours"
+        },
+        {
+          "label": "Louisiana Answers / Information Station",
+          "phone": "1-800-738-2256",
+          "description": "Statewide caregiver support line. Can provide referrals to your local Council on Aging and answer general questions about available services.",
+          "hours": "Mon-Fri, standard business hours"
+        },
+        {
+          "label": "Louisiana Department of Health Aging Services",
+          "phone": "1-877-456-1146",
+          "description": "Alternative contact to request aging services and be connected with local caregiver support resources.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "Services vary significantly by parish. A service that is available in Baton Rouge or New Orleans may not be available in a rural parish, or may have a longer wait. Always ask your local agency what is currently funded and available before counting on a specific service.",
+        "This program supports YOU as the caregiver, not only your parent. If you have been told you don't qualify because your parent's income is too high or too low, that may be a misunderstanding. There is no published income or asset test in Louisiana's NFCSP materials. Ask to speak with a caregiver services coordinator specifically.",
+        "Grandparents and other relatives raising grandchildren or older relatives may also qualify under a separate track of this program. Ask your local agency about the grandparent and relative caregiver eligibility category when you call.",
+        "If you are in a crisis situation and need respite care urgently, say so when you call. Local agencies may be able to prioritize your intake or refer you to emergency respite options."
+      ],
+      "relatedPrograms": [
+        "Louisiana Medicaid Home and Community-Based Services (HCBS) Waiver",
+        "Louisiana PACE (Program of All-inclusive Care for the Elderly)",
+        "Louisiana Aging and Disability Resource Center (ADRC)",
+        "Louisiana Adult Protective Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What services can you actually get?",
+          "body": "Louisiana's NFCSP may provide any combination of these depending on your parish and available funding: in-home respite care (someone comes to your home so you can take a break), group respite, caregiver sitter services, individual counseling, caregiver support groups, public education and training, and information and assistance connecting you with other resources. No single parish offers all of these at all times. Your local agency will tell you what is currently available."
+        },
+        {
+          "type": "prose",
+          "title": "Why services vary by parish",
+          "body": "The NFCSP is a federally funded program under the Older Americans Act, but Louisiana administers it through a network of local Area Agencies on Aging. Each agency receives a portion of state and federal funding and decides which services to offer based on local need and capacity. This means two caregivers in different parishes may receive different services, face different wait times, or go through different intake processes. The Governor's Office of Elderly Affairs at (225) 342-7100 can tell you which Area Agency on Aging covers your parish."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "I am not sure I qualify because my parent has some savings. Is there an income or asset limit?",
+          "answer": "Based on Louisiana's official program materials, there is no published income test or asset limit for the NFCSP. This program is designed for family caregivers and is not means-tested in the same way as Medicaid or SNAP. The key question is whether you are an active caregiver for an older adult or relative. Call 1-800-738-2256 to confirm with your local agency, since local intake practices can vary."
+        },
+        {
+          "question": "My parent lives with me. Does that affect whether I qualify?",
+          "answer": "No. Living with the person you care for does not disqualify you. In fact, co-resident caregivers who provide daily hands-on help are exactly who this program is designed to support. Describe your caregiving situation honestly during the intake assessment so the agency can match you with the most appropriate services."
+        },
+        {
+          "question": "Can I get respite care, or just information and referrals?",
+          "answer": "In-home respite and group respite are listed as NFCSP services in Louisiana's official materials. Whether they are available in your specific parish depends on current local funding and provider capacity. Ask your local Area Agency on Aging directly whether in-home respite has current openings or a waitlist. Call the Governor's Office of Elderly Affairs at (225) 342-7100 if your local agency cannot help."
+        },
+        {
+          "question": "How long will I wait before I actually receive any help?",
+          "answer": "Louisiana has not published a statewide processing timeline or waitlist policy for this program. Wait times depend entirely on your parish, the specific service you need, and current funding levels. Some services may be available quickly; others may have a wait. Ask your local agency for a honest estimate when you complete intake, and get a caseworker's contact information so you can follow up."
+        },
+        {
+          "question": "I am a grandparent raising my grandchildren. Does this program apply to me?",
+          "answer": "Yes. The NFCSP has a separate track for grandparents and other relatives who are raising grandchildren or caring for older relatives. When you call 1-800-738-2256 or your local Area Agency on Aging, mention that you are a grandparent or relative caregiver. This helps staff route you to the correct eligibility category and service options."
+        },
+        {
+          "question": "Can I apply for NFCSP services and Medicaid home care at the same time?",
+          "answer": "Yes. These are separate programs and applying for one does not affect your eligibility for the other. NFCSP services are specifically for the caregiver's support. Medicaid home and community-based services focus on direct care for your parent. Many families use both. Your local Area Agency on Aging can help you understand both options and may be able to assist with referrals."
+        },
+        {
+          "question": "What happens after I enroll? Will I need to reapply or be reassessed?",
+          "answer": "Each local agency handles reassessment differently, as there is no published statewide policy. In general, your service plan may be reviewed periodically or when your caregiving situation changes. If your parent's care needs increase significantly, contact your local caseworker to request a reassessment so your service plan can be updated."
+        },
+        {
+          "question": "My parent's situation is getting worse fast. Is there any way to get help sooner?",
+          "answer": "When you call, clearly explain that you are in a high-stress or near-crisis situation. Local agencies may be able to prioritize intake or connect you with emergency respite resources. You can also call the Louisiana Department of Health Aging Services line at 1-877-456-1146 as an alternative entry point if the main caregiver line has a wait."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "(225) 342-7100",
+      "sourceUrl": "https://goea.louisiana.gov/about-us/agency-overview/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

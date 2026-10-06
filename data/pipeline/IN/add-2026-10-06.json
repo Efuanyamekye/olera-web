@@ -1,0 +1,412 @@
+{
+  "state": "IN",
+  "addedAt": "2026-10-06T06:10:00.768Z",
+  "dive": {
+    "state": "IN",
+    "stateName": "Indiana",
+    "diveAt": "2026-10-06T06:06:43.332Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Indiana Energy Assistance Program (IEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "basis": "Household eligibility is based on the most recent three months of income and generally must be at or below 60% of State Median Income (60 SMI). For households of 10 or more, some local materials indicate 150% of the Federal Poverty Guidelines may be used as the comparable cap when it is higher.",
+            "table_3_month_income": [
+              {
+                "household_size": 1,
+                "max_income_3_months": 33556,
+                "monthly_equivalent": 2796
+              },
+              {
+                "household_size": 2,
+                "max_income_3_months": 43882,
+                "monthly_equivalent": 3659
+              },
+              {
+                "household_size": 3,
+                "max_income_3_months": 54207,
+                "monthly_equivalent": 4517
+              },
+              {
+                "household_size": 4,
+                "max_income_3_months": 64533,
+                "monthly_equivalent": 5377
+              },
+              {
+                "household_size": 5,
+                "max_income_3_months": 74857,
+                "monthly_equivalent": 6238
+              },
+              {
+                "household_size": 6,
+                "max_income_3_months": 85183,
+                "monthly_equivalent": 7098
+              },
+              {
+                "household_size": 7,
+                "max_income_3_months": 87119,
+                "monthly_equivalent": 7259
+              },
+              {
+                "household_size": 8,
+                "max_income_3_months": 89055,
+                "monthly_equivalent": 7421
+              },
+              {
+                "household_size": 9,
+                "max_income_3_months": 90991,
+                "monthly_equivalent": 7582
+              },
+              {
+                "household_size": 10,
+                "max_income_3_months": 92927,
+                "monthly_equivalent": 7743
+              }
+            ],
+            "notes": [
+              "Eligibility is based on income of all household members age 18 and older during the application period.",
+              "Some local providers publish the same 60 SMI table in monthly and annual form."
+            ]
+          },
+          "asset_limits": "No statewide asset limit was identified in the official program materials reviewed. The program focuses on household income, residency, and required documentation rather than bank balances or countable assets.",
+          "other_requirements": [
+            "Applicant must live in Indiana.",
+            "Applicant must have resided in a dwelling within Indiana for at least 30 days.",
+            "Household applies at the local office for the primary residence, an authorized site, through the online portal, or by telephone with the local service provider.",
+            "Applicants must be a U.S. citizen, U.S. national, or qualified non-citizen, according to some local provider guidance.",
+            "Program year is time-limited: the application window opens October 1, 2026 at 8:00 AM Eastern and closes April 30, 2027 at 5:00 PM Eastern."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A one-time energy assistance benefit applied to household utility costs; the program is designed to help with heating and other household energy expenses. The exact dollar amount varies by household circumstances and provider rules, and the benefit can differ by utility service type and local administration.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application portal: https://ihcda.rhsconnect.com/",
+            "By mail through your Local Service Provider after requesting a paper application",
+            "In person through your Local Service Provider or an authorized site",
+            "By phone appointment directly with your Local Service Provider"
+          ],
+          "processing_time": "No single statewide processing-time guarantee was identified in the official materials reviewed. Processing is handled by the local service provider, and timing can vary by county and provider workload.",
+          "waitlist": "No formal statewide waitlist was identified. Because applications are handled locally, some counties or providers may experience backlogs or appointment delays during peak season.",
+          "forms": [
+            "Indiana Energy Assistance Program application packet / application form",
+            "Income documentation for all household members age 18 and over",
+            "Local provider may require additional household or utility forms"
+          ],
+          "documents": [
+            "Current proof of income for all household members age 18 and over",
+            "Documentation covering the most recent three months of income",
+            "Proof of Indiana residency and dwelling address",
+            "Utility account or bill information",
+            "Any additional forms requested by the local service provider"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Indiana, but households must apply through their local service provider for their primary residence.",
+          "regional_variations": "Yes. Application intake, appointment availability, and some administrative details differ by county and by local service provider. Some utilities and local agencies publish their own income tables, intake instructions, and opening dates for their service area, but the statewide program window is the same.",
+          "offices_or_providers": [
+            "Indiana Housing and Community Development Authority statewide portal",
+            "County or regional Local Service Providers",
+            "Authorized local intake sites and subcontractors such as township trustees in some areas",
+            "Marion County / Indy EAP for Indianapolis-area applicants"
+          ]
+        },
+        "official_source": "https://www.in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/",
+        "gotchas": [
+          "This is not a medical or caregiving program; it is a utility assistance program.",
+          "Income is measured using the most recent three months, not just current monthly income.",
+          "The application window is seasonal, and missing the April 30 deadline can mean waiting for the next program year.",
+          "You must apply through the correct local service provider for your residence.",
+          "Some county-level materials show slightly different thresholds or local instructions, so families should confirm the local provider serving the home address.",
+          "Paper, in-person, and phone options usually run through local providers rather than a single statewide office."
+        ],
+        "data_shape_notes": "Benefit eligibility is income-based and household-size-based, with local-provider administration. The key structure is a statewide program with county-level intake and service delivery, not a single centralized office.",
+        "_raw": "{\n  \"name\": \"Indiana Energy Assistance Program (IEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"basis\": \"Household eligibility is based on the most recent three months of income and generally must be at or below 60% of State Median Income (60 SMI). For households of 10 or more, some local materials indicate 150% of the Federal Poverty Guidelines may be used as the comparable cap when it is higher.\",\n      \"table_3_month_income\": [\n        { \"household_size\": 1, \"max_income_3_months\": 33556, \"monthly_equivalent\": 2796 },\n        { \"household_size\": 2, \"max_income_3_months\": 43882, \"monthly_equivalent\": 3659 },\n        { \"household_size\": 3, \"max_income_3_months\": 54207, \"monthly_equivalent\": 4517 },\n        { \"household_size\": 4, \"max_income_3_months\": 64533, \"monthly_equivalent\": 5377 },\n        { \"household_size\": 5, \"max_income_3_months\": 74857, \"monthly_equivalent\": 6238 },\n        { \"household_size\": 6, \"max_income_3_months\": 85183, \"monthly_equivalent\": 7098 },\n        { \"household_size\": 7, \"max_income_3_months\": 87119, \"monthly_equivalent\": 7259 },\n        { \"household_size\": 8, \"max_income_3_months\": 89055, \"monthly_equivalent\": 7421 },\n        { \"household_size\": 9, \"max_income_3_months\": 90991, \"monthly_equivalent\": 7582 },\n        { \"household_size\": 10, \"max_income_3_months\": 92927, \"monthly_equivalent\": 7743 }\n      ],\n      \"notes\": [\n        \"Eligibility is based on income of all household members age 18 and older during the application period.\",\n        \"Some local providers publish the same 60 SMI table in monthly and annual form.\"\n      ]\n    },\n    \"asset_limits\": \"No statewide asset limit was identified in the official program materials reviewed. The program focuses on household income, residency, and required documentation rather than bank balances or countable assets.\",\n    \"other_requirements\": [\n      \"Applicant must live in Indiana.\",\n      \"Applicant must have resided in a dwelling within Indiana for at least 30 days.\",\n      \"Household applies at the local office for the primary residence, an authorized site, through the online portal, or by telephone with the local service provider.\",\n      \"Applicants must be a U.S. citizen, U.S. national, or qualified non-citizen, according to some local provider guidance.\",\n      \"Program year is time-limited: the application window opens October 1, 2026 at 8:00 AM Eastern and closes April 30, 2027 at 5:00 PM Eastern.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A one-time energy assistance benefit applied to household utility costs; the program is designed to help with heating and other household energy expenses. The exact dollar amount varies by household circumstances and provider rules, and the benefit can differ by utility service type and local administration.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application portal: https://ihcda.rhsconnect.com/\",\n      \"By mail through your Local Service Provider after requesting a paper application\",\n      \"In person through your Local Service Provider or an authorized site\",\n      \"By phone appointment directly with your Local Service Provider\"\n    ],\n    \"processing_time\": \"No single statewide processing-time guarantee was identified in the official materials reviewed. Processing is handled by the local service provider, and timing can vary by county and provider workload.\",\n    \"waitlist\": \"No formal statewide waitlist was identified. Because applications are handled locally, some counties or providers may experience backlogs or appointment delays during peak season.\",\n    \"forms\": [\n      \"Indiana Energy Assistance Program application packet / application form\",\n      \"Income documentation for all household members age 18 and over\",\n      \"Local provider may require additional household or utility forms\"\n    ],\n    \"documents\": [\n      \"Current proof of income for all household members age 18 and over\",\n      \"Documentation covering the most recent three months of income\",\n      \"Proof of Indiana residency and dwelling address\",\n      \"Utility account or bill information\",\n      \"Any additional forms requested by the local service provider\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Indiana, but households must apply through their local service provider for their primary residence.\",\n    \"regional_variations\": \"Yes. Application intake, appointment availability, and some administrative details differ by county and by local service provider. Some utilities and local agencies publish their own income tables, intake instructions, and opening dates for their service area, but the statewide program window is the same.\",\n    \"offices_or_providers\": [\n      \"Indiana Housing and Community Development Authority statewide portal\",\n      \"County or regional Local Service Providers\",\n      \"Authorized local intake sites and subcontractors such as township trustees in some areas\",\n      \"Marion County / Indy EAP for Indianapolis-area applicants\"\n    ]\n  },\n  \"official_source\": \"https://www.in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/\",\n  \"gotchas\": [\n    \"This is not a medical or caregiving program; it is a utility assistance program.\",\n    \"Income is measured using the most recent three months, not just current monthly income.\",\n    \"The application window is seasonal, and missing the April 30 deadline can mean waiting for the next program year.\",\n    \"You must apply through the correct local service provider for your residence.\",\n    \"Some county-level materials show slightly different thresholds or local instructions, so families should confirm the local provider serving the home address.\",\n    \"Paper, in-person, and phone options usually run through local providers rather than a single statewide office.\"\n  ],\n  \"data_shape_notes\": \"Benefit eligibility is income-based and household-size-based, with local-provider administration. The key structure is a statewide program with county-level intake and service delivery, not a single centralized office.\"\n}"
+      },
+      {
+        "name": "National Family Caregiver Support Program (NFCSP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No income limits for Indiana’s Family Caregiver Program/NFCSP. Participants are asked to make voluntary contributions if able.",
+          "asset_limits": "No asset limits were identified in the official Indiana materials reviewed. No asset test is described for this program.",
+          "other_requirements": [
+            "Care recipient must fit one of the program categories: a person age 60 or older; an older relative age 55 or older caring for a child or for an adult with a disability age 18 to 59; or an adult family member or other informal caregiver age 18 or older providing care to a person of any age with Alzheimer’s disease or a related disorder.",
+            "Services are provided through Indiana’s Area Agencies on Aging / INconnect member network.",
+            "The program is for unpaid family caregivers and informal caregivers, not for paid professional caregivers."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Provides caregiver support services, including individual counseling, training, support groups, respite care, supplemental services on a limited basis, access assistance, and information services. Specific respite hours, voucher amounts, or dollar caps are not stated statewide and can vary by local agency.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call 800-713-9023",
+            "Contact your local Area Agency on Aging / INconnect member",
+            "Use the Indiana FSSA resource page: https://www.in.gov/fssa/resource-guide/"
+          ],
+          "processing_time": "No statewide processing-time standard was identified in the official sources reviewed.",
+          "waitlist": "No statewide waitlist policy was identified; availability may depend on local Area Agency on Aging capacity and regional funding.",
+          "forms": [],
+          "documents": [
+            "Care recipient’s age and caregiving relationship details",
+            "Information showing the care recipient meets one of the program’s eligible categories",
+            "Basic contact information for the caregiver and care recipient",
+            "Any local intake paperwork requested by the Area Agency on Aging"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Administered through Indiana’s Area Agencies on Aging / INconnect members statewide; service access is local, but the program is not county-restricted.",
+          "regional_variations": "Yes. Indiana states the program is delivered through local Area Agencies on Aging, so the exact mix of services, availability, and likely wait times can differ by region.",
+          "offices_or_providers": [
+            "Indiana Area Agencies on Aging",
+            "INconnect members"
+          ]
+        },
+        "official_source": "https://www.in.gov/fssa/resource-guide/",
+        "gotchas": [
+          "There is no income test, so many families assume they will not qualify when they actually may.",
+          "The program is for caregivers, not the older adult directly, though the care recipient must fit one of the eligible categories.",
+          "Benefits are not uniform statewide; local agencies decide how services are delivered and may differ in available respite or counseling options.",
+          "Voluntary contributions may be requested, but inability to contribute should not bar access."
+        ],
+        "data_shape_notes": "No income or asset test; eligibility is relationship- and care-recipient-category-based. Benefits are service-based and locally administered, so regional variation matters more than household size.",
+        "_raw": "{\n  \"name\": \"National Family Caregiver Support Program (NFCSP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No income limits for Indiana’s Family Caregiver Program/NFCSP. Participants are asked to make voluntary contributions if able.\",\n    \"asset_limits\": \"No asset limits were identified in the official Indiana materials reviewed. No asset test is described for this program.\",\n    \"other_requirements\": [\n      \"Care recipient must fit one of the program categories: a person age 60 or older; an older relative age 55 or older caring for a child or for an adult with a disability age 18 to 59; or an adult family member or other informal caregiver age 18 or older providing care to a person of any age with Alzheimer’s disease or a related disorder.\",\n      \"Services are provided through Indiana’s Area Agencies on Aging / INconnect member network.\",\n      \"The program is for unpaid family caregivers and informal caregivers, not for paid professional caregivers.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Provides caregiver support services, including individual counseling, training, support groups, respite care, supplemental services on a limited basis, access assistance, and information services. Specific respite hours, voucher amounts, or dollar caps are not stated statewide and can vary by local agency.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call 800-713-9023\",\n      \"Contact your local Area Agency on Aging / INconnect member\",\n      \"Use the Indiana FSSA resource page: https://www.in.gov/fssa/resource-guide/\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was identified in the official sources reviewed.\",\n    \"waitlist\": \"No statewide waitlist policy was identified; availability may depend on local Area Agency on Aging capacity and regional funding.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Care recipient’s age and caregiving relationship details\",\n      \"Information showing the care recipient meets one of the program’s eligible categories\",\n      \"Basic contact information for the caregiver and care recipient\",\n      \"Any local intake paperwork requested by the Area Agency on Aging\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Administered through Indiana’s Area Agencies on Aging / INconnect members statewide; service access is local, but the program is not county-restricted.\",\n    \"regional_variations\": \"Yes. Indiana states the program is delivered through local Area Agencies on Aging, so the exact mix of services, availability, and likely wait times can differ by region.\",\n    \"offices_or_providers\": [\n      \"Indiana Area Agencies on Aging\",\n      \"INconnect members\"\n    ]\n  },\n  \"official_source\": \"https://www.in.gov/fssa/resource-guide/\",\n  \"gotchas\": [\n    \"There is no income test, so many families assume they will not qualify when they actually may.\",\n    \"The program is for caregivers, not the older adult directly, though the care recipient must fit one of the eligible categories.\",\n    \"Benefits are not uniform statewide; local agencies decide how services are delivered and may differ in available respite or counseling options.\",\n    \"Voluntary contributions may be requested, but inability to contribute should not bar access.\"\n  ],\n  \"data_shape_notes\": \"No income or asset test; eligibility is relationship- and care-recipient-category-based. Benefits are service-based and locally administered, so regional variation matters more than household size.\"\n}"
+      },
+      {
+        "name": "Indiana Medicaid for the Aged, Blind and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Indiana’s Aged, Blind, and Disabled Medicaid is not a single household-size-based program with one universal income chart. Eligibility depends on which ABD pathway the person fits into: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging, or an HCBS waiver. Indiana’s member guide says aged/blind/disabled individuals are served through those programs, and that income and assets are evaluated with program-specific limits[1][3]. For the Aged and Disabled HCBS waiver, income must be no greater than 300% of the federal SSI amount[4]. Indiana’s policy manual also shows a non-MAGI ABD category capped at 100% FPL in at least one eligibility grouping[11].",
+          "asset_limits": "Indiana uses a resource test for ABD coverage[8]. A commonly cited ABD resource limit is $2,000 for a single person[8]. Countable resources generally include cash, bank accounts, stocks, bonds, and other liquid assets, while exempt resources typically include a primary home, one vehicle, burial spaces, certain burial funds to the allowed extent, and some personal effects; exact treatment can vary by category and whether the person is in a Medicaid waiver or institutional setting[8][2].",
+          "other_requirements": [
+            "Must be aged, blind, or disabled under program rules; disability uses the Social Security Administration definition for ABD coverage[1][2][8].",
+            "Applicants who qualify on disability must meet SSA/SSI-style disability standards; Indiana policy says an SSA decision on disability controls[8].",
+            "Some ABD pathways require nursing facility level of care, especially HCBS waiver services[4].",
+            "For HCBS waiver services, the person must live in or be transitioning to an HCBS-compliant non-institutional setting[4].",
+            "PathWays for Aging is for individuals age 60 and older[1][3].",
+            "SSI recipients automatically receive Medicaid[8]."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Indiana ABD Medicaid can cover the broad Medicaid benefit package for eligible aged, blind, and disabled members, including physician visits, prescription drugs, emergency room care, inpatient and outpatient hospital care, and other medically necessary services[2][7][8]. For HCBS waiver participants, specific extra services may include adult day service, adult family care, assisted living, attendant care, care management, home-delivered meals, home modifications, respite, transportation, specialized medical equipment, and vehicle modifications[4]. There is no simple dollar grant amount; coverage is in-kind medical coverage and, when eligible, long-term services and supports[2][4][8].",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online at Indiana FSSA Benefits Portal / Apply Online for Health Coverage[15]",
+            "By phone at 1-800-403-0864[8]",
+            "In person at a local Division of Family Resources office[8]",
+            "Mail or fax supporting documents to the FSSA Document Center, P.O. Box 1810, Marion, IN 46952[8]"
+          ],
+          "processing_time": "Up to 90 days after a complete application is submitted[15].",
+          "waitlist": "There is no statewide waitlist for basic ABD Medicaid eligibility; however, HCBS waiver services can be subject to functional eligibility and service authorization rules, so access to specific waiver services may depend on assessment and availability of approved services[4].",
+          "forms": [
+            "Indiana Application for Health Coverage"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of age or date of birth",
+            "Proof of Social Security number",
+            "Proof of income",
+            "Proof of resources/assets such as bank statements",
+            "Proof of citizenship or immigration status if applicable",
+            "Medicare information if enrolled",
+            "Medical/disability evidence if applying on disability grounds",
+            "Housing or residency information",
+            "Any existing insurance information"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Indiana Medicaid program; no county-only restriction, but service delivery and managed care assignment depend on the specific ABD pathway and provider network[1][3][12].",
+          "regional_variations": "Basic eligibility is statewide, but who administers care and what plan the member is placed into can differ by program. Indiana says aged, blind, and disabled members may be served through Traditional Medicaid, Hoosier Care Connect, or Indiana PathWays for Aging; PathWays applies to age 60+ and began July 1, 2024[1][3]. Waiver services are authorized separately and can vary by individual assessment and provider availability[4].",
+          "offices_or_providers": [
+            "Indiana Family and Social Services Administration (FSSA)",
+            "Division of Family Resources (DFR)",
+            "Indiana Medicaid member programs: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging[1][3]"
+          ]
+        },
+        "official_source": "https://www.in.gov/medicaid/members/apply-for-medicaid/eligibility-guide/",
+        "gotchas": [
+          "This is not one single benefits package; Indiana routes ABD members into different programs, so coverage and enrollment can differ[1][3].",
+          "Families often miss that disability must meet SSA standards and that SSI decisions are highly important in Indiana ABD eligibility[2][8].",
+          "Income rules are not one simple federal poverty table for every ABD case; the limit depends on the specific ABD pathway and whether the person needs waiver or long-term care services[4][11].",
+          "The Aged and Disabled waiver has its own functional requirement: nursing facility level of care[4].",
+          "A complete application matters; Indiana says processing does not begin until the application and required documents are submitted[15].",
+          "The member’s age changes the pathway: Indiana PathWays for Aging is for people 60 and older, while other ABD categories may apply to different age/disability situations[1][3]."
+        ],
+        "data_shape_notes": "This program is state-run but pathway-based: eligibility and benefits depend on whether the person is aged, blind, disabled, in need of HCBS or long-term care, and whether they are routed into Traditional Medicaid, Hoosier Care Connect, or PathWays for Aging[1][3][4]. It is not a single flat-income, flat-benefit program.",
+        "_raw": "{\n  \"name\": \"Indiana Medicaid for the Aged, Blind and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Indiana’s Aged, Blind, and Disabled Medicaid is not a single household-size-based program with one universal income chart. Eligibility depends on which ABD pathway the person fits into: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging, or an HCBS waiver. Indiana’s member guide says aged/blind/disabled individuals are served through those programs, and that income and assets are evaluated with program-specific limits[1][3]. For the Aged and Disabled HCBS waiver, income must be no greater than 300% of the federal SSI amount[4]. Indiana’s policy manual also shows a non-MAGI ABD category capped at 100% FPL in at least one eligibility grouping[11].\",\n    \"asset_limits\": \"Indiana uses a resource test for ABD coverage[8]. A commonly cited ABD resource limit is $2,000 for a single person[8]. Countable resources generally include cash, bank accounts, stocks, bonds, and other liquid assets, while exempt resources typically include a primary home, one vehicle, burial spaces, certain burial funds to the allowed extent, and some personal effects; exact treatment can vary by category and whether the person is in a Medicaid waiver or institutional setting[8][2].\",\n    \"other_requirements\": [\n      \"Must be aged, blind, or disabled under program rules; disability uses the Social Security Administration definition for ABD coverage[1][2][8].\",\n      \"Applicants who qualify on disability must meet SSA/SSI-style disability standards; Indiana policy says an SSA decision on disability controls[8].\",\n      \"Some ABD pathways require nursing facility level of care, especially HCBS waiver services[4].\",\n      \"For HCBS waiver services, the person must live in or be transitioning to an HCBS-compliant non-institutional setting[4].\",\n      \"PathWays for Aging is for individuals age 60 and older[1][3].\",\n      \"SSI recipients automatically receive Medicaid[8].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Indiana ABD Medicaid can cover the broad Medicaid benefit package for eligible aged, blind, and disabled members, including physician visits, prescription drugs, emergency room care, inpatient and outpatient hospital care, and other medically necessary services[2][7][8]. For HCBS waiver participants, specific extra services may include adult day service, adult family care, assisted living, attendant care, care management, home-delivered meals, home modifications, respite, transportation, specialized medical equipment, and vehicle modifications[4]. There is no simple dollar grant amount; coverage is in-kind medical coverage and, when eligible, long-term services and supports[2][4][8].\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at Indiana FSSA Benefits Portal / Apply Online for Health Coverage[15]\",\n      \"By phone at 1-800-403-0864[8]\",\n      \"In person at a local Division of Family Resources office[8]\",\n      \"Mail or fax supporting documents to the FSSA Document Center, P.O. Box 1810, Marion, IN 46952[8]\"\n    ],\n    \"processing_time\": \"Up to 90 days after a complete application is submitted[15].\",\n    \"waitlist\": \"There is no statewide waitlist for basic ABD Medicaid eligibility; however, HCBS waiver services can be subject to functional eligibility and service authorization rules, so access to specific waiver services may depend on assessment and availability of approved services[4].\",\n    \"forms\": [\n      \"Indiana Application for Health Coverage\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of age or date of birth\",\n      \"Proof of Social Security number\",\n      \"Proof of income\",\n      \"Proof of resources/assets such as bank statements\",\n      \"Proof of citizenship or immigration status if applicable\",\n      \"Medicare information if enrolled\",\n      \"Medical/disability evidence if applying on disability grounds\",\n      \"Housing or residency information\",\n      \"Any existing insurance information\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Indiana Medicaid program; no county-only restriction, but service delivery and managed care assignment depend on the specific ABD pathway and provider network[1][3][12].\",\n    \"regional_variations\": \"Basic eligibility is statewide, but who administers care and what plan the member is placed into can differ by program. Indiana says aged, blind, and disabled members may be served through Traditional Medicaid, Hoosier Care Connect, or Indiana PathWays for Aging; PathWays applies to age 60+ and began July 1, 2024[1][3]. Waiver services are authorized separately and can vary by individual assessment and provider availability[4].\",\n    \"offices_or_providers\": [\n      \"Indiana Family and Social Services Administration (FSSA)\",\n      \"Division of Family Resources (DFR)\",\n      \"Indiana Medicaid member programs: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging[1][3]\"\n    ]\n  },\n  \"official_source\": \"https://www.in.gov/medicaid/members/apply-for-medicaid/eligibility-guide/\",\n  \"gotchas\": [\n    \"This is not one single benefits package; Indiana routes ABD members into different programs, so coverage and enrollment can differ[1][3].\",\n    \"Families often miss that disability must meet SSA standards and that SSI decisions are highly important in Indiana ABD eligibility[2][8].\",\n    \"Income rules are not one simple federal poverty table for every ABD case; the limit depends on the specific ABD pathway and whether the person needs waiver or long-term care services[4][11].\",\n    \"The Aged and Disabled waiver has its own functional requirement: nursing facility level of care[4].\",\n    \"A complete application matters; Indiana says processing does not begin until the application and required documents are submitted[15].\",\n    \"The member’s age changes the pathway: Indiana PathWays for Aging is for people 60 and older, while other ABD categories may apply to different age/disability situations[1][3].\"\n  ],\n  \"data_shape_notes\": \"This program is state-run but pathway-based: eligibility and benefits depend on whether the person is aged, blind, disabled, in need of HCBS or long-term care, and whether they are routed into Traditional Medicaid, Hoosier Care Connect, or PathWays for Aging[1][3][4]. It is not a single flat-income, flat-benefit program.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "IN",
+    "stateName": "Indiana",
+    "classifiedAt": "2026-10-06T06:06:43.337Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 2,
+      "navigator": 1
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 1,
+      "medium": 1,
+      "simple": 1
+    },
+    "programs": [
+      {
+        "name": "Indiana Energy Assistance Program (IEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Indiana Housing and Community Development Authority statewide portal",
+              "type": "service-area"
+            },
+            {
+              "name": "County or regional Local Service Providers",
+              "type": "service-area"
+            },
+            {
+              "name": "Authorized local intake sites and subcontractors such as township trustees in some areas",
+              "type": "service-area"
+            },
+            {
+              "name": "Marion County / Indy EAP for Indianapolis-area applicants",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "National Family Caregiver Support Program (NFCSP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Indiana Area Agencies on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "INconnect members",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Indiana Medicaid for the Aged, Blind and Disabled",
+        "programType": "navigator",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Indiana Family and Social Services Administration (FSSA)",
+              "type": "service-area"
+            },
+            {
+              "name": "Division of Family Resources (DFR)",
+              "type": "service-area"
+            },
+            {
+              "name": "Indiana Medicaid member programs: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging[1][3]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "provider-list"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "IN",
+      "id": "in-energy-assistance-program-ieap",
+      "name": "Indiana Energy Assistance Program (IEAP)",
+      "legacyId": "indiana-energy-assistance-program-ieap",
+      "programType": "benefit"
+    },
+    {
+      "state": "IN",
+      "id": "in-nfcsp-caregiver-support",
+      "name": "National Family Caregiver Support Program (NFCSP)",
+      "legacyId": "national-family-caregiver-support-program-nfcsp",
+      "programType": "benefit"
+    },
+    {
+      "state": "IN",
+      "id": "in-medicaid-aged-blind-disabled",
+      "name": "Indiana Medicaid for the Aged, Blind and Disabled",
+      "legacyId": null,
+      "programType": "navigator"
+    }
+  ]
+}

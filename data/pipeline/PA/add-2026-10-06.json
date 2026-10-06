@@ -1,0 +1,640 @@
+{
+  "state": "PA",
+  "addedAt": "2026-10-06T05:53:53.525Z",
+  "dive": {
+    "state": "PA",
+    "stateName": "Pennsylvania",
+    "diveAt": "2026-10-06T05:49:10.865Z",
+    "total": 4,
+    "parsed": 4,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Pennsylvania’s Medical Assistance for older people, blind people, and people with disabilities uses different financial pathways depending on whether the person is applying for regular Medical Assistance, medically needy coverage, or long-term care/waiver coverage. The program is not based only on age; disability or blindness can qualify a person under 65 as well.",
+            "regular_medicaid_abd": {
+              "single_annual_income_limit": 22025,
+              "couple_annual_income_limit": 29864,
+              "household_size_table": {
+                "1": 22025,
+                "2": 29864,
+                "3": 37702,
+                "4": 45540,
+                "5": 53379,
+                "6": 61217,
+                "7": 69056,
+                "8": 76894,
+                "each_additional_person": 7839
+              }
+            },
+            "medically_needy_older_people_and_disabilities": {
+              "single_net_monthly_income_limit": 425,
+              "single_net_6_month_income_limit": 2550,
+              "household_size_table_6_month_net_income": {
+                "1": 2550,
+                "2": null,
+                "3": null,
+                "4": null,
+                "5": null,
+                "6": null,
+                "7": null,
+                "8": 5600
+              },
+              "note": "The official page shows monthly and 6-month medically needy income limits, with a table extending to 8 people. The 6-month net income limit for 1 person is $2,550 and for 8 people is $5,600."
+            },
+            "long_term_care_or_non_money_payment": {
+              "single_monthly_income_limit_2026": 2982,
+              "note": "For long-term care-related categories, Pennsylvania states the 2026 individual income limit is 300% of the federal benefit rate, or $2,982 per month."
+            }
+          },
+          "asset_limits": {
+            "regular_medicaid": {
+              "single": 2000,
+              "couple": 3000
+            },
+            "long_term_care_or_non_money_payment": {
+              "if_income_at_or_below_300_percent_fbr": {
+                "resource_limit": 2000,
+                "additional_disregard": 6000,
+                "practical_effect": "Pennsylvania notes that if income is at or below 300% of the federal benefit rate, the resource limit is $2,000 plus a $6,000 resource disregard."
+              },
+              "if_income_above_300_percent_fbr": {
+                "resource_limit": 2400
+              }
+            },
+            "what_counts": [
+              "Cash",
+              "Bank accounts",
+              "Stocks and bonds",
+              "Some life insurance cash value",
+              "Other countable resources reviewed by the county assistance office"
+            ],
+            "what_is_exempt_or_not_counted": [
+              "Primary home in certain circumstances, especially if a spouse, child under 21, or blind/disabled child lives there",
+              "Certain personal belongings and household items",
+              "Some burial-related items and other exempt resources under Medicaid rules",
+              "For long-term care, Pennsylvania allows review and possible exemption treatment for the home if the applicant or qualifying family member lives there"
+            ],
+            "other_notes": [
+              "Transfers, sales, or gifts within the past 60 months are reviewed for long-term care eligibility.",
+              "The home may be exempt up to an equity cap for certain long-term care rules, depending on current policy and living arrangement."
+            ]
+          },
+          "other_requirements": [
+            "Must be a Pennsylvania resident",
+            "Must be a U.S. citizen or qualified non-citizen",
+            "Must have a Social Security number",
+            "Must be age 65 or older, or be blind, or be disabled",
+            "Must meet the program’s income and resource rules",
+            "For long-term care categories, transfers within the look-back period are reviewed",
+            "Medical necessity must be established for covered long-term care or home/community services"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Pennsylvania Medical Assistance for older people and people with disabilities covers health care benefits and, for those who qualify under long-term care pathways, nursing facility care and home-and-community-based services. Specific covered services include home health services, nursing home care, personal assistance, and transportation for qualifying long-term care participants. It also may cover some medical services in assisted living settings, but not room and board.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.compass.dhs.pa.gov/",
+            "By phone through the local County Assistance Office (CAO) handling Medical Assistance applications",
+            "In person at the County Assistance Office",
+            "By mail to the County Assistance Office"
+          ],
+          "processing_time": "Usually within 30 calendar days after a completed application is filed; if the agency cannot decide in that time, it may extend processing to 45 days with notice.",
+          "waitlist": null,
+          "forms": [
+            "MA application via COMPASS",
+            "Paper Medical Assistance application used by the County Assistance Office",
+            "CAO eligibility review forms as requested during processing"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Pennsylvania residency",
+            "Social Security number",
+            "Proof of U.S. citizenship or qualified non-citizen status",
+            "Proof of age, blindness, or disability if not already established",
+            "Income records such as Social Security award letters, pension statements, pay stubs, and retirement income statements",
+            "Bank statements and other resource records",
+            "Information about real estate, vehicles, and life insurance",
+            "Medical bills and long-term care facility information if applying under medically needy or long-term care rules",
+            "Information about spouse and household members if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Pennsylvania; eligibility and benefits are administered through County Assistance Offices, with long-term care and home/community services coordinated through Pennsylvania’s Medicaid system and related managed care arrangements.",
+          "regional_variations": "Eligibility rules are statewide, but application handling, caseworker assignment, local office access, and service delivery can vary by county. Processing may also differ depending on whether the application is filed in COMPASS or on paper and whether the case involves long-term care.",
+          "offices_or_providers": [
+            "County Assistance Offices (CAOs) across Pennsylvania",
+            "COMPASS online portal",
+            "Pennsylvania Department of Human Services Medical Assistance program"
+          ]
+        },
+        "official_source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+        "gotchas": [
+          "There is not one single income limit for every ABD case; Pennsylvania uses different rules for regular Medical Assistance, medically needy coverage, and long-term care-related categories.",
+          "Families often confuse the regular ABD path with nursing home or waiver eligibility; long-term care has a much higher income limit but also different resource and transfer rules.",
+          "The home may be protected in some cases, but that does not mean all real estate is exempt.",
+          "Transfers or gifts made within 60 months can create a penalty issue for long-term care Medicaid.",
+          "Assisted living room and board is not paid by Medicaid, even when some medical services inside the residence are covered.",
+          "Processing is supposed to take 30 days, but can extend to 45 days, so families should apply as soon as possible."
+        ],
+        "data_shape_notes": "This program has multiple eligibility tracks with different income and resource rules, including regular ABD Medicaid, medically needy coverage, and long-term care-related coverage. Benefits also differ sharply by track: basic health coverage versus long-term care, home care, or facility care. It is statewide, but administered locally through county offices.",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Pennsylvania’s Medical Assistance for older people, blind people, and people with disabilities uses different financial pathways depending on whether the person is applying for regular Medical Assistance, medically needy coverage, or long-term care/waiver coverage. The program is not based only on age; disability or blindness can qualify a person under 65 as well.\",\n      \"regular_medicaid_abd\": {\n        \"single_annual_income_limit\": 22025,\n        \"couple_annual_income_limit\": 29864,\n        \"household_size_table\": {\n          \"1\": 22025,\n          \"2\": 29864,\n          \"3\": 37702,\n          \"4\": 45540,\n          \"5\": 53379,\n          \"6\": 61217,\n          \"7\": 69056,\n          \"8\": 76894,\n          \"each_additional_person\": 7839\n        }\n      },\n      \"medically_needy_older_people_and_disabilities\": {\n        \"single_net_monthly_income_limit\": 425,\n        \"single_net_6_month_income_limit\": 2550,\n        \"household_size_table_6_month_net_income\": {\n          \"1\": 2550,\n          \"2\": null,\n          \"3\": null,\n          \"4\": null,\n          \"5\": null,\n          \"6\": null,\n          \"7\": null,\n          \"8\": 5600\n        },\n        \"note\": \"The official page shows monthly and 6-month medically needy income limits, with a table extending to 8 people. The 6-month net income limit for 1 person is $2,550 and for 8 people is $5,600.\"\n      },\n      \"long_term_care_or_non_money_payment\": {\n        \"single_monthly_income_limit_2026\": 2982,\n        \"note\": \"For long-term care-related categories, Pennsylvania states the 2026 individual income limit is 300% of the federal benefit rate, or $2,982 per month.\"\n      }\n    },\n    \"asset_limits\": {\n      \"regular_medicaid\": {\n        \"single\": 2000,\n        \"couple\": 3000\n      },\n      \"long_term_care_or_non_money_payment\": {\n        \"if_income_at_or_below_300_percent_fbr\": {\n          \"resource_limit\": 2000,\n          \"additional_disregard\": 6000,\n          \"practical_effect\": \"Pennsylvania notes that if income is at or below 300% of the federal benefit rate, the resource limit is $2,000 plus a $6,000 resource disregard.\"\n        },\n        \"if_income_above_300_percent_fbr\": {\n          \"resource_limit\": 2400\n        }\n      },\n      \"what_counts\": [\n        \"Cash\",\n        \"Bank accounts\",\n        \"Stocks and bonds\",\n        \"Some life insurance cash value\",\n        \"Other countable resources reviewed by the county assistance office\"\n      ],\n      \"what_is_exempt_or_not_counted\": [\n        \"Primary home in certain circumstances, especially if a spouse, child under 21, or blind/disabled child lives there\",\n        \"Certain personal belongings and household items\",\n        \"Some burial-related items and other exempt resources under Medicaid rules\",\n        \"For long-term care, Pennsylvania allows review and possible exemption treatment for the home if the applicant or qualifying family member lives there\"\n      ],\n      \"other_notes\": [\n        \"Transfers, sales, or gifts within the past 60 months are reviewed for long-term care eligibility.\",\n        \"The home may be exempt up to an equity cap for certain long-term care rules, depending on current policy and living arrangement.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a Pennsylvania resident\",\n      \"Must be a U.S. citizen or qualified non-citizen\",\n      \"Must have a Social Security number\",\n      \"Must be age 65 or older, or be blind, or be disabled\",\n      \"Must meet the program’s income and resource rules\",\n      \"For long-term care categories, transfers within the look-back period are reviewed\",\n      \"Medical necessity must be established for covered long-term care or home/community services\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Pennsylvania Medical Assistance for older people and people with disabilities covers health care benefits and, for those who qualify under long-term care pathways, nursing facility care and home-and-community-based services. Specific covered services include home health services, nursing home care, personal assistance, and transportation for qualifying long-term care participants. It also may cover some medical services in assisted living settings, but not room and board.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.compass.dhs.pa.gov/\",\n      \"By phone through the local County Assistance Office (CAO) handling Medical Assistance applications\",\n      \"In person at the County Assistance Office\",\n      \"By mail to the County Assistance Office\"\n    ],\n    \"processing_time\": \"Usually within 30 calendar days after a completed application is filed; if the agency cannot decide in that time, it may extend processing to 45 days with notice.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"MA application via COMPASS\",\n      \"Paper Medical Assistance application used by the County Assistance Office\",\n      \"CAO eligibility review forms as requested during processing\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Pennsylvania residency\",\n      \"Social Security number\",\n      \"Proof of U.S. citizenship or qualified non-citizen status\",\n      \"Proof of age, blindness, or disability if not already established\",\n      \"Income records such as Social Security award letters, pension statements, pay stubs, and retirement income statements\",\n      \"Bank statements and other resource records\",\n      \"Information about real estate, vehicles, and life insurance\",\n      \"Medical bills and long-term care facility information if applying under medically needy or long-term care rules\",\n      \"Information about spouse and household members if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Pennsylvania; eligibility and benefits are administered through County Assistance Offices, with long-term care and home/community services coordinated through Pennsylvania’s Medicaid system and related managed care arrangements.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but application handling, caseworker assignment, local office access, and service delivery can vary by county. Processing may also differ depending on whether the application is filed in COMPASS or on paper and whether the case involves long-term care.\",\n    \"offices_or_providers\": [\n      \"County Assistance Offices (CAOs) across Pennsylvania\",\n      \"COMPASS online portal\",\n      \"Pennsylvania Department of Human Services Medical Assistance program\"\n    ]\n  },\n  \"official_source\": \"https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities\",\n  \"gotchas\": [\n    \"There is not one single income limit for every ABD case; Pennsylvania uses different rules for regular Medical Assistance, medically needy coverage, and long-term care-related categories.\",\n    \"Families often confuse the regular ABD path with nursing home or waiver eligibility; long-term care has a much higher income limit but also different resource and transfer rules.\",\n    \"The home may be protected in some cases, but that does not mean all real estate is exempt.\",\n    \"Transfers or gifts made within 60 months can create a penalty issue for long-term care Medicaid.\",\n    \"Assisted living room and board is not paid by Medicaid, even when some medical services inside the residence are covered.\",\n    \"Processing is supposed to take 30 days, but can extend to 45 days, so families should apply as soon as possible.\"\n  ],\n  \"data_shape_notes\": \"This program has multiple eligibility tracks with different income and resource rules, including regular ABD Medicaid, medically needy coverage, and long-term care-related coverage. Benefits also differ sharply by track: basic health coverage versus long-term care, home care, or facility care. It is statewide, but administered locally through county offices.\"\n}"
+      },
+      {
+        "name": "LIHEAP",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "rule": "Household gross annual income must be at or below 150% of the Federal Poverty Income Guidelines for the current Pennsylvania LIHEAP season.",
+            "table": [
+              {
+                "household_size": 1,
+                "max_annual_income": 23940
+              },
+              {
+                "household_size": 2,
+                "max_annual_income": 32460
+              },
+              {
+                "household_size": 3,
+                "max_annual_income": 40980
+              },
+              {
+                "household_size": 4,
+                "max_annual_income": 49500
+              },
+              {
+                "household_size": 5,
+                "max_annual_income": 58020
+              },
+              {
+                "household_size": 6,
+                "max_annual_income": 66540
+              },
+              {
+                "household_size": 7,
+                "max_annual_income": 75060
+              },
+              {
+                "household_size": 8,
+                "max_annual_income": 83580
+              },
+              {
+                "household_size": 9,
+                "max_annual_income": 92100
+              },
+              {
+                "household_size": 10,
+                "max_annual_income": 100620
+              }
+            ],
+            "additional_person": 8520,
+            "notes": [
+              "Income is cumulative yearly gross income for everyone in the household.",
+              "You do not have to be on public assistance.",
+              "You do not need to have an unpaid heating bill.",
+              "You can rent or own your home."
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a Pennsylvania resident seeking heating assistance.",
+            "Must apply during the open LIHEAP season.",
+            "Household must be responsible for heating costs directly or indirectly.",
+            "Eligible households can include renters and homeowners.",
+            "For crisis/emergency help, the household must have a heating emergency and contact the County Assistance Office."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Pennsylvania LIHEAP provides cash grants paid to the household’s utility company or fuel provider, and crisis assistance for heating emergencies. The exact cash-grant amount varies by household size, income, and fuel type; crisis benefits are targeted to resolve a heating emergency rather than provide a fixed cash amount. The state also announced a one-time $100 supplemental LIHEAP payment in 2026 for eligible households, paid directly to the utility or fuel provider without a separate application.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.dhs.pa.gov/COMPASS",
+            "Phone: Statewide LIHEAP Hotline at 1-866-857-7095",
+            "Phone (general public assistance / application help): 1-866-550-4355",
+            "Mail: paper application can be submitted to a local County Assistance Office",
+            "In-person: local County Assistance Office"
+          ],
+          "processing_time": "Most applications are reviewed and decided within 30 days after they are assigned to a caseworker.",
+          "waitlist": "No statewide waitlist is described in the official materials reviewed; assistance is handled through the seasonal application process and local County Assistance Offices.",
+          "forms": [
+            "LIHEAP application form for the current season (paper applications are season-specific; the official guidance says the valid form must show the current season date range in the title)"
+          ],
+          "documents": [
+            "Names of everyone in the household",
+            "Dates of birth for all household members",
+            "Social Security numbers for all household members",
+            "Proof of income for all household members",
+            "A recent heating bill",
+            "If applicable, information about heating fuel provider or utility account"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Pennsylvania through County Assistance Offices and COMPASS; heating emergency help is also handled locally by CAOs.",
+          "regional_variations": "The core eligibility rules are statewide, but crisis/emergency assistance and any processing experience can vary by County Assistance Office and local circumstances. Official materials do not list different benefit formulas by region.",
+          "offices_or_providers": [
+            "County Assistance Offices (local CAOs)",
+            "Pennsylvania DHS COMPASS"
+          ]
+        },
+        "official_source": "https://www.pa.gov/agencies/dhs/resources/liheap",
+        "gotchas": [
+          "There is no age requirement for LIHEAP itself; families often assume it is an elderly-only program, but it is based on household income and heating need.",
+          "You do not need to already have shutoff notices or unpaid bills to qualify for the cash grant.",
+          "The benefit is usually paid to the utility or fuel vendor, not directly to the household.",
+          "Paper applications are season-specific; using an old form can make the application invalid.",
+          "The annual income limits update with the program year, so families should check the current season’s figures before applying.",
+          "Pennsylvania has both cash and crisis components, and crisis help is handled differently from regular cash grants.",
+          "A one-time $100 supplemental payment was announced for eligible households in 2026, but it was automatic and not a separate application."
+        ],
+        "data_shape_notes": "LIHEAP in Pennsylvania is seasonal, income-tested, and household-size-based. Benefits are split between regular cash grants and crisis assistance, and the cash grant amount varies by household size, income, and fuel type rather than being a fixed statewide dollar amount.",
+        "_raw": "{\n  \"name\": \"LIHEAP\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"rule\": \"Household gross annual income must be at or below 150% of the Federal Poverty Income Guidelines for the current Pennsylvania LIHEAP season.\",\n      \"table\": [\n        { \"household_size\": 1, \"max_annual_income\": 23940 },\n        { \"household_size\": 2, \"max_annual_income\": 32460 },\n        { \"household_size\": 3, \"max_annual_income\": 40980 },\n        { \"household_size\": 4, \"max_annual_income\": 49500 },\n        { \"household_size\": 5, \"max_annual_income\": 58020 },\n        { \"household_size\": 6, \"max_annual_income\": 66540 },\n        { \"household_size\": 7, \"max_annual_income\": 75060 },\n        { \"household_size\": 8, \"max_annual_income\": 83580 },\n        { \"household_size\": 9, \"max_annual_income\": 92100 },\n        { \"household_size\": 10, \"max_annual_income\": 100620 }\n      ],\n      \"additional_person\": 8520,\n      \"notes\": [\n        \"Income is cumulative yearly gross income for everyone in the household.\",\n        \"You do not have to be on public assistance.\",\n        \"You do not need to have an unpaid heating bill.\",\n        \"You can rent or own your home.\"\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a Pennsylvania resident seeking heating assistance.\",\n      \"Must apply during the open LIHEAP season.\",\n      \"Household must be responsible for heating costs directly or indirectly.\",\n      \"Eligible households can include renters and homeowners.\",\n      \"For crisis/emergency help, the household must have a heating emergency and contact the County Assistance Office.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Pennsylvania LIHEAP provides cash grants paid to the household’s utility company or fuel provider, and crisis assistance for heating emergencies. The exact cash-grant amount varies by household size, income, and fuel type; crisis benefits are targeted to resolve a heating emergency rather than provide a fixed cash amount. The state also announced a one-time $100 supplemental LIHEAP payment in 2026 for eligible households, paid directly to the utility or fuel provider without a separate application.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.dhs.pa.gov/COMPASS\",\n      \"Phone: Statewide LIHEAP Hotline at 1-866-857-7095\",\n      \"Phone (general public assistance / application help): 1-866-550-4355\",\n      \"Mail: paper application can be submitted to a local County Assistance Office\",\n      \"In-person: local County Assistance Office\"\n    ],\n    \"processing_time\": \"Most applications are reviewed and decided within 30 days after they are assigned to a caseworker.\",\n    \"waitlist\": \"No statewide waitlist is described in the official materials reviewed; assistance is handled through the seasonal application process and local County Assistance Offices.\",\n    \"forms\": [\n      \"LIHEAP application form for the current season (paper applications are season-specific; the official guidance says the valid form must show the current season date range in the title)\"\n    ],\n    \"documents\": [\n      \"Names of everyone in the household\",\n      \"Dates of birth for all household members\",\n      \"Social Security numbers for all household members\",\n      \"Proof of income for all household members\",\n      \"A recent heating bill\",\n      \"If applicable, information about heating fuel provider or utility account\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Pennsylvania through County Assistance Offices and COMPASS; heating emergency help is also handled locally by CAOs.\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but crisis/emergency assistance and any processing experience can vary by County Assistance Office and local circumstances. Official materials do not list different benefit formulas by region.\",\n    \"offices_or_providers\": [\n      \"County Assistance Offices (local CAOs)\",\n      \"Pennsylvania DHS COMPASS\"\n    ]\n  },\n  \"official_source\": \"https://www.pa.gov/agencies/dhs/resources/liheap\",\n  \"gotchas\": [\n    \"There is no age requirement for LIHEAP itself; families often assume it is an elderly-only program, but it is based on household income and heating need.\",\n    \"You do not need to already have shutoff notices or unpaid bills to qualify for the cash grant.\",\n    \"The benefit is usually paid to the utility or fuel vendor, not directly to the household.\",\n    \"Paper applications are season-specific; using an old form can make the application invalid.\",\n    \"The annual income limits update with the program year, so families should check the current season’s figures before applying.\",\n    \"Pennsylvania has both cash and crisis components, and crisis help is handled differently from regular cash grants.\",\n    \"A one-time $100 supplemental payment was announced for eligible households in 2026, but it was automatic and not a separate application.\"\n  ],\n  \"data_shape_notes\": \"LIHEAP in Pennsylvania is seasonal, income-tested, and household-size-based. Benefits are split between regular cash grants and crisis assistance, and the cash grant amount varies by household size, income, and fuel type rather than being a fixed statewide dollar amount.\"\n}"
+      },
+      {
+        "name": "Property Tax/Rent Rebate Program",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "household_income_cap": 48110,
+            "standard_rebate_table": [
+              {
+                "income_range": "$0 - $8,550",
+                "max_rebate": "$1,000"
+              },
+              {
+                "income_range": "$8,551 - $16,040",
+                "max_rebate": "$770"
+              },
+              {
+                "income_range": "$16,041 - $19,240",
+                "max_rebate": "$460"
+              },
+              {
+                "income_range": "$19,241 - $48,110",
+                "max_rebate": "$380"
+              }
+            ],
+            "who_qualifies": [
+              "Pennsylvanians age 65 and older",
+              "Widows and widowers age 50 and older",
+              "People with disabilities age 18 and older"
+            ],
+            "notes": [
+              "Eligibility is based on annual income and the amount paid in property taxes or rent during the previous year.",
+              "Applicants must reapply every year."
+            ]
+          },
+          "asset_limits": "No asset limit was identified in the official program materials reviewed. The program is income-based, not asset-based.",
+          "other_requirements": [
+            "Must be a Pennsylvania resident.",
+            "Must have paid property taxes or rent on a primary residence in Pennsylvania during the previous calendar year.",
+            "Must file a new claim each year using PA-1000.",
+            "Renter applicants must submit a PA-1000 RC (Rent Certificate)."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Annual rebate on property taxes or rent paid in the previous year. Standard maximum rebate amounts are $1,000, $770, $460, or $380 depending on income. For property owners with $32,070 or less in income whose property taxes exceed 15% of total income, the rebate is automatically calculated under an enhanced formula.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online at myPATH: https://mypath.pa.gov",
+            "By mail to Pennsylvania Department of Revenue, Property Tax/Rent Rebate Program, P.O. Box 280503, Harrisburg, PA 17128-0503",
+            "In-person help at statewide locations",
+            "Phone assistance at 1-888-222-9190"
+          ],
+          "processing_time": "No official fixed processing time was identified in the materials reviewed. Rebates are distributed after claims are processed, and applicants should expect the timeline to vary based on filing method and claim volume.",
+          "waitlist": null,
+          "forms": [
+            "PA-1000 — Property Tax or Rent Rebate Claim",
+            "PA-1000 RC — Rent Certificate",
+            "PA-1000 instructions / preparation guide"
+          ],
+          "documents": [
+            "Completed PA-1000 claim form",
+            "Proof of income",
+            "Property tax receipts for homeowners",
+            "PA-1000 RC Rent Certificate for renters",
+            "Any supporting documentation requested in the instructions"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Pennsylvania; no county-specific eligibility restriction identified.",
+          "regional_variations": "The program itself is statewide and the benefit rules are the same across Pennsylvania. Help with filing may vary by local office or assistance site, but eligibility and rebate calculations do not vary by region.",
+          "offices_or_providers": [
+            "Pennsylvania Department of Revenue statewide assistance locations",
+            "Local county assistance sites that help with filing"
+          ]
+        },
+        "official_source": "https://www.pa.gov/agencies/revenue/ptrr",
+        "gotchas": [
+          "This is a rebate program, not ongoing monthly aid.",
+          "People must file a new application every year; approval does not carry over.",
+          "Renter applicants often miss the PA-1000 RC rent certificate requirement.",
+          "The rebate is based on prior-year taxes or rent and prior-year income, not current-year circumstances.",
+          "The highest rebate is not for everyone; it depends on where income falls in the tier table.",
+          "The enhanced automatic calculation can apply to some homeowners with low income and high property taxes, which many applicants overlook."
+        ],
+        "data_shape_notes": "This program is a statewide annual financial rebate with age-based eligibility and income-tiered benefit amounts. It is not a service program, does not use a waitlist, and requires a fresh annual application.",
+        "_raw": "{\n  \"name\": \"Property Tax/Rent Rebate Program\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"household_income_cap\": 48110,\n      \"standard_rebate_table\": [\n        {\n          \"income_range\": \"$0 - $8,550\",\n          \"max_rebate\": \"$1,000\"\n        },\n        {\n          \"income_range\": \"$8,551 - $16,040\",\n          \"max_rebate\": \"$770\"\n        },\n        {\n          \"income_range\": \"$16,041 - $19,240\",\n          \"max_rebate\": \"$460\"\n        },\n        {\n          \"income_range\": \"$19,241 - $48,110\",\n          \"max_rebate\": \"$380\"\n        }\n      ],\n      \"who_qualifies\": [\n        \"Pennsylvanians age 65 and older\",\n        \"Widows and widowers age 50 and older\",\n        \"People with disabilities age 18 and older\"\n      ],\n      \"notes\": [\n        \"Eligibility is based on annual income and the amount paid in property taxes or rent during the previous year.\",\n        \"Applicants must reapply every year.\"\n      ]\n    },\n    \"asset_limits\": \"No asset limit was identified in the official program materials reviewed. The program is income-based, not asset-based.\",\n    \"other_requirements\": [\n      \"Must be a Pennsylvania resident.\",\n      \"Must have paid property taxes or rent on a primary residence in Pennsylvania during the previous calendar year.\",\n      \"Must file a new claim each year using PA-1000.\",\n      \"Renter applicants must submit a PA-1000 RC (Rent Certificate).\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Annual rebate on property taxes or rent paid in the previous year. Standard maximum rebate amounts are $1,000, $770, $460, or $380 depending on income. For property owners with $32,070 or less in income whose property taxes exceed 15% of total income, the rebate is automatically calculated under an enhanced formula.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at myPATH: https://mypath.pa.gov\",\n      \"By mail to Pennsylvania Department of Revenue, Property Tax/Rent Rebate Program, P.O. Box 280503, Harrisburg, PA 17128-0503\",\n      \"In-person help at statewide locations\",\n      \"Phone assistance at 1-888-222-9190\"\n    ],\n    \"processing_time\": \"No official fixed processing time was identified in the materials reviewed. Rebates are distributed after claims are processed, and applicants should expect the timeline to vary based on filing method and claim volume.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"PA-1000 — Property Tax or Rent Rebate Claim\",\n      \"PA-1000 RC — Rent Certificate\",\n      \"PA-1000 instructions / preparation guide\"\n    ],\n    \"documents\": [\n      \"Completed PA-1000 claim form\",\n      \"Proof of income\",\n      \"Property tax receipts for homeowners\",\n      \"PA-1000 RC Rent Certificate for renters\",\n      \"Any supporting documentation requested in the instructions\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Pennsylvania; no county-specific eligibility restriction identified.\",\n    \"regional_variations\": \"The program itself is statewide and the benefit rules are the same across Pennsylvania. Help with filing may vary by local office or assistance site, but eligibility and rebate calculations do not vary by region.\",\n    \"offices_or_providers\": [\n      \"Pennsylvania Department of Revenue statewide assistance locations\",\n      \"Local county assistance sites that help with filing\"\n    ]\n  },\n  \"official_source\": \"https://www.pa.gov/agencies/revenue/ptrr\",\n  \"gotchas\": [\n    \"This is a rebate program, not ongoing monthly aid.\",\n    \"People must file a new application every year; approval does not carry over.\",\n    \"Renter applicants often miss the PA-1000 RC rent certificate requirement.\",\n    \"The rebate is based on prior-year taxes or rent and prior-year income, not current-year circumstances.\",\n    \"The highest rebate is not for everyone; it depends on where income falls in the tier table.\",\n    \"The enhanced automatic calculation can apply to some homeowners with low income and high property taxes, which many applicants overlook.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide annual financial rebate with age-based eligibility and income-tiered benefit amounts. It is not a service program, does not use a waitlist, and requires a fresh annual application.\"\n}"
+      },
+      {
+        "name": "State SSI Supplement",
+        "eligibility": {
+          "age": 18,
+          "income_limits": {
+            "summary": "Pennsylvania’s state supplement is for people who are otherwise eligible for SSI, including aged, blind, or disabled individuals, and in some settings blind/disabled children. The supplement is paid to residents of Pennsylvania who receive SSI or would receive SSI except for excess income.[2][4][10]",
+            "household_table": [
+              {
+                "living_arrangement": "Living alone",
+                "individual_combined_federal_state_maximum": "$572.40",
+                "couple_combined_federal_state_maximum": "$860.70",
+                "state_supplement": "$27.40 individual / $43.70 couple"
+              },
+              {
+                "living_arrangement": "Living in the household of another",
+                "individual_combined_federal_state_maximum": "$390.74",
+                "couple_combined_federal_state_maximum": "$588.37",
+                "state_supplement": "$27.40 individual / $43.70 couple"
+              },
+              {
+                "living_arrangement": "Living with an essential person",
+                "individual_combined_federal_state_maximum": "$861.70",
+                "couple_combined_federal_state_maximum": "$1,158.05",
+                "state_supplement": "$43.70 individual / $68.05 couple"
+              },
+              {
+                "living_arrangement": "Living with an essential person in the household of another",
+                "individual_combined_federal_state_maximum": "$588.37",
+                "couple_combined_federal_state_maximum": "$794.72",
+                "state_supplement": "$43.70 individual / $68.05 couple"
+              },
+              {
+                "living_arrangement": "Living in a domiciliary care facility for adults",
+                "individual_combined_federal_state_maximum": "$934.30",
+                "couple_combined_federal_state_maximum": "$1,674.40",
+                "state_supplement": "$389.30 individual / $857.40 couple"
+              },
+              {
+                "living_arrangement": "Living in a personal care boarding home",
+                "individual_combined_federal_state_maximum": "$939.30",
+                "couple_combined_federal_state_maximum": "$1,684.40",
+                "state_supplement": "$394.30 individual / $867.40 couple"
+              }
+            ],
+            "asset_limits": "No separate Pennsylvania supplement asset limit was identified in the sources gathered. Eligibility is tied to SSI eligibility rules, which use SSI’s federal resource rules. Pennsylvania does not count the state supplement as income for SSI eligibility purposes.[4][5][10]",
+            "other_requirements": [
+              "Must be a Pennsylvania resident.",
+              "Must be eligible for SSI or would be eligible except for excess income.",
+              "Cannot be residing in a public institution or in a certified medical facility where Medicaid pays more than 50% of the cost of care.[10]",
+              "For domiciliary care and personal care home supplements, the person must be at least 18 years old.[10]",
+              "Blind and disabled children can receive optional supplementation in some settings, but not the domiciliary care or personal care home supplements unless age 18 or older.[10]"
+            ]
+          },
+          "benefits": {
+            "type": "financial",
+            "value": "Pennsylvania adds a monthly state supplement on top of federal SSI. The supplement amount depends on living arrangement: $27.40, $43.70, $389.30, or $394.30 for an individual in the cited table, with higher amounts for eligible couples.[12] SSA also describes that residents of domiciliary care homes and personal care boarding homes receive a single combined payment that includes both federal SSI and the Pennsylvania supplement.[2]",
+            "varies_by": "household_size"
+          },
+          "application": {
+            "methods": [
+              "Online federal SSI application through Social Security at https://www.ssa.gov/apply/ssi/",
+              "By phone with Social Security at 1-800-772-1213",
+              "In person at a local Social Security office",
+              "For domiciliary care and personal care home supplement cases, work through the local Area Agency on Aging and complete PA-761"
+            ],
+            "processing_time": "No single statewide processing-time standard for the supplement was identified in the sources gathered. SSA’s SSI claim process determines underlying SSI eligibility first; Pennsylvania’s supplement follows that eligibility and living arrangement.[2][3][10]",
+            "waitlist": null,
+            "forms": [
+              "PA-761 (Application for Personal Care Home Supplement)",
+              "SSA SSI application materials used to establish SSI eligibility"
+            ],
+            "documents": [
+              "Proof of age",
+              "Social Security number",
+              "Proof of Pennsylvania residency",
+              "Proof of income and resources",
+              "Proof of living arrangement and housing expenses",
+              "Medical evidence if applying as disabled",
+              "Facility information if in a domiciliary care home or personal care boarding home",
+              "Any SSA SSI award or application records already started"
+            ]
+          },
+          "geography": {
+            "statewide": true,
+            "restrictions": "Available to Pennsylvania residents meeting SSI-linked rules; not available in public institutions or certain Medicaid-paid facilities.[10]",
+            "regional_variations": "The payment rules are statewide, but the route for domiciliary care and personal care home cases can involve the local Area Agency on Aging and facility-specific administration. Living arrangement also changes the amount paid.[2][3][10][12]",
+            "offices_or_providers": [
+              "Social Security Administration field offices",
+              "Pennsylvania Department of Human Services",
+              "Local Area Agencies on Aging",
+              "Licensed domiciliary care homes",
+              "Licensed personal care boarding homes"
+            ]
+          },
+          "official_source": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+          "gotchas": [
+            "The state supplement is not a separate needs-based county program; it is tied to SSI eligibility and living arrangement.[2][4][10]",
+            "The supplement is not counted as income for SSI eligibility.[5]",
+            "People in domiciliary care homes and personal care boarding homes usually get one combined payment rather than two separate checks.[2]",
+            "The payment amount changes if the person moves or the household arrangement changes.[12]",
+            "A person can be eligible for the supplement even if SSI itself is being denied only because income is too high, depending on the state supplemental rules described in the sources.[10]",
+            "Facility-based supplements use different amounts from the standard living-at-home amounts.[12]"
+          ],
+          "data_shape_notes": "This program is a statewide SSI-linked cash supplement with benefit amounts that vary by living arrangement and household composition, and separate handling for domiciliary care and personal care home residents."
+        },
+        "_raw": "{\n  \"name\": \"State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": {\n      \"summary\": \"Pennsylvania’s state supplement is for people who are otherwise eligible for SSI, including aged, blind, or disabled individuals, and in some settings blind/disabled children. The supplement is paid to residents of Pennsylvania who receive SSI or would receive SSI except for excess income.[2][4][10]\",\n      \"household_table\": [\n        {\n          \"living_arrangement\": \"Living alone\",\n          \"individual_combined_federal_state_maximum\": \"$572.40\",\n          \"couple_combined_federal_state_maximum\": \"$860.70\",\n          \"state_supplement\": \"$27.40 individual / $43.70 couple\"\n        },\n        {\n          \"living_arrangement\": \"Living in the household of another\",\n          \"individual_combined_federal_state_maximum\": \"$390.74\",\n          \"couple_combined_federal_state_maximum\": \"$588.37\",\n          \"state_supplement\": \"$27.40 individual / $43.70 couple\"\n        },\n        {\n          \"living_arrangement\": \"Living with an essential person\",\n          \"individual_combined_federal_state_maximum\": \"$861.70\",\n          \"couple_combined_federal_state_maximum\": \"$1,158.05\",\n          \"state_supplement\": \"$43.70 individual / $68.05 couple\"\n        },\n        {\n          \"living_arrangement\": \"Living with an essential person in the household of another\",\n          \"individual_combined_federal_state_maximum\": \"$588.37\",\n          \"couple_combined_federal_state_maximum\": \"$794.72\",\n          \"state_supplement\": \"$43.70 individual / $68.05 couple\"\n        },\n        {\n          \"living_arrangement\": \"Living in a domiciliary care facility for adults\",\n          \"individual_combined_federal_state_maximum\": \"$934.30\",\n          \"couple_combined_federal_state_maximum\": \"$1,674.40\",\n          \"state_supplement\": \"$389.30 individual / $857.40 couple\"\n        },\n        {\n          \"living_arrangement\": \"Living in a personal care boarding home\",\n          \"individual_combined_federal_state_maximum\": \"$939.30\",\n          \"couple_combined_federal_state_maximum\": \"$1,684.40\",\n          \"state_supplement\": \"$394.30 individual / $867.40 couple\"\n        }\n      ],\n      \"asset_limits\": \"No separate Pennsylvania supplement asset limit was identified in the sources gathered. Eligibility is tied to SSI eligibility rules, which use SSI’s federal resource rules. Pennsylvania does not count the state supplement as income for SSI eligibility purposes.[4][5][10]\",\n      \"other_requirements\": [\n        \"Must be a Pennsylvania resident.\",\n        \"Must be eligible for SSI or would be eligible except for excess income.\",\n        \"Cannot be residing in a public institution or in a certified medical facility where Medicaid pays more than 50% of the cost of care.[10]\",\n        \"For domiciliary care and personal care home supplements, the person must be at least 18 years old.[10]\",\n        \"Blind and disabled children can receive optional supplementation in some settings, but not the domiciliary care or personal care home supplements unless age 18 or older.[10]\"\n      ]\n    },\n    \"benefits\": {\n      \"type\": \"financial\",\n      \"value\": \"Pennsylvania adds a monthly state supplement on top of federal SSI. The supplement amount depends on living arrangement: $27.40, $43.70, $389.30, or $394.30 for an individual in the cited table, with higher amounts for eligible couples.[12] SSA also describes that residents of domiciliary care homes and personal care boarding homes receive a single combined payment that includes both federal SSI and the Pennsylvania supplement.[2]\",\n      \"varies_by\": \"household_size\"\n    },\n    \"application\": {\n      \"methods\": [\n        \"Online federal SSI application through Social Security at https://www.ssa.gov/apply/ssi/\",\n        \"By phone with Social Security at 1-800-772-1213\",\n        \"In person at a local Social Security office\",\n        \"For domiciliary care and personal care home supplement cases, work through the local Area Agency on Aging and complete PA-761\"\n      ],\n      \"processing_time\": \"No single statewide processing-time standard for the supplement was identified in the sources gathered. SSA’s SSI claim process determines underlying SSI eligibility first; Pennsylvania’s supplement follows that eligibility and living arrangement.[2][3][10]\",\n      \"waitlist\": null,\n      \"forms\": [\n        \"PA-761 (Application for Personal Care Home Supplement)\",\n        \"SSA SSI application materials used to establish SSI eligibility\"\n      ],\n      \"documents\": [\n        \"Proof of age\",\n        \"Social Security number\",\n        \"Proof of Pennsylvania residency\",\n        \"Proof of income and resources\",\n        \"Proof of living arrangement and housing expenses\",\n        \"Medical evidence if applying as disabled\",\n        \"Facility information if in a domiciliary care home or personal care boarding home\",\n        \"Any SSA SSI award or application records already started\"\n      ]\n    },\n    \"geography\": {\n      \"statewide\": true,\n      \"restrictions\": \"Available to Pennsylvania residents meeting SSI-linked rules; not available in public institutions or certain Medicaid-paid facilities.[10]\",\n      \"regional_variations\": \"The payment rules are statewide, but the route for domiciliary care and personal care home cases can involve the local Area Agency on Aging and facility-specific administration. Living arrangement also changes the amount paid.[2][3][10][12]\",\n      \"offices_or_providers\": [\n        \"Social Security Administration field offices\",\n        \"Pennsylvania Department of Human Services\",\n        \"Local Area Agencies on Aging\",\n        \"Licensed domiciliary care homes\",\n        \"Licensed personal care boarding homes\"\n      ]\n    },\n    \"official_source\": \"https://www.ssa.gov/pubs/EN-05-11150.pdf\",\n    \"gotchas\": [\n      \"The state supplement is not a separate needs-based county program; it is tied to SSI eligibility and living arrangement.[2][4][10]\",\n      \"The supplement is not counted as income for SSI eligibility.[5]\",\n      \"People in domiciliary care homes and personal care boarding homes usually get one combined payment rather than two separate checks.[2]\",\n      \"The payment amount changes if the person moves or the household arrangement changes.[12]\",\n      \"A person can be eligible for the supplement even if SSI itself is being denied only because income is too high, depending on the state supplemental rules described in the sources.[10]\",\n      \"Facility-based supplements use different amounts from the standard living-at-home amounts.[12]\"\n    ],\n    \"data_shape_notes\": \"This program is a statewide SSI-linked cash supplement with benefit amounts that vary by living arrangement and household composition, and separate handling for domiciliary care and personal care home residents.\"\n  }\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "PA",
+    "stateName": "Pennsylvania",
+    "classifiedAt": "2026-10-06T05:49:10.870Z",
+    "total": 4,
+    "typeSummary": {
+      "benefit": 4
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 2,
+      "medium": 2
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County Assistance Offices (CAOs) across Pennsylvania",
+              "type": "service-area"
+            },
+            {
+              "name": "COMPASS online portal",
+              "type": "service-area"
+            },
+            {
+              "name": "Pennsylvania Department of Human Services Medical Assistance program",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "LIHEAP",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County Assistance Offices (local CAOs)",
+              "type": "service-area"
+            },
+            {
+              "name": "Pennsylvania DHS COMPASS",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Property Tax/Rent Rebate Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Pennsylvania Department of Revenue statewide assistance locations",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county assistance sites that help with filing",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table"
+        ],
+        "signals": {
+          "benefitType": "unknown",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": false,
+          "hasMultipleTiers": false
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "PA",
+      "id": "pa-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "PA",
+      "id": "pa-liheap-heating-assistance",
+      "name": "LIHEAP",
+      "legacyId": "liheap",
+      "programType": "benefit"
+    },
+    {
+      "state": "PA",
+      "id": "pa-property-tax-rent-rebate",
+      "name": "Property Tax/Rent Rebate Program",
+      "legacyId": "property-tax-rent-rebate-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "PA",
+      "id": "pa-state-ssi-supplement",
+      "name": "State SSI Supplement",
+      "legacyId": "state-ssi-supplement",
+      "programType": "benefit"
+    }
+  ]
+}

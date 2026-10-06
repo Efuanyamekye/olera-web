@@ -1,0 +1,23 @@
+[
+  {
+    "state": "IN",
+    "id": "in-energy-assistance-program-ieap",
+    "name": "Indiana Energy Assistance Program (IEAP)",
+    "legacyId": "indiana-energy-assistance-program-ieap",
+    "programType": "benefit"
+  },
+  {
+    "state": "IN",
+    "id": "in-nfcsp-caregiver-support",
+    "name": "National Family Caregiver Support Program (NFCSP)",
+    "legacyId": "national-family-caregiver-support-program-nfcsp",
+    "programType": "benefit"
+  },
+  {
+    "state": "IN",
+    "id": "in-medicaid-aged-blind-disabled",
+    "name": "Indiana Medicaid for the Aged, Blind and Disabled",
+    "legacyId": null,
+    "programType": "navigator"
+  }
+]

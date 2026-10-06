@@ -1,0 +1,640 @@
+{
+  "state": "WY",
+  "addedAt": "2026-10-06T05:43:00.583Z",
+  "dive": {
+    "state": "WY",
+    "stateName": "Wyoming",
+    "diveAt": "2026-10-06T05:36:09.916Z",
+    "total": 5,
+    "parsed": 5,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "overview": "Wyoming’s ABD Medicaid has multiple pathways. For standard aged/blind/disabled eligibility, the state uses SSI-related income/resource rules, and for nursing facility or HCBS waiver-related ABD, income must generally be at or below 300% of the Federal Benefit Rate/payment standard.[1][2][4]",
+            "table": [
+              {
+                "category": "SSI-related ABD",
+                "limit": "SSI-style income/resource rules; Wyoming’s materials reference SSI eligibility and SSI-related groups rather than a single universal ABD dollar limit.[1][2][4]"
+              },
+              {
+                "category": "Institutional / nursing facility / hospice / HCBS waiver ABD",
+                "limit": "Income at or below 300% of the payment standard / Federal Benefit Rate.[1][2][5][11][15]"
+              }
+            ],
+            "notes": "The public-facing Wyoming sources found do not provide one simple statewide ABD income chart for every household type in the search snippets; the official manual and eligibility engine contain the detailed tables used by the state.[5][6][7]"
+          },
+          "asset_limits": {
+            "overview": "ABD eligibility includes resource guidelines, and Wyoming’s official materials indicate applicants must meet the applicable resource standards for the specific ABD coverage group.[3][4][5]",
+            "counts": [
+              "Countable resources are evaluated under the program’s resource standards.[3][5]",
+              "The detailed countable/exempt resource rules are in Wyoming Medicaid’s eligibility manual and tables.[5][6][7]"
+            ],
+            "exempt": [
+              "The searched official snippets do not list the full exemption list in-line; the state’s eligibility manual is the controlling source for exemptions and exclusions.[5][6][7]"
+            ]
+          },
+          "other_requirements": [
+            "Must be a Wyoming resident.[1]",
+            "Must be a U.S. citizen or a lawful permanent resident who has lived in the U.S. for at least five years.[1]",
+            "Must be age 65 or older, blind, or disabled.[1][2][4]",
+            "Disability is determined using Social Security standards or by the Wyoming Department of Health.[2][4][10]",
+            "For some ABD pathways, the person must also meet a level-of-care or medical-necessity requirement, such as nursing facility or waiver level of care.[1][3][4][5]",
+            "Some ABD groups are tied to SSI eligibility or loss of SSI due to specific circumstances such as COLA-related increases or widow/widower benefits.[2]"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Medicaid covers medical care and certain additional services for eligible aged, blind, or disabled individuals, including office visits, outpatient and inpatient care, pharmacy, behavioral health, dental, vision in limited circumstances, long-term care/nursing facility services, home and community-based waiver services, non-emergency transportation, screenings, and treatment referrals.[11][15] Wyoming’s ABD-related materials also note adult benefits such as 2 preventive dental visits and 2 emergency dental visits per year, while routine vision is not covered except for treatment of eye disease or injury.[12]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.wesystem.wyo.gov/[8][10][14]",
+            "Phone: 1-855-294-2127[8][9][14]",
+            "TTY/TDD: 1-855-329-5204[9][14]",
+            "Mail: Wyoming Department of Health, Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001[8][10]",
+            "Paper application in person, with submission through the Customer Service Center route[8][10]"
+          ],
+          "processing_time": "Not clearly stated in the official snippets reviewed; no fixed processing timeline was surfaced in the search results.",
+          "waitlist": "No statewide ABD Medicaid waitlist was identified in the official materials reviewed; HCBS waiver services may have separate level-of-care and waiver administration considerations.[3][5]",
+          "forms": [
+            "Wyoming Medicaid Application (English or Spanish)[8][10]",
+            "Medicaid Eligibility Online Manual / ABD eligibility sections for rules and determinations[5][6][7]"
+          ],
+          "documents": [
+            "Proof of identity and Wyoming residency",
+            "Proof of citizenship or qualifying immigrant status",
+            "Social Security number information",
+            "Proof of age",
+            "Proof of disability or blindness if not already established by SSA",
+            "Income verification",
+            "Resource/asset statements",
+            "Medical records or disability evidence if disability must be established by the state",
+            "Any Medicare, health insurance, or other coverage information"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Wyoming Medicaid program; no county-only ABD restriction was identified in the official materials reviewed.[1][8][13]",
+          "regional_variations": "The core eligibility rules appear statewide. Differences are mainly administrative or provider-based, and waiver/long-term-care services can vary by provider network and level-of-care determinations rather than by county.[1][3][5]",
+          "offices_or_providers": [
+            "Wyoming Department of Health Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001[8][10]"
+          ]
+        },
+        "official_source": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+        "gotchas": [
+          "ABD Medicaid in Wyoming is not a single one-size-fits-all eligibility group; there are different ABD pathways, including SSI-related, institutional, hospice, and waiver-related coverage groups.[2][3][4][5]",
+          "Income and resource rules depend on the specific ABD pathway, so families need the correct category before assuming a simple monthly limit.[2][3][5][6][7]",
+          "Disability is not just self-attested; Wyoming may require SSA standards or state determination and supporting medical evidence.[2][4][10]",
+          "For some long-term-care or waiver-related ABD coverage, meeting income limits is not enough because the applicant must also meet level-of-care or medical-necessity requirements.[1][3][5]",
+          "Routine vision care is generally not covered; coverage is narrower than many families expect.[12]",
+          "Dental coverage exists but is limited, with preventive and emergency visit limits noted in Wyoming’s adult Medicaid materials.[12]"
+        ],
+        "data_shape_notes": "This program is best modeled as multiple ABD coverage groups with different eligibility pathways rather than a single benefit with one universal income table. The key structure is age/blindness/disability plus SSI/resource rules, with some pathways using a 300% FBR/payment-standard cap and additional level-of-care requirements.[1][2][3][4][5][6][7][11][15]",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"overview\": \"Wyoming’s ABD Medicaid has multiple pathways. For standard aged/blind/disabled eligibility, the state uses SSI-related income/resource rules, and for nursing facility or HCBS waiver-related ABD, income must generally be at or below 300% of the Federal Benefit Rate/payment standard.[1][2][4]\",\n      \"table\": [\n        {\n          \"category\": \"SSI-related ABD\",\n          \"limit\": \"SSI-style income/resource rules; Wyoming’s materials reference SSI eligibility and SSI-related groups rather than a single universal ABD dollar limit.[1][2][4]\"\n        },\n        {\n          \"category\": \"Institutional / nursing facility / hospice / HCBS waiver ABD\",\n          \"limit\": \"Income at or below 300% of the payment standard / Federal Benefit Rate.[1][2][5][11][15]\"\n        }\n      ],\n      \"notes\": \"The public-facing Wyoming sources found do not provide one simple statewide ABD income chart for every household type in the search snippets; the official manual and eligibility engine contain the detailed tables used by the state.[5][6][7]\"\n    },\n    \"asset_limits\": {\n      \"overview\": \"ABD eligibility includes resource guidelines, and Wyoming’s official materials indicate applicants must meet the applicable resource standards for the specific ABD coverage group.[3][4][5]\",\n      \"counts\": [\n        \"Countable resources are evaluated under the program’s resource standards.[3][5]\",\n        \"The detailed countable/exempt resource rules are in Wyoming Medicaid’s eligibility manual and tables.[5][6][7]\"\n      ],\n      \"exempt\": [\n        \"The searched official snippets do not list the full exemption list in-line; the state’s eligibility manual is the controlling source for exemptions and exclusions.[5][6][7]\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a Wyoming resident.[1]\",\n      \"Must be a U.S. citizen or a lawful permanent resident who has lived in the U.S. for at least five years.[1]\",\n      \"Must be age 65 or older, blind, or disabled.[1][2][4]\",\n      \"Disability is determined using Social Security standards or by the Wyoming Department of Health.[2][4][10]\",\n      \"For some ABD pathways, the person must also meet a level-of-care or medical-necessity requirement, such as nursing facility or waiver level of care.[1][3][4][5]\",\n      \"Some ABD groups are tied to SSI eligibility or loss of SSI due to specific circumstances such as COLA-related increases or widow/widower benefits.[2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Medicaid covers medical care and certain additional services for eligible aged, blind, or disabled individuals, including office visits, outpatient and inpatient care, pharmacy, behavioral health, dental, vision in limited circumstances, long-term care/nursing facility services, home and community-based waiver services, non-emergency transportation, screenings, and treatment referrals.[11][15] Wyoming’s ABD-related materials also note adult benefits such as 2 preventive dental visits and 2 emergency dental visits per year, while routine vision is not covered except for treatment of eye disease or injury.[12]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.wesystem.wyo.gov/[8][10][14]\",\n      \"Phone: 1-855-294-2127[8][9][14]\",\n      \"TTY/TDD: 1-855-329-5204[9][14]\",\n      \"Mail: Wyoming Department of Health, Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001[8][10]\",\n      \"Paper application in person, with submission through the Customer Service Center route[8][10]\"\n    ],\n    \"processing_time\": \"Not clearly stated in the official snippets reviewed; no fixed processing timeline was surfaced in the search results.\",\n    \"waitlist\": \"No statewide ABD Medicaid waitlist was identified in the official materials reviewed; HCBS waiver services may have separate level-of-care and waiver administration considerations.[3][5]\",\n    \"forms\": [\n      \"Wyoming Medicaid Application (English or Spanish)[8][10]\",\n      \"Medicaid Eligibility Online Manual / ABD eligibility sections for rules and determinations[5][6][7]\"\n    ],\n    \"documents\": [\n      \"Proof of identity and Wyoming residency\",\n      \"Proof of citizenship or qualifying immigrant status\",\n      \"Social Security number information\",\n      \"Proof of age\",\n      \"Proof of disability or blindness if not already established by SSA\",\n      \"Income verification\",\n      \"Resource/asset statements\",\n      \"Medical records or disability evidence if disability must be established by the state\",\n      \"Any Medicare, health insurance, or other coverage information\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Wyoming Medicaid program; no county-only ABD restriction was identified in the official materials reviewed.[1][8][13]\",\n    \"regional_variations\": \"The core eligibility rules appear statewide. Differences are mainly administrative or provider-based, and waiver/long-term-care services can vary by provider network and level-of-care determinations rather than by county.[1][3][5]\",\n    \"offices_or_providers\": [\n      \"Wyoming Department of Health Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001[8][10]\"\n    ]\n  },\n  \"official_source\": \"https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/\",\n  \"gotchas\": [\n    \"ABD Medicaid in Wyoming is not a single one-size-fits-all eligibility group; there are different ABD pathways, including SSI-related, institutional, hospice, and waiver-related coverage groups.[2][3][4][5]\",\n    \"Income and resource rules depend on the specific ABD pathway, so families need the correct category before assuming a simple monthly limit.[2][3][5][6][7]\",\n    \"Disability is not just self-attested; Wyoming may require SSA standards or state determination and supporting medical evidence.[2][4][10]\",\n    \"For some long-term-care or waiver-related ABD coverage, meeting income limits is not enough because the applicant must also meet level-of-care or medical-necessity requirements.[1][3][5]\",\n    \"Routine vision care is generally not covered; coverage is narrower than many families expect.[12]\",\n    \"Dental coverage exists but is limited, with preventive and emergency visit limits noted in Wyoming’s adult Medicaid materials.[12]\"\n  ],\n  \"data_shape_notes\": \"This program is best modeled as multiple ABD coverage groups with different eligibility pathways rather than a single benefit with one universal income table. The key structure is age/blindness/disability plus SSI/resource rules, with some pathways using a 300% FBR/payment-standard cap and additional level-of-care requirements.[1][2][3][4][5][6][7][11][15]\"\n}"
+      },
+      {
+        "name": "Community Choice Waiver (CCW)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For most applicants, eligibility requires Wyoming Medicaid financial eligibility or qualification under the Special HCBS Waiver Group. The program materials state that, in general, income must be at or below 300% of the Federal Benefit Rate (FBR), with limited countable resources. The exact dollar amount changes by year because it is tied to the federal benefit rate; the official Wyoming materials provided do not publish a household-size table for this waiver.",
+          "asset_limits": "Applicants must have limited countable resources. The official materials do not provide a full asset-dollar table in the cited program summary. Countable resources are the Medicaid-type resources used in Wyoming Medicaid eligibility review, while exempt resources are not detailed in the program summary provided. Families should expect Medicaid-style financial review and should verify which assets count during the application process.",
+          "other_requirements": [
+            "Must be a Wyoming resident receiving services in the state.",
+            "Must be eligible for Wyoming Medicaid, or qualify under the Special HCBS Waiver Group.",
+            "Must be age 65 or older, or be age 19 to 64 with a qualifying disability.",
+            "Disability for ages 19 to 64 must be verified by Social Security Administration disability determination or by the Department using SSA criteria.",
+            "Must be determined to need nursing facility level of care by a trained public health nurse using the LT-101 assessment tool.",
+            "Level of care eligibility must be established before enrollment and reassessed at least annually.",
+            "Must complete a CCW application and, if not already a Wyoming Medicaid member, also complete a Wyoming Medicaid application."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "A Medicaid HCBS waiver that provides an alternative to nursing facility care. Covered services include Adult Day Services, Assisted Living Facility Services, Assistive Technology, Case Management, Companion Services, Environmental Modification, Home-Delivered Meals, Home Health Aide, Homemaker, Non-Medical Transportation, Personal Emergency Response Systems (PERS), Personal Support Services, Respite, Skilled Nursing, Transition Intensive Case Management, and Transition Setup Services. Some program materials also mention agency option services and community-based support planning. No fixed cash amount or universal hourly cap is listed in the program summary provided.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://health.wyo.gov/healthcarefin/hcbs/ and the HCBS Document Library at https://health.wyo.gov/healthcarefin/hcbs/document-library/",
+            "Phone: Contact the Benefits and Eligibility Specialist in the applicant’s area; one listed intake number for CCW-related intake is 307-630-4729",
+            "Mail/In-person: Complete and return the CCW Application form to the Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002"
+          ],
+          "processing_time": "No official statewide processing-time benchmark was stated in the materials provided. Eligibility depends on Medicaid review, LT-101 assessment, and case management selection, so timing can vary by county and case management availability.",
+          "waitlist": "The official materials provided do not describe a formal statewide waitlist, but access can depend on local benefits/eligibility staff and case management capacity.",
+          "forms": [
+            "CCW Application – 7/2026 English/Spanish/Braille",
+            "Community Choices Waiver Application and Fact Sheet",
+            "Wyoming Medicaid application, if the applicant is not already enrolled in Medicaid"
+          ],
+          "documents": [
+            "Completed and signed CCW application",
+            "Wyoming Medicaid application if not already enrolled",
+            "Proof of age",
+            "Proof of Wyoming residency",
+            "Income and resource information for Medicaid financial review",
+            "Social Security disability determination or related disability evidence for applicants ages 19 to 64",
+            "Medical information supporting nursing facility level of care",
+            "Guardian or legal representative paperwork, if someone is signing on the applicant’s behalf"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Wyoming, but applicants must connect with the Benefits and Eligibility Specialist for their area and select a case management agency.",
+          "regional_variations": "The underlying program rules are statewide, but service access and timing can vary by county based on the local Benefits and Eligibility Specialist, the case management agency selected, and provider availability.",
+          "offices_or_providers": [
+            "Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002",
+            "Local Benefits and Eligibility Specialist offices",
+            "Chosen case management agency"
+          ]
+        },
+        "official_source": "https://health.wyo.gov/healthcarefin/hcbs/",
+        "gotchas": [
+          "This is not an open-ended home-care benefit; the applicant must first qualify for Medicaid and then separately qualify for nursing facility level of care.",
+          "People ages 19 to 64 can qualify only if they have a verified disability under SSA-style criteria.",
+          "The waiver application alone is not enough if the person is not already on Wyoming Medicaid; a Medicaid application may also be required.",
+          "Benefits are service-based, not a cash allowance.",
+          "Families often miss the required LT-101 nursing-facility-level-of-care assessment.",
+          "Applicants usually must choose a case management agency after starting the process.",
+          "The exact financial threshold is tied to 300% of the Federal Benefit Rate, so the dollar limit changes over time."
+        ],
+        "data_shape_notes": "This program is a statewide Medicaid HCBS waiver with dual financial and functional eligibility: Medicaid financial eligibility plus nursing facility level of care. Benefits are a fixed menu of services rather than cash, and access is coordinated through local eligibility staff and case management agencies.",
+        "_raw": "{\n  \"name\": \"Community Choice Waiver (CCW)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For most applicants, eligibility requires Wyoming Medicaid financial eligibility or qualification under the Special HCBS Waiver Group. The program materials state that, in general, income must be at or below 300% of the Federal Benefit Rate (FBR), with limited countable resources. The exact dollar amount changes by year because it is tied to the federal benefit rate; the official Wyoming materials provided do not publish a household-size table for this waiver.\",\n    \"asset_limits\": \"Applicants must have limited countable resources. The official materials do not provide a full asset-dollar table in the cited program summary. Countable resources are the Medicaid-type resources used in Wyoming Medicaid eligibility review, while exempt resources are not detailed in the program summary provided. Families should expect Medicaid-style financial review and should verify which assets count during the application process.\",\n    \"other_requirements\": [\n      \"Must be a Wyoming resident receiving services in the state.\",\n      \"Must be eligible for Wyoming Medicaid, or qualify under the Special HCBS Waiver Group.\",\n      \"Must be age 65 or older, or be age 19 to 64 with a qualifying disability.\",\n      \"Disability for ages 19 to 64 must be verified by Social Security Administration disability determination or by the Department using SSA criteria.\",\n      \"Must be determined to need nursing facility level of care by a trained public health nurse using the LT-101 assessment tool.\",\n      \"Level of care eligibility must be established before enrollment and reassessed at least annually.\",\n      \"Must complete a CCW application and, if not already a Wyoming Medicaid member, also complete a Wyoming Medicaid application.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"A Medicaid HCBS waiver that provides an alternative to nursing facility care. Covered services include Adult Day Services, Assisted Living Facility Services, Assistive Technology, Case Management, Companion Services, Environmental Modification, Home-Delivered Meals, Home Health Aide, Homemaker, Non-Medical Transportation, Personal Emergency Response Systems (PERS), Personal Support Services, Respite, Skilled Nursing, Transition Intensive Case Management, and Transition Setup Services. Some program materials also mention agency option services and community-based support planning. No fixed cash amount or universal hourly cap is listed in the program summary provided.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://health.wyo.gov/healthcarefin/hcbs/ and the HCBS Document Library at https://health.wyo.gov/healthcarefin/hcbs/document-library/\",\n      \"Phone: Contact the Benefits and Eligibility Specialist in the applicant’s area; one listed intake number for CCW-related intake is 307-630-4729\",\n      \"Mail/In-person: Complete and return the CCW Application form to the Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002\"\n    ],\n    \"processing_time\": \"No official statewide processing-time benchmark was stated in the materials provided. Eligibility depends on Medicaid review, LT-101 assessment, and case management selection, so timing can vary by county and case management availability.\",\n    \"waitlist\": \"The official materials provided do not describe a formal statewide waitlist, but access can depend on local benefits/eligibility staff and case management capacity.\",\n    \"forms\": [\n      \"CCW Application – 7/2026 English/Spanish/Braille\",\n      \"Community Choices Waiver Application and Fact Sheet\",\n      \"Wyoming Medicaid application, if the applicant is not already enrolled in Medicaid\"\n    ],\n    \"documents\": [\n      \"Completed and signed CCW application\",\n      \"Wyoming Medicaid application if not already enrolled\",\n      \"Proof of age\",\n      \"Proof of Wyoming residency\",\n      \"Income and resource information for Medicaid financial review\",\n      \"Social Security disability determination or related disability evidence for applicants ages 19 to 64\",\n      \"Medical information supporting nursing facility level of care\",\n      \"Guardian or legal representative paperwork, if someone is signing on the applicant’s behalf\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Wyoming, but applicants must connect with the Benefits and Eligibility Specialist for their area and select a case management agency.\",\n    \"regional_variations\": \"The underlying program rules are statewide, but service access and timing can vary by county based on the local Benefits and Eligibility Specialist, the case management agency selected, and provider availability.\",\n    \"offices_or_providers\": [\n      \"Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002\",\n      \"Local Benefits and Eligibility Specialist offices\",\n      \"Chosen case management agency\"\n    ]\n  },\n  \"official_source\": \"https://health.wyo.gov/healthcarefin/hcbs/\",\n  \"gotchas\": [\n    \"This is not an open-ended home-care benefit; the applicant must first qualify for Medicaid and then separately qualify for nursing facility level of care.\",\n    \"People ages 19 to 64 can qualify only if they have a verified disability under SSA-style criteria.\",\n    \"The waiver application alone is not enough if the person is not already on Wyoming Medicaid; a Medicaid application may also be required.\",\n    \"Benefits are service-based, not a cash allowance.\",\n    \"Families often miss the required LT-101 nursing-facility-level-of-care assessment.\",\n    \"Applicants usually must choose a case management agency after starting the process.\",\n    \"The exact financial threshold is tied to 300% of the Federal Benefit Rate, so the dollar limit changes over time.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Medicaid HCBS waiver with dual financial and functional eligibility: Medicaid financial eligibility plus nursing facility level of care. Benefits are a fixed menu of services rather than cash, and access is coordinated through local eligibility staff and case management agencies.\"\n}"
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "basis": "Countable income must be at or below the federal poverty level band for the MSP tier; Wyoming uses three tiers tied to Medicare entitlement and countable income.[1][2]",
+            "table": [
+              {
+                "tier": "QMB",
+                "income_limit": {
+                  "1_person": "$1,330/month",
+                  "2_people": "$1,804/month"
+                },
+                "fpl_band": "100% FPL[1][2]"
+              },
+              {
+                "tier": "SLMB",
+                "income_limit": {
+                  "1_person": "$1,596/month",
+                  "2_people": "$2,164/month"
+                },
+                "fpl_band": "120% FPL[1][2]"
+              },
+              {
+                "tier": "QI",
+                "income_limit": {
+                  "1_person": "$1,796/month",
+                  "2_people": "$2,435/month"
+                },
+                "fpl_band": "135% FPL[1][2]"
+              }
+            ],
+            "notes": "The official Wyoming table shown in 2026 lists only household sizes 1 and 2 on the page retrieved; Wyoming applies the tier rules statewide and the limits are adjusted annually.[1][2]"
+          },
+          "asset_limits": {
+            "limit": "Wyoming rules require countable resources not to exceed the Social Security resource limit, adjusted annually by the CPI.[2]",
+            "what_counts": [
+              "Bank accounts and other countable cash resources",
+              "Other resources counted under SSA-style MSP rules[2]"
+            ],
+            "what_is_exempt": [
+              "The retrieved official Wyoming sources did not spell out the full exempt-resource list on the same page.",
+              "Families should verify the current treatment of a home, one vehicle, and personal effects with the state application worker before applying."
+            ]
+          },
+          "other_requirements": [
+            "Must be entitled to Medicare.[2]",
+            "Must meet the income tier for QMB, SLMB, or QI.[1][2]",
+            "Must meet the applicable resource standard for the tier.[2]",
+            "Eligibility is for Medicare beneficiaries; no separate Wyoming residency rule was surfaced in the retrieved official MSP pages."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "QMB pays Medicare Part A and Part B premiums and also Medicare deductibles, coinsurance, and copayments. SLMB pays the Medicare Part B premium. QI also pays the Medicare Part B premium.[3][4]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through the Wyoming Department of Health application system (the official application process page points to the state web application path).[4]",
+            "By phone at 855-294-2127 to request an application or apply with assistance.[4]",
+            "By phone through the Long Term Care Unit at 855-203-2936 when applying in connection with long-term care services.[4]",
+            "Pick up an application at any Department of Family Services field office.[4]",
+            "Mail/fax request: request an application be mailed or faxed through the WDH Customer Service Center.[4]"
+          ],
+          "processing_time": "The retrieved official pages did not state a specific processing time; the application page describes the routes to apply but not a posted approval timeline.[4]",
+          "waitlist": null,
+          "forms": [
+            "M1100 Medicare Savings Programs (eligibility section in Wyoming’s eligibility manual)",
+            "Wyoming Department of Health application for benefits referenced on the application process page[2][4]"
+          ],
+          "documents": [
+            "Medicare card",
+            "Proof of monthly income such as Social Security award letter or pension statement",
+            "Bank statements and other proof of countable resources",
+            "Proof of Wyoming residency if requested by the worker",
+            "Identification for the applicant and spouse if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Wyoming program; no county restriction surfaced in the official sources retrieved.[1][2][4]",
+          "regional_variations": "No regional benefit differences were identified in the official materials retrieved. Any variation is administrative rather than programmatic, such as where a family submits the application or which local field office assists them.[4]",
+          "offices_or_providers": [
+            "Wyoming Department of Family Services field offices",
+            "Wyoming Department of Health Customer Service Center",
+            "Long Term Care Unit for LTC-related applications"
+          ]
+        },
+        "official_source": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/medicaid-income-requirements/",
+        "gotchas": [
+          "People often think MSP is one program, but Wyoming actually has three tiers: QMB, SLMB, and QI.[1][2][3]",
+          "QMB is the only tier that can cover Medicare cost-sharing; SLMB and QI generally pay only the Part B premium.[3]",
+          "The income test uses countable income, not simply every dollar of gross income.[2]",
+          "Resource rules still matter, and they are separate from the income limits.[2]",
+          "The official application page gives phone and office routes, but the retrieved sources did not provide a single online form number or a posted processing-time guarantee.[4]",
+          "QI is typically the most overlooked tier because its income limit is higher than SLMB but funding and enrollment rules can make it feel less straightforward than QMB or SLMB."
+        ],
+        "data_shape_notes": "This program is tiered by Medicare Savings category and countable income, with a separate resource test; benefits differ sharply by tier, and application routes are statewide rather than county-specific.[1][2][3][4]",
+        "_raw": "{\n  \"name\": \"Medicare Savings Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"basis\": \"Countable income must be at or below the federal poverty level band for the MSP tier; Wyoming uses three tiers tied to Medicare entitlement and countable income.[1][2]\",\n      \"table\": [\n        {\n          \"tier\": \"QMB\",\n          \"income_limit\": {\n            \"1_person\": \"$1,330/month\",\n            \"2_people\": \"$1,804/month\"\n          },\n          \"fpl_band\": \"100% FPL[1][2]\"\n        },\n        {\n          \"tier\": \"SLMB\",\n          \"income_limit\": {\n            \"1_person\": \"$1,596/month\",\n            \"2_people\": \"$2,164/month\"\n          },\n          \"fpl_band\": \"120% FPL[1][2]\"\n        },\n        {\n          \"tier\": \"QI\",\n          \"income_limit\": {\n            \"1_person\": \"$1,796/month\",\n            \"2_people\": \"$2,435/month\"\n          },\n          \"fpl_band\": \"135% FPL[1][2]\"\n        }\n      ],\n      \"notes\": \"The official Wyoming table shown in 2026 lists only household sizes 1 and 2 on the page retrieved; Wyoming applies the tier rules statewide and the limits are adjusted annually.[1][2]\"\n    },\n    \"asset_limits\": {\n      \"limit\": \"Wyoming rules require countable resources not to exceed the Social Security resource limit, adjusted annually by the CPI.[2]\",\n      \"what_counts\": [\n        \"Bank accounts and other countable cash resources\",\n        \"Other resources counted under SSA-style MSP rules[2]\"\n      ],\n      \"what_is_exempt\": [\n        \"The retrieved official Wyoming sources did not spell out the full exempt-resource list on the same page.\",\n        \"Families should verify the current treatment of a home, one vehicle, and personal effects with the state application worker before applying.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be entitled to Medicare.[2]\",\n      \"Must meet the income tier for QMB, SLMB, or QI.[1][2]\",\n      \"Must meet the applicable resource standard for the tier.[2]\",\n      \"Eligibility is for Medicare beneficiaries; no separate Wyoming residency rule was surfaced in the retrieved official MSP pages.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"QMB pays Medicare Part A and Part B premiums and also Medicare deductibles, coinsurance, and copayments. SLMB pays the Medicare Part B premium. QI also pays the Medicare Part B premium.[3][4]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through the Wyoming Department of Health application system (the official application process page points to the state web application path).[4]\",\n      \"By phone at 855-294-2127 to request an application or apply with assistance.[4]\",\n      \"By phone through the Long Term Care Unit at 855-203-2936 when applying in connection with long-term care services.[4]\",\n      \"Pick up an application at any Department of Family Services field office.[4]\",\n      \"Mail/fax request: request an application be mailed or faxed through the WDH Customer Service Center.[4]\"\n    ],\n    \"processing_time\": \"The retrieved official pages did not state a specific processing time; the application page describes the routes to apply but not a posted approval timeline.[4]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"M1100 Medicare Savings Programs (eligibility section in Wyoming’s eligibility manual)\",\n      \"Wyoming Department of Health application for benefits referenced on the application process page[2][4]\"\n    ],\n    \"documents\": [\n      \"Medicare card\",\n      \"Proof of monthly income such as Social Security award letter or pension statement\",\n      \"Bank statements and other proof of countable resources\",\n      \"Proof of Wyoming residency if requested by the worker\",\n      \"Identification for the applicant and spouse if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Wyoming program; no county restriction surfaced in the official sources retrieved.[1][2][4]\",\n    \"regional_variations\": \"No regional benefit differences were identified in the official materials retrieved. Any variation is administrative rather than programmatic, such as where a family submits the application or which local field office assists them.[4]\",\n    \"offices_or_providers\": [\n      \"Wyoming Department of Family Services field offices\",\n      \"Wyoming Department of Health Customer Service Center\",\n      \"Long Term Care Unit for LTC-related applications\"\n    ]\n  },\n  \"official_source\": \"https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/medicaid-income-requirements/\",\n  \"gotchas\": [\n    \"People often think MSP is one program, but Wyoming actually has three tiers: QMB, SLMB, and QI.[1][2][3]\",\n    \"QMB is the only tier that can cover Medicare cost-sharing; SLMB and QI generally pay only the Part B premium.[3]\",\n    \"The income test uses countable income, not simply every dollar of gross income.[2]\",\n    \"Resource rules still matter, and they are separate from the income limits.[2]\",\n    \"The official application page gives phone and office routes, but the retrieved sources did not provide a single online form number or a posted processing-time guarantee.[4]\",\n    \"QI is typically the most overlooked tier because its income limit is higher than SLMB but funding and enrollment rules can make it feel less straightforward than QMB or SLMB.\"\n  ],\n  \"data_shape_notes\": \"This program is tiered by Medicare Savings category and countable income, with a separate resource test; benefits differ sharply by tier, and application routes are statewide rather than county-specific.[1][2][3][4]\"\n}"
+      },
+      {
+        "name": "Supplemental Nutrition Assistance Program (SNAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Wyoming uses separate income tests depending on whether the household includes an elderly or disabled member. For households with an elderly/disabled member, the gross monthly income limit is 165% of poverty; for all other households, it is 130% of poverty, and all households must also meet the net income test at 100% of poverty. Effective Oct. 1, 2026–Sept. 30, 2027, Wyoming’s published monthly limits are: household size 1: 165% gross $2,195, 130% gross $1,729, net $1,330, max allotment $306; 2: $2,976, $2,345, $1,804, $562; 3: $3,757, $2,960, $2,277, $808; 4: $4,538, $3,575, $2,750, $1,023; 5: $5,319, $4,190, $3,223, amount not shown in the snippet; 6: $6,100, $4,805, $3,696, amount not shown in the snippet; 7: $6,881, $5,420, $4,169, amount not shown in the snippet; 8: $7,662, $6,035, $4,642, amount not shown in the snippet; 9: $8,443, $6,653, $5,118, $2,066. Each additional household member adds $781 at the 165% elderly/disabled level, $615 at the 130% gross level, $473 at the net level, and $218 to the allotment. The elderly/disabled gross-income table is the key special rule families usually need for an older relative.",
+          "asset_limits": "Wyoming SNAP requires an asset test. The household must meet federal SNAP resource rules, which generally count liquid resources such as cash and money in bank accounts, and exclude many essential assets such as a home and most retirement accounts. Households with an elderly or disabled member are the ones most likely to be affected by the asset test because Wyoming does not appear to use broad-based categorical eligibility. Because the provided official snippet does not list the exact current dollar asset limit or the full asset-counting/exemptions chart, the safest family-level guidance is to assume assets matter and to verify current counted resources with the local DFS office before applying.",
+          "other_requirements": [
+            "Must be a Wyoming resident applying through Wyoming DFS.",
+            "Must cooperate with the application interview process.",
+            "Must provide required verification documents when requested.",
+            "Households with elderly or disabled members use the higher 165% gross-income threshold, but still must satisfy the net-income test and resource rules.",
+            "Each application is reviewed under federal rules, so eligibility depends on the full household situation."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "SNAP provides monthly food-purchasing benefits loaded onto an EBT card. Benefits can be used for eligible food items at authorized retailers. The maximum monthly allotment in Wyoming for Oct. 1, 2026–Sept. 30, 2027 is $306 for 1 person, $562 for 2, $808 for 3, $1,023 for 4, and $2,066 for 9; the published table snippet also shows $306, $562, $808, $1,023, and $2,066 for those household sizes, and the program’s benefit increases with household size. The exact monthly amount a household gets depends on income, deductions, and household size.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application: Wyoming SNAP application page at https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/",
+            "Paper application: DFS 100 (Application for Benefits), available from a local DFS office or downloadable from the SNAP forms page",
+            "Mail completed application to your local DFS office",
+            "Fax completed application to your local DFS office",
+            "Email completed application to snappowerservice@wyo.gov",
+            "In person at a local Wyoming Department of Family Services office"
+          ],
+          "processing_time": "The provided official materials say that after DFS receives the application, a benefit specialist contacts the household to schedule a phone or face-to-face interview. A specific statewide processing-time number was not shown in the retrieved official snippets, so families should expect the timeline to depend on interview scheduling and document verification.",
+          "waitlist": null,
+          "forms": [
+            "DFS 100 Application for Benefits",
+            "DFS 100S Spanish Application for Benefits",
+            "Wyoming SNAP application form (paper application)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Wyoming residency",
+            "Proof of household income",
+            "Proof of Social Security number if available",
+            "Proof of shelter costs such as rent, mortgage, property tax, or utility bills",
+            "Proof of medical expenses for elderly or disabled household members if claiming deductions",
+            "Bank statements or other resource verification if requested",
+            "Any information DFS asks for during the interview"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "SNAP is available statewide in Wyoming through the Department of Family Services; there are no county-only restrictions shown in the retrieved sources.",
+          "regional_variations": "No regional benefit differences were identified in the official material retrieved. What varies is where you submit the application and which local DFS office handles follow-up, interviews, and document intake. Wait times can vary by local office workload, but no official region-by-region wait-time table was shown.",
+          "offices_or_providers": [
+            "Local Wyoming Department of Family Services offices",
+            "Wyoming DFS SNAP unit via snappowerservice@wyo.gov",
+            "Wyoming DFS state SNAP page"
+          ]
+        },
+        "official_source": "https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/",
+        "gotchas": [
+          "The household does not just have to meet income rules; Wyoming SNAP also uses resource/asset rules.",
+          "Households with an elderly or disabled member have a higher gross-income threshold, but that does not remove the net-income test.",
+          "Applying is paper-based in Wyoming, not a simple one-click online submission in the retrieved official material.",
+          "DFS contacts the household for an interview after receiving the application, so answering phone calls quickly matters.",
+          "The exact benefit amount is not a flat senior benefit; it depends on deductions and household size.",
+          "Families often miss out on medical-expense deductions for an elderly relative, which can help eligibility and increase benefits.",
+          "The official materials retrieved did not show one universal processing-time guarantee, so local office follow-up affects speed."
+        ],
+        "data_shape_notes": "This program is household-based and means-tested, with benefit amounts that scale by household size and eligibility rules that change when a household includes someone age 60 or older or disabled. Wyoming also appears to use a paper-application workflow with local office intake rather than a single fully digital statewide application path.",
+        "_raw": "{\n  \"name\": \"Supplemental Nutrition Assistance Program (SNAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Wyoming uses separate income tests depending on whether the household includes an elderly or disabled member. For households with an elderly/disabled member, the gross monthly income limit is 165% of poverty; for all other households, it is 130% of poverty, and all households must also meet the net income test at 100% of poverty. Effective Oct. 1, 2026–Sept. 30, 2027, Wyoming’s published monthly limits are: household size 1: 165% gross $2,195, 130% gross $1,729, net $1,330, max allotment $306; 2: $2,976, $2,345, $1,804, $562; 3: $3,757, $2,960, $2,277, $808; 4: $4,538, $3,575, $2,750, $1,023; 5: $5,319, $4,190, $3,223, amount not shown in the snippet; 6: $6,100, $4,805, $3,696, amount not shown in the snippet; 7: $6,881, $5,420, $4,169, amount not shown in the snippet; 8: $7,662, $6,035, $4,642, amount not shown in the snippet; 9: $8,443, $6,653, $5,118, $2,066. Each additional household member adds $781 at the 165% elderly/disabled level, $615 at the 130% gross level, $473 at the net level, and $218 to the allotment. The elderly/disabled gross-income table is the key special rule families usually need for an older relative.\",\n    \"asset_limits\": \"Wyoming SNAP requires an asset test. The household must meet federal SNAP resource rules, which generally count liquid resources such as cash and money in bank accounts, and exclude many essential assets such as a home and most retirement accounts. Households with an elderly or disabled member are the ones most likely to be affected by the asset test because Wyoming does not appear to use broad-based categorical eligibility. Because the provided official snippet does not list the exact current dollar asset limit or the full asset-counting/exemptions chart, the safest family-level guidance is to assume assets matter and to verify current counted resources with the local DFS office before applying.\",\n    \"other_requirements\": [\n      \"Must be a Wyoming resident applying through Wyoming DFS.\",\n      \"Must cooperate with the application interview process.\",\n      \"Must provide required verification documents when requested.\",\n      \"Households with elderly or disabled members use the higher 165% gross-income threshold, but still must satisfy the net-income test and resource rules.\",\n      \"Each application is reviewed under federal rules, so eligibility depends on the full household situation.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"SNAP provides monthly food-purchasing benefits loaded onto an EBT card. Benefits can be used for eligible food items at authorized retailers. The maximum monthly allotment in Wyoming for Oct. 1, 2026–Sept. 30, 2027 is $306 for 1 person, $562 for 2, $808 for 3, $1,023 for 4, and $2,066 for 9; the published table snippet also shows $306, $562, $808, $1,023, and $2,066 for those household sizes, and the program’s benefit increases with household size. The exact monthly amount a household gets depends on income, deductions, and household size.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application: Wyoming SNAP application page at https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/\",\n      \"Paper application: DFS 100 (Application for Benefits), available from a local DFS office or downloadable from the SNAP forms page\",\n      \"Mail completed application to your local DFS office\",\n      \"Fax completed application to your local DFS office\",\n      \"Email completed application to snappowerservice@wyo.gov\",\n      \"In person at a local Wyoming Department of Family Services office\"\n    ],\n    \"processing_time\": \"The provided official materials say that after DFS receives the application, a benefit specialist contacts the household to schedule a phone or face-to-face interview. A specific statewide processing-time number was not shown in the retrieved official snippets, so families should expect the timeline to depend on interview scheduling and document verification.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"DFS 100 Application for Benefits\",\n      \"DFS 100S Spanish Application for Benefits\",\n      \"Wyoming SNAP application form (paper application)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Wyoming residency\",\n      \"Proof of household income\",\n      \"Proof of Social Security number if available\",\n      \"Proof of shelter costs such as rent, mortgage, property tax, or utility bills\",\n      \"Proof of medical expenses for elderly or disabled household members if claiming deductions\",\n      \"Bank statements or other resource verification if requested\",\n      \"Any information DFS asks for during the interview\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"SNAP is available statewide in Wyoming through the Department of Family Services; there are no county-only restrictions shown in the retrieved sources.\",\n    \"regional_variations\": \"No regional benefit differences were identified in the official material retrieved. What varies is where you submit the application and which local DFS office handles follow-up, interviews, and document intake. Wait times can vary by local office workload, but no official region-by-region wait-time table was shown.\",\n    \"offices_or_providers\": [\n      \"Local Wyoming Department of Family Services offices\",\n      \"Wyoming DFS SNAP unit via snappowerservice@wyo.gov\",\n      \"Wyoming DFS state SNAP page\"\n    ]\n  },\n  \"official_source\": \"https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/\",\n  \"gotchas\": [\n    \"The household does not just have to meet income rules; Wyoming SNAP also uses resource/asset rules.\",\n    \"Households with an elderly or disabled member have a higher gross-income threshold, but that does not remove the net-income test.\",\n    \"Applying is paper-based in Wyoming, not a simple one-click online submission in the retrieved official material.\",\n    \"DFS contacts the household for an interview after receiving the application, so answering phone calls quickly matters.\",\n    \"The exact benefit amount is not a flat senior benefit; it depends on deductions and household size.\",\n    \"Families often miss out on medical-expense deductions for an elderly relative, which can help eligibility and increase benefits.\",\n    \"The official materials retrieved did not show one universal processing-time guarantee, so local office follow-up affects speed.\"\n  ],\n  \"data_shape_notes\": \"This program is household-based and means-tested, with benefit amounts that scale by household size and eligibility rules that change when a household includes someone age 60 or older or disabled. Wyoming also appears to use a paper-application workflow with local office intake rather than a single fully digital statewide application path.\"\n}"
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit is specified for Wyoming’s Title III-C2 Home Delivered Meals program in the official materials found; eligibility is based on age and nutritional risk/homebound status rather than income.",
+          "asset_limits": "No asset limit is specified in the official program materials found.",
+          "other_requirements": [
+            "Must be age 60 or older.",
+            "Must be unable to prepare meals, or lack another meal support service in the home or community.",
+            "Must be homebound or otherwise unable to attend a congregate meal site; Wyoming’s materials also reference geographically isolated older adults.",
+            "Must complete the Division-approved evaluation tool (AGNES).",
+            "Priority may be given based on greatest social and economic need and nutritional risk.",
+            "In some rural areas, a reduced meal frequency may be approved if five-day delivery is not feasible."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "At least one meal delivered to the home, generally five or more days per week; in rural areas, a lesser frequency may be approved. Meals may be hot or other appropriate meals, including cold, frozen, canned, dried, fresh, or supplemental foods depending on provider operations.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact the local county aging services provider listed on Wyoming Department of Health county service-area maps: https://health.wyo.gov/aging/communityliving/service-area-maps/",
+            "Contact the Wyoming Department of Health Aging Division nutrition program manager at (307) 777-5048",
+            "Use the Wyoming Department of Health Nutrition Services page for program information: https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/"
+          ],
+          "processing_time": "No statewide processing-time standard was found in the official materials reviewed; timing appears to depend on local provider assessment and availability.",
+          "waitlist": "A formal statewide waitlist policy was not identified in the official materials reviewed. Availability and delays may vary by county/provider.",
+          "forms": [
+            "Division-approved evaluation tool (AGNES)"
+          ],
+          "documents": [
+            "Proof of age",
+            "Information about current living situation and ability to prepare meals",
+            "Any relevant medical, functional, or nutrition information used in the AGNES assessment",
+            "Contact information and local service needs"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide through county/area aging providers, but delivery frequency and provider practices can vary by region. Rural areas may receive fewer deliveries if daily service is not feasible.",
+          "regional_variations": "Yes. Wyoming’s official materials state that five-day-per-week delivery is standard except in rural areas where a lesser frequency may be approved. Local county agencies administer intake and delivery, so wait times, meal frequency, and provider capacity can differ by county.",
+          "offices_or_providers": [
+            "Wyoming Department of Health Aging Division / Community Living Section",
+            "Local county aging services providers shown on the county service-area map"
+          ]
+        },
+        "official_source": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/",
+        "gotchas": [
+          "This is not a cash benefit; it is a meal service.",
+          "Income is not the main test for eligibility; functional need and age are.",
+          "People often miss that you must qualify through the local assessment process, including AGNES.",
+          "Delivery is not always daily in rural Wyoming.",
+          "Different counties use different local providers, so the application contact can change by region.",
+          "The program can include meals other than hot meals, depending on the provider and local delivery model."
+        ],
+        "data_shape_notes": "Eligibility is largely need-based rather than income-based; benefits are a service rather than a dollar amount; delivery frequency can vary by geography, especially in rural areas; access is administered through county-level providers under a statewide framework.",
+        "_raw": "{\n  \"name\": \"Home-Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit is specified for Wyoming’s Title III-C2 Home Delivered Meals program in the official materials found; eligibility is based on age and nutritional risk/homebound status rather than income.\",\n    \"asset_limits\": \"No asset limit is specified in the official program materials found.\",\n    \"other_requirements\": [\n      \"Must be age 60 or older.\",\n      \"Must be unable to prepare meals, or lack another meal support service in the home or community.\",\n      \"Must be homebound or otherwise unable to attend a congregate meal site; Wyoming’s materials also reference geographically isolated older adults.\",\n      \"Must complete the Division-approved evaluation tool (AGNES).\",\n      \"Priority may be given based on greatest social and economic need and nutritional risk.\",\n      \"In some rural areas, a reduced meal frequency may be approved if five-day delivery is not feasible.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"At least one meal delivered to the home, generally five or more days per week; in rural areas, a lesser frequency may be approved. Meals may be hot or other appropriate meals, including cold, frozen, canned, dried, fresh, or supplemental foods depending on provider operations.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the local county aging services provider listed on Wyoming Department of Health county service-area maps: https://health.wyo.gov/aging/communityliving/service-area-maps/\",\n      \"Contact the Wyoming Department of Health Aging Division nutrition program manager at (307) 777-5048\",\n      \"Use the Wyoming Department of Health Nutrition Services page for program information: https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was found in the official materials reviewed; timing appears to depend on local provider assessment and availability.\",\n    \"waitlist\": \"A formal statewide waitlist policy was not identified in the official materials reviewed. Availability and delays may vary by county/provider.\",\n    \"forms\": [\n      \"Division-approved evaluation tool (AGNES)\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Information about current living situation and ability to prepare meals\",\n      \"Any relevant medical, functional, or nutrition information used in the AGNES assessment\",\n      \"Contact information and local service needs\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide through county/area aging providers, but delivery frequency and provider practices can vary by region. Rural areas may receive fewer deliveries if daily service is not feasible.\",\n    \"regional_variations\": \"Yes. Wyoming’s official materials state that five-day-per-week delivery is standard except in rural areas where a lesser frequency may be approved. Local county agencies administer intake and delivery, so wait times, meal frequency, and provider capacity can differ by county.\",\n    \"offices_or_providers\": [\n      \"Wyoming Department of Health Aging Division / Community Living Section\",\n      \"Local county aging services providers shown on the county service-area map\"\n    ]\n  },\n  \"official_source\": \"https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/\",\n  \"gotchas\": [\n    \"This is not a cash benefit; it is a meal service.\",\n    \"Income is not the main test for eligibility; functional need and age are.\",\n    \"People often miss that you must qualify through the local assessment process, including AGNES.\",\n    \"Delivery is not always daily in rural Wyoming.\",\n    \"Different counties use different local providers, so the application contact can change by region.\",\n    \"The program can include meals other than hot meals, depending on the provider and local delivery model.\"\n  ],\n  \"data_shape_notes\": \"Eligibility is largely need-based rather than income-based; benefits are a service rather than a dollar amount; delivery frequency can vary by geography, especially in rural areas; access is administered through county-level providers under a statewide framework.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "WY",
+    "stateName": "Wyoming",
+    "classifiedAt": "2026-10-06T05:36:09.928Z",
+    "total": 5,
+    "typeSummary": {
+      "benefit": 5
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 2
+    },
+    "complexitySummary": {
+      "deep": 4,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wyoming Department of Health Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001[8][10]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Community Choice Waiver (CCW)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Benefits and Eligibility Specialist offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Chosen case management agency",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Wyoming Department of Family Services field offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Wyoming Department of Health Customer Service Center",
+              "type": "service-area"
+            },
+            {
+              "name": "Long Term Care Unit for LTC-related applications",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Supplemental Nutrition Assistance Program (SNAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Local Wyoming Department of Family Services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Wyoming DFS SNAP unit via snappowerservice@wyo.gov",
+              "type": "service-area"
+            },
+            {
+              "name": "Wyoming DFS state SNAP page",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wyoming Department of Health Aging Division / Community Living Section",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county aging services providers shown on the county service-area map",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "WY",
+      "id": "wy-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "WY",
+      "id": "wy-community-choice-waiver",
+      "name": "Community Choice Waiver (CCW)",
+      "legacyId": "community-choice-waiver-ccw",
+      "programType": "benefit"
+    },
+    {
+      "state": "WY",
+      "id": "wy-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "legacyId": "medicare-savings-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "WY",
+      "id": "wy-snap-food-benefits",
+      "name": "Supplemental Nutrition Assistance Program (SNAP)",
+      "legacyId": "supplemental-nutrition-assistance-program-snap",
+      "programType": "benefit"
+    },
+    {
+      "state": "WY",
+      "id": "wy-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "legacyId": "home-delivered-meals",
+      "programType": "benefit"
+    }
+  ]
+}

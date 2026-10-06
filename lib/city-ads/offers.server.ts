@@ -3,6 +3,7 @@ import { getLeadExchange } from "./exchange.server";
 import { classifyQualification, BLOCKING_CATEGORIES, type ClassifyLead } from "./classify.server";
 import { resolvePrimaryCampaign, handToPrimary, HANDOVER_AFTER_MS } from "./primary.server";
 import { getThreadLead, notifyProviderOfHandover } from "./thread.server";
+import { providerAlertPhone } from "./provider-alert-phone";
 /**
  * City lead offer chain — server only.
  *
@@ -118,6 +119,7 @@ interface ProviderLite {
   city: string | null;
   phone: string | null;
   email: string | null;
+  metadata?: unknown;
 }
 
 const LEAD_COLS =
@@ -175,13 +177,13 @@ async function getLead(db: SupabaseClient, leadId: string): Promise<CityLeadRow 
 async function getProviders(db: SupabaseClient, ids: string[]): Promise<Map<string, ProviderLite>> {
   const out = new Map<string, ProviderLite>();
   if (ids.length === 0) return out;
-  const { data } = await db.from("business_profiles").select("id, slug, display_name, city, phone, email").in("id", ids);
+  const { data } = await db.from("business_profiles").select("id, slug, display_name, city, phone, email, metadata").in("id", ids);
   for (const p of (data ?? []) as ProviderLite[]) out.set(p.id, p);
   return out;
 }
 
 function providerPhone(entry: PoolEntry | undefined, provider: ProviderLite | undefined): string | null {
-  const raw = entry?.phone_override || provider?.phone || null;
+  const raw = entry?.phone_override || providerAlertPhone(provider) || null;
   return raw ? normalizeUSPhone(raw) : null;
 }
 

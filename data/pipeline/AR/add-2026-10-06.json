@@ -1,0 +1,160 @@
+{
+  "state": "AR",
+  "addedAt": "2026-10-06T06:30:28.984Z",
+  "dive": {
+    "state": "AR",
+    "stateName": "Arkansas",
+    "diveAt": "2026-10-06T06:29:05.763Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "note": "Arkansas’s AABD/ABD Medicaid appears to use a very low income standard for full-benefit coverage, but the official materials found in search show multiple references and do not present a clean, single current eligibility table on the web page itself. The most concrete official chart found lists the following net-income limits for some AABD categories, with medical bills deductible if income is over the limit.",
+            "table": [
+              {
+                "household_size": "Individual",
+                "income_limit_per_month": 108.33
+              },
+              {
+                "household_size": "Couple",
+                "income_limit_per_month": 216.66
+              }
+            ],
+            "important_caveat": "Other current Arkansas summaries indicate the program also serves aged 65+, blind, and disabled people who meet income/resource rules, and one current non-official summary reports higher modern limits and asset levels. Because the official chart result is the most program-specific source found, families should confirm the exact current dollar test with Arkansas DHS before applying."
+          },
+          "asset_limits": {
+            "note": "The official search results say applicants must meet resource requirements, but the exact resource limit was not clearly listed in the official snippets retrieved. A current secondary summary reports countable-asset limits of $9,950 for an individual and $14,910 for a couple, but that should be verified with DHS before relying on it.",
+            "what_counts": [
+              "Countable resources generally include things like cash, bank accounts, and other non-exempt property.",
+              "Arkansas DHS also considers income, resources, Arkansas residency, and other requirements."
+            ],
+            "what_is_exempt": [
+              "Specific exemptions were not fully detailed in the retrieved official snippets.",
+              "Families should ask DHS which assets are excluded before applying."
+            ]
+          },
+          "other_requirements": [
+            "Must be age 65 or older, or blind, or disabled under Social Security Administration criteria.",
+            "Must be an Arkansas resident.",
+            "Must meet income and resource requirements.",
+            "Disabled applicants must meet SSA disability criteria or DHS Medical Review Team standards depending on the category.",
+            "Some noncitizens with longstanding status may qualify in limited circumstances."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Full Medicaid health coverage for eligible aged, blind, and disabled individuals, including medical coverage and, for Medicare beneficiaries, cost-sharing help in some cases. Official Arkansas DHS materials also indicate adult dental and vision benefits may be covered under ABD-related Medicaid, with some secondary summaries reporting up to $500 in adult dental benefits per year and one eye exam plus one pair of regular glasses every 12 months.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.access.arkansas.gov",
+            "Phone: 1-800-482-8988",
+            "Phone: 1-855-372-1084",
+            "In person: local county DHS office",
+            "Mail: submit paperwork to the local county DHS office"
+          ],
+          "processing_time": "The retrieved official sources did not give a specific processing-time target for AABD Medicaid.",
+          "waitlist": null,
+          "forms": [
+            "Application for health care coverage (official sources say to contact the county DHS office or call for an application form)",
+            "DHS-1 (reported by a current secondary source as the general health-care application)",
+            "ABD Application (reported by a current secondary source for long-term care and disabled applicants)"
+          ],
+          "documents": [
+            "Proof of Arkansas residency",
+            "Proof of age, blindness, or disability",
+            "Income proof such as Social Security, pension, wages, or other income statements",
+            "Resource/asset proof such as bank statements and ownership records",
+            "Medicare card if the applicant has Medicare",
+            "Medical bills if income is over the limit and the applicant is using medical expense deductions"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide through Arkansas DHS county offices; eligibility is based on state Medicaid rules, not a county-specific program.",
+          "regional_variations": "The program itself is statewide and does not appear to have county-by-county eligibility rules. The main regional difference is administrative: applicants work through their local county DHS office, and processing experience may vary by office workload.",
+          "offices_or_providers": [
+            "Local county Arkansas DHS office",
+            "Access Arkansas online portal"
+          ]
+        },
+        "official_source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/",
+        "gotchas": [
+          "This is not a simple income-only program; Arkansas uses both income and resource rules.",
+          "The exact dollar limits can be easy to misread because older quick-reference charts and newer summaries do not line up cleanly, so the family should verify the current numbers with DHS before applying.",
+          "If income is over the limit, Arkansas’s chart says medical bills may be deducted to qualify.",
+          "Applicants age 65+ are in one category; blind and disabled applicants may need SSA or DHS medical review proof.",
+          "The application can start online, but families may still need to work with the county office and submit documents."
+        ],
+        "data_shape_notes": "This program is statewide and means-tested, but the structure is unusual because the official chart points to very low income limits with medical-expense deductions, while other current summaries describe modern updated ABD figures; families should treat the county DHS office as the source of truth for the current test.",
+        "_raw": "{\n  \"name\": \"Regular Medicaid / Aged Blind and Disabled (AABD)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"note\": \"Arkansas’s AABD/ABD Medicaid appears to use a very low income standard for full-benefit coverage, but the official materials found in search show multiple references and do not present a clean, single current eligibility table on the web page itself. The most concrete official chart found lists the following net-income limits for some AABD categories, with medical bills deductible if income is over the limit.\",\n      \"table\": [\n        {\n          \"household_size\": \"Individual\",\n          \"income_limit_per_month\": 108.33\n        },\n        {\n          \"household_size\": \"Couple\",\n          \"income_limit_per_month\": 216.66\n        }\n      ],\n      \"important_caveat\": \"Other current Arkansas summaries indicate the program also serves aged 65+, blind, and disabled people who meet income/resource rules, and one current non-official summary reports higher modern limits and asset levels. Because the official chart result is the most program-specific source found, families should confirm the exact current dollar test with Arkansas DHS before applying.\"\n    },\n    \"asset_limits\": {\n      \"note\": \"The official search results say applicants must meet resource requirements, but the exact resource limit was not clearly listed in the official snippets retrieved. A current secondary summary reports countable-asset limits of $9,950 for an individual and $14,910 for a couple, but that should be verified with DHS before relying on it.\",\n      \"what_counts\": [\n        \"Countable resources generally include things like cash, bank accounts, and other non-exempt property.\",\n        \"Arkansas DHS also considers income, resources, Arkansas residency, and other requirements.\"\n      ],\n      \"what_is_exempt\": [\n        \"Specific exemptions were not fully detailed in the retrieved official snippets.\",\n        \"Families should ask DHS which assets are excluded before applying.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be age 65 or older, or blind, or disabled under Social Security Administration criteria.\",\n      \"Must be an Arkansas resident.\",\n      \"Must meet income and resource requirements.\",\n      \"Disabled applicants must meet SSA disability criteria or DHS Medical Review Team standards depending on the category.\",\n      \"Some noncitizens with longstanding status may qualify in limited circumstances.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Full Medicaid health coverage for eligible aged, blind, and disabled individuals, including medical coverage and, for Medicare beneficiaries, cost-sharing help in some cases. Official Arkansas DHS materials also indicate adult dental and vision benefits may be covered under ABD-related Medicaid, with some secondary summaries reporting up to $500 in adult dental benefits per year and one eye exam plus one pair of regular glasses every 12 months.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.access.arkansas.gov\",\n      \"Phone: 1-800-482-8988\",\n      \"Phone: 1-855-372-1084\",\n      \"In person: local county DHS office\",\n      \"Mail: submit paperwork to the local county DHS office\"\n    ],\n    \"processing_time\": \"The retrieved official sources did not give a specific processing-time target for AABD Medicaid.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for health care coverage (official sources say to contact the county DHS office or call for an application form)\",\n      \"DHS-1 (reported by a current secondary source as the general health-care application)\",\n      \"ABD Application (reported by a current secondary source for long-term care and disabled applicants)\"\n    ],\n    \"documents\": [\n      \"Proof of Arkansas residency\",\n      \"Proof of age, blindness, or disability\",\n      \"Income proof such as Social Security, pension, wages, or other income statements\",\n      \"Resource/asset proof such as bank statements and ownership records\",\n      \"Medicare card if the applicant has Medicare\",\n      \"Medical bills if income is over the limit and the applicant is using medical expense deductions\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide through Arkansas DHS county offices; eligibility is based on state Medicaid rules, not a county-specific program.\",\n    \"regional_variations\": \"The program itself is statewide and does not appear to have county-by-county eligibility rules. The main regional difference is administrative: applicants work through their local county DHS office, and processing experience may vary by office workload.\",\n    \"offices_or_providers\": [\n      \"Local county Arkansas DHS office\",\n      \"Access Arkansas online portal\"\n    ]\n  },\n  \"official_source\": \"https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/\",\n  \"gotchas\": [\n    \"This is not a simple income-only program; Arkansas uses both income and resource rules.\",\n    \"The exact dollar limits can be easy to misread because older quick-reference charts and newer summaries do not line up cleanly, so the family should verify the current numbers with DHS before applying.\",\n    \"If income is over the limit, Arkansas’s chart says medical bills may be deducted to qualify.\",\n    \"Applicants age 65+ are in one category; blind and disabled applicants may need SSA or DHS medical review proof.\",\n    \"The application can start online, but families may still need to work with the county office and submit documents.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide and means-tested, but the structure is unusual because the official chart points to very low income limits with medical-expense deductions, while other current summaries describe modern updated ABD figures; families should treat the county DHS office as the source of truth for the current test.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "AR",
+    "stateName": "Arkansas",
+    "classifiedAt": "2026-10-06T06:29:05.768Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county Arkansas DHS office",
+              "type": "service-area"
+            },
+            {
+              "name": "Access Arkansas online portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "AR",
+      "id": "ar-medicaid-aabd",
+      "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+      "legacyId": "regular-medicaid-aged-blind-and-disabled-aabd",
+      "programType": "benefit"
+    }
+  ]
+}

@@ -2,8 +2,8 @@
   "state": "RI",
   "stateName": "Rhode Island",
   "draftedAt": "2026-04-13T22:29:50.221Z",
-  "total": 17,
-  "successful": 17,
+  "total": 20,
+  "successful": 20,
   "programs": [
     {
       "id": "medicaid-ltss-elderly",
@@ -3135,6 +3135,603 @@
           "flaggedAt": "2026-10-04T00:53:58.349Z"
         }
       ]
+    },
+    {
+      "id": "ri-medicaid-ead-elders-adults-disabilities",
+      "name": "Medicaid for Elders and Adults with Disabilities (EAD)",
+      "shortName": "RI Medicaid EAD",
+      "tagline": "If your parent is 65 or older and living in Rhode Island on a limited income, this program may cover their medical care at little to no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Rhode Island Department of Human Services (DHS)",
+            "type": "service-area"
+          },
+          {
+            "name": "HealthSource RI",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Rhode Island's Medicaid for Elders and Adults with Disabilities (EAD) covers standard Medicaid medical services for adults who are 65 or older, or who have a qualifying disability, and who meet income and asset limits. For a parent on a fixed income, this can mean doctor visits, hospital stays, prescriptions, and other care covered without out-of-pocket costs that would otherwise be unmanageable.\n\nThe income limit is $1,330 per month for a single person (2026). The asset limit is $4,000 for an individual. If your parent's income is above that limit but they have high medical expenses, Rhode Island has a separate medically needy pathway that may still qualify them. So even if the numbers don't look right at first, it's worth applying.\n\nEAD is not the same as SSI. Your parent does not need to receive SSI to qualify. Age 65 automatically satisfies the categorical requirement. Adults under 65 with a disability go through a separate determination by Rhode Island's State Medicaid Assessment and Review Team (MART). The financial rules are what most families need to work through carefully, and this page explains them step by step.",
+      "savingsRange": "",
+      "savingsSource": "Free service: EAD is Medicaid coverage, not a cash benefit. There is no fixed dollar amount published by Rhode Island DHS for the value of coverage.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or determined disabled by Rhode Island MART",
+          "Income at or below $1,330/month for one person (2026)",
+          "Assets at or below $4,000 for an individual",
+          "Rhode Island resident",
+          "Not already receiving SSI (SSI recipients get Medicaid automatically through a separate pathway)"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1330
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1803
+          }
+        ],
+        "assetLimits": {
+          "individual": 4000,
+          "couple": 6000,
+          "countedAssets": [
+            "Countable resources under SSI methodology (cash, bank accounts, non-exempt property, non-exempt investments)"
+          ],
+          "exemptAssets": [
+            "Rhode Island DHS applies SSI-style exclusions; the full list of exempt assets is not published in the EAD program summary and should be confirmed directly with DHS at 855-697-4347"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For applicants under 65: Rhode Island's State Medicaid Assessment and Review Team (MART) must determine that the applicant meets SSI disability standards. This is a clinical and functional review. Adults 65 and older qualify categorically by age and do not need a disability determination.",
+        "otherRequirements": [
+          "Must be a Rhode Island resident",
+          "Must not be currently receiving SSI (SSI recipients qualify for Medicaid through a separate automatic pathway)",
+          "Must meet general Medicaid eligibility rules for Rhode Island",
+          "Medicare status may be relevant for certain coverage coordination questions but is not a requirement for EAD itself"
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to start is online at healthyrhode.ri.gov or by calling Rhode Island DHS at 855-697-4347, Monday through Friday.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you call or go online",
+            "description": "You will need your parent's Social Security award letter, proof of Rhode Island residency, proof of age or disability documentation, income records, and current asset balances. Having these ready prevents delays. See the full document checklist below."
+          },
+          {
+            "step": 2,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: go to healthyrhode.ri.gov and complete the Health Coverage application. By phone: call Rhode Island DHS at 855-697-4347. In person: visit a Rhode Island DHS office. By mail or fax: request a paper Health and Human Services Application for Assistance from DHS and return it completed."
+          },
+          {
+            "step": 3,
+            "title": "Complete the disability determination if your parent is under 65",
+            "description": "If your parent is under 65 and not already receiving SSI, Rhode Island's MART (State Medicaid Assessment and Review Team) will conduct a disability review using SSI standards. You will need to submit medical records and disability documentation. DHS will contact you to schedule or request materials."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any DHS requests",
+            "description": "DHS may contact you for additional documents or clarification. Missing paperwork is the most common reason applications stall. Submit everything in one packet if possible, and keep copies of everything you send."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility determination",
+            "description": "DHS will mail a determination letter. If approved, coverage may be backdated. If denied, the letter will explain why and describe your right to appeal. If income is over the standard limit, ask specifically about the medically needy pathway before accepting a denial."
+          }
+        ],
+        "processingTime": "Not specified in official program sources. Standard Medicaid applications in Rhode Island are generally processed within 45 days; disability determinations through MART may take longer. Confirm the current timeline with DHS at 855-697-4347.",
+        "waitlist": null,
+        "tip": "If your parent's income is slightly over $1,330/month, do not assume they are disqualified. Rhode Island's medically needy pathway counts high medical expenses against income. Ask DHS specifically about this option when you call.",
+        "urls": [
+          {
+            "label": "Apply online at HealthyRhode",
+            "url": "https://healthyrhode.ri.gov"
+          },
+          {
+            "label": "Rhode Island EAD program page",
+            "url": "https://staycovered.ri.gov/your-medicaid-benefits/programs-services/adults-disabilities"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter showing current monthly benefit amount",
+        "Proof of Rhode Island residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age: birth certificate, passport, or other government-issued document showing date of birth",
+        "Social Security card",
+        "Proof of identity: government-issued photo ID such as a driver's license or state ID",
+        "All sources of income: pension or retirement income statements, any other monthly income documentation",
+        "Current balances for any checking or savings accounts (Rhode Island DHS will ask for asset information; contact DHS at 855-697-4347 to confirm what period or statements they require)",
+        "Medicare card if your parent has Medicare (not required, but relevant for coverage coordination questions)",
+        "Medical records or disability documentation if applying on the basis of disability rather than age",
+        "Information about any other health insurance your parent currently has",
+        "Legal documents if a representative or power of attorney is applying on the parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "Rhode Island Department of Human Services (DHS)",
+          "phone": "855-697-4347",
+          "description": "Apply for EAD Medicaid, ask about eligibility, and get help with your application. This is the primary office that processes EAD cases.",
+          "hours": "Monday through Friday; contact DHS to confirm current hours"
+        },
+        {
+          "label": "HealthSource RI",
+          "phone": "1-855-840-4774",
+          "description": "Rhode Island's health coverage marketplace; can assist with Medicaid applications including EAD.",
+          "hours": "Monday through Friday; contact HealthSource RI to confirm current hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in a hospital or short-term rehab facility, you can begin the EAD application before discharge. Ask the facility's social worker to help initiate the process, as coverage can sometimes be backdated to the date of application.",
+        "If your parent's income is above $1,330/month (single) but they have substantial monthly medical bills, ask DHS specifically about the medically needy pathway. Rhode Island allows some applicants to qualify by subtracting high medical expenses from their countable income.",
+        "The disability determination for applicants under 65 is done by MART using SSI standards and is not automatic. Budget extra time if your parent does not already receive SSI and is applying on the basis of disability.",
+        "EAD uses SSI-style asset rules, which treat some assets differently than other Medicaid categories. If you are unsure whether a specific asset counts, ask DHS directly rather than assuming it is exempt or counted."
+      ],
+      "relatedPrograms": [
+        "Rhode Island PACE (Program of All-inclusive Care for the Elderly)",
+        "Rhode Island Medicaid Home and Community-Based Services (HCBS) waiver",
+        "Supplemental Security Income (SSI) for Rhode Island residents",
+        "Rhode Island Medicare Savings Programs (help paying Medicare premiums)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Income over the limit? Don't stop here.",
+          "body": "Rhode Island's medically needy pathway is part of the same Medicaid framework as EAD. If your parent earns more than $1,330/month but has significant out-of-pocket medical costs, those costs can reduce their countable income for eligibility purposes. This is sometimes called a spend-down. Ask DHS at 855-697-4347 whether this applies to your parent's situation."
+        },
+        {
+          "type": "prose",
+          "title": "EAD vs. SSI: what's the difference?",
+          "body": "SSI (Supplemental Security Income) is a monthly cash payment. If your parent receives SSI, they qualify for Rhode Island Medicaid automatically through a separate process. EAD is the Medicaid category for people who do not receive SSI but who meet similar financial and categorical requirements. Being denied SSI does not automatically mean your parent is ineligible for EAD. The two programs have overlapping but distinct rules, and it is worth applying for EAD even if an SSI application was previously denied."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,450/month. Does that automatically disqualify them?",
+          "answer": "Not necessarily. Rhode Island has a medically needy pathway for people whose income exceeds the standard EAD limit of $1,330/month (2026) but who have high medical expenses. The expenses are subtracted from countable income, which can bring the figure below the threshold. Call DHS at 855-697-4347 and ask specifically about the medically needy option before accepting that your parent is ineligible."
+        },
+        {
+          "question": "My parent owns a home. Does that count against the $4,000 asset limit?",
+          "answer": "EAD uses SSI-style resource rules, and under SSI rules the primary residence is generally excluded from countable assets. However, Rhode Island DHS does not fully enumerate all exempt assets in the published EAD program summary. Call DHS at 855-697-4347 to confirm how your parent's specific property will be treated before concluding they exceed the asset limit."
+        },
+        {
+          "question": "My parent is 62 and disabled but not yet 65. Can they still qualify?",
+          "answer": "Yes, if they meet the disability standard. Adults under 65 can qualify through EAD if Rhode Island's State Medicaid Assessment and Review Team (MART) determines they meet SSI disability standards. This involves a clinical and functional review. You will need to submit medical records as part of the application. The process may take longer than an age-based application."
+        },
+        {
+          "question": "My parent already receives SSI. Do they need to apply for EAD separately?",
+          "answer": "No. SSI recipients in Rhode Island qualify for Medicaid automatically through a separate pathway. EAD is for people who do not receive SSI but who meet similar financial and categorical criteria. If your parent receives SSI and is not already enrolled in Medicaid, contact DHS at 855-697-4347 to resolve the enrollment, but you should not need to go through the EAD application process."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the process themselves?",
+          "answer": "Yes. Rhode Island DHS accepts applications from authorized representatives, including family members acting under a power of attorney or other legal authority. Bring the legal documentation (power of attorney or guardianship papers) when you apply in person, or have it ready if applying by phone or online. The application itself allows you to list yourself as an authorized representative."
+        },
+        {
+          "question": "Can my parent be enrolled in EAD and also apply for a Medicaid waiver for home-based care?",
+          "answer": "Yes. EAD provides standard Medicaid medical coverage. Home and Community-Based Services (HCBS) waivers, which fund in-home care and other supports, are a separate layer of Medicaid that some EAD enrollees can also access. The two programs are not mutually exclusive. Ask DHS at 855-697-4347 which HCBS waivers your parent may qualify for alongside EAD coverage."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent is required to report changes in income, assets, household size, or residence to Rhode Island DHS. Changes can affect eligibility. Report changes promptly to DHS at 855-697-4347 or through healthyrhode.ri.gov. Failing to report changes can result in overpayment recovery or loss of coverage."
+        },
+        {
+          "question": "How long does it take to get a decision after applying?",
+          "answer": "Rhode Island DHS does not publish a specific processing timeline for EAD in its program documentation. Standard Medicaid applications in Rhode Island are generally processed within 45 days, but applications requiring a MART disability determination may take longer. Call DHS at 855-697-4347 after submitting to confirm the current expected timeline and to check the status of your application."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "855-697-4347",
+      "sourceUrl": "https://staycovered.ri.gov/your-medicaid-benefits/programs-services/adults-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ri-ssi-state-supplement",
+      "name": "Rhode Island State SSI Supplement",
+      "shortName": "RI SSI Supplement",
+      "tagline": "If your parent already receives SSI, Rhode Island adds a monthly cash payment on top of the federal amount, up to $97.30/month for couples, with no separate application required.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Rhode Island Department of Human Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Social Security Administration",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent receives federal Supplemental Security Income (SSI) and lives in Rhode Island, the state automatically adds a monthly cash supplement on top of their federal payment. This is called the State Supplemental Payment (SSP). It is not a separate application for most people. Receiving SSI makes your parent automatically eligible.\n\nThe monthly SSP amount depends on where your parent lives. Individuals living in their own home receive $39.92/month. Individuals living in someone else's household receive $51.92/month. Couples in their own household receive $79.38/month, and couples in another person's household receive $97.30/month. People in a Title XIX (Medicaid) facility receive $45/month. These amounts are in addition to the federal SSI payment, not instead of it.\n\nIf your parent has not yet applied for SSI and you believe they might qualify, they must go through Social Security first. SSI is available to Rhode Island residents who are 65 or older, blind, or disabled and who meet SSI's income and resource limits. Once SSI is approved, the SSP follows automatically. Rhode Island DHS administers the SSP for most recipients; SSA handles it for people in residential care, assisted living, or certain licensed facilities.",
+      "savingsRange": "$39.92 to $97.30/month added to federal SSI, depending on living arrangement",
+      "savingsSource": "Rhode Island DHS official SSP program page lists fixed monthly SSP amounts by living arrangement category. See dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must be a Rhode Island resident",
+          "Must qualify for federal SSI (age 65+, blind, or disabled with limited income and resources)",
+          "SSI recipients are automatically eligible for the state supplement",
+          "Payment amount depends on your parent's living arrangement",
+          "Separate application process required only if SSI has not yet been approved"
+        ],
+        "ageRequirement": "65+ for age-based SSI; no age minimum for disability-based SSI",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [],
+          "exemptAssets": [
+            "Primary home",
+            "One vehicle (in many cases under SSI rules)",
+            "Certain burial funds"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Rhode Island resident",
+          "Must meet SSI eligibility (age 65+, blind, or disabled; limited income and resources under SSI rules)",
+          "People in assisted living, residential care, or licensed adult community supportive living residences may have their SSP administered by SSA rather than DHS",
+          "State-only SSP applicants who have not been approved for SSI must apply at SSA first to establish SSI eligibility"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Most SSI recipients are enrolled in the SSP automatically; those not yet on SSI must apply at Social Security first, then contact Rhode Island DHS.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether SSI is already approved",
+            "description": "If your parent already receives a monthly SSI payment, they are automatically eligible for the Rhode Island SSP. No separate state application is required in most cases. Confirm the SSP amount appears on their payment or contact DHS at 1-855-697-4347 to verify."
+          },
+          {
+            "step": 2,
+            "title": "If SSI is not yet approved, apply at Social Security",
+            "description": "Call SSA at 1-800-772-1213 (TTY: 1-800-325-0778), Monday through Friday 8am to 7pm, or visit ssa.gov/ssi to begin the SSI application online. SSI eligibility must be established before Rhode Island can pay the SSP."
+          },
+          {
+            "step": 3,
+            "title": "Contact Rhode Island DHS after SSI approval",
+            "description": "Once SSI is approved, contact Rhode Island DHS at 1-855-697-4347 (TTY: 1-800-745-5555) to confirm your parent is receiving the SSP and that their living arrangement category is correct. The payment amount changes based on whether your parent lives in their own home, in someone else's household, or in a facility."
+          },
+          {
+            "step": 4,
+            "title": "Report any change in living arrangement",
+            "description": "If your parent moves from their own home into your household, into assisted living, or into a Medicaid facility, notify DHS immediately. The SSP amount changes by category, and SSA takes over administration for people in certain residential settings. Unreported changes can cause overpayments that DHS will recoup."
+          }
+        ],
+        "processingTime": "No specific statewide processing timeline was published in the official materials reviewed. For SSI, Social Security's standard timeline is 3 to 6 months, though disability determinations can take longer.",
+        "waitlist": null,
+        "tip": "When you call DHS, ask specifically whether your parent's living arrangement is recorded correctly. The SSP payment tier is set by category, and an incorrect category can mean your parent receives less than they are entitled to.",
+        "urls": [
+          {
+            "label": "Rhode Island DHS SSI State Supplemental Payment",
+            "url": "https://dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment"
+          },
+          {
+            "label": "Apply for SSI at Social Security",
+            "url": "https://www.ssa.gov/ssi/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI determination notice",
+        "Proof of Rhode Island residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of identity (driver's license, state ID, or passport)",
+        "Proof of age if applying as an older adult (birth certificate or passport)",
+        "Medical or disability records if applying based on disability rather than age",
+        "Income records (recent Social Security statement, pension letter, or any other income source)",
+        "Information about current living arrangement: whether your parent owns or rents their home, lives with someone else, or resides in assisted living or a licensed facility",
+        "SSA award letter or denial notice if your parent has already applied for SSI"
+      ],
+      "contacts": [
+        {
+          "label": "Rhode Island Department of Human Services",
+          "phone": "1-855-697-4347",
+          "description": "Apply for the SSP, verify your parent's payment amount, or report a change in living arrangement. This is the primary DHS benefits line for Rhode Island.",
+          "hours": "Check dhs.ri.gov for current hours"
+        },
+        {
+          "label": "Rhode Island DHS TTY Line",
+          "phone": "1-800-745-5555",
+          "description": "TTY access for deaf or hard-of-hearing callers contacting DHS.",
+          "hours": "Same hours as main DHS line"
+        },
+        {
+          "label": "Social Security Administration (SSI Applications)",
+          "phone": "1-800-772-1213",
+          "description": "Apply for federal SSI, check SSI status, or get help if your parent's SSI has been denied. SSA also administers the RI SSP for people in residential care, assisted living, or licensed facilities.",
+          "hours": "Mon-Fri 8am-7pm"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent lives in assisted living, a licensed adult community supportive living residence, or a Medicaid-certified facility, SSA administers the SSP rather than Rhode Island DHS. Contact SSA at 1-800-772-1213 for those situations.",
+        "The SSP amount is not automatic to correct itself if your parent's living arrangement changes. You must report the change to DHS or SSA, or your parent may receive the wrong payment tier.",
+        "If your parent was denied SSI but you believe they qualify, you have the right to appeal. The SSP cannot be paid until SSI eligibility is established, so appealing a denial promptly protects the SSP start date.",
+        "Some low-income older adults and people with disabilities may be eligible for a state-only SSP pathway even without federal SSI, but this is uncommon and requires SSA to first determine SSI eligibility. Ask DHS directly if you believe your parent may qualify through this route."
+      ],
+      "relatedPrograms": [
+        "Rhode Island Medicaid (RIte Care)",
+        "SNAP Food Benefits (Rhode Island)",
+        "Rhode Island LIHEAP Energy Assistance",
+        "Social Security SSI (Federal)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "How much does the SSP add each month?",
+          "body": "The Rhode Island SSP is a fixed amount set by living arrangement. Individual in own home: $39.92/month. Individual in someone else's household: $51.92/month. Couple in own home: $79.38/month. Couple in someone else's household: $97.30/month. Individual in a Title XIX (Medicaid) facility: $45/month. These amounts are added to the federal SSI payment, not subtracted from it."
+        },
+        {
+          "type": "prose",
+          "title": "Who administers the supplement depends on where your parent lives",
+          "body": "For most SSI recipients living at home or with family, Rhode Island DHS administers the SSP directly. If your parent moves into assisted living, a residential care facility, or a licensed adult community supportive living residence, SSA takes over administration of the SSP. This matters because you will call a different agency to report changes or resolve payment problems depending on your parent's setting. When in doubt, contact both DHS at 1-855-697-4347 and SSA at 1-800-772-1213 to confirm which agency is responsible."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already gets SSI. Do they need to apply separately for the Rhode Island supplement?",
+          "answer": "No, in most cases. SSI recipients are automatically eligible for the Rhode Island SSP, and DHS enrolls them without a separate application. If your parent is receiving SSI but does not see an SSP amount on their payment, contact DHS at 1-855-697-4347 to find out why."
+        },
+        {
+          "question": "My parent was denied SSI. Can they still get the Rhode Island SSP?",
+          "answer": "Not through the standard pathway. SSP eligibility is tied to SSI eligibility. If your parent was denied SSI, appeal the decision through SSA at 1-800-772-1213. Rhode Island does have a state-only SSP pathway for some individuals who are not approved for federal SSI, but it still requires SSA to first review and determine SSI eligibility. Ask DHS at 1-855-697-4347 whether your parent might qualify through that route."
+        },
+        {
+          "question": "My parent is moving from their own home into my house. Does that change their SSP payment?",
+          "answer": "Yes. The SSP amount increases when an individual moves from their own household into someone else's household: from $39.92/month to $51.92/month for individuals. You must report the move to DHS at 1-855-697-4347. If you do not report it, your parent may receive the wrong payment amount, which can result in overpayments DHS will recoup later."
+        },
+        {
+          "question": "My parent is moving into assisted living. What happens to the SSP?",
+          "answer": "The SSP continues, but the amount changes and SSA takes over administration instead of Rhode Island DHS. Individuals in certain residential care or assisted living settings receive a different SSP tier, and SSA handles those payments. Contact SSA at 1-800-772-1213 to ensure the transition is handled correctly and payments do not lapse."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent who cannot manage this themselves?",
+          "answer": "Yes. You can act as an authorized representative for SSI and SSP purposes. For SSI, SSA has a formal Representative Payee process that allows a family member to receive and manage benefits on the applicant's behalf. Call SSA at 1-800-772-1213 to ask about becoming a representative payee, or contact DHS at 1-855-697-4347 for the state supplement side."
+        },
+        {
+          "question": "Does my parent's home count against them for the SSP?",
+          "answer": "No. The primary home is excluded from SSI's resource rules, and since the SSP follows SSI eligibility, the home is not counted. Rhode Island does not publish a separate SSP asset test. Other common SSI exclusions also apply, including one vehicle in many cases and certain burial funds. The SSP itself does not add new asset rules on top of SSI."
+        },
+        {
+          "question": "Can my parent receive the Rhode Island SSP and also receive SNAP food benefits at the same time?",
+          "answer": "Yes. The SSP is a cash supplement and does not disqualify your parent from SNAP. In fact, SSI recipients in Rhode Island may be categorically eligible for SNAP, meaning the SSI approval can simplify or expedite the SNAP application. Contact Rhode Island DHS at 1-855-697-4347 or visit dhs.ri.gov to apply for both."
+        },
+        {
+          "question": "How long does it take for the SSP to start after SSI is approved?",
+          "answer": "Rhode Island did not publish a specific processing timeline for SSP payments. Because the SSP follows SSI automatically for most recipients, the timing depends largely on when SSI is approved by SSA. SSA's standard SSI processing time is roughly 3 to 6 months, with longer timelines possible for disability-based applications. Once SSI is active, contact DHS at 1-855-697-4347 to confirm when the SSP payment will begin."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Coins",
+      "phone": "1-855-697-4347",
+      "sourceUrl": "https://dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ri-property-tax-relief-seniors",
+      "name": "Rhode Island Property Tax Relief for Seniors",
+      "shortName": "RI Senior Tax Credit",
+      "tagline": "If your parent is 65 or older and earned under $40,730 last year, they may be owed a refundable Rhode Island tax credit that reduces what they pay in property taxes.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806",
+            "type": "service-area"
+          },
+          {
+            "name": "City of Providence Tax Assessor's Office",
+            "type": "service-area"
+          },
+          {
+            "name": "City of Newport Tax Assessor's Office, 43 Broadway, Newport, RI 02840",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, lives in Rhode Island, and had household income of $40,730 or less in 2025, they likely qualify for a refundable Rhode Island property tax relief credit filed through their state income tax return. Because the credit is refundable, they can receive it even if they owe no state income tax.\n\nThe credit is claimed once a year using Form RI-1040H, attached to the Rhode Island income tax return. The deadline is April 15, 2026 for tax year 2025. Both homeowners and renters in housing subject to property taxes may qualify. Only one person per household may claim the credit.\n\nImportant: this is a state tax credit, not a monthly benefit. It is also separate from any senior property tax exemption your parent's city or town may offer. Those local exemptions have their own rules, deadlines, and dollar amounts. This page covers the statewide RI-1040H credit only.",
+      "savingsRange": "",
+      "savingsSource": "The Rhode Island Division of Taxation publishes Form RI-1040H, which establishes eligibility and the credit calculation, but the specific dollar amount of the credit is not stated in the official form excerpt reviewed. We cannot verify a savings figure without that data.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "Rhode Island resident for the full calendar year",
+          "Household income $40,730 or less (tax year 2025)",
+          "Homeowner or renter in housing subject to property taxes",
+          "Current on all property tax or rent payments"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must have been domiciled in Rhode Island for the entire calendar year being claimed",
+          "Must have lived in a household or rented a dwelling subject to property taxes",
+          "Must be current on all property tax and rent payments due on the homestead for all prior years and on any current installments",
+          "Only one person per household may claim the credit",
+          "Homeowners must attach a copy of the property tax bill to the return"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "mail",
+        "summary": "File Form RI-1040H with your parent's Rhode Island income tax return by April 15, 2026; the state processes claims by mail to the Division of Taxation in Providence.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Download Form RI-1040H",
+            "description": "Get the 2025 Form RI-1040H directly from the Rhode Island Division of Taxation at tax.ri.gov. The direct form URL is: https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf. Print or complete it electronically."
+          },
+          {
+            "step": 2,
+            "title": "Gather supporting documents",
+            "description": "Homeowners must attach a copy of the 2025 property tax bill. All applicants need documentation supporting the household income total. Renters should have a lease or documentation showing the dwelling is subject to property taxes."
+          },
+          {
+            "step": 3,
+            "title": "Complete the RI-1040H and attach it to the state return",
+            "description": "Fill out Form RI-1040H and attach it to your parent's Rhode Island income tax return (Form RI-1040). If your parent does not otherwise need to file a state return, check current instructions at tax.ri.gov to confirm whether a return is still required as the vehicle for submitting the credit."
+          },
+          {
+            "step": 4,
+            "title": "Mail the completed return by April 15, 2026",
+            "description": "Mail the return with Form RI-1040H and all attachments to: Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806. This is the deadline for tax year 2025. Late submissions may forfeit the credit for that year."
+          },
+          {
+            "step": 5,
+            "title": "Ask your parent's city or town about local exemptions separately",
+            "description": "The statewide RI-1040H credit is separate from any senior property tax exemption offered by your parent's city or town. Contact your parent's local tax assessor office to ask about local elderly exemption programs, which have their own deadlines and dollar amounts. In Providence, contact the Tax Assessor's Office at TaxAssessors@providenceri.gov. In Newport, contact the Tax Assessor at 43 Broadway, Newport, RI 02840."
+          }
+        ],
+        "processingTime": "No official processing-time estimate was found in the materials reviewed.",
+        "waitlist": null,
+        "tip": "If your parent does not normally file a Rhode Island income tax return, they may still need to file one to claim this credit. Confirm with the RI Division of Taxation at (401) 574-8829 before assuming they can skip the return.",
+        "urls": [
+          {
+            "label": "2025 Form RI-1040H (official PDF)",
+            "url": "https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf"
+          },
+          {
+            "label": "Rhode Island Division of Taxation",
+            "url": "https://tax.ri.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "2025 Rhode Island property tax bill (homeowners must attach a copy to the return)",
+        "Documentation of all household income for 2025 (Social Security benefit statements, pension statements, or any other income sources used to calculate the household income total)",
+        "Completed Form RI-1040H",
+        "Rhode Island income tax return (Form RI-1040), if required",
+        "Lease or rental agreement showing the dwelling is subject to property taxes (for renters)",
+        "Proof of Rhode Island domicile for the full 2025 calendar year, such as a utility bill, lease, or state-issued document showing the address"
+      ],
+      "contacts": [
+        {
+          "label": "Rhode Island Division of Taxation",
+          "phone": "(401) 574-8829",
+          "description": "Call with questions about Form RI-1040H eligibility, how to file, or the status of a submitted return. This is the agency that administers the statewide property tax relief credit.",
+          "hours": "Mon-Fri 8:30am-3:30pm ET"
+        },
+        {
+          "label": "City of Providence Tax Assessor's Office",
+          "phone": null,
+          "description": "For Providence residents asking about local elderly property tax exemptions (separate from the state RI-1040H credit). Email: TaxAssessors@providenceri.gov.",
+          "hours": null
+        },
+        {
+          "label": "City of Newport Tax Assessor's Office",
+          "phone": null,
+          "description": "For Newport residents asking about local elderly property tax exemptions (separate from the state RI-1040H credit). Located at 43 Broadway, Newport, RI 02840.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The statewide RI-1040H credit and your parent's city or town elderly exemption are two different programs with different applications and deadlines. Filing one does not file the other. Ask your parent's local tax assessor whether a local exemption also applies.",
+        "The income limit for tax year 2025 is $40,730 for the household, not per person. If your parent lives with a spouse or other household members, all household income counts toward that cap.",
+        "Only one person in the household may claim the credit. If both parents live together, only one of them should file Form RI-1040H.",
+        "Your parent must be current on all property tax payments, including prior-year balances, to qualify. If there are unpaid balances, resolve them before filing."
+      ],
+      "relatedPrograms": [
+        "Rhode Island Municipal Elderly Property Tax Exemptions (city and town-level programs with separate rules and deadlines)",
+        "Rhode Island Low Income Home Energy Assistance Program (LIHEAP)",
+        "Rhode Island Supplemental Nutrition Assistance Program (SNAP)",
+        "Rhode Island Pharmaceutical Assistance to the Elderly (RIPAE)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is an annual tax credit, not a monthly benefit",
+          "body": "Your parent will not receive monthly payments from this program. The credit is applied when they file their Rhode Island income tax return each spring. Because the credit is refundable, they may receive a check from the state even if they owe no taxes. But they must file Form RI-1040H every year to get it. Missing the April 15 deadline means losing that year's credit."
+        },
+        {
+          "type": "callout",
+          "title": "Local exemptions are separate and may be worth more",
+          "body": "Many Rhode Island cities and towns offer their own senior property tax exemptions with different eligibility rules, dollar amounts, and filing deadlines. These are not part of the statewide RI-1040H credit. Your parent may qualify for both. Contact your parent's local tax assessor office to ask specifically about elderly exemptions. Newport and Providence both have local programs; other municipalities may as well."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent rents, not owns. Can they still claim this credit?",
+          "answer": "Yes, renters may qualify if they live in a dwelling that is subject to property taxes. The program is not limited to homeowners. Your parent will need documentation showing their rental housing is subject to property taxes, such as a lease or a statement from the landlord."
+        },
+        {
+          "question": "My parent does not usually file a Rhode Island income tax return. Do they still need to file one to get this credit?",
+          "answer": "Likely yes. The RI-1040H is filed as part of or alongside the Rhode Island income tax return. If your parent does not otherwise have a filing obligation, confirm with the RI Division of Taxation at (401) 574-8829 whether a return is still required to claim the credit. Do not assume they can skip the return."
+        },
+        {
+          "question": "My parents are married and live together. Can both of them claim the credit?",
+          "answer": "No. Only one person per household may claim the credit. One parent files Form RI-1040H on behalf of the household. It does not matter whose name is on the property."
+        },
+        {
+          "question": "My parent has a property tax balance from a prior year. Does that disqualify them?",
+          "answer": "It may. The program requires that your parent be current on all property tax and rent payments due on the homestead, including prior-year balances and current installments. If there are unpaid balances, your parent should resolve them before filing. Contact the RI Division of Taxation at (401) 574-8829 to ask how this affects a pending claim."
+        },
+        {
+          "question": "My parent moved to Rhode Island two years ago. Do they qualify?",
+          "answer": "Yes, as long as they were domiciled in Rhode Island for the full calendar year being claimed. Moving to Rhode Island two years ago means they were a full-year resident in both of those years and should be eligible on the residency requirement. The credit is claimed for the tax year just completed, so for 2025 they must have lived in Rhode Island all of 2025."
+        },
+        {
+          "question": "Can I apply for this credit on my parent's behalf?",
+          "answer": "You can help your parent complete and file Form RI-1040H, and if you have power of attorney or are their legal representative, you may sign and file on their behalf. The return is still filed under your parent's name and Social Security number. Contact the RI Division of Taxation at (401) 574-8829 to confirm what authorization documentation they require for a representative filing."
+        },
+        {
+          "question": "How is this different from my parent's city or town senior exemption?",
+          "answer": "The statewide RI-1040H credit is filed with your parent's Rhode Island income tax return and is administered by the state Division of Taxation. Local senior property tax exemptions are separate programs run by individual cities and towns, with their own eligibility rules, dollar amounts, and application deadlines. Filing the RI-1040H does not apply for a local exemption. Your parent may qualify for both; contact your parent's local tax assessor to ask about any local elderly exemption programs."
+        },
+        {
+          "question": "We do not know the exact dollar amount of the credit. How do we know if it is worth filing?",
+          "answer": "The official Form RI-1040H does not state a fixed credit amount in publicly available excerpts reviewed, so we cannot confirm the specific dollar figure. Because the credit is refundable and your parent is already required to file (or should file to preserve access to this benefit), the cost of filing is low relative to the potential benefit. Call the RI Division of Taxation at (401) 574-8829 to ask directly what amount your parent should expect based on their taxes paid."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(401) 574-8829",
+      "sourceUrl": "https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": null,

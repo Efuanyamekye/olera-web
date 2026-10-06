@@ -2651,6 +2651,11 @@ function generatePipelineDrafts({ dirName = null, regenAll = false } = {}) {
 module.exports = {
   STATE_NAMES,
   resolveEntity,
+  phaseDive,
+  phaseCompare,
+  phaseClassify,
+  runConcurrent,
+  cost,
   readJson,
   writeFile,
   extractJson,

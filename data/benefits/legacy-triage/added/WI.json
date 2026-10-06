@@ -1,0 +1,58 @@
+[
+  {
+    "state": "WI",
+    "id": "wi-medicaid-elderly-blind-disabled",
+    "name": "Medicaid for the Elderly, Blind, or Disabled",
+    "legacyId": "medicaid-for-the-elderly-blind-or-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-medicare-savings-programs",
+    "name": "Medicare Savings Programs",
+    "legacyId": "medicare-savings-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-foodshare-snap",
+    "name": "FoodShare",
+    "legacyId": "foodshare",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-pace-program",
+    "name": "Wisconsin PACE Program",
+    "legacyId": "wisconsin-pace-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-wheap-home-energy-assistance",
+    "name": "Wisconsin Home Energy Assistance Program (WHEAP)",
+    "legacyId": "wisconsin-home-energy-assistance-program-wheap",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-property-tax-relief-circuit-breaker-credit",
+    "name": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+    "legacyId": "wisconsin-property-tax-relief-circuit-breaker-credit",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-home-delivered-meals",
+    "name": "Wisconsin Home Delivered Meals",
+    "legacyId": "wisconsin-home-delivered-meals",
+    "programType": "benefit"
+  },
+  {
+    "state": "WI",
+    "id": "wi-state-ssi-supplement",
+    "name": "Wisconsin State SSI Supplement",
+    "legacyId": "wisconsin-state-ssi-supplement",
+    "programType": "benefit"
+  }
+]

@@ -1479,12 +1479,14 @@ function CasePanel({
     : flags.includes("awaiting_reply")
       ? { title: `Reply to ${familyName}`, when: "They wrote and nobody has answered" }
       : flags.includes("tried_three")
-        ? { title: "Send one last message, then archive", when: "Called three times, never reached" }
+        ? { title: "Text twice, then archive", when: "Called three times, never reached" }
         : flags.includes("promise_owed")
           ? { title: `Call ${familyName}`, when: "We promised a call" }
           : flags.includes("provider_no_show")
             ? { title: "Find them another provider", when: "The provider never got back to them" }
-            : null;
+            : flags.includes("check_provider") && data.handed_to
+              ? { title: `Ask ${data.handed_to.name} how it went`, when: "Handed over three or more days ago. Log what they say." }
+              : null;
 
   const consentText =
     consent === "opted_out"

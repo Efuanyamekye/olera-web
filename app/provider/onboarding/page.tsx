@@ -604,18 +604,57 @@ function ProviderOnboardingContent() {
     // If user is already signed in, validate immediately instead of opening auth
     if (user) {
       const userEmail = user.email?.toLowerCase();
-      if (listingEmail && userEmail !== listingEmail) {
+      // The listing's email, or anyone on its organisation's domain, may claim
+      // it from this login: a director adding her other locations signs in once
+      // (Tennessee State Veterans' Homes, 6 Oct 2026). Free-mail domains never
+      // count as an organisation. Trust scoring still decides verification.
+      const domainOf = (email: string | null | undefined) => email?.split("@")[1]?.toLowerCase() || null;
+      const sameOrg = !!listingEmail && !!userEmail && userEmail !== listingEmail
+        && domainOf(listingEmail) === domainOf(userEmail) && !CONSUMER_EMAIL_DOMAINS.has(domainOf(userEmail) || "");
+      if (listingEmail && userEmail !== listingEmail && !sameOrg) {
         // Already signed in with wrong email
         setClaimSignInMismatch({
           userEmail: user.email || "",
           listingName: name,
         });
         return; // Don't open auth modal
-      } else if (!listingEmail || userEmail === listingEmail) {
-        // Already signed in with correct email (or no email to validate)
-        router.push("/portal/inbox");
-        return;
       }
+      // Signed in as the listing's email, its organisation, or no email to
+      // check: claim it onto this login. A login holds any number of
+      // listings; the claim route makes the new one active and the switcher
+      // lists the rest. Pushing straight to the inbox, as this did before,
+      // assumed the listing was already theirs.
+      const isOleraProvider = result._source === "olera-providers";
+      setActionLoading("claim-signin");
+      setActionError("");
+      void (async () => {
+        try {
+          const res = await fetch("/api/provider/claim-listing", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              providerId: isOleraProvider ? result.provider_id : result.source_provider_id || result.id,
+              providerName: name,
+              providerSlug: isOleraProvider ? result.slug || result.provider_id : result.slug,
+              providerEmail: result.email,
+              city: result.city,
+              state: result.state,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            setActionError(typeof data?.error === "string" ? data.error : "Could not add that listing to your account.");
+            return;
+          }
+          await refreshAccountData();
+          router.push("/portal/inbox");
+        } catch {
+          setActionError("Could not add that listing to your account. Try again in a minute.");
+        } finally {
+          setActionLoading(null);
+        }
+      })();
+      return;
     }
 
     // Not signed in - store context for validation after auth completes
@@ -637,7 +676,7 @@ function ProviderOnboardingContent() {
         returnUrl: "/provider/onboarding",
       },
     });
-  }, [openAuth, user, router]);
+  }, [openAuth, user, router, refreshAccountData]);
 
   // Validate claim sign-in after user signs in
   // Check if the signed-in user's email matches the claimed listing's email

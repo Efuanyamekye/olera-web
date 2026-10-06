@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 /**
  * GET /api/provider/reviews
@@ -31,12 +32,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await supabase
-      .from("business_profiles")
-      .select("id, slug, source_provider_id")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(supabase, account.id, "id, slug, source_provider_id");
 
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
@@ -151,12 +147,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await supabase
-      .from("business_profiles")
-      .select("id, slug, source_provider_id")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(supabase, account.id, "id, slug, source_provider_id");
 
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });

@@ -1,0 +1,532 @@
+{
+  "state": "DC",
+  "addedAt": "2026-10-06T06:06:31.527Z",
+  "dive": {
+    "state": "DC",
+    "stateName": "District of Columbia",
+    "diveAt": "2026-10-06T06:01:08.289Z",
+    "total": 4,
+    "parsed": 4,
+    "programs": [
+      {
+        "name": "DC Medicaid for Aged, Blind and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Income must be at or below 100% of the Federal Poverty Level. DC’s official ABD page lists $1,330/month for 1 person and $1,804/month for 2 people[1]. A related DHCF fact sheet lists $1,305/month for 1 person for the ABD category[3][9].",
+          "asset_limits": "Resources must be below $4,000 for one person[1][3]. DHCF’s policy manual also describes ABD applicants as having assets not exceeding twice the SSI standard[11][14]. The official ABD page does not provide a full exempt-asset list in the search results; it only states that eligibility is based on household income and resources[1].",
+          "other_requirements": [
+            "Must be a District of Columbia resident[1][4].",
+            "Must be a U.S. citizen or have eligible immigration status[1].",
+            "If blind or disabled, must have a disability determination from SSA or be evaluated by a doctor[1].",
+            "ABD category applies to people age 65 or older, or blind, or disabled[1][4]."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "DC Medicaid coverage for eligible aged, blind, and disabled residents; the search results confirm eligibility category coverage but do not list a specific dollar benefit or hourly service cap for standard ABD Medicaid itself[1][4][8]. If the person also qualifies for related Medicaid pathways such as long-term care or Medicare Savings Programs, those are separate categories mentioned by DHCF[6][10].",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online: https://districtdirect.dc.gov[4][6][12]",
+            "By phone: (202) 727-5355[7][8][12]",
+            "By mail: Department of Human Services, Economic Security Administration, Case Record Management Unit, P.O. Box 91560, Washington, DC 20090[12]",
+            "By fax: (202) 671-4400[9][12]",
+            "In person: any Economic Service Center / ESA office[12]"
+          ],
+          "processing_time": "Up to 45 days, or up to 60 days if you are disabled[12].",
+          "waitlist": null,
+          "forms": [
+            "Integrated Application for Medical Assistance[4]",
+            "Combined Application for Benefits / Combined Application for DC (used for disability-related Medicaid and IDA; doctor medical form may also be required)[2][5][13]"
+          ],
+          "documents": [
+            "Proof of District residency[1][4]",
+            "Proof of income[1]",
+            "Proof of resources/assets[1]",
+            "Proof of age or identity[1]",
+            "U.S. citizenship or eligible immigration status documents[1]",
+            "SSA disability determination or doctor’s disability evaluation if applying as blind/disabled[1]",
+            "Medical Form completed by a doctor if requested for disability-related review[2][5][13]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "District of Columbia residents only[1][4].",
+          "regional_variations": "No regional county variation exists within DC; the program is citywide. Application can be submitted through districtwide channels, and the search results do not indicate geographic waitlist differences for ABD Medicaid[12].",
+          "offices_or_providers": [
+            "Economic Service Centers / ESA offices in DC[12]",
+            "Department of Human Services Economic Security Administration Case Record Management Unit (mail address)[12]"
+          ]
+        },
+        "official_source": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals",
+        "gotchas": [
+          "ABD Medicaid is not the same as DC Health Link/MAGI Medicaid; DC specifically says non-MAGI applicants should use the Integrated Application for Medical Assistance, while MAGI applicants apply through District Direct[4][6].",
+          "A disability claim may require SSA proof or a doctor evaluation, and some cases also need a doctor-completed Medical Form[1][2][13].",
+          "The public-facing sources show slightly different monthly income figures for the ABD category ($1,330 vs. $1,305 for one person), so families should verify the current standard with DC DHCF before applying[1][3][9].",
+          "There is no in-person interview requirement for Medicaid or Alliance/ICP applications[12].",
+          "Applicants often miss that ABD is resource-based as well as income-based; having income under the limit is not enough if countable resources are too high[1][3]."
+        ],
+        "data_shape_notes": "This program is a non-MAGI Medicaid category with eligibility driven by age/disability status plus income and resource limits; it is not scaled by household size beyond the income test, and DC’s published sources show a simple 1-person/2-person poverty-level table rather than a full family-size schedule[1][4][11].",
+        "_raw": "{\n  \"name\": \"DC Medicaid for Aged, Blind and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Income must be at or below 100% of the Federal Poverty Level. DC’s official ABD page lists $1,330/month for 1 person and $1,804/month for 2 people[1]. A related DHCF fact sheet lists $1,305/month for 1 person for the ABD category[3][9].\",\n    \"asset_limits\": \"Resources must be below $4,000 for one person[1][3]. DHCF’s policy manual also describes ABD applicants as having assets not exceeding twice the SSI standard[11][14]. The official ABD page does not provide a full exempt-asset list in the search results; it only states that eligibility is based on household income and resources[1].\",\n    \"other_requirements\": [\n      \"Must be a District of Columbia resident[1][4].\",\n      \"Must be a U.S. citizen or have eligible immigration status[1].\",\n      \"If blind or disabled, must have a disability determination from SSA or be evaluated by a doctor[1].\",\n      \"ABD category applies to people age 65 or older, or blind, or disabled[1][4].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"DC Medicaid coverage for eligible aged, blind, and disabled residents; the search results confirm eligibility category coverage but do not list a specific dollar benefit or hourly service cap for standard ABD Medicaid itself[1][4][8]. If the person also qualifies for related Medicaid pathways such as long-term care or Medicare Savings Programs, those are separate categories mentioned by DHCF[6][10].\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://districtdirect.dc.gov[4][6][12]\",\n      \"By phone: (202) 727-5355[7][8][12]\",\n      \"By mail: Department of Human Services, Economic Security Administration, Case Record Management Unit, P.O. Box 91560, Washington, DC 20090[12]\",\n      \"By fax: (202) 671-4400[9][12]\",\n      \"In person: any Economic Service Center / ESA office[12]\"\n    ],\n    \"processing_time\": \"Up to 45 days, or up to 60 days if you are disabled[12].\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Integrated Application for Medical Assistance[4]\",\n      \"Combined Application for Benefits / Combined Application for DC (used for disability-related Medicaid and IDA; doctor medical form may also be required)[2][5][13]\"\n    ],\n    \"documents\": [\n      \"Proof of District residency[1][4]\",\n      \"Proof of income[1]\",\n      \"Proof of resources/assets[1]\",\n      \"Proof of age or identity[1]\",\n      \"U.S. citizenship or eligible immigration status documents[1]\",\n      \"SSA disability determination or doctor’s disability evaluation if applying as blind/disabled[1]\",\n      \"Medical Form completed by a doctor if requested for disability-related review[2][5][13]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"District of Columbia residents only[1][4].\",\n    \"regional_variations\": \"No regional county variation exists within DC; the program is citywide. Application can be submitted through districtwide channels, and the search results do not indicate geographic waitlist differences for ABD Medicaid[12].\",\n    \"offices_or_providers\": [\n      \"Economic Service Centers / ESA offices in DC[12]\",\n      \"Department of Human Services Economic Security Administration Case Record Management Unit (mail address)[12]\"\n    ]\n  },\n  \"official_source\": \"https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals\",\n  \"gotchas\": [\n    \"ABD Medicaid is not the same as DC Health Link/MAGI Medicaid; DC specifically says non-MAGI applicants should use the Integrated Application for Medical Assistance, while MAGI applicants apply through District Direct[4][6].\",\n    \"A disability claim may require SSA proof or a doctor evaluation, and some cases also need a doctor-completed Medical Form[1][2][13].\",\n    \"The public-facing sources show slightly different monthly income figures for the ABD category ($1,330 vs. $1,305 for one person), so families should verify the current standard with DC DHCF before applying[1][3][9].\",\n    \"There is no in-person interview requirement for Medicaid or Alliance/ICP applications[12].\",\n    \"Applicants often miss that ABD is resource-based as well as income-based; having income under the limit is not enough if countable resources are too high[1][3].\"\n  ],\n  \"data_shape_notes\": \"This program is a non-MAGI Medicaid category with eligibility driven by age/disability status plus income and resource limits; it is not scaled by household size beyond the income test, and DC’s published sources show a simple 1-person/2-person poverty-level table rather than a full family-size schedule[1][4][11].\"\n}"
+      },
+      {
+        "name": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "District of Columbia uses a more generous QMB standard than the federal Medicare Savings Program minimum. For 2026, DC’s QMB program covers people with Medicare who are District residents, have Medicare Part A or Part B (or both), and have monthly income up to 300% of the Federal Poverty Level plus a $20 disregard: 1-person household $4,010; 2-person household $5,430.[1] Federal Medicare Savings Program standards for SLMB and QI in 2026 are $1,616/month for a single person and $2,184/month for a married couple for SLMB, and $1,816/month for a single person and $2,455/month for a married couple for QI, but DC’s public materials emphasize the expanded QMB pathway.[2][3][4]",
+          "asset_limits": "Federal Medicare Savings Program rules use resource limits of $9,950 for one person and $14,910 for a married couple in 2026.[2][3] Resources generally mean countable assets such as cash and money in checking/savings accounts; commonly exempt items under Medicare Savings Program rules include a primary home, one vehicle, household goods, personal effects, and burial spaces, while the exact treatment of life insurance and retirement accounts can depend on their cash value and accessibility.[2][3] DC’s QMB materials available here do not clearly restate a separate DC-only asset test, so families should verify current countable-resource rules with DC Medicaid when applying.[1][5]",
+          "other_requirements": [
+            "Must be a District resident.[1][5]",
+            "Must be entitled to Medicare Part A or Part B (or both).[1][5]",
+            "Must be a U.S. citizen or have eligible immigration status.[5]",
+            "Income and resources must fit the applicable Medicare Savings Program category.[1][2][3]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "QMB pays Medicare premiums and Medicare cost-sharing, including deductibles, coinsurance, and copayments for Medicare-covered services.[6] DC’s QMB fact sheet says it pays Medicare co-payments, deductibles, and premiums.[6] SLMB and QI are Medicare Savings Programs that generally help pay Medicare Part B premiums; QMB is the most comprehensive category.[2][3]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: DC Department of Health Care Finance / DC Medicaid application information page and MSP materials.[1][5]",
+            "In person: DC Income Maintenance Administration / local service center intake listed in the MSP packet; the packet directs applicants to call (202) 724-5506 to find the nearest center.[7]",
+            "Phone: (202) 724-5506 for center location/help and (202) 698-4220 for enrollment listed on the DC QMB fact sheet.[6][7]",
+            "Mail/in-person packet submission: Medicare MSP application packet is distributed by DC DHCF.[7]"
+          ],
+          "processing_time": "No exact statewide processing time was stated in the official materials found. Families should expect standard Medicaid-style eligibility review and should ask DC DHCF/IMA for current turnaround times when submitting the application.[5][7]",
+          "waitlist": "No waitlist was described for QMB. QI is a federal Medicare Savings Program category that can be subject to annual enrollment caps nationally, but the DC materials surfaced here do not show a DC-specific waitlist process.[2][3]",
+          "forms": [
+            "Medicare MSP Application Packet (DC DHCF packet)",
+            "QMB fact sheet / QMB FAQs referenced by DC DHCF"
+          ],
+          "documents": [
+            "Proof of Medicare entitlement (Medicare card or award letter)",
+            "Proof of District residency",
+            "Proof of citizenship or eligible immigration status",
+            "Proof of monthly income such as Social Security award letters, pension statements, or pay stubs",
+            "Proof of countable resources such as bank statements if requested",
+            "Identification for the applicant and, if applicable, a legal representative or helper"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to District of Columbia residents only.[1][5]",
+          "regional_variations": "No neighborhood- or ward-based eligibility differences were identified. The main practical variation is which DC intake office a family uses; DC DHCF says to call (202) 724-5506 to find the closest center.[7]",
+          "offices_or_providers": [
+            "District of Columbia Department of Health Care Finance (DHCF)",
+            "Income Maintenance Administration (IMA), 645 H Street, N.E., Washington, DC 20002[6]"
+          ]
+        },
+        "official_source": "https://dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb",
+        "gotchas": [
+          "DC’s QMB appears much more generous than the standard federal QMB income limit families may find on Medicare.gov, so applicants should use DC-specific guidance first.[1][2]",
+          "QMB is not a medical provider network; it is a cost-sharing assistance program for Medicare expenses.[6]",
+          "Families often miss that QMB can protect against Medicare cost-sharing bills, but it does not replace Medicare or cover all non-Medicare services.[6]",
+          "SLMB and QI have lower federal income ceilings than DC’s expanded QMB threshold, so many DC residents who miss federal SLMB/QI limits may still qualify under DC’s QMB rules.[1][2][3]",
+          "The DC materials found here do not clearly present a separate DC asset table, so resource questions should be confirmed before applying.[1][5]"
+        ],
+        "data_shape_notes": "This program is unusual because the District appears to use an expanded QMB pathway rather than the standard federal MSP tiers alone; the key structure is income-based eligibility with Medicare cost-sharing help rather than a service-hours model.",
+        "_raw": "{\n  \"name\": \"DC Medicare Savings Programs (QMB, SLMB, QI)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"District of Columbia uses a more generous QMB standard than the federal Medicare Savings Program minimum. For 2026, DC’s QMB program covers people with Medicare who are District residents, have Medicare Part A or Part B (or both), and have monthly income up to 300% of the Federal Poverty Level plus a $20 disregard: 1-person household $4,010; 2-person household $5,430.[1] Federal Medicare Savings Program standards for SLMB and QI in 2026 are $1,616/month for a single person and $2,184/month for a married couple for SLMB, and $1,816/month for a single person and $2,455/month for a married couple for QI, but DC’s public materials emphasize the expanded QMB pathway.[2][3][4]\",\n    \"asset_limits\": \"Federal Medicare Savings Program rules use resource limits of $9,950 for one person and $14,910 for a married couple in 2026.[2][3] Resources generally mean countable assets such as cash and money in checking/savings accounts; commonly exempt items under Medicare Savings Program rules include a primary home, one vehicle, household goods, personal effects, and burial spaces, while the exact treatment of life insurance and retirement accounts can depend on their cash value and accessibility.[2][3] DC’s QMB materials available here do not clearly restate a separate DC-only asset test, so families should verify current countable-resource rules with DC Medicaid when applying.[1][5]\",\n    \"other_requirements\": [\n      \"Must be a District resident.[1][5]\",\n      \"Must be entitled to Medicare Part A or Part B (or both).[1][5]\",\n      \"Must be a U.S. citizen or have eligible immigration status.[5]\",\n      \"Income and resources must fit the applicable Medicare Savings Program category.[1][2][3]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"QMB pays Medicare premiums and Medicare cost-sharing, including deductibles, coinsurance, and copayments for Medicare-covered services.[6] DC’s QMB fact sheet says it pays Medicare co-payments, deductibles, and premiums.[6] SLMB and QI are Medicare Savings Programs that generally help pay Medicare Part B premiums; QMB is the most comprehensive category.[2][3]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: DC Department of Health Care Finance / DC Medicaid application information page and MSP materials.[1][5]\",\n      \"In person: DC Income Maintenance Administration / local service center intake listed in the MSP packet; the packet directs applicants to call (202) 724-5506 to find the nearest center.[7]\",\n      \"Phone: (202) 724-5506 for center location/help and (202) 698-4220 for enrollment listed on the DC QMB fact sheet.[6][7]\",\n      \"Mail/in-person packet submission: Medicare MSP application packet is distributed by DC DHCF.[7]\"\n    ],\n    \"processing_time\": \"No exact statewide processing time was stated in the official materials found. Families should expect standard Medicaid-style eligibility review and should ask DC DHCF/IMA for current turnaround times when submitting the application.[5][7]\",\n    \"waitlist\": \"No waitlist was described for QMB. QI is a federal Medicare Savings Program category that can be subject to annual enrollment caps nationally, but the DC materials surfaced here do not show a DC-specific waitlist process.[2][3]\",\n    \"forms\": [\n      \"Medicare MSP Application Packet (DC DHCF packet)\",\n      \"QMB fact sheet / QMB FAQs referenced by DC DHCF\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare entitlement (Medicare card or award letter)\",\n      \"Proof of District residency\",\n      \"Proof of citizenship or eligible immigration status\",\n      \"Proof of monthly income such as Social Security award letters, pension statements, or pay stubs\",\n      \"Proof of countable resources such as bank statements if requested\",\n      \"Identification for the applicant and, if applicable, a legal representative or helper\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to District of Columbia residents only.[1][5]\",\n    \"regional_variations\": \"No neighborhood- or ward-based eligibility differences were identified. The main practical variation is which DC intake office a family uses; DC DHCF says to call (202) 724-5506 to find the closest center.[7]\",\n    \"offices_or_providers\": [\n      \"District of Columbia Department of Health Care Finance (DHCF)\",\n      \"Income Maintenance Administration (IMA), 645 H Street, N.E., Washington, DC 20002[6]\"\n    ]\n  },\n  \"official_source\": \"https://dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb\",\n  \"gotchas\": [\n    \"DC’s QMB appears much more generous than the standard federal QMB income limit families may find on Medicare.gov, so applicants should use DC-specific guidance first.[1][2]\",\n    \"QMB is not a medical provider network; it is a cost-sharing assistance program for Medicare expenses.[6]\",\n    \"Families often miss that QMB can protect against Medicare cost-sharing bills, but it does not replace Medicare or cover all non-Medicare services.[6]\",\n    \"SLMB and QI have lower federal income ceilings than DC’s expanded QMB threshold, so many DC residents who miss federal SLMB/QI limits may still qualify under DC’s QMB rules.[1][2][3]\",\n    \"The DC materials found here do not clearly present a separate DC asset table, so resource questions should be confirmed before applying.[1][5]\"\n  ],\n  \"data_shape_notes\": \"This program is unusual because the District appears to use an expanded QMB pathway rather than the standard federal MSP tiers alone; the key structure is income-based eligibility with Medicare cost-sharing help rather than a service-hours model.\"\n}"
+      },
+      {
+        "name": "DC SNAP (Supplemental Nutrition Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "basis": "Households generally must meet both gross and net monthly income limits; households with a member age 60 or older or a person with a disability only need to meet the net monthly income limit.",
+            "effective_dates": "October 1, 2025 through September 30, 2026",
+            "gross_monthly_income_limit_130_fpl": {
+              "1": 1305,
+              "2": 1763,
+              "3": 2221,
+              "4": 2680,
+              "5": 3277,
+              "6": 3873,
+              "7": 4470,
+              "8": 5066,
+              "each_additional_member": 597
+            },
+            "net_monthly_income_limit_100_fpl": {
+              "1": 1032,
+              "2": 1395,
+              "3": 1758,
+              "4": 2120,
+              "5": 2483,
+              "6": 2846,
+              "7": 3209,
+              "8": 3571,
+              "each_additional_member": 363
+            },
+            "notes": "For elderly/disabled households, only the net limit applies. DC’s published SNAP eligibility page states the gross and net standards and shows the current table for the 2025–2026 year."
+          },
+          "asset_limits": {
+            "countable_resource_limit": {
+              "general": 3000,
+              "if_household_includes_age_60_or_older_or_disabled_member": 4500
+            },
+            "what_counts": [
+              "cash",
+              "money in bank accounts",
+              "investments and other countable liquid resources"
+            ],
+            "what_is_exempt": [
+              "Certain excluded resources under SNAP rules may not count, but DC’s page highlights countable resources rather than giving a full exemption list."
+            ],
+            "notes": "The district page indicates households with a resource limit may have $3,000 in countable resources, or $4,500 if the household includes a person age 60+ or a person with a disability."
+          },
+          "other_requirements": [
+            "Must be a household applying together under SNAP household rules, or otherwise eligible under SNAP definitions.",
+            "Must meet DC residency requirements.",
+            "Households may qualify automatically if receiving certain assistance such as SSI.",
+            "Older adults age 60+ and people with disabilities can qualify under the relaxed income/resource rules described above."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly SNAP benefits loaded onto an EBT card for approved food purchases. Maximum monthly allotment in DC for October 1, 2025 through September 30, 2026 is: 1 person $298; 2 people $546; 3 people $785; 4 people $994; 5 people $1,183; 6 people $1,421; 7 people $1,571; 8 people $1,789; each additional member +$218. Minimum allotment is $24.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: District Direct / DC Department of Human Services public benefits portal",
+            "Phone: 202-727-5355",
+            "TTY: 711",
+            "TDD: 1-800-537-7699",
+            "In person: DHS/Economic Security Administration service locations and community-based intake offices",
+            "Mail: submit completed application/recertification paperwork to DHS (specific mailing route may vary by office instructions)"
+          ],
+          "processing_time": "30 days for standard applications; 7 days for expedited food assistance if the household qualifies for expedited processing.",
+          "waitlist": null,
+          "forms": [
+            "SNAP application",
+            "SNAP recertification or ongoing eligibility packet, if renewing"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of DC residency",
+            "Proof of income for all household members",
+            "Proof of rent or mortgage",
+            "Utility bills if claiming utility deductions",
+            "Proof of medical expenses for elderly/disabled households if applicable",
+            "Social Security numbers, if available",
+            "Immigration status documents, if applicable",
+            "Bank statements or other resource documentation if requested",
+            "SSI award letter or other benefit letters if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "District of Columbia residents only.",
+          "regional_variations": "No county-by-county variation inside DC because the program is administered citywide. Practical differences can occur by service office, appointment availability, and caseworker workload.",
+          "offices_or_providers": [
+            "District of Columbia Department of Human Services (Economic Security Administration)",
+            "District Direct public benefits call center"
+          ]
+        },
+        "official_source": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+        "gotchas": [
+          "A household with a member age 60+ or with a disability does not have to meet the gross income test, only the net income test.",
+          "The asset limit is higher for households with an elderly or disabled member.",
+          "SNAP benefits are not cash; they are monthly EBT food benefits.",
+          "The minimum benefit can be $24 for eligible one- and two-person households.",
+          "Expedited SNAP is possible in 7 days, but only for households that meet the emergency criteria.",
+          "Medical expenses can matter for elderly households because they may improve eligibility or increase benefits under SNAP deduction rules.",
+          "Families often forget to report all household income and deductible expenses, which can delay approval."
+        ],
+        "data_shape_notes": "Benefits scale by household size, income limits have separate gross and net tests, and elderly/disabled households get a relaxed eligibility test with a higher resource limit.",
+        "_raw": "{\n  \"name\": \"DC SNAP (Supplemental Nutrition Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"basis\": \"Households generally must meet both gross and net monthly income limits; households with a member age 60 or older or a person with a disability only need to meet the net monthly income limit.\",\n      \"effective_dates\": \"October 1, 2025 through September 30, 2026\",\n      \"gross_monthly_income_limit_130_fpl\": {\n        \"1\": 1305,\n        \"2\": 1763,\n        \"3\": 2221,\n        \"4\": 2680,\n        \"5\": 3277,\n        \"6\": 3873,\n        \"7\": 4470,\n        \"8\": 5066,\n        \"each_additional_member\": 597\n      },\n      \"net_monthly_income_limit_100_fpl\": {\n        \"1\": 1032,\n        \"2\": 1395,\n        \"3\": 1758,\n        \"4\": 2120,\n        \"5\": 2483,\n        \"6\": 2846,\n        \"7\": 3209,\n        \"8\": 3571,\n        \"each_additional_member\": 363\n      },\n      \"notes\": \"For elderly/disabled households, only the net limit applies. DC’s published SNAP eligibility page states the gross and net standards and shows the current table for the 2025–2026 year.\"\n    },\n    \"asset_limits\": {\n      \"countable_resource_limit\": {\n        \"general\": 3000,\n        \"if_household_includes_age_60_or_older_or_disabled_member\": 4500\n      },\n      \"what_counts\": [\n        \"cash\",\n        \"money in bank accounts\",\n        \"investments and other countable liquid resources\"\n      ],\n      \"what_is_exempt\": [\n        \"Certain excluded resources under SNAP rules may not count, but DC’s page highlights countable resources rather than giving a full exemption list.\"\n      ],\n      \"notes\": \"The district page indicates households with a resource limit may have $3,000 in countable resources, or $4,500 if the household includes a person age 60+ or a person with a disability.\"\n    },\n    \"other_requirements\": [\n      \"Must be a household applying together under SNAP household rules, or otherwise eligible under SNAP definitions.\",\n      \"Must meet DC residency requirements.\",\n      \"Households may qualify automatically if receiving certain assistance such as SSI.\",\n      \"Older adults age 60+ and people with disabilities can qualify under the relaxed income/resource rules described above.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly SNAP benefits loaded onto an EBT card for approved food purchases. Maximum monthly allotment in DC for October 1, 2025 through September 30, 2026 is: 1 person $298; 2 people $546; 3 people $785; 4 people $994; 5 people $1,183; 6 people $1,421; 7 people $1,571; 8 people $1,789; each additional member +$218. Minimum allotment is $24.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: District Direct / DC Department of Human Services public benefits portal\",\n      \"Phone: 202-727-5355\",\n      \"TTY: 711\",\n      \"TDD: 1-800-537-7699\",\n      \"In person: DHS/Economic Security Administration service locations and community-based intake offices\",\n      \"Mail: submit completed application/recertification paperwork to DHS (specific mailing route may vary by office instructions)\"\n    ],\n    \"processing_time\": \"30 days for standard applications; 7 days for expedited food assistance if the household qualifies for expedited processing.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"SNAP application\",\n      \"SNAP recertification or ongoing eligibility packet, if renewing\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of DC residency\",\n      \"Proof of income for all household members\",\n      \"Proof of rent or mortgage\",\n      \"Utility bills if claiming utility deductions\",\n      \"Proof of medical expenses for elderly/disabled households if applicable\",\n      \"Social Security numbers, if available\",\n      \"Immigration status documents, if applicable\",\n      \"Bank statements or other resource documentation if requested\",\n      \"SSI award letter or other benefit letters if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"District of Columbia residents only.\",\n    \"regional_variations\": \"No county-by-county variation inside DC because the program is administered citywide. Practical differences can occur by service office, appointment availability, and caseworker workload.\",\n    \"offices_or_providers\": [\n      \"District of Columbia Department of Human Services (Economic Security Administration)\",\n      \"District Direct public benefits call center\"\n    ]\n  },\n  \"official_source\": \"https://dhs.dc.gov/service/snap-eligibility-requirements\",\n  \"gotchas\": [\n    \"A household with a member age 60+ or with a disability does not have to meet the gross income test, only the net income test.\",\n    \"The asset limit is higher for households with an elderly or disabled member.\",\n    \"SNAP benefits are not cash; they are monthly EBT food benefits.\",\n    \"The minimum benefit can be $24 for eligible one- and two-person households.\",\n    \"Expedited SNAP is possible in 7 days, but only for households that meet the emergency criteria.\",\n    \"Medical expenses can matter for elderly households because they may improve eligibility or increase benefits under SNAP deduction rules.\",\n    \"Families often forget to report all household income and deductible expenses, which can delay approval.\"\n  ],\n  \"data_shape_notes\": \"Benefits scale by household size, income limits have separate gross and net tests, and elderly/disabled households get a relaxed eligibility test with a higher resource limit.\"\n}"
+      },
+      {
+        "name": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "standard": "Household annual gross income must be at or below 60% of the State Median Income (SMI) for the household size.",
+            "table": [
+              {
+                "household_size": 1,
+                "annual_limit": 61841,
+                "monthly_limit": 5153
+              },
+              {
+                "household_size": 2,
+                "annual_limit": 80869,
+                "monthly_limit": 6739
+              },
+              {
+                "household_size": 3,
+                "annual_limit": 99897,
+                "monthly_limit": 8325
+              },
+              {
+                "household_size": 4,
+                "annual_limit": 118926,
+                "monthly_limit": 9911
+              },
+              {
+                "household_size": 5,
+                "annual_limit": 137954,
+                "monthly_limit": 11496
+              },
+              {
+                "household_size": 6,
+                "annual_limit": 156982,
+                "monthly_limit": 13082
+              }
+            ],
+            "over_6": "For each additional household member over 6, add 3 percentage points to the 6-person share and calculate the corresponding income limit using the District’s FY26 LIHEAP benefit matrix."
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a District of Columbia resident.",
+            "Household must be responsible for paying home energy costs.",
+            "If utilities are included in rent, the applicant must still provide proof of direct responsibility for energy costs.",
+            "Categorical eligibility applies if at least one household member receives SNAP, TANF, or SSI.",
+            "Applicant must provide required documentation with the application.",
+            "Emergency gas/electric assistance requires a disconnection notice or a letter from the utility showing service has been disconnected, if applicable."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "DC pays between $250 and $1,800 per year toward utility bills. The exact benefit is determined by household size, household income, dwelling type (single-family or multifamily), fuel type, and typical bill amount. The FY26 benefit matrix is the controlling formula, and the maximum regular benefit is $1,800.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online / program page: https://doee.dc.gov/liheap",
+            "Front Door DC utility assistance page: https://www.frontdoor.dc.gov/liheap-and-udp",
+            "Paper application: print and complete the LIHEAP application from the DOEE site and submit with copies of required documents",
+            "In-person: submit through DOEE/Front Door DC energy assistance intake routes described by the program page"
+          ],
+          "processing_time": "Not specified in the available official materials.",
+          "waitlist": "No waitlist is described in the available official materials. The program page says DOEE is no longer accepting new LIHEAP applications for the current fiscal year as of October 2, 2026.",
+          "forms": [
+            "LIHEAP application",
+            "FY26 LIHEAP Benefit Matrix",
+            "FY26 LIHEAP State Plan"
+          ],
+          "documents": [
+            "Government-issued unexpired photo identification for the applicant",
+            "Recent Washington Gas, PEPCO, and DC Water utility bills",
+            "Proof of current income for all household members",
+            "Social Security cards for all household members",
+            "Disconnection notice or utility letter stating service has been disconnected, if applying for emergency assistance",
+            "Utility bill showing the applicant is directly responsible for energy costs if utilities are included in rent"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "District of Columbia residents only.",
+          "regional_variations": "No ward-by-ward variation is described in the available materials. Eligibility and benefit amount are determined by household factors rather than geography within DC.",
+          "offices_or_providers": [
+            "District of Columbia Department of Energy & Environment (DOEE)",
+            "Front Door DC"
+          ]
+        },
+        "official_source": "https://doee.dc.gov/liheap",
+        "gotchas": [
+          "The program is income-based, but households with SNAP, TANF, or SSI can be categorically eligible.",
+          "The benefit is not a fixed amount; it is calculated from a District benefit matrix.",
+          "Eligibility is tied to household responsibility for energy costs, so people with utilities included in rent may still need extra proof.",
+          "Emergency assistance has an extra disconnection-document requirement.",
+          "The program was reported as closed to new LIHEAP applications for the current fiscal year as of October 2, 2026."
+        ],
+        "data_shape_notes": "Income limits scale by household size, and benefits scale by household size, income, dwelling type, and fuel type; there is no age test and no region-based variation within DC described in the official materials.",
+        "_raw": "{\n  \"name\": \"DC Low Income Home Energy Assistance Program (LIHEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"standard\": \"Household annual gross income must be at or below 60% of the State Median Income (SMI) for the household size.\",\n      \"table\": [\n        { \"household_size\": 1, \"annual_limit\": 61841, \"monthly_limit\": 5153 },\n        { \"household_size\": 2, \"annual_limit\": 80869, \"monthly_limit\": 6739 },\n        { \"household_size\": 3, \"annual_limit\": 99897, \"monthly_limit\": 8325 },\n        { \"household_size\": 4, \"annual_limit\": 118926, \"monthly_limit\": 9911 },\n        { \"household_size\": 5, \"annual_limit\": 137954, \"monthly_limit\": 11496 },\n        { \"household_size\": 6, \"annual_limit\": 156982, \"monthly_limit\": 13082 }\n      ],\n      \"over_6\": \"For each additional household member over 6, add 3 percentage points to the 6-person share and calculate the corresponding income limit using the District’s FY26 LIHEAP benefit matrix.\"\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a District of Columbia resident.\",\n      \"Household must be responsible for paying home energy costs.\",\n      \"If utilities are included in rent, the applicant must still provide proof of direct responsibility for energy costs.\",\n      \"Categorical eligibility applies if at least one household member receives SNAP, TANF, or SSI.\",\n      \"Applicant must provide required documentation with the application.\",\n      \"Emergency gas/electric assistance requires a disconnection notice or a letter from the utility showing service has been disconnected, if applicable.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"DC pays between $250 and $1,800 per year toward utility bills. The exact benefit is determined by household size, household income, dwelling type (single-family or multifamily), fuel type, and typical bill amount. The FY26 benefit matrix is the controlling formula, and the maximum regular benefit is $1,800.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online / program page: https://doee.dc.gov/liheap\",\n      \"Front Door DC utility assistance page: https://www.frontdoor.dc.gov/liheap-and-udp\",\n      \"Paper application: print and complete the LIHEAP application from the DOEE site and submit with copies of required documents\",\n      \"In-person: submit through DOEE/Front Door DC energy assistance intake routes described by the program page\"\n    ],\n    \"processing_time\": \"Not specified in the available official materials.\",\n    \"waitlist\": \"No waitlist is described in the available official materials. The program page says DOEE is no longer accepting new LIHEAP applications for the current fiscal year as of October 2, 2026.\",\n    \"forms\": [\n      \"LIHEAP application\",\n      \"FY26 LIHEAP Benefit Matrix\",\n      \"FY26 LIHEAP State Plan\"\n    ],\n    \"documents\": [\n      \"Government-issued unexpired photo identification for the applicant\",\n      \"Recent Washington Gas, PEPCO, and DC Water utility bills\",\n      \"Proof of current income for all household members\",\n      \"Social Security cards for all household members\",\n      \"Disconnection notice or utility letter stating service has been disconnected, if applying for emergency assistance\",\n      \"Utility bill showing the applicant is directly responsible for energy costs if utilities are included in rent\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"District of Columbia residents only.\",\n    \"regional_variations\": \"No ward-by-ward variation is described in the available materials. Eligibility and benefit amount are determined by household factors rather than geography within DC.\",\n    \"offices_or_providers\": [\n      \"District of Columbia Department of Energy & Environment (DOEE)\",\n      \"Front Door DC\"\n    ]\n  },\n  \"official_source\": \"https://doee.dc.gov/liheap\",\n  \"gotchas\": [\n    \"The program is income-based, but households with SNAP, TANF, or SSI can be categorically eligible.\",\n    \"The benefit is not a fixed amount; it is calculated from a District benefit matrix.\",\n    \"Eligibility is tied to household responsibility for energy costs, so people with utilities included in rent may still need extra proof.\",\n    \"Emergency assistance has an extra disconnection-document requirement.\",\n    \"The program was reported as closed to new LIHEAP applications for the current fiscal year as of October 2, 2026.\"\n  ],\n  \"data_shape_notes\": \"Income limits scale by household size, and benefits scale by household size, income, dwelling type, and fuel type; there is no age test and no region-based variation within DC described in the official materials.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "DC",
+    "stateName": "District of Columbia",
+    "classifiedAt": "2026-10-06T06:01:08.293Z",
+    "total": 4,
+    "typeSummary": {
+      "benefit": 4
+    },
+    "scopeSummary": {
+      "state": 1,
+      "federal": 3
+    },
+    "complexitySummary": {
+      "deep": 4
+    },
+    "programs": [
+      {
+        "name": "DC Medicaid for Aged, Blind and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Economic Service Centers / ESA offices in DC[12]",
+              "type": "service-area"
+            },
+            {
+              "name": "Department of Human Services Economic Security Administration Case Record Management Unit (mail address)[12]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "District of Columbia Department of Health Care Finance (DHCF)",
+              "type": "service-area"
+            },
+            {
+              "name": "Income Maintenance Administration (IMA), 645 H Street, N.E., Washington, DC 20002[6]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "DC SNAP (Supplemental Nutrition Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "District of Columbia Department of Human Services (Economic Security Administration)",
+              "type": "service-area"
+            },
+            {
+              "name": "District Direct public benefits call center",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "District of Columbia Department of Energy & Environment (DOEE)",
+              "type": "service-area"
+            },
+            {
+              "name": "Front Door DC",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "DC",
+      "id": "dc-medicaid-aged-blind-disabled",
+      "name": "DC Medicaid for Aged, Blind and Disabled",
+      "legacyId": null,
+      "programType": "benefit"
+    },
+    {
+      "state": "DC",
+      "id": "dc-medicare-savings-programs-qmb-slmb-qi",
+      "name": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+      "legacyId": null,
+      "programType": "benefit"
+    },
+    {
+      "state": "DC",
+      "id": "dc-snap-food-benefits",
+      "name": "DC SNAP (Supplemental Nutrition Assistance Program)",
+      "legacyId": null,
+      "programType": "benefit"
+    },
+    {
+      "state": "DC",
+      "id": "dc-liheap-energy-assistance",
+      "name": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

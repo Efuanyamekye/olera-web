@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.901Z
+ * Last updated: 2026-10-06T06:44:48.368Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2256,6 +2256,1049 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null
+    },
+    {
+      "id": "co-medicaid-aged-blind-disabled",
+      "name": "Health First Colorado (Medicaid) for Aged, Blind, and Disabled",
+      "shortName": "Colorado ABD Medicaid",
+      "tagline": "If your parent is 65+ and needs help staying at home instead of moving to a nursing facility, Colorado Medicaid may cover their medical care, home modifications, and daily support services at little to no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County Department of Human Services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Local application assistance sites",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Case Management Agencies",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and struggling to manage daily life at home, Colorado's Health First Colorado program for Aged, Blind, and Disabled (ABD) residents can cover the medical care and home support they need. That includes doctor visits, hospital care, prescriptions, dental, vision, and behavioral health. No premiums for most enrollees.\n\nBeyond basic Medicaid, there is an additional layer called the Elderly, Blind, and Disabled (EBD) waiver. The waiver pays for the services that keep people out of nursing facilities: adult day programs, home accessibility modifications, respite care for you as a caregiver, non-medical transportation, and life skills training. Your parent must need the level of care that would qualify them for a nursing facility, but they can use these services to stay home instead.\n\nThis program has two distinct parts. Your parent may qualify for regular Health First Colorado without qualifying for the EBD waiver, and the waiver has its own additional income, asset, and functional requirements. Because the rules are layered and the income threshold shifts with the federal SSI rate each year, the best first step is calling the state line to screen eligibility before gathering paperwork.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Health First Colorado covers medical costs including doctor visits, hospital care, prescriptions, dental, vision, and behavioral health at little to no cost to the enrollee. The EBD waiver adds home and community-based support services. No verified dollar-value ceiling was available from official sources at time of drafting.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ with significant functional impairment (or 18-64 and blind or physically disabled)",
+          "Income generally below 300% of the federal SSI monthly limit (verify current figure at time of application)",
+          "Countable assets below $2,000 for a single person or $3,000 for a couple",
+          "Must need nursing-facility-level care to qualify for EBD waiver services",
+          "Colorado resident with qualifying citizenship or lawful presence"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Investment accounts (stocks, bonds, CDs)",
+            "Additional real property beyond primary residence",
+            "Cash value of life insurance policies (depending on face value)"
+          ],
+          "exemptAssets": [
+            "Primary residence (subject to Medicaid rules; confirm at application)",
+            "One vehicle (confirm at application)",
+            "Personal belongings and household goods (confirm at application)",
+            "Burial items and pre-need burial contracts (confirm at application)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For the EBD waiver specifically, your parent must meet Nursing Facility Level of Care: a clinical assessment confirming they need daily help with activities such as bathing, dressing, medication management, or other personal care tasks at a level that would otherwise require placement in a nursing facility. Basic Health First Colorado Medicaid does not require this assessment.",
+        "otherRequirements": [
+          "Must be a Colorado resident",
+          "Must meet citizenship or lawful presence requirements under Colorado Medicaid rules",
+          "For the EBD waiver: must be currently residing in, or at risk of being institutionalized in, a nursing facility or hospital",
+          "Applicants who may have a qualifying disability should also complete the separate Health First Colorado Disability Application",
+          "People with HIV/AIDS may qualify through a specific disability pathway; ask when you call"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online, by phone, or at your county Department of Human Services office; if your parent already has Health First Colorado and needs EBD waiver services, contact your local Case Management Agency directly rather than reapplying.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check current income against the SSI limit",
+            "description": "The monthly income limit for the EBD waiver is less than 300% of the current federal SSI rate. That rate changes annually. Call 1-800-221-3943 or visit hcpf.colorado.gov to confirm the current dollar threshold before you apply. Do not rely on a figure from a previous year."
+          },
+          {
+            "step": 2,
+            "title": "Choose your application method",
+            "description": "Apply online at healthfirstcolorado.gov/apply-now, call 1-800-221-3943 (State Relay 711), visit your county Department of Human Services office in person, or use a local application assistance site. All methods reach the same program."
+          },
+          {
+            "step": 3,
+            "title": "Complete the disability application if needed",
+            "description": "If your parent is applying through the disability pathway (ages 18-64, or 65+ with a disability-related basis), download and complete the Health First Colorado Disability Application in addition to the standard Health First Colorado and CHP+ Paper Application (June 2025 version). Submit both together to avoid delays."
+          },
+          {
+            "step": 4,
+            "title": "Gather and submit documents",
+            "description": "Collect the documents listed on this page. Submit everything at once; incomplete applications are the most common cause of processing delays. If applying online at healthfirstcolorado.gov, you can upload documents directly. If applying by phone or in person, ask the caseworker how to submit supporting materials."
+          },
+          {
+            "step": 5,
+            "title": "Complete the functional assessment for EBD waiver services",
+            "description": "If your parent may need home-based long-term services through the EBD waiver, a caseworker will schedule a Nursing Facility Level of Care assessment. This is a clinical interview, not a medical exam. It evaluates whether your parent needs daily help with bathing, dressing, or medication management. If your parent is already enrolled in Health First Colorado and wants to add EBD waiver services, contact your local Case Management Agency directly to request this assessment without starting a new application."
+          },
+          {
+            "step": 6,
+            "title": "Work with your Case Management Agency after approval",
+            "description": "Once approved for the EBD waiver, a local Case Management Agency will assign a case manager who coordinates your parent's services. They arrange adult day services, home modifications, respite care, transportation, and other waiver benefits. Your county's Case Management Agency contact is available through hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd."
+          }
+        ],
+        "processingTime": "No statewide processing deadline was published in official sources for the ABD pathway. If a disability determination is required, processing takes longer because that step must complete before final enrollment. Ask the caseworker for an estimated timeline when you submit.",
+        "waitlist": null,
+        "tip": "If your parent is currently in a hospital or short-term rehab facility, you can apply from there. Discharge planners at the facility may be able to initiate the process, and starting early gives more time for the functional assessment to complete before discharge.",
+        "urls": [
+          {
+            "label": "Apply online",
+            "url": "https://www.healthfirstcolorado.gov/apply-now/"
+          },
+          {
+            "label": "EBD Waiver official program page",
+            "url": "https://hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows current monthly benefit amount)",
+        "Proof of Colorado residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of identity (driver's license, state ID, or passport)",
+        "Social Security card or the last 4 digits of the Social Security number for your parent",
+        "Proof of date of birth (birth certificate, passport, or other government document)",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current balances for any checking or savings accounts (the caseworker will tell you what period or documentation format is required; do not assume a specific number of months)",
+        "Investment account statements (stocks, bonds, CDs, annuities) if applicable",
+        "Life insurance policy documents showing face value and any cash value",
+        "Proof of citizenship or lawful presence (U.S. passport, naturalization certificate, or immigration documents)",
+        "Medical or disability records if applying on a disability basis",
+        "Medicare card if your parent has Medicare (not required, but speeds up coordination of benefits review)",
+        "Legal documents if a representative, power of attorney, or guardian is applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "Health First Colorado Member Contact Center",
+          "phone": "1-800-221-3943",
+          "description": "Apply for Health First Colorado, ask eligibility questions, and get help with the ABD or disability pathway. State Relay users dial 711.",
+          "hours": "Monday-Friday, 8am-5pm MT"
+        },
+        {
+          "label": "Colorado PEAK Online Application Portal",
+          "phone": null,
+          "description": "Apply online at peak.my.site.com or healthfirstcolorado.gov/apply-now. Available 24 hours a day. Upload documents and track application status.",
+          "hours": "Online, 24/7"
+        },
+        {
+          "label": "County Department of Human Services",
+          "phone": null,
+          "description": "Apply in person or get help with your application at your local county office. Find your county office at cdhs.colorado.gov/county-offices.",
+          "hours": "Varies by county; call your local office to confirm"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent already has Health First Colorado and needs EBD waiver services, do not start a new application. Contact your local Case Management Agency directly to request the Nursing Facility Level of Care assessment. Reapplying can slow down the process.",
+        "The income limit is pegged to the federal SSI rate and changes annually. A figure that was accurate last year may no longer be correct. Always confirm the current threshold before deciding not to apply based on income.",
+        "Exceeding the $2,000 asset limit by even a small amount can block eligibility. If your parent's countable assets are close to that threshold, ask the caseworker whether any assets qualify for exemption before withdrawing or spending down funds without guidance.",
+        "If your parent may have a qualifying disability, submit the Health First Colorado Disability Application at the same time as the standard application. Missing this step is one of the most common reasons the ABD pathway takes longer than expected."
+      ],
+      "relatedPrograms": [
+        "Colorado PACE (Program of All-inclusive Care for the Elderly)",
+        "Colorado Old Age Pension (OAP)",
+        "Medicare Savings Programs (Colorado)",
+        "Colorado Community First Choice (CFC) Personal Care Option"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two programs, one application",
+          "body": "Health First Colorado (basic Medicaid) and the EBD waiver are separate. Your parent may qualify for standard Medicaid coverage, for Medicaid plus waiver services, or neither. The application screens for both, but waiver services require a separate functional assessment after enrollment. Ask specifically about the EBD waiver when you call."
+        },
+        {
+          "type": "prose",
+          "title": "What the EBD waiver pays for that basic Medicaid does not",
+          "body": "Standard Health First Colorado covers doctor visits, hospital care, prescriptions, dental, vision, and behavioral health. The EBD waiver adds a separate set of services specifically designed to keep your parent out of a nursing facility: adult day programs (structured daytime care outside the home), home accessibility modifications (ramps, grab bars, widened doorways), respite care (temporary relief for you as the primary caregiver), non-medical transportation to appointments and community activities, life skills training, and wellness education. These services are coordinated through your local Case Management Agency after your parent is enrolled."
+        },
+        {
+          "type": "prose",
+          "title": "Asset limits: what counts and what does not",
+          "body": "Countable assets must be below $2,000 for a single person or $3,000 for a couple. Countable assets typically include checking and savings account balances, investment accounts, and cash value in life insurance policies. Assets that are commonly excluded include the primary residence, one vehicle, personal belongings, and burial items, but the specific rules must be confirmed during application review. If your parent's countable assets are close to the limit, speak with the caseworker before making any financial moves."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house even though the asset limit is $2,000?",
+          "answer": "Yes, in most cases. The primary residence is commonly excluded from the countable asset calculation under Colorado Medicaid rules. The $2,000 limit applies to countable assets such as bank balances and investment accounts. However, Medicaid estate recovery rules may apply after your parent passes away, meaning the state may seek reimbursement from the estate for certain costs paid. Confirm the current exemption rules and estate recovery implications with the caseworker when you apply."
+        },
+        {
+          "question": "My parent already has Health First Colorado. Do they need to apply again to get EBD waiver services?",
+          "answer": "No. If your parent is already enrolled in Health First Colorado and now needs home-based long-term services, contact your local Case Management Agency directly and request a Nursing Facility Level of Care assessment. Starting a new application would delay the process. Find your local Case Management Agency through hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd."
+        },
+        {
+          "question": "The income limit is based on the SSI rate. What does that mean in actual dollars?",
+          "answer": "The EBD waiver income limit is less than 300% of the monthly federal SSI rate. The SSI rate changes annually, so the dollar threshold shifts each year. As of drafting, we do not have a verified current-year dollar figure to publish here. Call 1-800-221-3943 or visit hcpf.colorado.gov to confirm the current limit before deciding whether your parent qualifies."
+        },
+        {
+          "question": "Can I apply for this program on behalf of my parent if they can't do it themselves?",
+          "answer": "Yes. A family member, legal guardian, or someone holding power of attorney can apply on a parent's behalf. You will need to provide the legal document establishing your authority (power of attorney, guardianship order, or similar) along with the application. When calling 1-800-221-3943, tell the representative at the start that you are applying on behalf of someone else."
+        },
+        {
+          "question": "My parent is 62 and has a disability. Does this program apply to them?",
+          "answer": "Potentially. The ABD pathway covers people ages 18 to 64 who are blind or have a qualifying physical disability, and people with HIV/AIDS through a specific pathway. Your parent would need to complete the Health First Colorado Disability Application in addition to the standard application, and a disability determination step is required before final enrollment. Call 1-800-221-3943 to discuss the disability pathway specifically."
+        },
+        {
+          "question": "Can my parent be on this program and also apply for Medicare Savings Programs?",
+          "answer": "Yes, and it is worth doing. Medicare Savings Programs are separate state programs that help pay Medicare premiums and cost-sharing for people who have both Medicare and Medicaid. If your parent has Medicare, ask the caseworker about Medicare Savings Program eligibility at the same time you apply for Health First Colorado. The two programs are not mutually exclusive."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Enrollees are required to report changes in income, assets, or household circumstances to Health First Colorado. Changes that push income or assets above the program limits could affect eligibility. Report changes by calling 1-800-221-3943 or through your local county Department of Human Services office. Your Case Management Agency can also help if the change relates to waiver services."
+        },
+        {
+          "question": "How long does the application process take?",
+          "answer": "No statewide processing deadline was published in official sources for the ABD pathway at the time of drafting. Applications that require a disability determination take longer because that step must complete first. When you submit the application, ask the caseworker directly for an estimated timeline. Submitting all documents at once is the single most effective way to avoid delays."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-221-3943",
+      "sourceUrl": "https://hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "co-leap-energy-assistance",
+      "name": "Colorado Energy Assistance Program (LEAP)",
+      "shortName": "LEAP Heating Help",
+      "tagline": "If your parent struggles to pay heating bills each winter, LEAP can send $200 to $1,000 directly to their utility company or fuel provider, no repayment required.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County human services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "County LEAP administrators",
+            "type": "service-area"
+          },
+          {
+            "name": "Goodwill of Colorado in some regions",
+            "type": "service-area"
+          },
+          {
+            "name": "County-specific energy assistance offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on a fixed income and worried about keeping the heat on this winter, Colorado's LEAP program can pay a portion of their heating bill directly to the utility company or fuel dealer. The household does not receive cash; the payment goes straight to the provider. Benefit amounts range from $200 to $1,000 for the season, and eligibility is based on household size and gross monthly income, not assets or savings.\n\nThe program runs from November 1 through April 30 each year. Because funding is finite and is distributed as applications are approved, applying early in November gives your parent the best chance of receiving the full benefit before money runs out. A one-person household qualifies with gross monthly income up to $3,607 (2025-2026 season), and a two-person household qualifies up to $4,717 per month.\n\nLEAP is administered by county human services offices across Colorado, so where your parent applies and how they submit paperwork may differ slightly by county. The fastest way to start is online through Colorado PEAK or by calling 1-866-432-8435 to request a paper application.",
+      "savingsRange": "$200 to $1,000 per heating season",
+      "savingsSource": "Colorado Department of Human Services LEAP program page (cdhs.colorado.gov/leap). The range reflects reported benefit amounts in current state program materials; the exact award varies by household circumstances and funding availability.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Colorado resident",
+          "At least one U.S. citizen or qualifying legal resident in the household",
+          "Gross monthly income at or below 60% of Colorado State Median Income (e.g., $3,607/month for a single person)",
+          "Responsible for paying home heating costs, either directly or through rent",
+          "Winter heating season only: November 1 through April 30"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3607
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4717
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 5827
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 6938
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 8048
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 9158
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 9366
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 9574
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Colorado resident",
+          "At least one household member must be a U.S. citizen or permanent legal resident, or otherwise meet the program's immigration and citizenship rules as stated by the local administering office",
+          "Must pay home heating costs directly to a utility company or fuel dealer, or have heating costs included in rent (the landlord or lease must confirm heat is included)",
+          "Program covers winter heating only; it does not pay cooling or summer energy costs"
+        ],
+        "povertyLevelReference": "60% of Colorado State Median Income (2025-2026 season)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through Colorado PEAK starting November 1; most families find this the fastest route, though paper applications are available by calling 1-866-432-8435.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need a recent heating bill (or documentation that heat is included in rent), proof of income for everyone in the household, proof of Colorado residency, and identification. Having these ready prevents delays. If your parent has received a disconnection or shutoff notice, keep that on hand too."
+          },
+          {
+            "step": 2,
+            "title": "Apply online through Colorado PEAK",
+            "description": "Go to peak.my.site.com/ColoradoPEAK/s/LEAP-Online-Application. You can create an account or apply as a guest. The online form walks you through each section. This is the fastest submission method and available 24 hours a day."
+          },
+          {
+            "step": 3,
+            "title": "Or request a paper application by phone",
+            "description": "Call 1-866-HEAT-HELP (1-866-432-8435). Staff can mail or direct you to a paper application, answer basic eligibility questions, and help you find your county's LEAP office. You can also pick up a paper form at your county human services office."
+          },
+          {
+            "step": 4,
+            "title": "Submit the completed application to your county",
+            "description": "Online submissions route automatically. Paper applications go to the county LEAP administrator at the address printed on the form. Because submission procedures differ by county, confirm the correct mailing address or drop-off location with your county office before mailing."
+          },
+          {
+            "step": 5,
+            "title": "Watch for follow-up from the county office",
+            "description": "Your county may contact you if documents are missing. Once approved, payment goes directly to your parent's utility company or fuel provider. You will not receive a check. If your parent has an active disconnection notice, tell the county office when you apply; some offices can expedite processing."
+          }
+        ],
+        "processingTime": "No single statewide processing-time guarantee is published. Applications are processed while funding is available, from November 1 through April 30. Processing speed varies by county and how early in the season you apply.",
+        "waitlist": "No formal statewide waitlist exists. The practical limit is funding: once money is exhausted, later applications may not be paid. Applying early in November reduces this risk.",
+        "tip": "Apply as soon as the program opens on November 1. Funding is finite and is paid out as applications are approved. Families who apply in January or February risk the program running out of money before their application is processed.",
+        "urls": [
+          {
+            "label": "Apply Online: Colorado PEAK LEAP Application",
+            "url": "https://peak.my.site.com/ColoradoPEAK/s/LEAP-Online-Application"
+          },
+          {
+            "label": "LEAP Program Overview (Colorado CDHS)",
+            "url": "https://cdhs.colorado.gov/leap"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent heating bill showing the account name and address (or a letter from your landlord confirming heat is included in rent)",
+        "Proof of Colorado residency: a utility bill, lease agreement, or government-issued document showing your parent's current address",
+        "Proof of identity for the applicant: a state-issued ID, driver's license, or other government-issued photo ID",
+        "Proof of gross monthly income for all household members: Social Security award letter, pension statement, pay stubs, or most recent federal tax return",
+        "Social Security numbers for all household members (or immigration and citizenship documentation for non-citizen members as required by the application form)",
+        "Utility account number and the name of the utility company or heating fuel provider",
+        "Any disconnection notice or emergency shutoff notice, if your parent has received one (this may support expedited processing)"
+      ],
+      "contacts": [
+        {
+          "label": "LEAP Heat Help Line",
+          "phone": "1-866-432-8435",
+          "description": "Call to request a paper application, get help finding your county LEAP office, or ask basic eligibility questions. This is the statewide LEAP program line.",
+          "hours": "Hours vary; call during normal business hours Monday through Friday"
+        },
+        {
+          "label": "Colorado PEAK Online Application",
+          "phone": null,
+          "description": "Apply directly online at peak.my.site.com/ColoradoPEAK/s/LEAP-Online-Application. Available 24 hours a day starting November 1.",
+          "hours": "Available 24/7 during the program season (November 1 through April 30)"
+        },
+        {
+          "label": "County Human Services Office",
+          "phone": null,
+          "description": "Each county has its own LEAP administrator. Contact your county human services office directly if you prefer in-person help, have a paper application to submit, or need county-specific guidance. Find your county office through cdhs.colorado.gov/leap.",
+          "hours": "Varies by county; generally Monday through Friday during business hours"
+        },
+        {
+          "label": "Colorado 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general community resource helpline that can refer you to LEAP and other assistance programs. This line does not process LEAP applications itself; it connects you to the right office.",
+          "hours": "24 hours a day, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a disconnection or shutoff notice from their heating utility, mention this when applying. Some county offices can prioritize or expedite these cases. Keep the notice available when you call or submit the application.",
+        "Eligibility is based on gross monthly income, not net income. This means income before taxes and deductions. Using the wrong figure is one of the most common reasons families believe they are ineligible when they are not.",
+        "If your parent rents and heat is included in the rent, they can still qualify. The application will ask for documentation, typically a lease or landlord letter confirming that heating costs are part of the rent payment.",
+        "County procedures differ. Do not assume the same submission method or mailing address works in every county. Confirm the correct process with your county LEAP office or the statewide heat help line before mailing a paper application."
+      ],
+      "relatedPrograms": [
+        "Colorado Weatherization Assistance Program (WAP): free home energy efficiency upgrades that reduce heating costs long-term",
+        "Low Income Home Energy Assistance Program (LIHEAP): the federal program LEAP is funded through; some federal emergency funds may be available separately",
+        "Colorado Supplemental Nutrition Assistance Program (SNAP): food assistance for low-income households that often serves the same population",
+        "Colorado Medicaid: health coverage for low-income Coloradans; many LEAP-eligible households may also qualify"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Funding runs out. Apply November 1.",
+          "body": "LEAP accepts applications from November 1 through April 30. The program does not have a guaranteed statewide processing timeline, and once money is exhausted, later applications may not be paid even if the applicant is eligible. The single most effective step you can take is submitting the application the first week of November."
+        },
+        {
+          "type": "prose",
+          "title": "What counts as a household for LEAP?",
+          "body": "LEAP defines the household as the people living together and sharing heating costs. Income eligibility is based on the combined gross monthly income of everyone in the household, not just the applicant. If your parent lives alone, only their income is counted. If they live with a spouse, adult child, or other family member, all household members' incomes are combined and compared against the limit for that household size. A two-person household qualifies with up to $4,717 per month in combined gross income (2025-2026 season)."
+        },
+        {
+          "type": "prose",
+          "title": "How the payment works",
+          "body": "LEAP does not send money to your parent. Once approved, the benefit is paid directly to the utility company or heating fuel provider listed on the application. Your parent's account is credited, which reduces what they owe for the season. Because it is a one-time seasonal payment, it will not appear as a recurring monthly credit."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is slightly above the limit. Are there any exceptions?",
+          "answer": "No income exceptions are published for LEAP. The limit for the 2025-2026 season is strict: $3,607 gross per month for a one-person household, $4,717 for two people. If your parent's gross income is above the limit for their household size, LEAP will not approve the application for that season. Check the Colorado Weatherization Assistance Program as an alternative; eligibility rules differ."
+        },
+        {
+          "question": "Can I apply for LEAP on behalf of my elderly parent?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of a parent who cannot apply themselves. When submitting the application, include documentation of your authority to act on their behalf if the application form requests it. The Colorado PEAK online system allows you to apply for someone else in your household or as an authorized representative."
+        },
+        {
+          "question": "My parent rents and heat is included in the rent. Do they still qualify?",
+          "answer": "Yes, as long as the lease or the landlord can confirm in writing that heating costs are included in the rent. The application will ask for documentation of this. If the landlord refuses to provide a letter, call the LEAP heat help line at 1-866-432-8435 to ask what alternative documentation the county will accept."
+        },
+        {
+          "question": "What if my parent uses propane or heating oil instead of a utility company?",
+          "answer": "LEAP covers propane, heating oil, and other fuel dealers, not just gas and electric utilities. Your parent must have an account with the fuel dealer and provide that account information on the application. The benefit is sent directly to the fuel dealer the same way it would go to a utility company."
+        },
+        {
+          "question": "Can my parent apply for LEAP and the Weatherization Assistance Program at the same time?",
+          "answer": "Yes. These are separate programs with separate applications. LEAP provides a one-time payment toward this season's heating bill. The Weatherization Assistance Program provides free energy efficiency improvements to reduce heating costs in future seasons. Applying for both makes sense if your parent's home has poor insulation or an aging heating system. Start with LEAP because of the funding deadline, then look into weatherization through the Colorado Energy Office."
+        },
+        {
+          "question": "What happens if my parent is approved but the utility already disconnected service?",
+          "answer": "LEAP can still help in reconnection situations, but the process may be more urgent. When applying, include the disconnection notice and contact the county LEAP office directly by phone rather than relying on online processing alone. Some county offices can expedite payment approvals when service has already been cut off. Call 1-866-432-8435 and explain the situation."
+        },
+        {
+          "question": "Is there a limit on how many times a household can receive LEAP in a lifetime?",
+          "answer": "No lifetime limit is stated in the program's published materials. LEAP is a seasonal program: a household can apply each year they are eligible. They receive one benefit per heating season (November 1 through April 30), not per calendar year. Eligibility must be re-established each season."
+        },
+        {
+          "question": "What if my parent moves mid-season? Does the benefit follow them?",
+          "answer": "The published program materials do not address mid-season moves specifically. If your parent moves after applying but before a decision is made, contact the county LEAP office immediately to update the utility account information. If they move to a different county, the administering county may change. Call 1-866-432-8435 for guidance on how to handle this situation."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Thermometer",
+      "phone": "1-866-432-8435",
+      "sourceUrl": "https://cdhs.colorado.gov/leap",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "co-senior-property-tax-exemption",
+      "name": "Senior Property Tax Exemption (PTEX)",
+      "shortName": "Senior Tax Exemption",
+      "tagline": "If your parent is 65+ and has owned their Colorado home for at least 10 years, they may qualify to exempt up to $100,000 of their home's value from property taxes.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County assessor office in the county where the property is located",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, has lived in their Colorado home for at least 10 consecutive years, and owns the property, they may qualify to have 50% of the first $200,000 of their home's actual value exempted from property taxation. That means up to $100,000 of value is excluded when calculating what they owe. The exact dollar savings depends on the local mill levy rate in their county.\n\nThis program has no income test and no asset test. It does not matter how much money your parent has in savings or what their monthly income is. The only things that matter are age, how long they have owned the home, and that it is their primary residence.\n\nApplications go through the county assessor's office where the home is located, not through any state office. The deadline is July 15 each year. Missing that date means waiting until the following year. Also worth knowing: the exemption only applies when the Colorado state budget includes funding for it, though it has been funded consistently in recent years.",
+      "savingsRange": "Up to $100,000 in exempt home value (actual tax savings depend on your county's mill levy rate)",
+      "savingsSource": "Colorado Department of the Treasury: the exemption covers 50% of the first $200,000 of actual home value, for a maximum exempted value of $100,000. Actual tax reduction is calculated by the county assessor using the local mill levy. dpt.colorado.gov/senior-property-tax-exemption",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ as of January 1 of the application year",
+          "Owned the home for at least 10 consecutive years",
+          "Lived in the home as primary residence for at least 10 consecutive years",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Applicant or their spouse must be the property owner of record.",
+          "The home must be the applicant's primary residence. Only one primary residence can qualify.",
+          "Both the 10-year ownership requirement and the 10-year primary residence requirement must be met independently.",
+          "Ownership and occupancy must have occurred for at least 10 consecutive years before January 1 of the application year.",
+          "Surviving spouses of a previously qualifying senior may be eligible if they have not remarried; they must use the Long Form.",
+          "Application must be filed by July 15 of the year for which the exemption is requested.",
+          "The exemption is only applied when state funding is available for the program."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Download or pick up the form from your county assessor's office and submit it to that same office by July 15.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Determine which form your parent needs",
+            "description": "Most applicants use the Short Form. Your parent needs the Long Form if they are a surviving spouse of someone who previously qualified, or if they are applying under an exception. If you are unsure, call your county assessor's office before filling anything out."
+          },
+          {
+            "step": 2,
+            "title": "Get the form from your county assessor",
+            "description": "Forms are available at the county assessor's office or via the Colorado Department of the Treasury at dpt.colorado.gov/application-for-property-tax-exemption. Some counties provide their own version of the form; your county assessor's office can confirm which one to use."
+          },
+          {
+            "step": 3,
+            "title": "Complete the form and gather supporting documents",
+            "description": "Fill out the Short Form (or Long Form if applicable). Surviving spouses and applicants filing under exceptions will need supporting documents such as a death certificate or proof of survivorship. The county assessor can tell you exactly what is needed for your situation."
+          },
+          {
+            "step": 4,
+            "title": "Submit to the county assessor before July 15",
+            "description": "File the completed application with the county assessor's office in the county where the property is located. Do not mail it to the state. Missing the July 15 deadline means the exemption cannot be granted for that tax year."
+          },
+          {
+            "step": 5,
+            "title": "Follow up if you do not receive confirmation",
+            "description": "The county assessor's office will process the application and notify your parent if additional documents are needed. Processing timelines are set by the county and are not specified in the state's official materials. Contact your county assessor's office directly to check on status."
+          }
+        ],
+        "processingTime": "Not specified in official state materials. Contact your county assessor's office for their timeline.",
+        "waitlist": null,
+        "tip": "Call your county assessor's office before you fill out anything. They can tell you whether to use the Short Form or Long Form and whether any supporting documents are needed for your parent's specific situation.",
+        "urls": [
+          {
+            "label": "Official Program Page",
+            "url": "https://dpt.colorado.gov/senior-property-tax-exemption"
+          },
+          {
+            "label": "Application Forms",
+            "url": "https://dpt.colorado.gov/application-for-property-tax-exemption"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age for the applicant (birth certificate, passport, or government-issued ID showing date of birth)",
+        "Proof of ownership: current property deed or tax statement showing the applicant or spouse as owner of record",
+        "Completed Short Form or Long Form, as appropriate for your situation",
+        "If applying as a surviving spouse: death certificate of the qualifying senior and documentation showing you have not remarried",
+        "Any additional documents requested by the county assessor to verify 10-year ownership or 10-year primary residency (requirements vary by county)"
+      ],
+      "contacts": [
+        {
+          "label": "Your County Assessor's Office",
+          "phone": null,
+          "description": "Applications must be filed with the county assessor in the county where the property is located. Each county has its own office; find yours through the Colorado Association of Assessors or search '[your county] assessor Colorado'. This is the only office that can accept your application.",
+          "hours": "Varies by county; most offices are open Monday through Friday during business hours"
+        },
+        {
+          "label": "Colorado Department of the Treasury (PTEX Program)",
+          "phone": null,
+          "description": "The state program page at dpt.colorado.gov/senior-property-tax-exemption has program rules, FAQs, and links to application forms. The Treasury does not accept applications directly; all filing goes through the county.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Surviving spouses must use the Long Form, not the Short Form. Using the wrong form can delay or invalidate the application.",
+        "The July 15 deadline is firm. If your parent misses it, they cannot receive the exemption for that tax year and must reapply the following year.",
+        "The exemption reduces the taxable value of the home; it is not a cash payment or refund. Your parent will see a lower property tax bill, not a check in the mail.",
+        "This exemption only takes effect when the Colorado state budget funds the program. It has been funded in recent years, but this is worth confirming with the county assessor when you apply."
+      ],
+      "relatedPrograms": [
+        "Property Tax, Rent, Heat Credit (PTC Rebate) - Colorado",
+        "Colorado Energy Assistance Program (CEAP / LEAP)",
+        "Colorado Medicaid Home and Community-Based Services (HCBS)",
+        "Area Agency on Aging Benefits Counseling"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "content": {
+            "headline": "Up to $100,000 of home value exempt from property taxes",
+            "subtext": "50% of the first $200,000 of actual home value. No income test. No asset test.",
+            "source": "dpt.colorado.gov/senior-property-tax-exemption"
+          }
+        },
+        {
+          "type": "prose",
+          "title": "How the savings actually work",
+          "body": "The exemption does not reduce your parent's property tax bill by a flat dollar amount. Instead, it removes up to $100,000 from the taxable value of the home before the tax rate is applied. The actual dollar savings depend on the mill levy rate in your parent's county. Higher mill levies produce larger savings from the same exemption. Your county assessor can show you exactly how the math works for your parent's home."
+        },
+        {
+          "type": "prose",
+          "title": "The 10-year rules: what they actually mean",
+          "body": "Your parent must have owned the home for at least 10 consecutive years before January 1 of the application year. They must also have lived in that home as their primary residence for at least 10 consecutive years before January 1. Both requirements must be met. If your parent moved into a home they already owned, the residency clock starts from when they moved in, not when they bought it. If you are unsure whether your parent meets both tests, the county assessor can help you verify before you file."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's home is worth more than $200,000. Does the extra value affect the exemption?",
+          "answer": "No. The exemption applies only to the first $200,000 of the home's actual value, and 50% of that amount ($100,000) is exempt. The value above $200,000 is taxed normally. A home worth $400,000 still gets the same $100,000 exemption as a home worth $210,000."
+        },
+        {
+          "question": "My parent has significant savings and retirement income. Does that disqualify them?",
+          "answer": "No. This program has no income test and no asset test. Savings, retirement accounts, pensions, and Social Security income do not affect eligibility. The only factors are age, years of ownership, years of primary residency, and that the home is their primary residence."
+        },
+        {
+          "question": "My parent moved into a care facility. Can they still qualify?",
+          "answer": "Only if the home remains their legal primary residence. A temporary stay in a rehab facility or hospital generally does not affect primary residence status. A permanent move to a nursing home or assisted living facility typically does, because the care facility becomes the primary residence. If your parent's situation is in a gray area, contact the county assessor's office to ask how they evaluate it."
+        },
+        {
+          "question": "My parent recently passed away. Can their surviving spouse still get the exemption?",
+          "answer": "Possibly. A surviving spouse may be eligible if the senior previously qualified for the exemption and the surviving spouse has not remarried. The surviving spouse must use the Long Form (not the Short Form) and will need to provide a death certificate and documentation of the prior qualification. Contact the county assessor's office to confirm what they require."
+        },
+        {
+          "question": "Can I apply on behalf of my parent?",
+          "answer": "County assessor offices generally accept applications filed by an authorized representative, such as a family member with power of attorney. Contact your county assessor's office directly to ask what documentation they need to accept a representative filing. Having a copy of the power of attorney document ready is a good starting point."
+        },
+        {
+          "question": "What if my parent misses the July 15 deadline?",
+          "answer": "The exemption cannot be granted for that tax year. There is no late filing option under the standard program rules. Your parent would need to apply by July 15 of the following year to receive the benefit for that year. Set a calendar reminder well before the deadline, because county offices may be busier as the date approaches."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "House",
+      "phone": null,
+      "sourceUrl": "https://dpt.colorado.gov/senior-property-tax-exemption",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "co-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "shortName": "Meals to Home",
+      "tagline": "If your parent is 60+ and has trouble leaving home, they may qualify for regular meal deliveries at little or no cost through local programs across Colorado.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Colorado Department of Human Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Area Agencies on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Volunteers of America Colorado",
+            "type": "service-area"
+          },
+          {
+            "name": "Meals on Wheels Boulder",
+            "type": "service-area"
+          },
+          {
+            "name": "Meals on Wheels – Northern Colorado",
+            "type": "service-area"
+          },
+          {
+            "name": "Weld County Meals on Wheels – Greeley Office",
+            "type": "service-area"
+          },
+          {
+            "name": "Southwest Colorado Senior Citizens Organization",
+            "type": "service-area"
+          },
+          {
+            "name": "San Luis Valley Area Agency on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "United Way of the Arkansas Valley Area Agency on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and has difficulty leaving home to buy or prepare food, Colorado's home-delivered meals programs can bring nutritious meals directly to their door. There is no statewide income limit and no asset test. The main requirements are age and homebound status.\n\nThis is not a single statewide program. It is a network of local providers coordinated through Area Agencies on Aging across Colorado. Depending on where your parent lives, they may receive hot meals delivered daily by volunteers, or a weekly package of five frozen meals. At least one local provider charges $2.50 per meal; many programs charge nothing or ask for a voluntary contribution. Delivery schedules, meal formats, and fees vary by county.\n\nBeyond nutrition, many programs include a wellness check with each delivery. A volunteer stopping by regularly can be an early signal if something is wrong. For caregivers managing from a distance, that contact matters.",
+      "savingsRange": "",
+      "savingsSource": "Free service; some local providers charge up to $2.50 per meal, but no statewide fee applies. Specific cost depends on local provider.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound or unable to leave home without assistance",
+          "No income limit (statewide)",
+          "No asset limit",
+          "Eligibility and availability vary by county and local provider"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must generally be homebound, meaning they have difficulty leaving their home without assistance. This includes physical limitations, cognitive impairment, or recovery from illness or surgery. Some programs also accept temporary homebound status after a hospitalization. Local providers determine this informally when you call; there is no standardized clinical assessment for most county programs.",
+        "otherRequirements": [
+          "Must live within the local provider's service area or delivery route",
+          "If enrolled in an HCBS Medicaid waiver, home-delivered meals may be covered as a waiver service through your parent's case manager instead of through the general senior nutrition network",
+          "Some local programs temporarily serve adults under 60 with disabilities, but this varies by county"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your local Area Agency on Aging or the regional contact for your parent's county; most programs can screen and enroll by phone within a few days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find the right local contact for your parent's county",
+            "description": "Colorado does not have one central application line for home-delivered meals. Use the contacts below for your parent's region: Denver metro area: (303) 294-0111 or email MOWReferrals@voacolorado.org. Boulder County: 720-780-3380. Larimer County: (970) 472-9630. Weld County (Greeley): (970) 353-9738. Southwest Colorado: (719) 845-1133 ext. 225. San Luis Valley: 719-589-4511. All other counties: visit cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults to find your local Area Agency on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Call and describe your parent's situation",
+            "description": "When you call, tell them your parent's age, address, and why they have difficulty leaving home or preparing meals. You do not need to prove income or assets. The intake coordinator will confirm whether your parent is in their service area and what meals they can offer."
+          },
+          {
+            "step": 3,
+            "title": "Confirm delivery details",
+            "description": "Ask about meal format (hot or frozen), delivery days, any cost per meal, and whether someone needs to be home to receive the delivery. If your parent is on an HCBS Medicaid waiver, tell the coordinator; meals may be covered differently through your parent's case manager."
+          },
+          {
+            "step": 4,
+            "title": "Start receiving meals",
+            "description": "Most programs do not require a formal written application. Once intake is complete, delivery is scheduled based on route availability. Ask whether there is a waitlist in your parent's area before counting on a specific start date."
+          }
+        ],
+        "processingTime": "No single statewide processing time. Many programs can begin delivery within days of intake if route capacity is available. Wait times vary by county and provider.",
+        "waitlist": "No statewide waitlist was identified. Local programs may have limited route capacity; ask the local provider directly when you call.",
+        "tip": "If your parent was just discharged from a hospital or is recovering from surgery, ask specifically about temporary or short-term homebound service. Some programs fast-track post-hospitalization cases.",
+        "urls": [
+          {
+            "label": "Colorado CDHS Nutrition Services for Older Adults",
+            "url": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Parent's date of birth or proof of age (such as a Medicare card, driver's license, or birth certificate)",
+        "Home address and any delivery access instructions (gate codes, buzzer numbers, preferred entry point)",
+        "Brief description of why your parent has difficulty leaving home or preparing meals (you explain this verbally; no form required in most cases)",
+        "If your parent is enrolled in a Medicaid HCBS waiver: contact information for their case manager and waiver program name"
+      ],
+      "contacts": [
+        {
+          "label": "Denver Metro Referral Line (Volunteers of America Colorado)",
+          "phone": "(303) 294-0111",
+          "description": "Intake and enrollment for home-delivered meals in the Denver metro area. You can also email MOWReferrals@voacolorado.org.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Boulder County Home-Delivered Meals",
+          "phone": "720-780-3380",
+          "description": "Intake for home-delivered meals in Boulder County.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Meals on Wheels – Northern Colorado (Larimer County)",
+          "phone": "(970) 472-9630",
+          "description": "Intake for home-delivered meals in Larimer County.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Weld County Meals on Wheels – Greeley Office",
+          "phone": "(970) 353-9738",
+          "description": "Intake for home-delivered meals in Weld County.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Southwest Colorado Senior Citizens Organization",
+          "phone": "(719) 845-1133",
+          "description": "Area Agency on Aging serving southwest Colorado. Ask for extension 225 when you call.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "San Luis Valley Area Agency on Aging",
+          "phone": "719-589-4511",
+          "description": "Intake and referrals for home-delivered meals in the San Luis Valley region.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Colorado CDHS Older Adult Services",
+          "phone": null,
+          "description": "If you are unsure which county program serves your parent, the CDHS nutrition services page lists Area Agencies on Aging by region: cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Your parent does not need to be permanently homebound. Temporary homebound status after a hospitalization or during illness recovery qualifies in many counties. Mention this when you call.",
+        "If your parent lives on the edge of a county or in a rural area, the local provider may not cover their address. Ask about route boundaries before assuming they qualify. A neighboring county's provider may be the right call.",
+        "If your parent is already enrolled in a Colorado Medicaid HCBS waiver (such as HCBS-SLS or a similar program), home-delivered meals may be covered as a waiver service. Contact their case manager before applying through the general senior nutrition network, since the funding source and process differ."
+      ],
+      "relatedPrograms": [
+        "SNAP Food Benefits (Supplemental Nutrition Assistance Program)",
+        "Colorado HCBS Medicaid Waivers",
+        "Older Americans Act Congregate Meals (senior center dining)",
+        "Colorado Caregiver Support Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What your parent actually receives",
+          "body": "Meal format depends entirely on the local provider. Some programs deliver one hot meal per day, five days a week. Others deliver one weekly package with five frozen meals. At least one provider charges $2.50 per meal; many programs ask only for a voluntary contribution or charge nothing. Ask the local provider what they offer before assuming format or cost."
+        },
+        {
+          "type": "callout",
+          "title": "Not just food: the daily check-in",
+          "body": "Many programs include a brief wellness check with each delivery. The volunteer will note if your parent does not answer, seems unwell, or mentions a concern. For family caregivers who live far away, this regular contact can be an important safety signal. Ask your local provider whether wellness checks are part of their delivery."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives in a rural area. Is home-delivered meals available where they are?",
+          "answer": "Possibly, but route coverage is the biggest variable in this program. Service areas are set by local providers and do not cover every address in every county. Call the Area Agency on Aging or local provider for your parent's county and give them the exact address. If your parent's address is outside a current route, ask whether they maintain a waitlist for route expansion or whether a neighboring provider covers that area."
+        },
+        {
+          "question": "My parent can sometimes leave the house with help. Do they still qualify?",
+          "answer": "Yes, in most cases. Homebound does not mean completely unable to leave home. It means your parent has significant difficulty doing so without assistance, whether because of physical limitations, fall risk, cognitive decline, or lack of transportation. Describe your parent's actual situation when you call; the intake coordinator makes the determination. You do not need a doctor's note for most county programs."
+        },
+        {
+          "question": "My parent was just discharged from the hospital. Can I get meals started quickly?",
+          "answer": "Yes. Tell the provider that your parent is recovering from a hospitalization. Some programs prioritize or fast-track post-discharge cases. You can call even before your parent is home from the hospital to get intake started."
+        },
+        {
+          "question": "My parent is on a Medicaid waiver. Should I still call the local meal program?",
+          "answer": "Not necessarily first. If your parent is enrolled in a Colorado Medicaid HCBS waiver, home-delivered meals may already be covered as a waiver service. Contact their case manager first and ask whether meals are included in the care plan. If they are not, the case manager can help add them or refer to the county program. Enrolling through two systems at once can cause overlap."
+        },
+        {
+          "question": "Is there an income limit? Do we have to show financial need?",
+          "answer": "No. Colorado's home-delivered meals programs do not have a statewide income limit or asset test. Eligibility is based on age (60 or older) and homebound status, not financial need. Some programs ask for a voluntary contribution toward meal costs, but you are not required to pay to receive service."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to call themselves?",
+          "answer": "You can call on your parent's behalf. Most local programs accept referrals from family members, caregivers, hospital discharge planners, and social workers. When you call, have your parent's address, date of birth, and a brief description of why they have difficulty leaving home or preparing meals. The provider will tell you if they need to speak with your parent directly."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "(303) 294-0111",
+      "sourceUrl": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "co-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are an unpaid family caregiver in Colorado, this program connects you to counseling, training, and respite care so you can keep showing up for your parent without burning out.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging across Colorado",
+            "type": "service-area"
+          },
+          {
+            "name": "Colorado Department of Human Services State Unit on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are caring for an aging parent without pay, Colorado's Family Caregiver Support Program exists specifically for you. It does not pay you a cash wage, but it does provide real, practical support: help finding and accessing services, one-on-one counseling, caregiver training, and respite care (temporary relief so you can take a break while someone else steps in). These services are available at no cost to you through your local Area Agency on Aging.\n\nEligibility is not based on your income or your parent's income. What matters is the relationship: you must be an informal, unpaid caregiver for someone 60 or older, or for an adult with Alzheimer's disease or a related disorder. For respite care and supplemental services specifically, your parent must also have documented functional limitations, meaning they need substantial help with at least two daily activities like bathing, dressing, or medication management, or they require close supervision because of a cognitive condition that poses a safety risk.\n\nBecause the program is administered locally by Colorado's Area Agencies on Aging, the exact services available to you, and how quickly you can access them, depend on which county you live in. That means your first step is always to contact the agency serving your area. The statewide line at 1-888-866-4243 can route you to the right local office.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You are an unpaid family caregiver",
+          "Care recipient is age 60+ (or has Alzheimer's/related disorder)",
+          "No income or asset test",
+          "For respite care: care recipient must need help with 2+ daily activities",
+          "Available statewide through local Area Agencies on Aging"
+        ],
+        "ageRequirement": "Care recipient: 60+. Grandparent/relative caregiver: 55+.",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "For respite care and supplemental services, the care recipient must be functionally impaired. That means they either cannot perform at least two activities of daily living (such as bathing, dressing, eating, or managing medications) without substantial human help, or they require close supervision because of a cognitive or mental impairment that poses a serious health or safety risk. General information and referral services do not require this assessment.",
+        "otherRequirements": [
+          "Caregiver must be an informal, unpaid family caregiver (not a paid home care worker)",
+          "Care recipient must be age 60 or older, or have Alzheimer's disease or a related neurological disorder, or be a grandchild raised by a grandparent or relative caregiver age 55 or older",
+          "Grandparent or relative caregivers must live with the child and serve as the primary caregiver because the parents are unable or unwilling to do so, or must have a legal relationship such as custody or guardianship, or be raising the child informally"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the statewide line at 1-888-866-4243 to be connected to your local Area Agency on Aging, which will complete a Family Caregiver Support Assessment with you; no statewide processing timeline has been published.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local Area Agency on Aging",
+            "description": "Call 1-888-866-4243 (toll-free, Colorado statewide aging line) or 303-866-2800 to be connected to the Area Agency on Aging serving your county. You can also visit cdhs.colorado.gov/our-services/older-adult-services to find local agency contact information."
+          },
+          {
+            "step": 2,
+            "title": "Complete a Family Caregiver Support Assessment",
+            "description": "Your local agency will conduct an intake conversation and, where required, a Family Caregiver Support Assessment. This covers the care recipient's age, your relationship as caregiver, and, for respite or supplemental services, the care recipient's functional limitations. Have basic information about you and your parent ready: names, contact information, age of the care recipient, and a brief description of what help your parent currently needs."
+          },
+          {
+            "step": 3,
+            "title": "Learn what services are available in your county",
+            "description": "The specific services offered, including how many hours of respite care are available and what supplemental services exist, vary by local agency. Ask directly: 'What respite care can you provide, and is there a wait?' Some agencies have immediate capacity; others have local waiting periods."
+          },
+          {
+            "step": 4,
+            "title": "Begin receiving services",
+            "description": "Once your assessment is complete and you are enrolled, your local agency will connect you to the approved services: counseling, support groups, training, respite care, or referrals. Services are provided at no cost to you."
+          }
+        ],
+        "processingTime": "No statewide timeline has been published. Processing time depends on your local Area Agency on Aging. Ask your local agency how long intake and assessment typically take in your county.",
+        "waitlist": "No statewide waitlist policy has been published. Because services are locally administered, respite and supplemental services may have local capacity limits or waiting periods. Ask your local agency directly when you call.",
+        "tip": "When you call, ask specifically about respite care availability and whether there is a current wait. If your parent needs help now, say so clearly: some agencies can expedite intake for caregivers in crisis.",
+        "urls": [
+          {
+            "label": "Colorado Family Caregiver Support Program (official state page)",
+            "url": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your name and contact information as the caregiver",
+        "Care recipient's name, date of birth, and relationship to you",
+        "Brief description of the care recipient's functional limitations (what daily tasks they need help with, or what safety concerns exist due to cognitive impairment)",
+        "Your own identification (government-issued photo ID)",
+        "Any legal guardianship or custody documents if you are a grandparent or relative caregiver raising a child",
+        "Medications list or diagnosis information if your local agency requests it during intake"
+      ],
+      "contacts": [
+        {
+          "label": "Colorado Statewide Aging Line",
+          "phone": "1-888-866-4243",
+          "description": "Toll-free line that connects you to your local Area Agency on Aging to begin the application process for caregiver support services.",
+          "hours": "Contact your local agency for specific hours; statewide line routes to local offices during business hours"
+        },
+        {
+          "label": "Colorado Department of Human Services, State Unit on Aging",
+          "phone": "303-866-2800",
+          "description": "State office that oversees the program and can help if you are having difficulty reaching your local agency.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "This program does not pay you a cash wage or stipend. It provides services in kind: counseling, training, referrals, and respite care. If you were expecting a direct payment program, ask your local agency about other options in your county.",
+        "General information and referral services are available to any unpaid family caregiver. Respite care and supplemental services have a stricter threshold: the care recipient must meet a functional impairment standard assessed by your local agency.",
+        "Services and wait times differ by county. If you live near a county line, ask whether you might be served by a neighboring agency with shorter wait times.",
+        "This program is separate from Medicaid-funded caregiver programs. If your parent is on Medicaid and you want to be paid as a caregiver, ask your local agency about other programs such as Colorado's Home and Community Based Services waivers."
+      ],
+      "relatedPrograms": [
+        "Colorado HCBS Elderly, Blind, and Disabled Waiver (Medicaid-funded home care)",
+        "PACE (Program of All-inclusive Care for the Elderly, for Medicaid-eligible adults)",
+        "Senior Medicare Patrol (SMP) Colorado",
+        "Colorado State Health Insurance Assistance Program (SHIP)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is not a cash payment program",
+          "body": "A common misconception: the Family Caregiver Support Program does not pay family members a wage or stipend for caregiving. It funds services for the caregiver, such as counseling, training, and respite care. If your goal is to be paid for the care you provide, ask your local Area Agency on Aging about Colorado's Medicaid-funded HCBS waiver programs, which have different eligibility rules."
+        },
+        {
+          "type": "callout",
+          "title": "Services vary significantly by county",
+          "body": "Colorado routes all families through their local Area Agency on Aging. The number of respite hours available, the types of supplemental services offered, and the wait times all depend on your county. Two families in Colorado can have very different experiences with this program. Always ask your local agency what is specifically available to you."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does my parent need to be on Medicaid or Medicare to qualify?",
+          "answer": "No. This program has no insurance requirement. Eligibility is based on the care relationship and, for some services, your parent's functional limitations. Income, assets, and insurance coverage do not determine whether you qualify."
+        },
+        {
+          "question": "Can I get respite care right away, or is there a waiting list?",
+          "answer": "That depends entirely on your county. No statewide waitlist policy exists, and some local agencies have immediate capacity while others have delays. Call 1-888-866-4243 and ask your local Area Agency on Aging directly: 'Is there a current wait for respite care, and if so, how long?' If you are in a caregiving crisis, say so when you call."
+        },
+        {
+          "question": "I am raising my grandchild because my child is unable to. Does this program cover me?",
+          "answer": "Yes, if you meet the specific requirements. You must be age 55 or older, living with the child, and serving as the primary caregiver because the parents are unable or unwilling to do so. You must also either have a legal relationship (such as custody or guardianship) or be raising the child informally. Your local Area Agency on Aging will assess your situation at intake."
+        },
+        {
+          "question": "My parent needs more than two hours of help a day. Will this program cover all of it?",
+          "answer": "Probably not on its own. This program focuses on supporting the caregiver with counseling, training, and limited respite, not on replacing full-time home care. For more intensive daily support, ask your local agency about Colorado's Medicaid HCBS waiver programs, which are designed to cover ongoing personal care services."
+        },
+        {
+          "question": "Can I apply for this program and Medicaid home care at the same time?",
+          "answer": "Yes. These are separate programs with separate eligibility rules. Applying for one does not affect the other. Your local Area Agency on Aging can help you understand what your parent may qualify for across both programs and how to apply for each."
+        },
+        {
+          "question": "What happens if my parent's condition changes after I enroll?",
+          "answer": "Contact your local Area Agency on Aging. They can reassess the care situation and adjust services accordingly. If your parent's needs increase significantly, this is also a good time to ask about referrals to other programs such as Medicaid waiver services or PACE."
+        },
+        {
+          "question": "What if I am the sole caregiver and there is no one else to help during my breaks?",
+          "answer": "That is exactly the situation this program's respite services are designed for. Respite care means someone steps in temporarily so you can rest, attend to your own health, or handle other responsibilities. Ask your local agency what forms of respite are available: in-home, adult day, or facility-based. The availability of each type varies by county."
+        },
+        {
+          "question": "I work full time and care for my parent evenings and weekends. Do I still qualify?",
+          "answer": "Yes. The program does not require you to be a full-time caregiver. The key requirement is that you are an informal, unpaid caregiver for a qualifying care recipient. Your employment status does not affect eligibility."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "1-888-866-4243",
+      "sourceUrl": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

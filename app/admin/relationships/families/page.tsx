@@ -35,6 +35,7 @@ const TAB_SENTENCE: Record<Tab, string> = {
   call: "are waiting on a call from us",
   follow: "need a follow-up",
   close: "have been tried three times",
+  check: "were handed to a provider and need a check-in",
   record: "say the provider never got back to them",
   reach: "have no working way to reach them",
   all: "have something open in this window",
@@ -247,7 +248,7 @@ function AdminSeekerRelationshipsInner() {
   }, [load]);
 
   const counts = useMemo(() => {
-    const c: Record<Tab, number> = { urgent: 0, reply: 0, letter: 0, help: 0, call: 0, follow: 0, close: 0, record: 0, reach: 0, all: 0, archived: 0 };
+    const c: Record<Tab, number> = { urgent: 0, reply: 0, letter: 0, help: 0, call: 0, follow: 0, close: 0, check: 0, record: 0, reach: 0, all: 0, archived: 0 };
     for (const r of rows ?? []) for (const t of TABS) if (matches(r, t.key)) c[t.key] += 1;
     return c;
   }, [rows]);

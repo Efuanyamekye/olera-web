@@ -6,6 +6,7 @@ import { addressesAgree } from "@/lib/providers/address-match";
 import { deliverPendingConnections } from "@/lib/notifications/deliver-pending-connections";
 import { publishPendingQAAnswers } from "@/lib/notifications/publish-pending-qa-answers";
 import { publishPendingInterviews } from "@/lib/notifications/publish-pending-interviews";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 /**
  * Extract Google Place ID from various URL formats:
@@ -66,12 +67,7 @@ export async function GET() {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("id, slug, display_name, metadata")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "id, slug, display_name, metadata");
 
     if (!profile) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
@@ -162,12 +158,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("id, slug, display_name, address, metadata, verification_state")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "id, slug, display_name, address, metadata, verification_state");
 
     if (!profile) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });

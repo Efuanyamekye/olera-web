@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getCityConfig } from "./config";
+import { getCityConfig, RECIPIENT_LABEL } from "./config";
+import { pingCareTeam } from "./care-team-ping.server";
 import { ensureCareSeekerForCityLead } from "./care-seeker.server";
 import { normalizeMetaLead, parseNativeForms, type NativeReceipt, type MetaLead } from "./meta-native";
 import { cityQualifyingQuestion } from "./qualify";
@@ -87,11 +88,30 @@ export async function runMetaNativeIntake(db: SupabaseClient) {
       const confirmation = primary?.providerName
         ? `Olera: Hi ${name}, we have your request for ${care} in ${cfg.city} and have passed it to ${primary.providerName}, who will be in touch. So they know how to help, ${question} Reply in a few words. Reply STOP to opt out.`
         : `Olera: Hi ${name}, we have your request for ${care} in ${cfg.city}. So we can point you to the right provider, ${question} Reply in a few words and we'll take it from there. Reply STOP to opt out.`;
-      const { error: insertError } = await db.rpc("import_meta_city_lead", {
+      const { data: leadId, error: insertError } = await db.rpc("import_meta_city_lead", {
         receipt_id: receipt.leadgen_id, lead_data: normalized, confirmation,
       });
       if (insertError) throw new Error(`Could not save Meta lead: ${insertError.message}`);
       processed++;
+      // Only a lead THIS receipt created, still open, and real. The import also
+      // returns an existing id for a duplicate, and files job seekers and
+      // opt-outs as archived; none of those is a family to ring.
+      if (typeof leadId === "string") {
+        const { data: row } = await db.from("city_leads")
+          .select("meta_lead_id, archived_at, is_test, created_at, care_recipient").eq("id", leadId).maybeSingle();
+        if (row && row.meta_lead_id === receipt.leadgen_id && !row.archived_at && !row.is_test) {
+          const seeker = await ensureCareSeekerForCityLead(db, { firstName: normalized.first_name, phone: normalized.phone,
+            email: normalized.email, city: cfg.city, state: cfg.state, careType: "unsure",
+            careRecipient: row.care_recipient, urgency: null, note: null });
+          if (seeker) await db.from("city_leads").update({ care_seeker_id: seeker }).eq("id", leadId).is("care_seeker_id", null);
+          await pingCareTeam({
+            city: cfg.city, timeZone: cfg.timeZone, firstName: name, phone: normalized.phone,
+            need: row.care_recipient ? `${care} for ${RECIPIENT_LABEL[row.care_recipient as keyof typeof RECIPIENT_LABEL] ?? "a family member"}` : null,
+            providerName: primary?.providerName ?? null,
+            submittedAt: new Date(row.created_at), seekerId: seeker, source: "Meta form",
+          });
+        }
+      }
     } catch (err) {
       failed++;
       // Record the real cause. The generic message this replaced hid which of

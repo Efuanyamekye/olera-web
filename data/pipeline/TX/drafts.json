@@ -2,8 +2,8 @@
   "state": "TX",
   "stateName": "Texas",
   "draftedAt": "2026-04-10T18:59:34.942Z",
-  "total": 12,
-  "successful": 12,
+  "total": 16,
+  "successful": 16,
   "programs": [
     {
       "id": "medicaid-buy-in-qmb-slmb-qi",
@@ -1900,27 +1900,11 @@
         "summary": [
           "Texas resident",
           "Age 18+ with disability or daily care needs",
-          "Income under $2,982/month (single) or $5,964 (couple)",
-          "Assets under $5,000 (single) or $6,000 (couple)"
+          "No income or savings limit (Older Americans Act caregiver services)"
         ],
         "ageRequirement": "18+",
         "incomeTable": null,
-        "assetLimits": {
-          "individual": 5000,
-          "couple": 6000,
-          "countedAssets": [
-            "Bank accounts",
-            "Stocks and bonds",
-            "Cash"
-          ],
-          "exemptAssets": [
-            "Primary home",
-            "One vehicle",
-            "Burial funds",
-            "Personal belongings"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": "Need help with daily activities like bathing, dressing, meal preparation, or household tasks",
         "otherRequirements": [
           "Texas residency required",
@@ -2062,6 +2046,48 @@
           "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
           "reason": "page also lists ours ((855) 937-2372)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "structuredEligibility.assetLimits+summary",
+          "from": {
+            "assetLimits": {
+              "individual": 5000,
+              "couple": 6000,
+              "countedAssets": [
+                "Bank accounts",
+                "Stocks and bonds",
+                "Cash"
+              ],
+              "exemptAssets": [
+                "Primary home",
+                "One vehicle",
+                "Burial funds",
+                "Personal belongings"
+              ],
+              "homeEquityCap": null
+            },
+            "summary": [
+              "Texas resident",
+              "Age 18+ with disability or daily care needs",
+              "Income under $2,982/month (single) or $5,964 (couple)",
+              "Assets under $5,000 (single) or $6,000 (couple)"
+            ]
+          },
+          "to": {
+            "assetLimits": null,
+            "summary": [
+              "Texas resident",
+              "Age 18+ with disability or daily care needs",
+              "No income or savings limit (Older Americans Act caregiver services)"
+            ]
+          },
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "flaggedAt": "2026-10-06",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "answer-key review",
+          "note": "The income and asset figures are STAR+PLUS's ($2,982 is 300% of SSI), not this program's. Caregiver support through the Area Agency on Aging is Older Americans Act Title III-E, which has no means test; independent research for the answer key (TX-B) found the same. They ruled out a veteran couple who qualifies."
         }
       ]
     },
@@ -2339,6 +2365,857 @@
       "sourceUrl": "https://ltco.texas.gov",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10"
+    },
+    {
+      "id": "tx-medicaid-elderly-disabilities",
+      "name": "Texas Medicaid for the Elderly and People with Disabilities",
+      "shortName": "Texas MEPD",
+      "tagline": "If your parent is 65 or older and on a limited income, Texas MEPD may cover their doctor visits, prescriptions, nursing home care, and more at little or no cost to them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Texas Health and Human Services Commission local benefits offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Community partner sites",
+            "type": "service-area"
+          },
+          {
+            "name": "YourTexasBenefits.com",
+            "type": "service-area"
+          },
+          {
+            "name": "2-1-1 Texas",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or has a qualifying disability, Texas Medicaid for the Elderly and People with Disabilities (MEPD) may cover their health care costs entirely, including doctor visits, hospital stays, prescriptions, and in some cases nursing home or home-based care. This is not a supplemental program layered on top of other insurance; for many older Texans, it becomes their primary or only coverage.\n\nMEPD is not a single benefit with one income limit. It is an umbrella of coverage groups, each with its own financial rules and application path. Some people qualify automatically if they receive Supplemental Security Income (SSI). Others must apply separately through the Texas Health and Human Services Commission (HHSC) using Form H1200. The right pathway depends on your parent's income, resources, and living situation.\n\nBecause the rules vary by coverage group and the income and resource thresholds are not published in a single public table, the fastest first step is a direct call to HHSC or an application through YourTexasBenefits.com. A caseworker will identify which coverage group your parent fits and what documentation is needed. This page explains what to expect and how to prepare.",
+      "savingsRange": "",
+      "savingsSource": "MEPD is a service-based health coverage program, not a cash benefit. There is no single dollar amount to cite. Coverage replaces out-of-pocket medical costs, which vary by individual need and coverage group.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled at any age)",
+          "Texas resident",
+          "U.S. citizen or eligible non-citizen",
+          "Must meet income and resource limits for the specific coverage group",
+          "Some pathways require SSI receipt; others use separate HHSC financial rules"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Annuities (depending on type)",
+            "Additional vehicles beyond one",
+            "Non-home real property",
+            "Life insurance policies with cash value above certain thresholds"
+          ],
+          "exemptAssets": [
+            "Primary home (in most cases, as long as the applicant or spouse lives there)",
+            "One vehicle used for transportation",
+            "Household goods and personal property",
+            "Irrevocable burial arrangements and designated burial funds (within limits)",
+            "Certain life insurance policies with low face values"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be aged (65+), blind, or meet Social Security's definition of disability.",
+          "For disability-based eligibility, HHSC may conduct its own disability determination using medical records, work history, and education history if the person is not already receiving a qualifying disability benefit such as SSI or Social Security Disability Insurance.",
+          "Some applicants must apply through the Social Security Administration for SSI first; others apply directly to HHSC. A caseworker will tell you which path fits your parent's situation.",
+          "Must meet program-specific financial rules for the applicable MEPD coverage group. Exact income and resource thresholds depend on the group and are determined at application."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The most direct path is to apply online at YourTexasBenefits.com or call HHSC at (877) 541-7905; processing time varies and can extend to 90 days if a disability determination is needed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's basic documents before you contact anyone",
+            "description": "You will need their Social Security card, a recent Social Security award letter or income statement, proof of Texas residency (a utility bill or lease), and their Medicare card if they have one. Having these ready speeds up the screening call."
+          },
+          {
+            "step": 2,
+            "title": "Apply online or call HHSC directly",
+            "description": "Apply at YourTexasBenefits.com using the online application, or call HHSC at (877) 541-7905, Monday through Friday, 8am to 6pm CT. If you prefer paper, request Form H1200 (Medicaid for the Elderly and People with Disabilities Application for Assistance) by calling that same number or visiting a local HHSC benefits office."
+          },
+          {
+            "step": 3,
+            "title": "Submit all required documents",
+            "description": "After applying, HHSC will send a notice listing exactly which documents they need. Submit everything at once. Missing documents are the most common reason applications stall. You can submit by mail, fax, in person at an HHSC office, or through the YourTexasBenefits.com document upload portal."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any disability determination request",
+            "description": "If your parent is not already receiving SSI or Social Security Disability Insurance and is applying based on a disability, HHSC will initiate a disability determination. This requires medical records, work history, and education history. Responding promptly prevents delays. HHSC will contact you with specific instructions."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility determination",
+            "description": "HHSC will mail a written notice with the decision. If approved, the notice will state your parent's coverage group, effective date, and what services are covered. If denied, the notice will explain the reason and your right to request a fair hearing to appeal the decision."
+          }
+        ],
+        "processingTime": "Processing time is not guaranteed by a single statewide standard for MEPD. Standard applications are typically processed within 45 days. If HHSC must conduct a disability determination, processing can extend to 90 days.",
+        "waitlist": null,
+        "tip": "If your parent is already receiving SSI payments from Social Security, they may be automatically enrolled in Medicaid without a separate MEPD application. Call HHSC at (877) 541-7905 to confirm before submitting Form H1200.",
+        "urls": [
+          {
+            "label": "Apply online at YourTexasBenefits.com",
+            "url": "https://www.yourtexasbenefits.com/"
+          },
+          {
+            "label": "MEPD Handbook (official program rules)",
+            "url": "https://www.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or current benefit verification letter showing your parent's monthly income",
+        "Proof of Texas residency (a current utility bill, signed lease agreement, or state-issued document showing the home address)",
+        "Social Security card for your parent (and for any household member whose income is counted)",
+        "Proof of age (birth certificate, U.S. passport, or Social Security records)",
+        "Proof of U.S. citizenship or eligible immigration status (U.S. birth certificate, U.S. passport, or immigration documents)",
+        "Medicare card if your parent has Medicare (Part A, Part B, or both)",
+        "Pension, annuity, or retirement account statements showing current income and balance",
+        "Current balances for any checking, savings, or certificate of deposit accounts (Texas evaluates resources and may review transfer history going back five years as part of long-term care eligibility; gather what you have)",
+        "Investment account statements (stocks, bonds, mutual funds, annuities)",
+        "Life insurance policy documents showing face value and any cash surrender value",
+        "Vehicle title or registration for any vehicle owned beyond a primary vehicle",
+        "Deed or tax statement for any real property other than the primary home",
+        "Pre-need burial contracts or irrevocable burial trust documents",
+        "Medical records, treating physician contact information, work history, and education records (only needed if HHSC must conduct a disability determination and your parent is not already receiving SSI or SSDI)",
+        "Legal authorization documents (power of attorney, guardianship order, or authorized representative form) if you are applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "HHSC Benefits Office (Application Line)",
+          "phone": "(877) 541-7905",
+          "description": "The direct line to apply for MEPD, ask about eligibility, check on an application, or request Form H1200. This is where to start.",
+          "hours": "Mon-Fri 8am-6pm CT"
+        },
+        {
+          "label": "YourTexasBenefits.com",
+          "phone": null,
+          "description": "Apply online, upload documents, and check your application status at any time without waiting on hold.",
+          "hours": "Available 24 hours, 7 days a week"
+        },
+        {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general information and referral line. They can help you locate your nearest HHSC office or community partner site if the HHSC benefits line is busy. They do not process MEPD applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in a hospital or nursing facility right now, ask the discharge planner or social worker about applying before discharge. HHSC can process applications for people who are already receiving institutional care, and some coverage may be backdated to the month of admission.",
+        "MEPD has multiple coverage groups. If your parent is denied for one group, ask the caseworker whether they qualify for another. A denial letter for one pathway is not a denial of all pathways.",
+        "If your parent has transferred assets (given money or property to family members) within the past five years and is applying for long-term care Medicaid, those transfers will be reviewed. Transfers for less than fair market value can create a waiting period before benefits begin. Gather documentation of any transfers before applying.",
+        "You can request a fair hearing within 90 days of any denial or unfavorable action. Call (877) 541-7905 to start that process. You do not need an attorney to request a hearing, though legal aid organizations can help if the case is complex."
+      ],
+      "relatedPrograms": [
+        "Texas STAR+PLUS Medicaid Managed Care (the managed care delivery system for most MEPD enrollees)",
+        "Texas Medicaid Waiver Programs (such as STAR+PLUS HCBS Waiver for home and community-based services)",
+        "Medicare Savings Programs (which help eligible Texans pay Medicare premiums, deductibles, and copays)",
+        "Supplemental Security Income (SSI) through Social Security (qualifying for SSI often leads to automatic MEPD enrollment)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "This is not one program with one set of rules.",
+          "body": "MEPD is an umbrella of coverage groups for Texans who are aged, blind, or disabled. Your parent's income, resources, and whether they already receive SSI determine which group applies and what the financial thresholds are. A caseworker at (877) 541-7905 can identify the right group within minutes of reviewing your parent's basic information. You do not need to figure out which category fits before calling."
+        },
+        {
+          "type": "prose",
+          "heading": "What MEPD can cover",
+          "body": "Depending on which coverage group your parent qualifies for, MEPD can cover:\n\nDoctor visits, specialist care, and hospital stays. Prescription drugs through the Texas Medicaid pharmacy benefit. Nursing facility care, if your parent needs that level of care. Home and community-based services through related waiver programs, which may allow your parent to stay at home rather than move to a facility. Medicare cost-sharing assistance in some cases, which pays the premiums, deductibles, or copays your parent would otherwise owe to Medicare.\n\nThe specific services covered depend on the coverage group. A caseworker will explain what is included once eligibility is determined."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already gets SSI. Do they still need to apply for MEPD separately?",
+          "answer": "Usually not. In Texas, people who receive SSI are generally automatically enrolled in Medicaid. However, you should call HHSC at (877) 541-7905 to confirm that enrollment happened and that your parent's Medicaid is active. If it is not, a caseworker can resolve it quickly with the SSI award letter in hand."
+        },
+        {
+          "question": "Can my parent keep their home and still qualify?",
+          "answer": "Yes, in most cases. The primary home is generally exempt from the resource count as long as your parent (or their spouse) lives there. If your parent enters a nursing facility, the home may remain exempt for a period of time under specific conditions. The rules are complex and depend on the coverage group, so ask the caseworker directly about your parent's situation during the application call."
+        },
+        {
+          "question": "My parent gave money to family members in the past few years. Does that affect eligibility?",
+          "answer": "It can. Texas reviews transfers of assets made within the five years before a long-term care Medicaid application. Transfers for less than fair market value (gifts, below-market sales) may create a penalty period during which benefits are delayed. This does not disqualify your parent permanently, but it affects timing. Gather documentation of any transfers before applying so the caseworker can assess the impact."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot manage the process themselves?",
+          "answer": "Yes. HHSC accepts applications from an authorized representative, which can be a family member with power of attorney, a court-appointed guardian, or a person your parent designates in writing. Bring the legal authorization document (power of attorney or guardianship order) when you apply. If you do not yet have legal authority, a social worker or legal aid attorney can advise you on next steps."
+        },
+        {
+          "question": "What if my parent is denied? Can we appeal?",
+          "answer": "Yes. You can request a fair hearing within 90 days of receiving the denial notice. Call (877) 541-7905 to initiate the appeal. You do not need an attorney, but free legal help is available through Texas Legal Services Center (888-988-9996) if the case is complex or involves asset transfers."
+        },
+        {
+          "question": "Can my parent be on both MEPD and Medicare at the same time?",
+          "answer": "Yes, and this is common. When a person has both Medicare and Medicaid, Medicaid typically pays last, covering costs Medicare does not, including certain premiums, deductibles, and copays. Some MEPD coverage groups provide this Medicare cost-sharing assistance specifically. Having Medicare does not prevent MEPD eligibility, and having MEPD does not replace Medicare."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their health needs change significantly?",
+          "answer": "HHSC redetermines eligibility periodically, typically once a year. If your parent's income, resources, or living situation changes in the meantime, you are required to report it to HHSC. If their care needs increase, such as needing nursing home level care or wanting to transition to home-based waiver services, contact HHSC at (877) 541-7905 to discuss whether a different coverage group or waiver program is a better fit."
+        },
+        {
+          "question": "Can my parent apply for MEPD and a Medicaid waiver at the same time?",
+          "answer": "Yes, and it often makes sense to do both. MEPD covers core health care. Related waiver programs like the STAR+PLUS Home and Community-Based Services waiver cover supports that allow your parent to remain at home, such as personal assistance, home modifications, or adult day care. The applications are separate. Ask the HHSC caseworker about waiver programs when you call about MEPD eligibility."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(877) 541-7905",
+      "sourceUrl": "https://www.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "tx-primary-home-care-community-care",
+      "name": "Primary Home Care (Community Care)",
+      "shortName": "Primary Home Care",
+      "tagline": "If your parent needs help with bathing, dressing, or daily tasks and has limited income, Texas may send a paid attendant to their home for up to 42 to 50 hours a week.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local HHSC CCSE offices",
+            "type": "service-area"
+          },
+          {
+            "name": "HHSC-contracted PHC providers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Primary Home Care (PHC) pays for a trained attendant to come to your parent's home and help with personal care tasks they can no longer do safely on their own. That includes bathing, dressing, feeding, toileting, transferring (moving between a bed and a chair, for example), meal preparation, and medication reminders. The attendant is not a nurse; this is non-medical hands-on help with daily life, delivered in the home so your parent does not have to move to a facility.\n\nThis is a Medicaid-linked program, not a first-come, first-served benefit. To qualify, your parent must meet a financial screen (income and assets), a medical screen (a practitioner must document the need), and a functional assessment (a score of at least 24 on a standardized tool). Clearing all three gates is what unlocks the service. Clearing only one or two does not.\n\nIf approved, the number of weekly hours depends on whether your parent is assigned priority status. Priority clients can receive up to 42 hours per week; non-priority clients can receive up to 50 hours per week. There is no cash payment to your family. The program arranges and pays the attendant directly through an HHSC-contracted provider.",
+      "savingsRange": "",
+      "savingsSource": "Free in-home attendant service; no dollar benefit is paid to the family. The value is the cost of the attendant hours covered.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 21 or older",
+          "Medicaid-eligible or meets community-care income rules",
+          "Income at or below $2,829/month (single) or $5,658/month (married) per PHC/CAS notice",
+          "Assets at or below $2,000 (single) or $3,000 (married) per PHC/CAS notice",
+          "Functional assessment score of at least 24, plus a practitioner's statement of medical need",
+          "Needs help with at least one personal care task and at least 6 hours of service per week (with exceptions)"
+        ],
+        "ageRequirement": "21+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2829
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5658
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must score at least 24 on a standardized functional impairment tool administered by HHSC or CCSE staff. A practitioner's statement of medical need is also required, but that statement alone does not satisfy the functional threshold. The assessment looks at how much help your parent needs with personal care tasks such as bathing, dressing, feeding, toileting, and transferring.",
+        "otherRequirements": [
+          "Must need help with at least one personal care task (bathing, feeding, meal preparation, toileting, transferring, or medication reminders).",
+          "Must need at least 6 hours of service per week, unless a specific exception applies: caregiver respite need, living with someone who also receives certain attendant-care services, or receipt of one of the listed qualifying services or benefits.",
+          "Must live in a community setting. Cannot be in a hospital, nursing facility, ICF, assisted living facility, foster care setting, jail or prison, state school, or state hospital.",
+          "Adults under 21 with full Medicaid benefits are not routed through PHC; they go through Community Attendant Services (CAS) screening instead.",
+          "Two different income and asset figures appear in Texas materials. The figures above come from the PHC/CAS rights-and-responsibilities notice. A separate community-care rule shows $1,302/month income and $5,000 in resources. Confirm which standard applies to your parent's specific pathway with the local HHSC CCSE office before concluding they do or do not qualify."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Contact the local HHSC Community Care for the Aged and Disabled (CCSE) office to request intake screening; the process involves both a financial review and an in-home functional assessment.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the HHSC Benefits Line or Texas 2-1-1 to find your local CCSE office",
+            "description": "Call (877) 541-7905 (HHSC Benefits Line, Mon-Fri 8am-6pm CT) and tell them you are requesting a screening for Primary Home Care. Alternatively, dial 2-1-1 and ask to be connected to the Community Care for the Aged and Disabled office in your parent's county. The CCSE office, not the general benefits line, manages PHC intake."
+          },
+          {
+            "step": 2,
+            "title": "Complete intake and financial screening",
+            "description": "A CCSE intake worker will review your parent's income, assets, Medicaid status, and living situation. Have your parent's most recent income documents, proof of residency, Medicaid information if already enrolled, and any current benefit letters ready. The worker will determine which income and asset standard applies to your parent's specific eligibility pathway."
+          },
+          {
+            "step": 3,
+            "title": "Obtain a practitioner's statement of medical need",
+            "description": "Ask your parent's doctor, nurse practitioner, or other qualified practitioner to complete the practitioner's statement of medical need documenting why your parent requires in-home personal care. The exact form title was not listed in the published materials; ask the CCSE intake worker for the correct form number when you call."
+          },
+          {
+            "step": 4,
+            "title": "Undergo the functional assessment",
+            "description": "CCSE staff will conduct an in-home or in-person functional assessment using a standardized tool. Your parent must score at least 24 to qualify. The assessment looks at ability to bathe, dress, eat, toilet, transfer, and manage medications. This step cannot be skipped or substituted with the practitioner's note alone."
+          },
+          {
+            "step": 5,
+            "title": "Review and sign Attachment 2307-A",
+            "description": "If approved, your parent will receive and sign Attachment 2307-A, the Family Care, Community Attendant Services and Primary Home Care Rights and Responsibilities form. This document outlines what the program covers, weekly hour limits, and your parent's rights as a client."
+          },
+          {
+            "step": 6,
+            "title": "HHSC matches your parent with a contracted PHC provider",
+            "description": "HHSC will connect your parent with an HHSC-contracted PHC provider in their area. Actual service start depends on local provider capacity and your parent's priority status. Ask the CCSE worker at intake whether there is any delay expected in your parent's county."
+          }
+        ],
+        "processingTime": "Not specified in official published materials. Actual time from intake to service start depends on CCSE screening timelines, completion of the functional assessment, and local provider availability. Ask the CCSE office for a realistic estimate when you call.",
+        "waitlist": "No formal statewide PHC waitlist was identified in the published materials, but practical delays can occur based on local provider capacity and priority-status assignment. Ask the CCSE office about current wait times in your parent's county.",
+        "tip": "Call early in the week and early in the morning. CCSE offices handle high call volumes. If your parent was recently hospitalized or discharged from a facility, tell the intake worker immediately; that context can affect how quickly the assessment is scheduled.",
+        "urls": [
+          {
+            "label": "Texas HHSC Community Care Services Eligibility Handbook: Primary Home Care",
+            "url": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services"
+          },
+          {
+            "label": "Texas HHSC PHC Provider Information",
+            "url": "https://www.hhs.texas.gov/providers/long-term-care-providers/primary-home-care"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of Medicaid enrollment, such as the Medicaid card or a benefits letter from HHSC, if your parent is already enrolled",
+        "Proof of Texas residency (a utility bill, lease agreement, or state-issued document showing your parent's current home address)",
+        "Most recent Social Security award letter or other income verification showing current monthly income",
+        "Practitioner's statement of medical need completed by your parent's doctor or nurse practitioner (ask the CCSE worker for the correct form)",
+        "Current balances for any checking or savings accounts (the exact documentation period is not specified in published materials; the CCSE worker will tell you what is required)",
+        "Information about any other assets your parent owns, such as property other than the primary home, vehicles, or financial accounts",
+        "Description of the personal care tasks your parent needs help with (bathing, dressing, feeding, toileting, transferring, meal preparation, medication reminders)",
+        "Information about any current services or benefits your parent receives, which is relevant if they need fewer than 6 hours per week and may qualify under an exception",
+        "Photo ID for your parent (driver's license, state ID, or passport)",
+        "Social Security number for your parent"
+      ],
+      "contacts": [
+        {
+          "label": "HHSC Benefits Line",
+          "phone": "(877) 541-7905",
+          "description": "Ask for Community Care for the Aged and Disabled (CCSE) intake to start the PHC screening process. This line can connect you to your local CCSE office or begin the intake.",
+          "hours": "Mon-Fri 8am-6pm CT"
+        },
+        {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline that can identify your local CCSE office by county and transfer you. Use this if the HHSC Benefits Line is busy or if you are not sure which office serves your parent's address.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Two different sets of income and asset limits appear in Texas community-care materials. The PHC/CAS rights-and-responsibilities notice shows $2,829/month income and $2,000 in assets for a single person. A separate community-care rule shows $1,302/month income and $5,000 in assets. Do not assume your parent qualifies or does not qualify based on either figure alone. Ask the CCSE worker at intake which standard applies to your parent's specific pathway before drawing any conclusions.",
+        "If your parent needs fewer than 6 hours of service per week, they may still qualify under specific exceptions: caregiver respite need, living with someone who also receives certain attendant-care services, or receiving one of the listed qualifying services or benefits. Tell the intake worker about all services your parent currently receives so the worker can screen for these exceptions.",
+        "Priority status affects the weekly hour cap. A client with priority status may receive no more than 42 hours per week; a client without priority status may receive no more than 50 hours per week. Ask the CCSE worker how priority status is determined and what tier your parent is likely to fall into.",
+        "Adults under 21 with full Medicaid benefits are not screened for PHC. If you are calling about a younger adult, tell the intake worker; they will route the case through Community Attendant Services (CAS) screening instead."
+      ],
+      "relatedPrograms": [
+        "Community Attendant Services (CAS)",
+        "Family Care (FC)",
+        "STAR+PLUS Medicaid Managed Care (Texas)",
+        "Community First Choice (CFC) Personal Attendant Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program has two eligibility gates. Income alone does not qualify your parent.",
+          "body": "PHC requires both a financial screen (income and assets) AND a clinical screen (a practitioner's statement plus a functional assessment score of at least 24). Families sometimes call assuming their parent qualifies because income is low enough, only to find that the functional assessment score falls short, or that the practitioner's note was not submitted in the right form. Complete both tracks at the same time to avoid delays."
+        },
+        {
+          "type": "tier-comparison",
+          "title": "Weekly hour limits by priority status",
+          "rows": [
+            {
+              "tier": "Priority status",
+              "weeklyHourCap": "Up to 42 hours per week",
+              "notes": "Ask the CCSE worker how priority is determined for your parent's case."
+            },
+            {
+              "tier": "Non-priority status",
+              "weeklyHourCap": "Up to 50 hours per week",
+              "notes": "Non-priority clients have a higher cap but may face longer waits for service start depending on local provider availability."
+            }
+          ]
+        },
+        {
+          "type": "prose",
+          "title": "What the attendant does and does not do",
+          "body": "The PHC attendant helps with personal care tasks: bathing, dressing, feeding, meal preparation, toileting, transferring (moving between a bed and a chair, for example), and medication reminders. These are non-technical, non-skilled tasks.\n\nThe attendant is not a nurse and does not provide wound care, injections, IV therapy, or other clinical services. If your parent needs skilled nursing care at home, that is a separate program (typically through Medicaid home health or a Medicare skilled nursing benefit). PHC and skilled home health can sometimes be used together, but they are authorized separately."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is below $2,829/month but their assets are above $2,000. Does that disqualify them?",
+          "answer": "Based on the PHC/CAS rights-and-responsibilities notice, a single person's countable assets must not exceed $2,000 to qualify. However, two different asset figures appear in Texas materials: the PHC/CAS notice shows $2,000 for a single person, and a separate community-care rule shows $5,000. The local HHSC CCSE office will tell you which standard applies to your parent's specific eligibility pathway. Call (877) 541-7905 and ask before assuming your parent is disqualified. Some assets may also be exempt; confirm what counts with the CCSE worker directly, because the published materials do not list a full exempt-asset schedule for PHC specifically."
+        },
+        {
+          "question": "Can my parent qualify if they only need help a few hours a week?",
+          "answer": "Generally, PHC requires at least 6 hours of service per week. If your parent's assessed need falls below that, they may still qualify under specific exceptions: the service is needed for caregiver respite, your parent lives with someone who also receives certain attendant-care services, or your parent receives one of a set of qualifying services or benefits listed in the program rules. Tell the intake worker about all services and benefits your parent currently receives so the worker can screen for these exceptions rather than closing the case automatically."
+        },
+        {
+          "question": "How long will it take before an attendant actually shows up at my parent's door?",
+          "answer": "The official materials do not specify a processing timeline. The time from intake to service start depends on how quickly the financial screening and in-home functional assessment are completed, and on whether a contracted PHC provider has capacity in your parent's area. There is no formal statewide waitlist, but local delays do occur. Ask the CCSE worker at intake for a realistic estimate specific to your parent's county and situation."
+        },
+        {
+          "question": "Can I, as an adult child, be paid to care for my parent through this program?",
+          "answer": "PHC services are delivered by HHSC-contracted providers, not by family members acting as independent attendants. The program arranges and pays the attendant through a contracted provider agency; there is no mechanism in PHC itself to pay a family caregiver directly. If your family is exploring options for a family member to serve as a paid attendant, ask the CCSE worker whether other Texas Medicaid programs, such as Consumer Directed Services options within STAR+PLUS, might allow that arrangement."
+        },
+        {
+          "question": "My parent's doctor already documented the need for home care. Is the functional assessment still required?",
+          "answer": "Yes. The practitioner's statement of medical need is required but does not replace the functional assessment. Your parent must also score at least 24 on the standardized functional impairment tool administered by CCSE staff. Both are required. Submitting only the practitioner's statement will not complete the eligibility process."
+        },
+        {
+          "question": "My parent is 19 and has a disability. Can they use this program?",
+          "answer": "No. PHC is only available to individuals age 21 and older. Adults under 21 with full Medicaid benefits are routed through Community Attendant Services (CAS) screening instead. If you are calling about someone under 21, tell the intake worker immediately so they can direct you to the correct program."
+        },
+        {
+          "question": "What happens if my parent's condition gets worse after they are enrolled?",
+          "answer": "Reassessment is part of ongoing PHC participation. If your parent's needs increase significantly, contact the local CCSE office and request a reassessment. The CCSE worker can evaluate whether the level of authorized hours should be adjusted. Waiting for the next scheduled reassessment cycle is not your only option; you can request an earlier review based on a change in condition."
+        },
+        {
+          "question": "Can my parent receive PHC while also receiving services from another Medicaid program?",
+          "answer": "Possibly, but it depends on which other programs are involved and whether there is overlap in covered services. For example, if your parent is enrolled in STAR+PLUS managed care, personal attendant services may be coordinated through that plan rather than through standalone PHC. Ask the CCSE worker and, if your parent is in a managed care plan, contact the plan's care coordinator to clarify which program covers which services and how they interact."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(877) 541-7905",
+      "sourceUrl": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "tx-respite-care-services",
+      "name": "Texas Respite Care Services",
+      "shortName": "Texas Respite Care",
+      "tagline": "Get short-term relief from caregiving so you can rest, work, or handle your own health, while your parent stays safe at home.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Aging and Disability Resource Center (ADRC)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Area Agency on Aging (AAA)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local respite providers listed through the Texas respite search portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are caring for an aging parent or a family member with a disability, Texas Respite Care Services can send a trained worker to your parent's home so you can step away for hours, a day, or longer without arranging and paying for care yourself. Depending on the program your family qualifies for, that relief can be planned in advance or arranged on short notice in an emergency.\n\nTexas does not run respite care as a single program. Instead, three different funding streams can pay for it: the STAR+PLUS Medicaid waiver (up to 30 days of respite per year for eligible waiver members), the Texas Lifespan Respite Care Program (brief in-home or out-of-home relief for caregivers of people with chronic conditions or disabilities of any age), and local Area Agency on Aging voucher programs (funds to help adult caregivers of people 60 or older who need help with at least two daily activities, or for grandparents 55 and older raising a child or person with a disability). Which stream your family accesses depends on your parent's situation, not on a single statewide income threshold.\n\nBecause access and wait times depend heavily on your county, the fastest first step is calling the Aging and Disability Resource Center at 1-855-YES-ADRC (1-855-937-2372). They screen for all three funding streams and connect you to the right local program.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The Texas Lifespan Respite Care Program and ADRC-coordinated respite do not charge caregivers a participation fee. Voucher amounts vary by local AAA and are not published as a statewide standard in official state guidance.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Primary caregiver who needs planned or emergency relief",
+          "Care recipient lives at home or with relatives (not in assisted living or adult foster care for STAR+PLUS)",
+          "Care recipient has a chronic health condition, disability, or qualifying functional need",
+          "For voucher programs: caring for a person 60+ who needs help with 2+ daily activities, or grandparent 55+ caring for a child",
+          "Must not be paid to provide care for the same person you are asking respite for"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "For STAR+PLUS waiver respite, your parent must already qualify for the STAR+PLUS waiver, which requires a clinical determination that they need a nursing-facility level of care. For voucher-based respite through a local Area Agency on Aging, your parent must need help with at least two Activities of Daily Living (ADLs, meaning daily tasks like bathing, dressing, eating, or getting around) or require supervision for safety.",
+        "otherRequirements": [
+          "For STAR+PLUS respite: your parent's Individual Service Plan (Form H1700-1) must authorize respite before services begin.",
+          "Your parent cannot live in adult foster care or assisted living and receive STAR+PLUS respite at the same time.",
+          "A person who is paid to care for the same individual cannot also receive respite vouchers for that individual.",
+          "For Texas Lifespan Respite: the person receiving care can be of any age and must have a chronic health condition or disability.",
+          "Funding availability and provider networks vary by county. A family in one county may reach a provider faster than a family in another."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to start is calling the ADRC line at 1-855-937-2372; they screen for all Texas respite programs in one call, and processing time varies by local program and funding availability.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Aging and Disability Resource Center (ADRC)",
+            "description": "Call 1-855-YES-ADRC (1-855-937-2372). Tell them you are a family caregiver looking for respite care. They will ask about your parent's living situation, functional needs, and your caregiver relationship to determine which funding stream fits. This is the single best first call because it covers STAR+PLUS waiver, Lifespan Respite, and voucher programs in one conversation."
+          },
+          {
+            "step": 2,
+            "title": "Search for local respite providers in your county",
+            "description": "Use the Texas Respite Provider Search at https://respite.hhs.state.tx.us/RespiteProvider/respite/respiteSearch.xhtml to see which providers operate near your parent's address. Provider availability is location-based. Bring this list to your ADRC conversation or your Area Agency on Aging contact."
+          },
+          {
+            "step": 3,
+            "title": "Contact your local Area Agency on Aging for voucher-based respite",
+            "description": "If the ADRC determines a voucher program is the right fit, they will refer you to your local AAA. The AAA handles the voucher application directly. Each local AAA has its own process and forms; ask what documents to bring to that appointment."
+          },
+          {
+            "step": 4,
+            "title": "Complete an Individual Service Plan if applying through STAR+PLUS",
+            "description": "For STAR+PLUS waiver respite, your parent's care manager must authorize respite on Form H1700-1, the Individual Service Plan. If your parent is already on STAR+PLUS, contact their managed care organization's care manager to request that respite be added to the plan."
+          },
+          {
+            "step": 5,
+            "title": "Gather documents and submit your application",
+            "description": "Collect the documents listed below. Submit everything at once to avoid delays. If a waitlist exists in your area, ask the ADRC or AAA to put you on it while your application is reviewed, because funding and openings can change."
+          }
+        ],
+        "processingTime": "No single statewide timeline is published. Timing depends on your local ADRC, AAA, and which funding stream applies. Ask the ADRC contact for the current estimate in your county.",
+        "waitlist": "A waitlist may exist for some local programs. Availability depends on funding and the local provider network in your county. No statewide waitlist rule or estimated timeline is published in official state sources. Ask your local ADRC or AAA for current wait times in your area.",
+        "tip": "If this is an emergency and your parent's regular caregiver cannot be present, tell the ADRC that clearly at the start of the call. STAR+PLUS includes emergency respite as a distinct category, and emergency situations may be handled differently than planned requests.",
+        "urls": [
+          {
+            "label": "Texas Lifespan Respite Care Program (Take Time Texas)",
+            "url": "https://apps.hhs.texas.gov/taketimetexas/about.html"
+          },
+          {
+            "label": "Texas Respite Provider Search",
+            "url": "https://respite.hhs.state.tx.us/RespiteProvider/respite/respiteSearch.xhtml"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Basic identification for both you (the caregiver) and the person you care for (a driver's license, state ID, or birth certificate works)",
+        "Proof of your parent's living arrangement (a current utility bill, lease, or mail showing they live at home or with family, not in a facility)",
+        "Information about your parent's medical or functional needs (a doctor's letter, discharge summary, or written description of daily help they require)",
+        "Medicaid card or STAR+PLUS enrollment information if your parent is already in a Medicaid waiver program",
+        "Any forms required by your local AAA or ADRC (ask when you call, because each local office may have its own intake paperwork)",
+        "Form H1700-1, Individual Service Plan, if applying through STAR+PLUS (your parent's care manager generates this; you do not need to create it yourself)"
+      ],
+      "contacts": [
+        {
+          "label": "Aging and Disability Resource Center (ADRC)",
+          "phone": "1-855-937-2372",
+          "description": "Call to screen for all Texas respite programs in one call. They determine which funding stream fits your family's situation and connect you to the right local program or Area Agency on Aging.",
+          "hours": "Mon-Fri, hours vary by local ADRC; call to confirm your local office hours"
+        },
+        {
+          "label": "Texas Lifespan Respite Care Program (Take Time Texas)",
+          "phone": null,
+          "description": "Visit https://apps.hhs.texas.gov/taketimetexas/about.html for program information and to find local contacts for the Lifespan Respite program.",
+          "hours": null
+        },
+        {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "General statewide helpline. Can refer you to your local ADRC or AAA if you have trouble reaching the ADRC line directly. Does not handle respite applications itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is already enrolled in the STAR+PLUS waiver, you do not need to start from scratch. Contact their existing care manager and ask for respite to be added to the current Individual Service Plan (Form H1700-1).",
+        "Voucher-based respite through a local Area Agency on Aging may not be available in all counties at the same time. If your county's voucher funds are exhausted, ask to be placed on a waitlist and ask the ADRC whether the Lifespan Respite program is an alternative in the meantime.",
+        "A family member who is already paid by the state or a private employer to provide care for your parent cannot also receive respite vouchers for that same parent. This rule applies even if the paid caregiving and the requested respite would happen on different days."
+      ],
+      "relatedPrograms": [
+        "STAR+PLUS Medicaid Waiver (Texas)",
+        "Texas Family Caregiver Support Program (through local Area Agencies on Aging)",
+        "Texas Lifespan Respite Care Program (Take Time Texas)",
+        "Consumer Directed Services (CDS) option under Texas Medicaid waivers"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Texas respite is not one program. It is three.",
+          "body": "The funding stream that applies to your family depends on your parent's living situation, whether they are on a Medicaid waiver, and your relationship as caregiver. STAR+PLUS waiver respite covers up to 30 days per year for waiver members. The Lifespan Respite program targets any caregiver of a person with a chronic condition or disability. Local AAA voucher programs focus on caregivers of people 60 and older who need help with daily activities. The ADRC call at 1-855-937-2372 is the fastest way to find out which door is open for your family."
+        },
+        {
+          "type": "prose",
+          "title": "What 'respite' actually covers",
+          "body": "Respite care under these programs can happen in your parent's home (a worker comes to them) or outside the home (your parent goes to a care setting for a few hours or days). The setting and duration depend on which program authorizes the service and what local providers offer. STAR+PLUS limits respite to 30 days per calendar year. The Texas Lifespan Respite program describes services as brief relief or rest, without publishing a single statewide cap. Voucher programs provide funds for families to arrange their own respite care, but the specific dollar amounts are set locally and are not published as a statewide standard."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is not on Medicaid. Can we still get respite care?",
+          "answer": "Yes. The Texas Lifespan Respite Care Program and some local Area Agency on Aging voucher programs are not limited to Medicaid enrollees. Eligibility for those programs is based on your parent's functional needs and your role as a caregiver, not on Medicaid status. Call 1-855-937-2372 and tell the ADRC your parent is not on Medicaid; they will identify which programs are still available."
+        },
+        {
+          "question": "My parent lives with me. Does that disqualify them?",
+          "answer": "No. Living with a family caregiver is a qualifying living arrangement for Texas respite programs. In fact, STAR+PLUS respite specifically requires that the person live at home or with relatives rather than in a facility. Assisted living and adult foster care settings are the arrangements that can disqualify someone from certain respite types."
+        },
+        {
+          "question": "How long will we wait before we actually get help?",
+          "answer": "There is no single statewide answer. Wait times depend on your county, the funding stream, and local provider availability. In some areas, families reach a provider within weeks; in others, a waitlist exists with no published timeline. When you call 1-855-937-2372, ask specifically: what is the current wait in my county for each type of respite? Also ask to be placed on any waitlist immediately, because your spot starts the day you ask, not the day funding opens up."
+        },
+        {
+          "question": "Can I choose who provides the respite care, including a family member?",
+          "answer": "It depends on the program. The Consumer Directed Services (CDS) option available through some Texas Medicaid waiver programs allows families more control over who they hire, which can include certain family members. Standard agency-based respite does not typically allow you to direct the selection in the same way. Ask the ADRC or your STAR+PLUS care manager specifically about CDS if you want input on the provider."
+        },
+        {
+          "question": "My parent's condition just changed and they now need more help. Does the respite plan automatically update?",
+          "answer": "No. For STAR+PLUS waiver respite, any change to the level or type of service requires an update to Form H1700-1, the Individual Service Plan. Contact your parent's care manager as soon as their needs change and request a reassessment. Do not wait for the annual review if the situation has shifted significantly."
+        },
+        {
+          "question": "Can I apply for respite and also apply for other caregiver support programs at the same time?",
+          "answer": "Yes, and you should. The Texas Family Caregiver Support Program, offered through local Area Agencies on Aging, can provide counseling, training, and supplemental services alongside respite. The ADRC at 1-855-937-2372 screens for multiple programs in one call, so you do not need to contact each program separately. Applying to several programs at once does not hurt your chances for any of them."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "1-855-937-2372",
+      "sourceUrl": "https://apps.hhs.texas.gov/taketimetexas/about.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "tx-community-attendant-services",
+      "name": "Community Attendant Services (CAS)",
+      "shortName": "CAS Home Attendant",
+      "tagline": "If your parent needs daily help with bathing, dressing, or meals but doesn't qualify for Medicaid, Texas may send a paid attendant to their home at no cost to your family.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Texas Health and Human Services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Regional nurse / CCSE staff involved in assessment and authorization",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent struggles with bathing, dressing, getting to the toilet, eating, or managing meals on their own, Community Attendant Services (CAS) can send a paid in-home attendant to help, at no cost to your family. The program is for Texans of any age who have a documented medical reason for needing that help but who do not qualify for standard Medicaid.\n\nCAS is funded through Texas Medicaid's state plan and is not a capped waiver with a waitlist. If your parent meets the financial and functional requirements, they are entitled to services. The financial limit is $2,982/month in income for a single applicant (2026), with a resource cap of $2,000 in countable assets. The functional bar is a score of at least 24 on a state assessment form (Form 2060), which a regional nurse conducts in person.\n\nThis is not a simple program to navigate. It requires a practitioner's statement of medical need, a financial determination through the state's MEPD process, and a functional assessment before a nurse can authorize services. The steps below walk your family through exactly what to expect and what to gather before calling.",
+      "savingsRange": "",
+      "savingsSource": "Free service; no dollar benefit paid to the family. The program provides in-home attendant hours at state expense to eligible Texans.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Texas resident living at home, not in a facility",
+          "Not currently eligible for Medicaid",
+          "Income at or below $2,982/month (single, 2026)",
+          "Countable assets at or below $2,000 (individual)",
+          "Medical condition causing functional limitation in at least one personal care task"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Second vehicles",
+            "Non-primary real property"
+          ],
+          "exemptAssets": [
+            "Primary home (confirm treatment through MEPD determination)",
+            "One vehicle (confirm treatment through MEPD determination)",
+            "Personal belongings and household goods (confirm treatment through MEPD determination)",
+            "Certain burial arrangements (confirm treatment through MEPD determination)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must have a functional limitation in performing at least one personal care task (bathing, dressing, grooming, toileting, eating, walking, or transferring) because of a documented medical condition. A regional HHSC nurse visits in person and completes Form 2060. A score of at least 24 is required. Your parent must also have an unmet need for home management or personal care, meaning they are not already receiving help that covers the gap.",
+        "otherRequirements": [
+          "Must be a Texas resident and live in the community, not a nursing home or other institution.",
+          "Must not be eligible for Medicaid at the time of application.",
+          "A licensed practitioner (doctor, nurse practitioner, or physician assistant) must sign a statement confirming the medical need.",
+          "Must require at least 6 hours of attendant care per authorization cycle, with limited policy exceptions.",
+          "Applicants under 21 must still meet all medical, financial, functional, and unmet-need criteria."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call 855-937-2372 to reach your local HHSC Community Care Services Eligibility (CCSE) office; the process then moves through a financial determination and an in-person functional assessment before services start.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call HHSC to request CAS intake",
+            "description": "Call 855-937-2372 and ask specifically for Community Attendant Services through Community Care Services Eligibility (CCSE) intake. This routes your call to the local office that handles CAS, not the general Medicaid line. Have your parent's name, address, and a brief description of their care needs ready."
+          },
+          {
+            "step": 2,
+            "title": "Get a practitioner's statement before your appointment",
+            "description": "Before the functional assessment can move forward, a licensed practitioner (doctor, nurse practitioner, or physician assistant) must complete a written statement confirming your parent's medical condition and need for attendant care. Contact your parent's primary care provider now so this paperwork doesn't delay the process later."
+          },
+          {
+            "step": 3,
+            "title": "Complete the financial eligibility application",
+            "description": "If your parent does not already have financial verification on file with HHSC, they will need to submit Form H1200-EZ (Application for Assistance: Aged and Disabled) or Form H1200 (Application for Assistance: Your Texas Benefits). The financial review is handled through the Medicaid for the Elderly and People with Disabilities (MEPD) process and checks income against the $2,982/month limit and assets against the $2,000 cap. Gather income and asset documents before this step."
+          },
+          {
+            "step": 4,
+            "title": "Attend the in-person functional assessment",
+            "description": "A regional HHSC nurse will schedule a visit to your parent's home to complete Form 2060, the functional assessment. The nurse scores your parent's ability to perform personal care tasks. A score of at least 24 is required to proceed. You or another family member may be present during this visit, which is strongly recommended."
+          },
+          {
+            "step": 5,
+            "title": "Receive service authorization and attendant assignment",
+            "description": "If both the financial and functional reviews are approved, the regional nurse issues Form 2101 to authorize services. HHSC will then connect your parent with an attendant. Timing from intake to first service varies by local office and case complexity; ask the CCSE office for a realistic estimate in your area."
+          }
+        ],
+        "processingTime": "No single statewide processing time is published. The process requires both a financial determination and a functional assessment, so timing depends on local office capacity and how quickly documentation is submitted. Ask your local CCSE office for an estimate at intake.",
+        "waitlist": "CAS does not have an enrollment cap or interest list. If your parent meets all eligibility criteria, services are available as an entitlement. However, local intake scheduling, the assessment visit, and service authorization each take time, so there is a practical gap between application and first service.",
+        "tip": "Get the practitioner's statement of medical need signed before you call HHSC. This is the single most common reason applications stall. If your parent's doctor asks what form to use, tell them HHSC staff will provide guidance, but a signed letter on office letterhead describing the diagnosis, the functional limitations, and the medical need for attendant care will typically suffice to start the process.",
+        "urls": [
+          {
+            "label": "CAS Official Handbook (Texas HHS)",
+            "url": "https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services"
+          },
+          {
+            "label": "Your Texas Benefits (online application portal)",
+            "url": "https://www.yourtexasbenefits.com"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of Texas residency (utility bill, lease agreement, or state-issued document showing your parent's address)",
+        "Government-issued photo ID for your parent (Texas driver's license, state ID, or passport)",
+        "Practitioner's written statement confirming the medical condition and need for attendant care (signed by a doctor, nurse practitioner, or physician assistant)",
+        "Social Security card for your parent",
+        "Proof of age (birth certificate or passport if not already on file with HHSC)",
+        "Most recent Social Security award letter or SSI letter showing monthly benefit amount",
+        "Pension or retirement account income statements showing current monthly amounts",
+        "Current balances for any checking, savings, or certificate of deposit accounts (MEPD will review asset documentation; the exact period HHSC requests will be specified by the eligibility worker at intake)",
+        "Investment account statements (stocks, bonds, annuities) if applicable",
+        "Property documents for any real estate your parent owns beyond their primary home (deeds, tax statements)",
+        "Life insurance policy documents showing face value and any cash value",
+        "Vehicle title and registration for any vehicle your parent owns",
+        "Pre-need burial contracts or irrevocable burial trust documents if applicable",
+        "Legal documents authorizing you to act on your parent's behalf (power of attorney or guardianship papers, if you will be representing them)",
+        "Medical records relevant to the functional limitations your parent experiences, to support the practitioner's statement"
+      ],
+      "contacts": [
+        {
+          "label": "HHSC Community Care Services Eligibility (CCSE) Line",
+          "phone": "(855) 937-2372",
+          "description": "Call this number to request CAS intake. Ask specifically for Community Attendant Services through CCSE. This is the line that connects you to the local office that can open a case and schedule your parent's functional assessment.",
+          "hours": "Mon-Fri 8am-5pm CT (hours may vary by local office; call to confirm)"
+        },
+        {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line. 2-1-1 does not process CAS applications directly, but can help you locate your nearest HHSC office if the CCSE line is busy or you are unsure which local office serves your parent's zip code.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's condition is deteriorating quickly and they are at risk of unsafe living conditions without attendant support, tell the CCSE intake worker at your first call. Some cases may be prioritized for faster assessment scheduling.",
+        "Your parent cannot be currently Medicaid-eligible when they apply for CAS. If HHSC determines they do qualify for Medicaid during the financial review, they will be redirected to a Medicaid-funded program instead. This is not a denial; it may actually mean broader coverage.",
+        "CAS covers personal care and home management tasks only. It does not cover skilled nursing, wound care, or medical procedures. If your parent also needs skilled services, ask the CCSE nurse about whether a separate program applies.",
+        "If you plan to apply for other Texas programs at the same time (such as PHC or STAR+PLUS), let the CCSE intake worker know. Some financial determinations can be shared across programs, which may reduce duplicate paperwork."
+      ],
+      "relatedPrograms": [
+        "Primary Home Care (PHC) — a related Texas HHSC in-home attendant program for people who do qualify for Medicaid",
+        "STAR+PLUS Medicaid managed care — for Texans who become Medicaid-eligible and need long-term services and supports",
+        "Texas Home Living (TxHmL) waiver — for people with intellectual or developmental disabilities who need community-based supports",
+        "Community First Choice (CFC) — a Medicaid state plan option that may also cover personal attendant services for eligible Texans"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "CAS has no waitlist, but it still takes time",
+          "body": "Unlike many Texas Medicaid waiver programs that have interest lists spanning months or years, CAS is an entitlement program. If your parent meets all the criteria, they will receive services. There is no cap on enrollment. The practical delay is the time required for intake scheduling, the in-person functional assessment, and service authorization through the regional nurse. Ask the CCSE office at your first call how long the local process is currently taking."
+        },
+        {
+          "type": "prose",
+          "title": "What a CAS attendant actually does",
+          "body": "A CAS attendant is not a medical professional. They provide non-technical personal care: helping your parent bathe, dress, groom, use the toilet, eat, walk, and transfer in and out of chairs or bed. They can also assist with meal preparation, grocery shopping, and basic housekeeping tasks that your parent cannot manage because of their medical condition.\n\nWhat an attendant cannot do: give injections, manage wound care, administer IV medications, or perform other skilled nursing tasks. If your parent needs both personal care and skilled services, ask the CCSE nurse about programs that cover clinical care in addition to attendant support.\n\nThe number of attendant hours authorized is based on your parent's assessed needs and the program's minimum threshold of at least 6 hours per authorization cycle."
+        },
+        {
+          "type": "prose",
+          "title": "How the financial test works",
+          "body": "CAS does not use a standard Medicaid household-size income table. Instead, it uses the SSI-based income cap. In 2026, the limit is $2,982/month for a single applicant and $5,964/month for a couple when both spouses are applying.\n\nThe financial review is conducted through the Medicaid for the Elderly and People with Disabilities (MEPD) process using the state's TIERS system. An HHSC eligibility worker will review your parent's income and countable assets. Assets must be at or below $2,000 for an individual or $3,000 for a couple.\n\nCertain assets are typically exempt under MEPD-style rules, including the primary home and one vehicle, but the exact treatment of specific assets is determined case by case through the MEPD process. Do not assume an asset is exempt without confirming with the eligibility worker."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's house is worth $180,000. Will that disqualify them?",
+          "answer": "A primary home is typically exempt from the asset count under MEPD-style Medicaid rules that CAS follows. This means its value generally does not count toward the $2,000 individual asset limit. However, the exact treatment is confirmed through the MEPD financial determination process, not before. Tell the HHSC eligibility worker your parent's living situation at intake so they can clarify how the home is treated in your parent's specific case."
+        },
+        {
+          "question": "My parent qualifies for Medicaid. Can they still get CAS?",
+          "answer": "No. CAS is specifically for people who are not Medicaid-eligible. If your parent qualifies for Medicaid, they will be redirected to a Medicaid-funded attendant service program, such as Primary Home Care (PHC) or STAR+PLUS. This is not a denial of in-home care; it means their attendant services may be covered through a different program. Let the CCSE intake worker know your parent's full situation so they can identify the right program."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent, or do they have to call themselves?",
+          "answer": "You can contact HHSC on your parent's behalf and participate in the intake process. If you hold a power of attorney or have legal guardianship, bring those documents to the assessment visit and mention them at intake. For the financial determination, your parent's signature may still be required on the application form. Ask the CCSE intake worker what is needed given your specific situation."
+        },
+        {
+          "question": "How long does it take from the first call to the first attendant visit?",
+          "answer": "No statewide timeline is published. The process involves intake, a financial determination through MEPD, an in-person functional assessment by a regional nurse, and service authorization using Form 2101 before an attendant is assigned. Each step takes time, and local office capacity varies across Texas. Ask the CCSE intake worker at your first call how long the current process is taking in your parent's area."
+        },
+        {
+          "question": "What if my parent's needs change after they are enrolled?",
+          "answer": "CAS services are authorized based on your parent's functional assessment at a point in time. If their condition changes significantly, you should contact the CCSE office and request a reassessment. A regional nurse can conduct a new Form 2060 evaluation to determine whether the authorized hours should be adjusted. Do not wait for the annual renewal; call if the current level of care is no longer adequate."
+        },
+        {
+          "question": "Can my parent apply for CAS and another home care program at the same time?",
+          "answer": "You can initiate contact with HHSC about multiple programs at the same time. Because some programs share the same financial determination process, the CCSE intake worker may be able to screen for several options at once. Ask specifically whether your parent might also qualify for Primary Home Care (PHC) or Community First Choice (CFC), and let the worker know all of your parent's circumstances upfront."
+        },
+        {
+          "question": "What if my parent does not score at least 24 on the Form 2060 assessment?",
+          "answer": "If the functional assessment score is below 24, your parent will not qualify for CAS under the current assessment. You can ask the regional nurse whether any exceptions apply in your parent's case, and you should also ask whether a different program might still cover some of their needs. If you believe the assessment did not fully capture your parent's limitations, ask HHSC about the process for requesting a review."
+        },
+        {
+          "question": "Does CAS cover care for adults under 65, or only seniors?",
+          "answer": "CAS has no minimum age requirement. Adults and children can qualify as long as they meet all the financial, functional, and medical criteria. For applicants under 21, all requirements (medical need, income, assets, and functional limitation) still apply in full. This distinguishes CAS from senior-only programs and makes it relevant for families caring for a younger person with a disabling medical condition."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(855) 937-2372",
+      "sourceUrl": "https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -1,0 +1,307 @@
+{
+  "state": "AL",
+  "addedAt": "2026-10-06T06:21:01.187Z",
+  "dive": {
+    "state": "AL",
+    "stateName": "Alabama",
+    "diveAt": "2026-10-06T06:18:20.087Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Alabama Medicaid for Aged/Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For the core aged/disabled Medicaid pathway tied to SSI rules, the 2026 monthly income limit is $1,014 for a single person and $1,511 for a couple.[2] For the Elderly and Disabled Waiver pathway, the 2026 income limit is $2,982 per month.[2][8] Income limits are program-specific, so families should distinguish between regular aged/disabled Medicaid and waiver services.[4][6]",
+          "asset_limits": "For SSI-based aged/disabled Medicaid, countable resources cannot exceed $2,000 for an individual or $3,000 for a couple.[2] Alabama’s materials shown here do not list a separate household-size table beyond individual/couple limits for this category.[2] The official materials also indicate that applicants must apply for and accept income from annuities, pensions, retirement, disability benefits, or other income to which they are entitled.[6]",
+          "other_requirements": [
+            "Must be an Alabama resident.[4][6]",
+            "Must be a U.S. citizen or have satisfactory immigrant status.[4]",
+            "Must meet age, disability, or medical-need rules for the specific pathway.[4][6]",
+            "For some disabled applicants, disability may need to be established through SSI or Social Security disability rules.[6][8]",
+            "For waiver services, applicants must meet nursing facility level of care and live in the community.[6][13]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The program can cover Medicare cost sharing for eligible Medicare beneficiaries and can provide long-term services and supports that Medicare generally does not cover, including home and community-based waiver services.[11][13] Listed waiver services include adult day health with transportation, case management, homemaker, personal care, skilled and unskilled respite, adult companion services, home-delivered meals, home modification, medical supplies, assistive technology and durable medical equipment, personal emergency response system installation and monthly monitoring, pest control services, skilled nursing, supervisory visits, personal assistance services, and environmental accessibility adaptations for certain waiver groups.[13] Alabama also offers limited vision benefits for adults, including one full eye exam and one pair of eyeglasses every two years.[11]",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online application portal: https://eanddapplication.medicaid.alabama.gov/ [1]",
+            "General Medicaid online application page: https://medicaid.alabama.gov/content/3.0_Apply/ [4]",
+            "Paper application mailed or delivered to one of Alabama Medicaid’s 11 district offices for programs such as help with Medicare premiums, nursing home care, or elderly/disabled programs.[9]",
+            "For Home and Community Based Waiver programs, the application must be submitted to the waiver agency.[5]"
+          ],
+          "processing_time": "No official processing-time window was found in the materials reviewed. Families should expect the timeline to depend on whether the case is a regular aged/disabled Medicaid application or a waiver application, and on how quickly verification documents are provided.[1][4][5][9]",
+          "waitlist": "The waiver materials identify waiver-agency submission and medical/functional eligibility review, but no explicit statewide waitlist duration was shown in the sources reviewed.[5][13]",
+          "forms": [
+            "Elderly and Disabled Application / Application/Redetermination for Elderly and Disabled Programs [1][5]",
+            "Joint Paper Application (listed by Medicaid FAQ as the paper form to print and mail)[9]",
+            "Form 206 for Home and Community Based Waivers (shown in the waiver materials)[8]"
+          ],
+          "documents": [
+            "Verification of gross monthly income.[1]",
+            "Copy of Social Security card.[1]",
+            "Copy of Medicare card, if the applicant has Medicare.[1]",
+            "Information and proof for income sources such as pensions, retirement, disability benefits, or annuities.[6]",
+            "Proof of residency and citizenship/immigration status.[4][6]",
+            "Medical/disability documentation if the applicant is seeking disability-based or waiver services.[6][8][13]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Alabama program, but waiver applications are routed through the waiver agency and district-office handling can matter for where paperwork goes.[5][9]",
+          "regional_variations": "The sources reviewed do not show different eligibility rules by county. The practical variation is administrative: applicants may need to send paper applications to one of 11 district offices, and waiver cases are handled through the waiver agency rather than the standard application route.[5][9]",
+          "offices_or_providers": [
+            "Alabama Medicaid 11 district offices for certain paper applications.[9]",
+            "Waiver agencies for Home and Community Based Waiver applications.[5]"
+          ]
+        },
+        "official_source": "https://medicaid.alabama.gov/content/3.0_Apply/",
+        "gotchas": [
+          "There are multiple Alabama paths that sound similar: SSI-based aged/disabled Medicaid, Medicare premium help, nursing home Medicaid, and home/community-based waivers. Each has different financial and functional rules.[4][6][9]",
+          "The waiver income limit is higher than the regular SSI-based aged/disabled limit, but the applicant still must meet nursing facility level of care and waiver-specific service rules.[2][13]",
+          "Income and resources are counted differently for some waivers and long-term-care pathways, so a person may qualify for one Medicaid category but not another.[2][8][13]",
+          "Applicants are expected to provide proof of all income they are entitled to, not just what they actually receive.[6]",
+          "Adults on Alabama Medicaid have limited vision coverage, but adult dental coverage is not broadly provided in the materials reviewed.[11]"
+        ],
+        "data_shape_notes": "This program is not a single benefit with one universal test; it is a set of aged/disabled Medicaid pathways with different income limits, resource limits, and functional requirements, especially for waiver services.[2][5][6][13]",
+        "_raw": "{\n  \"name\": \"Alabama Medicaid for Aged/Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For the core aged/disabled Medicaid pathway tied to SSI rules, the 2026 monthly income limit is $1,014 for a single person and $1,511 for a couple.[2] For the Elderly and Disabled Waiver pathway, the 2026 income limit is $2,982 per month.[2][8] Income limits are program-specific, so families should distinguish between regular aged/disabled Medicaid and waiver services.[4][6]\",\n    \"asset_limits\": \"For SSI-based aged/disabled Medicaid, countable resources cannot exceed $2,000 for an individual or $3,000 for a couple.[2] Alabama’s materials shown here do not list a separate household-size table beyond individual/couple limits for this category.[2] The official materials also indicate that applicants must apply for and accept income from annuities, pensions, retirement, disability benefits, or other income to which they are entitled.[6]\",\n    \"other_requirements\": [\n      \"Must be an Alabama resident.[4][6]\",\n      \"Must be a U.S. citizen or have satisfactory immigrant status.[4]\",\n      \"Must meet age, disability, or medical-need rules for the specific pathway.[4][6]\",\n      \"For some disabled applicants, disability may need to be established through SSI or Social Security disability rules.[6][8]\",\n      \"For waiver services, applicants must meet nursing facility level of care and live in the community.[6][13]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The program can cover Medicare cost sharing for eligible Medicare beneficiaries and can provide long-term services and supports that Medicare generally does not cover, including home and community-based waiver services.[11][13] Listed waiver services include adult day health with transportation, case management, homemaker, personal care, skilled and unskilled respite, adult companion services, home-delivered meals, home modification, medical supplies, assistive technology and durable medical equipment, personal emergency response system installation and monthly monitoring, pest control services, skilled nursing, supervisory visits, personal assistance services, and environmental accessibility adaptations for certain waiver groups.[13] Alabama also offers limited vision benefits for adults, including one full eye exam and one pair of eyeglasses every two years.[11]\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application portal: https://eanddapplication.medicaid.alabama.gov/ [1]\",\n      \"General Medicaid online application page: https://medicaid.alabama.gov/content/3.0_Apply/ [4]\",\n      \"Paper application mailed or delivered to one of Alabama Medicaid’s 11 district offices for programs such as help with Medicare premiums, nursing home care, or elderly/disabled programs.[9]\",\n      \"For Home and Community Based Waiver programs, the application must be submitted to the waiver agency.[5]\"\n    ],\n    \"processing_time\": \"No official processing-time window was found in the materials reviewed. Families should expect the timeline to depend on whether the case is a regular aged/disabled Medicaid application or a waiver application, and on how quickly verification documents are provided.[1][4][5][9]\",\n    \"waitlist\": \"The waiver materials identify waiver-agency submission and medical/functional eligibility review, but no explicit statewide waitlist duration was shown in the sources reviewed.[5][13]\",\n    \"forms\": [\n      \"Elderly and Disabled Application / Application/Redetermination for Elderly and Disabled Programs [1][5]\",\n      \"Joint Paper Application (listed by Medicaid FAQ as the paper form to print and mail)[9]\",\n      \"Form 206 for Home and Community Based Waivers (shown in the waiver materials)[8]\"\n    ],\n    \"documents\": [\n      \"Verification of gross monthly income.[1]\",\n      \"Copy of Social Security card.[1]\",\n      \"Copy of Medicare card, if the applicant has Medicare.[1]\",\n      \"Information and proof for income sources such as pensions, retirement, disability benefits, or annuities.[6]\",\n      \"Proof of residency and citizenship/immigration status.[4][6]\",\n      \"Medical/disability documentation if the applicant is seeking disability-based or waiver services.[6][8][13]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Alabama program, but waiver applications are routed through the waiver agency and district-office handling can matter for where paperwork goes.[5][9]\",\n    \"regional_variations\": \"The sources reviewed do not show different eligibility rules by county. The practical variation is administrative: applicants may need to send paper applications to one of 11 district offices, and waiver cases are handled through the waiver agency rather than the standard application route.[5][9]\",\n    \"offices_or_providers\": [\n      \"Alabama Medicaid 11 district offices for certain paper applications.[9]\",\n      \"Waiver agencies for Home and Community Based Waiver applications.[5]\"\n    ]\n  },\n  \"official_source\": \"https://medicaid.alabama.gov/content/3.0_Apply/\",\n  \"gotchas\": [\n    \"There are multiple Alabama paths that sound similar: SSI-based aged/disabled Medicaid, Medicare premium help, nursing home Medicaid, and home/community-based waivers. Each has different financial and functional rules.[4][6][9]\",\n    \"The waiver income limit is higher than the regular SSI-based aged/disabled limit, but the applicant still must meet nursing facility level of care and waiver-specific service rules.[2][13]\",\n    \"Income and resources are counted differently for some waivers and long-term-care pathways, so a person may qualify for one Medicaid category but not another.[2][8][13]\",\n    \"Applicants are expected to provide proof of all income they are entitled to, not just what they actually receive.[6]\",\n    \"Adults on Alabama Medicaid have limited vision coverage, but adult dental coverage is not broadly provided in the materials reviewed.[11]\"\n  ],\n  \"data_shape_notes\": \"This program is not a single benefit with one universal test; it is a set of aged/disabled Medicaid pathways with different income limits, resource limits, and functional requirements, especially for waiver services.[2][5][6][13]\"\n}"
+      },
+      {
+        "name": "Alabama SNAP (Food Assistance Program)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": {
+            "overview": "Income limits vary by household size. Households without an elderly or disabled member must meet both gross and net income limits. Households with an elderly person age 60+ or a disabled person must meet only the net income limit.",
+            "gross_and_net_table": [
+              {
+                "household_size": 1,
+                "gross_monthly_income": 1473,
+                "net_monthly_income": 1133
+              },
+              {
+                "household_size": 2,
+                "gross_monthly_income": 1984,
+                "net_monthly_income": 1526
+              },
+              {
+                "household_size": 3,
+                "gross_monthly_income": 2495,
+                "net_monthly_income": 1920
+              },
+              {
+                "household_size": 4,
+                "gross_monthly_income": 3007,
+                "net_monthly_income": 2313
+              },
+              {
+                "household_size": 5,
+                "gross_monthly_income": 3518,
+                "net_monthly_income": 2706
+              },
+              {
+                "household_size": 6,
+                "gross_monthly_income": 4029,
+                "net_monthly_income": 3100
+              },
+              {
+                "household_size": 7,
+                "gross_monthly_income": 4541,
+                "net_monthly_income": 3493
+              },
+              {
+                "household_size": 8,
+                "gross_monthly_income": 5052,
+                "net_monthly_income": 3886
+              },
+              {
+                "household_size": "each additional member",
+                "gross_monthly_income": 512,
+                "net_monthly_income": 394
+              }
+            ]
+          },
+          "asset_limits": {
+            "resource_limit_general": 2750,
+            "resource_limit_elderly_or_disabled_household": 4250,
+            "what_counts": [
+              "cash on hand",
+              "checking accounts",
+              "savings accounts",
+              "stocks",
+              "savings bonds",
+              "lottery winnings of $4,250 or more",
+              "gambling winnings of $4,250 or more"
+            ],
+            "what_is_exempt": [
+              "The source materials provided do not list every exempt resource item in detail.",
+              "The program materials specifically note liquid resources in expedited cases and mention counted resources, but do not provide a full exemption list."
+            ]
+          },
+          "other_requirements": [
+            "The application must be filed in the county where the household lives.",
+            "Applicants must complete an application, be interviewed, and have certain information verified.",
+            "Elderly is defined here as age 60 or over for the special net-income rule.",
+            "Expedited service may apply if the household has very low income/resources or is a destitute migrant or seasonal farmworker."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly food assistance benefits loaded onto an EBT card to buy eligible food items. Benefit amount varies by household size and income under USDA rules.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online at https://dhr.alabama.gov/",
+            "By mail to the Food Assistance Office in the county where you live",
+            "By fax to the county Food Assistance Office",
+            "By email to the county Food Assistance Office",
+            "In person at the Food Assistance Office in the county where you live",
+            "All county DHR offices have applications available"
+          ],
+          "processing_time": "Up to 30 days for regular cases; 7 calendar days for expedited cases.",
+          "waitlist": null,
+          "forms": [
+            "Food Assistance Application (Form 2116, Rev. 10/2025)",
+            "Application for Benefits form (combined application packet referenced in state materials)"
+          ],
+          "documents": [
+            "Name, address, and signature to file the application",
+            "Proof of income",
+            "Proof of household size and identity",
+            "Proof of living arrangement and expenses if requested",
+            "Information needed for verification during the interview"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Must apply in the county where the household lives. No county-based benefit differences were identified in the source materials.",
+          "regional_variations": "Processing is handled by county DHR offices, so office-level service experiences may vary. A state pilot for the Alabama Combined Eligibility System (ACES) began in five counties: Montgomery, Elmore, Tuscaloosa, Dallas, and Talladega.",
+          "offices_or_providers": [
+            "County DHR offices",
+            "Alabama Department of Human Resources Food Assistance Division, 50 North Ripley Street, Montgomery, AL 36130"
+          ]
+        },
+        "official_source": "https://dhr.alabama.gov/food-assistance/",
+        "gotchas": [
+          "Households with an elderly member age 60+ or a disabled member do not have to pass the gross-income test, only the net-income test.",
+          "The resource limit is higher for households with an elderly or disabled member.",
+          "Expedited SNAP can be decided in 7 days only if specific low-income/resource conditions are met.",
+          "You do not need to finish the whole application to file it; name, address, and signature are enough to establish a filing date.",
+          "Applications are handled by the county where the household lives, not a central statewide office.",
+          "SNAP in Alabama is a food benefit, not cash assistance."
+        ],
+        "data_shape_notes": "This program has household-size-based income standards, a special elderly/disabled rule that relaxes the gross-income test, and expedited 7-day processing for qualifying cases.",
+        "_raw": "{\n  \"name\": \"Alabama SNAP (Food Assistance Program)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": {\n      \"overview\": \"Income limits vary by household size. Households without an elderly or disabled member must meet both gross and net income limits. Households with an elderly person age 60+ or a disabled person must meet only the net income limit.\",\n      \"gross_and_net_table\": [\n        { \"household_size\": 1, \"gross_monthly_income\": 1473, \"net_monthly_income\": 1133 },\n        { \"household_size\": 2, \"gross_monthly_income\": 1984, \"net_monthly_income\": 1526 },\n        { \"household_size\": 3, \"gross_monthly_income\": 2495, \"net_monthly_income\": 1920 },\n        { \"household_size\": 4, \"gross_monthly_income\": 3007, \"net_monthly_income\": 2313 },\n        { \"household_size\": 5, \"gross_monthly_income\": 3518, \"net_monthly_income\": 2706 },\n        { \"household_size\": 6, \"gross_monthly_income\": 4029, \"net_monthly_income\": 3100 },\n        { \"household_size\": 7, \"gross_monthly_income\": 4541, \"net_monthly_income\": 3493 },\n        { \"household_size\": 8, \"gross_monthly_income\": 5052, \"net_monthly_income\": 3886 },\n        { \"household_size\": \"each additional member\", \"gross_monthly_income\": 512, \"net_monthly_income\": 394 }\n      ]\n    },\n    \"asset_limits\": {\n      \"resource_limit_general\": 2750,\n      \"resource_limit_elderly_or_disabled_household\": 4250,\n      \"what_counts\": [\n        \"cash on hand\",\n        \"checking accounts\",\n        \"savings accounts\",\n        \"stocks\",\n        \"savings bonds\",\n        \"lottery winnings of $4,250 or more\",\n        \"gambling winnings of $4,250 or more\"\n      ],\n      \"what_is_exempt\": [\n        \"The source materials provided do not list every exempt resource item in detail.\",\n        \"The program materials specifically note liquid resources in expedited cases and mention counted resources, but do not provide a full exemption list.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"The application must be filed in the county where the household lives.\",\n      \"Applicants must complete an application, be interviewed, and have certain information verified.\",\n      \"Elderly is defined here as age 60 or over for the special net-income rule.\",\n      \"Expedited service may apply if the household has very low income/resources or is a destitute migrant or seasonal farmworker.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly food assistance benefits loaded onto an EBT card to buy eligible food items. Benefit amount varies by household size and income under USDA rules.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at https://dhr.alabama.gov/\",\n      \"By mail to the Food Assistance Office in the county where you live\",\n      \"By fax to the county Food Assistance Office\",\n      \"By email to the county Food Assistance Office\",\n      \"In person at the Food Assistance Office in the county where you live\",\n      \"All county DHR offices have applications available\"\n    ],\n    \"processing_time\": \"Up to 30 days for regular cases; 7 calendar days for expedited cases.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Food Assistance Application (Form 2116, Rev. 10/2025)\",\n      \"Application for Benefits form (combined application packet referenced in state materials)\"\n    ],\n    \"documents\": [\n      \"Name, address, and signature to file the application\",\n      \"Proof of income\",\n      \"Proof of household size and identity\",\n      \"Proof of living arrangement and expenses if requested\",\n      \"Information needed for verification during the interview\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Must apply in the county where the household lives. No county-based benefit differences were identified in the source materials.\",\n    \"regional_variations\": \"Processing is handled by county DHR offices, so office-level service experiences may vary. A state pilot for the Alabama Combined Eligibility System (ACES) began in five counties: Montgomery, Elmore, Tuscaloosa, Dallas, and Talladega.\",\n    \"offices_or_providers\": [\n      \"County DHR offices\",\n      \"Alabama Department of Human Resources Food Assistance Division, 50 North Ripley Street, Montgomery, AL 36130\"\n    ]\n  },\n  \"official_source\": \"https://dhr.alabama.gov/food-assistance/\",\n  \"gotchas\": [\n    \"Households with an elderly member age 60+ or a disabled member do not have to pass the gross-income test, only the net-income test.\",\n    \"The resource limit is higher for households with an elderly or disabled member.\",\n    \"Expedited SNAP can be decided in 7 days only if specific low-income/resource conditions are met.\",\n    \"You do not need to finish the whole application to file it; name, address, and signature are enough to establish a filing date.\",\n    \"Applications are handled by the county where the household lives, not a central statewide office.\",\n    \"SNAP in Alabama is a food benefit, not cash assistance.\"\n  ],\n  \"data_shape_notes\": \"This program has household-size-based income standards, a special elderly/disabled rule that relaxes the gross-income test, and expedited 7-day processing for qualifying cases.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "AL",
+    "stateName": "Alabama",
+    "classifiedAt": "2026-10-06T06:18:20.092Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 1,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 2
+    },
+    "programs": [
+      {
+        "name": "Alabama Medicaid for Aged/Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Alabama Medicaid 11 district offices for certain paper applications.[9]",
+              "type": "service-area"
+            },
+            {
+              "name": "Waiver agencies for Home and Community Based Waiver applications.[5]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Alabama SNAP (Food Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County DHR offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Alabama Department of Human Resources Food Assistance Division, 50 North Ripley Street, Montgomery, AL 36130",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "AL",
+      "id": "al-medicaid-aged-disabled",
+      "name": "Alabama Medicaid for Aged/Disabled",
+      "legacyId": "alabama-medicaid-for-aged-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "AL",
+      "id": "al-snap-food-benefits",
+      "name": "Alabama SNAP (Food Assistance Program)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

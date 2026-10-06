@@ -1,0 +1,30 @@
+[
+  {
+    "state": "VT",
+    "id": "vt-3squares-snap",
+    "name": "3Squares Vermont (SNAP)",
+    "legacyId": "3squares-vermont-snap",
+    "programType": "benefit"
+  },
+  {
+    "state": "VT",
+    "id": "vt-ssi-supplement-essential-person",
+    "name": "State SSI Supplement (Essential Person Benefit)",
+    "legacyId": "state-ssi-supplement-essential-person-benefit",
+    "programType": "benefit"
+  },
+  {
+    "state": "VT",
+    "id": "vt-fuel-assistance",
+    "name": "General Assistance Fuel",
+    "legacyId": "general-assistance-fuel",
+    "programType": "benefit"
+  },
+  {
+    "state": "VT",
+    "id": "vt-property-tax-adjustment-renter-credit",
+    "name": "Property Tax Adjustment (Renter/Property Tax Credit)",
+    "legacyId": "property-tax-adjustment-renter-property-tax-credit",
+    "programType": "benefit"
+  }
+]
