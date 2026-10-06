@@ -24,6 +24,7 @@ import { startOrAdvance } from "@/lib/city-ads/offers.server";
 import { cityQualifyingQuestion } from "@/lib/city-ads/qualify";
 import { ensureCareSeekerForCityLead, syncCityLeadDetails } from "@/lib/city-ads/care-seeker.server";
 import { getSiteUrl } from "@/lib/site-url";
+import { pingCareTeam } from "@/lib/city-ads/care-team-ping.server";
 import { sendMetaLeadEvent } from "@/lib/city-ads/meta-capi.server";
 
 /**
@@ -291,6 +292,19 @@ export async function POST(req: NextRequest) {
     adminUrl: `${getSiteUrl()}/admin/city-ads`,
   });
   await sendSlackAlert(alert.text, alert.blocks);
+  // The channel post above is the record; this is the nudge to the person who
+  // calls. See lib/city-ads/care-team-ping.server.ts.
+  await pingCareTeam({
+    city: cfg.city,
+    timeZone: cfg.timeZone,
+    firstName,
+    phone,
+    need: `${careLabel} for ${who}`,
+    providerName: null,
+    submittedAt: now,
+    seekerId: careSeekerId,
+    source: "City page",
+  });
   // The confirmation asks one question. Which one depends on what this family
   // already told the form, so it never asks twice for the same thing — see
   // cityQualifyingQuestion. The answer lands on the lead through the SMS
