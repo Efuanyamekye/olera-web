@@ -4,7 +4,7 @@ import { fetchGooglePlaceStatus } from "@/lib/google-places";
 import { withCronRun } from "@/lib/crons/run";
 import { getClaimedProviderIds } from "@/lib/providers";
 import { planStatusPass, STATUS_FREE_MONTHLY_REQUESTS } from "@/lib/providers/directory-health";
-import { applyStatusObservation, getClickedProviderSlugs, getProvidersForStatusPass } from "@/lib/providers/directory-health.server";
+import { applyStatusObservation, getClickedProviderSlugs, getDeadWebsiteProviderIds, getProvidersForStatusPass } from "@/lib/providers/directory-health.server";
 
 /**
  * GET /api/cron/directory-status
@@ -38,13 +38,14 @@ export async function GET(request: NextRequest) {
     let plan;
     let candidates = 0;
     try {
-      const [claimedIds, clicked, providers] = await Promise.all([
+      const [claimedIds, clicked, providers, deadSites] = await Promise.all([
         getClaimedProviderIds(db),
         getClickedProviderSlugs(db).catch((err) => { console.error("[directory-status] clicks unavailable:", err); return new Set<string>(); }),
         getProvidersForStatusPass(db),
+        getDeadWebsiteProviderIds(db).catch((err) => { console.error("[directory-status] dead-site flags unavailable:", err); return new Set<string>(); }),
       ]);
       candidates = providers.length;
-      plan = planStatusPass(providers, claimedIds, clicked, cap);
+      plan = planStatusPass(providers, claimedIds, clicked, cap, deadSites);
     } catch (err) {
       console.error("[directory-status] Could not plan the pass:", err);
       return NextResponse.json({ error: "DB error" }, { status: 500 });

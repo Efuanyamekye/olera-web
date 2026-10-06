@@ -90,8 +90,11 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
   }
   const rows: HealthActionRow[] = base.map((a) => ({ ...a, provider_name: names.get(a.provider_id)?.provider_name ?? null, slug: names.get(a.provider_id)?.slug ?? null }));
   const applied = rows.filter((a) => a.applied_at && !a.undone_at);
-  const flagged = rows.filter((a) => !a.applied_at && !a.resolved_at);
-  if (!applied.length && !flagged.length) return null;
+  // A dead website is a signal, not a decision for a person: it moves the
+  // provider to the front of the next free Google check. Said as a count.
+  const deadSites = rows.filter((a) => a.kind === "website_dead" && !a.resolved_at);
+  const flagged = rows.filter((a) => a.kind !== "website_dead" && !a.applied_at && !a.resolved_at);
+  if (!applied.length && !flagged.length && !deadSites.length) return null;
   const group = (list: HealthActionRow[]) => {
     const by = new Map<string, HealthActionRow[]>();
     for (const a of list) by.set(a.kind, [...(by.get(a.kind) ?? []), a]);
@@ -106,8 +109,11 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
     }
     lines.push(`Undo any of these at <${SITE()}/admin/directory/health|admin › Directory health>.`);
   }
+  if (deadSites.length) {
+    lines.push(`${applied.length ? "" : "*Directory.* "}${deadSites.length.toLocaleString("en-US")} provider website${deadSites.length === 1 ? "" : "s"} came back dead. Not a verdict on its own; those providers go first in the next free Google check, which archives the closed ones and clears the rest.`);
+  }
   if (flagged.length) {
-    lines.push(applied.length ? "What I want a person to decide:" : "*Directory.* Waiting on a person:");
+    lines.push(applied.length || deadSites.length ? "What I want a person to decide:" : "*Directory.* Waiting on a person:");
     for (const [kind, list] of group(flagged)) {
       const shown = list.slice(0, 5).map(providerLink).join(", ");
       lines.push(`• ${list.length.toLocaleString("en-US")} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${(list.length - 5).toLocaleString("en-US")} more` : ""}`);
@@ -122,11 +128,12 @@ export async function directoryWeeklyText(db: SupabaseClient): Promise<string> {
   const s = await directoryHealthSummary(db, 7);
   const total = s.checked + s.unchecked;
   const coverage = total ? Math.round((s.checked / total) * 100) : 0;
-  const did = Object.entries(s.byKind).map(([k, v]) => `${v.toLocaleString("en-US")} ${KIND_WORDS[k] ?? k.replace(/_/g, " ")}`).join(", ");
+  const did = Object.entries(s.byKind).filter(([k]) => k !== "website_dead").map(([k, v]) => `${v.toLocaleString("en-US")} ${KIND_WORDS[k] ?? k.replace(/_/g, " ")}`).join(", ");
+  const dead = s.deadWebsites ? ` ${s.deadWebsites.toLocaleString("en-US")} dead websites are queued for their Google check.` : "";
   const sinceLast = s.lastActionAt ? Math.floor((Date.now() - Date.parse(s.lastActionAt)) / 86_400_000) : null;
   const quiet = sinceLast === null ? "I have not acted on the directory yet." : sinceLast > 7 ? `My last action was ${sinceLast} days ago; something is stuck.` : "";
   return [
-    `*Directory, this week.* ${did ? `${did}.` : "Nothing changed."} ${s.openFlags.toLocaleString("en-US")} flag${s.openFlags === 1 ? "" : "s"} waiting on a person.`,
+    `*Directory, this week.* ${did ? `${did}.` : "Nothing changed."} ${s.openFlags.toLocaleString("en-US")} flag${s.openFlags === 1 ? "" : "s"} waiting on a person.${dead}`,
     `${coverage}% of the directory checked against Google (${s.checked.toLocaleString()} of ${total.toLocaleString()}); about 10,000 more each month at $0.`,
     quiet,
   ].filter(Boolean).join("\n");

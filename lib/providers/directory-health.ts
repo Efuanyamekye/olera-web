@@ -113,8 +113,14 @@ export function planStatusPass(
   claimedIds: Set<string>,
   clickedSlugs: Set<string>,
   cap: number = STATUS_FREE_MONTHLY_REQUESTS,
+  /** Providers whose website is dead (open website_dead flag): Google is asked about them first. */
+  deadWebsiteIds: Set<string> = new Set(),
 ): StatusCandidate[] {
-  const rank = (c: StatusCandidate) => (claimedIds.has(c.provider_id) ? 0 : c.slug && clickedSlugs.has(c.slug) ? 1 : 2);
+  // A dead website is the strongest free closure signal, but on its own it is
+  // not a verdict (a site can lapse while the business stands). It is a reason
+  // to spend one of the free Google checks on that provider before anyone
+  // else: Google's CLOSED_PERMANENTLY then archives it, OPERATIONAL clears it.
+  const rank = (c: StatusCandidate) => (deadWebsiteIds.has(c.provider_id) ? 0 : claimedIds.has(c.provider_id) ? 1 : c.slug && clickedSlugs.has(c.slug) ? 2 : 3);
   const viewed = (c: StatusCandidate) => (c.last_viewed_at ? Date.parse(c.last_viewed_at) : 0);
   const checked = (c: StatusCandidate) => (c.google_status_checked_at ? Date.parse(c.google_status_checked_at) : -1);
   return [...candidates]
