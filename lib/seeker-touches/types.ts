@@ -276,6 +276,16 @@ export const SEEKER_FLAG_LABEL: Record<SeekerFlag, string> = {
   check_provider: "check with the provider",
 };
 
+/**
+ * The flag's label for one family. promise_owed means "we promised a call" only
+ * for a city-ad family; a provider-page family with a phone is owed a check-in
+ * call we never promised, so the chip must not claim otherwise.
+ */
+export function seekerFlagLabel(flag: SeekerFlag, cityLeadId: string | null): string {
+  if (flag === "promise_owed" && !cityLeadId) return "call to check in";
+  return SEEKER_FLAG_LABEL[flag];
+}
+
 // ── Rows ──────────────────────────────────────────────────────────────────────
 
 export type SeekerContact = {
