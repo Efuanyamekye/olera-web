@@ -179,14 +179,16 @@ export type DirectoryHealthSummary = {
   unchecked: number;
   /** Most recent ledger row, or null if the system has never acted. */
   lastActionAt: string | null;
-  /** Open website_dead signals waiting for their Google check (not a human queue). */
+  /** Open website_dead signals whose provider has a Place ID: queued for the Google check, not a human queue. */
   deadWebsites: number;
+  /** Open website_dead signals with no Place ID: nothing to ask Google, so a person decides. Counted in openFlags. */
+  deadNoGoogle: number;
 };
 
 /** What the Cortex probe and the admin page both read. */
 export async function directoryHealthSummary(db: SupabaseClient, days = 7): Promise<DirectoryHealthSummary> {
   const since = new Date(Date.now() - days * 86_400_000).toISOString();
-  const [{ data: recent }, { count: openFlags }, { count: checked }, { count: unchecked }, { data: last }, { count: deadWebsites }] = await Promise.all([
+  const [{ data: recent }, { count: openFlags }, { count: checked }, { count: unchecked }, { data: last }, { data: deadRows }] = await Promise.all([
     db.from("provider_health_actions").select("kind").gte("created_at", since).limit(10_000),
     // Flags a person must decide. A dead website is a signal the Google pass
     // consumes, not a human task, so it is counted apart (deadWebsites).
@@ -194,17 +196,25 @@ export async function directoryHealthSummary(db: SupabaseClient, days = 7): Prom
     db.from("olera-providers").select("provider_id", { count: "exact", head: true }).eq("deleted", false).not("google_status_checked_at", "is", null),
     db.from("olera-providers").select("provider_id", { count: "exact", head: true }).eq("deleted", false).not("place_id", "is", null).is("google_status_checked_at", null),
     db.from("provider_health_actions").select("created_at").order("created_at", { ascending: false }).limit(1),
-    db.from("provider_health_actions").select("id", { count: "exact", head: true }).eq("kind", "website_dead").is("resolved_at", null).is("undone_at", null),
+    db.from("provider_health_actions").select("provider_id").eq("kind", "website_dead").is("resolved_at", null).is("undone_at", null).limit(50_000),
   ]);
+  const deadIds = [...new Set((deadRows ?? []).map((r) => (r as { provider_id: string }).provider_id))];
+  let deadWebsites = 0;
+  for (let i = 0; i < deadIds.length; i += 500) {
+    const { count } = await db.from("olera-providers").select("provider_id", { count: "exact", head: true }).in("provider_id", deadIds.slice(i, i + 500)).not("place_id", "is", null);
+    deadWebsites += count ?? 0;
+  }
+  const deadNoGoogle = deadIds.length - deadWebsites;
   const byKind: Record<string, number> = {};
   for (const r of recent ?? []) byKind[(r as { kind: string }).kind] = (byKind[(r as { kind: string }).kind] ?? 0) + 1;
   return {
     byKind,
-    openFlags: openFlags ?? 0,
+    openFlags: (openFlags ?? 0) + deadNoGoogle,
     checked: checked ?? 0,
     unchecked: unchecked ?? 0,
     lastActionAt: (last?.[0] as { created_at: string } | undefined)?.created_at ?? null,
-    deadWebsites: deadWebsites ?? 0,
+    deadWebsites,
+    deadNoGoogle,
   };
 }
 

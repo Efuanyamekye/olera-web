@@ -82,19 +82,24 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
     .order("created_at", { ascending: false })
     .limit(5_000);
   const base = (data ?? []) as Array<Omit<HealthActionRow, "provider_name" | "slug">>;
-  const ids = [...new Set(base.map((a) => a.provider_id))].slice(0, 400);
-  const names = new Map<string, { provider_name: string | null; slug: string | null }>();
-  for (let i = 0; i < ids.length; i += 200) {
-    const { data: providers } = await db.from("olera-providers").select("provider_id, provider_name, slug").in("provider_id", ids.slice(i, i + 200));
-    for (const p of providers ?? []) names.set(p.provider_id as string, { provider_name: (p.provider_name as string | null) ?? null, slug: (p.slug as string | null) ?? null });
-  }
-  const rows: HealthActionRow[] = base.map((a) => ({ ...a, provider_name: names.get(a.provider_id)?.provider_name ?? null, slug: names.get(a.provider_id)?.slug ?? null }));
-  const applied = rows.filter((a) => a.applied_at && !a.undone_at);
+  const appliedBase = base.filter((a) => a.applied_at && !a.undone_at);
   // A dead website is a signal, not a decision for a person: it moves the
   // provider to the front of the next free Google check. Said as a count.
-  const deadSites = rows.filter((a) => a.kind === "website_dead" && !a.resolved_at);
-  const flagged = rows.filter((a) => a.kind !== "website_dead" && !a.applied_at && !a.resolved_at);
-  if (!applied.length && !flagged.length && !deadSites.length) return null;
+  const deadSites = base.filter((a) => a.kind === "website_dead" && !a.resolved_at);
+  const flaggedBase = base.filter((a) => a.kind !== "website_dead" && !a.applied_at && !a.resolved_at);
+  if (!appliedBase.length && !flaggedBase.length && !deadSites.length) return null;
+  // Names only for what will be shown. Looking up "the first 400 ids of the
+  // day" missed Stinvil Home Care on a day the sweep wrote 2,966 rows, and
+  // the digest printed its id instead.
+  const shownIds = [...new Set([...appliedBase, ...flaggedBase].map((a) => a.provider_id))].slice(0, 400);
+  const names = new Map<string, { provider_name: string | null; slug: string | null }>();
+  for (let i = 0; i < shownIds.length; i += 200) {
+    const { data: providers } = await db.from("olera-providers").select("provider_id, provider_name, slug").in("provider_id", shownIds.slice(i, i + 200));
+    for (const p of providers ?? []) names.set(p.provider_id as string, { provider_name: (p.provider_name as string | null) ?? null, slug: (p.slug as string | null) ?? null });
+  }
+  const named = (a: Omit<HealthActionRow, "provider_name" | "slug">): HealthActionRow => ({ ...a, provider_name: names.get(a.provider_id)?.provider_name ?? null, slug: names.get(a.provider_id)?.slug ?? null });
+  const applied = appliedBase.map(named);
+  const flagged = flaggedBase.map(named);
   const group = (list: HealthActionRow[]) => {
     const by = new Map<string, HealthActionRow[]>();
     for (const a of list) by.set(a.kind, [...(by.get(a.kind) ?? []), a]);
@@ -110,7 +115,9 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
     lines.push(`Undo any of these at <${SITE()}/admin/directory/health|admin › Directory health>.`);
   }
   if (deadSites.length) {
-    lines.push(`${applied.length ? "" : "*Directory.* "}${deadSites.length.toLocaleString("en-US")} provider website${deadSites.length === 1 ? "" : "s"} came back dead. Not a verdict on its own; those providers go first in the next free Google check, which archives the closed ones and clears the rest.`);
+    const checkable = await countWithPlaceId(db, deadSites.map((a) => a.provider_id));
+    const noGoogle = deadSites.length - checkable;
+    lines.push(`${applied.length ? "" : "*Directory.* "}${deadSites.length.toLocaleString("en-US")} provider website${deadSites.length === 1 ? "" : "s"} came back dead. Not a verdict on its own; ${checkable.toLocaleString("en-US")} of them go first in the next free Google check, which archives the closed ones and clears the rest.${noGoogle ? ` ${noGoogle.toLocaleString("en-US")} have no Google listing to check and wait in <${SITE()}/admin/directory/health|admin › Directory health>.` : ""}`);
   }
   if (flagged.length) {
     lines.push(applied.length || deadSites.length ? "What I want a person to decide:" : "*Directory.* Waiting on a person:");
@@ -123,13 +130,24 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
   return lines.join("\n");
 }
 
+/** How many of these providers have a Place ID, i.e. can be asked about on Google. */
+async function countWithPlaceId(db: SupabaseClient, providerIds: string[]): Promise<number> {
+  const ids = [...new Set(providerIds)];
+  let n = 0;
+  for (let i = 0; i < ids.length; i += 500) {
+    const { count } = await db.from("olera-providers").select("provider_id", { count: "exact", head: true }).in("provider_id", ids.slice(i, i + 500)).not("place_id", "is", null);
+    n += count ?? 0;
+  }
+  return n;
+}
+
 /** The weekly state of the directory, said even when nothing moved. */
 export async function directoryWeeklyText(db: SupabaseClient): Promise<string> {
   const s = await directoryHealthSummary(db, 7);
   const total = s.checked + s.unchecked;
   const coverage = total ? Math.round((s.checked / total) * 100) : 0;
   const did = Object.entries(s.byKind).filter(([k]) => k !== "website_dead").map(([k, v]) => `${v.toLocaleString("en-US")} ${KIND_WORDS[k] ?? k.replace(/_/g, " ")}`).join(", ");
-  const dead = s.deadWebsites ? ` ${s.deadWebsites.toLocaleString("en-US")} dead websites are queued for their Google check.` : "";
+  const dead = s.deadWebsites ? ` ${s.deadWebsites.toLocaleString("en-US")} dead websites are queued for their Google check${s.deadNoGoogle ? `; ${s.deadNoGoogle.toLocaleString("en-US")} more have no Google listing and wait for a person` : ""}.` : "";
   const sinceLast = s.lastActionAt ? Math.floor((Date.now() - Date.parse(s.lastActionAt)) / 86_400_000) : null;
   const quiet = sinceLast === null ? "I have not acted on the directory yet." : sinceLast > 7 ? `My last action was ${sinceLast} days ago; something is stuck.` : "";
   return [
