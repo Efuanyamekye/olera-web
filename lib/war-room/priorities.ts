@@ -125,13 +125,14 @@ export function buildPriorityLines(input: {
   shipped?: Partial<Record<PriorityKey, string | null>>;
   now?: Date;
 }): string[] {
-  // A reading named after its priority ("Benefits Finder") says its headline
-  // whole: "*Benefits Finder:* Benefits Finder 90 → 79." reads twice.
+  // A reading named after its priority ("Benefits Finder") opens with its
+  // headline's first sentence: "*Benefits Finder:* Benefits Finder 90 → 79."
+  // reads twice, and the whole headline is repeated under "What moved".
   const moved = (key: PriorityKey) => input.movers
     .filter((reading) => priorityFor(reading.label) === key)
     .slice(0, 1)
     .map((reading) => reading.label === OLERA_PRIORITIES.find((priority) => priority.key === key)!.label
-      ? reading.headline.trim()
+      ? reading.headline.trim().split(/(?<=\.)\s+/)[0]
       : compactMove(reading));
   // "No measured number moved", not "no change": only readings are measured.
   // Until the standing Benefits probe (probes.server.ts), no reading covered

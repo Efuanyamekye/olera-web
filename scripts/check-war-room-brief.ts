@@ -179,8 +179,9 @@ assert.deepEqual(priorityLines, [
 }
 
 // The standing Benefits probe gives the Benefits line a measured number. Its
-// label is the priority's own, so the line carries the headline, not "Benefits
-// Finder Benefits Finder 90 → 79".
+// label is the priority's own, so the line opens with the headline's first
+// sentence, not "Benefits Finder Benefits Finder 90 → 79"; the rest is under
+// "What moved".
 {
   assert.equal(priorityFor("Benefits Finder"), "benefits");
   const headline = "79 families finished the Benefits Finder in the last 7 days, 90 the week before. 61 first-step letters and 113 check-ins went out.";
@@ -190,7 +191,7 @@ assert.deepEqual(priorityLines, [
     shipped: { benefits: "Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372)." },
     now: new Date("2026-10-06T01:00:00Z"),
   });
-  assert.equal(lines[1], `*Benefits Finder:* ${headline} Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372).`);
+  assert.equal(lines[1], "*Benefits Finder:* 79 families finished the Benefits Finder in the last 7 days, 90 the week before. Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372).");
   console.log("benefits probe line check passed");
 }
 
