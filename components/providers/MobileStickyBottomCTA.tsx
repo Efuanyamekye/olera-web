@@ -11,6 +11,7 @@ import PhoneButton from "@/components/providers/connection-card/PhoneButton";
 import Pill from "@/components/providers/connection-card/Pill";
 import StepIndicator from "@/components/providers/connection-card/StepIndicator";
 import EnrichmentState from "@/components/providers/connection-card/EnrichmentState";
+import NextBestOption from "@/components/providers/connection-card/NextBestOption";
 import {
   RECIPIENT_OPTIONS,
   URGENCY_OPTIONS,
@@ -977,6 +978,9 @@ export default function MobileStickyBottomCTA({
                 </p>
               </div>
             </div>
+            {hook.justSent && hook.connectionId && (
+              <NextBestOption connectionId={hook.connectionId} providerName={providerName} />
+            )}
           </div>
         )}
 

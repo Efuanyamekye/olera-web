@@ -159,6 +159,9 @@ export function useConnectionCard(props: ConnectionCardProps) {
   const [previousIntent, setPreviousIntent] = useState<IntentData | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [connectionId, setConnectionId] = useState<string | null>(null);
+  // True only when THIS visit sent the inquiry, never on a return visit that
+  // found an old one. Gates the one-time "next best option" offer.
+  const [justSent, setJustSent] = useState(false);
   const [blockedEmail, setBlockedEmail] = useState<string | null>(null);
 
   // ── Social proof: monthly connection count ──
@@ -664,7 +667,10 @@ export function useConnectionCard(props: ConnectionCardProps) {
 
         window.dispatchEvent(new CustomEvent("olera:connection-created"));
         if (data.created_at) setPendingRequestDate(data.created_at);
-        if (data.connectionId) setConnectionId(data.connectionId);
+        if (data.connectionId) {
+          setConnectionId(data.connectionId);
+          setJustSent(true);
+        }
 
         // Update redirect with real connectionId
         postEnrichmentRedirect.current = `/portal/inbox?id=${data.connectionId}`;
@@ -720,7 +726,10 @@ export function useConnectionCard(props: ConnectionCardProps) {
           // localStorage not available
         }
 
-        if (data.connectionId) setConnectionId(data.connectionId);
+        if (data.connectionId) {
+          setConnectionId(data.connectionId);
+          setJustSent(true);
+        }
         if (data.created_at) setPendingRequestDate(data.created_at);
 
         // Update redirect with real connectionId — but ONLY for users who now
@@ -939,5 +948,8 @@ export function useConnectionCard(props: ConnectionCardProps) {
 
     // Social proof
     connectionCount,
+
+    // Post-send "next best option" offer
+    justSent,
   };
 }
