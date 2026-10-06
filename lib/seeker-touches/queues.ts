@@ -59,7 +59,7 @@ export const TAB_BLURB: Record<Tab, string> = {
   letter: "A first-step letter the verdict held for a person to read. Open the case and read it in the Benefits section.",
   help: "They asked for a person (STUCK or \"I'd like help\"). Overdue ones first.",
   reply: "They wrote to us and nobody has answered.",
-  call: "We promised a call and have not reached them. A logged missed call parks them for 24 hours.",
+  call: "City-ad families we promised a call, and provider-page families who left a phone number in the last two weeks. Nobody has reached them yet. A logged missed call parks them for 24 hours.",
   follow: "Tried and waiting, or a next step is set. A missed call comes back to Call them after 24 hours.",
   close: "Called three times and never reached. Two texts on different days, then archive as Never answered.",
   check: "We handed them to a provider three or more days ago. Ask the provider how it went and log what they said. Logging it parks the row for three days.",

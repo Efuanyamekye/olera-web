@@ -91,7 +91,7 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Overdue", tone: "act", age: `was due ${r.open_action.due}` };
   }
   if (r.flags.includes("promise_owed")) {
-    return { phrase: "Owed a call", tone: "act", age };
+    return { phrase: r.city_lead_id ? "Owed a call" : "Call them", tone: "act", age };
   }
   if (r.flags.includes("tried_three")) {
     return { phrase: "Close out", tone: "warn", age };
@@ -232,6 +232,11 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
 
 
   if (r.flags.includes("promise_owed")) {
+    // A provider-page family was never promised anything: they asked a
+    // provider, and we call to check that provider is looking after them.
+    if (!r.city_lead_id) {
+      return `Asked ${r.providers[0]?.name ?? "a provider"} about care. Call to check they're being looked after.`;
+    }
     if (r.reach.note) return `Promised a call. ${capitalise(r.reach.note)}.`;
     return "Promised a call, still not reached.";
   }

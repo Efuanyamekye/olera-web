@@ -1481,7 +1481,7 @@ function CasePanel({
       : flags.includes("tried_three")
         ? { title: "Text twice, then archive", when: "Called three times, never reached" }
         : flags.includes("promise_owed")
-          ? { title: `Call ${familyName}`, when: "We promised a call" }
+          ? { title: `Call ${familyName}`, when: data.city_lead_id ? "We promised a call" : `They asked ${data.providers[0]?.name ?? "a provider"} about care. Check they're being looked after.` }
           : flags.includes("provider_no_show")
             ? { title: "Find them another provider", when: "The provider never got back to them" }
             : flags.includes("check_provider") && data.handed_to

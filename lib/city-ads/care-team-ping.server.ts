@@ -42,10 +42,16 @@ export type CareTeamPing = {
    * handToPrimary passes it on when they answer our text, or after an hour.
    */
   providerName?: string | null;
+  /**
+   * A provider-page inquiry: the family wrote to this provider directly, and
+   * the provider was told at the same moment as this ping. Ces calls alongside
+   * them, not instead of them.
+   */
+  inquiredWith?: string | null;
   /** When they submitted. Drives the call-time hint. */
   submittedAt: Date;
   seekerId?: string | null;
-  source: "Meta form" | "City page";
+  source: "Meta form" | "City page" | "Provider page";
 };
 
 /**
@@ -61,9 +67,11 @@ export function careTeamPingText(p: CareTeamPing, siteUrl: string): string {
   const link = p.seekerId
     ? `${siteUrl}/admin/relationships/families/${p.seekerId}`
     : `${siteUrl}/admin/relationships/families?tab=call`;
-  const who = p.providerName
-    ? `From the ${p.providerName} ad. They get this family when it answers our text, or in an hour, so if you reach them first, say ${p.providerName} will be in touch.`
-    : "No provider has it yet. You are the first call.";
+  const who = p.inquiredWith
+    ? `They asked ${p.inquiredWith} about care, and ${p.inquiredWith} has been told too. Call to check they're being looked after, and log if ${p.inquiredWith} hasn't reached them.`
+    : p.providerName
+      ? `From the ${p.providerName} ad. They get this family when it answers our text, or in an hour, so if you reach them first, say ${p.providerName} will be in touch.`
+      : "No provider has it yet. You are the first call.";
   return [
     `📞 *New family · ${p.city}* (${p.source})`,
     `${p.firstName} · ${formatUSPhone(p.phone)}${p.need ? ` · ${p.need}` : ""}`,
