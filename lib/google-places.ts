@@ -12,7 +12,12 @@ import type { GoogleReviewsData, GoogleReviewSnippet } from "@/lib/types";
 const PLACES_API_BASE = "https://places.googleapis.com/v1/places";
 
 /** Fields we request — reviews is an Advanced field ($5/1K) */
-const FIELD_MASK = "rating,userRatingCount,reviews";
+// businessStatus and displayName are Pro-tier fields; reviews is Enterprise +
+// Atmosphere and a request bills at its highest tier only, so the two ride
+// along at no cost and feed directory health (lib/providers/directory-health).
+const FIELD_MASK = "rating,userRatingCount,reviews,businessStatus,displayName";
+/** The free Pro-tier read: status and name only, 5,000 a month at $0. */
+const STATUS_FIELD_MASK = "businessStatus,displayName";
 
 /** Max reviews to store per provider (Google returns up to 5) */
 const MAX_REVIEWS = 2;
@@ -36,6 +41,8 @@ interface PlacesApiResponse {
   rating?: number;
   userRatingCount?: number;
   reviews?: PlacesApiReview[];
+  businessStatus?: string;
+  displayName?: { text?: string; languageCode?: string };
 }
 
 /**
@@ -76,7 +83,9 @@ export async function fetchGoogleReviews(
 
     const data: PlacesApiResponse = await res.json();
 
-    if (!data.rating && !data.reviews?.length) {
+    // A listing with no rating used to read as "Google has nothing". A closed
+    // business often has no rating and its status is the one fact we want.
+    if (!data.rating && !data.reviews?.length && !data.businessStatus) {
       return null;
     }
 
@@ -96,9 +105,39 @@ export async function fetchGoogleReviews(
       review_count: data.userRatingCount ?? 0,
       reviews,
       last_synced: new Date().toISOString(),
+      business_status: data.businessStatus ?? null,
+      google_name: data.displayName?.text ?? null,
     };
   } catch (err) {
     console.error(`[google-places] Failed to fetch ${placeId}:`, err);
+    return null;
+  }
+}
+
+/**
+ * Status and name only, at the free Pro tier. Used by the monthly
+ * directory-status pass (app/api/cron/directory-status) on providers the
+ * review refresh has not reached. Null on any error, so a bad Place ID or a
+ * Google outage leaves the provider unchecked rather than wrongly open.
+ */
+export async function fetchGooglePlaceStatus(
+  placeId: string,
+): Promise<{ business_status: string | null; google_name: string | null } | null> {
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  if (!apiKey || !placeId) return null;
+  try {
+    const res = await fetch(`${PLACES_API_BASE}/${placeId}?fields=${STATUS_FIELD_MASK}&key=${apiKey}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) {
+      console.error(`[google-places] Status error for ${placeId}: ${res.status} ${await res.text().catch(() => "")}`);
+      return null;
+    }
+    const data: PlacesApiResponse = await res.json();
+    return { business_status: data.businessStatus ?? null, google_name: data.displayName?.text ?? null };
+  } catch (err) {
+    console.error(`[google-places] Status fetch failed for ${placeId}:`, err);
     return null;
   }
 }

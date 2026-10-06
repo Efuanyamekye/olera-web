@@ -64,6 +64,7 @@ const navSections: NavSection[] = [
     defaultOpen: true,
     items: [
       { label: "Directory", href: "/admin/directory", description: "Find and manage provider listings", keywords: "organizations facilities care homes" },
+      { label: "Directory health", href: "/admin/directory/health", description: "What the system did to listings (closed, renamed) and what it wants you to decide", keywords: "closed permanently renamed google status flags ledger undo" },
       { label: "Care Seekers", href: "/admin/care-seekers", description: "Find families looking for care", keywords: "families users records" },
       { label: "Students", href: "/admin/caregivers", description: "Manage student caregiver records", keywords: "candidates medjobs applicants" },
       { label: "Reviews", href: "/admin/reviews", description: "Review provider ratings and feedback", keywords: "testimonials moderation" },

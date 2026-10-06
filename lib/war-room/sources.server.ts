@@ -946,6 +946,10 @@ const ARCHIVE_BLOCK_CHARS = 5_000;
  */
 const DEFAULT_ARCHIVE_PATHS = [
   "SCRATCHPAD.md",
+  // Every slash command and script, one line each (scripts/build-capabilities-index.ts).
+  // Second on purpose: the file bound keeps the first entries, and "is there
+  // already a tool for X" must be answerable from the repository.
+  "docs/CAPABILITIES-INDEX.md",
   "docs/war-room-operating-agent.md",
   "docs/growth/",
   "docs/crp/living/",
