@@ -6,7 +6,7 @@ import { captureFounderAnswer, findAskByThread, findOpenAsk } from "@/lib/war-ro
 import { answerFounderQuestion, answersOpenAsk, classifyMessage, loadOpenExchange, recordExchange } from "@/lib/war-room/conversation.server";
 import { startVisualRoutine, visualizeSubject } from "@/lib/war-room/visualize.server";
 import { parseScanCommand, runScanCommand } from "@/lib/war-room/scan-command.server";
-import { cleanDmText, imageFiles, isApproval, isReadableDm, skippedImages, type DmFile } from "@/lib/war-room/dm-intake";
+import { cleanDmText, imageFiles, isApproval, isOwnMessage, isReadableDm, skippedImages, type DmFile } from "@/lib/war-room/dm-intake";
 import { downloadSlackFile } from "@/lib/war-room/attachments.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 import { approvalReply, nothingWaitingReply } from "@/lib/war-room/dm-intake";
@@ -93,12 +93,17 @@ export async function POST(request: NextRequest) {
     const inCortexChannel = Boolean(cortexChannel) && /^[CG][A-Z0-9]{8,}$/.test(cortexChannel!)
       && payload.event.channel === cortexChannel
       && payload.event.type === "message"
-      && !payload.event.bot_id && !payload.event.app_id && !payload.event.subtype
+      // The DM path's own filter, not "any app_id": the founder's messages
+      // through the Claude connector carry an app id and must still count.
+      && !isOwnMessage(payload) && (!payload.event.subtype || payload.event.subtype === "file_share")
       && Boolean(payload.event.user);
     if (inCortexChannel) {
       if (request.headers.get("x-slack-retry-num")) return NextResponse.json({ ok: true, retry: true });
       const text = cleanDmText(payload.event.text).replace(/<@[A-Z0-9]+>/g, "").replace(/\s+/g, " ").trim();
       if (!text) return NextResponse.json({ ok: true, cortexChannel: { ignored: "no text" } });
+      // Still evidence: what the team says in #cortex is part of the record,
+      // as it was before the channel answered back.
+      await ingestSlackEventEvidence(db, payload.event).catch(() => null);
       const threadTs = payload.event.thread_ts ?? payload.event.ts;
       const say = (reply: string) => postAsCortex(payload.event!.channel!, reply, { threadTs }).catch(() => null);
       const founderId = process.env.WAR_ROOM_BRIEF_SLACK_USER_ID?.trim() || null;
