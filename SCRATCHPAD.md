@@ -7,6 +7,27 @@
 
 ## Current Focus
 
+### 2026-10-06 — Ad Boost full-book audit: the family photo doesn't fix job seekers everywhere (`loving-nobel`, docs only)
+
+**Output.** Page https://claude.ai/artifact/Lc37rNkCpAkAbRBuXNw4ks. 16 `ad_campaign_log` observations at 10:00Z (15 provider + 1 city-row). One dated line appended to 15 provider `admin_note`s (verified append-only). `~/Desktop/adboost-state-of-play.md` rewritten. Google read from the hourly script sync (matches 2 Oct screen reads to the cent), so no Google browser session; Meta via Graph in Ads Manager (read-only).
+
+**Findings.**
+- Every Meta form runs the same family image: 12 job seekers / 22 leads. Fresno 5/5 after the 30 Sep swap, Concord 3/3, Killeen 1/1; Pascagoula v3 1/7, Cleveland 0/2. Settings identical. The 30 Sep image rule only holds in Pascagoula.
+- Forms total $636, 40 leads, 14 families ($45/family), 3 reached, 0 clients. Google $962, 457 clicks, 12 inquiries (≥3 job seekers), 0 clients.
+- Miracle-Lightstar: 2 form families + a 5 Oct page inquiry, no provider contact; alert emails unopened, SMS fails (Twilio 30005).
+- Robbie: every SMS alert fails (30006, landline); 7 duplicate "Selam replied" emails 2 Oct. Richard (3 Oct) has no Robbie message in thread.
+- William (Hoop) reached by Ces 5 Oct: disabled veteran, wants 1-2 visits/wk, free after 9 AM. Corrected 2 Oct: Hoop v3 dead numbers are 2 of 6, not 3 of 5.
+
+**Same day, after the audit.**
+- TJ: Robbie DID call Richard (detailed VM, no pickup). Logged in `family_touches`; correction in `ad_campaign_log`; page v2.
+- TJ texted Zardy (iMessage, delivered) asking him to call Cindy and confirm best number. Logged in `provider_touches`. Cause of failed alerts: profile phone is 216-243-9339, Zardy's working cell is 216-635-8464. Update `business_profiles.phone` only after Zardy confirms.
+- Posted Ces's two calls in #careseeker-support (Sandra; Cindy if Miracle hasn't). Ces already called Cindy (VM full), will retry tomorrow + call Sandra.
+
+- Zardy replied in all three Olera threads (Cindy, Lisa, Cathy) with business line 216-243-9339; that line can't take texts. Built `metadata.alert_phone` (#2389, ON STAGING, not prod): alerts text there, profile phone unchanged. Miracle's alert_phone set to +12166358464 (TJ yes).
+- Merges: added Olera merge context to `autoMode.environment` in ~/.claude/settings.json (TJ ran it). #2389 admin-merge then went through.
+
+**Next Up.** Promote #2389 to main (TJ, separate branch). Get Robbie a mobile → set his alert_phone. Check Cindy/Lisa replies to Zardy 7 Oct. Before 12 Oct: Liz → William; Ces → Sandra. 9 Oct: renew/stop the five 25 Sep forms (not Fresno as built). 10 Oct: Franchil + Miracle Google hit ~$150 (Miracle/Pacesetter were slated to stop 30 Sep). Before 14 Oct: mobile number for Robbie's alerts; trace duplicate alert emails. Stale rows (13th flag).
+
 ### 2026-10-06 — Team logins IN PROD; Colorado CareAssist call; `/provider-call-prep` (`radiant-jackson`)
 
 **Team logins shipped (#2381 → staging, #2384 → main, migration 272 applied by TJ).** An email added to an agency (admin → Provider Relationships → agency → Team logins) signs in as itself and works the agency next to the owner. `lib/auth/profile-access.server.ts` (`actingProfileIds` / `canActForProfile`) is now the ownership check in ad-families, Boost eligibility, dashboard, provider connections, and the inquiry routes. Members' alert links sign them in as themselves; first sign-in makes the agency active and skips /welcome. Same PR closed two live holes: any user could set `accounts.active_profile_id` to any profile and message as it (trigger + route checks), and `upload-image` never checked ownership. Migration renamed 271 → 272 (staging already had a 271). QA'd on preview with tj@olera.care as a temporary member of Aggie Home Care (removed). Jacob McKay added to Colorado CareAssist 6 Oct.
