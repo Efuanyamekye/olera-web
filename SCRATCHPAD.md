@@ -7,6 +7,25 @@
 
 ## Current Focus
 
+### 2026-10-06 — Benefits: answer key, federal programs, full catalog, no wrong "likely" (`jolly-ramanujan`; ALL IN PROD via #2382, #2391, #2394, #2408)
+
+**Shipped (production, main 9ee622f0c):**
+- **Researched answer key** (`data/benefits/answer-key/`): 40 dementia-caregiver families, 10 states, researched from official sources without reading our data. `scripts/benefits-answer-key-score.ts` replays the conversation. **Score every recommendation change before it ships.** Final: wrong "likely" 0 (conversation and form), 181/181 researched programs we hold are found, and the first call agrees with the research 48% of the time (was 20%).
+- **Federal programs** (Extra Help, SSI, VA pension with A&A) in `data/benefits/federal-programs.ts`, via `getPlanProgramIds`. Pages are noindex and "Auto-researched".
+- **Catalog:** 263 hidden legacy programs triaged (`data/benefits/legacy-triage/`): 142 drafted via `scripts/benefits-add-programs.js`, 44 mapped, 80 left as pages. `replaced.json` redirects 181 legacy ids. Every state now has all 6 core program types; the finder sees 622 programs (was 472).
+- **Engine:** a household answer (alone / spouse / family) and couple limits; SNAP limits only confirm; `requiresMedicaid()` reads "must have Medicaid" rules; `likelyCap` (PACE county named, live-in caregiver, dementia-only, whole-home only in the conversation). "Also likely" folds at 4. The call script starts Medicaid on the same call when the program needs it.
+- **Routing:** the full-ZIP county (`data/geo/zip-county-5.json`; 5,232 ZIPs were sent to another county's agency); Eldercare Locator when there's no agency on file.
+- **Build:** `outputFileTracingExcludes` keeps data/pipeline and data/benefits out of functions (two had hit Vercel's 250 MB limit).
+- **Fact-check:** the 45 states with new drafts (#2404) plus the weekly NH–RI run (#2374). Migration 271 has run.
+- Prod test rows deleted (Test AAA, Test Program).
+
+**Next Up:**
+- The fact-check review queue (311 flags, mostly ambiguous FPL tiers, phones and aggregator sources) is in #2404, for whoever owns benefits data.
+- The caseworker doc (APdQ3n36UeTbSLhqUu1kGJ) is stale: Phase 3 is shipped and Phase 2 (the scoreboard) is the answer key.
+- Researched programs still not held: VA health care, SSDI conversion, GUIDE, county tax exemptions (66 of 247, mostly not catalog material).
+- ZIP table is from the 2000 census; the 2020 Census file is blocked to scripts (newer ZIPs fall back to 3 digits).
+- Tooling: this session lost Desktop access mid-way. The scratchpad clone + public anon key run the scorer, and GitHub Actions runs the fact-check (keys in GH secrets).
+
 ### 2026-10-06 (night) — Cortex on offense: directory health, multi-listing logins, Benefits probe, inbox walkthrough (`graceful-franklin`)
 
 **Merged to staging (unpromoted):** #2372 shipped lines in the brief; #2378 Benefits standing probe (needs migration 271); #2388 one login claims many listings + `activeProviderProfile` helper for 11 provider routes that `.single()`'d the profile. **Open PRs:** #2383 case-page note shows in full; #2397 consumed qualification reply marked handled in SMS inbox; #2400 directory health.
