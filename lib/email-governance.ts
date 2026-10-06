@@ -179,6 +179,24 @@ export function capCountedTypesFor(emailType: string | undefined | null): string
   return all;
 }
 
+/**
+ * Help, not nudges: the outcome check ("did the provider reach you?") and the
+ * provider-silent rescue (other providers near you). Exempt from the WEEKLY
+ * family cap, still under the daily one, and still counted against every other
+ * family nudge, so they push nudges out rather than the other way round.
+ *
+ * Why (6 Oct 2026): the rescue was blocked by family_nudge_cap 9 times out of
+ * 18 since July, because "finish your profile" reminders had used up each
+ * family's three-a-week first (completion_nudge_2: 494 sent, 7 clicks in 30
+ * days). A family whose provider never called was getting profile reminders
+ * instead of another provider.
+ */
+export const FAMILY_HELP_EMAIL_TYPES = new Set<string>(["family_outcome_check", "family_provider_silent"]);
+
+export function isFamilyHelpEmail(emailType: string | undefined | null): boolean {
+  return !!emailType && FAMILY_HELP_EMAIL_TYPES.has(emailType);
+}
+
 /** True when this email_type is a governed FAMILY nudge (subject to the per-family weekly cap). */
 export function isGovernedFamilyNudge(emailType: string | undefined | null): boolean {
   return !!emailType && FAMILY_NUDGE_EMAIL_TYPES.has(emailType);

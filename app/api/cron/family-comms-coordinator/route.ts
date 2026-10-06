@@ -824,15 +824,23 @@ export async function GET(request: NextRequest) {
           return { pathTellBack: pathTellBackLine(facts.financialPath), fullPictureUrl: buildQuizUrl(eid) };
         };
 
-        // ── Rung 2: provider silent → alternatives — inquiry 96-120h, family engaged,
-        //    provider silent everywhere, ≥3 responsive alternatives ──
+        // ── Rung 2: provider silent → alternatives — inquiry day 3 to day 7, provider
+        //    silent everywhere, ≥3 responsive alternatives ──
+        //
+        // Widened 6 Oct 2026 from a 96-120h window that required the family to
+        // have written in the thread. One daily cron with a 24-hour window gave
+        // each family a single chance, and the engagement gate excluded most of
+        // them, so the rescue sent 9 in three months. Families rarely answer the
+        // outcome check (about 1 in 8), so waiting for their "no" is not a
+        // trigger either: silence from the provider by day 3 is. Still once per
+        // family (alreadyAlt), and Rung 3 now stands down when this has gone.
         const alreadyAlt = fam.inquiries.some((c) => metaOf(c).family_alternatives_sent_at);
         const alreadyGuidance = fam.inquiries.some((c) => metaOf(c).family_guidance_sent_at);
         const r2trigger = fam.inquiries.find((c) => {
           const a = ageMs(c);
-          return a >= 96 * HOUR && a <= 120 * HOUR;
+          return a >= 72 * HOUR && a <= 168 * HOUR;
         });
-        if (r2trigger && familyEngagedAnywhere && !providerRespondedAnywhere && !alreadyAlt && !alreadyGuidance) {
+        if (r2trigger && !providerRespondedAnywhere && !alreadyAlt && !alreadyGuidance) {
           const provider = norm(r2trigger.to_profile);
           const providerName = provider?.display_name || "the provider";
           const alts = await findAlternativeProviders(
@@ -897,7 +905,13 @@ export async function GET(request: NextRequest) {
           // the original provider reachable. Reuses the never-engaged template's
           // guide-led fallback (recommendedProviders omitted) + its governed emailType
           // so no new email_type / governance wiring is needed.
-          return {
+          //
+          // Kept to the original 96-120h window when the alternatives path was
+          // widened (6 Oct 2026): the guide email draws about 1 click in 200, and
+          // a day-3-to-7 window would have more than doubled how many families
+          // get it. Outside that window a thin market falls through to later rungs.
+          const r2age = ageMs(r2trigger);
+          if (r2age >= 96 * HOUR && r2age <= 120 * HOUR) return {
             rung: "provider_silent_guidance",
             emailType: "family_never_engaged",
             subject: familyNeverEngagedSubject(false),
@@ -940,7 +954,10 @@ export async function GET(request: NextRequest) {
           const a = ageMs(c);
           return a >= 120 * HOUR && a <= 144 * HOUR;
         });
-        if (r3trigger && !familyEngagedAnywhere && !providerRespondedAnywhere && !alreadyNever) {
+        // alreadyAlt / alreadyGuidance: Rung 2 no longer requires engagement, so a
+        // never-engaged family may already have had the alternatives (or, in a
+        // thin market, Rung 2's guide-led email); don't send them a second one.
+        if (r3trigger && !familyEngagedAnywhere && !providerRespondedAnywhere && !alreadyNever && !alreadyAlt && !alreadyGuidance) {
           const provider = norm(r3trigger.to_profile);
           const providerName = provider?.display_name || "the provider";
           // Compare-led when we have alternatives to show; guide-led fallback otherwise.
