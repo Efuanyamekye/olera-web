@@ -211,6 +211,10 @@
     {
       "path": "/api/cron/directory-status",
       "schedule": "0 3 15 * *"
+    },
+    {
+      "path": "/api/cron/cortex-voice",
+      "schedule": "0 6 * * *"
     }
   ]
 }

@@ -144,6 +144,40 @@ async function listAll<T>(token: string, method: string, key: string, body: Reco
   return { items };
 }
 
+/**
+ * Post in Cortex's own voice, raw text, to a channel by name ("#cortex") or
+ * id, optionally in a thread. Unlike sendToSlack this adds no "From TJ"
+ * header: it is the agent speaking. Returns the message ts for threading.
+ */
+export async function postAsCortex(
+  target: string,
+  text: string,
+  opts: { threadTs?: string; token?: string } = {},
+): Promise<{ ok: true; channelId: string; ts: string } | { ok: false; error: string }> {
+  const token = opts.token ?? process.env.SLACK_BOT_TOKEN;
+  if (!token) return { ok: false, error: "SLACK_BOT_TOKEN is not set" };
+  let channelId = target;
+  if (!/^[CGD][A-Z0-9]{8,}$/.test(target)) {
+    const [open, closed] = await Promise.all([
+      listAll<{ id: string; name: string; is_private?: boolean }>(token, "conversations.list", "channels", { types: "public_channel", exclude_archived: "true" }),
+      listAll<{ id: string; name: string; is_private?: boolean }>(token, "conversations.list", "channels", { types: "private_channel", exclude_archived: "true" }),
+    ]);
+    const wanted = target.replace(/^#/, "").toLowerCase();
+    const channel = [...open.items, ...closed.items].find((c) => c.name.toLowerCase() === wanted);
+    if (!channel) return { ok: false, error: open.error ? slackErrorText(open.error, target) : `Cortex can't see ${target} (create it and /invite @Cortex)` };
+    channelId = channel.id;
+  }
+  const body: Record<string, string> = { channel: channelId, text, unfurl_links: "false" };
+  if (opts.threadTs) body.thread_ts = opts.threadTs;
+  let posted = await slack<{ ts?: string }>(token, "chat.postMessage", body);
+  if (!posted.ok && posted.error === "not_in_channel") {
+    const joined = await slack(token, "conversations.join", { channel: channelId });
+    if (joined.ok) posted = await slack<{ ts?: string }>(token, "chat.postMessage", body);
+  }
+  if (!posted.ok || !posted.ts) return { ok: false, error: slackErrorText(posted, target) };
+  return { ok: true, channelId, ts: posted.ts };
+}
+
 /** Resolve the name, then post. Returns where it went, or why nothing went. */
 export async function sendToSlack(target: string, text: string, token = process.env.SLACK_BOT_TOKEN): Promise<{ success: true; label: string } | { success: false; error: string }> {
   if (!token) return { success: false, error: "SLACK_BOT_TOKEN is not set" };

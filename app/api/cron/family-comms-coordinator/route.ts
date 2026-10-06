@@ -235,6 +235,12 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const querySecret = searchParams.get("secret");
   const dryRun = searchParams.get("dry_run") === "true";
+  // The distance lookup for alternatives costs one to three seconds a family.
+  // The run normally takes one to two minutes against a five-minute limit, so
+  // past 150 seconds it falls back to the city match rather than time out.
+  const runStartedMs = Date.now();
+  const distanceMode = (): "create" | "existing" | "off" =>
+    Date.now() - runStartedMs > 150_000 ? "off" : dryRun ? "existing" : "create";
   const maxConns = Math.min(8000, parseInt(searchParams.get("limit") || "5000", 10));
   const isAuthed =
     authHeader === `Bearer ${process.env.CRON_SECRET}` || querySecret === process.env.CRON_SECRET;
@@ -851,6 +857,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            distanceMode(),
           );
           if (alts.length >= 3) {
             const m = metaOf(r2trigger);
@@ -969,6 +977,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            distanceMode(),
           );
           const hasAlts3 = alts3.length >= 3;
           return {
@@ -1029,6 +1039,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            distanceMode(),
           );
           const hasAlts4 = alts4.length >= 2;
           return {
