@@ -305,6 +305,30 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         console.timeEnd(profilesLabel);
 
         const profiles = (profilesResult.data as Profile[]) || [];
+
+        // Agencies this email is a team member of (migration 271): an intake
+        // director who works the families while the owner holds the account.
+        // RLS returns only the signed-in email's rows, and the member policy on
+        // business_profiles lets the agency itself be read.
+        try {
+          const { data: memberRows } = await supabase
+            .from("business_profile_members")
+            .select("profile_id");
+          const memberIds = ((memberRows as { profile_id: string }[] | null) ?? [])
+            .map((m) => m.profile_id)
+            .filter((id) => !profiles.some((p) => p.id === id));
+          if (memberIds.length > 0) {
+            const { data: memberProfiles } = await supabase
+              .from("business_profiles")
+              .select("*")
+              .in("id", memberIds);
+            profiles.push(...(((memberProfiles as Profile[] | null) ?? [])));
+          }
+        } catch (e) {
+          // Before migration 271 the table does not exist; owners are unaffected.
+          console.warn("[auth] team membership lookup failed", e);
+        }
+
         const membershipRows = (membershipResult.data as Membership[]) || [];
         const membership = membershipRows[0] ?? null;
 

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import TouchForm from "@/components/admin/TouchForm";
+import TeamMembers from "@/components/admin/TeamMembers";
 import { CHANNEL_LABEL, type ProviderTimeline, type TimelineItem } from "@/lib/touches/types";
 
 /**
@@ -163,6 +164,8 @@ export default function AdminRelationshipPage() {
             )}
           </div>
         </div>
+
+        <TeamMembers providerId={p.provider_id} />
 
         <div className="border-b border-gray-200 px-4 py-3">
           {showForm ? (

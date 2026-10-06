@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import type { ExtendedMetadata } from "@/lib/profile-completeness";
 import type { Profile } from "@/lib/types";
 import {
@@ -87,25 +88,20 @@ export async function loadAdBoostEligibility(): Promise<AdBoostEligibilityResult
   // provider sees.
   let profileRow: ProfileRow | null = null;
 
-  if (account.active_profile_id) {
+  // Owned agencies plus agencies this email is a team member of (migration 271).
+  const actingIds = await actingProfileIds(getServiceClient(), user, { types: ["organization", "caregiver"] });
+  const pick =
+    account.active_profile_id && actingIds.includes(account.active_profile_id)
+      ? account.active_profile_id
+      : actingIds[0] ?? null;
+
+  if (pick) {
     const { data } = await supabase
       .from("business_profiles")
       .select(PROFILE_SELECT)
-      .eq("id", account.active_profile_id)
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
+      .eq("id", pick)
       .maybeSingle();
     profileRow = (data as unknown as ProfileRow | null) ?? null;
-  }
-
-  if (!profileRow) {
-    const { data } = await supabase
-      .from("business_profiles")
-      .select(PROFILE_SELECT)
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .limit(1);
-    profileRow = (data?.[0] as unknown as ProfileRow | undefined) ?? null;
   }
 
   if (!profileRow?.slug) {

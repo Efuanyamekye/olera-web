@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { canActForProfile } from "@/lib/auth/profile-access.server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
@@ -83,6 +84,12 @@ export async function POST(request: Request) {
           { error: "No active profile" },
           { status: 400 }
         );
+      }
+      // The active profile is stored on the account and was once writable to
+      // any id from the browser. Act only for a profile this user owns or is a
+      // team member of (migration 271).
+      if (!(await canActForProfile(admin, user, account.active_profile_id))) {
+        return NextResponse.json({ error: "Not authorized" }, { status: 403 });
       }
       profileId = account.active_profile_id;
       userEmail = user.email || null;

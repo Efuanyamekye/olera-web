@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 
@@ -48,12 +49,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's profile IDs (business_profiles.account_id → accounts.id)
-    const { data: profiles } = await db
-      .from("business_profiles")
-      .select("id")
-      .eq("account_id", account.id);
-
-    const profileIds = (profiles || []).map((p) => p.id);
+    // Owned profiles plus agencies this email is a team member of (migration 271).
+    const profileIds = await actingProfileIds(db, user);
 
     if (profileIds.length === 0) {
       return NextResponse.json({ error: "No profiles found" }, { status: 404 });
