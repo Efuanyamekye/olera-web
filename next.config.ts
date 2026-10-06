@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
   // served from public/, because its exhibits are screenshots of the admin
   // panel. A file read through a runtime-built path is not traced on its own,
   // so it is named here or the route 404s in production.
+  // The workflow step function (war-room discovery) traces a credentials
+  // file read through a runtime-built path (lib/growth/collector.server.ts),
+  // so the tracer copies whole directories into it. It reads none of these,
+  // and the benefits program data (data/pipeline, 32 MB) took it past
+  // Vercel's 250 MB function limit (6 Oct 2026, 256 MB).
+  outputFileTracingExcludes: {
+    "/.well-known/workflow/v1/step": ["./data/pipeline/**", "./data/benefits/**", "./docs/**"],
+  },
   outputFileTracingIncludes: {
     // The SOP route reads these through a path built at runtime, which the
     // tracer cannot follow. Without these entries the route works locally and
