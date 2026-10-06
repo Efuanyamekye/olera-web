@@ -92,6 +92,10 @@ const MAX_FAMILIES = 400;
 /** A pending inquiry older than this with no provider reply reads as silence. */
 const PROVIDER_SILENT_MS = 3 * DAY_MS;
 
+/** How long after a handover we ask how it went, and when we stop asking. */
+const CHECK_PROVIDER_MS = 3 * DAY_MS;
+const CHECK_PROVIDER_CAP_MS = 30 * DAY_MS;
+
 /**
  * How many ids go into one PostgREST `in.(…)`.
  *
@@ -219,6 +223,9 @@ type CityLeadRow = {
   admin_note: string | null;
   created_at: string;
   archived_at: string | null;
+  /** Handed to the provider whose own ad brought them in (primary.server.ts). */
+  handed_at: string | null;
+  handed_request_id: string | null;
 };
 
 type CityMsgRow = {
@@ -731,6 +738,8 @@ type Loaded = {
   cityMsgs: Map<string, CityMsgRow[]>;
   cityOffers: Map<string, CityOfferRow[]>;
   providerNames: Map<string, string>;
+  /** ad_campaign_requests.id -> provider id, for leads handed to an ad's owner. */
+  requestProvider: Map<string, string>;
   activity: Map<string, ActivityRow[]>;
   touches: Map<string, FamilyTouchRow[]>;
   archived: Map<string, { reason: string; note: string | null; at: string }>;
@@ -862,6 +871,7 @@ async function loadFeeds(
     cityMsgs: new Map(),
     cityOffers: new Map(),
     providerNames: new Map(),
+    requestProvider: new Map(),
     archived: new Map(),
     managedConnections: new Set(),
     everDidBenefits: new Set(),
@@ -916,7 +926,7 @@ async function loadFeeds(
       db
         .from("city_leads")
         .select(
-          "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at",
+          "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at, handed_at, handed_request_id",
         )
         .in("care_seeker_id", g)
         .limit(1000),
@@ -1083,7 +1093,18 @@ async function loadFeeds(
         .order("position")
         .limit(1000),
   );
-  const offerProviderIds = Array.from(new Set(cityOfferRows.map((o) => o.provider_id)));
+  // A lead from a provider's own ad is handed to her without an offer row, so
+  // her name comes from the campaign request instead.
+  const requestIds = Array.from(new Set(leads.map((l) => l.handed_request_id).filter((x): x is string => !!x)));
+  const requestRows = requestIds.length
+    ? await fetchInChunks<{ id: string; provider_id: string }>(requestIds, (g) =>
+        db.from("ad_campaign_requests").select("id, provider_id").in("id", g),
+      )
+    : [];
+  const requestProvider = new Map(requestRows.map((r) => [r.id, r.provider_id]));
+  const offerProviderIds = Array.from(
+    new Set([...cityOfferRows.map((o) => o.provider_id), ...requestRows.map((r) => r.provider_id)]),
+  );
   const offerProviders = offerProviderIds.length
     ? await fetchInChunks<{ id: string; display_name: string | null }>(offerProviderIds, (g) =>
         db.from("business_profiles").select("id, display_name").in("id", g),
@@ -1238,6 +1259,7 @@ async function loadFeeds(
     cityMsgs,
     cityOffers,
     providerNames,
+    requestProvider,
     archived,
     managedConnections,
     everDidBenefits,
@@ -1426,6 +1448,40 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   if (triedThree) flags.push("tried_three");
   else if (callOwed && !callRetryAt) flags.push("promise_owed");
 
+  // CHECK WITH THE PROVIDER (meeting 6 Oct).
+  //
+  // Once Olera hands a family to a named provider (she took the offer, or the
+  // family came from her own ad) we stop seeing what happens: Robbie had two
+  // families and we only learned neither placed by asking him. This queue asks
+  // a person to find out, three days after the handover.
+  //
+  // Deliberately narrow. "Chase a provider" across every inquiry was tried and
+  // removed (see queues.ts): 307 rows nobody could work. Only a family Olera
+  // itself handed over belongs here, which is a handful a week. A recorded
+  // outcome or an archive closes it; any touch logged on the case (a call to
+  // the provider, a note of what they said) parks it for three more days, and
+  // a dated next step parks it until that step is done. After thirty days it
+  // stops asking, because a stale handover is history, not a task.
+  const acceptedOffer = (f.cityOffers.get(p.id) ?? []).find((o) => o.accepted_at);
+  const handedProviderId = lead?.handed_request_id
+    ? f.requestProvider.get(lead.handed_request_id) ?? null
+    : acceptedOffer?.provider_id ?? null;
+  const handedAtIso = lead?.handed_at ?? acceptedOffer?.accepted_at ?? null;
+  const handedTo =
+    lead && handedAtIso && handedProviderId
+      ? { name: f.providerNames.get(handedProviderId) ?? "the provider", at: handedAtIso }
+      : null;
+  if (handedTo && !cityClosed && !lead!.outcome) {
+    const sinceHand = now.getTime() - new Date(handedTo.at).getTime();
+    const lastLogged = touchRows[0]?.occurred_at ?? null;
+    const checkedRecently = Boolean(
+      lastLogged && lastLogged > handedTo.at && now.getTime() - new Date(lastLogged).getTime() < CHECK_PROVIDER_MS,
+    );
+    if (sinceHand >= CHECK_PROVIDER_MS && sinceHand < CHECK_PROVIDER_CAP_MS && !checkedRecently && !openAction?.due) {
+      flags.push("check_provider");
+    }
+  }
+
   // ARCHIVING IS A DECISION ABOUT THE ROW, NOT ABOUT THE EVENTS.
   //
   // Every flag above reads real history and is correct. "Test McTest" really
@@ -1441,7 +1497,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
     // says they told us to stop.
     const work = new Set<SeekerFlag>([
       "awaiting_reply", "promise_owed", "tried_three", "unreachable",
-      "provider_no_show", "provider_silent", "never_human",
+      "provider_no_show", "provider_silent", "never_human", "check_provider",
     ]);
     for (let i = flags.length - 1; i >= 0; i--) if (work.has(flags[i])) flags.splice(i, 1);
   }
@@ -1474,6 +1530,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
     lastInbound: inbound[0] ?? null,
     callRetryAt,
     missedCalls,
+    handedTo,
     openAction,
     everReached,
     lead,
@@ -1520,6 +1577,7 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
       outcome: a.outcome,
       call_retry_at: a.callRetryAt,
       missed_calls: a.missedCalls,
+      handed_to: a.handedTo,
       last_inbound: a.lastInbound
         ? {
             occurred_at: a.lastInbound.occurred_at,
@@ -1540,7 +1598,7 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
     if (r.flags.includes("awaiting_reply")) return 0;
     if (r.flags.includes("promise_owed") || r.flags.includes("tried_three")) return 1;
     if (r.flags.includes("unreachable")) return 2;
-    if (r.flags.includes("provider_no_show")) return 3;
+    if (r.flags.includes("provider_no_show") || r.flags.includes("check_provider")) return 3;
     if (r.episode.state === "open") return 4;
     if (r.flags.includes("provider_silent")) return 5;
     if (r.episode.state === "waiting") return 6;
@@ -1734,6 +1792,7 @@ export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelati
     archived: a.archived,
     origin: a.origin,
     outcome: a.outcome,
+    handed_to: a.handedTo,
     items,
   };
 }

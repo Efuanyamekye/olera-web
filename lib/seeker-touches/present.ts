@@ -96,6 +96,10 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   if (r.flags.includes("tried_three")) {
     return { phrase: "Close out", tone: "warn", age };
   }
+  if (r.flags.includes("check_provider") && r.handed_to) {
+    const n = Math.floor((Date.now() - new Date(r.handed_to.at).getTime()) / 86_400_000);
+    return { phrase: "Check with provider", tone: "warn", age: `handed over ${days(n)} ago` };
+  }
   if (r.flags.includes("awaiting_reply")) {
     return { phrase: "Waiting on us", tone: "warn", age: quiet };
   }
@@ -224,7 +228,11 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
   }
 
   if (r.flags.includes("tried_three")) {
-    return `Called ${r.missed_calls} times, never reached. Send one last text or email, then archive as Never answered.`;
+    return `Called ${r.missed_calls} times, never reached. Text them twice on different days, then archive as Never answered.`;
+  }
+
+  if (r.flags.includes("check_provider") && r.handed_to) {
+    return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
   }
 
   if (r.flags.includes("promise_owed")) {

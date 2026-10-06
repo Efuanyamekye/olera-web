@@ -37,7 +37,7 @@ import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
  * thirty-eight days old and there is nothing useful to say to a family about
  * a referral from last quarter.
  */
-export type Tab = "urgent" | "reply" | "letter" | "help" | "call" | "follow" | "close" | "record" | "reach" | "all" | "archived";
+export type Tab = "urgent" | "reply" | "letter" | "help" | "call" | "follow" | "close" | "check" | "record" | "reach" | "all" | "archived";
 
 export const TABS: { key: Tab; label: string }[] = [
   { key: "urgent", label: "Urgent" },
@@ -47,6 +47,7 @@ export const TABS: { key: Tab; label: string }[] = [
   { key: "call", label: "Call them" },
   { key: "follow", label: "Follow up" },
   { key: "close", label: "Tried 3 times" },
+  { key: "check", label: "Check with the provider" },
   { key: "record", label: "Provider never got back to them" },
   { key: "reach", label: "Fix how we reach them" },
   { key: "all", label: "All" },
@@ -60,7 +61,8 @@ export const TAB_BLURB: Record<Tab, string> = {
   reply: "They wrote to us and nobody has answered.",
   call: "We promised a call and have not reached them. A logged missed call parks them for 24 hours.",
   follow: "Tried and waiting, or a next step is set. A missed call comes back to Call them after 24 hours.",
-  close: "Called three times and never reached. Send one last text or email, then archive as Never answered.",
+  close: "Called three times and never reached. Two texts on different days, then archive as Never answered.",
+  check: "We handed them to a provider three or more days ago. Ask the provider how it went and log what they said. Logging it parks the row for three days.",
   record: "They told us the provider never got back to them, in the last two weeks.",
   reach: "No working phone or email, so nothing we send can land.",
   all: "Everyone with a live episode in the window.",
@@ -99,6 +101,8 @@ export function matches(r: SeekerRelationshipRow, tab: Tab): boolean {
     // are families someone is actively working, so they get their own place.
     case "follow":
       return Boolean(r.call_retry_at) || Boolean(r.open_action);
+    case "check":
+      return r.flags.includes("check_provider");
     case "record":
       return r.flags.includes("provider_no_show");
     case "reach":
