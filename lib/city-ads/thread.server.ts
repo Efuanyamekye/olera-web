@@ -23,8 +23,9 @@ import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendEmail } from "@/lib/email";
 import { sendSlackAlert } from "@/lib/slack";
 import { getSiteUrl } from "@/lib/site-url";
-import { generateCityThreadUrl } from "@/lib/claim-tokens";
-import { providerSignInUrl } from "@/lib/city-ads/provider-links.server";
+import { generateCityThreadUrl, generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { inboxPathFor, providerSignInUrl } from "@/lib/city-ads/provider-links.server";
+import { memberEmails } from "@/lib/auth/profile-access.server";
 import { cityThreadProviderEmail } from "@/lib/email-templates";
 import { getCityConfig } from "@/lib/city-ads/config";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
@@ -399,6 +400,8 @@ export async function notifyProvider(
     });
   }
   const recipients = [provider.email, ...(provider.alertEmails ?? [])].filter((e): e is string => !!e);
+  // Team members (migration 272) get a link that signs them in as themselves.
+  const members = provider.via === "inbox" ? new Set(await memberEmails(db, provider.id)) : new Set<string>();
   for (const to of recipients) {
     await sendEmail({
       to,
@@ -408,9 +411,15 @@ export async function notifyProvider(
         headline: what.headline,
         quote: what.quote ?? null,
         body: what.body,
-        // Only the owner's own address gets a signed-in link; copied staff
-        // get the plain link and sign in themselves.
-        ctaUrl: to === provider.email ? await providerEmailUrl(db, lead, provider) : url,
+        // The owner's address gets a link that signs in as the owner. A team
+        // member's gets one that signs in as that member. Anyone else copied
+        // gets the plain link and signs in themselves.
+        ctaUrl:
+          to === provider.email
+            ? await providerEmailUrl(db, lead, provider)
+            : members.has(to.toLowerCase())
+              ? generateFamilyInboxUrl(to.toLowerCase(), inboxPathFor(lead.id), getSiteUrl())
+              : url,
         ctaLabel: provider.via === "inbox" ? "Open your inbox" : "Open your campaign",
       }),
       replyTo: "support@olera.care",

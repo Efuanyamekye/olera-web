@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { canActForProfile } from "@/lib/auth/profile-access.server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -67,6 +68,13 @@ export async function POST(req: NextRequest) {
 
     // Get admin client for storage operations
     const admin = getAdminClient();
+
+    // The lookup above reads account_id but never compared it, so any
+    // signed-in user could replace any profile's photo. Owners and team
+    // members only (migration 272).
+    if (admin && !(await canActForProfile(admin, user, profile.id))) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+    }
     if (!admin) {
       return NextResponse.json(
         { error: "Storage is not configured on the server." },
