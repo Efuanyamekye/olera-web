@@ -1576,9 +1576,9 @@
     "id": "program-of-all-inclusive-care-for-the-elderly-pace",
     "name": "Program of All-Inclusive Care for the Elderly (PACE)",
     "cat": "waiver",
-    "decision": "draft",
+    "decision": "skip",
     "target": "",
-    "reason": "a waiver draft exists",
+    "reason": "Nevada has no PACE provider (the draft research found none, 6 Oct 2026)",
     "phone": "",
     "highlights": "Age 55 or older / Income below $2901/month",
     "draftName": "Program of All-Inclusive Care for the Elderly (PACE)"

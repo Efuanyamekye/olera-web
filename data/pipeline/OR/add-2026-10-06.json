@@ -1,0 +1,144 @@
+{
+  "state": "OR",
+  "addedAt": "2026-10-06T06:33:51.221Z",
+  "dive": {
+    "state": "OR",
+    "stateName": "Oregon",
+    "diveAt": "2026-10-06T06:32:18.569Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Oregon Medicaid - Aged and Physically Disabled (APD) Waiver",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "The waiver serves people age 65+ and also adults age 18-64 with a physical disability who meet nursing-facility level of care. For the financial side, the current commonly reported Medicaid-style limits in Oregon are $2,523/month for a single applicant and $5,046/month for a married couple if both spouses apply; if only one spouse applies, only the applicant’s income is counted and the limit is $2,523/month. These figures are reported by secondary sources and should be verified with Oregon APD/OHP before applying.",
+          "asset_limits": "Commonly reported countable asset limits are $2,000 for a single applicant and $4,000 for a married couple if both spouses apply. If only one spouse applies, the applicant is typically limited to $2,000 in countable assets, while the non-applicant spouse may keep a much higher community spouse resource allowance (reported at up to $137,400). Countable assets generally include cash, bank accounts, stocks, bonds, and other non-exempt resources; exempt resources typically include the primary home (if certain rules are met), one vehicle, personal belongings, and pre-paid burial/funeral arrangements, but the exact treatment can depend on Medicaid rules and should be confirmed with APD.",
+          "other_requirements": [
+            "Must be an Oregon resident.",
+            "Must meet nursing facility level of care.",
+            "Must be a U.S. citizen or otherwise meet Medicaid immigration rules.",
+            "Must qualify for Oregon Health Plan / Medicaid financial eligibility or the waiver-linked Medicaid pathway used by APD.",
+            "For waiver services, the person generally must need to transition from or avoid institutional care and be able to receive services safely in the community."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The APD Waiver specifically includes waiver case management, community transition services (one-time set-up help for moving from an institution or provider-operated setting to community living), and housing support services to help people maintain or find housing for in-home/community-based care. The waiver is intended to support older adults and adults with physical disabilities who meet institutional level-of-care criteria.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Apply through Oregon Health Plan / Medicaid channels, including online through Oregon benefits application pathways",
+            "By phone: ONE Customer Service Center at 800-699-9075",
+            "In person at a local benefits or APD office",
+            "By submitting the Oregon Health Plan application form by mail"
+          ],
+          "processing_time": "No precise statewide processing time was located in the gathered sources. Because APD waiver services depend on Medicaid eligibility plus assessment for level of care and service availability, timing can vary; applicants should expect it to take longer than a standard benefits application.",
+          "waitlist": "The waiver itself is a 1915(c) program serving a defined population. The gathered sources did not show a single explicit statewide waitlist number or universal queue, but APD notes it is preparing to serve people through a separate 1115 waiver initiative, which suggests access may be capacity-sensitive in practice. Families should ask APD whether there is a local service capacity delay or assessment backlog.",
+          "forms": [
+            "Application for Oregon Health Plan Benefits"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Oregon residency",
+            "Proof of age or disability",
+            "Proof of U.S. citizenship or qualifying immigration status",
+            "Income proof such as Social Security award letters, pension statements, pay stubs, or VA benefits statements",
+            "Asset proof such as bank statements, retirement statements, deeds, titles, and insurance information",
+            "Medical or functional documentation showing need for nursing-facility level of care",
+            "Housing information if applying for housing support or community transition help"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide in Oregon; no county-only restriction was identified in the gathered sources. Actual service delivery and provider availability can still vary by local APD office and region.",
+          "regional_variations": "Eligibility rules are statewide, but local intake, assessment scheduling, provider availability, and practical wait times can vary by county/region. The gathered sources did not identify different benefit rules by region.",
+          "offices_or_providers": [
+            "Oregon Department of Human Services / Aging and People with Disabilities",
+            "Local Aging and Disability Resource Center / local APD office",
+            "ONE Customer Service Center"
+          ]
+        },
+        "official_source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/pages/waivers-kplan.aspx",
+        "gotchas": [
+          "This is not a simple open-ended home-care grant; the person must meet Medicaid financial rules and a nursing-facility level-of-care standard.",
+          "The waiver’s core services are narrow: case management, community transition, and housing supports. Families often expect broader in-home caregiving coverage from the waiver itself.",
+          "Income and asset rules can be affected by spousal status and Medicaid planning rules, especially when one spouse remains in the community.",
+          "The program name is often used broadly, but APD also operates under multiple waiver authorities; families should confirm they are asking about the 1915(c) Aged and Physically Disabled Waiver specifically.",
+          "A separate 1115 waiver effort is being prepared in Oregon, so some APD service pathways may be changing over time.",
+          "A family may qualify medically but still need to navigate local assessment, service coordination, and provider availability before services begin."
+        ],
+        "data_shape_notes": "This program’s data structure is mostly fixed statewide, but access depends on both Medicaid financial eligibility and a functional/nursing-facility level-of-care test. The most important nuance is that the waiver does not primarily pay cash benefits; it provides targeted community-transition and support services through APD.",
+        "_raw": "{\n  \"name\": \"Oregon Medicaid - Aged and Physically Disabled (APD) Waiver\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"The waiver serves people age 65+ and also adults age 18-64 with a physical disability who meet nursing-facility level of care. For the financial side, the current commonly reported Medicaid-style limits in Oregon are $2,523/month for a single applicant and $5,046/month for a married couple if both spouses apply; if only one spouse applies, only the applicant’s income is counted and the limit is $2,523/month. These figures are reported by secondary sources and should be verified with Oregon APD/OHP before applying.\",\n    \"asset_limits\": \"Commonly reported countable asset limits are $2,000 for a single applicant and $4,000 for a married couple if both spouses apply. If only one spouse applies, the applicant is typically limited to $2,000 in countable assets, while the non-applicant spouse may keep a much higher community spouse resource allowance (reported at up to $137,400). Countable assets generally include cash, bank accounts, stocks, bonds, and other non-exempt resources; exempt resources typically include the primary home (if certain rules are met), one vehicle, personal belongings, and pre-paid burial/funeral arrangements, but the exact treatment can depend on Medicaid rules and should be confirmed with APD.\",\n    \"other_requirements\": [\n      \"Must be an Oregon resident.\",\n      \"Must meet nursing facility level of care.\",\n      \"Must be a U.S. citizen or otherwise meet Medicaid immigration rules.\",\n      \"Must qualify for Oregon Health Plan / Medicaid financial eligibility or the waiver-linked Medicaid pathway used by APD.\",\n      \"For waiver services, the person generally must need to transition from or avoid institutional care and be able to receive services safely in the community.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The APD Waiver specifically includes waiver case management, community transition services (one-time set-up help for moving from an institution or provider-operated setting to community living), and housing support services to help people maintain or find housing for in-home/community-based care. The waiver is intended to support older adults and adults with physical disabilities who meet institutional level-of-care criteria.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through Oregon Health Plan / Medicaid channels, including online through Oregon benefits application pathways\",\n      \"By phone: ONE Customer Service Center at 800-699-9075\",\n      \"In person at a local benefits or APD office\",\n      \"By submitting the Oregon Health Plan application form by mail\"\n    ],\n    \"processing_time\": \"No precise statewide processing time was located in the gathered sources. Because APD waiver services depend on Medicaid eligibility plus assessment for level of care and service availability, timing can vary; applicants should expect it to take longer than a standard benefits application.\",\n    \"waitlist\": \"The waiver itself is a 1915(c) program serving a defined population. The gathered sources did not show a single explicit statewide waitlist number or universal queue, but APD notes it is preparing to serve people through a separate 1115 waiver initiative, which suggests access may be capacity-sensitive in practice. Families should ask APD whether there is a local service capacity delay or assessment backlog.\",\n    \"forms\": [\n      \"Application for Oregon Health Plan Benefits\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Oregon residency\",\n      \"Proof of age or disability\",\n      \"Proof of U.S. citizenship or qualifying immigration status\",\n      \"Income proof such as Social Security award letters, pension statements, pay stubs, or VA benefits statements\",\n      \"Asset proof such as bank statements, retirement statements, deeds, titles, and insurance information\",\n      \"Medical or functional documentation showing need for nursing-facility level of care\",\n      \"Housing information if applying for housing support or community transition help\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide in Oregon; no county-only restriction was identified in the gathered sources. Actual service delivery and provider availability can still vary by local APD office and region.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but local intake, assessment scheduling, provider availability, and practical wait times can vary by county/region. The gathered sources did not identify different benefit rules by region.\",\n    \"offices_or_providers\": [\n      \"Oregon Department of Human Services / Aging and People with Disabilities\",\n      \"Local Aging and Disability Resource Center / local APD office\",\n      \"ONE Customer Service Center\"\n    ]\n  },\n  \"official_source\": \"https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/pages/waivers-kplan.aspx\",\n  \"gotchas\": [\n    \"This is not a simple open-ended home-care grant; the person must meet Medicaid financial rules and a nursing-facility level-of-care standard.\",\n    \"The waiver’s core services are narrow: case management, community transition, and housing supports. Families often expect broader in-home caregiving coverage from the waiver itself.\",\n    \"Income and asset rules can be affected by spousal status and Medicaid planning rules, especially when one spouse remains in the community.\",\n    \"The program name is often used broadly, but APD also operates under multiple waiver authorities; families should confirm they are asking about the 1915(c) Aged and Physically Disabled Waiver specifically.\",\n    \"A separate 1115 waiver effort is being prepared in Oregon, so some APD service pathways may be changing over time.\",\n    \"A family may qualify medically but still need to navigate local assessment, service coordination, and provider availability before services begin.\"\n  ],\n  \"data_shape_notes\": \"This program’s data structure is mostly fixed statewide, but access depends on both Medicaid financial eligibility and a functional/nursing-facility level-of-care test. The most important nuance is that the waiver does not primarily pay cash benefits; it provides targeted community-transition and support services through APD.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "OR",
+    "stateName": "Oregon",
+    "classifiedAt": "2026-10-06T06:32:18.572Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Oregon Medicaid - Aged and Physically Disabled (APD) Waiver",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Oregon Department of Human Services / Aging and People with Disabilities",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Aging and Disability Resource Center / local APD office",
+              "type": "service-area"
+            },
+            {
+              "name": "ONE Customer Service Center",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "OR",
+      "id": "or-medicaid-apd-waiver",
+      "name": "Oregon Medicaid - Aged and Physically Disabled (APD) Waiver",
+      "legacyId": "oregon-medicaid-aged-and-physically-disabled-apd-waiver",
+      "programType": "benefit"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.947Z
+ * Last updated: 2026-10-06T06:44:48.387Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2448,6 +2448,677 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "mn-supplemental-aid-msa",
+      "name": "Minnesota Supplemental Aid (MSA)",
+      "shortName": "MSA Cash Aid",
+      "tagline": "If your parent receives SSI or has limited income and assets, Minnesota may add $81 to $275 per month in cash to help cover basic living costs.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county human services office",
+            "type": "service-area"
+          },
+          {
+            "name": "Local tribal human services office",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Minnesota Supplemental Aid (MSA) is a monthly cash benefit for adults who are elderly, blind, or disabled and have low income and assets. If your parent already receives SSI (Supplemental Security Income), they likely qualify automatically. If they don't receive SSI but have limited income and resources, they may still qualify through a separate eligibility pathway. The typical monthly benefit is $81 for a single person or $111 for a couple, deposited directly and usable for any basic living expense.\n\nFor parents who spend more than 40% of their total income on housing and are under age 65, an add-on called MSA Housing Assistance adds $194 per month on top of the base benefit. That would bring the monthly total to $275 for an individual. The housing add-on has its own rules and is not automatic.\n\nApplications go through your parent's county or tribal human services office, not a single statewide number. Processing takes up to 30 days for applicants who are aged or blind, or up to 60 days when a disability determination is needed. If your parent is already on SSI, the process is simpler because much of the eligibility groundwork is already done.",
+      "savingsRange": "Typically $81/month for an individual or $111/month for a couple; up to $275/month for individuals under 65 with high housing costs (base benefit plus $194 MSA Housing Assistance add-on)",
+      "savingsSource": "Minnesota DHS program page (mn.gov/dhs) states the typical MSA benefit is $81 for an individual and $111 for a couple; MSA Housing Assistance adds $194/month for qualifying individuals under 65.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 18 or older",
+          "Currently receiving SSI, or would qualify for SSI except income is too high",
+          "If not on SSI: must be age 65+, blind, or disabled",
+          "Asset limit: $2,000 for SSI recipients; $10,000 for non-SSI applicants",
+          "Must live in Minnesota"
+        ],
+        "ageRequirement": "18+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Bank accounts",
+            "Vehicles",
+            "Other resources counted under SSI or MSA rules"
+          ],
+          "exemptAssets": [
+            "For people already receiving SSI: assets are not re-verified; SSI asset limit ($2,000) is assumed to be met"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For applicants who are not receiving SSI and are applying based on disability (not age 65+ or blindness), disability must be determined by the State Medical Review Team (SMRT). This is a clinical review process similar to how Social Security evaluates disability for SSI.",
+        "otherRequirements": [
+          "Must be receiving SSI, or would receive SSI if income were lower",
+          "If not on SSI: must be age 65 or older, blind, or disabled under SSI or RSDI criteria",
+          "Non-SSI applicants face a gross income limit of $2,982/month for an individual or $5,964/month for a couple (300% and 600% of the federal SSI benefit rate, respectively; DB101 figures for 2026)",
+          "Income standards also vary by living arrangement (whether your parent lives alone, with others, or is part of a couple)",
+          "MSA Housing Assistance add-on: housing costs must exceed 40% of total income, and applicant must be under age 65"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at MNbenefits.mn.gov or submit the Combined Application Form (DHS-5223) to your parent's county or tribal human services office; expect a decision within 30 to 60 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm which pathway applies",
+            "description": "If your parent currently receives SSI, they are likely eligible for MSA and the county will verify that. If they do not receive SSI, you will need to apply through the non-SSI pathway, which requires proof of age 65+, blindness, or a disability determination by SMRT. Knowing which situation applies before you apply will save time."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before starting the application",
+            "description": "At minimum, have your parent's SSI award letter (if they receive SSI), a government-issued photo ID, and proof of Minnesota residency. Non-SSI applicants will also need bank statements or account balance information and any income documentation. See the full document list on this page."
+          },
+          {
+            "step": 3,
+            "title": "Apply online or on paper",
+            "description": "The fastest way to apply is online at MNbenefits.mn.gov. If your parent prefers paper, download or request the Combined Application Form (DHS-5223) from your county human services office. You can mail the completed form or bring it in person to the local county or tribal human services office."
+          },
+          {
+            "step": 4,
+            "title": "Submit to the correct local office",
+            "description": "MSA is handled by county and tribal human services offices, not a single statewide agency. Find your county's office through mn.gov/dhs or call 2-1-1 and ask for your local human services office if you are unsure which county applies."
+          },
+          {
+            "step": 5,
+            "title": "Respond to any requests for additional verification",
+            "description": "The county will contact you if they need more documentation. For aged and blind applicants, a decision must come within 30 days of receiving a complete signed application. For disability cases, the timeline extends to 60 days while SMRT reviews the disability determination."
+          },
+          {
+            "step": 6,
+            "title": "Ask about MSA Housing Assistance at the same time",
+            "description": "If your parent is under 65 and their housing costs exceed 40% of their total monthly income, ask the county worker about MSA Housing Assistance when you apply. It adds $194/month but has its own eligibility criteria and is not automatically added."
+          }
+        ],
+        "processingTime": "30 days for aged or blind applicants after a complete signed application is received; up to 60 days for applicants whose disability must be determined by the State Medical Review Team (SMRT).",
+        "waitlist": null,
+        "tip": "If your parent already receives SSI, the application is simpler because their disability and asset status are largely presumed to meet MSA requirements. Lead with the SSI award letter and let the county worker confirm eligibility from there.",
+        "urls": [
+          {
+            "label": "Apply online at MNbenefits.mn.gov",
+            "url": "https://mnbenefits.mn.gov"
+          },
+          {
+            "label": "Minnesota DHS MSA program page",
+            "url": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/"
+          },
+          {
+            "label": "Download Combined Application Form (DHS-5223)",
+            "url": "https://www.dhs.state.mn.us/main/groups/publications/documents/pub/dhs5223.pdf"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "SSI award letter (if your parent currently receives SSI)",
+        "Government-issued photo ID (driver's license, state ID, or passport)",
+        "Proof of Minnesota residency (utility bill, lease agreement, or other document with current address)",
+        "Social Security card",
+        "Proof of citizenship or immigration status",
+        "Birth certificate or other proof of age",
+        "Current balances for any checking or savings accounts (the county will ask for this; no specific number of months is prescribed in DHS guidance)",
+        "Income documentation for any income other than SSI (pension statements, rental income records, pay stubs)",
+        "Vehicle titles or registration if your parent owns a vehicle",
+        "Information about other assets (investments, property other than the primary home)",
+        "Names, dates of birth, and relationship information for all household members",
+        "Medical records or documentation of disability (for non-SSI applicants applying on the basis of disability)"
+      ],
+      "contacts": [
+        {
+          "label": "Your county or tribal human services office",
+          "phone": null,
+          "description": "MSA applications are processed by local county and tribal human services offices, not a single statewide number. Find your county office through the Minnesota DHS county directory at mn.gov/dhs, or call 2-1-1 to be connected.",
+          "hours": "Varies by county; most offices are open Mon-Fri during business hours"
+        },
+        {
+          "label": "Minnesota 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide helpline that can identify and connect you to your local county human services office. This line does not process MSA applications directly but can tell you exactly where to call or go.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Minnesota DHS Economic Assistance",
+          "phone": "(651) 431-3805",
+          "description": "Minnesota Department of Human Services main line for income assistance programs. Can answer policy questions and direct you to the correct county office if needed.",
+          "hours": "Mon-Fri, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent does not receive SSI and is applying on the basis of disability, their case must go to the State Medical Review Team (SMRT) for a disability determination. This extends the decision timeline to up to 60 days and requires medical documentation. Gather doctor records or disability paperwork before applying to avoid delays.",
+        "The income standards and assistance amounts vary depending on living arrangement: whether your parent lives alone, with others, or with a spouse. Tell the county worker exactly who lives in the household at the time of application so they apply the correct standard.",
+        "MSA Housing Assistance ($194/month add-on) is only for people under age 65. If your parent is 65 or older, do not expect this add-on; ask the county about other housing programs instead.",
+        "Submitting an incomplete application is the most common cause of delay. If applying on paper using form DHS-5223, attach all supporting documents at once rather than sending them separately."
+      ],
+      "relatedPrograms": [
+        "Supplemental Security Income (SSI)",
+        "Minnesota Housing Support (formerly Group Residential Housing)",
+        "Minnesota Medical Assistance (Medicaid)",
+        "Low Income Home Energy Assistance Program (LIHEAP) in Minnesota"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "MSA and SSI are not the same program",
+          "body": "SSI is a federal program run by Social Security. MSA is a separate Minnesota state program. Your parent can receive both at the same time. In fact, receiving SSI is the most common pathway into MSA because it satisfies most of the eligibility requirements automatically. If your parent was denied SSI because their income was slightly too high, they may still qualify for MSA through the non-SSI pathway."
+        },
+        {
+          "type": "prose",
+          "title": "How income limits work for non-SSI applicants",
+          "body": "If your parent does not receive SSI, the income rules are more complex. Minnesota uses two different income figures in determining MSA eligibility.\n\nFirst, a gross income ceiling: your parent's income cannot exceed $2,982/month for an individual or $5,964/month for a couple (300% and 600% of the federal SSI benefit rate; DB101 2026 figures).\n\nSecond, Minnesota applies an assistance-standard structure based on living arrangement. The monthly standards cited by DHS for 2026 are: $1,055 for a person living alone; $755 for a person living with others; $778 for a married couple not living with others; and $519 for an individual not living with others under the standard-of-assistance structure. These figures interact with your parent's actual income to determine whether there is a financial need and what the benefit amount will be.\n\nBecause this calculation is specific to your parent's situation, ask the county worker to walk through the numbers with you when you apply."
+        },
+        {
+          "type": "callout",
+          "title": "MSA Housing Assistance: an extra $194/month for qualifying renters under 65",
+          "body": "If your parent is under age 65 and their housing costs (rent or mortgage) are more than 40% of their total monthly income, MSA Housing Assistance adds $194/month on top of the base MSA benefit. You must request this add-on; it is not automatically added. Ask the county worker about it when you submit the application."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is on SSI. Do they need to apply separately for MSA, or is it automatic?",
+          "answer": "They do need to apply, but the process is much simpler. Because SSI already establishes disability or age eligibility and presumes the asset test is met, the county primarily needs to confirm residency and that your parent is receiving SSI. Apply through MNbenefits.mn.gov or submit form DHS-5223 to the county office. The county must decide within 30 days of receiving a complete application."
+        },
+        {
+          "question": "My parent's income is too high for SSI. Can they still get MSA?",
+          "answer": "Yes, possibly. Non-SSI applicants can qualify for MSA if they are age 65 or older, blind, or disabled, and their income and assets are within the program's limits. For an individual, the gross income ceiling is $2,982/month (2026, per DB101). However, the benefit amount is calculated using a needs-standard structure that varies by living arrangement, so the actual benefit may be small or may not exist depending on your parent's income. Ask the county worker to run the calculation with your parent's specific numbers."
+        },
+        {
+          "question": "Does my parent's home count against the asset limit?",
+          "answer": "The primary home is generally not a countable asset for MSA. For SSI recipients, assets are not re-verified by the county because SSI already screens for the $2,000 limit. For non-SSI applicants, the asset limit is $10,000 in countable resources. Bank accounts, vehicles, and other financial assets count; the primary residence typically does not. If your parent has a second property or significant savings, talk to the county before applying."
+        },
+        {
+          "question": "My parent is 67 and has high rent. Will they get the MSA Housing Assistance add-on?",
+          "answer": "No. MSA Housing Assistance is available only to people under age 65. Once your parent is 65 or older, the add-on is not available regardless of housing costs. If your parent is under 65 and spends more than 40% of their income on housing, they may qualify for the $194/month add-on. Ask about it specifically when you apply."
+        },
+        {
+          "question": "Can I apply for MSA on behalf of my parent if they can't do it themselves?",
+          "answer": "Yes. A family member, legal representative, or authorized representative can submit the application on your parent's behalf. On form DHS-5223 or through MNbenefits.mn.gov, you can identify yourself as the person completing the application. If your parent has a power of attorney or legal guardian arrangement in place, bring that documentation when you apply or submit a copy with the paper form."
+        },
+        {
+          "question": "My parent applies on the basis of disability but doesn't have an SSI determination. How long will this take?",
+          "answer": "If your parent's disability has not been determined by Social Security, Minnesota's State Medical Review Team (SMRT) must make that determination as part of the MSA process. By law, the county has up to 60 days from receiving a complete application to decide. Submitting thorough medical records with the application, rather than waiting for the county to request them, is the most effective way to avoid delays."
+        },
+        {
+          "question": "Can my parent receive both MSA and Minnesota Medical Assistance (Medicaid) at the same time?",
+          "answer": "Yes. MSA and Medical Assistance are separate programs and can be received simultaneously. In fact, many people who qualify for MSA also qualify for Medical Assistance because both programs serve people who receive SSI or have low income. Applying for both at the same time through MNbenefits.mn.gov or the Combined Application Form (DHS-5223) is common and does not create a conflict."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they are approved?",
+          "answer": "Your parent must report changes in income, household composition, or living arrangement to their county human services office. Because MSA benefit amounts vary by living arrangement and income level, a change could increase or decrease the benefit or end eligibility. Changes should be reported promptly; failure to report can result in an overpayment that must be repaid. Contact the county office that handles your parent's case to report changes."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": null,
+      "sourceUrl": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mn-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "shortName": "Energy Assistance",
+      "tagline": "If your parent rents or owns their home in Minnesota and earns under $3,205/month, they may qualify for up to $1,400 toward heating and electric bills this winter.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Local Energy Assistance Program provider for the applicant's county or tribe",
+            "type": "service-area"
+          },
+          {
+            "name": "Minnesota Department of Commerce Energy Assistance Program",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Minnesota winters are expensive. If your aging parent is on a fixed income and struggling to pay heat or electricity, the state's Energy Assistance Program can send a grant of $200 to $1,400 directly to their utility or fuel provider. The money never passes through their hands; it goes straight to the bill. Both renters and homeowners qualify, and there is no asset test.\n\nThe income limits are broader than most people expect. A single person qualifies at up to $3,205/month in gross income (that includes Social Security, pensions, and any part-time work). A two-person household qualifies at up to $4,191/month. Many families who assume they earn too much actually qualify when they look at the numbers.\n\nApplications are handled by local providers for each county or tribal nation in Minnesota, not by a single state office. You can start online, by phone, or in person. The statewide deadline for the 2026-2027 winter season is May 31, 2027. Applying early gives your parent the best chance at a higher grant before local funding runs low.",
+      "savingsRange": "$200 to $1,400 per season (2026-2027)",
+      "savingsSource": "Minnesota Department of Commerce 2026 LIHEAP model plan; minimum and maximum grant amounts published by the state. Actual award varies by household size, income, fuel type, and energy costs.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Lives in Minnesota (renters and homeowners both qualify)",
+          "Single person: income under $3,205/month",
+          "Two-person household: income under $4,191/month",
+          "No asset limit",
+          "Any age; no minimum age requirement"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3205
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4191
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 5117
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 6164
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 7150
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 8136
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 8321
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 8506
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 8691
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 8876
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Minnesota at the time of application",
+          "Renters and homeowners are both eligible",
+          "Gross household income must fall within the limit for your household size",
+          "Application submitted to the local Energy Assistance provider for your county or tribal nation"
+        ],
+        "povertyLevelReference": "50% of State Median Income (household sizes 1-18); 110% of Federal Poverty Guidelines (household sizes 19-20)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at mn.gov/commerce, by calling 1-800-657-3710 to request a paper application, or directly through your county or tribal Energy Assistance provider.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need one month of income proof for every household member, your most recent heating bill, and your most recent electric bill. Have account numbers ready for both utilities. See the full document list below."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Apply online at mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/. If you prefer paper, call 1-800-657-3710 to request the Minnesota Energy Programs Application be mailed to your parent's address. Paper applications are also available in Hmong, Somali, Spanish, Vietnamese, and Russian."
+          },
+          {
+            "step": 3,
+            "title": "Submit to your local provider",
+            "description": "Online applications route to the correct local Energy Assistance provider automatically. If applying by paper, return the completed Minnesota Energy Programs Application to the provider serving your parent's county or tribal nation. Find your local provider through the Minnesota Department of Commerce at mn.gov/commerce or by calling 1-800-657-3710."
+          },
+          {
+            "step": 4,
+            "title": "Check application status",
+            "description": "The state allows you to check status online after submitting. Processing timelines vary by county. If you have not heard back within a few weeks, contact your local provider directly or call the program information line at 651-539-1500."
+          },
+          {
+            "step": 5,
+            "title": "Grant paid directly to the utility or fuel provider",
+            "description": "If approved, the grant is sent directly to your parent's heating or electric provider. Your parent does not receive a check. Confirm with your local provider whether both the heating and electric accounts will receive payment or just one."
+          }
+        ],
+        "processingTime": "No single statewide processing time is published. Timeline varies by county and local provider. The state allows online status checks after submission. Contact your local provider if you have not received a decision within a few weeks.",
+        "waitlist": null,
+        "tip": "Apply early in the season. Local providers have a set pool of funding, and grant amounts can be higher earlier in the program year. The statewide deadline is May 31, 2027, but waiting until spring may mean a smaller benefit.",
+        "urls": [
+          {
+            "label": "Minnesota Energy Assistance Program (official program page)",
+            "url": "https://mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/"
+          },
+          {
+            "label": "Apply online at mn.gov",
+            "url": "https://mn.gov/home"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent heating bill (showing provider name and account number)",
+        "Most recent electric bill (showing provider name and account number)",
+        "One month of proof of income for each household member (Social Security award letter, pension statement, pay stub, or SSI letter)",
+        "Names and dates of birth for all people living in the household",
+        "Heating fuel provider name and account number (if not already on the bill)",
+        "Electric provider name and account number (if not already on the bill)"
+      ],
+      "contacts": [
+        {
+          "label": "Minnesota Energy Assistance Program (application and eligibility)",
+          "phone": "1-800-657-3710",
+          "description": "Call to request a paper application be mailed, ask eligibility questions, or get connected to your local county or tribal provider. This line also provides TTY support.",
+          "hours": "Business hours; specific hours not published statewide"
+        },
+        {
+          "label": "Minnesota Department of Commerce Energy Information Line",
+          "phone": "651-539-1500",
+          "description": "General program information and help navigating the Energy Assistance Program.",
+          "hours": "Business hours; specific hours not published statewide"
+        },
+        {
+          "label": "TTY Support",
+          "phone": "651-296-2860",
+          "description": "TTY relay line for applicants who are deaf or hard of hearing.",
+          "hours": "Business hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a disconnection notice from their utility provider, tell the local provider immediately when you contact them. Crisis cases with active shutoff notices may qualify for expedited processing.",
+        "Eligibility is determined using one month of gross household income, even though the published guideline is an annual figure. If your parent had an unusual high-income month, ask the local provider whether a different month can be used.",
+        "The grant goes directly to the heating or electric provider. Your parent will not receive a check or prepaid card. The benefit reduces what is owed on their utility account.",
+        "If your parent lives on a tribal nation, their application is handled by their tribe's Energy Assistance provider, not the county office. Use the same phone number (1-800-657-3710) to find the right contact."
+      ],
+      "relatedPrograms": [
+        "Weatherization Assistance Program (WAP) Minnesota",
+        "Minnesota Supplemental Nutrition Assistance Program (SNAP)",
+        "Minnesota Medical Assistance (Medicaid)",
+        "Telephone Equipment Distribution Program (TED)"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "title": "Key numbers at a glance",
+          "stats": [
+            {
+              "label": "Minimum grant (2026-2027)",
+              "value": "$200"
+            },
+            {
+              "label": "Maximum grant (2026-2027)",
+              "value": "$1,400"
+            },
+            {
+              "label": "Income limit for 1 person",
+              "value": "$3,205/month"
+            },
+            {
+              "label": "Income limit for 2 people",
+              "value": "$4,191/month"
+            },
+            {
+              "label": "Season deadline",
+              "value": "May 31, 2027"
+            },
+            {
+              "label": "Asset limit",
+              "value": "None"
+            }
+          ]
+        },
+        {
+          "type": "prose",
+          "title": "What the grant covers and what it does not",
+          "body": "The grant pays toward home energy costs: heating fuel (natural gas, propane, fuel oil, wood), and electric bills. It can also help with the cost of fuel delivery.\n\nThe grant is not a cash payment to your parent. It is applied directly to the utility or fuel account. Your parent cannot use it for food, rent, or non-energy expenses.\n\nIf your parent rents and heat is included in their rent, contact your local provider. Coverage for renters with heat-included leases may differ by county."
+        },
+        {
+          "type": "prose",
+          "title": "How the grant amount is calculated",
+          "body": "The state does not publish a single fixed benefit amount. The grant your parent receives depends on household size, gross income, type of fuel used, and actual energy costs. The published minimum is $200 and the maximum is $1,400 for the 2026-2027 season.\n\nLower income and higher energy costs generally result in a larger grant. Your local provider calculates the specific amount after reviewing the application."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home outright and has savings. Does that disqualify them?",
+          "answer": "No. Minnesota's Energy Assistance Program has no asset limit. Home equity, savings accounts, and other assets are not counted. Eligibility is based only on gross household income and household size. A single person with $200,000 in savings but $2,800/month in income still qualifies."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. A family member or authorized representative can submit the application on behalf of an elderly or disabled parent. You will need to provide their income documents, utility account information, and household details. Contact your local Energy Assistance provider at 1-800-657-3710 to confirm what authorization, if any, they require in your county."
+        },
+        {
+          "question": "My parent's heat is included in their rent. Can they still get help?",
+          "answer": "Possibly. Coverage for renters whose heat is included in rent can vary by county and local provider. Contact your local Energy Assistance provider directly through 1-800-657-3710 to ask how this situation is handled in your parent's county."
+        },
+        {
+          "question": "The deadline is May 31, 2027. Should we wait until spring to apply?",
+          "answer": "Apply as early as possible. Local providers have a fixed pool of funding for the season. Applying early in the heating season gives your parent the best chance at a higher grant amount. Waiting until spring may mean a smaller benefit or, in some counties, exhausted local funds before the statewide deadline."
+        },
+        {
+          "question": "My parent got a shutoff notice from their utility. Is it too late to apply?",
+          "answer": "No, and you should act immediately. Tell the local Energy Assistance provider about the disconnection notice when you first contact them at 1-800-657-3710. Crisis cases with active shutoff notices may be processed on an expedited basis. Do not wait."
+        },
+        {
+          "question": "Can my parent apply for Energy Assistance and the Weatherization Assistance Program at the same time?",
+          "answer": "Yes. Energy Assistance (which pays current bills) and Weatherization (which makes the home more energy-efficient at no cost) are separate programs but share similar income limits. Applying for both is common and encouraged. Ask your local Energy Assistance provider about Weatherization at the same time you apply."
+        },
+        {
+          "question": "My parent uses propane or fuel oil, not natural gas. Does the program cover that?",
+          "answer": "Yes. The program covers heating fuel costs regardless of fuel type, including natural gas, propane, fuel oil, and wood. It can also help with the cost of fuel delivery. Have your parent's fuel provider name and account number ready when you apply."
+        },
+        {
+          "question": "What if my parent's income was higher last month because of a one-time payment?",
+          "answer": "Eligibility is based on one month of gross household income at the time of the application review. If last month's income included a one-time payment (like a tax refund or insurance settlement) that won't recur, ask your local provider at 1-800-657-3710 whether a different month's income can be used. The answer may depend on local provider policy."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-800-657-3710",
+      "sourceUrl": "https://mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mn-property-tax-refund-seniors",
+      "name": "Minnesota Property Tax Refund (PTF) for Seniors",
+      "shortName": "Senior Property Tax Refund",
+      "tagline": "If your parent owns a home in Minnesota and earns under $142,490/year, they may qualify for up to $3,310 back on their property taxes — money they're likely leaving on the table right now.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Minnesota Department of Revenue",
+            "type": "service-area"
+          },
+          {
+            "name": "County auditor offices",
+            "type": "service-area"
+          },
+          {
+            "name": "County property tax offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent owns a home in Minnesota, they may qualify for a real cash refund on their property taxes — up to $3,310 per year — just by filing a single tax form. This is not automatic. Most eligible homeowners have to file Form M1PR to claim it, and many never do.\n\nThere are actually two separate programs here, and they are easy to confuse. The first is the regular Homestead Credit Refund: a tax refund for homeowners whose property taxes are high relative to their income, with a maximum refund of $3,310 (based on payable 2024 taxes). The income limit for the 2026 payable year is $142,490 in household income. The second is the Senior Property Tax Deferral program: a loan mechanism for homeowners 65 or older with household income at or below $96,000. Under deferral, your parent pays only up to 3% of their household income toward property taxes each year, and the state pays the rest directly to the county. That unpaid amount accumulates as a lien on the home and is repaid when the home is sold.\n\nThe deferral program is not free money. It is a state-backed loan secured by the property. Understanding which program fits your parent's situation — or whether both apply — is the first decision to make.",
+      "savingsRange": "Up to $3,310/year (regular Homestead Credit Refund, based on payable 2024 taxes); up to $1,000 for the special refund triggered by a large tax increase. Deferral savings depend on household income and actual tax bill.",
+      "savingsSource": "Minnesota Department of Revenue 2025 Form M1PR instructions and official program pages at revenue.state.mn.us/seniors. Maximum figures are published program caps, not averages.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must own and occupy the home as a homestead in Minnesota",
+          "Regular refund: household income at or below $142,490 (payable 2026 taxes)",
+          "Senior deferral: age 65+ (or one spouse 65+, other 62+)",
+          "Senior deferral: household income at or below $96,000",
+          "No reverse mortgage or disqualifying liens on the property for deferral"
+        ],
+        "ageRequirement": "65+ (for senior deferral); no age requirement for the regular Homestead Credit Refund",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Home must be the applicant's principal homestead in Minnesota",
+          "For the senior deferral: no reverse mortgage, life estate, state or federal tax lien, or judgment lien on the property",
+          "For the senior deferral: other existing liens must total less than 75% of the home's estimated market value",
+          "For the senior deferral: home must have been owned and occupied for at least 5 years (some county guidance states 15 years; confirm with your county auditor)",
+          "Renters and nursing home residents may also qualify for the regular refund if they paid property taxes on a principal Minnesota residence",
+          "Form M1PR is due August 15; you may file up to one year after that date"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Form M1PR online or by mail to the Minnesota Department of Revenue by August 15; for the senior deferral program, apply through your county auditor's office.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Decide which program applies",
+            "description": "If your parent is 65 or older with household income at or below $96,000 and wants to reduce what they pay each year going forward, look at the Senior Property Tax Deferral. If they simply want a refund on taxes already paid, file Form M1PR for the Homestead Credit Refund. Both can be relevant; start by calling the Minnesota Department of Revenue at 651-296-3781 to clarify which fits."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "For Form M1PR, you need the Statement of Property Taxes Payable (mailed from your county), proof of household income, and documentation of homestead status. For the deferral application, you also need information on any mortgages or liens on the property."
+          },
+          {
+            "step": 3,
+            "title": "File Form M1PR (for the refund)",
+            "description": "File online through the Minnesota Department of Revenue's e-file system at www.revenue.state.mn.us, or mail a paper Form M1PR to the Minnesota Department of Revenue. The deadline is August 15. You can file up to one year after that date if you miss it."
+          },
+          {
+            "step": 4,
+            "title": "Apply for the deferral at your county auditor's office (for the deferral program)",
+            "description": "Senior deferral applications are handled through your county auditor's office, not through the Department of Revenue online filing system. Contact your county auditor directly to get the application materials and confirm local deadlines and requirements."
+          },
+          {
+            "step": 5,
+            "title": "Confirm your application was received",
+            "description": "If filing M1PR by mail, keep a copy of everything you send. If applying for the deferral, ask your county auditor for written confirmation of receipt and the timeline for approval."
+          }
+        ],
+        "processingTime": "No official processing time has been published by the Minnesota Department of Revenue for either program.",
+        "waitlist": null,
+        "tip": "The M1PR deadline of August 15 catches many families off guard because it doesn't match the April tax filing season. Set a reminder in June to gather the property tax statement from the county and file before the deadline.",
+        "urls": [
+          {
+            "label": "Minnesota Department of Revenue: Seniors Property Tax Programs",
+            "url": "https://www.revenue.state.mn.us/seniors"
+          },
+          {
+            "label": "Form M1PR e-file (Homestead Credit Refund)",
+            "url": "https://www.revenue.state.mn.us/free-electronic-filing"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Statement of Property Taxes Payable (mailed to your parent from their county each year; this is the primary document needed for Form M1PR)",
+        "Proof of household income for all members of the household (Social Security award letter, pension statements, or other income documentation)",
+        "Proof of homestead status showing the property is your parent's principal Minnesota residence",
+        "Information on any existing mortgages or liens on the property (for the senior deferral program only)",
+        "Documentation showing the home has been owned and occupied for the required period (for the senior deferral program; confirm the exact period with your county auditor)",
+        "Completed Form M1PR, Homestead Credit Refund (available from the Minnesota Department of Revenue or through e-file at revenue.state.mn.us)"
+      ],
+      "contacts": [
+        {
+          "label": "Minnesota Department of Revenue (Property Tax Refund)",
+          "phone": "(651) 296-3781",
+          "description": "Call to ask questions about Form M1PR eligibility, the senior deferral program, or to get help understanding which program fits your parent's situation.",
+          "hours": "Check revenue.state.mn.us for current hours; hours vary by season"
+        },
+        {
+          "label": "Your County Auditor's Office",
+          "phone": null,
+          "description": "For the Senior Property Tax Deferral program, your county auditor's office handles applications. Phone numbers vary by county. Find your county at mn.gov/admin/government/counties.",
+          "hours": "Varies by county; typically Monday-Friday business hours"
+        }
+      ],
+      "applicationNotes": [
+        "The senior deferral program and the regular Homestead Credit Refund are completely separate programs with different rules, forms, and offices. Applying for one does not apply you for the other.",
+        "If your parent is enrolled in the senior deferral program, any property tax refund they receive through M1PR may be applied to the deferred tax amount rather than paid out directly. Ask the Department of Revenue to explain how this interaction works before enrolling in deferral.",
+        "The income limit for the deferral program uses total household income, which includes both taxable and nontaxable income (such as Social Security). Make sure to count all income sources when checking eligibility.",
+        "A reverse mortgage, life estate, or certain tax liens will automatically disqualify your parent from the senior deferral program, even if they meet the age and income rules. Check these property conditions before spending time on the application."
+      ],
+      "relatedPrograms": [
+        "Minnesota Senior Citizens Property Tax Deferral (the companion program covered on this page; a loan, not a grant)",
+        "Minnesota Special Property Tax Refund (triggered by a large year-over-year increase in net property taxes; maximum $1,000; also filed on Form M1PR)",
+        "Minnesota Renter's Property Tax Refund (for renters whose landlords pay property taxes on their behalf; also filed on Form M1PR)",
+        "Minnesota Energy Assistance Program (LIHEAP) (helps low-income seniors with heating costs; separate program, separate application)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Deferral is a loan, not a grant",
+          "body": "The Senior Property Tax Deferral program sounds like relief, and it is — but the deferred taxes are not forgiven. The state pays your parent's excess taxes directly to the county each year, and that amount accrues as a lien on the property. When the home is eventually sold or transferred, the full deferred amount must be repaid. This matters for estate planning. Talk to your parent's attorney or financial advisor before enrolling."
+        },
+        {
+          "type": "prose",
+          "title": "Two programs, two very different mechanisms",
+          "body": "The regular Homestead Credit Refund is straightforward: your parent files Form M1PR, the state calculates how much their property taxes exceed what is reasonable relative to their income, and they receive a check or direct deposit. Maximum refund: $3,310 based on payable 2024 taxes. Income limit: $142,490 in household income for the payable 2026 year. There is no age requirement for this program.\n\nThe Senior Property Tax Deferral is different. It caps how much your parent pays toward property taxes each year at 3% of their household income. If their tax bill is higher than that, the state pays the difference directly to the county. That difference becomes a low-interest state loan secured by the home. Age requirement: 65+ (or one spouse 65, the other at least 62). Income limit: $96,000 or less in household income.\n\nA homeowner could potentially benefit from both programs, but the interaction between them is complicated. The Department of Revenue at 651-296-3781 is the right starting point to understand what makes sense for your parent's specific situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is 63. Can they use either of these programs?",
+          "answer": "For the regular Homestead Credit Refund, there is no age requirement. If your parent owns their home, lives in it as their primary residence, and household income is at or below $142,490 (for payable 2026 taxes), they can file Form M1PR and potentially receive a refund up to $3,310. The Senior Property Tax Deferral program does require age 65, so a 63-year-old would not qualify for deferral unless their spouse is at least 65."
+        },
+        {
+          "question": "Can I file Form M1PR on behalf of my elderly parent?",
+          "answer": "Yes. An authorized representative, including an adult child acting as power of attorney, can file Form M1PR on a parent's behalf. You will need a valid power of attorney document and all the same supporting documents the applicant would provide. Contact the Minnesota Department of Revenue at 651-296-3781 to confirm what authorization documentation they require."
+        },
+        {
+          "question": "My parent has a reverse mortgage. Does that rule them out of both programs?",
+          "answer": "A reverse mortgage disqualifies your parent from the Senior Property Tax Deferral program. It does not affect eligibility for the regular Homestead Credit Refund, which has no property-condition requirements of that kind. Your parent can still file Form M1PR and claim the refund if they meet the income and residency rules."
+        },
+        {
+          "question": "My parent missed the August 15 deadline. Is it too late?",
+          "answer": "Not necessarily. Minnesota allows late filing of Form M1PR up to one year after the August 15 deadline. So if your parent missed the deadline for a given year, they may still file late. However, you cannot go back more than one year past the original due date, so do not delay further. File as soon as possible."
+        },
+        {
+          "question": "Can my parent apply for the regular refund and the senior deferral at the same time?",
+          "answer": "They can pursue both, but be aware of an important interaction: if your parent receives a Homestead Credit Refund while enrolled in the senior deferral program, that refund may be applied toward the deferred tax balance rather than paid to them directly. Ask the Department of Revenue at 651-296-3781 to walk through how this would work in your parent's specific case before enrolling in the deferral program."
+        },
+        {
+          "question": "My parent lives in a nursing home. Can they still get a property tax refund on their house?",
+          "answer": "It depends on whether the home still qualifies as their principal residence for property tax purposes. Renters and nursing home residents can file Form M1PR if the property taxes were paid on what was their principal Minnesota residence. This is a nuanced question worth clarifying with the Department of Revenue at 651-296-3781 or with your parent's county assessor."
+        },
+        {
+          "question": "How does the deferral program calculate the 3% cap?",
+          "answer": "The state looks at your parent's total household income (all taxable and nontaxable income combined) and calculates 3% of that figure. That amount is what your parent owes toward property taxes for the year. If their actual property tax bill exceeds that amount, the state pays the excess directly to the county as a loan. For example, if household income is $30,000, the maximum your parent pays is $900 in property taxes for that year."
+        },
+        {
+          "question": "What happens to the deferred amount when my parent passes away or sells the home?",
+          "answer": "The total deferred amount, which has been accumulating as a lien on the property, must be repaid at that time. It comes out of the proceeds of the sale or from the estate. This is a meaningful financial consideration for estate planning. We strongly recommend reviewing this with an elder law attorney or financial advisor before enrolling in the deferral program."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(651) 296-3781",
+      "sourceUrl": "https://www.revenue.state.mn.us/seniors",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

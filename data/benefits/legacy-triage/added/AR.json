@@ -1,0 +1,9 @@
+[
+  {
+    "state": "AR",
+    "id": "ar-medicaid-aabd",
+    "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+    "legacyId": "regular-medicaid-aged-blind-and-disabled-aabd",
+    "programType": "benefit"
+  }
+]

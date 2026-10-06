@@ -1,0 +1,380 @@
+{
+  "state": "RI",
+  "addedAt": "2026-10-06T06:14:58.750Z",
+  "dive": {
+    "state": "RI",
+    "stateName": "Rhode Island",
+    "diveAt": "2026-10-06T06:11:27.946Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Medicaid for Elders and Adults with Disabilities (EAD)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "rule": "Countable income must be at or below 100% of the Federal Poverty Level (FPL) for the family size involved.",
+            "table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": 1330,
+                "year": 2026
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": 1803,
+                "year": 2026
+              }
+            ],
+            "notes": [
+              "Rhode Island’s EAD rules use family size under the FPL methodology.",
+              "For people over the standard EAD income limit but with high medical expenses, Rhode Island also has a medically needy pathway under the same broader Medicaid framework."
+            ]
+          },
+          "asset_limits": {
+            "individual": 4000,
+            "couple": 6000,
+            "what_counts": [
+              "Countable resources under the SSI methodology"
+            ],
+            "what_is_exempt": [
+              "The available source does not fully enumerate exempt resources in the program text provided; applicants should expect SSI-style exclusions to apply and should verify specific exclusions with DHS."
+            ]
+          },
+          "other_requirements": [
+            "Must not be receiving SSI, and must meet the categorical requirements for EAD.",
+            "Age 65 or older, or",
+            "Be determined disabled by the State Medicaid Assessment and Review Team (MART) under SSI disability standards.",
+            "Must meet Rhode Island residency and Medicaid general eligibility rules.",
+            "For some pathways, Medicare status is relevant in the application materials, especially for EAD coverage without long-term services and supports."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Medicaid medical coverage for EAD enrollees, including community Medicaid and, for some applicants, medically needy coverage when income is above 100% FPL but medical expenses are high. The specific service package is not stated as a fixed dollar amount in the sources; it is standard Medicaid coverage rather than a cash benefit.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://healthyrhode.ri.gov",
+            "Phone: 1-855-840-4774 (HealthSource RI)",
+            "Phone: 855-697-4347 (Rhode Island DHS)",
+            "Paper application through Rhode Island DHS / Health Coverage application packet",
+            "In-person through Rhode Island DHS offices"
+          ],
+          "processing_time": "Not specified in the sources reviewed.",
+          "waitlist": "No waitlist is indicated for EAD Medicaid coverage itself. Separate long-term services/supports pathways may have different authorization processes, but EAD community Medicaid is not described as waitlisted.",
+          "forms": [
+            "Rhode Island Health and Human Services Application for Assistance",
+            "Health Coverage application packet for Medicaid, including EAD"
+          ],
+          "documents": [
+            "Proof of age or disability status",
+            "Proof of identity",
+            "Proof of Rhode Island residency",
+            "Income verification",
+            "Asset/resource information",
+            "Medicare information if applicable",
+            "Medical records or disability documentation if disability-based eligibility is being claimed",
+            "Information needed for household/family-size determination"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Rhode Island program; no county restrictions were identified.",
+          "regional_variations": "No formal regional benefit variation was identified for EAD Medicaid. The main variation is administrative: applicants may work through state DHS/HealthSource RI channels, and local office handling may differ by location.",
+          "offices_or_providers": [
+            "Rhode Island Department of Human Services (DHS)",
+            "HealthSource RI"
+          ]
+        },
+        "official_source": "https://staycovered.ri.gov/your-medicaid-benefits/programs-services/adults-disabilities",
+        "gotchas": [
+          "The program is often confused with SSI, but EAD is Medicaid coverage with its own eligibility rules; qualifying for SSI automatically qualifies an adult with a disability for Medicaid, but EAD is broader than SSI.",
+          "Income over the standard EAD limit does not always end the conversation; Rhode Island’s medically needy pathway may still help if medical expenses are high.",
+          "The disability path is not automatic unless the person already receives SSI; MART must determine disability under SSI standards.",
+          "Applicants should not assume all assets are counted the same way across Medicaid programs; EAD uses SSI-style resource rules, which can differ from other Medicaid categories.",
+          "The application materials reference different routes and hotlines, so families should use the correct channel for the type of case they have."
+        ],
+        "data_shape_notes": "EAD is a statewide Medicaid eligibility category with two main gates: categorical status (age 65+ or disability) and SSI-style financial rules. Its data structure is unusual because income is tied to FPL household size, resources have fixed dollar caps, and some applicants may instead qualify through a medically needy route if income is too high but medical expenses are significant.",
+        "_raw": "{\n  \"name\": \"Medicaid for Elders and Adults with Disabilities (EAD)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"rule\": \"Countable income must be at or below 100% of the Federal Poverty Level (FPL) for the family size involved.\",\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": 1330,\n          \"year\": 2026\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": 1803,\n          \"year\": 2026\n        }\n      ],\n      \"notes\": [\n        \"Rhode Island’s EAD rules use family size under the FPL methodology.\",\n        \"For people over the standard EAD income limit but with high medical expenses, Rhode Island also has a medically needy pathway under the same broader Medicaid framework.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"individual\": 4000,\n      \"couple\": 6000,\n      \"what_counts\": [\n        \"Countable resources under the SSI methodology\"\n      ],\n      \"what_is_exempt\": [\n        \"The available source does not fully enumerate exempt resources in the program text provided; applicants should expect SSI-style exclusions to apply and should verify specific exclusions with DHS.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must not be receiving SSI, and must meet the categorical requirements for EAD.\",\n      \"Age 65 or older, or\",\n      \"Be determined disabled by the State Medicaid Assessment and Review Team (MART) under SSI disability standards.\",\n      \"Must meet Rhode Island residency and Medicaid general eligibility rules.\",\n      \"For some pathways, Medicare status is relevant in the application materials, especially for EAD coverage without long-term services and supports.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Medicaid medical coverage for EAD enrollees, including community Medicaid and, for some applicants, medically needy coverage when income is above 100% FPL but medical expenses are high. The specific service package is not stated as a fixed dollar amount in the sources; it is standard Medicaid coverage rather than a cash benefit.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://healthyrhode.ri.gov\",\n      \"Phone: 1-855-840-4774 (HealthSource RI)\",\n      \"Phone: 855-697-4347 (Rhode Island DHS)\",\n      \"Paper application through Rhode Island DHS / Health Coverage application packet\",\n      \"In-person through Rhode Island DHS offices\"\n    ],\n    \"processing_time\": \"Not specified in the sources reviewed.\",\n    \"waitlist\": \"No waitlist is indicated for EAD Medicaid coverage itself. Separate long-term services/supports pathways may have different authorization processes, but EAD community Medicaid is not described as waitlisted.\",\n    \"forms\": [\n      \"Rhode Island Health and Human Services Application for Assistance\",\n      \"Health Coverage application packet for Medicaid, including EAD\"\n    ],\n    \"documents\": [\n      \"Proof of age or disability status\",\n      \"Proof of identity\",\n      \"Proof of Rhode Island residency\",\n      \"Income verification\",\n      \"Asset/resource information\",\n      \"Medicare information if applicable\",\n      \"Medical records or disability documentation if disability-based eligibility is being claimed\",\n      \"Information needed for household/family-size determination\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Rhode Island program; no county restrictions were identified.\",\n    \"regional_variations\": \"No formal regional benefit variation was identified for EAD Medicaid. The main variation is administrative: applicants may work through state DHS/HealthSource RI channels, and local office handling may differ by location.\",\n    \"offices_or_providers\": [\n      \"Rhode Island Department of Human Services (DHS)\",\n      \"HealthSource RI\"\n    ]\n  },\n  \"official_source\": \"https://staycovered.ri.gov/your-medicaid-benefits/programs-services/adults-disabilities\",\n  \"gotchas\": [\n    \"The program is often confused with SSI, but EAD is Medicaid coverage with its own eligibility rules; qualifying for SSI automatically qualifies an adult with a disability for Medicaid, but EAD is broader than SSI.\",\n    \"Income over the standard EAD limit does not always end the conversation; Rhode Island’s medically needy pathway may still help if medical expenses are high.\",\n    \"The disability path is not automatic unless the person already receives SSI; MART must determine disability under SSI standards.\",\n    \"Applicants should not assume all assets are counted the same way across Medicaid programs; EAD uses SSI-style resource rules, which can differ from other Medicaid categories.\",\n    \"The application materials reference different routes and hotlines, so families should use the correct channel for the type of case they have.\"\n  ],\n  \"data_shape_notes\": \"EAD is a statewide Medicaid eligibility category with two main gates: categorical status (age 65+ or disability) and SSI-style financial rules. Its data structure is unusual because income is tied to FPL household size, resources have fixed dollar caps, and some applicants may instead qualify through a medically needy route if income is too high but medical expenses are significant.\"\n}"
+      },
+      {
+        "name": "Rhode Island State SSI Supplement",
+        "eligibility": {
+          "age": null,
+          "income_limits": "This is not a separate income-tested program with its own household-size income chart. It is the Rhode Island State Supplemental Payment (SSP) added to SSI, and eligibility tracks SSI rules. Federal SSI is generally for people who are age 65+, blind, or disabled and who meet SSI financial limits; Rhode Island says recipients of federal SSI are automatically eligible for the SSP. Rhode Island also has a state-only SSP pathway for some low-income older adults and people with disabilities in approved living arrangements, but the primary SSP for families is tied to SSI eligibility.",
+          "asset_limits": "No separate Rhode Island SSP asset limit was identified in the state program materials; the SSP follows SSI eligibility. For SSI, countable resources are generally limited to the SSI resource rules, and Rhode Island notes that eligibility for SSP is automatic for SSI recipients. Common SSI resource exclusions still apply, such as a primary home, one vehicle in many cases, and certain burial funds, but the SSP page itself does not publish a separate state asset test.",
+          "other_requirements": [
+            "Must be a Rhode Island resident.",
+            "Must be eligible for SSI to receive the SSP in the standard pathway.",
+            "For state-only supplemental payment applicants, the person must first apply at SSA to determine SSI eligibility.",
+            "Rhode Island administers the state supplement for eligible residents and uses different living-arrangement categories for payment amounts.",
+            "Individuals in residential care, assisted living, or a licensed adult community supportive living residence may have the supplement handled differently through SSA."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Rhode Island adds a cash monthly supplement to the federal SSI payment. Reported monthly SSP amounts are $39.92 for individuals living in their own household, $51.92 for individuals living in the household of another, $79.38 for couples living in their own household, $97.30 for couples living in the household of another, and $20.00 per month for individuals in a Title XIX facility (the state page notes this was changed to $45). The Social Security Administration continues to administer the SSP for people in residential care or assisted living.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Phone: 1-855-MY-RIDHS (1-855-697-4347)",
+            "TTY: 1-800-745-5555",
+            "SSA application for SSI first, for state-only supplemental payment cases",
+            "DHS-administered state supplement processes for eligible Rhode Island residents"
+          ],
+          "processing_time": "No specific statewide processing-time standard was published in the sources reviewed.",
+          "waitlist": null,
+          "forms": [
+            "No standalone Rhode Island SSP form name/number was clearly identified in the official materials reviewed.",
+            "SSA SSI application for the federal SSI determination is required first for state-only supplemental payment applicants."
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Rhode Island residency",
+            "Proof of age if applying as an older adult",
+            "Medical/disability records if applying based on disability",
+            "Income records",
+            "Resource/asset records",
+            "Information about living arrangement, such as household type, residential care, assisted living, or facility status",
+            "SSA award or denial information if already applied for SSI"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Rhode Island program; payment amount depends on living arrangement rather than county. SSA handles payments for residential care, assisted living, and some facility cases, while DHS handles in-house administration for other eligible individuals.",
+          "regional_variations": "No county-level or regional variation was identified. The main variation is by living arrangement and whether SSA or DHS administers the supplement.",
+          "offices_or_providers": [
+            "Rhode Island Department of Human Services",
+            "Social Security Administration"
+          ]
+        },
+        "official_source": "https://dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment",
+        "gotchas": [
+          "This is not a separate medical or caregiving program; it is a cash supplement to SSI.",
+          "People often miss that SSP eligibility usually follows SSI eligibility automatically.",
+          "The payment amount changes based on living arrangement, not just marital status.",
+          "People in assisted living, residential care, or certain facilities may have the supplement administered by SSA instead of DHS.",
+          "There is no obvious standalone Rhode Island income table because the state supplement is tied to SSI rules rather than a separate state means test.",
+          "State-only applicants must first go through SSA to determine SSI eligibility."
+        ],
+        "data_shape_notes": "This program is a cash supplement layered onto federal SSI, with payment amounts determined by living arrangement and administration split between DHS and SSA depending on residence type.",
+        "_raw": "{\n  \"name\": \"Rhode Island State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"This is not a separate income-tested program with its own household-size income chart. It is the Rhode Island State Supplemental Payment (SSP) added to SSI, and eligibility tracks SSI rules. Federal SSI is generally for people who are age 65+, blind, or disabled and who meet SSI financial limits; Rhode Island says recipients of federal SSI are automatically eligible for the SSP. Rhode Island also has a state-only SSP pathway for some low-income older adults and people with disabilities in approved living arrangements, but the primary SSP for families is tied to SSI eligibility.\",\n    \"asset_limits\": \"No separate Rhode Island SSP asset limit was identified in the state program materials; the SSP follows SSI eligibility. For SSI, countable resources are generally limited to the SSI resource rules, and Rhode Island notes that eligibility for SSP is automatic for SSI recipients. Common SSI resource exclusions still apply, such as a primary home, one vehicle in many cases, and certain burial funds, but the SSP page itself does not publish a separate state asset test.\",\n    \"other_requirements\": [\n      \"Must be a Rhode Island resident.\",\n      \"Must be eligible for SSI to receive the SSP in the standard pathway.\",\n      \"For state-only supplemental payment applicants, the person must first apply at SSA to determine SSI eligibility.\",\n      \"Rhode Island administers the state supplement for eligible residents and uses different living-arrangement categories for payment amounts.\",\n      \"Individuals in residential care, assisted living, or a licensed adult community supportive living residence may have the supplement handled differently through SSA.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Rhode Island adds a cash monthly supplement to the federal SSI payment. Reported monthly SSP amounts are $39.92 for individuals living in their own household, $51.92 for individuals living in the household of another, $79.38 for couples living in their own household, $97.30 for couples living in the household of another, and $20.00 per month for individuals in a Title XIX facility (the state page notes this was changed to $45). The Social Security Administration continues to administer the SSP for people in residential care or assisted living.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Phone: 1-855-MY-RIDHS (1-855-697-4347)\",\n      \"TTY: 1-800-745-5555\",\n      \"SSA application for SSI first, for state-only supplemental payment cases\",\n      \"DHS-administered state supplement processes for eligible Rhode Island residents\"\n    ],\n    \"processing_time\": \"No specific statewide processing-time standard was published in the sources reviewed.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No standalone Rhode Island SSP form name/number was clearly identified in the official materials reviewed.\",\n      \"SSA SSI application for the federal SSI determination is required first for state-only supplemental payment applicants.\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Rhode Island residency\",\n      \"Proof of age if applying as an older adult\",\n      \"Medical/disability records if applying based on disability\",\n      \"Income records\",\n      \"Resource/asset records\",\n      \"Information about living arrangement, such as household type, residential care, assisted living, or facility status\",\n      \"SSA award or denial information if already applied for SSI\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Rhode Island program; payment amount depends on living arrangement rather than county. SSA handles payments for residential care, assisted living, and some facility cases, while DHS handles in-house administration for other eligible individuals.\",\n    \"regional_variations\": \"No county-level or regional variation was identified. The main variation is by living arrangement and whether SSA or DHS administers the supplement.\",\n    \"offices_or_providers\": [\n      \"Rhode Island Department of Human Services\",\n      \"Social Security Administration\"\n    ]\n  },\n  \"official_source\": \"https://dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment\",\n  \"gotchas\": [\n    \"This is not a separate medical or caregiving program; it is a cash supplement to SSI.\",\n    \"People often miss that SSP eligibility usually follows SSI eligibility automatically.\",\n    \"The payment amount changes based on living arrangement, not just marital status.\",\n    \"People in assisted living, residential care, or certain facilities may have the supplement administered by SSA instead of DHS.\",\n    \"There is no obvious standalone Rhode Island income table because the state supplement is tied to SSI rules rather than a separate state means test.\",\n    \"State-only applicants must first go through SSA to determine SSI eligibility.\"\n  ],\n  \"data_shape_notes\": \"This program is a cash supplement layered onto federal SSI, with payment amounts determined by living arrangement and administration split between DHS and SSA depending on residence type.\"\n}"
+      },
+      {
+        "name": "Rhode Island Property Tax Relief for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "State property tax relief credit (RI-1040H): household income must be $40,730 or less for tax year 2025[1]. For comparison, prior year 2024 was $39,275 or less[4]. The official form does not show a household-size table; the cap is a single statewide household-income limit[1][4].",
+          "asset_limits": "No asset limit was found in the official program materials reviewed. The state credit is based on age/ disability, Rhode Island residency, household income, and payment status, not reported assets[1][4].",
+          "other_requirements": [
+            "Must have been domiciled in Rhode Island for the entire calendar year being claimed[1][4]",
+            "Must have lived in a household or rented a dwelling subject to property taxes[4]",
+            "Must be current on property tax and rent payments due on the homestead for all prior years and on any current installments[4]",
+            "Only one person in a household may claim the credit[4]",
+            "If claiming as a homeowner, a copy of the property tax bill must be attached[1]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A refundable Rhode Island personal income tax credit for property taxes paid. The official form says eligible taxpayers may claim a property tax relief credit, but the exact dollar amount is not stated in the source excerpt reviewed[1][4].",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "File Form RI-1040H with the Rhode Island income tax return[4]",
+            "Mail the claim to Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806[1]",
+            "For some municipalities, elderly exemption applications may be submitted to the local tax assessor office; for example Providence allows electronic submission to TaxAssessors@providenceri.gov[15]"
+          ],
+          "processing_time": "No official processing-time estimate was found in the materials reviewed.",
+          "waitlist": null,
+          "forms": [
+            "2025 Form RI-1040H",
+            "Rhode Island income tax return (RI-1040), if required",
+            "Municipal elderly exemption forms may exist separately for local exemptions; these are city-specific and not part of the state credit[15]"
+          ],
+          "documents": [
+            "Copy of the 2025 property tax bill for homeowners[1]",
+            "Proof of household income supporting the $40,730 income test[1]",
+            "Completed RI-1040H[1]",
+            "Rhode Island income tax return if otherwise required[11]",
+            "For local municipal exemptions, proof of age, proof of ownership, proof of residence, and prior-year tax return may be requested depending on the city[8][15]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "The state credit is for Rhode Island residents only and must cover the full calendar year; municipal senior exemptions vary by city and are not statewide[1][4][15].",
+          "regional_variations": "The state RI-1040H credit appears uniform statewide. Separate city/town elderly exemptions differ by municipality, with their own age, residency, filing deadline, and exemption amount rules[2][3][6][8][15].",
+          "offices_or_providers": [
+            "Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806[1]",
+            "City of Providence Tax Assessor’s Office[15]",
+            "City of Newport Tax Assessor’s Office, 43 Broadway, Newport, RI 02840[3]"
+          ]
+        },
+        "official_source": "https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf",
+        "gotchas": [
+          "This is a tax credit, not a service program or monthly benefit[1][4].",
+          "The statewide income limit is a single household-income cap, not a sliding scale by family size in the official form excerpt reviewed[1][4].",
+          "The credit is claimed annually and must be filed by April 15, 2026 for tax year 2025[1].",
+          "One household can claim only one credit[4].",
+          "Municipal elderly property-tax exemptions are different programs with different rules, deadlines, and dollar amounts; do not confuse them with the state RI-1040H credit[2][3][15].",
+          "Some local programs require the owner to live in the home as a primary residence and may end when the owner moves, dies, or transfers the property[2][15]."
+        ],
+        "data_shape_notes": "Statewide refundable tax credit with a single household-income cap and annual filing on RI-1040H; separate local senior exemption programs exist in individual cities and towns with their own rules.",
+        "_raw": "{\n  \"name\": \"Rhode Island Property Tax Relief for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"State property tax relief credit (RI-1040H): household income must be $40,730 or less for tax year 2025[1]. For comparison, prior year 2024 was $39,275 or less[4]. The official form does not show a household-size table; the cap is a single statewide household-income limit[1][4].\",\n    \"asset_limits\": \"No asset limit was found in the official program materials reviewed. The state credit is based on age/ disability, Rhode Island residency, household income, and payment status, not reported assets[1][4].\",\n    \"other_requirements\": [\n      \"Must have been domiciled in Rhode Island for the entire calendar year being claimed[1][4]\",\n      \"Must have lived in a household or rented a dwelling subject to property taxes[4]\",\n      \"Must be current on property tax and rent payments due on the homestead for all prior years and on any current installments[4]\",\n      \"Only one person in a household may claim the credit[4]\",\n      \"If claiming as a homeowner, a copy of the property tax bill must be attached[1]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A refundable Rhode Island personal income tax credit for property taxes paid. The official form says eligible taxpayers may claim a property tax relief credit, but the exact dollar amount is not stated in the source excerpt reviewed[1][4].\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"File Form RI-1040H with the Rhode Island income tax return[4]\",\n      \"Mail the claim to Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806[1]\",\n      \"For some municipalities, elderly exemption applications may be submitted to the local tax assessor office; for example Providence allows electronic submission to TaxAssessors@providenceri.gov[15]\"\n    ],\n    \"processing_time\": \"No official processing-time estimate was found in the materials reviewed.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"2025 Form RI-1040H\",\n      \"Rhode Island income tax return (RI-1040), if required\",\n      \"Municipal elderly exemption forms may exist separately for local exemptions; these are city-specific and not part of the state credit[15]\"\n    ],\n    \"documents\": [\n      \"Copy of the 2025 property tax bill for homeowners[1]\",\n      \"Proof of household income supporting the $40,730 income test[1]\",\n      \"Completed RI-1040H[1]\",\n      \"Rhode Island income tax return if otherwise required[11]\",\n      \"For local municipal exemptions, proof of age, proof of ownership, proof of residence, and prior-year tax return may be requested depending on the city[8][15]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"The state credit is for Rhode Island residents only and must cover the full calendar year; municipal senior exemptions vary by city and are not statewide[1][4][15].\",\n    \"regional_variations\": \"The state RI-1040H credit appears uniform statewide. Separate city/town elderly exemptions differ by municipality, with their own age, residency, filing deadline, and exemption amount rules[2][3][6][8][15].\",\n    \"offices_or_providers\": [\n      \"Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806[1]\",\n      \"City of Providence Tax Assessor’s Office[15]\",\n      \"City of Newport Tax Assessor’s Office, 43 Broadway, Newport, RI 02840[3]\"\n    ]\n  },\n  \"official_source\": \"https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf\",\n  \"gotchas\": [\n    \"This is a tax credit, not a service program or monthly benefit[1][4].\",\n    \"The statewide income limit is a single household-income cap, not a sliding scale by family size in the official form excerpt reviewed[1][4].\",\n    \"The credit is claimed annually and must be filed by April 15, 2026 for tax year 2025[1].\",\n    \"One household can claim only one credit[4].\",\n    \"Municipal elderly property-tax exemptions are different programs with different rules, deadlines, and dollar amounts; do not confuse them with the state RI-1040H credit[2][3][15].\",\n    \"Some local programs require the owner to live in the home as a primary residence and may end when the owner moves, dies, or transfers the property[2][15].\"\n  ],\n  \"data_shape_notes\": \"Statewide refundable tax credit with a single household-income cap and annual filing on RI-1040H; separate local senior exemption programs exist in individual cities and towns with their own rules.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "RI",
+    "stateName": "Rhode Island",
+    "classifiedAt": "2026-10-06T06:11:27.950Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 3
+    },
+    "programs": [
+      {
+        "name": "Medicaid for Elders and Adults with Disabilities (EAD)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Rhode Island Department of Human Services (DHS)",
+              "type": "service-area"
+            },
+            {
+              "name": "HealthSource RI",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Rhode Island State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Rhode Island Department of Human Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Social Security Administration",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Rhode Island Property Tax Relief for Seniors",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Rhode Island Division of Taxation, One Capitol Hill, Providence, RI 02908-5806[1]",
+              "type": "service-area"
+            },
+            {
+              "name": "City of Providence Tax Assessor’s Office[15]",
+              "type": "service-area"
+            },
+            {
+              "name": "City of Newport Tax Assessor’s Office, 43 Broadway, Newport, RI 02840[3]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "RI",
+      "id": "ri-medicaid-ead-elders-adults-disabilities",
+      "name": "Medicaid for Elders and Adults with Disabilities (EAD)",
+      "legacyId": "medicaid-for-elders-and-adults-with-disabilities-ead",
+      "programType": "benefit"
+    },
+    {
+      "state": "RI",
+      "id": "ri-ssi-state-supplement",
+      "name": "Rhode Island State SSI Supplement",
+      "legacyId": "rhode-island-state-ssi-supplement",
+      "programType": "benefit"
+    },
+    {
+      "state": "RI",
+      "id": "ri-property-tax-relief-seniors",
+      "name": "Rhode Island Property Tax Relief for Seniors",
+      "legacyId": "rhode-island-property-tax-relief-for-seniors",
+      "programType": "benefit"
+    }
+  ]
+}

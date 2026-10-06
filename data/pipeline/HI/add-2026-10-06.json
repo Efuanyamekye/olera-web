@@ -1,0 +1,145 @@
+{
+  "state": "HI",
+  "addedAt": "2026-10-06T06:29:15.281Z",
+  "dive": {
+    "state": "HI",
+    "stateName": "Hawaii",
+    "diveAt": "2026-10-06T06:27:51.731Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Assistance to the Aged, Blind and Disabled (AABD)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Hawaii’s AABD program is for adults 65+ who are aged, or who are blind or disabled under SSA standards. The official DHS page says countable income must be below 34% of the 2006 Federal Poverty Level. A Hawaii DHS FAQ also describes the program as available when a family’s total gross income is under 185% of the 2006 Federal Poverty Level and the net income is under the AABD standard of assistance. The official sources provided do not include a current household-size dollar table, and the program appears to use program-specific standards rather than a simple modern household-size chart.",
+          "asset_limits": "Countable resources may not exceed $2,000 for a single person and $3,000 for a couple. The official material provided does not list a detailed exempt-asset list. The rules reference 'resources' and 'assets' generally, so families should expect usual means-tested program screening, but the exact exempt-property categories were not stated in the sources reviewed.",
+          "other_requirements": [
+            "Must be a Hawaii resident receiving or applying for state AABD.",
+            "Must be age 65+ or meet the Social Security Administration definition of blind or disabled.",
+            "Most recipients are not eligible for federal Social Security benefits.",
+            "If the person is potentially eligible for SSI, they must apply for SSI; refusal to apply for SSI makes the person ineligible for state AABD.",
+            "For blind applicants, Hawaii materials indicate blindness is determined through Ho‘opono (Division of Vocational Rehabilitation).",
+            "For disabled applicants, Hawaii materials indicate disability may be verified by ADRC/CYRCA or by receipt of SSI/SSDI disability benefits.",
+            "For disability, the condition is described in Hawaii rules as a medically determinable impairment expected to result in death or last at least 12 months."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Cash benefits for food, clothing, shelter, and other essentials. One Hawaii DHS FAQ in the sources states the current monthly AABD benefit is $388, but that figure should be treated as source-specific and time-sensitive unless confirmed again before use.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online application portal: https://pais.dhs.hawaii.gov/PAIS/",
+            "Public assistance information line: 1-855-643-1643",
+            "Use the DHS Med-QUEST/financial assistance forms and return them to the appropriate Med-QUEST eligibility office",
+            "In-person submission to the Med-QUEST eligibility office indicated on the supplemental form"
+          ],
+          "processing_time": "No processing-time standard was stated in the sources provided.",
+          "waitlist": "No formal waitlist was stated in the sources provided.",
+          "forms": [
+            "DHS 1100",
+            "DHS 1100B (Supplemental Form for Individuals Applying for Coverage on the basis of Age, Blindness or Disability and/or Requests for Long-Term Care Services)"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of blindness or disability, if applying on that basis",
+            "Income verification",
+            "Resource/asset verification",
+            "SSI application status or proof of SSI denial/ineligibility, if applicable",
+            "Identification and Hawaii residency information",
+            "Any documents requested by the Med-QUEST eligibility office"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Hawaii program; no county-only restriction was identified in the sources provided.",
+          "regional_variations": "The sources provided do not show different eligibility rules by island or county. Operationally, applicants are routed through the appropriate Med-QUEST eligibility office, so office handling may vary, but the program rules described are statewide.",
+          "offices_or_providers": [
+            "Med-QUEST eligibility office listed on the application instructions",
+            "Ho‘opono (for blindness determinations)",
+            "ADRC/CYRCA (for disability verification in some cases)"
+          ]
+        },
+        "official_source": "https://humanservices.hawaii.gov/bessd/aabd/",
+        "gotchas": [
+          "AABD is not a general senior benefit; it is a means-tested state cash assistance program for a narrow group.",
+          "People often miss that an SSI application can be mandatory before state AABD can be granted.",
+          "The program uses older federal-poverty-based standards in Hawaii guidance, so families should not assume a simple current poverty-chart formula.",
+          "The official materials provided list resource limits but do not give a full exempt-asset list, so asset questions often need direct verification.",
+          "Blindness/disability proof may need to come from Hawaii-specific agencies or from SSI/SSDI status, not just a family statement.",
+          "The benefit is cash assistance, not medical coverage; separate Medicaid/Med-QUEST eligibility may also need to be pursued."
+        ],
+        "data_shape_notes": "This is a fixed statewide cash-assistance program with categorical eligibility (aged, blind, disabled) plus strict income/resource rules, and it may require an SSI application before approval.",
+        "_raw": "{\n  \"name\": \"Assistance to the Aged, Blind and Disabled (AABD)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Hawaii’s AABD program is for adults 65+ who are aged, or who are blind or disabled under SSA standards. The official DHS page says countable income must be below 34% of the 2006 Federal Poverty Level. A Hawaii DHS FAQ also describes the program as available when a family’s total gross income is under 185% of the 2006 Federal Poverty Level and the net income is under the AABD standard of assistance. The official sources provided do not include a current household-size dollar table, and the program appears to use program-specific standards rather than a simple modern household-size chart.\",\n    \"asset_limits\": \"Countable resources may not exceed $2,000 for a single person and $3,000 for a couple. The official material provided does not list a detailed exempt-asset list. The rules reference 'resources' and 'assets' generally, so families should expect usual means-tested program screening, but the exact exempt-property categories were not stated in the sources reviewed.\",\n    \"other_requirements\": [\n      \"Must be a Hawaii resident receiving or applying for state AABD.\",\n      \"Must be age 65+ or meet the Social Security Administration definition of blind or disabled.\",\n      \"Most recipients are not eligible for federal Social Security benefits.\",\n      \"If the person is potentially eligible for SSI, they must apply for SSI; refusal to apply for SSI makes the person ineligible for state AABD.\",\n      \"For blind applicants, Hawaii materials indicate blindness is determined through Ho‘opono (Division of Vocational Rehabilitation).\",\n      \"For disabled applicants, Hawaii materials indicate disability may be verified by ADRC/CYRCA or by receipt of SSI/SSDI disability benefits.\",\n      \"For disability, the condition is described in Hawaii rules as a medically determinable impairment expected to result in death or last at least 12 months.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Cash benefits for food, clothing, shelter, and other essentials. One Hawaii DHS FAQ in the sources states the current monthly AABD benefit is $388, but that figure should be treated as source-specific and time-sensitive unless confirmed again before use.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application portal: https://pais.dhs.hawaii.gov/PAIS/\",\n      \"Public assistance information line: 1-855-643-1643\",\n      \"Use the DHS Med-QUEST/financial assistance forms and return them to the appropriate Med-QUEST eligibility office\",\n      \"In-person submission to the Med-QUEST eligibility office indicated on the supplemental form\"\n    ],\n    \"processing_time\": \"No processing-time standard was stated in the sources provided.\",\n    \"waitlist\": \"No formal waitlist was stated in the sources provided.\",\n    \"forms\": [\n      \"DHS 1100\",\n      \"DHS 1100B (Supplemental Form for Individuals Applying for Coverage on the basis of Age, Blindness or Disability and/or Requests for Long-Term Care Services)\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of blindness or disability, if applying on that basis\",\n      \"Income verification\",\n      \"Resource/asset verification\",\n      \"SSI application status or proof of SSI denial/ineligibility, if applicable\",\n      \"Identification and Hawaii residency information\",\n      \"Any documents requested by the Med-QUEST eligibility office\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Hawaii program; no county-only restriction was identified in the sources provided.\",\n    \"regional_variations\": \"The sources provided do not show different eligibility rules by island or county. Operationally, applicants are routed through the appropriate Med-QUEST eligibility office, so office handling may vary, but the program rules described are statewide.\",\n    \"offices_or_providers\": [\n      \"Med-QUEST eligibility office listed on the application instructions\",\n      \"Ho‘opono (for blindness determinations)\",\n      \"ADRC/CYRCA (for disability verification in some cases)\"\n    ]\n  },\n  \"official_source\": \"https://humanservices.hawaii.gov/bessd/aabd/\",\n  \"gotchas\": [\n    \"AABD is not a general senior benefit; it is a means-tested state cash assistance program for a narrow group.\",\n    \"People often miss that an SSI application can be mandatory before state AABD can be granted.\",\n    \"The program uses older federal-poverty-based standards in Hawaii guidance, so families should not assume a simple current poverty-chart formula.\",\n    \"The official materials provided list resource limits but do not give a full exempt-asset list, so asset questions often need direct verification.\",\n    \"Blindness/disability proof may need to come from Hawaii-specific agencies or from SSI/SSDI status, not just a family statement.\",\n    \"The benefit is cash assistance, not medical coverage; separate Medicaid/Med-QUEST eligibility may also need to be pursued.\"\n  ],\n  \"data_shape_notes\": \"This is a fixed statewide cash-assistance program with categorical eligibility (aged, blind, disabled) plus strict income/resource rules, and it may require an SSI application before approval.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "HI",
+    "stateName": "Hawaii",
+    "classifiedAt": "2026-10-06T06:27:51.736Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Assistance to the Aged, Blind and Disabled (AABD)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Med-QUEST eligibility office listed on the application instructions",
+              "type": "service-area"
+            },
+            {
+              "name": "Ho‘opono (for blindness determinations)",
+              "type": "service-area"
+            },
+            {
+              "name": "ADRC/CYRCA (for disability verification in some cases)",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "HI",
+      "id": "hi-aabd-cash-assistance",
+      "name": "Assistance to the Aged, Blind and Disabled (AABD)",
+      "legacyId": "assistance-to-the-aged-blind-and-disabled-aabd",
+      "programType": "benefit"
+    }
+  ]
+}

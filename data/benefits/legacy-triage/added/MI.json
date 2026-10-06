@@ -61,5 +61,26 @@
     "name": "State SSI Supplement",
     "legacyId": "state-ssi-supplement",
     "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-home-help-program",
+    "name": "Home Help Program",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-home-heating-credit",
+    "name": "Michigan Home Heating Credit",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-meap-energy-assistance",
+    "name": "Michigan Energy Assistance Program (MEAP)",
+    "legacyId": null,
+    "programType": "benefit"
   }
 ]

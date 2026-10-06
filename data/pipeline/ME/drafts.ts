@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.923Z
+ * Last updated: 2026-10-06T06:44:48.385Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1371,6 +1371,1030 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "me-mainecare-aged-blind-disabled",
+      "name": "MaineCare Aged, Blind, and Disabled",
+      "shortName": "MaineCare ABD",
+      "tagline": "If your parent is 65 or older and has limited income and savings, MaineCare ABD can cover their doctor visits, prescriptions, hospital care, and potentially home care or nursing facility costs.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Office for Family Independence (state processing unit)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local DHHS district offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Aging and Disability Resource Centers for application help",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or disabled and living on a fixed income in Maine, MaineCare Aged, Blind, and Disabled (ABD) is the state's full Medicaid coverage program designed for them. It pays for doctor visits, hospital stays, outpatient care, prescription drugs, lab work, and other medically necessary services. For many families, this program eliminates or dramatically reduces out-of-pocket medical costs.\n\nFor parents who need more than basic medical care, MaineCare ABD can also cover nursing facility care and home and community-based services. That coverage is not automatic: it requires a separate functional assessment to determine whether your parent's care needs meet the clinical threshold. But if they qualify, the program can pay for care that would otherwise cost thousands of dollars per month.\n\nThe income limit is $1,330 per month for a single person and $1,804 per month for a two-person household (2026 figures at 100% of the Federal Poverty Level). Assets must also be below $2,000 for an individual or $3,000 for a couple. If your parent is close to these limits, it is worth applying even if you are unsure, because certain assets like their home and one vehicle are not counted.",
+      "savingsRange": "",
+      "savingsSource": "Free service: MaineCare ABD covers medically necessary services at no premium cost for eligible enrollees. The value of coverage depends on your parent's specific health care use and is not published as a single dollar figure by the Maine Department of Health and Human Services.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled under Social Security standards)",
+          "Income at or below $1,330/month for one person (2026)",
+          "Assets at or below $2,000 for one person",
+          "Maine resident",
+          "Functional assessment required for home care or nursing facility coverage"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1330
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1804
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash",
+            "Checking and savings account balances",
+            "Stocks and bonds",
+            "Other countable resources typically treated as available assets"
+          ],
+          "exemptAssets": [
+            "Primary home (protected under Medicaid home-equity rules)",
+            "One vehicle",
+            "Personal belongings and household goods",
+            "Certain burial arrangements (limits apply)",
+            "Limited life insurance (rules apply)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For home care or nursing facility coverage, your parent must meet the Nursing Facility Level of Care standard. This is a clinical assessment that determines whether your parent needs daily help with tasks like bathing, dressing, eating, or medication management. Basic MaineCare ABD medical coverage (doctor visits, prescriptions, hospital care) does not require this assessment.",
+        "otherRequirements": [
+          "Must be a Maine resident",
+          "Must be age 65 or older, blind, or disabled under Social Security Administration standards",
+          "If not already receiving SSI or Social Security disability, a separate disability determination may be required",
+          "Married applicants may be subject to spousal income and asset rules depending on whether both spouses are applying"
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can apply online at mymaineconnection.gov, by phone at 1-855-797-4357, or by mailing a paper application to the Office for Family Independence in Farmington.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "Have their Social Security award letter, proof of Maine residency, Medicare card if they have one, most recent bank statements showing current account balances, and proof of any other income (pension statements, retirement account documents) ready before you begin. Incomplete applications are the most common reason for delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online is the fastest route: go to mymaineconnection.gov and create or log into an account to submit the MaineCare application. If you prefer phone, call 1-855-797-4357 Monday through Friday. For paper, mail the MaineCare Application to the Office for Family Independence, 114 Corn Shop Lane, Farmington, ME 04938. You can also fax to (207) 778-8429 or email Farmington.DHHS@Maine.gov."
+          },
+          {
+            "step": 3,
+            "title": "Complete a disability determination if needed",
+            "description": "If your parent does not already receive SSI or Social Security disability benefits and is applying on the basis of disability rather than age, MaineCare may require a separate disability determination. The Office for Family Independence will tell you if this applies and will send the MaineCare Disability Determination form."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional verification",
+            "description": "After submission, a caseworker at the Office for Family Independence may contact you to request additional documents. Respond as quickly as possible. Delays in returning requested materials are the second most common reason applications take longer than expected."
+          },
+          {
+            "step": 5,
+            "title": "If home care or nursing facility coverage is needed, request a functional assessment",
+            "description": "For long-term care services beyond basic medical coverage, your parent will need a separate functional eligibility assessment. Ask the caseworker explicitly about the Long-Term Care application and assessment process at the time you submit the main MaineCare application. You can also contact your local Aging and Disability Resource Center for help navigating this step."
+          }
+        ],
+        "processingTime": "No single official processing time is published. Expect review by the Office for Family Independence, which may include requests for additional verification. If a disability determination is required, the process will take longer. Contact 1-855-797-4357 to ask about the current timeline after you apply.",
+        "waitlist": "There is no waitlist for core MaineCare ABD medical coverage. Home care and other long-term services require a functional assessment and may have additional steps; waitlist status depends on the specific service category and provider availability in your parent's area.",
+        "tip": "Apply at mymaineconnection.gov even if you are not sure your parent qualifies. The online application screens for multiple MaineCare categories at once, so you will not miss a related benefit by only applying for ABD.",
+        "urls": [
+          {
+            "label": "Apply online at MyMaineConnection",
+            "url": "https://www.mymaineconnection.gov"
+          },
+          {
+            "label": "Maine DHHS MaineCare options for older adults and adults with disabilities",
+            "url": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (shows monthly benefit amount)",
+        "Proof of Maine residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or Social Security card)",
+        "Medicare card if your parent has Medicare",
+        "Social Security number for your parent and, if married, for their spouse",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current balances for any checking or savings accounts (Maine will review asset levels; bring whatever statements show the current balance)",
+        "Investment documents if applicable (stocks, bonds, annuities, IRAs, or other retirement accounts)",
+        "Vehicle registration or title for any vehicles owned",
+        "Documentation of burial arrangements or prepaid funeral contracts if your parent has them (certain exempt burial funds are not counted toward the asset limit)",
+        "Life insurance policy information showing face value amounts",
+        "Spouse's financial information if your parent is married",
+        "Medical records or provider information if a disability determination is needed and your parent does not receive SSI or Social Security disability",
+        "Health insurance information including any private or employer-sponsored coverage in addition to Medicare"
+      ],
+      "contacts": [
+        {
+          "label": "Maine DHHS Benefits Line (Office for Family Independence)",
+          "phone": "1-855-797-4357",
+          "description": "Start your application, ask about eligibility, or check the status of a pending application. This is the direct line to the office that processes MaineCare ABD applications.",
+          "hours": "Monday through Friday, business hours (exact hours not published; call during weekday morning hours for shortest wait)"
+        },
+        {
+          "label": "Office for Family Independence (mail and fax)",
+          "phone": "(207) 778-8429",
+          "description": "Fax documents or mail paper applications to the centralized processing office at 114 Corn Shop Lane, Farmington, ME 04938. You can also email Farmington.DHHS@Maine.gov.",
+          "hours": null
+        },
+        {
+          "label": "Maine Aging and Disability Resource Centers",
+          "phone": "1-800-262-2232",
+          "description": "Local resource centers can help you understand your options, prepare documents, and navigate the application. They do not process applications themselves but can walk alongside you through the process.",
+          "hours": "Hours vary by location; call for your nearest center"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is being discharged from a hospital or skilled nursing facility and needs long-term care coverage, ask the discharge planner to help initiate the MaineCare long-term care application before discharge. Starting early can prevent a gap in coverage.",
+        "Do not confuse MaineCare ABD with a Medicare Savings Program. Medicare Savings Programs help pay Medicare premiums and are a separate application with different rules. Your parent may qualify for both, but they are not the same program.",
+        "If your parent's countable assets are just over the $2,000 limit, consult an elder law attorney before spending down assets. Certain transfers or purchases may be treated differently than you expect, and improper transfers can affect eligibility.",
+        "Provider availability for home and community-based services varies across Maine. Even after financial and functional eligibility is confirmed, access to specific in-home services may depend on what providers are operating in your parent's area. Ask the caseworker about this at the time of assessment."
+      ],
+      "relatedPrograms": [
+        "MaineCare Medicare Savings Programs (helps pay Medicare premiums for people who do not qualify for full MaineCare ABD)",
+        "MaineCare Home and Community-Based Services waiver programs (expanded in-home care for people who meet nursing facility level of care)",
+        "Maine SNAP for seniors (food assistance for low-income adults 60 and older)",
+        "Maine Low Income Home Energy Assistance Program (LIHEAP) (utility bill help for low-income households)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What MaineCare ABD does and does not cover",
+          "body": "Core MaineCare ABD pays for doctor visits, hospital care, outpatient services, prescription drugs, lab work, imaging, and preventive care. It does not automatically cover nursing home costs or in-home care. For those services, your parent must also meet the Nursing Facility Level of Care standard through a separate functional assessment. If they qualify, the program can cover nursing facility care or assessed in-home services. The number of home care hours is not fixed; it is based on the assessment of your parent's specific needs."
+        },
+        {
+          "type": "callout",
+          "title": "The asset test is real and applies to both spouses",
+          "body": "Many families are surprised by the $2,000 individual asset limit. Your parent's home, one car, personal belongings, and certain burial arrangements are not counted. But cash, checking accounts, savings accounts, stocks, bonds, and most other financial accounts are counted. If your parent is married, spousal rules apply, and the financial treatment depends on whether one or both spouses are applying. An elder law attorney can help you understand what is countable before you apply."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "Yes. The primary home is exempt from the asset test under Medicaid home-equity rules, so its value does not count toward the $2,000 individual limit. Your parent can own and live in their home and still qualify for MaineCare ABD. The home may be subject to Medicaid estate recovery after your parent passes away, which means the state may seek reimbursement from the estate. An elder law attorney can explain how this works in Maine."
+        },
+        {
+          "question": "My parent already has Medicare. Do they still need to apply for MaineCare ABD?",
+          "answer": "Yes. Medicare and MaineCare are separate programs that work together, but they are not the same. Medicare covers many medical services but leaves gaps, including significant cost-sharing and limited long-term care coverage. MaineCare ABD can fill those gaps and, for qualifying parents, cover nursing facility or in-home care costs that Medicare does not pay. Having Medicare does not automatically enroll your parent in MaineCare ABD."
+        },
+        {
+          "question": "My parent is 62 and disabled. Can they qualify even though they are not yet 65?",
+          "answer": "Yes. MaineCare ABD is not limited to people 65 and older. Adults who are blind or meet the Social Security Administration's definition of disability can qualify at any age. If your parent does not already receive SSI or Social Security disability benefits, the Office for Family Independence will require a separate disability determination as part of the application process."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the process themselves?",
+          "answer": "Yes. A family member, legal guardian, or authorized representative can apply on a parent's behalf. If you are applying as a representative, be prepared to provide documentation of your relationship or legal authority. The Office for Family Independence can tell you what documentation they need when you call 1-855-797-4357."
+        },
+        {
+          "question": "How long will the application take, and what can slow it down?",
+          "answer": "Maine DHHS does not publish a single official processing timeline. The most common reasons for delays are missing documents and, if your parent is not already on SSI or Social Security disability, the time needed for a separate disability determination. Submit all documents at once and respond quickly to any follow-up requests. You can check on your application status by calling 1-855-797-4357."
+        },
+        {
+          "question": "My parent's income is $1,400 per month, which is over the limit. Are they completely out of luck?",
+          "answer": "Not necessarily. Maine may allow a spend-down process for people whose income exceeds the MaineCare ABD limit, similar to a deductible, where your parent can deduct medical expenses from their income to bring it below the threshold. This is a separate track and not guaranteed, but it is worth asking about specifically when you call 1-855-797-4357. The interaction between income and spend-down rules is complex enough that speaking with a benefits counselor at your local Aging and Disability Resource Center (1-800-262-2232) is advisable."
+        },
+        {
+          "question": "My parent qualifies financially. Does that mean they automatically get home care hours covered?",
+          "answer": "No. Financial eligibility (income and assets) is only one requirement. For home care and other long-term services, your parent must also meet the Nursing Facility Level of Care standard through a functional assessment that evaluates whether they need daily help with activities like bathing, dressing, or medication management. The number of covered home care hours is set through that assessment, not by a fixed program amount. Ask the caseworker about the Long-Term Care application and assessment process when you submit the main application."
+        },
+        {
+          "question": "Can my parent apply for MaineCare ABD and a Medicare Savings Program at the same time?",
+          "answer": "Yes, and it is worth doing. Medicare Savings Programs help pay Medicare premiums and cost-sharing for people who do not qualify for full MaineCare ABD or who have Medicare. The online application at mymaineconnection.gov screens for multiple MaineCare categories at once, so applying there gives your parent the best chance of being considered for every program they may qualify for in a single application."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-855-797-4357",
+      "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "me-mainecare-ead-waiver",
+      "name": "MaineCare Elderly and Adults with Disabilities Waiver",
+      "shortName": "MaineCare EAD Waiver",
+      "tagline": "If your parent is 65+ and needs daily help to stay out of a nursing home, this Maine program may pay for the in-home care services that make it possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local DHHS district offices for in-person application help",
+            "type": "service-area"
+          },
+          {
+            "name": "Office of Aging and Disability Services regional offices for medical review coordination",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs the level of care a nursing home would provide but wants to stay home, the MaineCare Elderly and Adults with Disabilities (EAD) Waiver is the program designed for that situation. It covers home- and community-based services for Maine residents 65 or older (or adults 18+ with a physical disability) who meet both financial and medical requirements. The goal is to let your parent remain at home or in a family member's home instead of moving into a facility.\n\nTo qualify, your parent must meet two separate tests. First, they must pass a clinical assessment showing they need nursing-facility-level care, meaning daily help with bathing, dressing, medication management, or similar tasks. Second, their income must be at or below $2,982 per month (in 2026 for a single applicant), and their countable assets must be at or below $10,000. Both tests must be passed; meeting only one is not enough.\n\nThis is a full-service waiver, not a cash benefit. If approved, your parent receives covered services coordinated through MaineCare rather than a monthly payment. Because eligibility depends on both a financial review and a medical review, the process takes time. Starting early matters.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the program covers home- and community-based care services in place of nursing facility placement. No single published dollar cap per member was found in official sources.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or 18+ with a physical disability)",
+          "Maine resident",
+          "Income at or below $2,982/month (single applicant, 2026)",
+          "Countable assets at or below $10,000 (single applicant, 2026)",
+          "Must meet nursing-facility level of care in a clinical assessment"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5964
+          }
+        ],
+        "assetLimits": {
+          "individual": 10000,
+          "couple": 15000,
+          "countedAssets": [
+            "Checking and savings accounts",
+            "Stocks and bonds",
+            "Investment accounts",
+            "Retirement accounts (review required)",
+            "Additional vehicles beyond one"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must be assessed as needing nursing-facility-level care. This is a clinical evaluation, conducted as part of the MaineCare medical review, that looks at whether your parent requires daily hands-on help with bathing, dressing, medication management, mobility, or similar essential tasks. Meeting the financial rules alone does not qualify someone; this clinical finding is also required.",
+        "otherRequirements": [
+          "Must be a Maine resident",
+          "Must be enrolled in or eligible for MaineCare",
+          "Cannot be living in an adult foster care home or assisted living facility under this waiver",
+          "Must complete both financial and medical review before services begin"
+        ],
+        "povertyLevelReference": "300% SSI federal benefit rate (2026)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can apply by phone, online through My Maine Connection, or in person at a local DHHS district office; expect the process to include both a financial review and a separate medical review before services begin.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather financial and medical records before you call",
+            "description": "Before contacting DHHS, collect your parent's most recent Social Security award letter, proof of Maine residency, income records, and bank or investment statements showing current balances. Having these ready prevents delays when a caseworker asks for them."
+          },
+          {
+            "step": 2,
+            "title": "Start the application",
+            "description": "Call the Office for Family Independence at 855-797-4357, apply online at My Maine Connection (mymaineconnection.gov), or visit your parent's local DHHS district office in person. Ask specifically for the Application for Long Term Care MaineCare."
+          },
+          {
+            "step": 3,
+            "title": "Complete the financial review",
+            "description": "A caseworker will review your parent's income against the $2,982/month limit and countable assets against the $10,000 limit. Submit all financial documents at the same time to avoid requests for additional information that slow down processing."
+          },
+          {
+            "step": 4,
+            "title": "Complete the medical and functional review",
+            "description": "A separate clinical assessment is required to confirm your parent meets nursing-facility level of care. This is coordinated through the Office of Aging and Disability Services (OADS) regional offices. The assessment looks at your parent's daily care needs, such as help with bathing, dressing, and medication management."
+          },
+          {
+            "step": 5,
+            "title": "Receive an eligibility determination",
+            "description": "Once both the financial and clinical reviews are complete, DHHS will issue an eligibility decision. If approved, a care coordinator will work with your parent to identify which covered services are needed and arrange for those services to begin."
+          }
+        ],
+        "processingTime": "No exact statewide processing-time guarantee is published. Both the financial review and the clinical/medical review must be completed before services begin. Families should plan for the process to take several weeks or longer.",
+        "waitlist": "The available official sources do not identify a published waitlist for this program. Ask directly when you call whether there is any delay in service start after approval.",
+        "tip": "If your parent is currently in a hospital or rehabilitation facility, ask the discharge planner to help initiate the MaineCare long-term care application before discharge. Starting the process from a facility often moves faster than starting from home.",
+        "urls": [
+          {
+            "label": "My Maine Connection (online application portal)",
+            "url": "https://www.mymaineconnection.gov"
+          },
+          {
+            "label": "MaineCare options for older adults and adults with disabilities",
+            "url": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter showing monthly benefit amount",
+        "Proof of Maine residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or Maine driver's license)",
+        "Current balances for any checking or savings accounts (the state will review financial accounts as part of the eligibility determination; ask your caseworker what period of records they need)",
+        "Pension or retirement income statements",
+        "Investment or brokerage account statements showing current balances",
+        "Medical records or physician documentation supporting the need for nursing-facility-level care",
+        "Health insurance cards (MaineCare card if already enrolled; Medicare card if applicable)",
+        "Legal documents if a family member or representative is applying on behalf of the applicant (power of attorney or guardianship paperwork)"
+      ],
+      "contacts": [
+        {
+          "label": "Office for Family Independence (MaineCare Long-Term Care Applications)",
+          "phone": "855-797-4357",
+          "description": "Call to apply for the MaineCare Elderly and Adults with Disabilities Waiver or to ask about eligibility. Ask specifically for the Application for Long Term Care MaineCare.",
+          "hours": "Mon-Fri, business hours (confirm current hours when you call)"
+        },
+        {
+          "label": "Office of Aging and Disability Services (OADS)",
+          "phone": "207-287-9200",
+          "description": "Coordinates the medical and functional review that is required as part of waiver eligibility. Contact if you have questions about the clinical assessment process.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Maine 211",
+          "phone": "211",
+          "description": "General information and referral line. Can help you locate your nearest DHHS district office or regional OADS office. Transfers you rather than handling the application itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent must pass both the financial test and the clinical assessment. If they pass one but not the other, the application will not be approved. Make sure medical documentation of care needs is part of the submission.",
+        "The income limit for this waiver (300% of SSI, or $2,982/month in 2026) is higher than the general MaineCare aged/blind/disabled income limit. Do not assume your parent is ineligible based on the general MaineCare limit; apply through the long-term care pathway.",
+        "If your parent is over the asset limit, spending down to $10,000 in countable assets may be required before approval. How assets are counted (and which may be treated differently) is a detail a DHHS caseworker or elder law attorney can walk you through.",
+        "Your parent cannot use this waiver while living in an assisted living facility or adult foster care home. The waiver is for people living at home or in a family member's home."
+      ],
+      "relatedPrograms": [
+        "MaineCare (full Medicaid coverage for older adults and adults with disabilities)",
+        "Maine PACE (Program of All-Inclusive Care for the Elderly)",
+        "MaineCare Consumer Directed Services (self-directed option within the waiver)",
+        "SHIP Maine (State Health Insurance Assistance Program, for help understanding how Medicare and MaineCare work together)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two tests. Both required.",
+          "body": "Many families focus only on the income and asset limits, then are surprised when the application stalls at the clinical review. Your parent must meet a nursing-facility level of care AND fall within the financial limits. Neither alone is enough. Collect medical documentation of your parent's daily care needs before you apply."
+        },
+        {
+          "type": "prose",
+          "title": "What 'nursing-facility level of care' actually means",
+          "body": "This is not a judgment about severity of illness. It is a structured clinical assessment that asks: does your parent need daily hands-on help with bathing, dressing, mobility, medication management, or similar essential tasks to a degree that would otherwise require nursing facility placement? A trained assessor from the Office of Aging and Disability Services conducts this review. Your parent's physician records, care history, and current functional status all inform the finding."
+        },
+        {
+          "type": "prose",
+          "title": "What the waiver pays for",
+          "body": "The EAD Waiver pays for home- and community-based services, not cash. Covered services support your parent's ability to remain at home: personal care, case management, and other services coordinated through the waiver. The exact services available to your parent depend on the assessment and approved care plan. The official source does not publish a fixed per-person dollar cap. Contact the Office for Family Independence at 855-797-4357 to ask which specific services are covered in your parent's situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $3,100 per month. Does that automatically disqualify them?",
+          "answer": "The 2026 income limit is $2,982 per month for a single applicant. If your parent's income exceeds that, they may not qualify for the waiver under this income pathway. However, there are other MaineCare pathways that apply different income rules, and some income may be disregarded in the calculation. Call 855-797-4357 and ask a caseworker to review the full income picture before assuming disqualification."
+        },
+        {
+          "question": "My parent owns their home. Does that count against the $10,000 asset limit?",
+          "answer": "The official sources available for this program do not publish a complete list of exempt assets for the EAD Waiver. In most Medicaid long-term care programs, a primary residence is treated differently from liquid assets, but Maine DHHS will review your parent's specific situation during the eligibility determination. Bring documentation of any property to the application. An elder law attorney can help you understand how the state is likely to treat the home before you apply."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't handle the paperwork themselves?",
+          "answer": "Yes. A family member can apply on behalf of an older adult. If you have power of attorney or guardianship, bring that documentation with the application. If no formal legal authority exists, the caseworker can advise on what is needed to proceed. Call 855-797-4357 to ask what documentation they require for your specific situation."
+        },
+        {
+          "question": "My parent is currently in a rehab facility after a hospital stay. Can we apply now?",
+          "answer": "Yes, and starting now is advisable. Ask the facility's discharge planner to help initiate the Application for Long Term Care MaineCare before your parent leaves the facility. Discharge planners are familiar with this process and can help gather medical documentation that supports the clinical assessment. Waiting until after discharge adds time you may not have."
+        },
+        {
+          "question": "How long will it take before services actually start?",
+          "answer": "No exact statewide processing time is published by Maine DHHS for this waiver. The process requires both a financial review and a separate clinical assessment, which means it can take several weeks or longer. Ask when you call 855-797-4357 what the current processing timeline looks like in your parent's region, since local office staffing and appointment availability vary."
+        },
+        {
+          "question": "My parent currently lives with me. Does the waiver still apply, or is it only for people living alone?",
+          "answer": "The waiver covers people living at home or in a family member's home. Your parent living with you qualifies under the community-based design of the program. The restriction is that your parent cannot be living in an assisted living facility or adult foster care home while using this waiver."
+        },
+        {
+          "question": "What happens if my parent's condition changes after they are enrolled?",
+          "answer": "MaineCare conducts periodic reassessments to confirm ongoing eligibility. If your parent's care needs increase, the care coordinator assigned to them can request a reassessment and adjust the care plan to match the new level of need. If their financial situation changes significantly, that also triggers a review. Contact your parent's care coordinator or call 855-797-4357 to report changes."
+        },
+        {
+          "question": "Is there a waitlist, and if so, how long is it?",
+          "answer": "The official published sources for the EAD Waiver do not identify a published waitlist. That is an honest unknown. When you call 855-797-4357 to begin the application, ask directly whether there is any delay between approval and when services start, and whether that varies by region in Maine."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "855-797-4357",
+      "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "me-mainecare-medicare-savings-programs",
+      "name": "MaineCare Medicare Savings Programs",
+      "shortName": "Maine MSP",
+      "tagline": "If your parent is on Medicare and has a limited income, Maine may pay some or all of their Medicare premiums, deductibles, and coinsurance costs every month.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true
+      },
+      "intro": "Medicare is not free. Your parent likely pays $185 or more each month just for the Part B premium, and that is before any deductibles or coinsurance when they actually use care. Maine's Medicare Savings Program (MSP) is designed to cover those costs for people on fixed incomes. Depending on which tier your parent qualifies for, MaineCare may pay the Part B premium alone or the premium plus Medicare deductibles and coinsurance.\n\nMaine expanded its MSP eligibility in July 2024, so income limits are now higher than older charts show. If your parent looked into this before and didn't think they qualified, that assessment may be out of date. Maine's own guidance explicitly says not to rule yourself out before applying, because people with higher incomes than before now qualify.\n\nThere are three tiers: QMB, SLMB, and QI. The tiers differ in how much they cover and who qualifies. Because Maine's published thresholds conflict across different official documents and recently changed, this page does not print a single income cutoff. Apply through MyMaineConnection or call Maine DHHS to get a determination specific to your parent's situation.",
+      "savingsRange": "Up to $2,220/year per person in Part B premiums alone (at the 2026 standard premium of $185/month), plus potential coverage of Medicare deductibles and coinsurance under the QMB tier",
+      "savingsSource": "Part B premium savings calculated from the 2026 standard Medicare Part B monthly premium of $185, published by CMS at cms.gov. QMB coinsurance and deductible coverage described by Maine DHHS at maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Must be enrolled in Medicare (Part A and/or Part B)",
+          "Must be a Maine resident",
+          "Income eligibility expanded in July 2024; higher earners now may qualify",
+          "Asset rules are in conflict across official sources; apply rather than self-screen",
+          "No waitlist; eligibility is determined when you apply"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Liquid assets (in older MaineCare guidance)"
+          ],
+          "exemptAssets": [
+            "Non-liquid assets appear to be excluded under older guidance; full exemption list not confirmed in available sources"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in Medicare Part A and/or Part B",
+          "Must be a Maine resident",
+          "Must apply through MaineCare; program is administered by Maine DHHS"
+        ],
+        "povertyLevelReference": "QMB and QI tiers appear to range from 140% to 250% FPL depending on the source and whether pre- or post-July 2024 rules apply; verify current limits by applying"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at MyMaineConnection.gov or download a paper application from Maine DHHS; no processing time was published in available official materials.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's Medicare information",
+            "description": "Find your parent's Medicare card and their most recent Social Security award letter. These two documents confirm the Medicare enrollment and income information Maine needs to determine which tier applies."
+          },
+          {
+            "step": 2,
+            "title": "Apply online at MyMaineConnection.gov",
+            "description": "Go to MyMaineConnection.gov and start a MaineCare application. The same application covers the Medicare Savings Program, which Maine also calls the 'Buy-In' program in its forms. You do not need to select a separate MSP application form."
+          },
+          {
+            "step": 3,
+            "title": "Or download and mail a paper application",
+            "description": "If your parent prefers paper, download the MaineCare application from the Maine DHHS Applications and Forms page at maine.gov/dhhs/oms. Complete it and return it by mail, email, or fax per the instructions on the form."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any follow-up requests",
+            "description": "Maine DHHS may contact you for additional documents after you submit. Respond quickly: missing documents are the most common reason applications stall. If you have not heard back within a few weeks of submitting, call Maine DHHS at (207) 287-3707 to confirm receipt."
+          },
+          {
+            "step": 5,
+            "title": "Watch for the eligibility determination letter",
+            "description": "Maine will mail a determination letter explaining which tier your parent qualifies for and when coverage starts. If approved for QMB, Social Security should automatically stop deducting the Part B premium from your parent's benefit check, though this adjustment can take 1 to 3 months to appear."
+          }
+        ],
+        "processingTime": "No official processing time was published in available Maine DHHS sources. If you need an estimate, call Maine DHHS at (207) 287-3707 when you submit.",
+        "waitlist": null,
+        "tip": "Maine's guidance says not to self-screen before applying. If your parent was told they earn too much in the past, the July 2024 expansion may have changed that. Submit the application and let Maine make the determination.",
+        "urls": [
+          {
+            "label": "Apply online at MyMaineConnection",
+            "url": "https://www.mymaineconnection.gov"
+          },
+          {
+            "label": "Maine DHHS Applications and Forms (paper application)",
+            "url": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (showing Part A and/or Part B enrollment)",
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of Maine residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or other government-issued document)",
+        "Any pension or retirement income statements showing current monthly amounts",
+        "Current bank or savings account balance information (older Maine guidance asks about liquid assets; have balances available even if the current asset test is unclear)",
+        "Any health insurance premium notices or Medicare Advantage plan documents if your parent has supplemental coverage",
+        "Social Security card"
+      ],
+      "contacts": [
+        {
+          "label": "Maine DHHS Office of MaineCare Services",
+          "phone": "(207) 287-3707",
+          "description": "The MaineCare office that administers the Medicare Savings Program. Call here to ask about the application, check status, or get help completing the form.",
+          "hours": "Mon-Fri, business hours (confirm current hours at maine.gov/dhhs)"
+        },
+        {
+          "label": "MyMaineConnection Help Line",
+          "phone": "(800) 977-6740",
+          "description": "Support line for the online application portal at MyMaineConnection.gov. Call here if you have trouble logging in or submitting your application online.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Maine SHIP (State Health Insurance Assistance Program)",
+          "phone": "(877) 353-3771",
+          "description": "Free counselors who can explain MSP tiers, help you understand your Medicare costs, and guide you through the application. They do not process the application themselves but can sit with you through the process.",
+          "hours": "Mon-Fri, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "Maine's MSP rules changed in July 2024. If your parent was denied before that date or looked into the program before that date and decided not to apply, re-apply now. The income limits are higher than they were.",
+        "If your parent qualifies for QMB, Medicare providers are not allowed to bill them for deductibles and coinsurance. If a provider sends a bill anyway, your parent can show their QMB card and dispute it. This is a federal protection.",
+        "The program is called both 'Medicare Savings Program' and 'Buy-In' in Maine's official documents. If you see either term on a form, they refer to the same program.",
+        "If your parent is already enrolled in MaineCare for other reasons, the MSP may already be active. Check their MaineCare letter or call (207) 287-3707 to confirm."
+      ],
+      "relatedPrograms": [
+        "MaineCare (Maine Medicaid) full coverage for low-income adults",
+        "Medicare Extra Help (Low Income Subsidy) for Part D prescription drug costs",
+        "Maine SHIP free Medicare counseling",
+        "Supplemental Nutrition Assistance Program (SNAP) for food costs"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "What each MSP tier covers",
+          "description": "Maine's MSP has three tiers. The main difference is how much Maine pays and who qualifies.",
+          "rows": [
+            {
+              "tier": "QMB (Qualified Medicare Beneficiary)",
+              "whatItCovers": "Part B premium plus Medicare Part A and Part B deductibles and coinsurance. This is the most comprehensive tier.",
+              "incomeNote": "Maine published QMB at both 140% FPL and 185% FPL in different documents; the post-July 2024 figure may be higher. Apply for a determination.",
+              "additionalNote": "QMB enrollees cannot be billed by Medicare providers for cost-sharing; that protection is federal law."
+            },
+            {
+              "tier": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "whatItCovers": "Part B premium only. Does not cover deductibles or coinsurance.",
+              "incomeNote": "Income threshold falls between QMB and QI. Exact post-2024 dollar limit was not confirmed in available sources; apply for a determination.",
+              "additionalNote": null
+            },
+            {
+              "tier": "QI (Qualifying Individual)",
+              "whatItCovers": "Part B premium only. Least comprehensive tier.",
+              "incomeNote": "One 2026 Maine source shows an upper income limit of $3,325/month for a single person and $4,509/month for a couple, but this conflicts with other sources. Apply for a determination.",
+              "additionalNote": null
+            }
+          ],
+          "caveat": "These tier descriptions are based on available Maine DHHS sources. Because published thresholds conflict and Maine expanded eligibility in July 2024, exact income cutoffs are not listed here. The safest step is to apply and let Maine assign the tier."
+        },
+        {
+          "type": "stat-callout",
+          "title": "Medicare Part B costs your parent may not have to pay",
+          "stats": [
+            {
+              "label": "Standard 2026 Part B premium",
+              "value": "$185/month"
+            },
+            {
+              "label": "Potential annual savings on premiums alone",
+              "value": "Up to $2,220/year"
+            },
+            {
+              "label": "Additional savings under QMB",
+              "value": "Medicare deductibles and coinsurance, which vary by year and service"
+            }
+          ],
+          "caveat": "Savings figures are based on the 2026 standard Medicare Part B premium published by CMS. Actual savings depend on which tier your parent qualifies for and how much Medicare care they use."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent looked into this a few years ago and was told they earned too much. Should they apply again?",
+          "answer": "Yes. Maine expanded MSP eligibility in July 2024, raising the income thresholds above what older charts show. Maine's own materials say explicitly not to rule yourself out before applying. Submit a new application at MyMaineConnection.gov or call (207) 287-3707."
+        },
+        {
+          "question": "What is the difference between QMB and the other tiers, and does it matter which one my parent gets?",
+          "answer": "It matters significantly. QMB is the most generous tier: it pays the Part B premium and also covers Medicare deductibles and coinsurance, so your parent pays little or nothing out of pocket for Medicare-covered services. SLMB and QI pay only the Part B premium. Under QMB, Medicare providers are also legally prohibited from billing your parent for cost-sharing."
+        },
+        {
+          "question": "Does my parent need to own very little to qualify, or is there an asset test?",
+          "answer": "This is genuinely unclear. Some older Maine DHHS documents describe a liquid-asset test with limits of $50,000 for an individual and $75,000 for a couple. A 2026 Maine Council on Aging summary says there is no asset test at all. Because the sources conflict, the safest approach is to apply rather than assume your parent is disqualified by assets. Maine's own page directs applicants to apply for a determination."
+        },
+        {
+          "question": "Can I apply for MSP and Medicare Extra Help (Part D Low Income Subsidy) at the same time?",
+          "answer": "Yes, and you should. MSP covers Part B premiums and, under QMB, Medicare cost-sharing. Medicare Extra Help covers Part D prescription drug costs. They are separate programs but address related costs. If your parent qualifies for QMB, they may automatically qualify for a level of Extra Help as well. Apply for both through MyMaineConnection.gov for MSP and through SSA.gov for Extra Help."
+        },
+        {
+          "question": "My parent gets a Part B premium deducted from their Social Security check each month. How quickly will that stop if they are approved?",
+          "answer": "Approval does not stop the deduction immediately. Social Security processes the change after Maine notifies them, which can take one to three months. Your parent should receive a refund of premiums paid after the effective date of approval. Keep the approval letter in case you need to follow up with Social Security."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage paperwork themselves?",
+          "answer": "Yes. A family member, legal representative, or caregiver can complete and submit the MaineCare application on behalf of an applicant. If you have a power of attorney or are a legal guardian, include a copy of that documentation with the application. If you do not have formal legal authority, Maine DHHS can still accept applications submitted by a family member acting on the applicant's behalf; call (207) 287-3707 to confirm the process for your situation."
+        },
+        {
+          "question": "My parent already has MaineCare for other benefits. Do they need a separate MSP application?",
+          "answer": "Not necessarily. People enrolled in full MaineCare often have MSP coverage automatically as part of their MaineCare. Check your parent's most recent MaineCare letter or call (207) 287-3707 to confirm whether MSP is already active. If it is not listed, ask how to add it."
+        },
+        {
+          "question": "What if my parent's income goes up after they are enrolled in MSP?",
+          "answer": "Your parent is required to report income changes to Maine DHHS. Depending on how much income increases, they may move to a different tier or lose eligibility entirely. However, if income later decreases again, they can reapply. Call (207) 287-3707 to report a change or ask about the reporting process."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(207) 287-3707",
+      "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "me-state-ssi-supplement",
+      "name": "Maine State SSI Supplement",
+      "shortName": "Maine SSI Supplement",
+      "tagline": "If your parent receives SSI in Maine, the state adds a monthly cash payment on top of the federal benefit to help cover basic living costs.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Maine Department of Health and Human Services, Office for Family Independence local offices",
+            "type": "service-area"
+          },
+          {
+            "name": "My Maine Connection online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is elderly, blind, or disabled and already receives federal Supplemental Security Income (SSI) in Maine, they may qualify for an additional monthly state cash payment on top of what SSI provides. Maine law requires this supplement to be at least $8 per month above the federal SSI amount for an individual, and at least $12 per month for a couple. The actual amount depends on your parent's living situation and benefit category.\n\nThis program is not a stand-alone cash benefit with its own income table. Eligibility is tied to SSI: if your parent is financially eligible for SSI, they must apply for and receive SSI first. The state supplement then layers on top. There is one important exception: if SSI was denied only because of income-in-kind (for example, a family member covering rent or groceries), Maine does not count that the same way SSI does, and your parent may still qualify for the state supplement even without SSI.\n\nThe program is administered by Maine DHHS through its Office for Family Independence (OFI). Applications can be submitted online, in person at a local OFI office, by phone, or by mail. Processing takes up to 45 days from the date the department receives the application.",
+      "savingsRange": "At least $96/year for an individual ($8/month minimum); at least $144/year for a couple ($12/month minimum). Actual payment depends on the person's benefit category and circumstances. No published universal payment table was found in official sources.",
+      "savingsSource": "Maine law sets a floor of $8/month per individual and $12/month per couple above the federal SSI payment standard. Source: Maine DHHS Office for Family Independence official program materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Aged, blind, or disabled Maine resident",
+          "Receiving SSI, or eligible for SSI but denied only for citizenship or income-in-kind reasons",
+          "Must apply for SSI first if financially eligible",
+          "Must be a Maine resident",
+          "No separate Maine asset limit; SSI's federal resource rules apply"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be aged, blind, or disabled as recognized under SSI definitions",
+          "Must be a Maine resident",
+          "If financially eligible for SSI, must apply for and receive SSI before the state supplement is payable",
+          "May qualify without SSI if denied only because of citizenship status or income-in-kind",
+          "Maine does not count income-in-kind (such as a family member paying rent or groceries) the same way SSI does; this can make your parent eligible for the state supplement even if SSI was denied on that ground"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at My Maine Connection, by phone through your local OFI office, in person, or by mail; the department must process the application within 45 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Apply for SSI first (if your parent hasn't already)",
+            "description": "If your parent is financially eligible for SSI, Maine requires that SSI be applied for and received before the state supplement is paid. Call the Social Security Administration at (800) 772-1213 to open an SSI application. If SSI was already approved, skip to Step 2."
+          },
+          {
+            "step": 2,
+            "title": "Apply for the Maine State Supplement",
+            "description": "Apply online at My Maine Connection (gateway.maine.gov/jspui), in person at your local Maine DHHS Office for Family Independence, by phone through your local OFI office, or by mailing a paper application to your regional OFI office. No single state-supplement-specific form number is published on official materials; the OFI intake process covers this program."
+          },
+          {
+            "step": 3,
+            "title": "Gather your documents before the appointment or submission",
+            "description": "Bring or upload your parent's SSI award letter, proof of Maine residency, and proof of age, blindness, or disability if not already on file with SSI. See the full document list below for additional items OFI may request."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from OFI during processing",
+            "description": "The department must process your application within 45 days of receiving it. If OFI contacts you for missing documents, respond promptly to avoid delay. If your parent was denied SSI only because of income-in-kind, tell OFI explicitly, because that denial does not disqualify them from the state supplement."
+          },
+          {
+            "step": 5,
+            "title": "Receive a written decision",
+            "description": "OFI will send a written notice of approval or denial. If approved, payments begin based on the date eligibility was established. If denied, the notice will explain the reason and your appeal rights."
+          }
+        ],
+        "processingTime": "Up to 45 days from the date the department receives the application.",
+        "waitlist": null,
+        "tip": "If your parent was denied SSI because a family member pays their rent or groceries (called income-in-kind), tell OFI this directly. Maine does not count income-in-kind the same way SSI does, and your parent may still qualify for the state supplement. Many families miss this exception.",
+        "urls": [
+          {
+            "label": "My Maine Connection (online application portal)",
+            "url": "https://gateway.maine.gov/jspui"
+          },
+          {
+            "label": "Maine DHHS OFI Applications and Forms",
+            "url": "https://www.maine.gov/dhhs/ofi/applications-forms"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "SSI award letter showing current monthly benefit amount (or, if SSI was denied, the denial notice explaining the reason)",
+        "Proof of Maine residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age, blindness, or disability if not already established through SSI (birth certificate, passport, or disability determination documentation)",
+        "Social Security card or number for your parent",
+        "Income statements for any income your parent receives beyond SSI (pension, retirement, or other sources)",
+        "Documentation of any income-in-kind received (for example, a statement from the family member who pays rent or groceries), because Maine handles this differently from SSI and it may help your parent qualify",
+        "Citizenship or immigration documents if your parent was denied SSI due to citizenship status, since that denial does not automatically disqualify them from the state supplement",
+        "Bank account information showing current balances (the federal SSI resource rules generally govern; OFI will ask for current account balances)",
+        "Legal documents if someone other than your parent is applying on their behalf (power of attorney, guardianship order, or representative payee authorization)"
+      ],
+      "contacts": [
+        {
+          "label": "Maine DHHS Office for Family Independence (OFI)",
+          "phone": "(207) 287-3707",
+          "description": "The state office that administers this program. Call to find your nearest local OFI office, ask eligibility questions, or get help with your application.",
+          "hours": "Mon-Fri, standard state business hours"
+        },
+        {
+          "label": "My Maine Connection (online portal)",
+          "phone": null,
+          "description": "Apply online at gateway.maine.gov/jspui. You can start the application, upload documents, and check status without calling.",
+          "hours": "Available 24 hours online"
+        },
+        {
+          "label": "Social Security Administration (SSI application)",
+          "phone": "(800) 772-1213",
+          "description": "If your parent has not yet applied for SSI, call SSA first. Maine requires SSI be applied for before the state supplement is paid to those who are financially eligible.",
+          "hours": "Mon-Fri 8am-7pm local time"
+        },
+        {
+          "label": "Maine 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line. Can direct you to your nearest OFI office if you are unsure where to call. Does not process applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's SSI was denied only because of income-in-kind (a family member paying rent, food, or utilities), notify OFI explicitly when you apply. Maine's rules exclude income-in-kind from the state supplement calculation, which means your parent may still qualify even without SSI.",
+        "If your parent was denied SSI because of citizenship status, they may still be eligible for the state supplement. Bring the SSI denial notice and any immigration documents to the OFI appointment.",
+        "The state supplement amount is not published as a simple dollar table in official materials. The payment depends on your parent's benefit category and living arrangement. Ask OFI directly what amount your parent would receive.",
+        "Submit all documents at once when you apply. Applications missing documentation are held during the 45-day processing window, and delays in responding can push the effective date of payment."
+      ],
+      "relatedPrograms": [
+        "Federal Supplemental Security Income (SSI)",
+        "MaineCare (Maine's Medicaid program)",
+        "Maine Elderly and Adult Services Home and Community-Based Waiver",
+        "Maine Low Income Home Energy Assistance Program (LIHEAP)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The income-in-kind exception: easy to miss, worth knowing",
+          "body": "SSI counts it as income when a family member pays your parent's rent, groceries, or utilities. That can reduce or eliminate the SSI payment. Maine's state supplement does not count income-in-kind the same way. So if your parent was denied SSI, or receives a reduced SSI amount, partly because your family helps cover housing or food costs, they may still qualify for the full state supplement. Tell OFI this when you apply."
+        },
+        {
+          "type": "prose",
+          "title": "Why SSI must come first",
+          "body": "Maine's state supplement is not a stand-alone cash program you can access independently. If your parent is financially eligible for SSI, the state requires SSI to be applied for and received before the supplement is paid. This is not optional. Families sometimes try to skip the SSI application because it can be slow or complicated, but doing so blocks access to the state supplement entirely. Start with SSI at (800) 772-1213, then apply to OFI for the supplement."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already gets SSI. Do they automatically get the state supplement, or do they have to apply separately?",
+          "answer": "They need to apply separately through Maine DHHS. SSI is a federal program run by Social Security; the state supplement is administered by Maine DHHS Office for Family Independence. Receiving SSI does not trigger automatic enrollment in the state supplement. Apply at My Maine Connection (gateway.maine.gov/jspui) or contact your local OFI office."
+        },
+        {
+          "question": "My parent was denied SSI because our family pays their rent. Can they still get the state supplement?",
+          "answer": "Yes, possibly. SSI counts housing and food paid by others (called income-in-kind) as income, which can reduce or eliminate SSI eligibility. Maine's state supplement does not count income-in-kind the same way. If the only reason SSI was denied or reduced was income-in-kind, your parent may still qualify for the Maine supplement. Bring the SSI denial notice to OFI and explain the reason for denial."
+        },
+        {
+          "question": "How much will my parent actually receive from this supplement?",
+          "answer": "Maine law sets the minimum at $8 per month above the federal SSI payment for an individual, and $12 per month for a couple. The actual amount depends on your parent's benefit category and living arrangement. No universal payment table is published in official materials. Ask OFI directly what amount your parent qualifies for based on their specific situation."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent who cannot manage paperwork?",
+          "answer": "Yes. If you have power of attorney, are a legal guardian, or are recognized as a representative payee by Social Security, you can apply and communicate with OFI on your parent's behalf. Bring the legal document establishing your authority (power of attorney, guardianship order, or SSA representative payee letter) when you apply."
+        },
+        {
+          "question": "My parent is not a U.S. citizen and was denied SSI because of immigration status. Are they completely locked out of the state supplement?",
+          "answer": "Not necessarily. Maine's rules allow eligibility for the state supplement even when SSI is denied because of citizenship or certain immigration-related reasons. Bring the SSI denial notice and any immigration documents to your OFI application appointment, and explain that the denial was citizenship-based."
+        },
+        {
+          "question": "How long does the application take, and when do payments start?",
+          "answer": "Maine DHHS is required to process the application within 45 days of receiving it. Payments are tied to the date eligibility is established, not the date you submit paperwork. Submitting all required documents at the same time you apply is the best way to avoid a gap. If OFI requests additional documents during the 45-day window, respond quickly."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they're enrolled?",
+          "answer": "You are required to report changes to OFI. Changes in income, living arrangement, or household composition can affect the benefit amount or eligibility. Contact your local OFI office to report changes; the phone number for OFI's central office is (207) 287-3707. Failure to report changes can result in an overpayment that OFI will seek to recover."
+        },
+        {
+          "question": "Can my parent apply for this supplement and MaineCare at the same time?",
+          "answer": "Yes. Applying for Maine's state supplement through OFI and applying for MaineCare (Maine's Medicaid program) are separate processes, but both go through Maine DHHS. You can submit applications for both at the same time through My Maine Connection at gateway.maine.gov/jspui. SSI recipients often qualify for MaineCare automatically, so it is worth asking OFI about both programs during your appointment."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Coins",
+      "phone": "(207) 287-3707",
+      "sourceUrl": "https://www.maine.gov/dhhs/ofi/applications-forms",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "me-property-tax-stabilization-seniors",
+      "name": "Maine Property Tax Stabilization for Seniors",
+      "shortName": "Senior Tax Freeze",
+      "tagline": "If your parent is 65 or older and owns their Maine home, this program can freeze their property tax bill so it never rises above what they owe today.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local municipal office where the homestead is located",
+            "type": "service-area"
+          },
+          {
+            "name": "Maine Revenue Services Property Tax Division, Augusta",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and owns the home they live in as their primary residence in Maine, this program can lock their property tax bill at its current level. Any tax increase that would otherwise apply in future years gets deferred as long as they remain eligible. The bill does not disappear, but it stops growing.\n\nThere is no income test and no asset test. Eligibility turns on three things: age, homeownership, and occupying the home as a primary residence. Your parent does not need to be low-income to qualify.\n\nThe application goes to the town or city where the home is located, not to a state office. The deadline is December 1 each year, and a new application is required every year. Because local rules can vary, confirm the exact requirements with your parent's municipal office before assuming eligibility.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "Own and occupy the home as a primary residence in Maine",
+          "Apply to the municipality where the home is located",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Maine resident and apply to the municipality where the homestead is located",
+          "Application must be filed by December 1 each year for the tax year beginning the following April 1",
+          "A new application is required every year; the freeze does not renew automatically",
+          "Must submit any proof of qualification the municipality requests",
+          "Homeowners enrolled in the State Property Tax Deferral Program cannot also participate in this stabilization program"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply at your parent's town or city office before December 1; applications are available from the municipality or by mail from Maine Revenue Services.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your parent's municipal office",
+            "description": "The application goes to the town or city where the home is located, not to a state office. Look up the assessor's or municipal office contact at maine.gov or search your parent's town name plus 'assessor's office.'"
+          },
+          {
+            "step": 2,
+            "title": "Get the application form",
+            "description": "Your parent can pick up a form at the municipal office in person, download the Property Tax Stabilization for Senior Citizens application from maine.gov/revenue/taxes/tax-relief-credits-programs/property-tax-relief-programs, or call Maine Revenue Services Property Tax Division in Augusta to have one mailed."
+          },
+          {
+            "step": 3,
+            "title": "Complete and submit the form",
+            "description": "Fill out the application and attach any proof of qualification the municipality requests, such as documentation of ownership and primary residency. Submit it to the municipal office by December 1."
+          },
+          {
+            "step": 4,
+            "title": "Repeat every year",
+            "description": "The freeze does not renew automatically. A new application is due every December 1. Set a calendar reminder now so your parent does not lose the benefit."
+          }
+        ],
+        "processingTime": "Applications due by December 1 apply to the tax year beginning the following April 1. No statewide standard processing time has been published; contact your municipal office for local timelines.",
+        "waitlist": null,
+        "tip": "Call your parent's municipal assessor's office first. Local rules can add requirements beyond the state baseline, such as minimum years of ownership, and the staff can confirm exactly what documents to bring.",
+        "urls": [
+          {
+            "label": "Maine Revenue Services: Property Tax Relief Programs",
+            "url": "https://www.maine.gov/revenue/taxes/tax-relief-credits-programs/property-tax-relief-programs"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed Property Tax Stabilization for Senior Citizens application form",
+        "Proof of ownership of the home (deed or property tax statement)",
+        "Proof that the home is your parent's primary residence (utility bill, Maine driver's license, or voter registration showing the address)",
+        "Any additional documents your municipality requests at the time of application"
+      ],
+      "contacts": [
+        {
+          "label": "Maine Revenue Services Property Tax Division",
+          "phone": "(207) 624-5600",
+          "description": "Can mail you the application form and answer questions about statewide program rules. Your parent's municipal office handles the actual application.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "The December 1 deadline is firm. Missing it means waiting until the following year. Submit well in advance if your parent needs help gathering documents.",
+        "Homeowners already enrolled in the State Property Tax Deferral Program are not eligible for this stabilization program. If your parent is in that program, contact the municipal office to compare the two benefits before switching."
+      ],
+      "relatedPrograms": [
+        "Maine Homestead Exemption",
+        "Maine Property Tax Deferral Program for Seniors",
+        "Maine Property Tax Fairness Credit",
+        "Maine Bureau of Elder and Adult Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "This is a freeze, not forgiveness",
+          "body": "The program locks your parent's property tax at the most recent assessed level before their application. It does not cancel taxes already owed, and it does not stop the municipality from billing future taxes. It prevents the bill from rising beyond the stabilized amount as long as your parent stays eligible and reapplies each year."
+        },
+        {
+          "type": "callout",
+          "heading": "Local rules can differ",
+          "body": "The state law sets the baseline, but each municipality administers the program. Your parent's town may require additional documentation, minimum years of ownership, or other criteria. Confirm the exact local rules with the municipal assessor's office before the December 1 deadline."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does my parent have to reapply every year, or does the freeze stay in place automatically?",
+          "answer": "Your parent must submit a new application every year by December 1. The freeze does not renew on its own. If they miss the deadline, the stabilization does not apply for that tax year and they would need to apply again the following year. Set a calendar reminder well before December 1."
+        },
+        {
+          "question": "My parent's income is comfortable. Do they still qualify?",
+          "answer": "Yes. The statewide program has no income limit and no asset limit. Eligibility depends only on age (65 or older), owning the home, and living in it as a primary residence. Some municipalities may add local requirements, so confirm with your parent's town office, but income alone will not disqualify them under state rules."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they have difficulty getting to the municipal office?",
+          "answer": "Contact your parent's municipal assessor's office and ask. Some municipalities accept mail-in applications, and Maine Revenue Services can mail a form to your parent at (207) 624-5600. Local offices vary in how they handle representation, so ask directly about whether a family member can assist with submission."
+        },
+        {
+          "question": "My parent is already enrolled in the State Property Tax Deferral Program. Can they switch to this stabilization program?",
+          "answer": "Residents enrolled in the State Property Tax Deferral Program cannot participate in this stabilization program at the same time. If your parent is in the deferral program, talk to your municipal assessor's office to compare the two options before making a change. Contact Maine Revenue Services at (207) 624-5600 with questions about the distinction."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "House",
+      "phone": "(207) 624-5600",
+      "sourceUrl": "https://www.maine.gov/revenue/taxes/tax-relief-credits-programs/property-tax-relief-programs",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

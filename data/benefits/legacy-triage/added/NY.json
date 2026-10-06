@@ -1,0 +1,23 @@
+[
+  {
+    "state": "NY",
+    "id": "ny-epic-prescription-assistance",
+    "name": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+    "legacyId": "elderly-pharmaceutical-insurance-coverage-epic",
+    "programType": "resource"
+  },
+  {
+    "state": "NY",
+    "id": "ny-property-tax-relief-seniors",
+    "name": "Property Tax Relief for Seniors",
+    "legacyId": "property-tax-relief-for-seniors",
+    "programType": "benefit"
+  },
+  {
+    "state": "NY",
+    "id": "ny-cdpap-consumer-directed-personal-assistance",
+    "name": "Consumer Directed Personal Assistance Program (CDPAP)",
+    "legacyId": null,
+    "programType": "benefit"
+  }
+]

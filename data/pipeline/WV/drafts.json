@@ -2,8 +2,8 @@
   "state": "WV",
   "stateName": "West Virginia",
   "draftedAt": "2026-04-13T21:50:19.572Z",
-  "total": 15,
-  "successful": 15,
+  "total": 16,
+  "successful": 16,
   "programs": [
     {
       "id": "medicare-savings-programs",
@@ -2626,6 +2626,253 @@
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
+    },
+    {
+      "id": "wv-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "Full health coverage for your aging parent in West Virginia, including doctor visits, prescriptions, and potentially nursing home or in-home care, if they meet income and asset limits.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county Department of Health and Human Resources/DoHS offices",
+            "type": "service-area"
+          },
+          {
+            "name": "WV Bureau for Medical Services statewide Medicaid administration",
+            "type": "service-area"
+          },
+          {
+            "name": "WV PATH online application portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or disabled and lives in West Virginia, ABD Medicaid can cover their doctor visits, prescription drugs, emergency care, and hospital stays at no cost to them. For parents who need more intensive help, it can also pay for nursing home care or in-home care, as long as they meet the clinical and financial requirements for that level of coverage.\n\nThe income limit for basic ABD Medicaid is $994/month for a single person in 2026. If your parent's income is above that, they may still qualify through a spend-down process: once their out-of-pocket medical expenses bring their countable income below the medically needy threshold, Medicaid coverage kicks in. Asset limits also apply. A single person can have no more than $2,000 in countable assets, though the home and one vehicle are typically exempt.\n\nThis is not one simple program. ABD Medicaid has at least three distinct coverage paths: standard eligibility, medically needy spend-down, and long-term-care coverage, each with different financial tests. Knowing which path applies to your parent's situation is the most important first step, and it's worth a phone call to the state's eligibility line before you gather paperwork.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays covered medical expenses directly to providers. There is no standard dollar benefit to quote because the program covers actual costs incurred.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+, or blind or disabled at any age",
+          "Income below $994/month for a single person (2026)",
+          "Assets below $2,000 for a single person",
+          "West Virginia resident",
+          "SSI recipients are automatically eligible; no separate application needed"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash and checking account balances",
+            "Savings accounts and certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Additional real property beyond the primary home",
+            "Jointly held bank accounts or financial accounts"
+          ],
+          "exemptAssets": [
+            "Primary home, if it is the applicant's principal residence and home equity rules are satisfied",
+            "One vehicle",
+            "Certain personal belongings",
+            "Some burial funds or irrevocable burial arrangements"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For long-term-care or in-home care coverage under ABD Medicaid, your parent must meet a Nursing Facility Level of Care standard. This is a clinical assessment that determines whether your parent needs daily help with tasks like bathing, dressing, eating, or managing medications. Basic ABD Medicaid for routine medical care does not require this assessment.",
+        "otherRequirements": [
+          "Must be aged (65+), blind, or disabled as defined by Medicaid or SSI criteria",
+          "Must meet West Virginia Medicaid financial eligibility for the specific coverage category being applied for",
+          "SSI recipients are automatically enrolled in Medicaid and do not need to apply at the county office",
+          "Eligibility for long-term-care coverage involves additional financial and functional criteria beyond the standard ABD test",
+          "Eligibility is determined by West Virginia Department of Human Services workers at county offices"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through WV PATH, by phone at 877-716-1212, in person at your county DoHS office, or by mailing the paper form DFA-MA-1; no firm statewide processing deadline exists, so applying as early as possible is critical.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether your parent already qualifies through SSI",
+            "description": "If your parent receives Supplemental Security Income (SSI), they are automatically enrolled in West Virginia Medicaid and do not need to apply at a county office. Confirm this by calling the West Virginia Customer Service Center at 877-716-1212 before gathering any paperwork."
+          },
+          {
+            "step": 2,
+            "title": "Identify which coverage path applies",
+            "description": "Standard ABD Medicaid covers income up to $994/month (single, 2026). If your parent's income is higher, ask specifically about the medically needy spend-down path. If nursing home or in-home care is the goal, ask about long-term-care Medicaid, which has a separate 300% SSI threshold of $2,901/month (effective January 2025) and requires a functional assessment. Getting this wrong means applying under the wrong category."
+          },
+          {
+            "step": 3,
+            "title": "Choose an application method",
+            "description": "Apply online through WV PATH at dhhr.wv.gov/bcf/Services/Pages/WVPath.aspx, call 877-716-1212 to apply by phone, visit your local county Department of Human Services office in person, or download and mail the paper form DFA-MA-1 (available from DHHR). Online and phone are the fastest routes."
+          },
+          {
+            "step": 4,
+            "title": "Gather and submit your documents",
+            "description": "Collect proof of identity, residency, age or disability status, income sources (Social Security award letter, pension statements), and asset records (bank account balances, property documents). If pursuing spend-down, also collect all medical bills paid out of pocket. Submit everything together to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Follow up with your county office",
+            "description": "Eligibility decisions are made at the county DoHS office level. Processing times vary by office workload and by whether a disability or long-term-care review is needed. There is no statewide guaranteed timeline. Call 877-716-1212 to check status if you have not heard back within 30 days."
+          }
+        ],
+        "processingTime": "No statewide processing deadline is published. Timing varies by county office workload and by whether a disability determination or long-term-care clinical review is required. Apply as early as possible.",
+        "waitlist": null,
+        "tip": "If your parent is applying for long-term-care or nursing home Medicaid, the financial rules are more complex than for basic ABD coverage. Call 877-716-1212 before starting the application and ask specifically about the long-term-care Medicaid pathway so the county worker routes the case correctly.",
+        "urls": [
+          {
+            "label": "WV PATH Online Application",
+            "url": "https://dhhr.wv.gov/bcf/Services/Pages/WVPath.aspx"
+          },
+          {
+            "label": "WV Guide to Medicaid 2025 (PDF)",
+            "url": "https://dhhr.wv.gov/bms/BMSPUB/Documents/Guide%20to%20Medicaid%202025.pdf"
+          },
+          {
+            "label": "WV Bureau for Medical Services",
+            "url": "https://dhhr.wv.gov/bms/Pages/default.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of West Virginia residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age or disability status (birth certificate, passport, or Social Security disability determination letter)",
+        "Proof of any other income sources: pension statements, VA benefit letters, annuity or retirement income statements",
+        "Current balances for any checking, savings, or CD accounts (the county worker will ask for this; the state may request documentation of transfers during the prior period if applying for long-term-care Medicaid)",
+        "Proof of identity (state-issued photo ID or driver's license)",
+        "Medicare card, if your parent has Medicare (not required, but helps the county worker coordinate coverage)",
+        "Information about any other health insurance your parent carries",
+        "Property documents if your parent owns real estate beyond the primary home (deed, tax assessment)",
+        "Vehicle title and registration if your parent owns more than one vehicle",
+        "Life insurance policy documents showing face value and any cash surrender value",
+        "Pre-need burial contracts or irrevocable burial trust documents, if any exist",
+        "Medical bills and receipts paid out of pocket, if pursuing spend-down or medically needy eligibility",
+        "Spouse's income and asset information if your parent is married, because spousal rules affect the financial test",
+        "Legal documents such as power of attorney or guardianship paperwork if you are applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "WV Medicaid Customer Service Center",
+          "phone": "(877) 716-1212",
+          "description": "Apply for ABD Medicaid, ask about eligibility, check application status, and get routed to your county office.",
+          "hours": "Mon-Fri, business hours (call to confirm current hours)"
+        },
+        {
+          "label": "Local County DoHS Office",
+          "phone": null,
+          "description": "Eligibility decisions are made at the county level. Find your local office through the WV DHHR county office directory at dhhr.wv.gov. In-person applications are accepted.",
+          "hours": "Varies by county; typically Mon-Fri 8am-4:30pm"
+        },
+        {
+          "label": "WV Bureau for Medical Services (BMS)",
+          "phone": "(304) 558-1700",
+          "description": "Statewide Medicaid program administration. Contact for policy questions, not for individual applications.",
+          "hours": "Mon-Fri, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in a hospital or nursing facility right now, ask the facility's social worker or discharge planner to initiate the Medicaid application. They do this regularly and can help identify the right coverage category from the start.",
+        "ABD Medicaid has three meaningfully different coverage paths: standard eligibility, medically needy spend-down, and long-term-care. Applying under the wrong category will not automatically move the case to the right one. Confirm with the county worker which category applies before submitting paperwork.",
+        "If your parent's income is above $994/month but they have significant medical expenses, do not assume they are ineligible. The spend-down path lets them apply once medical bills bring countable income below the medically needy limit. Ask specifically for this evaluation.",
+        "Asset limits still apply even when income is low. Jointly held bank accounts, CDs in your parent's name, and funds held in non-retirement investment accounts all count. Review all accounts before applying to avoid a denial that delays coverage."
+      ],
+      "relatedPrograms": [
+        "PACE (Program of All-Inclusive Care for the Elderly)",
+        "WV Aged and Disabled Waiver (ADW)",
+        "Medicare Savings Programs (help paying Medicare premiums and cost-sharing)",
+        "Supplemental Security Income (SSI)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Three coverage paths under ABD Medicaid",
+          "description": "Which path applies to your parent depends on their income, their medical expenses, and the level of care they need. The financial rules are not the same across all three.",
+          "tiers": [
+            {
+              "name": "Standard ABD Medicaid",
+              "incomeLimit": "$994/month (single, 2026)",
+              "assetLimit": "$2,000 (single)",
+              "covers": "Doctor visits, prescriptions, emergency care, hospital stays",
+              "functionalTest": "No clinical assessment required for basic coverage"
+            },
+            {
+              "name": "Medically Needy / Spend-Down",
+              "incomeLimit": "Above $994/month but medical expenses reduce countable income to the medically needy threshold",
+              "assetLimit": "$2,000 (single)",
+              "covers": "Same as standard ABD Medicaid once spend-down obligation is met each month",
+              "functionalTest": "No clinical assessment required for community medical coverage"
+            },
+            {
+              "name": "Long-Term-Care Medicaid",
+              "incomeLimit": "Up to $2,901/month (300% SSI threshold, effective January 2025) for nursing home or qualifying in-home care",
+              "assetLimit": "$2,000 (single); spousal impoverishment protections apply for married couples",
+              "covers": "Nursing home care or in-home care meeting nursing-facility level of care",
+              "functionalTest": "Clinical assessment required: your parent must need daily help with bathing, dressing, eating, or medication management"
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "If your parent receives SSI, they are already enrolled",
+          "body": "West Virginia SSI recipients are automatically eligible for Medicaid. No separate county-office application is needed. Call 877-716-1212 to confirm your parent's Medicaid status is active before scheduling any medical appointments."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,400/month. Does that automatically disqualify them?",
+          "answer": "Not necessarily. The standard ABD income limit is $994/month for a single person in 2026, but West Virginia has a spend-down path for people whose income is above that limit. Once your parent's countable income minus their out-of-pocket medical expenses falls below the medically needy threshold, Medicaid coverage can begin. Ask the county DoHS worker specifically about the medically needy eligibility category when you call 877-716-1212."
+        },
+        {
+          "question": "Can my parent keep the house if it is worth more than $2,000?",
+          "answer": "Yes. The primary home is generally exempt from Medicaid asset limits as long as it remains your parent's principal residence and home equity rules are satisfied. The $2,000 asset limit applies to countable resources like cash, bank accounts, and investments. The home, one vehicle, and certain personal belongings are typically exempt. If your parent moves to a nursing facility, different rules about the home's exemption status may apply over time; a county DoHS worker can explain those rules for your parent's specific situation."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. You can apply on your parent's behalf if you have legal authority to do so, such as a power of attorney or guardianship. Bring those legal documents when you apply. If no legal authority has been established, the county DoHS worker can explain what documentation they need to process the case with you acting as a representative."
+        },
+        {
+          "question": "What is the difference between ABD Medicaid and long-term-care Medicaid, and does my parent need both?",
+          "answer": "ABD Medicaid covers routine medical care: doctor visits, prescriptions, and hospital care. Long-term-care Medicaid covers nursing home stays or qualifying in-home care for people who need daily help with personal care tasks. The income limit for long-term-care coverage is higher ($2,901/month as of January 2025) but a clinical assessment is required to confirm your parent needs that level of care. They are not two separate applications; the county DoHS worker determines which coverage category applies based on your parent's situation."
+        },
+        {
+          "question": "How long will it take to find out if my parent is approved?",
+          "answer": "West Virginia does not publish a guaranteed statewide processing deadline for ABD Medicaid. Processing time depends on county office workload and on whether a disability determination or long-term-care clinical review is needed. Those additional reviews can add significant time. Apply as early as possible and follow up by calling 877-716-1212 if you have not received a decision within 30 days."
+        },
+        {
+          "question": "My parent has a joint bank account with me. Does that account count against the $2,000 asset limit?",
+          "answer": "It may. Jointly held bank accounts are generally treated as countable resources under Medicaid rules, and West Virginia Medicaid may consider some or all of those funds as belonging to your parent. Before applying, review all accounts where your parent's name appears, including accounts you share with them. The county DoHS worker will ask about these accounts during the eligibility review."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and Medicare Savings Programs at the same time?",
+          "answer": "Yes. If your parent has Medicare, they may also qualify for a Medicare Savings Program, which helps pay Medicare premiums and cost-sharing. These are separate programs with separate eligibility rules, but both are administered through West Virginia's Medicaid system. When you call 877-716-1212 or visit the county DoHS office, ask about both programs at the same intake appointment to avoid a second round of paperwork."
+        },
+        {
+          "question": "What happens if my parent's financial situation changes after they are enrolled?",
+          "answer": "Your parent must report changes in income or assets to the county DoHS office. West Virginia conducts periodic eligibility reviews, and a significant change in income or assets could affect coverage. If your parent's income rises above the standard limit, they may need to be evaluated under the spend-down pathway rather than standard ABD Medicaid to maintain coverage. Call 877-716-1212 to report changes and understand how they affect eligibility."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(877) 716-1212",
+      "sourceUrl": "https://dhhr.wv.gov/bms/BMSPUB/Documents/Guide%20to%20Medicaid%202025.pdf",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.315Z
+ * Last updated: 2026-10-06T06:44:48.408Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -3578,6 +3578,431 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:48:08.854Z"
         }
       ]
+    },
+    {
+      "id": "wa-abd-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "Full health coverage for Washington seniors on a fixed income, including doctor visits, hospital care, and prescriptions, at no cost when income is under $994/month.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Washington Department of Social and Health Services Community Services Offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living on a modest income in Washington, they may qualify for Apple Health (Washington's Medicaid program) through the Aged, Blind, and Disabled (ABD) pathway. This coverage pays for doctor visits, hospital care, prescription drugs, lab work, imaging, and preventive care. For a single person, the income limit is $994/month and the asset limit is $2,000 in countable resources (not counting the home or typically one vehicle).\n\nThis program is especially important for parents who are not yet on Medicare, who have Medicare but cannot afford the out-of-pocket costs, or who have been denied other coverage due to income. Because the program covers medically necessary services under one state-administered plan, your parent will not need to manage multiple insurance sources for basic care. Some enrollees also get help paying Medicare premiums.\n\nThe application goes through the Washington Department of Social and Health Services (DSHS). You can apply online, by mail, or in person at a local Community Services Office. Processing takes up to 30 calendar days for most applications.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays covered medical costs directly to providers. No dollar premium range is published by DSHS for the coverage itself.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled)",
+          "Income at or below $994/month for a single person (2026)",
+          "Countable assets at or below $2,000 for a single person (2026)",
+          "Washington state resident",
+          "U.S. citizen or qualified noncitizen"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash",
+            "Checking and savings account balances",
+            "Stocks and bonds",
+            "Other countable liquid resources"
+          ],
+          "exemptAssets": [
+            "Primary home (typically exempt)",
+            "One vehicle (typically exempt)",
+            "Other exemptions apply per current DSHS Apple Health resource rules and may vary by case type"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Washington state",
+          "Must be age 65 or older, blind, or have a disability that meets SSA or DSHS standards (for disability-based eligibility, the condition must prevent work for at least 12 months in a row)",
+          "Must meet citizenship or qualified noncitizen requirements for Washington Medicaid",
+          "Must meet both income and asset limits under the categorical-needy pathway; a medically needy pathway may be available for some people above the standard income limit"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at washingtonconnection.org, by mail using Form 18-005, or in person at a DSHS Community Services Office; most applications are decided within 30 calendar days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need your parent's Social Security card, proof of age, proof of Washington residency, current income documents (such as an SSA award letter or pension statement), and current bank account balances. Having these ready prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online: go to washingtonconnection.org and complete the application. By mail: download or request Form 18-005 (Classic Health Care Application) and mail it to DSHS Community Services Division, P.O. Box 11699, Tacoma, WA 98411-6699. In person: find your nearest DSHS Community Services Office at dshs.wa.gov and bring your documents with you."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application and get a confirmation",
+            "description": "If you apply online through washingtonconnection.org, you will receive a confirmation number. If you apply by mail or in person, ask for a date-stamped copy of your application. Keep this as proof of your filing date."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any DSHS follow-up requests promptly",
+            "description": "DSHS may contact you by letter or phone to request missing documents or to clarify information. Respond as quickly as possible. Delays in responding can extend your processing time beyond the standard 30 days."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility decision",
+            "description": "DSHS will mail a written decision within 30 calendar days for most ABD Medicaid applications. If your parent is also applying for ABD cash assistance or being referred to the Housing and Essential Needs (HEN) program, the decision can take up to 45 calendar days. If approved, your parent's Apple Health coverage card or confirmation will follow."
+          }
+        ],
+        "processingTime": "Up to 30 calendar days for ABD Medicaid coverage; up to 45 calendar days if the application also includes ABD cash assistance or a Housing and Essential Needs (HEN) referral.",
+        "waitlist": null,
+        "tip": "If your parent is currently in the hospital or being discharged to a care facility, ask the hospital social worker or discharge planner to help initiate the ABD Medicaid application. They do this regularly and can speed up the process.",
+        "urls": [
+          {
+            "label": "Apply online at Washington Connection",
+            "url": "https://www.washingtonconnection.org"
+          },
+          {
+            "label": "DSHS Health Care Coverage for Aged, Blind or Disabled",
+            "url": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter showing current monthly benefit amount",
+        "Proof of Washington residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or state ID)",
+        "Social Security card or record of Social Security number",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current balances for any checking or savings accounts (DSHS will ask for account information as part of the resource test; bring what you have)",
+        "Medicare card if your parent has Medicare (useful for coordination of benefits, but not required to qualify)",
+        "Citizenship documents or immigration status documents if applicable (green card, naturalization certificate, or passport)",
+        "Proof of disability if applying on the basis of disability rather than age (SSA disability award letter, DSHS determination, or medical records supporting the claim)",
+        "Investment account statements if your parent holds stocks, bonds, or annuities (needed for the resource test)",
+        "Legal documents if a family member or authorized representative is applying on behalf of the parent (power of attorney, guardianship order, or signed consent form)"
+      ],
+      "contacts": [
+        {
+          "label": "DSHS Community Services Office (statewide intake)",
+          "phone": "(877) 501-2233",
+          "description": "Call to apply for ABD Medicaid, ask eligibility questions, or find your nearest Community Services Office. This is DSHS's main public benefits line for Washington Apple Health programs.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Washington Connection (online application portal)",
+          "phone": null,
+          "description": "Apply online at washingtonconnection.org. You can submit Form 18-005 equivalent information entirely online and track your application status.",
+          "hours": null
+        },
+        {
+          "label": "Washington 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline that can identify your nearest DSHS office and other local resources. Cannot process your application but can transfer you or provide office locations if the DSHS line is busy.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "ABD Medicaid is not the same as the ABD cash-assistance program. Both are administered by DSHS, but they are separate programs with separate eligibility rules. Make sure you are applying for health coverage, not cash assistance, unless you want both.",
+        "If your parent's income is above $994/month, do not stop there. Washington also has a medically needy pathway for some people above the categorical-needy income limit. Ask DSHS whether your parent qualifies under that pathway before concluding they are ineligible.",
+        "Income and resource limits update every January. Any chart or web page you find that is more than a year old may show outdated numbers. Confirm current limits directly with DSHS or at dshs.wa.gov before making decisions.",
+        "If your parent is working and has a disability, the Health and Working Disabled (HWD) program is a different Apple Health pathway with no asset test and a higher income limit. Families frequently confuse it with ABD Medicaid. Ask DSHS which pathway fits your parent's situation."
+      ],
+      "relatedPrograms": [
+        "Washington Apple Health (HWD) for Working Disabled",
+        "Medicare Savings Programs (help paying Medicare premiums for dual-eligible enrollees)",
+        "ALTSA Long-Term Services and Supports (for parents who need home care or facility placement)",
+        "Housing and Essential Needs (HEN) Program (for ABD applicants who also need housing assistance)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What ABD Medicaid actually covers",
+          "body": "Washington Apple Health through the ABD pathway covers: doctor and specialist visits, inpatient hospital care, prescription drugs, lab tests, imaging (X-rays, MRIs), preventive care, and other medically necessary services. For parents who also have Medicare, ABD Medicaid may help pay Medicare premiums and reduce out-of-pocket costs. The coverage is comprehensive; your parent does not pay premiums to enroll."
+        },
+        {
+          "type": "callout",
+          "title": "The $2,000 asset limit: what it does and does not count",
+          "body": "The asset limit for a single person is $2,000 in countable resources (2026). Countable resources include cash, checking and savings account balances, stocks, and bonds. The primary home and typically one vehicle are not counted. If your parent's countable assets are just above $2,000, talk to DSHS before assuming they are ineligible: some assets have exemptions that are not obvious, and the precise rules can vary by case type. DSHS can tell you exactly what counts in your parent's situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "Yes. The primary home is generally exempt from the ABD Medicaid resource test and does not count toward the $2,000 limit. The $2,000 limit applies to countable liquid resources such as bank accounts, cash, stocks, and bonds. Your parent does not need to sell their home to qualify. Confirm the exact exemptions for your parent's case with DSHS at (877) 501-2233, because rules can vary by case type."
+        },
+        {
+          "question": "My parent's income is above $994/month. Are they automatically disqualified?",
+          "answer": "Not necessarily. The $994/month limit applies to the categorical-needy pathway, which is the standard route. Washington also has a medically needy pathway for some people whose income exceeds that limit. Ask DSHS directly whether your parent qualifies under the medically needy rules before concluding they are ineligible. Call (877) 501-2233 or apply through washingtonconnection.org and let DSHS screen all available pathways."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent, or do they have to apply themselves?",
+          "answer": "Yes, a family member can apply on behalf of a parent. You will need documentation showing you are authorized to act for them, such as a signed and dated consent form, a power of attorney, or a guardianship order. Bring that document with your application. DSHS accepts applications submitted by authorized representatives both online and in person."
+        },
+        {
+          "question": "My parent already has Medicare. Does that affect ABD Medicaid?",
+          "answer": "Having Medicare does not disqualify your parent from ABD Medicaid. In fact, when someone has both Medicare and ABD Medicaid, the programs coordinate: Medicare pays first, and Medicaid may cover remaining costs such as copays, deductibles, and services Medicare does not cover. For some dual-eligible individuals, ABD Medicaid also helps pay Medicare premiums. Bring your parent's Medicare card when you apply so DSHS can coordinate coverage correctly."
+        },
+        {
+          "question": "How long does it take to get approved, and is there a waitlist?",
+          "answer": "There is no waitlist for ABD Medicaid coverage itself. DSHS is required to process most ABD Medicaid applications within 30 calendar days. If the application includes an ABD cash-assistance request or a Housing and Essential Needs (HEN) referral, the deadline extends to 45 calendar days. If you have not received a decision after 30 days, call DSHS at (877) 501-2233 and ask for a status update."
+        },
+        {
+          "question": "What is the difference between ABD Medicaid and ABD cash assistance?",
+          "answer": "They are two separate programs administered by DSHS. ABD Medicaid (this program) provides health coverage: doctor visits, prescriptions, hospital care, and related services. ABD cash assistance provides a small monthly cash payment to help with living expenses. You can apply for one or both, but qualifying for the health coverage does not automatically mean you receive cash assistance. Make sure your application clearly identifies which program or programs you are requesting."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their income or health situation changes?",
+          "answer": "Your parent is required to report changes in income, resources, household composition, or address to DSHS. Changes can affect eligibility. DSHS will also conduct periodic renewals to confirm continued eligibility. If your parent's income rises above the limit, DSHS will review whether the medically needy pathway or another Apple Health program applies before terminating coverage. Report changes promptly through washingtonconnection.org or by calling (877) 501-2233."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a Medicare Savings Program at the same time?",
+          "answer": "Yes. Medicare Savings Programs (MSPs) help pay Medicare premiums and cost-sharing for people who qualify for both Medicare and Medicaid. If your parent has Medicare and meets ABD Medicaid income and asset limits, DSHS will screen for MSP eligibility as part of the same application process. You do not need to file a separate application for MSP; ask DSHS to confirm your parent is being screened for all applicable pathways."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(877) 501-2233",
+      "sourceUrl": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wa-tailored-supports-older-adults",
+      "name": "Tailored Supports for Older Adults",
+      "shortName": "TSOA Caregiver Support",
+      "tagline": "If you're caring for a parent 55 or older at home in Washington, this program can pay for respite care, meals, housekeeping, and medical supplies so you're not doing it alone.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Washington Connection online application portal",
+            "type": "service-area"
+          },
+          {
+            "name": "Local aging and disability resource offices",
+            "type": "service-area"
+          },
+          {
+            "name": "County/region caregiver-support agencies and enrollment partners",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Tailored Supports for Older Adults (TSOA) is a Washington state Medicaid-related program that pays for practical support services so your aging parent can stay home instead of moving to a facility. If your parent is 55 or older, needs the level of daily help that would otherwise require a nursing home, and doesn't already qualify for full Medicaid, TSOA may cover respite care for you, home-delivered meals, housekeeping, medical equipment like bath benches and incontinence supplies, caregiver training, and counseling.\n\nThe program has two tracks. If you are an unpaid family caregiver for your parent, TSOA focuses heavily on supporting you, including mental health counseling and massage therapy. If your parent has no unpaid caregiver, they can still qualify, but the service mix shifts toward direct personal care. Either way, one program covers the range of needs rather than requiring your family to piece together separate applications.\n\nBe aware before you apply: this is not a simple grant program. Eligibility involves a financial review under Washington Medicaid long-term services and supports (LTSS) rules and a clinical assessment of your parent's care needs. Some regions also have enrollment pauses and waitlists, so timing varies. The steps below will help you determine whether your parent qualifies and how to get in line.",
+      "savingsRange": "",
+      "savingsSource": "Free service: TSOA provides in-kind support services, not a cash benefit. The program does not publish a fixed dollar value or hours cap in publicly available materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Lives at home, not in a licensed facility",
+          "Meets nursing facility level of care",
+          "Does not already qualify for CN or ABP Medicaid",
+          "Passes Washington Medicaid LTSS financial review"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Non-primary-residence real property",
+            "Investments and non-retirement accounts"
+          ],
+          "exemptAssets": [
+            "Primary home (in most circumstances)",
+            "One vehicle (in most circumstances)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet nursing facility level of care. This is a formal clinical assessment conducted by a state assessor. It is not enough to need some help at home. The assessor looks at whether your parent needs daily assistance with bathing, dressing, medication management, or other personal care tasks at a level that would otherwise require nursing home placement. This is a stricter standard than most home-help programs.",
+        "otherRequirements": [
+          "Must live in Washington State in their own home or another person's home, not in a licensed residential or institutional setting",
+          "Must be a U.S. citizen, U.S. national, qualifying American Indian born abroad, or a qualified alien who has met or is exempt from the five-year bar",
+          "Must provide a valid Social Security number",
+          "Must have an eligible unpaid caregiver, OR must meet the separate criteria for people without one",
+          "Must not currently be eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid; people already on full Medicaid use a different program"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at washingtonconnection.org or contact your local aging and disability resource office; processing time varies by region, and some areas have waitlists.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether your parent is already on Medicaid",
+            "description": "TSOA is only for people who do NOT already qualify for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid. If your parent has full Medicaid now, call the Washington Apple Health customer service line at 1-800-562-3022 to find out which program is right for them instead."
+          },
+          {
+            "step": 2,
+            "title": "Contact your local aging and disability resource office or caregiver-support agency",
+            "description": "Local enrollment partners do the initial screening and can tell you whether TSOA is available in your area or whether there is a current waitlist. Find your local office through the Washington State Department of Social and Health Services (DSHS) at https://www.dshs.wa.gov/altsa/home-and-community-services/find-your-local-office or call DSHS Home and Community Services at 1-800-422-3263."
+          },
+          {
+            "step": 3,
+            "title": "Submit the TSOA application",
+            "description": "Apply online using the Washington Apple Health application for TSOA at https://www.washingtonconnection.org. Alternatively, your local aging and disability resource office can assist you with a paper application. You will need to complete the Washington Apple Health Application for Tailored Supports for Older Adults (TSOA) form."
+          },
+          {
+            "step": 4,
+            "title": "Complete the functional assessment",
+            "description": "After submitting the application, a state assessor will contact your family to conduct the nursing facility level of care assessment. This is done in person or by phone. It evaluates your parent's daily care needs, including help with bathing, dressing, mobility, and medication. This step determines whether your parent meets the clinical threshold for the program."
+          },
+          {
+            "step": 5,
+            "title": "Financial review",
+            "description": "DSHS will review your parent's income and countable resources under the Washington Medicaid LTSS financial rules (WAC 182-513-1635 and WAC 182-513-1640). Gather all income and asset documents before this step to avoid delays."
+          },
+          {
+            "step": 6,
+            "title": "Receive your eligibility determination and service plan",
+            "description": "If approved, a care coordinator will work with your family to build a service plan based on your parent's needs and your role as a caregiver. Services may include respite, meals, housekeeping, equipment, and counseling. If there is a regional waitlist, you will be notified of your position."
+          }
+        ],
+        "processingTime": "No statewide processing-time guarantee is published. Timing varies by region and by whether a waitlist is in effect.",
+        "waitlist": "Yes. Some regions in Washington have enrollment pauses and active waitlists for TSOA. Being eligible does not guarantee immediate entry. Ask your local aging and disability resource office about current waitlist status in your area when you first call.",
+        "tip": "Call your local aging and disability resource office before applying online. They can tell you whether a waitlist is active in your region and help you submit a complete application the first time, which reduces delays.",
+        "urls": [
+          {
+            "label": "Apply online at Washington Connection",
+            "url": "https://www.washingtonconnection.org"
+          },
+          {
+            "label": "Official TSOA program page (Washington HCA)",
+            "url": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/tailored-supports-older-adults-tsoa"
+          },
+          {
+            "label": "Find your local DSHS Home and Community Services office",
+            "url": "https://www.dshs.wa.gov/altsa/home-and-community-services/find-your-local-office"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or number for the older adult",
+        "Proof of age (birth certificate, passport, or other government-issued document showing date of birth)",
+        "Proof of Washington State residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of U.S. citizenship or qualifying immigration status (U.S. passport, naturalization certificate, or immigration documents)",
+        "Proof of current income (Social Security award letter, pension or retirement income statements, or other income documents)",
+        "Information about countable resources: current balances for any checking, savings, or other financial accounts",
+        "Information about real property other than the primary home (deeds or tax statements)",
+        "Information about any investments or non-retirement accounts",
+        "Caregiver information: name, relationship, and contact information for the unpaid caregiver, if there is one",
+        "Any documentation that supports the functional assessment, such as recent physician notes, hospital discharge summaries, or care records describing daily care needs"
+      ],
+      "contacts": [
+        {
+          "label": "DSHS Home and Community Services",
+          "phone": "1-800-422-3263",
+          "description": "The primary state office for TSOA and in-home care services. Call to start the screening process, find your local office, or ask about waitlist status in your area.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Washington Apple Health Customer Service",
+          "phone": "1-800-562-3022",
+          "description": "Use this line to ask whether your parent is already enrolled in CN or ABP Medicaid, which would change which program applies to them.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Washington 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general information and referral line that can connect you to local aging and disability resource offices if you are not sure where to start. This line transfers you; it does not handle TSOA applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "People already enrolled in Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid do not qualify for TSOA. If your parent has full Apple Health coverage, call 1-800-562-3022 to find out what in-home care programs apply to them instead.",
+        "Your parent can qualify even without a family caregiver, but the services offered will differ. The program is designed primarily to support unpaid caregivers, so if there is no caregiver, ask the assessor specifically which services are available under the no-caregiver track.",
+        "Some regions have active waitlists. If your parent's needs are urgent, tell the assessor at your first contact. Ask whether an expedited review is possible given your parent's current situation.",
+        "The nursing facility level of care threshold is stricter than it sounds. 'Needing some help at home' is not enough. The assessor is looking for a level of daily care need equivalent to what a nursing facility would provide. Bring physician notes or care records to the assessment to support your parent's case."
+      ],
+      "relatedPrograms": [
+        "Medicaid Alternative Care (MAC)",
+        "PACE (Program of All-Inclusive Care for the Elderly)",
+        "Washington Apple Health (Categorically Needy Medicaid)",
+        "Community First Choice (CFC)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is often missed",
+          "body": "TSOA is specifically designed for families who are not yet on full Medicaid but are approaching the point where a nursing home becomes the only option. If you have been told your parent earns too much for Medicaid but too little to pay privately for home care, TSOA may be the gap-filler you have not found yet. The program explicitly targets that middle group."
+        },
+        {
+          "type": "tier-comparison",
+          "title": "Two tracks: with a caregiver vs. without",
+          "body": "TSOA has two eligibility pathways depending on whether the older adult has an unpaid family caregiver.\n\nWith an unpaid caregiver: The program supports both your parent and you. Services can include respite care (temporary relief for you), caregiver training, support groups, counseling, mental health services, and items like massage therapy to support the caregiver's health. Your parent may also receive home-delivered meals, housekeeping, medical equipment, and supplies.\n\nWithout an unpaid caregiver: Your parent can still qualify, but the focus shifts to direct personal care services. The caregiver-specific benefits (respite, caregiver counseling, massage) are not part of this track. Ask your local office which specific services are available under this track in your region."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is already on Apple Health. Can they still apply for TSOA?",
+          "answer": "It depends on which Apple Health program they have. People who are already eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid do not qualify for TSOA. Those programs have their own in-home care pathways. Call Washington Apple Health at 1-800-562-3022 to confirm which coverage your parent has and which in-home care program applies to them."
+        },
+        {
+          "question": "How strict is the nursing facility level of care requirement?",
+          "answer": "It is stricter than most families expect. Needing help with a few tasks does not automatically qualify. The assessor evaluates whether your parent needs daily assistance with multiple personal care activities, such as bathing, dressing, transfers, or medication management, at a level consistent with nursing home care. Bring physician notes, hospital discharge summaries, or other care records to the assessment to document the full picture of your parent's needs."
+        },
+        {
+          "question": "How long will we be on the waitlist?",
+          "answer": "Washington does not publish a statewide average waitlist time for TSOA. Waitlist length varies by region, and some areas have no current pause while others have enrollment caps in effect. When you contact your local aging and disability resource office or call DSHS at 1-800-422-3263, ask specifically about the waitlist status in your county. Getting into the queue as early as possible matters, even if your parent's needs are not yet critical."
+        },
+        {
+          "question": "Can I apply for TSOA at the same time as other programs?",
+          "answer": "Yes. Applying for TSOA does not prevent you from applying for other programs at the same time. Medicaid Alternative Care (MAC) is closely related and is worth asking about in the same conversation with your local office. If your parent does not qualify for TSOA, MAC may be an option, or vice versa. Community First Choice (CFC) is another Washington in-home care program worth discussing if your parent qualifies for Medicaid."
+        },
+        {
+          "question": "What happens to my parent's services if their needs change after enrollment?",
+          "answer": "TSOA service plans are reassessed periodically and can be updated if your parent's needs change. If your parent's condition worsens significantly, contact your care coordinator immediately rather than waiting for the scheduled reassessment. A more significant change in needs may also trigger a review of whether full Medicaid eligibility now applies, which would open different programs."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent?",
+          "answer": "Yes. A family member, authorized representative, or caregiver can submit the TSOA application on behalf of the older adult. You will need to document your role as the applicant's representative. Your local aging and disability resource office can walk you through what is needed. Apply online at washingtonconnection.org or ask your local office for assistance."
+        },
+        {
+          "question": "Does my parent need to own their home to qualify?",
+          "answer": "No. Your parent can rent, live in your home, or live in another person's private home and still qualify. The requirement is that they live in a private residence, not a licensed residential care facility or institution. A licensed adult family home or assisted living facility does not count as qualifying for TSOA."
+        },
+        {
+          "question": "What if my parent has savings or assets? Is there a hard dollar limit?",
+          "answer": "The program uses a Medicaid-style resource review under WAC 182-513-1640, but the exact dollar cap is not published in publicly available program summaries. The primary home and typically one vehicle are generally exempt. Other financial accounts and property are reviewed as countable resources. The specific limit will be determined during the application review. Contact DSHS at 1-800-422-3263 to get guidance on how your parent's specific assets will be evaluated before you apply."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "1-800-422-3263",
+      "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/tailored-supports-older-adults-tsoa",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

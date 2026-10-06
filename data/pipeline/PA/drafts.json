@@ -2,8 +2,8 @@
   "state": "PA",
   "stateName": "Pennsylvania",
   "draftedAt": "2026-04-13T21:50:19.563Z",
-  "total": 10,
-  "successful": 10,
+  "total": 14,
+  "successful": 14,
   "programs": [
     {
       "id": "community-healthchoices-chc",
@@ -1750,6 +1750,907 @@
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17"
+    },
+    {
+      "id": "pa-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "PA ABD Medicaid",
+      "tagline": "If your parent is 65 or older and on a fixed income, Pennsylvania's ABD Medicaid can cover their doctor visits, home care, and potentially nursing home costs at little or no cost to them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County Assistance Offices (CAOs) across Pennsylvania",
+            "type": "service-area"
+          },
+          {
+            "name": "COMPASS online portal",
+            "type": "service-area"
+          },
+          {
+            "name": "Pennsylvania Department of Human Services Medical Assistance program",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Pennsylvania's Aged, Blind, and Disabled (ABD) Medicaid is the state's health coverage program for people 65 and older, or any age if they are blind or disabled. For qualifying families, it pays for doctor visits, hospital care, home health services, personal care assistance, and, for those who need it, nursing home care. This is not a small supplement: for families whose parent needs daily help or is heading toward a nursing facility, ABD Medicaid can cover tens of thousands of dollars in annual care costs.\n\nThe program runs on three separate eligibility tracks, and that is where most families get confused. The regular track covers basic medical care for lower-income individuals (income limit: $22,025 per year for a single person). The medically needy track helps people whose income is higher but whose medical bills reduce their usable income below $425 per month. The long-term care track applies when your parent needs a nursing home or home-and-community services, and it carries a higher income limit of $2,982 per month (2026). Each track has different income rules, resource rules, and covered services.\n\nThis is one of the most paperwork-intensive programs in Pennsylvania, and decisions made before you apply, particularly gifts or asset transfers in the past 60 months, can affect eligibility for the long-term care track. Apply as early as possible. Processing takes up to 30 days, sometimes 45. Your County Assistance Office (CAO) handles all applications and can tell you which track your parent qualifies for.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid covers the cost of qualifying medical and long-term care services directly. There is no standard dollar benefit to cite; covered costs depend entirely on the services your parent uses.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled at any age)",
+          "Pennsylvania resident and U.S. citizen or qualified non-citizen",
+          "Regular track: income under $22,025/year for one person",
+          "Long-term care track: income under $2,982/month for one person (2026)",
+          "Countable assets under $2,000 for most tracks"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1835
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2489
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 3142
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 3795
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4448
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 5101
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 5755
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6408
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash and checking or savings account balances",
+            "Stocks and bonds",
+            "Certificates of deposit",
+            "Some life insurance cash value",
+            "Other countable resources as reviewed by the County Assistance Office"
+          ],
+          "exemptAssets": [
+            "Primary home (if a spouse, child under 21, or blind or disabled child lives there)",
+            "Certain personal belongings and household items",
+            "Some burial-related items and prepaid burial contracts",
+            "Other exempt resources under Pennsylvania Medicaid rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Pennsylvania resident",
+          "Must be a U.S. citizen or qualified non-citizen",
+          "Must have a Social Security number",
+          "Must be age 65 or older, or be blind or disabled",
+          "For the long-term care track: asset transfers or gifts made within the past 60 months are reviewed and may create a penalty period",
+          "For long-term care or home-and-community services: medical necessity must be established through a clinical assessment"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at COMPASS, by phone with your County Assistance Office, in person, or by mail; processing takes up to 30 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify which track applies to your parent",
+            "description": "Before applying, determine which eligibility track fits: regular ABD (annual income under $22,025 for one person), medically needy (higher income but large medical bills), or long-term care (monthly income under $2,982 and needing nursing home or home-based care). If you are unsure, the County Assistance Office can help you figure this out at no cost before you file."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "Collect your parent's Social Security award letter, proof of Pennsylvania residency, proof of identity, proof of citizenship or qualified non-citizen status, income statements (pension letters, retirement income statements), and bank or account information. For the long-term care track, also gather property documents, life insurance policies, vehicle titles, and any information about gifts or asset transfers made in the past 60 months."
+          },
+          {
+            "step": 3,
+            "title": "Apply online through COMPASS or contact your CAO",
+            "description": "The fastest way to start is online at compass.dhs.pa.gov. You can also call or visit your local County Assistance Office to apply by phone, in person, or by mail. To find your local CAO, visit pa.gov or call the DHS helpline at (800) 692-7462."
+          },
+          {
+            "step": 4,
+            "title": "Submit supporting documents promptly",
+            "description": "After filing, the CAO will request specific documents. Submit everything requested as quickly as possible. A missing document is the most common reason an application is held past 30 days. You can upload documents through COMPASS or bring them to the CAO directly."
+          },
+          {
+            "step": 5,
+            "title": "Attend any scheduled interview or assessment",
+            "description": "The CAO may schedule a phone or in-person interview. For the long-term care track, a medical necessity assessment may also be required to confirm your parent's care needs. Respond promptly to all CAO requests to avoid delays."
+          },
+          {
+            "step": 6,
+            "title": "Receive your determination",
+            "description": "Pennsylvania must decide within 30 calendar days of a completed application. If the agency cannot finish in 30 days, it may extend to 45 days with written notice to you. If approved, coverage may be retroactive depending on the date of application and the track."
+          }
+        ],
+        "processingTime": "Up to 30 calendar days after a completed application is filed; may extend to 45 days with written notice.",
+        "waitlist": null,
+        "tip": "Apply as early as possible. If your parent is approaching a nursing home admission or is already in a facility, tell the CAO immediately. Discharge planners at hospitals and nursing homes are often familiar with this process and can help initiate the application.",
+        "urls": [
+          {
+            "label": "Apply online at COMPASS",
+            "url": "https://www.compass.dhs.pa.gov/"
+          },
+          {
+            "label": "Pennsylvania DHS ABD Medicaid program page",
+            "url": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows monthly benefit amount)",
+        "Proof of Pennsylvania residency (utility bill, lease agreement, or state-issued document)",
+        "Proof of identity (driver's license, state ID, or passport)",
+        "Social Security card or number for your parent",
+        "Proof of U.S. citizenship or qualified non-citizen status (birth certificate or passport for citizens; immigration documents for non-citizens)",
+        "Proof of age (birth certificate or passport if not already established)",
+        "Pension or retirement income statements showing current monthly amount",
+        "Current balances for any checking or savings accounts (the CAO will tell you which statements or verification it needs)",
+        "Information about any real estate other than the primary home (deeds, tax records)",
+        "Life insurance policies, including face value and cash surrender value",
+        "Vehicle titles and registration",
+        "Information about any gifts, asset transfers, or property sales made in the past 60 months (required for the long-term care track)",
+        "Long-term care facility admission paperwork or home care plan if applying under the long-term care track",
+        "Medical bills paid out-of-pocket if applying under the medically needy track",
+        "Legal documents if a family member, power of attorney, or representative is applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "Pennsylvania DHS Statewide Customer Service Line",
+          "phone": "(800) 692-7462",
+          "description": "Call to find your local County Assistance Office, ask eligibility questions, or get help starting a Medical Assistance application. This is the main door into the ABD Medicaid system.",
+          "hours": "Mon-Fri 8:30am-4:45pm ET"
+        },
+        {
+          "label": "COMPASS Online Application",
+          "phone": null,
+          "description": "Apply for Medical Assistance online at compass.dhs.pa.gov. You can also upload documents and check application status through the portal.",
+          "hours": "Available 24 hours, 7 days a week"
+        },
+        {
+          "label": "Pennsylvania 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general helpline that can connect you to your local CAO or other community resources if the DHS line is busy. This line transfers you; it does not process Medical Assistance applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is already in a hospital or nursing facility, tell the CAO at the time of application. Discharge planners at facilities often help initiate the process, and coverage may be retroactive to the application date.",
+        "The medically needy track uses a spend-down calculation: your parent's income above $425 per month counts as a deductible that must be met with medical bills before coverage begins. This math is complex; ask the CAO to walk through it with you.",
+        "For the long-term care track, gifts or transfers of assets made within the past 60 months are reviewed. Even transfers that seemed routine, such as helping a grandchild with college or adding someone to a deed, can create a penalty period that delays Medicaid coverage. Get this information on the table before you apply.",
+        "Assisted living room and board is not covered by ABD Medicaid, even when some medical services provided inside the residence are covered. If your parent is in assisted living, ask specifically what is and is not paid."
+      ],
+      "relatedPrograms": [
+        "PACE (Program of All-inclusive Care for the Elderly): Pennsylvania's PACE program covers all medical and long-term care for eligible adults as an alternative to nursing home placement",
+        "Pennsylvania HCBS Waivers (Attendant Care, COMMCARE, Independence): home-and-community-based waiver programs that may run alongside ABD Medicaid for people who qualify for nursing facility care but want to remain at home",
+        "PENNCARE / APPRISE (Pennsylvania's State Health Insurance Assistance Program): free counseling on Medicare and Medicaid coordination for older Pennsylvanians",
+        "SNAP (Supplemental Nutrition Assistance Program): food assistance that many ABD Medicaid recipients also qualify for, administered through the same County Assistance Offices"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Three tracks, three sets of rules",
+          "body": "ABD Medicaid in Pennsylvania is not one program with one income limit. It has three distinct tracks.\n\nRegular ABD Medicaid covers basic health care. Income limit: $22,025 per year for one person ($1,835/month). Asset limit: $2,000 for one person.\n\nMedically Needy covers people whose income is higher but who have large medical bills. Net income after bills must fall below $425 per month (or $2,550 over a 6-month period) for one person.\n\nLong-Term Care track applies when your parent needs nursing home care or home-and-community services at a nursing facility level. Income limit: $2,982 per month for one person (2026). Asset limit: $2,000, plus a $6,000 resource disregard if income is at or below that limit. This track has the 60-month transfer lookback and stricter asset review rules."
+        },
+        {
+          "type": "callout",
+          "title": "What Medicaid does and does not pay in a care facility",
+          "body": "For qualifying long-term care participants, ABD Medicaid can pay for nursing home care, home health services, personal assistance, and transportation. It can also cover some medical services delivered inside an assisted living residence. It does not pay for room and board in assisted living, even when the resident qualifies for Medicaid on other grounds. This distinction matters significantly when families are weighing care options."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $2,400 per month. Is that too high to qualify?",
+          "answer": "It depends on which track applies. For regular ABD Medicaid, the income limit is $22,025 per year ($1,835/month) for one person, so $2,400 per month would exceed that limit. However, the long-term care track allows income up to $2,982 per month (2026 limit), so your parent may still qualify if they need nursing home care or home-and-community services at a nursing facility level. The medically needy track is a third option if their medical bills bring their usable income low enough. Ask your County Assistance Office which track fits your parent's situation."
+        },
+        {
+          "question": "Can my parent keep their house if they apply for the long-term care track?",
+          "answer": "In many cases, yes. The primary home is generally exempt from the asset count if a spouse, a child under 21, or a blind or disabled child lives there. Even if your parent enters a nursing home, the home may still be protected in certain circumstances. However, Pennsylvania does review home equity for some long-term care rules, and the home may be subject to Medicaid estate recovery after your parent's death. These rules are complex and situation-specific; consult with an elder law attorney or ask your County Assistance Office for a full explanation before making any decisions about the property."
+        },
+        {
+          "question": "My parent gave money to family members two years ago. Does that disqualify them?",
+          "answer": "Possibly, for the long-term care track. Pennsylvania reviews all asset transfers or gifts made within the past 60 months (five years) when someone applies for long-term care Medicaid. A transfer that was not for fair market value can create a penalty period, meaning Medicaid will not pay for care for a set number of months. The penalty does not apply to the regular ABD or medically needy tracks. Disclose all transfers to the County Assistance Office when you apply; not disclosing them can cause bigger problems later."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent?",
+          "answer": "Yes. A family member who holds a valid power of attorney can apply on a parent's behalf. Bring the legal POA document when applying in person or uploading through COMPASS. If no legal document exists, the County Assistance Office can explain what options are available based on your parent's capacity and situation."
+        },
+        {
+          "question": "My parent is in assisted living. Will ABD Medicaid pay for their care there?",
+          "answer": "Partly. Medicaid can cover some medical services provided to your parent inside an assisted living residence, but it does not pay for room and board in assisted living. This means the facility's monthly base cost stays out-of-pocket or must be covered through other means. If the cost of assisted living is becoming unmanageable, ask the County Assistance Office whether a nursing facility or a home-and-community waiver program might be a better fit financially."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and SNAP at the same time?",
+          "answer": "Yes, and it is worth doing both at once. Many people who qualify for ABD Medicaid also qualify for SNAP food benefits. Both programs are handled through Pennsylvania's County Assistance Offices, and you can apply for multiple benefits through the COMPASS portal at compass.dhs.pa.gov in a single session."
+        },
+        {
+          "question": "How long will the application actually take?",
+          "answer": "Pennsylvania is required to decide within 30 calendar days of a completed application. If the agency cannot finish in 30 days, it must notify you in writing and may extend to 45 days. The most common reason applications drag past 30 days is missing documentation. Submit every requested document as quickly as possible and keep copies of everything you send. If you have not heard anything after 30 days, call (800) 692-7462 to ask for a status update."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their health needs change?",
+          "answer": "Enrollment is not permanent without review. Pennsylvania conducts periodic eligibility renewals, and your parent's coverage must be redetermined at regular intervals. If your parent's income, assets, or care needs change significantly, such as moving from home care to a nursing facility, notify the County Assistance Office promptly. Changes that affect the track your parent is enrolled in can change what is covered and what documents are needed."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 692-7462",
+      "sourceUrl": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "pa-liheap-heating-assistance",
+      "name": "LIHEAP",
+      "shortName": "Heating Assistance",
+      "tagline": "If your parent pays heating bills on a fixed income in Pennsylvania, they may qualify for a cash grant paid directly to their utility or fuel provider, plus emergency help if heat is ever at risk.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County Assistance Offices (local CAOs)",
+            "type": "service-area"
+          },
+          {
+            "name": "Pennsylvania DHS COMPASS",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "LIHEAP (Low Income Home Energy Assistance Program) helps Pennsylvania households with low to moderate incomes pay their heating costs. If your parent qualifies, Pennsylvania pays a cash grant directly to their utility company or fuel provider, so the money never needs to pass through your parent's hands. The grant amount varies by household size, income, and the type of fuel they use; the state does not publish a single fixed amount for all households.\n\nYour parent does not need an overdue bill or a shutoff notice to apply for the regular cash grant. They can own or rent their home. There is no age requirement. The income limit for a single-person household is $23,940 per year (150% of the Federal Poverty Guidelines for the current season). A one-time $100 supplemental payment was also announced for eligible households in 2026, paid automatically to the utility or fuel provider without a separate application.\n\nPennsylvania also has a separate crisis component for households facing a genuine heating emergency, such as a broken furnace or an imminent shutoff. Crisis assistance is handled through local County Assistance Offices and works differently from the regular grant. Both components are available only during the open LIHEAP season, so timing your application matters.",
+      "savingsRange": "Varies by household size, income, and fuel type; plus a one-time $100 supplemental payment for eligible households in 2026.",
+      "savingsSource": "Pennsylvania Department of Human Services LIHEAP program page (pa.gov/agencies/dhs/resources/liheap). The $100 supplemental figure is a 2026 state-announced amount. The regular grant amount is not published as a fixed statewide figure; it is calculated individually.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Pennsylvania resident responsible for heating costs",
+          "Single-person household income at or below $23,940/year",
+          "Two-person household income at or below $32,460/year",
+          "Renters and homeowners both qualify",
+          "No unpaid bill or shutoff notice required for the regular grant"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1995
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2705
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 3415
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4125
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4835
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 5545
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 6255
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6965
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 7675
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 8385
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must apply during the open LIHEAP season for the current program year",
+          "Household must be responsible for heating costs, either directly (paying the bill) or indirectly (heat included in rent)",
+          "Crisis assistance requires an active heating emergency; contact the County Assistance Office"
+        ],
+        "povertyLevelReference": "150% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through COMPASS, call the LIHEAP hotline at 1-866-857-7095, or submit a paper application at your local County Assistance Office; most decisions come within 30 days of the application being assigned to a caseworker.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check that LIHEAP season is open",
+            "description": "LIHEAP applications are only accepted during the official season. Visit pa.gov/agencies/dhs/resources/liheap or call 1-866-857-7095 to confirm the current season's open dates before starting an application. Using a paper form from a prior season will make the application invalid."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need: names, dates of birth, and Social Security numbers for everyone in the household; proof of income for all household members; and a recent heating bill showing the account name and provider. Having these ready prevents delays."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: go to compass.state.pa.us and complete the LIHEAP application. By phone: call the LIHEAP Hotline at 1-866-857-7095 or the general application help line at 1-866-550-4355. In person or by mail: bring or send a paper application (current season only) to your local County Assistance Office. Find your CAO at pa.gov/agencies/dhs."
+          },
+          {
+            "step": 4,
+            "title": "Track your application",
+            "description": "Most applications are reviewed within 30 days after a caseworker is assigned. If you applied online through COMPASS, you can log in to check status. If you applied by phone or in person, call 1-866-857-7095 to follow up."
+          },
+          {
+            "step": 5,
+            "title": "For a heating emergency, call your CAO directly",
+            "description": "Crisis assistance (broken furnace, imminent shutoff, no fuel) is handled separately from the regular grant. Call your local County Assistance Office immediately; do not wait. Find your CAO at pa.gov/agencies/dhs. Crisis cases are not resolved through the standard 30-day process."
+          }
+        ],
+        "processingTime": "Most applications are reviewed and decided within 30 days after they are assigned to a caseworker.",
+        "waitlist": null,
+        "tip": "Apply as early in the season as possible. LIHEAP funds are limited and distributed seasonally. Do not wait for a heating emergency or an unpaid bill; the regular cash grant does not require either.",
+        "urls": [
+          {
+            "label": "Apply online via COMPASS",
+            "url": "https://www.dhs.pa.gov/COMPASS"
+          },
+          {
+            "label": "Pennsylvania LIHEAP official program page",
+            "url": "https://www.pa.gov/agencies/dhs/resources/liheap"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "A recent heating bill showing the account name and utility or fuel provider",
+        "Proof of income for all household members (Social Security award letter, pension statements, pay stubs, or most recent federal tax return)",
+        "Social Security numbers for all household members",
+        "Names and dates of birth for all household members",
+        "Proof of Pennsylvania residency (a utility bill, lease agreement, or similar document showing the household address)"
+      ],
+      "contacts": [
+        {
+          "label": "Pennsylvania LIHEAP Hotline",
+          "phone": "1-866-857-7095",
+          "description": "Apply for LIHEAP, ask about eligibility, and get help with the application process.",
+          "hours": "Check pa.gov/agencies/dhs/resources/liheap for current hours during the open season."
+        },
+        {
+          "label": "Pennsylvania DHS Application Help Line",
+          "phone": "1-866-550-4355",
+          "description": "General public assistance and application help; can assist if the LIHEAP hotline is busy.",
+          "hours": "Mon-Fri, standard business hours."
+        },
+        {
+          "label": "Local County Assistance Office (CAO)",
+          "phone": null,
+          "description": "Find your local CAO at pa.gov/agencies/dhs for in-person or crisis assistance. Crisis heating emergencies must go through the CAO directly.",
+          "hours": "Varies by county. Check pa.gov/agencies/dhs for your office."
+        }
+      ],
+      "applicationNotes": [
+        "If your parent faces an active heating emergency (no heat, broken equipment, or imminent shutoff), do not apply through the standard process. Call your local County Assistance Office directly. Crisis assistance moves on a different timeline.",
+        "The grant is paid to the utility or fuel company, not to your parent. Make sure the heating account name matches the applicant on the LIHEAP application to avoid delays.",
+        "Paper applications are season-specific. An old form from a prior year will be rejected. Always use the current season's form, which will show the active date range in the title.",
+        "The $100 supplemental payment announced for 2026 is automatic for eligible households; no separate application is needed."
+      ],
+      "relatedPrograms": [
+        "Pennsylvania Weatherization Assistance Program (WAP)",
+        "SNAP Food Benefits (Pennsylvania)",
+        "Pennsylvania Medicaid / Medical Assistance",
+        "Dollar Energy Fund Emergency Utility Assistance"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Your parent does not need a crisis to qualify",
+          "body": "Many families only contact LIHEAP when a shutoff notice arrives. But the regular cash grant has no such requirement. Your parent can apply during the open season simply because their income qualifies, and Pennsylvania will pay their utility or fuel company directly. Waiting until there is an emergency limits your options."
+        },
+        {
+          "type": "prose",
+          "title": "What the benefit actually looks like",
+          "body": "Pennsylvania does not publish a single fixed grant amount. The cash grant varies based on three factors: household size, gross annual income, and the type of fuel your parent uses to heat their home. The benefit is sent directly to the utility company or fuel vendor; your parent will see a credit on their account rather than receiving a check. The 2026 one-time $100 supplemental payment works the same way: it goes to the utility or fuel provider automatically, with no separate action needed from your parent."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is a renter and heat is included in their rent. Can they still apply?",
+          "answer": "Yes. Pennsylvania LIHEAP allows renters whose heat is included in their rent to apply. The household must be responsible for heating costs either directly (paying a utility or fuel bill) or indirectly (heat built into the rent). Your parent should apply and note on the application that heat is part of their lease."
+        },
+        {
+          "question": "My parent's furnace broke and they have no heat right now. Do they use the regular application?",
+          "answer": "No. A heating emergency is handled through the crisis assistance component, which is separate from the regular cash grant. Call your parent's local County Assistance Office immediately; do not use the standard online or phone application for this situation. Find the local CAO at pa.gov/agencies/dhs."
+        },
+        {
+          "question": "Can I apply on my parent's behalf, or does my parent have to apply themselves?",
+          "answer": "You can apply on your parent's behalf. When you apply through COMPASS or by phone, you can identify yourself as the person completing the application on behalf of the household. Have your parent's Social Security number, income documents, and heating bill ready. Call 1-866-857-7095 if you have questions about completing the application as a representative."
+        },
+        {
+          "question": "The LIHEAP season just opened. How quickly should we apply?",
+          "answer": "Apply as early as possible. LIHEAP funding is limited. There is no statewide waitlist described in official materials, but early applications are assigned to caseworkers faster. Processing typically takes up to 30 days after a caseworker is assigned, so applying early in the season gives the most lead time before cold weather becomes urgent."
+        },
+        {
+          "question": "My parent already received a LIHEAP grant. Do they get the $100 supplemental payment automatically?",
+          "answer": "According to Pennsylvania DHS, the 2026 one-time $100 supplemental payment is automatic for eligible households; no separate application is required. The payment goes directly to the utility or fuel provider. If you are unsure whether your parent qualifies or want to confirm the payment was made, call the LIHEAP Hotline at 1-866-857-7095."
+        },
+        {
+          "question": "My parent's income went up this year. Are the income limits the same as last year?",
+          "answer": "Not necessarily. Pennsylvania's LIHEAP income limits update each program year to reflect the current Federal Poverty Guidelines. The limit for a single-person household in the current season is $23,940 per year (150% FPL). Always verify the current season's figures at pa.gov/agencies/dhs/resources/liheap before assuming your parent qualifies or does not qualify based on a prior year's limits."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Lightning",
+      "phone": "1-866-857-7095",
+      "sourceUrl": "https://www.pa.gov/agencies/dhs/resources/liheap",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "pa-property-tax-rent-rebate",
+      "name": "Property Tax/Rent Rebate Program",
+      "shortName": "PA Tax/Rent Rebate",
+      "tagline": "Pennsylvania reimburses your parent up to $1,000 a year on property taxes or rent paid, if their income is under $48,110.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Pennsylvania Department of Revenue statewide assistance locations",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county assistance sites that help with filing",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, owns a home or rents in Pennsylvania, and has an annual income under $48,110, they may qualify to get money back on what they paid in property taxes or rent last year. The rebate is not a monthly check; it is a once-a-year payment from the Pennsylvania Department of Revenue. Depending on income, that payment can be as high as $1,000.\n\nThe amount depends on where your parent's income falls in a four-tier table. Someone earning $8,550 or less per year can get up to $1,000 back. Someone earning between $19,241 and $48,110 can get up to $380. Both homeowners and renters qualify, though renters need their landlord to sign a Rent Certificate form (PA-1000 RC) before they can apply.\n\nOne detail many families miss: this program looks at last year's income and last year's taxes or rent, not what your parent is paying today. And approval does not carry over; your parent must file a new claim every single year using form PA-1000.",
+      "savingsRange": "Up to $1,000/year (standard maximum; actual amount depends on income tier)",
+      "savingsSource": "Pennsylvania Department of Revenue standard rebate table, published at pa.gov/agencies/revenue/ptrr. The $1,000 maximum applies to the lowest income tier ($0 to $8,550). The $380 standard minimum applies to income between $19,241 and $48,110.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or widow/widower age 50+, or person with disability age 18+)",
+          "Annual household income under $48,110",
+          "Paid property taxes or rent on a Pennsylvania primary residence last year",
+          "Must be a Pennsylvania resident",
+          "Must file a new claim every year"
+        ],
+        "ageRequirement": "65+ (50+ for widows/widowers; 18+ for people with disabilities)",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Pennsylvania resident.",
+          "Must have paid property taxes or rent on a primary residence in Pennsylvania during the previous calendar year.",
+          "Must file a new claim each year using form PA-1000.",
+          "Renters must submit a PA-1000 RC Rent Certificate signed by their landlord.",
+          "Eligibility and rebate amount are based on prior-year income and prior-year taxes or rent paid, not current circumstances."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at myPATH (mypath.pa.gov), where you can complete and submit form PA-1000 without mailing anything.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather last year's income and tax or rent records",
+            "description": "You will need your parent's total income from the prior calendar year, their property tax receipts (if they own a home), or a completed PA-1000 RC Rent Certificate signed by their landlord (if they rent). Collect these before starting the application."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to file",
+            "description": "Online is fastest: go to mypath.pa.gov and look for the Property Tax/Rent Rebate section. If your parent prefers paper, download form PA-1000 from the Department of Revenue site or call 1-888-222-9190 to request a paper copy by mail."
+          },
+          {
+            "step": 3,
+            "title": "Complete and submit form PA-1000",
+            "description": "Fill out the PA-1000 claim form. Renters must also attach the signed PA-1000 RC Rent Certificate. Homeowners attach their property tax receipts. Submit online through myPATH, or mail the completed forms to: Pennsylvania Department of Revenue, Property Tax/Rent Rebate Program, P.O. Box 280503, Harrisburg, PA 17128-0503."
+          },
+          {
+            "step": 4,
+            "title": "Get in-person help if needed",
+            "description": "If filing online or by mail feels too complex, Pennsylvania Department of Revenue assistance locations and local county assistance sites will help your parent complete the PA-1000 at no cost. Call 1-888-222-9190 to find a location near you."
+          },
+          {
+            "step": 5,
+            "title": "Wait for your rebate",
+            "description": "The Department of Revenue processes claims after they are received. No official fixed processing window is published; timing depends on filing method and claim volume. You can check the status of a filed claim through myPATH at mypath.pa.gov."
+          }
+        ],
+        "processingTime": "No official fixed processing time is published by the Department of Revenue. Timing varies by filing method and claim volume. Check claim status at mypath.pa.gov after filing.",
+        "waitlist": null,
+        "tip": "If your parent rents, ask the landlord to sign the PA-1000 RC Rent Certificate before you start the application. Missing this one form is the most common reason renter applications are delayed or rejected.",
+        "urls": [
+          {
+            "label": "Apply online at myPATH",
+            "url": "https://mypath.pa.gov"
+          },
+          {
+            "label": "Official program page (PA Department of Revenue)",
+            "url": "https://www.pa.gov/agencies/revenue/ptrr"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Total income from the prior calendar year (Social Security award letter, pension statements, or tax return showing all income sources)",
+        "Property tax receipts showing taxes paid on your parent's primary Pennsylvania residence in the prior year (homeowners only)",
+        "PA-1000 RC Rent Certificate completed and signed by the landlord showing rent paid in the prior year (renters only)",
+        "Proof of Pennsylvania residency (utility bill, lease agreement, or Pennsylvania-issued ID showing current address)",
+        "Proof of age (Pennsylvania driver's license, state ID, or birth certificate confirming age 65 or older)",
+        "Social Security or taxpayer identification number for the applicant",
+        "Death certificate or marriage certificate if applying as a surviving widow or widower (required to verify age 50+ widow/widower status)",
+        "Documentation of disability if applying under the disability category (age 18+)"
+      ],
+      "contacts": [
+        {
+          "label": "PA Department of Revenue: Property Tax/Rent Rebate",
+          "phone": "1-888-222-9190",
+          "description": "Call to ask eligibility questions, request paper forms (PA-1000 and PA-1000 RC), or get help finding an in-person assistance location near you.",
+          "hours": "Check pa.gov/agencies/revenue/ptrr for current hours"
+        },
+        {
+          "label": "myPATH Online Application Portal",
+          "phone": null,
+          "description": "Apply online, check claim status, and submit supporting documents at mypath.pa.gov. No phone call required.",
+          "hours": "Available online 24 hours a day"
+        }
+      ],
+      "applicationNotes": [
+        "This is an annual rebate, not monthly assistance. Your parent receives one payment per year based on what they paid in property taxes or rent the prior year. Plan accordingly if they need ongoing help with housing costs.",
+        "Your parent must file a new PA-1000 claim every year. Last year's approval does not carry over. If they skip a year, they lose that year's rebate permanently.",
+        "Homeowners with income at or below $32,070 whose property taxes exceed 15% of their total income may qualify for a higher rebate under an enhanced automatic calculation. The Department of Revenue applies this automatically when you file, but many families do not know to ask about it.",
+        "If your parent's income recently dropped (due to a spouse's death or reduced pension), the rebate amount is based on last year's income, not this year's. The benefit will reflect the lower income when they file next year's claim."
+      ],
+      "relatedPrograms": [
+        "LIHEAP (Low Income Home Energy Assistance Program) — Pennsylvania utility cost help",
+        "Pennsylvania Medicaid / Medical Assistance",
+        "Supplemental Security Income (SSI)",
+        "SNAP Food Benefits (Pennsylvania)"
+      ],
+      "contentSections": [
+        {
+          "type": "income-table",
+          "title": "How much could your parent get back?",
+          "description": "The rebate amount depends on your parent's total annual income from the prior year. Use this table to estimate their rebate before applying.",
+          "rows": [
+            {
+              "incomeRange": "$0 to $8,550",
+              "maxRebate": "$1,000"
+            },
+            {
+              "incomeRange": "$8,551 to $16,040",
+              "maxRebate": "$770"
+            },
+            {
+              "incomeRange": "$16,041 to $19,240",
+              "maxRebate": "$460"
+            },
+            {
+              "incomeRange": "$19,241 to $48,110",
+              "maxRebate": "$380"
+            }
+          ],
+          "note": "These are standard maximum rebates. Homeowners with income at or below $32,070 whose property taxes exceed 15% of total income may qualify for a higher amount under an enhanced formula applied automatically when you file. Source: pa.gov/agencies/revenue/ptrr."
+        },
+        {
+          "type": "stat-callout",
+          "stats": [
+            {
+              "value": "Up to $1,000",
+              "label": "maximum annual rebate"
+            },
+            {
+              "value": "$48,110",
+              "label": "income limit to qualify"
+            },
+            {
+              "value": "65+",
+              "label": "age to qualify (50+ for widows/widowers)"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent earns about $22,000 a year. How much will they actually get back?",
+          "answer": "At $22,000, your parent falls in the $19,241 to $48,110 income tier, which has a standard maximum rebate of $380. That is the most they can receive at that income level under the standard formula. If they own a home and their property taxes exceed 15% of their total income, an enhanced calculation may apply automatically when they file, potentially increasing the rebate."
+        },
+        {
+          "question": "My parent rents. Can they still apply, or is this only for homeowners?",
+          "answer": "Renters can apply and receive the same rebate amounts as homeowners. The requirement is that their landlord must sign the PA-1000 RC Rent Certificate, which documents the rent paid in the prior year. Ask the landlord to complete this form before you start the application; without it, the application will be incomplete."
+        },
+        {
+          "question": "My parent already qualified last year. Do they automatically get the rebate again this year?",
+          "answer": "No. This program requires a new PA-1000 application every single year. Last year's approval does not carry over. If your parent misses a year, they lose that year's rebate entirely. Set a reminder to file each year."
+        },
+        {
+          "question": "My parent's income dropped a lot this year because of medical bills and reduced hours. Will the program use this year's lower income?",
+          "answer": "No. The rebate is always calculated on prior-year income and prior-year property taxes or rent paid. If your parent's income dropped this year, that lower income will be used when you apply next year for the following rebate cycle. The current application reflects what happened last year."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. A family member or authorized representative can help complete and submit the PA-1000 on the parent's behalf. If your parent has a power of attorney or legal guardian, that documentation may be requested. For questions about representative filing, call 1-888-222-9190."
+        },
+        {
+          "question": "Does owning a home with significant equity or savings in the bank disqualify my parent?",
+          "answer": "No. This program has no asset limit. It is income-based only. Your parent's home value, savings, or investments do not affect eligibility or the rebate amount. Only their annual income and what they paid in property taxes or rent the prior year are considered."
+        },
+        {
+          "question": "My parent is 62 and widowed. Do they qualify?",
+          "answer": "Not yet. Widows and widowers qualify at age 50 or older, so your parent does qualify as a surviving spouse. The age 65 requirement applies to the general population; the 50-plus threshold applies specifically to widows and widowers. They will need documentation such as a death certificate or marriage certificate to confirm their status."
+        },
+        {
+          "question": "Can my parent apply for this rebate and also apply for LIHEAP or SNAP at the same time?",
+          "answer": "Yes. The Property Tax/Rent Rebate Program is entirely separate from LIHEAP (utility bill help) and SNAP (food benefits). Receiving one does not affect eligibility for the others. Many Pennsylvania seniors with low incomes qualify for all three. Applying for them at the same time is common and encouraged."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-888-222-9190",
+      "sourceUrl": "https://www.pa.gov/agencies/revenue/ptrr",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "pa-state-ssi-supplement",
+      "name": "State SSI Supplement",
+      "shortName": "PA SSI Supplement",
+      "tagline": "Pennsylvania adds a monthly cash payment on top of federal SSI, up to $394/month more for seniors in personal care homes.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "If your parent already receives SSI, or would qualify for SSI except that their income is slightly too high, Pennsylvania pays them an additional monthly cash supplement. The exact amount depends on where your parent lives: seniors living at home alone receive $27.40/month extra, while those in a personal care boarding home can receive up to $394.30/month on top of their federal SSI payment.\n\nThis supplement is not a separate application in most cases. SSA determines SSI eligibility first, and Pennsylvania's supplement follows automatically based on living arrangement. The one exception is for residents of domiciliary care homes and personal care boarding homes, where the local Area Agency on Aging handles part of the process using form PA-761.\n\nYour parent cannot be in a public institution or a Medicaid-paid facility where Medicaid covers more than 50% of care costs. If they are living at home, in someone else's household, or in a licensed personal care home, they are likely in an eligible setting.",
+      "savingsRange": "Up to $394.30/month for an individual ($867.40/month for an eligible couple) in a personal care boarding home; $27.40/month for an individual living at home",
+      "savingsSource": "SSA State Assistance Programs for SSI States publication (EN-05-11150), Pennsylvania supplement amounts by living arrangement",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Currently receiving SSI, or income just above the SSI limit",
+          "Pennsylvania resident",
+          "Not in a public institution or Medicaid-funded facility",
+          "Amount varies by living arrangement",
+          "Age 18+ for domiciliary care and personal care home supplements"
+        ],
+        "ageRequirement": "18+ for facility-based supplements; no upper age limit",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be eligible for SSI or would be eligible except for excess income",
+          "Must be a Pennsylvania resident",
+          "Cannot reside in a public institution or in a Medicaid-certified facility where Medicaid pays more than 50% of the cost of care",
+          "Blind and disabled children may receive the supplement in some settings but not the domiciliary care or personal care home versions unless age 18 or older"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Most people apply through Social Security by phone or online; personal care home residents also need a PA-761 form handled through the local Area Agency on Aging.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm SSI eligibility first",
+            "description": "The Pennsylvania supplement is tied to SSI. If your parent is not already on SSI, start the SSI application at https://www.ssa.gov/apply/ssi/ or call Social Security at 1-800-772-1213 (TTY 1-800-325-0778), Monday through Friday 8am to 7pm. The supplement eligibility follows once SSA determines SSI eligibility."
+          },
+          {
+            "step": 2,
+            "title": "Report the correct living arrangement to SSA",
+            "description": "The supplement amount depends entirely on where your parent lives. Whether they are living alone, in your home, or in a licensed personal care boarding home changes the payment. Tell SSA the exact living situation when you apply or if it changes."
+          },
+          {
+            "step": 3,
+            "title": "If in a domiciliary care home or personal care boarding home, contact the local Area Agency on Aging",
+            "description": "Facility-based supplement cases require form PA-761 (Application for Personal Care Home Supplement). Contact your local Area Agency on Aging to complete this step. Find your local AAA at https://www.aging.pa.gov/local-resources/Pages/AAA.aspx."
+          },
+          {
+            "step": 4,
+            "title": "Gather and submit documents",
+            "description": "SSA will ask for proof of age, Pennsylvania residency, income, resources, and living arrangement. If applying as disabled, medical records are also required. Submit everything at once to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Receive combined payment",
+            "description": "For most recipients, SSA issues one combined check that includes both the federal SSI amount and the Pennsylvania supplement. You will not receive two separate payments."
+          }
+        ],
+        "processingTime": "No single statewide standard. SSA processes the underlying SSI claim first; the supplement follows that determination. SSI processing can take several months, longer if a disability determination is required.",
+        "waitlist": null,
+        "tip": "If your parent's income is slightly above the SSI limit, do not assume they are ineligible. Pennsylvania can pay a supplement even when federal SSI is denied due to excess income in some cases. Ask SSA directly.",
+        "urls": [
+          {
+            "label": "Apply for SSI online",
+            "url": "https://www.ssa.gov/apply/ssi/"
+          },
+          {
+            "label": "Find your local Area Agency on Aging (PA)",
+            "url": "https://www.aging.pa.gov/local-resources/Pages/AAA.aspx"
+          },
+          {
+            "label": "SSA state supplement publication (EN-05-11150)",
+            "url": "https://www.ssa.gov/pubs/EN-05-11150.pdf"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI determination notice (if your parent already receives SSI)",
+        "Proof of Pennsylvania residency: utility bill, lease agreement, or Pennsylvania-issued ID showing current address",
+        "Proof of age: birth certificate or passport",
+        "Social Security card",
+        "Proof of all income sources: Social Security benefit letter, pension statements, any other monthly income",
+        "Proof of living arrangement: lease, facility agreement, or statement from the household where your parent lives",
+        "Medical records or physician statement if applying on the basis of disability",
+        "Facility documentation if your parent lives in a domiciliary care home or personal care boarding home (facility name, address, license number)",
+        "Any prior SSI application or SSA correspondence already started"
+      ],
+      "contacts": [
+        {
+          "label": "Social Security Administration",
+          "phone": "1-800-772-1213",
+          "description": "Start or check on an SSI application, which triggers the Pennsylvania supplement. This is the primary application door for most people.",
+          "hours": "Mon-Fri 8am-7pm ET (TTY: 1-800-325-0778)"
+        },
+        {
+          "label": "Pennsylvania Department of Aging (AAA Locator)",
+          "phone": "1-800-753-8827",
+          "description": "Find your local Area Agency on Aging for help with the PA-761 form if your parent lives in a domiciliary care home or personal care boarding home.",
+          "hours": "Mon-Fri 8am-4:30pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent moves from living alone into a personal care boarding home, the supplement amount increases significantly but you must notify SSA and the Area Agency on Aging. The change is not automatic.",
+        "People who are denied SSI because their income is too high may still qualify for the state supplement in some cases. Do not stop the process after an SSI denial without asking SSA specifically about the Pennsylvania supplement.",
+        "The supplement is not counted as income for SSI eligibility purposes, so receiving it does not push your parent over any income threshold."
+      ],
+      "relatedPrograms": [
+        "SSI (Supplemental Security Income, federal)",
+        "Pennsylvania Medicaid (Medical Assistance)",
+        "SNAP Food Benefits (Pennsylvania)",
+        "LIHEAP Energy Assistance (Pennsylvania)"
+      ],
+      "contentSections": [
+        {
+          "type": "income-table",
+          "title": "Monthly payment amounts by living arrangement (2026)",
+          "description": "The supplement amount and combined federal-plus-state maximum depend on where your parent lives. These are the figures SSA publishes for Pennsylvania.",
+          "rows": [
+            {
+              "livingArrangement": "Living alone",
+              "individualCombinedMax": "$572.40",
+              "coupleCombinedMax": "$860.70",
+              "stateSupplement": "$27.40 individual / $43.70 couple"
+            },
+            {
+              "livingArrangement": "Living in someone else's household",
+              "individualCombinedMax": "$390.74",
+              "coupleCombinedMax": "$588.37",
+              "stateSupplement": "$27.40 individual / $43.70 couple"
+            },
+            {
+              "livingArrangement": "Living with an essential person",
+              "individualCombinedMax": "$861.70",
+              "coupleCombinedMax": "$1,158.05",
+              "stateSupplement": "$43.70 individual / $68.05 couple"
+            },
+            {
+              "livingArrangement": "Living with an essential person in someone else's household",
+              "individualCombinedMax": "$588.37",
+              "coupleCombinedMax": "$794.72",
+              "stateSupplement": "$43.70 individual / $68.05 couple"
+            },
+            {
+              "livingArrangement": "Living in a domiciliary care facility for adults",
+              "individualCombinedMax": "$934.30",
+              "coupleCombinedMax": "$1,674.40",
+              "stateSupplement": "$389.30 individual / $857.40 couple"
+            },
+            {
+              "livingArrangement": "Living in a personal care boarding home",
+              "individualCombinedMax": "$939.30",
+              "coupleCombinedMax": "$1,684.40",
+              "stateSupplement": "$394.30 individual / $867.40 couple"
+            }
+          ],
+          "source": "SSA publication EN-05-11150, https://www.ssa.gov/pubs/EN-05-11150.pdf"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is slightly too high for SSI. Can they still get the Pennsylvania supplement?",
+          "answer": "Possibly yes. Pennsylvania can pay a state supplement to people who would be eligible for SSI except that their income is too high, depending on the specific rules for their living arrangement. Do not assume a prior SSI denial closes this door. Call SSA at 1-800-772-1213 and ask specifically whether your parent qualifies for the Pennsylvania supplement despite excess income."
+        },
+        {
+          "question": "If my parent moves from their own apartment into a personal care home, do we need to do anything?",
+          "answer": "Yes, and it matters financially. Moving into a personal care boarding home changes the supplement from $27.40/month to $394.30/month for an individual. You must notify SSA of the change in living arrangement and contact the local Area Agency on Aging to complete form PA-761 for the facility-based supplement. The increase is not applied automatically."
+        },
+        {
+          "question": "Will my parent receive two separate checks, one from SSA and one from Pennsylvania?",
+          "answer": "Usually no. For most recipients, SSA issues one combined payment that includes both the federal SSI amount and the Pennsylvania supplement. Residents of domiciliary care homes and personal care boarding homes typically receive this single combined payment as well."
+        },
+        {
+          "question": "Does receiving this supplement affect my parent's SSI payment or Medicaid eligibility?",
+          "answer": "No. Pennsylvania's supplement is not counted as income for SSI eligibility purposes, so it does not reduce the federal SSI payment. Medicaid eligibility rules are separate; ask your local county assistance office if you have questions about Medicaid specifically."
+        },
+        {
+          "question": "Can I apply for this supplement on behalf of my parent?",
+          "answer": "Yes. A family member can apply on behalf of a parent who is unable to apply independently. SSA allows a representative to complete the SSI application process. If your parent has already appointed you as a representative payee or has legal documentation such as power of attorney, bring that when you call or visit."
+        },
+        {
+          "question": "What happens if my parent's living situation changes after they are enrolled?",
+          "answer": "The supplement amount changes any time the living arrangement changes. Moving from living alone to living in someone else's home, or from home to a personal care facility, will adjust the payment up or down. You are required to report the change to SSA. Failure to report can result in overpayments that SSA will reclaim."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Coins",
+      "phone": "1-800-772-1213",
+      "sourceUrl": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

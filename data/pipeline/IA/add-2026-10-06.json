@@ -1,0 +1,297 @@
+{
+  "state": "IA",
+  "addedAt": "2026-10-06T06:20:51.763Z",
+  "dive": {
+    "state": "IA",
+    "stateName": "Iowa",
+    "diveAt": "2026-10-06T06:17:56.501Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Iowa’s ABD Medicaid is a non-MAGI Medicaid group for people who are age 65 or older, blind, or disabled and who meet SSI-like income/resource rules, but are not receiving SSI. Iowa’s current Medicaid income guidelines were effective April 1, 2026, but the exact ABD monthly income figure was not available in the gathered source. The state’s ABD-related Medically Needy pathway uses the MNIL table below: 1 person $483, 2 persons $483, 3 persons $566, 4 persons $666, 5 persons $733, 6 persons $816, 7 persons $891, 8 persons $975, 9 persons $1,058, 10 persons $1,158. If countable income is above the MNIL, a spend-down applies.",
+          "asset_limits": "ABD eligibility is resource-tested. Iowa describes ABD eligibility as following SSI income and resource guidelines for people who are not receiving SSI. The gathered sources did not provide a complete current asset dollar-limit table for ABD itself, but they confirm that resources are part of the test and that the Medically Needy route is available when income/resources are over the regular limit. Commonly excluded items in Iowa Medicaid programs include a primary home and one vehicle in some disability-related groups, but that specific exclusion was not confirmed in the gathered ABD source and should be verified on the application or eligibility notice.",
+          "other_requirements": [
+            "Must be an Iowa resident.",
+            "Must be U.S. citizen or otherwise eligible noncitizen under Medicaid rules.",
+            "Must meet non-MAGI Medicaid rules.",
+            "Must be age 65 or older, or blind, or disabled under Social Security standards.",
+            "For Medically Needy ABD, the person must be aged, blind, or disabled and have income or resources above the regular Medicaid limit but still qualify after spend-down."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "ABD Medicaid provides full Iowa Medicaid coverage for eligible aged, blind, or disabled individuals, including medical assistance and, depending on the person’s category and level of care, long-term care and home- and community-based services. For people who qualify through Medically Needy, coverage begins once the spend-down is met. A specific service menu in the gathered sources included coverage for persons who are blind or disabled under home-and-community-based waiver authority, but that waiver specifically requires being under age 65. No dollar cash benefit is paid.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: Iowa HHS Benefits Portal at the official Medicaid application page",
+            "Paper application: complete the Medicaid application form and take or send it to the local HHS office",
+            "In person: local Iowa HHS office"
+          ],
+          "processing_time": "45 days for most non-MAGI Medicaid applications; up to 90 days when a blindness or disability determination is pending.",
+          "waitlist": null,
+          "forms": [
+            "Iowa Medicaid application form (paper application linked from the Iowa HHS Medicaid application page)",
+            "Medicaid Application Processing guidance used by Iowa HHS staff (not an applicant form)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Iowa residency",
+            "Social Security number",
+            "Proof of citizenship or immigration status, if needed",
+            "Proof of income such as Social Security, pension, wages, or other unearned income",
+            "Bank statements and other resource records",
+            "Information about health insurance coverage",
+            "Medical records or disability/blindness documentation if disability is being used to qualify",
+            "Information about household members and spouse, if married"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Iowa; eligibility is not limited to a specific county. Some related waiver services have age or functional restrictions, but ABD Medicaid itself is statewide.",
+          "regional_variations": "Core ABD Medicaid eligibility is statewide and uniform. Administrative access may vary by local HHS office, but the eligibility rules, income-processing timelines, and Medicaid rules are state-level.",
+          "offices_or_providers": [
+            "Local Iowa HHS offices"
+          ]
+        },
+        "official_source": "https://hhs.iowa.gov/medicaid/apply-medicaid/eligibility",
+        "gotchas": [
+          "ABD Medicaid is not the same as Iowa’s Medicaid for people with incomes up to 133% of the federal poverty level; ABD is the older/blind/disabled pathway with resource rules.",
+          "A person may qualify through SSI-related rules even if they do not receive SSI.",
+          "If income is too high, Medically Needy may still work through a spend-down.",
+          "A disability determination can extend the decision time to 90 days.",
+          "Some families confuse ABD Medicaid with waiver services; waivers can have age and functional limits and are not identical to Medicaid eligibility.",
+          "The exact ABD income/resource thresholds should be verified on the current Iowa HHS income guidelines page or with the local office before applying."
+        ],
+        "data_shape_notes": "This program is not a simple single-income-limit Medicaid category; it is an SSI-related non-MAGI eligibility group with age/blindness/disability rules, resource limits, and a separate Medically Needy spend-down pathway. Benefits are statewide, but processing can stretch from 45 to 90 days when disability must be determined.",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled (ABD) Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Iowa’s ABD Medicaid is a non-MAGI Medicaid group for people who are age 65 or older, blind, or disabled and who meet SSI-like income/resource rules, but are not receiving SSI. Iowa’s current Medicaid income guidelines were effective April 1, 2026, but the exact ABD monthly income figure was not available in the gathered source. The state’s ABD-related Medically Needy pathway uses the MNIL table below: 1 person $483, 2 persons $483, 3 persons $566, 4 persons $666, 5 persons $733, 6 persons $816, 7 persons $891, 8 persons $975, 9 persons $1,058, 10 persons $1,158. If countable income is above the MNIL, a spend-down applies.\",\n    \"asset_limits\": \"ABD eligibility is resource-tested. Iowa describes ABD eligibility as following SSI income and resource guidelines for people who are not receiving SSI. The gathered sources did not provide a complete current asset dollar-limit table for ABD itself, but they confirm that resources are part of the test and that the Medically Needy route is available when income/resources are over the regular limit. Commonly excluded items in Iowa Medicaid programs include a primary home and one vehicle in some disability-related groups, but that specific exclusion was not confirmed in the gathered ABD source and should be verified on the application or eligibility notice.\",\n    \"other_requirements\": [\n      \"Must be an Iowa resident.\",\n      \"Must be U.S. citizen or otherwise eligible noncitizen under Medicaid rules.\",\n      \"Must meet non-MAGI Medicaid rules.\",\n      \"Must be age 65 or older, or blind, or disabled under Social Security standards.\",\n      \"For Medically Needy ABD, the person must be aged, blind, or disabled and have income or resources above the regular Medicaid limit but still qualify after spend-down.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"ABD Medicaid provides full Iowa Medicaid coverage for eligible aged, blind, or disabled individuals, including medical assistance and, depending on the person’s category and level of care, long-term care and home- and community-based services. For people who qualify through Medically Needy, coverage begins once the spend-down is met. A specific service menu in the gathered sources included coverage for persons who are blind or disabled under home-and-community-based waiver authority, but that waiver specifically requires being under age 65. No dollar cash benefit is paid.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Iowa HHS Benefits Portal at the official Medicaid application page\",\n      \"Paper application: complete the Medicaid application form and take or send it to the local HHS office\",\n      \"In person: local Iowa HHS office\"\n    ],\n    \"processing_time\": \"45 days for most non-MAGI Medicaid applications; up to 90 days when a blindness or disability determination is pending.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Iowa Medicaid application form (paper application linked from the Iowa HHS Medicaid application page)\",\n      \"Medicaid Application Processing guidance used by Iowa HHS staff (not an applicant form)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Iowa residency\",\n      \"Social Security number\",\n      \"Proof of citizenship or immigration status, if needed\",\n      \"Proof of income such as Social Security, pension, wages, or other unearned income\",\n      \"Bank statements and other resource records\",\n      \"Information about health insurance coverage\",\n      \"Medical records or disability/blindness documentation if disability is being used to qualify\",\n      \"Information about household members and spouse, if married\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Iowa; eligibility is not limited to a specific county. Some related waiver services have age or functional restrictions, but ABD Medicaid itself is statewide.\",\n    \"regional_variations\": \"Core ABD Medicaid eligibility is statewide and uniform. Administrative access may vary by local HHS office, but the eligibility rules, income-processing timelines, and Medicaid rules are state-level.\",\n    \"offices_or_providers\": [\n      \"Local Iowa HHS offices\"\n    ]\n  },\n  \"official_source\": \"https://hhs.iowa.gov/medicaid/apply-medicaid/eligibility\",\n  \"gotchas\": [\n    \"ABD Medicaid is not the same as Iowa’s Medicaid for people with incomes up to 133% of the federal poverty level; ABD is the older/blind/disabled pathway with resource rules.\",\n    \"A person may qualify through SSI-related rules even if they do not receive SSI.\",\n    \"If income is too high, Medically Needy may still work through a spend-down.\",\n    \"A disability determination can extend the decision time to 90 days.\",\n    \"Some families confuse ABD Medicaid with waiver services; waivers can have age and functional limits and are not identical to Medicaid eligibility.\",\n    \"The exact ABD income/resource thresholds should be verified on the current Iowa HHS income guidelines page or with the local office before applying.\"\n  ],\n  \"data_shape_notes\": \"This program is not a simple single-income-limit Medicaid category; it is an SSI-related non-MAGI eligibility group with age/blindness/disability rules, resource limits, and a separate Medically Needy spend-down pathway. Benefits are statewide, but processing can stretch from 45 to 90 days when disability must be determined.\"\n}"
+      },
+      {
+        "name": "Iowa Medicare Savings Programs (QMB, SLMB, QI)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "effective_date": "April 1, 2026",
+            "programs": {
+              "QMB": {
+                "individual_monthly_income_max": 1350,
+                "couple_monthly_income_max": 1824,
+                "resource_limit": {
+                  "individual": 9950,
+                  "couple": 14910
+                },
+                "fpl_band": "At or below 100% of the federal poverty level"
+              },
+              "SLMB": {
+                "individual_monthly_income_min": 1330,
+                "individual_monthly_income_max": 1596,
+                "couple_monthly_income_min": 1804,
+                "couple_monthly_income_max": 2164,
+                "resource_limit": {
+                  "individual": 9950,
+                  "couple": 14910
+                },
+                "fpl_band": "Over 100% but less than 120% of the federal poverty level"
+              },
+              "QI": {
+                "individual_monthly_income_min": 1596,
+                "individual_monthly_income_max": 1796,
+                "couple_monthly_income_min": 2164,
+                "couple_monthly_income_max": 2455,
+                "resource_limit": {
+                  "individual": 9950,
+                  "couple": 14910
+                },
+                "fpl_band": "120% but less than 135% of the federal poverty level"
+              }
+            },
+            "table_notes": "Iowa’s official pages present the limits by family size as individual and married couple, not a larger household-size table."
+          },
+          "asset_limits": {
+            "limits": {
+              "individual": 9950,
+              "couple": 14910
+            },
+            "what_counts": [
+              "Countable resources as used by Iowa Medicaid for MSP eligibility",
+              "Bank accounts and other countable liquid assets are typically included if not otherwise excluded"
+            ],
+            "what_is_exempt": [
+              "The source materials provided do not list the full exemption schedule on the MSP page itself"
+            ],
+            "notes": "The official Iowa pages referenced here state the dollar resource limit but do not, in the snippets available, provide a complete item-by-item exempt-assets list."
+          },
+          "other_requirements": [
+            "Must have Medicare Part A and/or Part B",
+            "Must be a U.S. resident eligible for Iowa Medicaid administration rules",
+            "Eligibility is based on monthly income and resources",
+            "QI is limited by federal funding and may be treated as a first-come, first-served program if funding runs out during a year"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": {
+            "QMB": "Pays Medicare Part A and Part B premiums, deductibles, coinsurance, and copayments",
+            "SLMB": "Pays Medicare Part B premium only",
+            "QI": "Pays Medicare Part B premium only"
+          },
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Iowa HHS Medicare Savings Program application page",
+            "Phone: SHIIP-SMP at 1-800-351-4664",
+            "TTY: 1-800-735-2942",
+            "Email: shiip@iid.iowa.gov",
+            "In-person / local DHS office if additional information is requested or assistance is needed",
+            "Mail or fax to local DHS office when returning requested documents"
+          ],
+          "processing_time": "The Medicaid processing rule referenced for MSP gives applicants 10 days to return any requested additional information; the available sources here do not give a single statewide final decision time.",
+          "waitlist": "No general waitlist is indicated for QMB or SLMB; QI is the only tier that can be limited by federal funding and may effectively run out for the year.",
+          "forms": [
+            "470-4846 Medicare Savings Programs Additional Information Request",
+            "470-4846(S) Medicare Savings Programs Additional Information Request (Spanish)"
+          ],
+          "documents": [
+            "Proof of Medicare Part A and/or Part B",
+            "Proof of monthly income",
+            "Proof of resources/assets",
+            "Information needed to complete the 470-4846 additional information request if DHS asks for more details",
+            "Any bank statements, award letters, or other financial verification requested by the state"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Iowa through Iowa HHS Medicaid administration; QI funding may create practical timing limits during the benefit year.",
+          "regional_variations": "The program itself is statewide and does not appear to vary by county in eligibility rules or benefits. Local DHS offices may differ in how quickly they process paperwork or help applicants, but the core rules are statewide.",
+          "offices_or_providers": [
+            "Iowa HHS / Iowa Medicaid",
+            "Local DHS offices",
+            "SHIIP-SMP counseling support"
+          ]
+        },
+        "official_source": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program",
+        "gotchas": [
+          "QMB is the only tier that pays deductibles, coinsurance, and copays; SLMB and QI only pay the Part B premium.",
+          "The resource limit is the same across QMB, SLMB, and QI in Iowa.",
+          "QI is different from SLMB because it depends on federal funding, so applying early matters.",
+          "Families often miss that these are Medicare cost-help programs, not full Medicaid coverage.",
+          "The state may request more information using form 470-4846, and failure to respond can delay or stop the case.",
+          "Iowa’s published figures change over time, so the current April 1, 2026 limits should be used when screening eligibility."
+        ],
+        "data_shape_notes": "This program is tiered by Medicare cost-sharing level rather than by service package: QMB pays premiums plus cost sharing, while SLMB and QI pay only Part B premiums. Eligibility is income- and resource-based, with the same resource cap across all tiers and a special funding-limited feature for QI.",
+        "_raw": "{\n  \"name\": \"Iowa Medicare Savings Programs (QMB, SLMB, QI)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"effective_date\": \"April 1, 2026\",\n      \"programs\": {\n        \"QMB\": {\n          \"individual_monthly_income_max\": 1350,\n          \"couple_monthly_income_max\": 1824,\n          \"resource_limit\": {\n            \"individual\": 9950,\n            \"couple\": 14910\n          },\n          \"fpl_band\": \"At or below 100% of the federal poverty level\"\n        },\n        \"SLMB\": {\n          \"individual_monthly_income_min\": 1330,\n          \"individual_monthly_income_max\": 1596,\n          \"couple_monthly_income_min\": 1804,\n          \"couple_monthly_income_max\": 2164,\n          \"resource_limit\": {\n            \"individual\": 9950,\n            \"couple\": 14910\n          },\n          \"fpl_band\": \"Over 100% but less than 120% of the federal poverty level\"\n        },\n        \"QI\": {\n          \"individual_monthly_income_min\": 1596,\n          \"individual_monthly_income_max\": 1796,\n          \"couple_monthly_income_min\": 2164,\n          \"couple_monthly_income_max\": 2455,\n          \"resource_limit\": {\n            \"individual\": 9950,\n            \"couple\": 14910\n          },\n          \"fpl_band\": \"120% but less than 135% of the federal poverty level\"\n        }\n      },\n      \"table_notes\": \"Iowa’s official pages present the limits by family size as individual and married couple, not a larger household-size table.\"\n    },\n    \"asset_limits\": {\n      \"limits\": {\n        \"individual\": 9950,\n        \"couple\": 14910\n      },\n      \"what_counts\": [\n        \"Countable resources as used by Iowa Medicaid for MSP eligibility\",\n        \"Bank accounts and other countable liquid assets are typically included if not otherwise excluded\"\n      ],\n      \"what_is_exempt\": [\n        \"The source materials provided do not list the full exemption schedule on the MSP page itself\"\n      ],\n      \"notes\": \"The official Iowa pages referenced here state the dollar resource limit but do not, in the snippets available, provide a complete item-by-item exempt-assets list.\"\n    },\n    \"other_requirements\": [\n      \"Must have Medicare Part A and/or Part B\",\n      \"Must be a U.S. resident eligible for Iowa Medicaid administration rules\",\n      \"Eligibility is based on monthly income and resources\",\n      \"QI is limited by federal funding and may be treated as a first-come, first-served program if funding runs out during a year\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": {\n      \"QMB\": \"Pays Medicare Part A and Part B premiums, deductibles, coinsurance, and copayments\",\n      \"SLMB\": \"Pays Medicare Part B premium only\",\n      \"QI\": \"Pays Medicare Part B premium only\"\n    },\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Iowa HHS Medicare Savings Program application page\",\n      \"Phone: SHIIP-SMP at 1-800-351-4664\",\n      \"TTY: 1-800-735-2942\",\n      \"Email: shiip@iid.iowa.gov\",\n      \"In-person / local DHS office if additional information is requested or assistance is needed\",\n      \"Mail or fax to local DHS office when returning requested documents\"\n    ],\n    \"processing_time\": \"The Medicaid processing rule referenced for MSP gives applicants 10 days to return any requested additional information; the available sources here do not give a single statewide final decision time.\",\n    \"waitlist\": \"No general waitlist is indicated for QMB or SLMB; QI is the only tier that can be limited by federal funding and may effectively run out for the year.\",\n    \"forms\": [\n      \"470-4846 Medicare Savings Programs Additional Information Request\",\n      \"470-4846(S) Medicare Savings Programs Additional Information Request (Spanish)\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare Part A and/or Part B\",\n      \"Proof of monthly income\",\n      \"Proof of resources/assets\",\n      \"Information needed to complete the 470-4846 additional information request if DHS asks for more details\",\n      \"Any bank statements, award letters, or other financial verification requested by the state\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Iowa through Iowa HHS Medicaid administration; QI funding may create practical timing limits during the benefit year.\",\n    \"regional_variations\": \"The program itself is statewide and does not appear to vary by county in eligibility rules or benefits. Local DHS offices may differ in how quickly they process paperwork or help applicants, but the core rules are statewide.\",\n    \"offices_or_providers\": [\n      \"Iowa HHS / Iowa Medicaid\",\n      \"Local DHS offices\",\n      \"SHIIP-SMP counseling support\"\n    ]\n  },\n  \"official_source\": \"https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program\",\n  \"gotchas\": [\n    \"QMB is the only tier that pays deductibles, coinsurance, and copays; SLMB and QI only pay the Part B premium.\",\n    \"The resource limit is the same across QMB, SLMB, and QI in Iowa.\",\n    \"QI is different from SLMB because it depends on federal funding, so applying early matters.\",\n    \"Families often miss that these are Medicare cost-help programs, not full Medicaid coverage.\",\n    \"The state may request more information using form 470-4846, and failure to respond can delay or stop the case.\",\n    \"Iowa’s published figures change over time, so the current April 1, 2026 limits should be used when screening eligibility.\"\n  ],\n  \"data_shape_notes\": \"This program is tiered by Medicare cost-sharing level rather than by service package: QMB pays premiums plus cost sharing, while SLMB and QI pay only Part B premiums. Eligibility is income- and resource-based, with the same resource cap across all tiers and a special funding-limited feature for QI.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "IA",
+    "stateName": "Iowa",
+    "classifiedAt": "2026-10-06T06:17:56.504Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 1,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 2
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Iowa HHS offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Iowa Medicare Savings Programs (QMB, SLMB, QI)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Iowa HHS / Iowa Medicaid",
+              "type": "service-area"
+            },
+            {
+              "name": "Local DHS offices",
+              "type": "service-area"
+            },
+            {
+              "name": "SHIIP-SMP counseling support",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "IA",
+      "id": "ia-abd-medicaid",
+      "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "legacyId": "aged-blind-and-disabled-abd-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "IA",
+      "id": "ia-medicare-savings-programs-qmb-slmb-qi",
+      "name": "Iowa Medicare Savings Programs (QMB, SLMB, QI)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

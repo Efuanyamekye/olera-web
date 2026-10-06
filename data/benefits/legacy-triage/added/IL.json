@@ -1,0 +1,37 @@
+[
+  {
+    "state": "IL",
+    "id": "il-community-care-program",
+    "name": "Illinois Community Care Program (CCP)",
+    "legacyId": "hcbs-medicaid-waiver-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "IL",
+    "id": "il-aabd-cash-assistance",
+    "name": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+    "legacyId": "aid-to-the-aged-blind-and-disabled-aabd-cash-assistance",
+    "programType": "benefit"
+  },
+  {
+    "state": "IL",
+    "id": "il-liheap-energy-assistance",
+    "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+    "legacyId": "liheap-low-income-home-energy-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "IL",
+    "id": "il-senior-property-tax-freeze",
+    "name": "Senior Citizens Property Tax Freeze",
+    "legacyId": "senior-citizens-property-tax-freeze",
+    "programType": "resource"
+  },
+  {
+    "state": "IL",
+    "id": "il-benefit-access-program",
+    "name": "Illinois Benefit Access Program",
+    "legacyId": null,
+    "programType": "resource"
+  }
+]

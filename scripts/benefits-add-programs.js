@@ -84,6 +84,8 @@ async function addForState(state, items) {
     if (al && typeof al === "object") {
       draft.structuredEligibility.assetLimits = Object.fromEntries(Object.entries(al).filter(([k]) => ASSET_KEYS.has(k)));
     }
+    const CONTACT_KEYS = new Set(["label", "description", "phone", "hours"]);
+    if (Array.isArray(draft.contacts)) draft.contacts = draft.contacts.map((c) => Object.fromEntries(Object.entries(c || {}).filter(([k]) => CONTACT_KEYS.has(k))));
     // Caregiver support and respite are services a family gets; every state's
     // other caregiver draft is a benefit, and a "resource" is hidden from the plan.
     if (draft.programType === "resource" && /caregiver|respite/i.test(draft.name)) draft.programType = "benefit";

@@ -1,0 +1,326 @@
+{
+  "state": "KS",
+  "addedAt": "2026-10-06T06:26:12.747Z",
+  "dive": {
+    "state": "KS",
+    "stateName": "Kansas",
+    "diveAt": "2026-10-06T06:23:28.741Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "individual": "$994/month",
+            "couple": "$1,491/month combined",
+            "household_table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": "$994"
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": "$1,491"
+              }
+            ],
+            "notes": [
+              "Kansas ABD Medicaid uses the medically needy/SSI-related financial methodology for adults who are age 65+, blind, or disabled.",
+              "Applicants must also be financially eligible based on both income and resources."
+            ]
+          },
+          "asset_limits": {
+            "individual": "$2,000 countable resources",
+            "couple": "$3,000 countable resources combined",
+            "what_counts": [
+              "cash",
+              "bank accounts",
+              "investments",
+              "other countable liquid assets"
+            ],
+            "what_is_exempt": [
+              "The specific exempt-asset list is not fully stated in the gathered source material.",
+              "Kansas uses SSI-style resource rules for this pathway, so some essential items are commonly excluded, but the exact Kansas list should be confirmed on the state application instructions."
+            ]
+          },
+          "other_requirements": [
+            "Must live in Kansas",
+            "Must be a U.S. citizen or have a qualifying immigration status",
+            "Must be age 65 or older, blind under Social Security rules, or disabled under Social Security rules",
+            "Must not already qualify for other categorically needy coverage under the state plan",
+            "Must file a separate Medicaid application for this eligibility group",
+            "For disability/blindness, SSA standards are used"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Health coverage through KanCare/Medicaid for eligible aged, blind, or disabled adults. The program can also cover some preventive dental care, eye exams, and eyeglasses for adults. For people needing long-term care, eligibility can include a functional assessment of Activities of Daily Living and Instrumental Activities of Daily Living to determine needed services.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: Kansas KanCare application portal",
+            "Phone: KanCare Clearinghouse at 1-800-792-4884",
+            "Mail: KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601",
+            "In-person: through Kansas human services/eligibility offices if offered locally"
+          ],
+          "processing_time": "No exact statewide processing-time number was confirmed in the gathered material.",
+          "waitlist": null,
+          "forms": [
+            "Separate Medicaid application for aged, blind, or disabled coverage",
+            "The specific form number was not confirmed in the gathered material"
+          ],
+          "documents": [
+            "Proof of Kansas residency",
+            "Proof of identity",
+            "Proof of U.S. citizenship or qualifying immigration status",
+            "Proof of age, blindness, or disability determination",
+            "Income records",
+            "Bank statements and other resource records",
+            "Social Security number",
+            "Household information for everyone living in the home",
+            "Medical or disability documentation if SSA determination is not already on file"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Kansas; eligibility is not county-restricted.",
+          "regional_variations": "No formal regional benefit variation was confirmed. Administration and local office access may vary by county, but the core ABD Medicaid rules are statewide.",
+          "offices_or_providers": [
+            "KanCare Clearinghouse"
+          ]
+        },
+        "official_source": "https://www.kancare.ks.gov/apply-now/eligibility",
+        "gotchas": [
+          "This is not automatic for every older adult in Kansas; applicants must meet both the disability/age test and the financial limits.",
+          "SSI receipt and Medicaid eligibility are related but not identical; Kansas requires a separate Medicaid application for this pathway.",
+          "Income and resources can be low enough that a family thinks someone qualifies, but an inheritance, savings account, or other countable resource can make them ineligible.",
+          "Adults seeking long-term care services may face an additional functional assessment beyond basic financial eligibility.",
+          "The exact exemption list for resources should be checked before applying because some assets are counted and some are not.",
+          "A person who is aged, blind, or disabled may still be denied if they are otherwise eligible for a different categorically needy group and the state routes them differently."
+        ],
+        "data_shape_notes": "This program has fixed statewide income and resource limits, but the disability/functional side can vary depending on whether the applicant needs only medical coverage or also long-term care services.",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"individual\": \"$994/month\",\n      \"couple\": \"$1,491/month combined\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": \"$994\"\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": \"$1,491\"\n        }\n      ],\n      \"notes\": [\n        \"Kansas ABD Medicaid uses the medically needy/SSI-related financial methodology for adults who are age 65+, blind, or disabled.\",\n        \"Applicants must also be financially eligible based on both income and resources.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"individual\": \"$2,000 countable resources\",\n      \"couple\": \"$3,000 countable resources combined\",\n      \"what_counts\": [\n        \"cash\",\n        \"bank accounts\",\n        \"investments\",\n        \"other countable liquid assets\"\n      ],\n      \"what_is_exempt\": [\n        \"The specific exempt-asset list is not fully stated in the gathered source material.\",\n        \"Kansas uses SSI-style resource rules for this pathway, so some essential items are commonly excluded, but the exact Kansas list should be confirmed on the state application instructions.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must live in Kansas\",\n      \"Must be a U.S. citizen or have a qualifying immigration status\",\n      \"Must be age 65 or older, blind under Social Security rules, or disabled under Social Security rules\",\n      \"Must not already qualify for other categorically needy coverage under the state plan\",\n      \"Must file a separate Medicaid application for this eligibility group\",\n      \"For disability/blindness, SSA standards are used\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Health coverage through KanCare/Medicaid for eligible aged, blind, or disabled adults. The program can also cover some preventive dental care, eye exams, and eyeglasses for adults. For people needing long-term care, eligibility can include a functional assessment of Activities of Daily Living and Instrumental Activities of Daily Living to determine needed services.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Kansas KanCare application portal\",\n      \"Phone: KanCare Clearinghouse at 1-800-792-4884\",\n      \"Mail: KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601\",\n      \"In-person: through Kansas human services/eligibility offices if offered locally\"\n    ],\n    \"processing_time\": \"No exact statewide processing-time number was confirmed in the gathered material.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Separate Medicaid application for aged, blind, or disabled coverage\",\n      \"The specific form number was not confirmed in the gathered material\"\n    ],\n    \"documents\": [\n      \"Proof of Kansas residency\",\n      \"Proof of identity\",\n      \"Proof of U.S. citizenship or qualifying immigration status\",\n      \"Proof of age, blindness, or disability determination\",\n      \"Income records\",\n      \"Bank statements and other resource records\",\n      \"Social Security number\",\n      \"Household information for everyone living in the home\",\n      \"Medical or disability documentation if SSA determination is not already on file\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Kansas; eligibility is not county-restricted.\",\n    \"regional_variations\": \"No formal regional benefit variation was confirmed. Administration and local office access may vary by county, but the core ABD Medicaid rules are statewide.\",\n    \"offices_or_providers\": [\n      \"KanCare Clearinghouse\"\n    ]\n  },\n  \"official_source\": \"https://www.kancare.ks.gov/apply-now/eligibility\",\n  \"gotchas\": [\n    \"This is not automatic for every older adult in Kansas; applicants must meet both the disability/age test and the financial limits.\",\n    \"SSI receipt and Medicaid eligibility are related but not identical; Kansas requires a separate Medicaid application for this pathway.\",\n    \"Income and resources can be low enough that a family thinks someone qualifies, but an inheritance, savings account, or other countable resource can make them ineligible.\",\n    \"Adults seeking long-term care services may face an additional functional assessment beyond basic financial eligibility.\",\n    \"The exact exemption list for resources should be checked before applying because some assets are counted and some are not.\",\n    \"A person who is aged, blind, or disabled may still be denied if they are otherwise eligible for a different categorically needy group and the state routes them differently.\"\n  ],\n  \"data_shape_notes\": \"This program has fixed statewide income and resource limits, but the disability/functional side can vary depending on whether the applicant needs only medical coverage or also long-term care services.\"\n}"
+      },
+      {
+        "name": "KanCare Medicare Buy-In Programs",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "programs": [
+              {
+                "name": "QMB (Qualified Medicare Beneficiary)",
+                "single_monthly_income": "Up to $1,350",
+                "couple_monthly_income": "Up to $1,824"
+              },
+              {
+                "name": "SLMB / LMB (Specified Low-Income Medicare Beneficiary)",
+                "single_monthly_income": "$1,351 to $1,616",
+                "couple_monthly_income": "$1,825 to $2,184"
+              },
+              {
+                "name": "QI / ELMB (Qualifying Individual)",
+                "single_monthly_income": "$1,617 to $1,816",
+                "couple_monthly_income": "$2,185 to $2,455"
+              }
+            ],
+            "notes": "Kansas Medicare Savings Program limits are reported in current 2026 summaries as above; older official Kansas policy pages confirm the buy-in categories and that Medicare Part B enrollment is a condition of eligibility, but the exact dollar table was not available in the official snippet returned."
+          },
+          "asset_limits": {
+            "qmb_slmb": {
+              "single": "$9,660",
+              "couple": "$14,470"
+            },
+            "qi": {
+              "single": "$9,950",
+              "couple": "$14,910"
+            },
+            "what_counts": [
+              "Countable bank accounts",
+              "Stocks and bonds",
+              "Non-retirement cash assets",
+              "Other non-exempt resources"
+            ],
+            "what_is_exempt": [
+              "Home you live in",
+              "One vehicle",
+              "Personal belongings",
+              "Household goods",
+              "Burial space and certain burial funds",
+              "Most retirement accounts may be treated differently depending on status and rules"
+            ],
+            "notes": "Kansas applies federal Medicare Savings Program resource rules. Asset limits vary slightly by program tier, and QI generally has the highest allowable limit among the three listed groups."
+          },
+          "other_requirements": [
+            "Must be entitled to Medicare Part A or enrolled in Medicare Part B, depending on category",
+            "Must be a Kansas resident",
+            "Must meet citizenship/qualified immigrant requirements for Kansas Medicaid-related programs",
+            "QI is first-come, first-served and subject to available federal funding",
+            "Part B enrollment is required or arranged through the buy-in process for eligible Medicaid beneficiaries"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": {
+            "QMB": "Pays Medicare Part A premium if owed, Medicare Part B premium, and Medicare deductibles, coinsurance, and copayments for Medicare-covered services.",
+            "SLMB/LMB": "Pays Medicare Part B premium only.",
+            "QI/ELMB": "Pays Medicare Part B premium only."
+          },
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: https://applyforKanCare.ks.gov",
+            "Phone: KanCare Clearinghouse at 800-792-4884",
+            "Mail: KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601-3599",
+            "Paper application delivered through Kansas DCF offices"
+          ],
+          "processing_time": "Not stated in the returned official snippets; families should expect a Medicaid-style eligibility review rather than an instant approval. QI determinations can be affected by funding availability.",
+          "waitlist": "QI is first-come, first-served and may effectively close or exhaust funds if the yearly federal allocation runs out; QMB and SLMB do not have a waitlist in the same way.",
+          "forms": [
+            "KanCare application / Medicaid application used for Medicare Savings Programs",
+            "KEESM 2911 Medicare and Medicare Buy-In policy references a completed form and supporting documentation sent to the servicing Social Security office in some buy-in situations"
+          ],
+          "documents": [
+            "Proof of Medicare Part A and/or Part B",
+            "Social Security numbers",
+            "Proof of Kansas residency",
+            "Proof of income such as Social Security award letters, pension statements, paycheck stubs, or bank deposit records",
+            "Proof of resources/assets such as bank statements if requested",
+            "Identification for household members",
+            "If applicable, immigration/citizenship documents",
+            "Any current Medicaid or Medicare notices"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Kansas statewide; administered through KanCare/Kansas Medicaid rules, not county-restricted.",
+          "regional_variations": "The program itself is statewide and does not appear to vary by county. Practical experience can differ by local DCF office workload, caseworker availability, and whether a family applies online, by mail, or in person.",
+          "offices_or_providers": [
+            "KanCare Clearinghouse",
+            "Kansas Department for Children and Families local offices",
+            "Kansas Department for Aging and Disability Services information line for Medicare-buy-in questions"
+          ]
+        },
+        "official_source": "https://khap.kdhe.ks.gov/KEESM/Oct_2023_Output/keesm2911.htm",
+        "gotchas": [
+          "There are three different Kansas Medicare Savings Program levels, and families often confuse them: QMB is the most generous; SLMB/LMB and QI/ELMB only pay Part B premiums.",
+          "QI is not guaranteed if funds run out because it is first-come, first-served.",
+          "People often miss that QMB prohibits providers from billing the beneficiary for Medicare-covered cost-sharing.",
+          "A person can still qualify even if they already have Medicare; the program helps pay premiums and cost-sharing rather than replacing Medicare.",
+          "The income and asset tests are separate; being under the income limit alone is not enough if resources are too high.",
+          "Kansas uses the buy-in process so Medicaid beneficiaries who are entitled to Medicare Part B are enrolled in Part B as a condition of eligibility."
+        ],
+        "data_shape_notes": "This program is really a set of three income-tiered Medicare Savings Programs rather than one single benefit. Eligibility depends on both income and resources, the benefit changes by tier, and QI has funding-based availability.",
+        "_raw": "{\n  \"name\": \"KanCare Medicare Buy-In Programs\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"programs\": [\n        {\n          \"name\": \"QMB (Qualified Medicare Beneficiary)\",\n          \"single_monthly_income\": \"Up to $1,350\",\n          \"couple_monthly_income\": \"Up to $1,824\"\n        },\n        {\n          \"name\": \"SLMB / LMB (Specified Low-Income Medicare Beneficiary)\",\n          \"single_monthly_income\": \"$1,351 to $1,616\",\n          \"couple_monthly_income\": \"$1,825 to $2,184\"\n        },\n        {\n          \"name\": \"QI / ELMB (Qualifying Individual)\",\n          \"single_monthly_income\": \"$1,617 to $1,816\",\n          \"couple_monthly_income\": \"$2,185 to $2,455\"\n        }\n      ],\n      \"notes\": \"Kansas Medicare Savings Program limits are reported in current 2026 summaries as above; older official Kansas policy pages confirm the buy-in categories and that Medicare Part B enrollment is a condition of eligibility, but the exact dollar table was not available in the official snippet returned.\"\n    },\n    \"asset_limits\": {\n      \"qmb_slmb\": {\n        \"single\": \"$9,660\",\n        \"couple\": \"$14,470\"\n      },\n      \"qi\": {\n        \"single\": \"$9,950\",\n        \"couple\": \"$14,910\"\n      },\n      \"what_counts\": [\n        \"Countable bank accounts\",\n        \"Stocks and bonds\",\n        \"Non-retirement cash assets\",\n        \"Other non-exempt resources\"\n      ],\n      \"what_is_exempt\": [\n        \"Home you live in\",\n        \"One vehicle\",\n        \"Personal belongings\",\n        \"Household goods\",\n        \"Burial space and certain burial funds\",\n        \"Most retirement accounts may be treated differently depending on status and rules\"\n      ],\n      \"notes\": \"Kansas applies federal Medicare Savings Program resource rules. Asset limits vary slightly by program tier, and QI generally has the highest allowable limit among the three listed groups.\"\n    },\n    \"other_requirements\": [\n      \"Must be entitled to Medicare Part A or enrolled in Medicare Part B, depending on category\",\n      \"Must be a Kansas resident\",\n      \"Must meet citizenship/qualified immigrant requirements for Kansas Medicaid-related programs\",\n      \"QI is first-come, first-served and subject to available federal funding\",\n      \"Part B enrollment is required or arranged through the buy-in process for eligible Medicaid beneficiaries\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": {\n      \"QMB\": \"Pays Medicare Part A premium if owed, Medicare Part B premium, and Medicare deductibles, coinsurance, and copayments for Medicare-covered services.\",\n      \"SLMB/LMB\": \"Pays Medicare Part B premium only.\",\n      \"QI/ELMB\": \"Pays Medicare Part B premium only.\"\n    },\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://applyforKanCare.ks.gov\",\n      \"Phone: KanCare Clearinghouse at 800-792-4884\",\n      \"Mail: KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601-3599\",\n      \"Paper application delivered through Kansas DCF offices\"\n    ],\n    \"processing_time\": \"Not stated in the returned official snippets; families should expect a Medicaid-style eligibility review rather than an instant approval. QI determinations can be affected by funding availability.\",\n    \"waitlist\": \"QI is first-come, first-served and may effectively close or exhaust funds if the yearly federal allocation runs out; QMB and SLMB do not have a waitlist in the same way.\",\n    \"forms\": [\n      \"KanCare application / Medicaid application used for Medicare Savings Programs\",\n      \"KEESM 2911 Medicare and Medicare Buy-In policy references a completed form and supporting documentation sent to the servicing Social Security office in some buy-in situations\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare Part A and/or Part B\",\n      \"Social Security numbers\",\n      \"Proof of Kansas residency\",\n      \"Proof of income such as Social Security award letters, pension statements, paycheck stubs, or bank deposit records\",\n      \"Proof of resources/assets such as bank statements if requested\",\n      \"Identification for household members\",\n      \"If applicable, immigration/citizenship documents\",\n      \"Any current Medicaid or Medicare notices\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Kansas statewide; administered through KanCare/Kansas Medicaid rules, not county-restricted.\",\n    \"regional_variations\": \"The program itself is statewide and does not appear to vary by county. Practical experience can differ by local DCF office workload, caseworker availability, and whether a family applies online, by mail, or in person.\",\n    \"offices_or_providers\": [\n      \"KanCare Clearinghouse\",\n      \"Kansas Department for Children and Families local offices\",\n      \"Kansas Department for Aging and Disability Services information line for Medicare-buy-in questions\"\n    ]\n  },\n  \"official_source\": \"https://khap.kdhe.ks.gov/KEESM/Oct_2023_Output/keesm2911.htm\",\n  \"gotchas\": [\n    \"There are three different Kansas Medicare Savings Program levels, and families often confuse them: QMB is the most generous; SLMB/LMB and QI/ELMB only pay Part B premiums.\",\n    \"QI is not guaranteed if funds run out because it is first-come, first-served.\",\n    \"People often miss that QMB prohibits providers from billing the beneficiary for Medicare-covered cost-sharing.\",\n    \"A person can still qualify even if they already have Medicare; the program helps pay premiums and cost-sharing rather than replacing Medicare.\",\n    \"The income and asset tests are separate; being under the income limit alone is not enough if resources are too high.\",\n    \"Kansas uses the buy-in process so Medicaid beneficiaries who are entitled to Medicare Part B are enrolled in Part B as a condition of eligibility.\"\n  ],\n  \"data_shape_notes\": \"This program is really a set of three income-tiered Medicare Savings Programs rather than one single benefit. Eligibility depends on both income and resources, the benefit changes by tier, and QI has funding-based availability.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "KS",
+    "stateName": "Kansas",
+    "classifiedAt": "2026-10-06T06:23:28.747Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 1,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 2
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "KanCare Clearinghouse",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "KanCare Medicare Buy-In Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "KanCare Clearinghouse",
+              "type": "service-area"
+            },
+            {
+              "name": "Kansas Department for Children and Families local offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Kansas Department for Aging and Disability Services information line for Medicare-buy-in questions",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "KS",
+      "id": "ks-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "KS",
+      "id": "ks-kancare-medicare-buy-in",
+      "name": "KanCare Medicare Buy-In Programs",
+      "legacyId": "kancare-medicare-buy-in-programs",
+      "programType": "benefit"
+    }
+  ]
+}

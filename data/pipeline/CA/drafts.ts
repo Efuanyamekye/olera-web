@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.669Z
+ * Last updated: 2026-10-06T06:44:48.367Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -3089,6 +3089,661 @@ export const drafts: PipelineStateDrafts = {
           "dismissedAt": "2026-10-04"
         }
       ]
+    },
+    {
+      "id": "ca-medi-cal-aged-disabled",
+      "name": "Medi-Cal for Aged and Disabled",
+      "shortName": "Medi-Cal A&D",
+      "tagline": "If your parent is 65 or older and living on a fixed income in California, they may qualify for full medical coverage with no monthly premium and no out-of-pocket share of cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county Medi-Cal office",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county social services agency",
+            "type": "service-area"
+          },
+          {
+            "name": "County online portals such as BenefitsCal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older (or under 65 and disabled) and their monthly income falls below $1,836 for a single person, they may qualify for Medi-Cal for Aged and Disabled. This is full-scope Medi-Cal coverage with zero share of cost, meaning no monthly premiums, no copays, and no deductibles. It covers doctor visits, hospital stays, prescription drugs, ambulance transport, and home care services.\n\nThis is not a supplemental plan layered on top of another insurance. For many older Californians with low income, it is their primary or only health coverage. Because there is no share of cost under the Aged and Disabled Federal Poverty Level (A&D FPL) category, your parent pays nothing for covered medical services. That can mean thousands of dollars a year in avoided costs for someone managing chronic conditions or multiple medications.\n\nTwo tests apply: income and assets. Meeting the income limit alone is not enough. A single person must also have countable assets of $130,000 or less (the primary home and one vehicle are not counted). If your parent is not yet receiving Social Security disability benefits and disability is the basis for eligibility rather than age, the county may need additional time to verify that status, which can extend processing beyond the standard 45 days.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Medi-Cal for Aged and Disabled provides full-scope health coverage at zero cost to the enrollee. No dollar benefit amount is published because this is a coverage program, not a cash benefit.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR disabled under Social Security standards",
+          "Income at or below $1,836/month for a single person (2026)",
+          "Countable assets at or below $130,000 for one person",
+          "California resident",
+          "U.S. citizen or qualifying immigration status"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1836
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2490
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 3143
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 3795
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4450
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 5102
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 5755
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6409
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 7062
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 7715
+          }
+        ],
+        "assetLimits": {
+          "individual": 130000,
+          "couple": 195000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit (CDs)",
+            "Stocks, bonds, and investment accounts",
+            "Cash value of life insurance policies (above certain thresholds)",
+            "Additional real property beyond the primary home"
+          ],
+          "exemptAssets": [
+            "Primary home (regardless of value)",
+            "One vehicle"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a California resident",
+          "Must be a U.S. citizen or have satisfactory immigration status for the A&D FPL category",
+          "Must not reside in a long-term care facility (different Medi-Cal categories apply for nursing facility residents)",
+          "If disability rather than age is the basis for eligibility: must meet Social Security Administration disability standards; if SSA has not yet made a disability determination, the county will need to verify disability separately, which can add time to processing"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest route is to apply online through BenefitsCal; most standard applications are processed within 45 days, though disability-based cases can take longer.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "Pull together your parent's Social Security award letter, a document showing California residency (utility bill or lease), and proof of income. If disability rather than age is the basis for the application, gather any SSA disability determination letters or medical records you have. Having these ready prevents the most common processing delay."
+          },
+          {
+            "step": 2,
+            "title": "Apply online through BenefitsCal",
+            "description": "Go to BenefitsCal at benefitscal.com and complete the Single Streamlined Application. The system screens for Medi-Cal eligibility automatically. You can also start at the DHCS application page at dhcs.ca.gov/medi-cal/apply/ for links to county portals and additional guidance. If you prefer to apply through Covered California (coveredca.gov), that application also routes to Medi-Cal automatically when the applicant appears eligible."
+          },
+          {
+            "step": 3,
+            "title": "Or apply by phone, mail, or in person",
+            "description": "If online is not workable, call your county Medi-Cal office to request a paper application. You can mail the completed application back to the county, or bring it in person to the local county social services or Medi-Cal office. Processing timelines are the same regardless of how you apply."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any county requests quickly",
+            "description": "After submission, the county may send a notice requesting additional documents or scheduling an interview. Respond as quickly as possible. Missing a document request is the most common reason applications stall. If disability must be established, the county may take up to 90 days rather than the standard 45."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility determination",
+            "description": "The county will mail a notice of decision. If approved, coverage can be retroactive to the month of application in some cases. If denied, the notice will include appeal rights and deadlines. You have the right to request a state fair hearing if you disagree with the decision."
+          }
+        ],
+        "processingTime": "45 days for standard applications; up to 90 days when disability must be established by the county rather than SSA",
+        "waitlist": null,
+        "tip": "If your parent already receives SSI (Supplemental Security Income), they are typically automatically eligible for Medi-Cal and may not need to file a separate application. Check with the county office to confirm enrollment status.",
+        "urls": [
+          {
+            "label": "Apply online: BenefitsCal",
+            "url": "https://www.benefitscal.com"
+          },
+          {
+            "label": "DHCS Medi-Cal application information",
+            "url": "https://www.dhcs.ca.gov/medi-cal/apply/"
+          },
+          {
+            "label": "Apply through Covered California",
+            "url": "https://www.coveredca.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or benefit verification letter (shows current monthly income from SSA)",
+        "Proof of California residency: a utility bill, lease agreement, or California-issued document showing your parent's current address",
+        "Proof of age: birth certificate, passport, or other government-issued document showing date of birth",
+        "Proof of all income sources: Social Security statements, pension or retirement account statements, rental income records, or any other regular income",
+        "Bank and financial account information: current balances for any checking, savings, or certificate of deposit accounts (the county will ask for account information to verify the asset limit; verify with your county which statements or documentation they require)",
+        "SSA disability determination letter (only if applying on the basis of disability rather than age, and disability has already been established by SSA)",
+        "Medical records or physician documentation of disability (only if disability has not yet been established by SSA and the county must make its own determination)",
+        "Immigration or citizenship documentation if your parent is not a U.S. citizen",
+        "Documentation for any additional real property beyond the primary home (property tax statements or deed if applicable)",
+        "Life insurance policy documents showing face value and any cash value (if policies exist)",
+        "Legal authorization documents if you are applying as a representative or authorized representative on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "California DHCS Medi-Cal Helpline",
+          "phone": "(800) 541-5555",
+          "description": "The state Medi-Cal information line. Can direct you to your county office and answer general eligibility questions. To apply, you will be directed to your county Medi-Cal office or BenefitsCal.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "BenefitsCal online application",
+          "phone": null,
+          "description": "Apply online at benefitscal.com. This is the fastest application route and connects directly to county processing.",
+          "hours": "Available 24 hours"
+        },
+        {
+          "label": "California 2-1-1",
+          "phone": "2-1-1",
+          "description": "General social services helpline. Can help you find your local county Medi-Cal office phone number and address. Does not process Medi-Cal applications directly.",
+          "hours": "Available in most areas 24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is already receiving SSI, they are most likely already enrolled in Medi-Cal automatically. Call the DHCS helpline at (800) 541-5555 to confirm before filing a new application.",
+        "If your parent's income is above the A&D FPL limit but still limited, they may still qualify under a different Medi-Cal category called Medically Needy or the share-of-cost program. These are related but not identical to the A&D FPL category described here. Ask the county specifically about both options.",
+        "If your parent is in the hospital or a rehabilitation facility right now, you can apply while they are still there. Hospital discharge planners and social workers can often help initiate the application or provide documentation. Do not wait until discharge.",
+        "If disability is the basis for eligibility and has not yet been established by SSA, submit any available medical records with the initial application. This can reduce the back-and-forth that extends processing toward the 90-day maximum."
+      ],
+      "relatedPrograms": [
+        "Medicare Savings Programs (help paying Medicare premiums for those who have both Medicare and Medi-Cal)",
+        "Cal MediConnect or Medi-Medi (coordinated care for dual Medicare and Medi-Cal enrollees)",
+        "PACE (Program of All-Inclusive Care for the Elderly, available to Medi-Cal eligible adults 55+ who qualify for nursing facility level of care)",
+        "In-Home Supportive Services (IHSS, which pays for home care for Medi-Cal eligible adults who need help with daily activities)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What zero share of cost actually means",
+          "body": "Under the A&D FPL category, your parent pays nothing for covered Medi-Cal services. No copays at the doctor. No cost-sharing for hospital stays. No deductible for prescriptions. This is different from the Medi-Cal share-of-cost category, where enrollees must spend a set amount on medical bills each month before Medi-Cal activates. Make sure the county is evaluating your parent for the A&D FPL category specifically, not defaulting to a share-of-cost pathway."
+        },
+        {
+          "type": "prose",
+          "title": "The asset test: what counts and what does not",
+          "body": "Your parent's home does not count toward the $130,000 asset limit, regardless of what it is worth. One vehicle does not count. What does count: bank account balances, CDs, stocks, bonds, investment accounts, and the cash value of life insurance policies above certain thresholds. If your parent has savings or investments approaching $130,000, verify with the county exactly how each account is classified before assuming they are ineligible. The rules around which assets are countable can be more nuanced than a simple list suggests."
+        },
+        {
+          "type": "prose",
+          "title": "Income and assets are two separate tests",
+          "body": "Passing the income test does not mean your parent automatically passes the asset test, and vice versa. Both must be met. A common situation: a parent with very low monthly Social Security income who has accumulated savings over $130,000 would not qualify under the A&D FPL category as described in county guidance, even though their monthly income is well below the limit. If assets are the obstacle, ask the county about any spend-down or asset-restructuring options that may be permissible."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's monthly income is $1,900, just above the single-person limit. Are they completely out of options?",
+          "answer": "Not necessarily. The A&D FPL category described here has a $1,836/month limit for a single person. But California Medi-Cal has other pathways for aged and disabled individuals whose income is somewhat higher, including a share-of-cost category where Medi-Cal activates after your parent spends a set amount on medical bills each month. Ask the county specifically about all available Medi-Cal categories for aged and disabled applicants, not just the A&D FPL path."
+        },
+        {
+          "question": "My parent owns their home. Does the home value count against the $130,000 asset limit?",
+          "answer": "No. The primary home is exempt from the asset calculation for the A&D FPL Medi-Cal category. It does not matter what the home is worth. One vehicle is also exempt. The asset limit applies to countable resources such as bank accounts, savings, CDs, investments, and similar holdings."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. You can apply as an authorized representative on your parent's behalf. You will need to indicate this on the application and may be asked to provide documentation of your authority to act, such as a power of attorney. The county Medi-Cal office can walk you through what they require. Call your county office or use BenefitsCal at benefitscal.com to start the process."
+        },
+        {
+          "question": "My parent is not receiving Social Security disability benefits yet but may qualify based on a medical condition. Can they still apply for this program?",
+          "answer": "Yes, but the process takes longer. If SSA has not yet made a disability determination, the county must make its own disability evaluation. This can extend the processing window from the standard 45 days to up to 90 days. Submit all available medical documentation with the initial application to reduce back-and-forth delays. Once SSA issues a disability determination, that determination can be used to establish eligibility going forward."
+        },
+        {
+          "question": "If my parent qualifies for Medi-Cal for Aged and Disabled and also has Medicare, how do the two programs interact?",
+          "answer": "When someone qualifies for both Medicare and Medi-Cal, they are considered dually eligible. In that situation, Medicare generally pays first for covered services, and Medi-Cal may cover costs that Medicare does not, such as copays, deductibles, or services Medicare does not include. Your parent may also be eligible for a Medicare Savings Program, which has Medi-Cal help pay Medicare premiums. Ask the county about both at the same time when you apply."
+        },
+        {
+          "question": "My parent lives in a skilled nursing facility. Can they still get Medi-Cal for Aged and Disabled?",
+          "answer": "The A&D FPL category described here is generally for individuals who do not reside in a long-term care facility. If your parent is in a nursing home, a different Medi-Cal category applies with different income and asset rules. Contact the county Medi-Cal office directly to discuss the correct pathway. The facility's social worker or discharge planner can also help initiate the right type of application."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Enrollees are required to report changes in income, assets, or household circumstances to the county. Medi-Cal eligibility is redetermined periodically, typically annually. If income or assets rise above the applicable limits, eligibility may end or shift to a different Medi-Cal category such as share-of-cost. Report changes to your county Medi-Cal office as they occur rather than waiting for the annual renewal."
+        },
+        {
+          "question": "Can my parent apply for Medi-Cal for Aged and Disabled and In-Home Supportive Services (IHSS) at the same time?",
+          "answer": "Yes, and it often makes sense to do both. IHSS pays for in-home care for Medi-Cal-eligible adults who need help with daily activities like bathing, dressing, and medication management. Medi-Cal eligibility is a requirement for IHSS, so applying for both simultaneously means IHSS processing can begin once Medi-Cal is approved. Ask the county about initiating both applications together through BenefitsCal or at the county social services office."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 541-5555",
+      "sourceUrl": "https://www.dhcs.ca.gov/medi-cal/apply/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ca-assisted-living-waiver-alw",
+      "name": "California Assisted Living Waiver (ALW)",
+      "shortName": "Assisted Living Waiver",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay in assisted living instead, Medi-Cal may pay for their care services through this waiver so they never have to enter a facility.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Participating Residential Care Facilities for the Elderly (RCFEs)",
+            "type": "service-area"
+          },
+          {
+            "name": "Participating Adult Residential Care Facilities (ARFs)",
+            "type": "service-area"
+          },
+          {
+            "name": "Participating Care Coordination Agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Participating Home Health Agencies",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent qualifies for a nursing facility but you want them to live in assisted living instead, the California Assisted Living Waiver pays for the personal care, homemaker, and coordination services that make that possible. Medi-Cal covers the care services; your parent still pays room and board, usually from SSI/SSP or personal funds.\n\nThe program is only available in 15 counties: Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, and Sonoma. Your parent must already have full-scope Medi-Cal with zero share of cost. If Medi-Cal has assigned them a share of cost, they are not eligible for ALW even if they otherwise qualify.\n\nThe most important thing to understand: this is not a cash benefit and it does not pay rent. It pays for the services your parent needs to live safely in an assisted living setting rather than a nursing home. Getting in requires a clinical level-of-care assessment, a participating ALW provider in your county, and Medi-Cal enrollment without a share of cost. All three gates must open before enrollment can begin.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ALW pays for care services directly to participating providers. It does not issue cash to enrollees.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 21 or older",
+          "Full-scope Medi-Cal with zero share of cost",
+          "Needs nursing-facility level of care",
+          "Lives in one of 15 participating counties",
+          "Able to live safely in an assisted living setting and pay room and board"
+        ],
+        "ageRequirement": "21+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must meet Nursing Facility Level of Care, a clinical assessment that determines whether they need daily hands-on help with bathing, dressing, medication management, or other activities of daily living at a level that would otherwise require a nursing home stay. This is a stricter standard than ordinary assisted-living need.",
+        "otherRequirements": [
+          "Must have full-scope Medi-Cal eligibility with zero share of cost. A share of cost disqualifies.",
+          "Must be willing to live in an assisted living facility or publicly subsidized senior or disabled housing instead of a nursing facility.",
+          "Must be able to reside safely in the assisted living setting.",
+          "Must live in one of the 15 ALW service counties listed above.",
+          "Must be able to pay room and board from personal funds, SSI/SSP, or other sources."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Start by contacting a participating ALW provider or care coordination agency in your parent's county; they initiate the clinical and Medi-Cal eligibility review on your parent's behalf.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm Medi-Cal status and share of cost",
+            "description": "Check your parent's Medi-Cal approval letter or Benefits Identification Card. It must show full-scope Medi-Cal with no share of cost. If a share of cost is listed, resolve that first through your county's Medi-Cal office before proceeding. The county office finder is at dhcs.ca.gov/individuals/pages/medi-calcountyoffices.aspx."
+          },
+          {
+            "step": 2,
+            "title": "Confirm your county is in the ALW program",
+            "description": "ALW operates only in Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, and Sonoma counties. If your parent lives outside these counties, ALW is not an option."
+          },
+          {
+            "step": 3,
+            "title": "Find a participating ALW provider in your county",
+            "description": "Visit the DHCS ALW program page at dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/ to identify participating RCFEs, ARFs, care coordination agencies, and home health agencies in your area. The facility itself must be ALW-qualified; not every licensed assisted living facility participates."
+          },
+          {
+            "step": 4,
+            "title": "Contact the provider or care coordination agency to initiate enrollment",
+            "description": "The participating provider or care coordination agency guides the enrollment process. They will request your parent's Medi-Cal information, initiate the nursing-facility level-of-care assessment, and submit the required ALW enrollment paperwork including the ALW Program Application Checklist."
+          },
+          {
+            "step": 5,
+            "title": "Complete the level-of-care assessment",
+            "description": "A clinical reviewer assesses whether your parent meets Nursing Facility Level of Care. This assessment reviews daily functioning, medical needs, and care requirements. Your parent must pass this review to proceed."
+          },
+          {
+            "step": 6,
+            "title": "Confirm room and board funding",
+            "description": "ALW pays for care services only. Your parent must have a way to pay rent and meals at the facility, most commonly through SSI/SSP benefits or personal funds. Confirm this with the facility before finalizing placement."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Timeline depends on Medi-Cal eligibility status, level-of-care review completion, local provider availability, and county enrollment capacity.",
+        "waitlist": "Access can be constrained by local provider availability and county enrollment capacity. No official statewide waitlist length is published. Ask the specific provider or care coordination agency about current wait times in your county when you make contact.",
+        "tip": "If your parent is transitioning from a nursing facility to the community, ask the care coordination agency specifically about Nursing Facility Transition Care Coordination services, which are a dedicated part of the ALW benefit.",
+        "urls": [
+          {
+            "label": "DHCS Assisted Living Waiver Program Page",
+            "url": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/"
+          },
+          {
+            "label": "Medi-Cal County Office Finder",
+            "url": "https://www.dhcs.ca.gov/individuals/pages/medi-calcountyoffices.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medi-Cal Benefits Identification Card or current Medi-Cal approval notice showing full-scope eligibility",
+        "Documentation showing zero share of cost on current Medi-Cal enrollment",
+        "Medical records or physician documentation supporting nursing-facility level of care (functional assessments, diagnosis history, care needs)",
+        "Proof of age (birth certificate, passport, or state-issued ID)",
+        "Social Security card or SSI/SSP award letter showing current benefit amount",
+        "Documentation showing ability to pay room and board (SSI/SSP award letter, pension statement, or personal bank account balance)",
+        "Proof of California residency in an ALW service county (utility bill, lease agreement, or government-issued document with current address)",
+        "If transitioning from a nursing facility: discharge planning documents and nursing facility transfer records"
+      ],
+      "contacts": [
+        {
+          "label": "DHCS ALW Program",
+          "phone": "(916) 552-9105",
+          "description": "California Department of Health Care Services Long-Term Care division, which administers the ALW program. Call to ask about participating providers in your county and program eligibility.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Medi-Cal County Office",
+          "phone": null,
+          "description": "Contact your parent's county Medi-Cal office to confirm full-scope eligibility and zero share of cost before applying. Find your county office at dhcs.ca.gov/individuals/pages/medi-calcountyoffices.aspx.",
+          "hours": "Varies by county"
+        },
+        {
+          "label": "California Department of Aging (CDA) Information Line",
+          "phone": "(916) 419-7500",
+          "description": "Can help identify local care coordination agencies and area agencies on aging that may work with ALW providers in your county. This line provides information and referrals, not direct ALW enrollment.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is currently in a nursing facility and wants to transition to assisted living, ALW includes Nursing Facility Transition Care Coordination services specifically for this situation. Ask any participating care coordination agency about this pathway.",
+        "A person can be Medi-Cal-eligible by income and assets and still be disqualified from ALW if they carry a share of cost. Resolving the share of cost first, before identifying a facility, saves significant time.",
+        "The facility itself must be ALW-enrolled. A licensed RCFE or ARF that is not a participating ALW provider cannot deliver ALW services even if your parent is eligible. Always confirm ALW participation before touring or committing to a facility.",
+        "If your county has no current ALW provider openings, ask the care coordination agency about other Medi-Cal Home and Community-Based Services (HCBS) options such as IHSS or PACE, which may serve your parent in the meantime."
+      ],
+      "relatedPrograms": [
+        "California In-Home Supportive Services (IHSS)",
+        "California Program of All-Inclusive Care for the Elderly (PACE)",
+        "Medi-Cal Community-Based Adult Services (CBAS)",
+        "SSI/SSP (Supplemental Security Income / State Supplementary Payment)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What ALW pays for and what it does not",
+          "body": "ALW covers: personal care (bathing, dressing, grooming), homemaker services, home health aide services, care coordination, residential habilitation, and nursing facility transition support.\n\nALW does not cover: room and board (rent and meals at the facility). Your parent must pay those costs separately, typically using SSI/SSP benefits or personal funds. This is one of the most common sources of confusion when families start the process."
+        },
+        {
+          "type": "prose",
+          "title": "Two types of ALW settings",
+          "body": "ALW services can be delivered in two settings. The first is a licensed Residential Care Facility for the Elderly (RCFE) or Adult Residential Facility (ARF), which is the traditional assisted living model. The second is publicly subsidized senior or disabled housing, where the same services are delivered under the name Assisted Care rather than Assisted Living Services. The clinical eligibility requirements and Medi-Cal rules are the same in both settings. Which type is available depends on your county and local provider participation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has a Medi-Cal share of cost. Can they still apply for ALW?",
+          "answer": "No. A Medi-Cal share of cost disqualifies a person from ALW enrollment entirely, even if they meet every other requirement. Your parent must have full-scope Medi-Cal with zero share of cost before they can enroll. Contact your parent's county Medi-Cal office to find out whether the share of cost can be reduced or eliminated, or ask about spend-down pathways."
+        },
+        {
+          "question": "Does ALW pay for my parent's room and board at the assisted living facility?",
+          "answer": "No. ALW pays only for care services: personal care, homemaker tasks, home health aide support, and care coordination. Your parent must independently cover rent and meals at the facility. Most participants use SSI/SSP benefits for this. Confirm with the specific facility what the monthly room and board cost is before committing."
+        },
+        {
+          "question": "How do I know if the assisted living facility we are considering actually participates in ALW?",
+          "answer": "Not every licensed RCFE or ARF participates. The facility must be enrolled as an ALW provider with DHCS. Before touring or signing any agreement, ask the facility directly whether it holds an active ALW provider agreement. You can also check the DHCS ALW program page at dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/ for guidance on finding participating providers."
+        },
+        {
+          "question": "My parent's county is not on the ALW list. Are there alternatives?",
+          "answer": "Yes. If your parent's county is not among the 15 ALW counties, three Medi-Cal programs worth exploring are In-Home Supportive Services (IHSS), which funds personal care at home; PACE (Program of All-Inclusive Care for the Elderly), which provides all-inclusive care for people who qualify for nursing-home level care; and Community-Based Adult Services (CBAS), which provides day-program support. Each has its own eligibility rules."
+        },
+        {
+          "question": "What is the nursing-facility level of care assessment and who conducts it?",
+          "answer": "It is a clinical review that determines whether your parent's functional and medical needs are severe enough to require the level of care provided in a nursing home. The assessment typically examines how much help your parent needs with daily activities like bathing, dressing, eating, mobility, and medication management. The participating ALW provider or care coordination agency arranges this assessment as part of the enrollment process. Your parent must pass this review to qualify."
+        },
+        {
+          "question": "Can I apply for ALW while my parent is still in a nursing facility?",
+          "answer": "Yes, and this is one of the intended use cases. ALW includes a specific benefit called Nursing Facility Transition Care Coordination to help people move from a nursing facility back into the community. Tell the care coordination agency upfront that your parent is currently in a nursing facility and wants to transition to assisted living. Discharge planners at the facility may also be able to help initiate the process."
+        },
+        {
+          "question": "How long will it take to get my parent enrolled?",
+          "answer": "DHCS does not publish a statewide processing timeline. Enrollment depends on confirming Medi-Cal eligibility, completing the level-of-care assessment, finding an ALW-participating facility with an opening, and county-level capacity. In practice, the biggest variable is local provider availability. Ask the specific care coordination agency or facility about current wait times in your county when you first make contact."
+        },
+        {
+          "question": "Can my parent apply for both ALW and IHSS at the same time?",
+          "answer": "These programs serve different living situations. IHSS pays for in-home care when a person lives in their own home. ALW pays for care services when a person lives in a participating assisted living facility. A person generally cannot receive both simultaneously for the same care needs. If your parent is currently at home using IHSS and is considering a move to assisted living, ask a care coordination agency how the transition would affect their existing IHSS services."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Buildings",
+      "phone": "(916) 552-9105",
+      "sourceUrl": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ca-pace-programs",
+      "name": "California PACE Programs",
+      "shortName": "PACE Care",
+      "tagline": "If your parent is 55+ and needs nursing-home-level care but wants to stay home, PACE covers almost everything: doctors, medications, home care, meals, and transportation, all under one coordinated team.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local PACE organizations and PACE centers in participating California service areas",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "PACE (Program of All-Inclusive Care for the Elderly) is for people 55 and older who need a nursing-home level of care but can still live at home safely with support. If your parent qualifies, one PACE team takes over all their medical and long-term care: primary care, specialists, medications, physical therapy, home care, dental, vision, hearing, mental health, meals, and transportation to appointments. You do not coordinate between providers because the PACE team does that.\n\nFor people who have both Medicare and Medi-Cal, PACE typically costs nothing out of pocket. People who have only Medicare or only Medi-Cal may pay a partial premium, and people without either can enroll by paying privately. There is no income or asset test to qualify; eligibility is based on age, where your parent lives, and whether a clinical assessment confirms they need nursing-home-level care.\n\nPACE is not available everywhere in California. Each PACE organization serves specific counties and zip codes, and the enrollment process runs through that local organization rather than a statewide office. Your first step is confirming whether a PACE plan operates in your parent's zip code.",
+      "savingsRange": "",
+      "savingsSource": "Free service for dual Medicare-Medi-Cal enrollees; partial premiums may apply for others. No cash benefit or dollar savings figure is published by DHCS.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Lives in a California PACE service area (county and zip code matter)",
+          "Clinically assessed to need nursing-home-level care",
+          "Can still live safely at home with PACE support",
+          "No income or asset limit"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must meet California's Nursing Facility Level of Care standard. This is a clinical determination, meaning a PACE interdisciplinary team (or the California Department of Health Care Services) reviews whether your parent needs daily help with activities like bathing, dressing, getting around, or managing medications. Meeting this standard does not mean your parent must enter a nursing home; it means their care needs are complex enough that they would qualify for one.",
+        "otherRequirements": [
+          "Must live within the service area of a participating California PACE organization at the time of enrollment.",
+          "Must be able to live safely in the community with PACE support (people who require 24-hour nursing supervision that PACE cannot arrange at home are not eligible).",
+          "Enrollment is voluntary; your parent must consent."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Contact the PACE organization serving your parent's zip code directly by phone, online, or in person; the full process including health assessment typically takes a few weeks.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent's zip code is in a PACE service area",
+            "description": "Go to the California DHCS PACE page at dhcs.ca.gov and use the list of participating PACE organizations to find one that covers your parent's county and zip code. If none appears for your area, PACE is not currently available there."
+          },
+          {
+            "step": 2,
+            "title": "Contact the local PACE organization",
+            "description": "Call or go online to the specific PACE organization serving your parent's area. Each organization runs its own enrollment office. Ask to speak with an enrollment coordinator. They will screen for basic eligibility (age, zip code) on this first call."
+          },
+          {
+            "step": 3,
+            "title": "Complete the health assessment",
+            "description": "A PACE interdisciplinary team will conduct a clinical assessment of your parent's care needs to determine whether they meet the Nursing Facility Level of Care standard. This typically involves a home visit or in-person evaluation. Bring your parent's current medication list, recent medical records, and names of current doctors."
+          },
+          {
+            "step": 4,
+            "title": "Submit enrollment documents",
+            "description": "Provide proof of age, proof of residence in the service area, Medicare card if applicable, Medi-Cal card if applicable, and any insurance information. Each PACE organization handles its own paperwork; there is no single statewide enrollment form."
+          },
+          {
+            "step": 5,
+            "title": "Review and sign the enrollment agreement",
+            "description": "Once the assessment is complete and eligibility is confirmed, the PACE organization will present an enrollment agreement. Your parent (or their authorized representative) signs voluntarily. PACE covers care from the enrollment date forward."
+          }
+        ],
+        "processingTime": "The application and health assessment combined typically take a few weeks. The clinical assessment phase is the main variable.",
+        "waitlist": null,
+        "tip": "If your parent is being discharged from a hospital or skilled nursing facility, ask the discharge planner whether PACE is available in their home zip code. Discharge planners often know local PACE contacts and can speed up the initial outreach.",
+        "urls": [
+          {
+            "label": "California DHCS PACE Program Page (find local organizations here)",
+            "url": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (if your parent has Medicare)",
+        "Medi-Cal card (if your parent has Medi-Cal)",
+        "Proof of residence in the PACE service area (a utility bill, lease agreement, or state-issued document showing the address)",
+        "Proof of age (birth certificate, passport, or state ID)",
+        "Current medication list (all prescription and over-the-counter medications with dosages)",
+        "Recent medical records or documentation of current diagnoses",
+        "Names and contact information for your parent's current doctors and specialists",
+        "Any additional health insurance information beyond Medicare or Medi-Cal"
+      ],
+      "contacts": [
+        {
+          "label": "California DHCS PACE Program Office",
+          "phone": "(916) 552-9105",
+          "description": "The state office overseeing PACE in California. Can answer questions about the program and help you identify local PACE organizations serving your parent's area.",
+          "hours": "Mon-Fri, standard state business hours"
+        },
+        {
+          "label": "Your local PACE organization (find via DHCS page)",
+          "phone": null,
+          "description": "The actual application is handled by the local PACE organization in your parent's county and zip code. Go to dhcs.ca.gov to find the contact number for the organization serving your area. This is the call that starts enrollment.",
+          "hours": "Varies by organization"
+        },
+        {
+          "label": "California 211",
+          "phone": "2-1-1",
+          "description": "A general information line that can help identify local PACE organizations and other senior services. It cannot process a PACE application but can point you to the right local contact.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "PACE eligibility hinges on the clinical assessment, not paperwork. The biggest reason families get stuck is not documents but the level-of-care determination. Come to the assessment with a clear picture of everything your parent needs help with daily, including things they may downplay.",
+        "Your parent must live inside a specific zip code served by the PACE organization, not just the county. Call before investing time in the enrollment process to confirm coverage at their exact address.",
+        "People who have only Medicare (no Medi-Cal) or who are paying privately can still enroll. Ask the PACE organization about premium amounts that apply to your parent's specific insurance situation.",
+        "Enrollment is voluntary and your parent can disenroll at any time. PACE is not a one-way door, and families sometimes worry unnecessarily about locking in. The decision can be revisited if circumstances change."
+      ],
+      "relatedPrograms": [
+        "Medi-Cal Home and Community-Based Services (HCBS)",
+        "California Community-Based Adult Services (CBAS)",
+        "In-Home Supportive Services (IHSS)",
+        "CalAIM Enhanced Care Management"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "PACE is not the same as PACE financing for home improvements",
+          "body": "California has two completely different programs that use the acronym PACE. The senior care program on this page coordinates medical care and long-term support. The other PACE (Property Assessed Clean Energy) finances solar panels and home energy upgrades. If someone directed you here for home improvement financing, that is a different program entirely."
+        },
+        {
+          "type": "prose",
+          "title": "What PACE actually covers",
+          "body": "When your parent enrolls in PACE, a single interdisciplinary team becomes responsible for all of the following: primary care visits, specialist referrals, prescription medications, physical and occupational therapy, restorative therapy, skilled nursing care, home health aide visits, personal care (bathing, dressing, grooming), social work services, mental and behavioral health services, dental care, vision care, hearing care, nutritional counseling, meals, recreational therapy, durable medical equipment, and transportation to the PACE center and to medical appointments. Families often describe enrollment as the moment they stopped spending hours each week coordinating between providers."
+        },
+        {
+          "type": "prose",
+          "title": "Cost: what your parent actually pays",
+          "body": "If your parent has both Medicare and Medi-Cal (dual eligible), PACE typically costs nothing out of pocket. The PACE organization is paid a set monthly amount by Medicare and Medi-Cal to cover all care. If your parent has only Medicare, a monthly premium for the Medi-Cal portion of services may apply; ask the local PACE organization for the current amount in your area. If your parent has neither, private-pay enrollment is available and the PACE organization can quote a monthly cost. No figures are published statewide because amounts vary by plan and individual coverage."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has Medicare but not Medi-Cal. Can they still enroll in PACE?",
+          "answer": "Yes. PACE does not require both Medicare and Medi-Cal. Your parent may enroll with Medicare only or even without either program by paying privately. If they have Medicare but not Medi-Cal, a monthly premium for the long-term care portion may apply. Contact the local PACE organization in your parent's zip code and ask specifically about the cost structure for Medicare-only enrollees."
+        },
+        {
+          "question": "My parent owns a home and has savings. Does that disqualify them?",
+          "answer": "No. PACE has no income or asset limit. Eligibility is based on age (55+), living in a PACE service area, and meeting the Nursing Facility Level of Care clinical standard. Owning a home or having savings does not affect eligibility. PACE is a medical and care coordination program, not a means-tested financial benefit."
+        },
+        {
+          "question": "What does 'nursing-home level of care' actually mean for the assessment?",
+          "answer": "It means a clinical team will evaluate whether your parent needs ongoing help with activities like bathing, dressing, mobility, medication management, or supervision for cognitive impairment at a level that would qualify them for nursing home admission under California standards. Meeting this standard does not mean your parent has to go to a nursing home; it is the clinical threshold that makes them eligible for PACE's comprehensive support at home."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to do it themselves?",
+          "answer": "An authorized representative, including an adult child with a signed authorization or a legal power of attorney, can initiate the enrollment process and handle paperwork on your parent's behalf. However, PACE enrollment is voluntary, so your parent must be able to consent to joining the program. If your parent has a legal representative (guardian, conservator, or healthcare proxy), that person can consent in their place."
+        },
+        {
+          "question": "What if my parent's condition worsens after enrollment? Will PACE drop them?",
+          "answer": "PACE is designed specifically for people whose needs increase over time. As your parent's condition changes, the interdisciplinary team adjusts the care plan, which can include more home care hours, skilled nursing visits, or short-term stays in a nursing facility covered by PACE. PACE does not discharge participants because their care needs increase. The only reason a person would leave PACE involuntarily is if they permanently move outside the service area or if they require 24-hour nursing care that PACE cannot safely arrange in a home setting."
+        },
+        {
+          "question": "Is PACE available everywhere in California?",
+          "answer": "No. PACE operates only in specific counties and zip codes served by participating organizations. Availability depends on whether a PACE plan has been established in your parent's area and whether that plan has capacity. Go to the California DHCS PACE page at dhcs.ca.gov to find organizations serving your parent's location. If none serves their zip code, PACE is not currently an option, and you would need to look at alternatives like IHSS or CBAS."
+        },
+        {
+          "question": "Can my parent enroll in PACE and also keep seeing their current doctor?",
+          "answer": "When your parent enrolls in PACE, the PACE interdisciplinary team becomes responsible for all of their medical care. In most cases, outside providers are no longer covered by Medicare or Medi-Cal because the PACE plan takes on that full responsibility. If your parent has a strong relationship with a specific specialist, ask the local PACE organization whether that provider participates or whether a referral arrangement is possible. This is one of the most important questions to ask before enrolling."
+        },
+        {
+          "question": "Can my parent disenroll from PACE if it is not working for them?",
+          "answer": "Yes. PACE enrollment is always voluntary and your parent can disenroll at any time without penalty. Disenrollment typically takes effect the first of the following month. After leaving PACE, your parent's Medicare and Medi-Cal coverage returns to standard fee-for-service or their previous managed care plan. Ask the local PACE organization about transition planning before disenrolling so there is no gap in care."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(916) 552-9105",
+      "sourceUrl": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

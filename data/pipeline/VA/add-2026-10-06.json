@@ -1,0 +1,936 @@
+{
+  "state": "VA",
+  "addedAt": "2026-10-06T05:27:56.765Z",
+  "dive": {
+    "state": "VA",
+    "stateName": "Virginia",
+    "diveAt": "2026-10-06T05:18:34.277Z",
+    "total": 7,
+    "parsed": 7,
+    "programs": [
+      {
+        "name": "Medicaid for Aged, Blind, or Disabled (ABD)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Virginia’s ABD Medicaid includes multiple pathways. For the full Medicaid ABD path for older adults, blind individuals, or disabled individuals, one common coverage group uses an income cap of 80% of the Federal Poverty Level (FPL), which is shown in Virginia materials as $1,004/month for a household of 1 and $1,363/month for a household of 2.[6][8] Virginia also notes that if a person’s income is over the limit, they may qualify through a spenddown based on medical bills, and the amount needed depends on household size and income.[8] Another ABD-related pathway is for people receiving SSI and certain related recipients, which is treated as meeting income eligibility for the ABD categorically needy group.[2] Virginia also has a Medicaid Works pathway for people who are blind or disabled, age 16 through 64, with income up to 138% of FPL.[5]",
+          "asset_limits": "For the 80% FPL ABD category, Virginia’s fact sheet states countable resources may not exceed $2,000 for one person or $3,000 for a couple.[6] The state says both income and resources are needed to determine eligibility for most ABD applicants.[1] The materials reviewed do not provide a complete official list of exempt resources, but the program generally asks for countable resources rather than every asset; families should expect the state to review bank accounts, cash, certain investments, and other countable resources during screening.[1][6]",
+          "other_requirements": [
+            "Must be a Virginia resident; Virginia allows self-declaration of residence unless there is reason to question it.[6][10]",
+            "Must be a U.S. citizen or meet Medicaid immigration/citizenship rules.[6]",
+            "Must have a Social Security number or proof of application for one.[6]",
+            "Must be age 65 or older, blind, or disabled under Social Security or Virginia disability standards.[1][5][10]",
+            "Blindness generally means visual acuity of not greater than 20/200.[10]",
+            "Disability generally means an impairment expected to last at least 12 months or result in death and prevent substantial gainful activity.[10]",
+            "Some ABD groups require disability determination by Virginia Disability Determination Services through DARS if the person is not already entitled through SSI/SSDI-type proof.[1][10]",
+            "People who do not qualify under the standard income test may still qualify through spenddown or institutional/home-and-community-based coverage rules.[1][8]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Full Medicaid coverage for eligible ABD members, meaning Medicaid-covered medical care and services. Virginia specifically describes full Medicaid for adults age 65 or older, blind, or disabled who meet income and resource rules.[1][8] For people who are over the income limit, Virginia offers spenddown-based coverage after enough medical bills are incurred.[1][8] For institutionalized individuals, Virginia also describes coverage when countable income is no more than 300% of SSI for a person receiving nursing-facility or certain home-and-community-based services.[5][11]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://commonhelp.virginia.gov/",
+            "Phone: Cover Virginia Call Center at 1-833-5CALLVA (1-833-522-5582), TDD 1-888-221-1590",
+            "Mail or drop off a paper application to the local Department of Social Services office",
+            "Download paper applications/forms from the Cover Virginia or DSS forms pages"
+          ],
+          "processing_time": "Virginia’s sources reviewed do not give one single ABD-specific processing deadline in the quoted materials. Mailing a paper application may take longer than other ways of applying.[13] Families should expect processing to depend on whether disability or resource verification is needed.[1][13]",
+          "waitlist": null,
+          "forms": [
+            "Virginia Medicaid paper application (available from Cover Virginia / local DSS forms pages)",
+            "Any disability verification or medical documentation requested by the local agency or disability determination unit"
+          ],
+          "documents": [
+            "Proof of age, identity, and Virginia residency",
+            "Social Security number or proof of application for one",
+            "Current income proof for the applicant and spouse, if applicable",
+            "Current resource proof, such as bank statements and similar records",
+            "Health insurance cards, if the person has other coverage",
+            "Medical proof or disability records if disability must be established",
+            "Spousal information if married, because spouse income/resources may matter"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Virginia program; no county-only restriction found in the materials reviewed.",
+          "regional_variations": "Eligibility rules are statewide, but local Department of Social Services offices handle paper applications and may move at different speeds depending on workload. Disability determinations are routed through Virginia Disability Determination Services via DARS, not through a local county-only system.[10][13] Some ABD-related services and waiver programs can vary by region or provider availability, but the core ABD Medicaid eligibility rules are statewide.[1][8]",
+          "offices_or_providers": [
+            "Local Virginia Department of Social Services offices",
+            "Cover Virginia Call Center",
+            "Virginia Disability Determination Services through DARS"
+          ]
+        },
+        "official_source": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+        "gotchas": [
+          "ABD Medicaid is not one single rule set; there are multiple ABD pathways, including standard 80% FPL coverage, spenddown coverage, institutional coverage, SSI-linked coverage, and Medicaid Works for certain working blind/disabled adults.[1][5][8]",
+          "Income and resources both matter for most ABD applicants; many families focus only on income and miss the resource test.[1][6]",
+          "A spouse’s income and resources can matter if the applicant is married.[6]",
+          "People over the income limit are not automatically denied; they may qualify through spenddown after enough medical bills are counted.[1][8]",
+          "Disability may need to be proven through Virginia’s disability determination process unless the person already has an accepted SSA-based disability status.[1][10]",
+          "A person can be eligible for only limited or different coverage categories depending on income level and living situation; institutional and home-and-community-based rules differ from standard ABD Medicaid.[5][11]",
+          "Paper applications are allowed, but mailing may slow the case down compared with online or phone applications.[13]"
+        ],
+        "data_shape_notes": "This program is not a simple fixed-benefit or fixed-income program; it is a statewide Medicaid category with multiple eligibility pathways, a means test, a resource test, possible disability determination, and alternative spenddown/institutional routes.",
+        "_raw": "{\n  \"name\": \"Medicaid for Aged, Blind, or Disabled (ABD)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Virginia’s ABD Medicaid includes multiple pathways. For the full Medicaid ABD path for older adults, blind individuals, or disabled individuals, one common coverage group uses an income cap of 80% of the Federal Poverty Level (FPL), which is shown in Virginia materials as $1,004/month for a household of 1 and $1,363/month for a household of 2.[6][8] Virginia also notes that if a person’s income is over the limit, they may qualify through a spenddown based on medical bills, and the amount needed depends on household size and income.[8] Another ABD-related pathway is for people receiving SSI and certain related recipients, which is treated as meeting income eligibility for the ABD categorically needy group.[2] Virginia also has a Medicaid Works pathway for people who are blind or disabled, age 16 through 64, with income up to 138% of FPL.[5]\",\n    \"asset_limits\": \"For the 80% FPL ABD category, Virginia’s fact sheet states countable resources may not exceed $2,000 for one person or $3,000 for a couple.[6] The state says both income and resources are needed to determine eligibility for most ABD applicants.[1] The materials reviewed do not provide a complete official list of exempt resources, but the program generally asks for countable resources rather than every asset; families should expect the state to review bank accounts, cash, certain investments, and other countable resources during screening.[1][6]\",\n    \"other_requirements\": [\n      \"Must be a Virginia resident; Virginia allows self-declaration of residence unless there is reason to question it.[6][10]\",\n      \"Must be a U.S. citizen or meet Medicaid immigration/citizenship rules.[6]\",\n      \"Must have a Social Security number or proof of application for one.[6]\",\n      \"Must be age 65 or older, blind, or disabled under Social Security or Virginia disability standards.[1][5][10]\",\n      \"Blindness generally means visual acuity of not greater than 20/200.[10]\",\n      \"Disability generally means an impairment expected to last at least 12 months or result in death and prevent substantial gainful activity.[10]\",\n      \"Some ABD groups require disability determination by Virginia Disability Determination Services through DARS if the person is not already entitled through SSI/SSDI-type proof.[1][10]\",\n      \"People who do not qualify under the standard income test may still qualify through spenddown or institutional/home-and-community-based coverage rules.[1][8]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Full Medicaid coverage for eligible ABD members, meaning Medicaid-covered medical care and services. Virginia specifically describes full Medicaid for adults age 65 or older, blind, or disabled who meet income and resource rules.[1][8] For people who are over the income limit, Virginia offers spenddown-based coverage after enough medical bills are incurred.[1][8] For institutionalized individuals, Virginia also describes coverage when countable income is no more than 300% of SSI for a person receiving nursing-facility or certain home-and-community-based services.[5][11]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://commonhelp.virginia.gov/\",\n      \"Phone: Cover Virginia Call Center at 1-833-5CALLVA (1-833-522-5582), TDD 1-888-221-1590\",\n      \"Mail or drop off a paper application to the local Department of Social Services office\",\n      \"Download paper applications/forms from the Cover Virginia or DSS forms pages\"\n    ],\n    \"processing_time\": \"Virginia’s sources reviewed do not give one single ABD-specific processing deadline in the quoted materials. Mailing a paper application may take longer than other ways of applying.[13] Families should expect processing to depend on whether disability or resource verification is needed.[1][13]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Virginia Medicaid paper application (available from Cover Virginia / local DSS forms pages)\",\n      \"Any disability verification or medical documentation requested by the local agency or disability determination unit\"\n    ],\n    \"documents\": [\n      \"Proof of age, identity, and Virginia residency\",\n      \"Social Security number or proof of application for one\",\n      \"Current income proof for the applicant and spouse, if applicable\",\n      \"Current resource proof, such as bank statements and similar records\",\n      \"Health insurance cards, if the person has other coverage\",\n      \"Medical proof or disability records if disability must be established\",\n      \"Spousal information if married, because spouse income/resources may matter\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Virginia program; no county-only restriction found in the materials reviewed.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but local Department of Social Services offices handle paper applications and may move at different speeds depending on workload. Disability determinations are routed through Virginia Disability Determination Services via DARS, not through a local county-only system.[10][13] Some ABD-related services and waiver programs can vary by region or provider availability, but the core ABD Medicaid eligibility rules are statewide.[1][8]\",\n    \"offices_or_providers\": [\n      \"Local Virginia Department of Social Services offices\",\n      \"Cover Virginia Call Center\",\n      \"Virginia Disability Determination Services through DARS\"\n    ]\n  },\n  \"official_source\": \"https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/\",\n  \"gotchas\": [\n    \"ABD Medicaid is not one single rule set; there are multiple ABD pathways, including standard 80% FPL coverage, spenddown coverage, institutional coverage, SSI-linked coverage, and Medicaid Works for certain working blind/disabled adults.[1][5][8]\",\n    \"Income and resources both matter for most ABD applicants; many families focus only on income and miss the resource test.[1][6]\",\n    \"A spouse’s income and resources can matter if the applicant is married.[6]\",\n    \"People over the income limit are not automatically denied; they may qualify through spenddown after enough medical bills are counted.[1][8]\",\n    \"Disability may need to be proven through Virginia’s disability determination process unless the person already has an accepted SSA-based disability status.[1][10]\",\n    \"A person can be eligible for only limited or different coverage categories depending on income level and living situation; institutional and home-and-community-based rules differ from standard ABD Medicaid.[5][11]\",\n    \"Paper applications are allowed, but mailing may slow the case down compared with online or phone applications.[13]\"\n  ],\n  \"data_shape_notes\": \"This program is not a simple fixed-benefit or fixed-income program; it is a statewide Medicaid category with multiple eligibility pathways, a means test, a resource test, possible disability determination, and alternative spenddown/institutional routes.\"\n}"
+      },
+      {
+        "name": "Medicare Savings Programs (QMB, SLMB, QI)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "notes": "Virginia’s Medicare Savings Programs are for people with Medicare Part A; age is not the deciding factor. QMB has the lowest income limit and the broadest coverage, SLMB is higher, and QI is highest and subject to federal funding availability.",
+            "household_table": [
+              {
+                "household_size": 1,
+                "QMB": 1325,
+                "SLMB": 1585,
+                "QI": 1781
+              },
+              {
+                "household_size": 2,
+                "QMB": 1783,
+                "SLMB": 2135,
+                "QI": 2400
+              }
+            ],
+            "income_definition": "Income includes Social Security, pensions, wages, interest, dividends, and other earned and unearned income. The income of both spouses is counted."
+          },
+          "asset_limits": {
+            "resource_limits": {
+              "individual": 8400,
+              "couple": 12600
+            },
+            "what_counts": [
+              "Bank accounts",
+              "Cash",
+              "Stocks, bonds, and similar financial resources",
+              "Other countable resources used by Medicaid eligibility rules"
+            ],
+            "what_is_exempt": [
+              "The home the person lives in, if treated as a primary residence under Medicaid rules",
+              "One vehicle, in many Medicaid eligibility situations",
+              "Other resources that Virginia Medicaid excludes under its broader Medicaid rules"
+            ],
+            "notes": "The source materials show a resource limit for MSP applicants in Virginia and indicate that eligibility is based on income and resources within specific limits."
+          },
+          "other_requirements": [
+            "Must have Medicare Part A",
+            "Must meet Virginia Medicaid residency rules",
+            "QMB, SLMB, and QI are for people who are not enrolled in full Medicaid but need help with Medicare costs",
+            "QI is limited to available federal funds and is typically first-come, first-served"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": {
+            "QMB": "Pays Medicare Part A premiums, Medicare Part B premiums, deductibles, coinsurance, and copayments for Medicare-covered services.",
+            "SLMB": "Pays the monthly Medicare Part B premium only.",
+            "QI": "Pays the monthly Medicare Part B premium only, while funding is available."
+          },
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.commonhelp.virginia.gov",
+            "Phone: Cover Virginia Call Center at 1-855-242-8282",
+            "Phone TDD: 1-888-221-1590",
+            "In person: local Virginia Department of Social Services office",
+            "Mail: Cardinal Care Correspondence Center, P.O. Box 1820, Richmond, VA 23218"
+          ],
+          "processing_time": "No single statewide processing-time number was identified in the source materials; MSP applications can be submitted at any time and are processed through Virginia Medicaid eligibility systems.",
+          "waitlist": "No waitlist is described for QMB or SLMB. QI is limited by available federal funding and can function like a funding-based cutoff rather than a traditional waitlist.",
+          "forms": [
+            "Application for Health Coverage & Financial Assistance",
+            "Virginia Medicaid / CommonHelp online application"
+          ],
+          "documents": [
+            "Proof of Medicare Part A enrollment",
+            "Social Security award letter or other income proof",
+            "Pension statements",
+            "Recent bank statements",
+            "Proof of resources if requested",
+            "Proof of Virginia residency",
+            "Identification information for the applicant and spouse",
+            "Citizenship or immigration documents if requested by the agency"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Virginia; administered through Virginia Medicaid and local Department of Social Services offices.",
+          "regional_variations": "Benefit rules are statewide and uniform. The main variation is administrative: local DSS offices can differ in how quickly they schedule interviews or process paperwork, but the program itself does not have county-specific benefit levels.",
+          "offices_or_providers": [
+            "Virginia Department of Social Services local offices",
+            "Cover Virginia / Virginia Medicaid"
+          ]
+        },
+        "official_source": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/",
+        "gotchas": [
+          "QMB is the most valuable tier because it covers Medicare cost sharing, but many families only look for premium help and miss the deductibles and copays.",
+          "QI is not guaranteed the same way QMB and SLMB are; it depends on available funding.",
+          "The spouse’s income is counted, which surprises many couples.",
+          "Even if someone has income above QMB, they may still qualify for SLMB or QI.",
+          "People often confuse MSPs with full Medicaid; these programs mainly help with Medicare costs rather than replacing Medicare.",
+          "Applications can be filed anytime, so families should not wait for an open enrollment period."
+        ],
+        "data_shape_notes": "This program has a tiered structure: eligibility gets looser from QMB to SLMB to QI, while benefits get narrower. Income and resource limits matter, and spouse income is counted.",
+        "_raw": "{\n  \"name\": \"Medicare Savings Programs (QMB, SLMB, QI)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"notes\": \"Virginia’s Medicare Savings Programs are for people with Medicare Part A; age is not the deciding factor. QMB has the lowest income limit and the broadest coverage, SLMB is higher, and QI is highest and subject to federal funding availability.\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"QMB\": 1325,\n          \"SLMB\": 1585,\n          \"QI\": 1781\n        },\n        {\n          \"household_size\": 2,\n          \"QMB\": 1783,\n          \"SLMB\": 2135,\n          \"QI\": 2400\n        }\n      ],\n      \"income_definition\": \"Income includes Social Security, pensions, wages, interest, dividends, and other earned and unearned income. The income of both spouses is counted.\"\n    },\n    \"asset_limits\": {\n      \"resource_limits\": {\n        \"individual\": 8400,\n        \"couple\": 12600\n      },\n      \"what_counts\": [\n        \"Bank accounts\",\n        \"Cash\",\n        \"Stocks, bonds, and similar financial resources\",\n        \"Other countable resources used by Medicaid eligibility rules\"\n      ],\n      \"what_is_exempt\": [\n        \"The home the person lives in, if treated as a primary residence under Medicaid rules\",\n        \"One vehicle, in many Medicaid eligibility situations\",\n        \"Other resources that Virginia Medicaid excludes under its broader Medicaid rules\"\n      ],\n      \"notes\": \"The source materials show a resource limit for MSP applicants in Virginia and indicate that eligibility is based on income and resources within specific limits.\"\n    },\n    \"other_requirements\": [\n      \"Must have Medicare Part A\",\n      \"Must meet Virginia Medicaid residency rules\",\n      \"QMB, SLMB, and QI are for people who are not enrolled in full Medicaid but need help with Medicare costs\",\n      \"QI is limited to available federal funds and is typically first-come, first-served\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": {\n      \"QMB\": \"Pays Medicare Part A premiums, Medicare Part B premiums, deductibles, coinsurance, and copayments for Medicare-covered services.\",\n      \"SLMB\": \"Pays the monthly Medicare Part B premium only.\",\n      \"QI\": \"Pays the monthly Medicare Part B premium only, while funding is available.\"\n    },\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.commonhelp.virginia.gov\",\n      \"Phone: Cover Virginia Call Center at 1-855-242-8282\",\n      \"Phone TDD: 1-888-221-1590\",\n      \"In person: local Virginia Department of Social Services office\",\n      \"Mail: Cardinal Care Correspondence Center, P.O. Box 1820, Richmond, VA 23218\"\n    ],\n    \"processing_time\": \"No single statewide processing-time number was identified in the source materials; MSP applications can be submitted at any time and are processed through Virginia Medicaid eligibility systems.\",\n    \"waitlist\": \"No waitlist is described for QMB or SLMB. QI is limited by available federal funding and can function like a funding-based cutoff rather than a traditional waitlist.\",\n    \"forms\": [\n      \"Application for Health Coverage & Financial Assistance\",\n      \"Virginia Medicaid / CommonHelp online application\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare Part A enrollment\",\n      \"Social Security award letter or other income proof\",\n      \"Pension statements\",\n      \"Recent bank statements\",\n      \"Proof of resources if requested\",\n      \"Proof of Virginia residency\",\n      \"Identification information for the applicant and spouse\",\n      \"Citizenship or immigration documents if requested by the agency\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Virginia; administered through Virginia Medicaid and local Department of Social Services offices.\",\n    \"regional_variations\": \"Benefit rules are statewide and uniform. The main variation is administrative: local DSS offices can differ in how quickly they schedule interviews or process paperwork, but the program itself does not have county-specific benefit levels.\",\n    \"offices_or_providers\": [\n      \"Virginia Department of Social Services local offices\",\n      \"Cover Virginia / Virginia Medicaid\"\n    ]\n  },\n  \"official_source\": \"https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/\",\n  \"gotchas\": [\n    \"QMB is the most valuable tier because it covers Medicare cost sharing, but many families only look for premium help and miss the deductibles and copays.\",\n    \"QI is not guaranteed the same way QMB and SLMB are; it depends on available funding.\",\n    \"The spouse’s income is counted, which surprises many couples.\",\n    \"Even if someone has income above QMB, they may still qualify for SLMB or QI.\",\n    \"People often confuse MSPs with full Medicaid; these programs mainly help with Medicare costs rather than replacing Medicare.\",\n    \"Applications can be filed anytime, so families should not wait for an open enrollment period.\"\n  ],\n  \"data_shape_notes\": \"This program has a tiered structure: eligibility gets looser from QMB to SLMB to QI, while benefits get narrower. Income and resource limits matter, and spouse income is counted.\"\n}"
+      },
+      {
+        "name": "Supplemental Nutrition Assistance Program (SNAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "effective_period": "Oct. 1, 2025 to Sept. 30, 2026",
+            "notes": [
+              "Eligibility is based on household size and income.",
+              "Most households must meet both gross and net income limits.",
+              "Households with at least one member age 60 or older, or with a member who is disabled, only need to meet the net income limit."
+            ],
+            "table": [
+              {
+                "household_size": 1,
+                "non_bbce_net_monthly_income_100_fpl": 1305,
+                "non_bbce_gross_monthly_income_130_fpl": 1696,
+                "bbce_gross_monthly_income_200_fpl": 2608,
+                "maximum_snap_allotment": 298
+              },
+              {
+                "household_size": 2,
+                "non_bbce_net_monthly_income_100_fpl": 1763,
+                "non_bbce_gross_monthly_income_130_fpl": 2292,
+                "bbce_gross_monthly_income_200_fpl": 3525,
+                "maximum_snap_allotment": 546
+              },
+              {
+                "household_size": 3,
+                "non_bbce_net_monthly_income_100_fpl": 2221,
+                "non_bbce_gross_monthly_income_130_fpl": 2888,
+                "bbce_gross_monthly_income_200_fpl": 4441,
+                "maximum_snap_allotment": 785
+              },
+              {
+                "household_size": 4,
+                "non_bbce_net_monthly_income_100_fpl": 2680,
+                "non_bbce_gross_monthly_income_130_fpl": 3483,
+                "bbce_gross_monthly_income_200_fpl": 5358,
+                "maximum_snap_allotment": 994
+              },
+              {
+                "household_size": 5,
+                "non_bbce_net_monthly_income_100_fpl": 3138,
+                "non_bbce_gross_monthly_income_130_fpl": 4079,
+                "bbce_gross_monthly_income_200_fpl": 6275,
+                "maximum_snap_allotment": 1183
+              },
+              {
+                "household_size": 6,
+                "non_bbce_net_monthly_income_100_fpl": 3596,
+                "non_bbce_gross_monthly_income_130_fpl": 4675,
+                "bbce_gross_monthly_income_200_fpl": 7191,
+                "maximum_snap_allotment": 1421
+              },
+              {
+                "household_size": 7,
+                "non_bbce_net_monthly_income_100_fpl": 4055,
+                "non_bbce_gross_monthly_income_130_fpl": 5271,
+                "bbce_gross_monthly_income_200_fpl": 8108,
+                "maximum_snap_allotment": 1571
+              },
+              {
+                "household_size": 8,
+                "non_bbce_net_monthly_income_100_fpl": 4513,
+                "non_bbce_gross_monthly_income_130_fpl": 5867,
+                "bbce_gross_monthly_income_200_fpl": 9025,
+                "maximum_snap_allotment": 1789
+              },
+              {
+                "household_size": "each additional member",
+                "non_bbce_net_monthly_income_100_fpl": 459,
+                "non_bbce_gross_monthly_income_130_fpl": 596,
+                "bbce_gross_monthly_income_200_fpl": 916,
+                "maximum_snap_allotment": 218
+              }
+            ]
+          },
+          "asset_limits": {
+            "countable_resource_limit_general_households": 3000,
+            "countable_resource_limit_households_with_elderly_or_disabled_member": 4500,
+            "what_counts": [
+              "Cash on hand",
+              "Money in checking or savings accounts",
+              "Other countable liquid resources"
+            ],
+            "what_is_exempt": [
+              "The home the household lives in",
+              "Most retirement accounts and certain retirement resources",
+              "Most vehicles used for household transportation",
+              "Certain other resources excluded under SNAP rules"
+            ]
+          },
+          "other_requirements": [
+            "Must be a Virginia resident applying through the state SNAP program.",
+            "Must be in a household that buys and prepares food together.",
+            "Must meet work-related rules unless an age or disability exemption applies.",
+            "Households with an older adult or disabled member may qualify under different income handling rules."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly SNAP EBT benefits loaded onto an EBT card to buy eligible food items; maximum monthly allotments range from $298 for a 1-person household to $1,789 for an 8-person household, with +$218 for each additional member.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: CommonHelp at https://commonhelp.virginia.gov/access/",
+            "Phone: 833-522-5582",
+            "Phone: 855-635-4370",
+            "Paper application through local Department of Social Services",
+            "In person at the local Department of Social Services office"
+          ],
+          "processing_time": "No exact statewide turnaround time was provided in the gathered sources; the program is administered through local DSS offices and CommonHelp.",
+          "waitlist": null,
+          "forms": [
+            "TANF, SNAP (Formerly Food Stamps) and Medical Assistance application"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Virginia residency",
+            "Proof of household income",
+            "Proof of expenses such as shelter, utilities, and medical costs if applicable",
+            "Social Security numbers for household members if available",
+            "Bank statements or other resource records if requested",
+            "Immigration/citizenship documents if relevant",
+            "Information about household members, ages, and who buys/prepares food together"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Virginia program; applicants apply through local Department of Social Services offices.",
+          "regional_variations": "Eligibility rules and benefit amounts are statewide, but application help and paper-application handling can vary by local Department of Social Services office. Some local offices publish their own contact numbers and may mail applications or offer local assistance.",
+          "offices_or_providers": [
+            "Virginia Department of Social Services local offices",
+            "CommonHelp statewide application portal"
+          ]
+        },
+        "official_source": "https://www.dss.virginia.gov/relief/food-assistance/snap/",
+        "gotchas": [
+          "For households with someone age 60 or older, SNAP uses the net income test only, which can help older adults qualify even when gross income is higher.",
+          "SNAP is not cash assistance; it provides food-purchasing benefits on an EBT card.",
+          "Benefit amounts change with household size and are capped by the federal allotment table.",
+          "Households may still qualify even if they own some assets, because many resources are exempt.",
+          "Local offices handle paper applications and case follow-up, so response experience can vary by office even though the rules are statewide.",
+          "Some households are categorically eligible and may have different gross-income handling than non-categorically eligible households."
+        ],
+        "data_shape_notes": "SNAP in Virginia is a statewide, means-tested in-kind benefit with income tiers, household-size-based allotments, and special rules for households with an elderly or disabled member.",
+        "_raw": "{\n  \"name\": \"Supplemental Nutrition Assistance Program (SNAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"effective_period\": \"Oct. 1, 2025 to Sept. 30, 2026\",\n      \"notes\": [\n        \"Eligibility is based on household size and income.\",\n        \"Most households must meet both gross and net income limits.\",\n        \"Households with at least one member age 60 or older, or with a member who is disabled, only need to meet the net income limit.\"\n      ],\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"non_bbce_net_monthly_income_100_fpl\": 1305,\n          \"non_bbce_gross_monthly_income_130_fpl\": 1696,\n          \"bbce_gross_monthly_income_200_fpl\": 2608,\n          \"maximum_snap_allotment\": 298\n        },\n        {\n          \"household_size\": 2,\n          \"non_bbce_net_monthly_income_100_fpl\": 1763,\n          \"non_bbce_gross_monthly_income_130_fpl\": 2292,\n          \"bbce_gross_monthly_income_200_fpl\": 3525,\n          \"maximum_snap_allotment\": 546\n        },\n        {\n          \"household_size\": 3,\n          \"non_bbce_net_monthly_income_100_fpl\": 2221,\n          \"non_bbce_gross_monthly_income_130_fpl\": 2888,\n          \"bbce_gross_monthly_income_200_fpl\": 4441,\n          \"maximum_snap_allotment\": 785\n        },\n        {\n          \"household_size\": 4,\n          \"non_bbce_net_monthly_income_100_fpl\": 2680,\n          \"non_bbce_gross_monthly_income_130_fpl\": 3483,\n          \"bbce_gross_monthly_income_200_fpl\": 5358,\n          \"maximum_snap_allotment\": 994\n        },\n        {\n          \"household_size\": 5,\n          \"non_bbce_net_monthly_income_100_fpl\": 3138,\n          \"non_bbce_gross_monthly_income_130_fpl\": 4079,\n          \"bbce_gross_monthly_income_200_fpl\": 6275,\n          \"maximum_snap_allotment\": 1183\n        },\n        {\n          \"household_size\": 6,\n          \"non_bbce_net_monthly_income_100_fpl\": 3596,\n          \"non_bbce_gross_monthly_income_130_fpl\": 4675,\n          \"bbce_gross_monthly_income_200_fpl\": 7191,\n          \"maximum_snap_allotment\": 1421\n        },\n        {\n          \"household_size\": 7,\n          \"non_bbce_net_monthly_income_100_fpl\": 4055,\n          \"non_bbce_gross_monthly_income_130_fpl\": 5271,\n          \"bbce_gross_monthly_income_200_fpl\": 8108,\n          \"maximum_snap_allotment\": 1571\n        },\n        {\n          \"household_size\": 8,\n          \"non_bbce_net_monthly_income_100_fpl\": 4513,\n          \"non_bbce_gross_monthly_income_130_fpl\": 5867,\n          \"bbce_gross_monthly_income_200_fpl\": 9025,\n          \"maximum_snap_allotment\": 1789\n        },\n        {\n          \"household_size\": \"each additional member\",\n          \"non_bbce_net_monthly_income_100_fpl\": 459,\n          \"non_bbce_gross_monthly_income_130_fpl\": 596,\n          \"bbce_gross_monthly_income_200_fpl\": 916,\n          \"maximum_snap_allotment\": 218\n        }\n      ]\n    },\n    \"asset_limits\": {\n      \"countable_resource_limit_general_households\": 3000,\n      \"countable_resource_limit_households_with_elderly_or_disabled_member\": 4500,\n      \"what_counts\": [\n        \"Cash on hand\",\n        \"Money in checking or savings accounts\",\n        \"Other countable liquid resources\"\n      ],\n      \"what_is_exempt\": [\n        \"The home the household lives in\",\n        \"Most retirement accounts and certain retirement resources\",\n        \"Most vehicles used for household transportation\",\n        \"Certain other resources excluded under SNAP rules\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a Virginia resident applying through the state SNAP program.\",\n      \"Must be in a household that buys and prepares food together.\",\n      \"Must meet work-related rules unless an age or disability exemption applies.\",\n      \"Households with an older adult or disabled member may qualify under different income handling rules.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly SNAP EBT benefits loaded onto an EBT card to buy eligible food items; maximum monthly allotments range from $298 for a 1-person household to $1,789 for an 8-person household, with +$218 for each additional member.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: CommonHelp at https://commonhelp.virginia.gov/access/\",\n      \"Phone: 833-522-5582\",\n      \"Phone: 855-635-4370\",\n      \"Paper application through local Department of Social Services\",\n      \"In person at the local Department of Social Services office\"\n    ],\n    \"processing_time\": \"No exact statewide turnaround time was provided in the gathered sources; the program is administered through local DSS offices and CommonHelp.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"TANF, SNAP (Formerly Food Stamps) and Medical Assistance application\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Virginia residency\",\n      \"Proof of household income\",\n      \"Proof of expenses such as shelter, utilities, and medical costs if applicable\",\n      \"Social Security numbers for household members if available\",\n      \"Bank statements or other resource records if requested\",\n      \"Immigration/citizenship documents if relevant\",\n      \"Information about household members, ages, and who buys/prepares food together\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Virginia program; applicants apply through local Department of Social Services offices.\",\n    \"regional_variations\": \"Eligibility rules and benefit amounts are statewide, but application help and paper-application handling can vary by local Department of Social Services office. Some local offices publish their own contact numbers and may mail applications or offer local assistance.\",\n    \"offices_or_providers\": [\n      \"Virginia Department of Social Services local offices\",\n      \"CommonHelp statewide application portal\"\n    ]\n  },\n  \"official_source\": \"https://www.dss.virginia.gov/relief/food-assistance/snap/\",\n  \"gotchas\": [\n    \"For households with someone age 60 or older, SNAP uses the net income test only, which can help older adults qualify even when gross income is higher.\",\n    \"SNAP is not cash assistance; it provides food-purchasing benefits on an EBT card.\",\n    \"Benefit amounts change with household size and are capped by the federal allotment table.\",\n    \"Households may still qualify even if they own some assets, because many resources are exempt.\",\n    \"Local offices handle paper applications and case follow-up, so response experience can vary by office even though the rules are statewide.\",\n    \"Some households are categorically eligible and may have different gross-income handling than non-categorically eligible households.\"\n  ],\n  \"data_shape_notes\": \"SNAP in Virginia is a statewide, means-tested in-kind benefit with income tiers, household-size-based allotments, and special rules for households with an elderly or disabled member.\"\n}"
+      },
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "Virginia uses Medicaid financial rules for PACE enrollment. The income limit is 300% of the current SSI payment standard for one person[7]. Because the SSI payment standard changes over time, the exact dollar amount should be checked against the current SSI rate before applying[7].",
+          "asset_limits": "Virginia requires countable resources to be at or below the current resource allowance in the State Plan[7]. The source retrieved here does not list the exact dollar figure, so the amount must be confirmed from the current Medicaid State Plan or the local PACE intake team[7].",
+          "other_requirements": [
+            "Must require nursing facility level of care and be at imminent risk of nursing facility placement[7].",
+            "Must be medically appropriate for PACE services because, without them, the person is at imminent risk of nursing facility placement[7].",
+            "Must live in a PACE plan catchment area/service area[2][7].",
+            "Must be able to live safely in the community with PACE support[2][15].",
+            "Must voluntarily enroll and agree to the terms and conditions of enrollment[7].",
+            "Eligibility is determined through a Long-Term Services and Supports screening using the Uniform Assessment Instrument (UAI) and required forms in the LTSS screening packet[7][15].",
+            "Federal PACE rules also require the person to be age 55 or older[1][2][15]."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE is a fully integrated package of medical and supportive services. In Virginia, services include primary care, hospital care, medical specialty services, prescription medications, emergency services, home care, physical therapy, occupational therapy, adult day care, dentistry, social services, transportation, lab and X-ray services, nursing facility care, respite care, and end-of-life care[15]. PACE is designed to help participants remain in their homes and communities longer by providing coordinated community-based healthcare and supports[1][2].",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Contact a local Virginia PACE provider directly by phone or through its local enrollment office[13].",
+            "Use the Virginia Medicaid PACE information page to identify program details and local contact pathways[1][5].",
+            "Have the LTSS screening team complete the required UAI-based assessment for nursing facility level of care[7][15]."
+          ],
+          "processing_time": "No statewide processing-time standard was identified in the retrieved sources. Eligibility depends on completion of the LTSS/UAI screening and enrollment through a local PACE program[7][15].",
+          "waitlist": "No statewide waitlist policy was identified in the retrieved sources. Availability depends on whether the person lives in a provider's service area and whether the local PACE program is accepting enrollees[2][13].",
+          "forms": [
+            "Uniform Assessment Instrument (UAI)[7][15]",
+            "LTSS screening packet forms required for the long-term services and supports screening[7]"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of Virginia residence and address within the PACE service area",
+            "Medicare and Medicaid cards, if applicable",
+            "Income documentation for eligibility review",
+            "Resource/asset documentation for eligibility review",
+            "Medical records supporting nursing facility level of care needs",
+            "Medication list and current provider information",
+            "Any assessment or screening paperwork already completed, including UAI/LTSS documents"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "PACE is only available in local PACE service areas/catchment areas, not automatically statewide[2][7].",
+          "regional_variations": "Virginia has multiple local PACE programs, and availability depends on the provider's catchment area. As of January 2025, the Virginia PACE Alliance said Virginia had 14 PACE programs and some were still serving additional ZIP codes or expanding service areas[13].",
+          "offices_or_providers": [
+            "Local PACE centers in Virginia's service areas[13]",
+            "InnovAge Virginia PACE in Charlottesville was one listed program with phone number 434-529-1300 and TTY 711[12]"
+          ]
+        },
+        "official_source": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/",
+        "gotchas": [
+          "PACE is not a cash benefit; it is an all-inclusive service model with Medicare/Medicaid financing rules[2][15].",
+          "The biggest gatekeeper is functional eligibility: the person must qualify for nursing facility level of care, not just be older or have low income[7][15].",
+          "Living inside a provider's catchment area is mandatory; being otherwise eligible is not enough[2][7].",
+          "Enrollment can make PACE the sole source of covered Medicare and Medicaid services for enrolled participants[2].",
+          "Families often miss that the assessment is done through LTSS screening and the UAI, so medical records alone are not enough[7][15].",
+          "Income and resource thresholds are tied to Medicaid rules and can change, so the exact dollar amounts should be verified at the time of application[7]."
+        ],
+        "data_shape_notes": "This program is service-based, not a grant or stipend. Eligibility has both age and functional/medical requirements, plus Medicaid financial rules for some enrollees, and access is geographically limited to local PACE catchment areas[2][7][15].",
+        "_raw": "{\n  \"name\": \"Program of All-Inclusive Care for the Elderly (PACE)\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"Virginia uses Medicaid financial rules for PACE enrollment. The income limit is 300% of the current SSI payment standard for one person[7]. Because the SSI payment standard changes over time, the exact dollar amount should be checked against the current SSI rate before applying[7].\",\n    \"asset_limits\": \"Virginia requires countable resources to be at or below the current resource allowance in the State Plan[7]. The source retrieved here does not list the exact dollar figure, so the amount must be confirmed from the current Medicaid State Plan or the local PACE intake team[7].\",\n    \"other_requirements\": [\n      \"Must require nursing facility level of care and be at imminent risk of nursing facility placement[7].\",\n      \"Must be medically appropriate for PACE services because, without them, the person is at imminent risk of nursing facility placement[7].\",\n      \"Must live in a PACE plan catchment area/service area[2][7].\",\n      \"Must be able to live safely in the community with PACE support[2][15].\",\n      \"Must voluntarily enroll and agree to the terms and conditions of enrollment[7].\",\n      \"Eligibility is determined through a Long-Term Services and Supports screening using the Uniform Assessment Instrument (UAI) and required forms in the LTSS screening packet[7][15].\",\n      \"Federal PACE rules also require the person to be age 55 or older[1][2][15].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE is a fully integrated package of medical and supportive services. In Virginia, services include primary care, hospital care, medical specialty services, prescription medications, emergency services, home care, physical therapy, occupational therapy, adult day care, dentistry, social services, transportation, lab and X-ray services, nursing facility care, respite care, and end-of-life care[15]. PACE is designed to help participants remain in their homes and communities longer by providing coordinated community-based healthcare and supports[1][2].\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact a local Virginia PACE provider directly by phone or through its local enrollment office[13].\",\n      \"Use the Virginia Medicaid PACE information page to identify program details and local contact pathways[1][5].\",\n      \"Have the LTSS screening team complete the required UAI-based assessment for nursing facility level of care[7][15].\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was identified in the retrieved sources. Eligibility depends on completion of the LTSS/UAI screening and enrollment through a local PACE program[7][15].\",\n    \"waitlist\": \"No statewide waitlist policy was identified in the retrieved sources. Availability depends on whether the person lives in a provider's service area and whether the local PACE program is accepting enrollees[2][13].\",\n    \"forms\": [\n      \"Uniform Assessment Instrument (UAI)[7][15]\",\n      \"LTSS screening packet forms required for the long-term services and supports screening[7]\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of Virginia residence and address within the PACE service area\",\n      \"Medicare and Medicaid cards, if applicable\",\n      \"Income documentation for eligibility review\",\n      \"Resource/asset documentation for eligibility review\",\n      \"Medical records supporting nursing facility level of care needs\",\n      \"Medication list and current provider information\",\n      \"Any assessment or screening paperwork already completed, including UAI/LTSS documents\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"PACE is only available in local PACE service areas/catchment areas, not automatically statewide[2][7].\",\n    \"regional_variations\": \"Virginia has multiple local PACE programs, and availability depends on the provider's catchment area. As of January 2025, the Virginia PACE Alliance said Virginia had 14 PACE programs and some were still serving additional ZIP codes or expanding service areas[13].\",\n    \"offices_or_providers\": [\n      \"Local PACE centers in Virginia's service areas[13]\",\n      \"InnovAge Virginia PACE in Charlottesville was one listed program with phone number 434-529-1300 and TTY 711[12]\"\n    ]\n  },\n  \"official_source\": \"https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/\",\n  \"gotchas\": [\n    \"PACE is not a cash benefit; it is an all-inclusive service model with Medicare/Medicaid financing rules[2][15].\",\n    \"The biggest gatekeeper is functional eligibility: the person must qualify for nursing facility level of care, not just be older or have low income[7][15].\",\n    \"Living inside a provider's catchment area is mandatory; being otherwise eligible is not enough[2][7].\",\n    \"Enrollment can make PACE the sole source of covered Medicare and Medicaid services for enrolled participants[2].\",\n    \"Families often miss that the assessment is done through LTSS screening and the UAI, so medical records alone are not enough[7][15].\",\n    \"Income and resource thresholds are tied to Medicaid rules and can change, so the exact dollar amounts should be verified at the time of application[7].\"\n  ],\n  \"data_shape_notes\": \"This program is service-based, not a grant or stipend. Eligibility has both age and functional/medical requirements, plus Medicaid financial rules for some enrollees, and access is geographically limited to local PACE catchment areas[2][7][15].\"\n}"
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "Virginia LIHEAP/Energy Assistance Program uses a gross monthly income cap of 150% of the federal poverty level for the household size.[3][9] The only specific dollar figures found in the gathered sources were examples cited by a Virginia legal aid resource: $1,956/month for a household of 1 and $4,018/month for a household of 4.[5] The state regulation says the maximum income limits cannot exceed the federal maximum, and Virginia uses the federal 150% FPL standard.[4][9] A full official household-size table was not available in the gathered material.",
+          "asset_limits": "No asset limit was identified in the gathered sources.[4][9] The program description provided by Virginia focuses on gross monthly income and household energy expenses, not counted assets. Because no asset test appears in the cited state materials, households should treat income and residency/heating-cost rules as the main screening criteria.[4][9]",
+          "other_requirements": [
+            "Must live in Virginia.[5][9]",
+            "Must live in the county where the application is filed.[5]",
+            "Must have a heating or cooling expense, depending on the component applied for.[9]",
+            "Must be applying for one of Virginia’s LIHEAP components: Fuel Assistance, Crisis Assistance, or Cooling Assistance.[9]",
+            "For cooling assistance, the household must include a vulnerable person such as someone age 60 or older, a person with a disability, or a child under age 6.[7]",
+            "Some households are specifically ineligible for fuel assistance, including subsidized households whose heating costs are included in rent, people in institutions, people in temporary shelters or group homes with no heating expense or only a nominal fee, and persons who reside in only one room within a larger dwelling.[4]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Virginia LIHEAP is an energy-assistance program that helps pay home heating and cooling costs. It has distinct components: Fuel Assistance for heating bills, Crisis Assistance for emergency heating/utility needs, and Cooling Assistance for cooling bills. The program may also cover energy-related emergencies, weatherization improvements, and minor energy-related home repairs through related assistance pathways described by Virginia utility and state sources.[6][9] No fixed dollar benefit amount was identified in the gathered sources; assistance appears to vary by component, household income, and household circumstances.[5][9]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://commonhelp.virginia.gov/",
+            "Phone: Enterprise Customer Service Center, 855-635-4370",
+            "In person or by submitting a paper application through the local department of social services",
+            "State program information page: https://dss.virginia.gov/relief/ea/"
+          ],
+          "processing_time": "A specific statewide processing time was not identified in the gathered sources. Applications are accepted during fixed seasonal windows, and crisis assistance can be accepted until March 31 unless funds are depleted earlier.[4][13] Timing can therefore depend on the application type and local office workload.",
+          "waitlist": "No formal statewide waitlist was identified in the gathered sources. The crisis-assistance rule allows applications to close early if funds are depleted, which is functionally similar to a first-come, first-served funding limit.[4][13]",
+          "forms": [
+            "Paper application for the Virginia Energy Assistance Program / LIHEAP (specific form number not identified in the gathered sources)"
+          ],
+          "documents": [
+            "Proof of identity for household members",
+            "Proof of Virginia residence",
+            "Proof of gross household income for all household members",
+            "Recent utility or heating bill, or documentation of heating/cooling expense",
+            "Information showing household composition and the age/disability status of vulnerable members if applying for cooling assistance",
+            "Any documentation needed by the local department of social services for crisis needs, such as disconnection notices or repair estimates if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applications must be filed in the county where the applicant lives, and local acceptance dates can vary within the state application windows.[5][4]",
+          "regional_variations": "Virginia uses a statewide LIHEAP framework, but local departments of social services set their own exact application dates within the state-authorized seasonal windows.[4] Public inquiries and office handling are centralized through the state Energy Assistance Program, but day-to-day intake and timing may differ by locality.[1][9] The gathered sources did not identify county-by-county benefit differences, but they did indicate timing and intake can vary locally.",
+          "offices_or_providers": [
+            "Virginia Department of Social Services Energy Assistance Program, 801 E. Main Street, Richmond, VA 23219[1]",
+            "Local departments of social services across Virginia",
+            "Enterprise Customer Service Center / Public Inquiries: 855-635-4370 or 1-800-230-6977[1][9]"
+          ]
+        },
+        "official_source": "https://dss.virginia.gov/relief/ea/",
+        "gotchas": [
+          "Virginia LIHEAP is not one single benefit; families need to choose the right component: Fuel Assistance, Crisis Assistance, or Cooling Assistance.[9]",
+          "Eligibility is tied to gross monthly income, not just annual income.[5][9]",
+          "Cooling Assistance has a special vulnerability requirement: age 60+, disability, or child under 6 in the household.[7]",
+          "Some households that pay heat in rent are not eligible for fuel assistance if their total heating costs are included in rent.[4]",
+          "Applications are seasonal, and the exact open/close dates can differ by component and can end early if funds run out.[4][13]",
+          "The county filing rule matters: applicants must apply in the county where they live.[5]",
+          "No clear statewide benefit dollar amount was found in the gathered sources, so families should expect the actual help to depend on the component and local circumstances rather than a fixed check.[5][9]"
+        ],
+        "data_shape_notes": "This program is statewide but administered through local departments of social services, with eligibility based on gross monthly income at or below 150% of the federal poverty level and with different seasonal application windows for different components.[4][5][9][13] The data structure is unusual because benefits are component-based, not a single uniform payment, and local intake timing can vary even though the rules are statewide.",
+        "_raw": "{\n  \"name\": \"Low-Income Home Energy Assistance Program (LIHEAP)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"Virginia LIHEAP/Energy Assistance Program uses a gross monthly income cap of 150% of the federal poverty level for the household size.[3][9] The only specific dollar figures found in the gathered sources were examples cited by a Virginia legal aid resource: $1,956/month for a household of 1 and $4,018/month for a household of 4.[5] The state regulation says the maximum income limits cannot exceed the federal maximum, and Virginia uses the federal 150% FPL standard.[4][9] A full official household-size table was not available in the gathered material.\",\n    \"asset_limits\": \"No asset limit was identified in the gathered sources.[4][9] The program description provided by Virginia focuses on gross monthly income and household energy expenses, not counted assets. Because no asset test appears in the cited state materials, households should treat income and residency/heating-cost rules as the main screening criteria.[4][9]\",\n    \"other_requirements\": [\n      \"Must live in Virginia.[5][9]\",\n      \"Must live in the county where the application is filed.[5]\",\n      \"Must have a heating or cooling expense, depending on the component applied for.[9]\",\n      \"Must be applying for one of Virginia’s LIHEAP components: Fuel Assistance, Crisis Assistance, or Cooling Assistance.[9]\",\n      \"For cooling assistance, the household must include a vulnerable person such as someone age 60 or older, a person with a disability, or a child under age 6.[7]\",\n      \"Some households are specifically ineligible for fuel assistance, including subsidized households whose heating costs are included in rent, people in institutions, people in temporary shelters or group homes with no heating expense or only a nominal fee, and persons who reside in only one room within a larger dwelling.[4]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Virginia LIHEAP is an energy-assistance program that helps pay home heating and cooling costs. It has distinct components: Fuel Assistance for heating bills, Crisis Assistance for emergency heating/utility needs, and Cooling Assistance for cooling bills. The program may also cover energy-related emergencies, weatherization improvements, and minor energy-related home repairs through related assistance pathways described by Virginia utility and state sources.[6][9] No fixed dollar benefit amount was identified in the gathered sources; assistance appears to vary by component, household income, and household circumstances.[5][9]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://commonhelp.virginia.gov/\",\n      \"Phone: Enterprise Customer Service Center, 855-635-4370\",\n      \"In person or by submitting a paper application through the local department of social services\",\n      \"State program information page: https://dss.virginia.gov/relief/ea/\"\n    ],\n    \"processing_time\": \"A specific statewide processing time was not identified in the gathered sources. Applications are accepted during fixed seasonal windows, and crisis assistance can be accepted until March 31 unless funds are depleted earlier.[4][13] Timing can therefore depend on the application type and local office workload.\",\n    \"waitlist\": \"No formal statewide waitlist was identified in the gathered sources. The crisis-assistance rule allows applications to close early if funds are depleted, which is functionally similar to a first-come, first-served funding limit.[4][13]\",\n    \"forms\": [\n      \"Paper application for the Virginia Energy Assistance Program / LIHEAP (specific form number not identified in the gathered sources)\"\n    ],\n    \"documents\": [\n      \"Proof of identity for household members\",\n      \"Proof of Virginia residence\",\n      \"Proof of gross household income for all household members\",\n      \"Recent utility or heating bill, or documentation of heating/cooling expense\",\n      \"Information showing household composition and the age/disability status of vulnerable members if applying for cooling assistance\",\n      \"Any documentation needed by the local department of social services for crisis needs, such as disconnection notices or repair estimates if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applications must be filed in the county where the applicant lives, and local acceptance dates can vary within the state application windows.[5][4]\",\n    \"regional_variations\": \"Virginia uses a statewide LIHEAP framework, but local departments of social services set their own exact application dates within the state-authorized seasonal windows.[4] Public inquiries and office handling are centralized through the state Energy Assistance Program, but day-to-day intake and timing may differ by locality.[1][9] The gathered sources did not identify county-by-county benefit differences, but they did indicate timing and intake can vary locally.\",\n    \"offices_or_providers\": [\n      \"Virginia Department of Social Services Energy Assistance Program, 801 E. Main Street, Richmond, VA 23219[1]\",\n      \"Local departments of social services across Virginia\",\n      \"Enterprise Customer Service Center / Public Inquiries: 855-635-4370 or 1-800-230-6977[1][9]\"\n    ]\n  },\n  \"official_source\": \"https://dss.virginia.gov/relief/ea/\",\n  \"gotchas\": [\n    \"Virginia LIHEAP is not one single benefit; families need to choose the right component: Fuel Assistance, Crisis Assistance, or Cooling Assistance.[9]\",\n    \"Eligibility is tied to gross monthly income, not just annual income.[5][9]\",\n    \"Cooling Assistance has a special vulnerability requirement: age 60+, disability, or child under 6 in the household.[7]\",\n    \"Some households that pay heat in rent are not eligible for fuel assistance if their total heating costs are included in rent.[4]\",\n    \"Applications are seasonal, and the exact open/close dates can differ by component and can end early if funds run out.[4][13]\",\n    \"The county filing rule matters: applicants must apply in the county where they live.[5]\",\n    \"No clear statewide benefit dollar amount was found in the gathered sources, so families should expect the actual help to depend on the component and local circumstances rather than a fixed check.[5][9]\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but administered through local departments of social services, with eligibility based on gross monthly income at or below 150% of the federal poverty level and with different seasonal application windows for different components.[4][5][9][13] The data structure is unusual because benefits are component-based, not a single uniform payment, and local intake timing can vary even though the rules are statewide.\"\n}"
+      },
+      {
+        "name": "Virginia Home-Delivered Meals Program",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No statewide income limit was identified for Virginia’s Home-Delivered Meals program. The statewide nutrition program description focuses on age, homebound/isolated status, and inability to prepare meals rather than financial eligibility.[1][2] Local providers may set donation requests or local service priorities, but those are not income tests.[3][4][5]",
+          "asset_limits": "No asset test was identified.[1][2] The available official descriptions do not list countable assets or exemptions.",
+          "other_requirements": [
+            "Must be homebound or otherwise unable to easily leave home.[1][2]",
+            "Must be unable to prepare meals for yourself, or lack assistance to do so.[1][3][5]",
+            "In some local programs, you must also be unable to attend a congregate meal site.[3]",
+            "Some Virginia guidance also says the program may serve in some cases caregivers, spouses, and/or persons with disabilities.[2]"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "A nutritious midday meal delivered to the home; local programs describe hot meals delivered Monday through Friday, with some providers offering frozen or shelf-stable backup meals when daily hot delivery is not available.[1][3][4][5] The statewide program also includes related nutrition services such as nutrition screening, assessment, education, and counseling.[2]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Use the Virginia Aging Services / Service Finder portal to locate your local Area Agency on Aging and contact the local provider.[6]",
+            "Call your local Area Agency on Aging; Fairfax lists 703-324-5409, TTY 711 for Home Delivered Meals.[3][13]",
+            "Contact local county providers directly, such as Loudoun County at 703-771-5012 or 703-737-8034.[4]",
+            "Statewide Virginia Aging Services contact: Kelly Wright, 804-662-9319, kelly.wright@dars.virginia.gov.[2]",
+            "In Arlington, contact the Aging and Disability Services Intake team at 703-228-1700 or arlaaa@arlingtonva.us, or visit 2100 Washington Blvd. 4th Floor, Arlington, VA 22204.[10]"
+          ],
+          "processing_time": "No statewide processing time was found. Local programs appear to do intake and assessment through the Area Agency on Aging, and some providers describe a home visit assessment during registration.[10][15]",
+          "waitlist": "No statewide waitlist policy was identified. Availability is local and may depend on provider capacity, geography, and delivery route coverage.[3][4][15]",
+          "forms": [],
+          "documents": [
+            "Proof of age may be requested locally because eligibility is generally age 60+.[1][2][3][4]",
+            "Information showing homebound status or difficulty leaving home.[1][3][5]",
+            "Information about inability to prepare meals and lack of available help.[3][5]",
+            "If the local office does an assessment, be ready to explain medical or physical reasons for needing meals.[3][4][15]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide program administered through local Area Agencies on Aging, but exact service area, delivery schedule, and meal format vary by locality.[1][2][6]",
+          "regional_variations": "Significant variation by region. Fairfax serves adults 60+ or adults with disabilities and uses a local intake line.[3][13] Loudoun requires residents to be 60+, medically or physically unable to prepare meals, have no other assistance, and be homebound; it delivers hot meals Monday through Friday and frozen meals outside daily delivery areas.[4] Prince William requests a suggested minimum donation of $1.50 per meal and provides emergency shelf-stable meals if hot meals cannot be delivered.[7] Encompass in several counties provides frozen meals on a set monthly schedule and requires a home visit assessment.[15]",
+          "offices_or_providers": [
+            "Virginia Department for the Aging / DARS nutrition program statewide contact: 804-662-9319.[2]",
+            "Virginia Aging Services Service Finder portal.[6]",
+            "Fairfax Area Agency on Aging / Fairfax County Family Services.[3][13]",
+            "Loudoun County Nutrition Services.[4]",
+            "Prince William Area Agency on Aging.[7]",
+            "Arlington Aging and Disability Services Intake.[10]",
+            "Peninsula Agency on Aging / Senior Services of Southeastern Virginia.[5][9]",
+            "Encompass Community Supports (Culpeper, Fauquier, Madison, Orange, Rappahannock).[15]"
+          ]
+        },
+        "official_source": "https://dars.virginia.gov/aging/home-community/nutrition-meals/",
+        "gotchas": [
+          "There is no single uniform statewide intake form or dollar benefit; local AAAs run the program and details vary by locality.[1][2][6]",
+          "People often miss that some local programs also serve adults with disabilities, while others describe eligibility mainly as age 60+.[3][10][13]",
+          "A donation may be requested locally, but it is not the same as a fee-based eligibility test.[7][5]",
+          "Some areas deliver hot meals daily, while others provide frozen meals, monthly delivery, or shelf-stable backup meals depending on route coverage.[4][7][15]",
+          "The program is for people who are homebound or cannot easily attend congregate meals; being age-eligible alone is not enough.[1][3][4][5]",
+          "The statewide nutrition program can include related services like nutrition counseling and screening, which families sometimes overlook when asking only about meals.[2]"
+        ],
+        "data_shape_notes": "This is a statewide, locally administered nutrition service with no uniform statewide income or asset test, no fixed dollar benefit, and substantial regional variation in eligibility wording, delivery schedule, meal type, and donation policy.[1][2][3][4][7][15]",
+        "_raw": "{\n  \"name\": \"Virginia Home-Delivered Meals Program\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No statewide income limit was identified for Virginia’s Home-Delivered Meals program. The statewide nutrition program description focuses on age, homebound/isolated status, and inability to prepare meals rather than financial eligibility.[1][2] Local providers may set donation requests or local service priorities, but those are not income tests.[3][4][5]\",\n    \"asset_limits\": \"No asset test was identified.[1][2] The available official descriptions do not list countable assets or exemptions.\",\n    \"other_requirements\": [\n      \"Must be homebound or otherwise unable to easily leave home.[1][2]\",\n      \"Must be unable to prepare meals for yourself, or lack assistance to do so.[1][3][5]\",\n      \"In some local programs, you must also be unable to attend a congregate meal site.[3]\",\n      \"Some Virginia guidance also says the program may serve in some cases caregivers, spouses, and/or persons with disabilities.[2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"A nutritious midday meal delivered to the home; local programs describe hot meals delivered Monday through Friday, with some providers offering frozen or shelf-stable backup meals when daily hot delivery is not available.[1][3][4][5] The statewide program also includes related nutrition services such as nutrition screening, assessment, education, and counseling.[2]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Use the Virginia Aging Services / Service Finder portal to locate your local Area Agency on Aging and contact the local provider.[6]\",\n      \"Call your local Area Agency on Aging; Fairfax lists 703-324-5409, TTY 711 for Home Delivered Meals.[3][13]\",\n      \"Contact local county providers directly, such as Loudoun County at 703-771-5012 or 703-737-8034.[4]\",\n      \"Statewide Virginia Aging Services contact: Kelly Wright, 804-662-9319, kelly.wright@dars.virginia.gov.[2]\",\n      \"In Arlington, contact the Aging and Disability Services Intake team at 703-228-1700 or arlaaa@arlingtonva.us, or visit 2100 Washington Blvd. 4th Floor, Arlington, VA 22204.[10]\"\n    ],\n    \"processing_time\": \"No statewide processing time was found. Local programs appear to do intake and assessment through the Area Agency on Aging, and some providers describe a home visit assessment during registration.[10][15]\",\n    \"waitlist\": \"No statewide waitlist policy was identified. Availability is local and may depend on provider capacity, geography, and delivery route coverage.[3][4][15]\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of age may be requested locally because eligibility is generally age 60+.[1][2][3][4]\",\n      \"Information showing homebound status or difficulty leaving home.[1][3][5]\",\n      \"Information about inability to prepare meals and lack of available help.[3][5]\",\n      \"If the local office does an assessment, be ready to explain medical or physical reasons for needing meals.[3][4][15]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide program administered through local Area Agencies on Aging, but exact service area, delivery schedule, and meal format vary by locality.[1][2][6]\",\n    \"regional_variations\": \"Significant variation by region. Fairfax serves adults 60+ or adults with disabilities and uses a local intake line.[3][13] Loudoun requires residents to be 60+, medically or physically unable to prepare meals, have no other assistance, and be homebound; it delivers hot meals Monday through Friday and frozen meals outside daily delivery areas.[4] Prince William requests a suggested minimum donation of $1.50 per meal and provides emergency shelf-stable meals if hot meals cannot be delivered.[7] Encompass in several counties provides frozen meals on a set monthly schedule and requires a home visit assessment.[15]\",\n    \"offices_or_providers\": [\n      \"Virginia Department for the Aging / DARS nutrition program statewide contact: 804-662-9319.[2]\",\n      \"Virginia Aging Services Service Finder portal.[6]\",\n      \"Fairfax Area Agency on Aging / Fairfax County Family Services.[3][13]\",\n      \"Loudoun County Nutrition Services.[4]\",\n      \"Prince William Area Agency on Aging.[7]\",\n      \"Arlington Aging and Disability Services Intake.[10]\",\n      \"Peninsula Agency on Aging / Senior Services of Southeastern Virginia.[5][9]\",\n      \"Encompass Community Supports (Culpeper, Fauquier, Madison, Orange, Rappahannock).[15]\"\n    ]\n  },\n  \"official_source\": \"https://dars.virginia.gov/aging/home-community/nutrition-meals/\",\n  \"gotchas\": [\n    \"There is no single uniform statewide intake form or dollar benefit; local AAAs run the program and details vary by locality.[1][2][6]\",\n    \"People often miss that some local programs also serve adults with disabilities, while others describe eligibility mainly as age 60+.[3][10][13]\",\n    \"A donation may be requested locally, but it is not the same as a fee-based eligibility test.[7][5]\",\n    \"Some areas deliver hot meals daily, while others provide frozen meals, monthly delivery, or shelf-stable backup meals depending on route coverage.[4][7][15]\",\n    \"The program is for people who are homebound or cannot easily attend congregate meals; being age-eligible alone is not enough.[1][3][4][5]\",\n    \"The statewide nutrition program can include related services like nutrition counseling and screening, which families sometimes overlook when asking only about meals.[2]\"\n  ],\n  \"data_shape_notes\": \"This is a statewide, locally administered nutrition service with no uniform statewide income or asset test, no fixed dollar benefit, and substantial regional variation in eligibility wording, delivery schedule, meal type, and donation policy.[1][2][3][4][7][15]\"\n}"
+      },
+      {
+        "name": "Virginia Property Tax Exemption for Elderly/Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No single statewide income table exists. Virginia law lets each county, city, or town set its own income and asset rules by local ordinance. Examples from current local programs include Chesterfield County: total household income under $65,400; Spotsylvania County: income $68,000 or less; York County: one-owner income $59,650 or less, two-owner income $68,200 or less, with higher limits if one or both owners are disabled.[8][11][12]",
+          "asset_limits": "No statewide asset limit exists. Localities set their own rules. Examples: Chesterfield County excludes the home and allows assets up to $514,000; Spotsylvania County requires net worth less than $250,000, excluding the home and up to 10 acres; York County caps assets at $220,000 excluding the residence, furnishings, and ten acres of land.[8][11][12]",
+          "other_requirements": [
+            "The property must be owned by the applicant and occupied as the sole dwelling.[1][3]",
+            "Local ordinances may also extend eligibility to people who are permanently and totally disabled.[1][3]",
+            "Jointly owned property may qualify on a prorated basis if at least one owner is 65+ or, if the locality allows it, permanently and totally disabled.[4]",
+            "The exemption can apply only to the real estate portion authorized by the local ordinance, and some localities limit the acreage covered (often up to 10 acres, but some counties use less).[6][9][10]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A local real estate tax exemption, deferral, or combination of both on the qualifying dwelling and sometimes the land under it. Virginia law allows the locality to exempt or defer all or part of the tax, and some local programs also offer mobile home relief and, in some places, vehicle tax relief. The exact dollar value depends entirely on the local ordinance.[1][3][5][7][8][9][10][12]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Apply through the local Commissioner of the Revenue or local Department of Social Services, depending on the locality.[7][8][10][12]",
+            "Check the locality’s official tax relief webpage for the application instructions and downloadable form.[5][7][8][9][10][12]",
+            "Phone example: York County Commissioner of the Revenue at 757-890-3382.[12]"
+          ],
+          "processing_time": "Varies by locality; many programs require annual filing before a local deadline, commonly around April 1 or June 30, and the locality then determines eligibility for the upcoming tax year.[7][10][12]",
+          "waitlist": null,
+          "forms": [
+            "Local Tax Relief for the Elderly and Disabled application form (name varies by locality).",
+            "Some localities require annual reapplication.[7][10][12]"
+          ],
+          "documents": [
+            "Proof of age or disability",
+            "Proof of ownership",
+            "Proof of occupancy as the sole dwelling",
+            "Income documentation for the household",
+            "Asset documentation excluding exempt items",
+            "If disabled, medical or Social Security proof of permanent and total disability",
+            "Any documents required by the specific county or city ordinance"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "The program exists under Virginia law statewide, but participation is optional for each county, city, and town, and the details are set locally by ordinance.[1][3]",
+          "regional_variations": "Yes. Income limits, asset limits, acreage covered, whether disability is included, whether vehicle relief is offered, filing deadlines, and the administering office all vary by locality.[1][4][5][7][8][9][10][11][12]",
+          "offices_or_providers": [
+            "Local Commissioner of the Revenue",
+            "Local Department of Social Services in some localities"
+          ]
+        },
+        "official_source": "https://law.lis.virginia.gov/vacodefull/title58.1/chapter32/article2/",
+        "gotchas": [
+          "This is not one uniform statewide exemption; the locality must opt in and set its own rules.[1][3]",
+          "The income and asset limits are not the same everywhere, so families must check the exact county or city ordinance.[8][11][12]",
+          "The disability option exists only if the local ordinance includes it.[1][3][4]",
+          "Annual filing is commonly required, so approval one year does not guarantee automatic renewal.[7][10][12]",
+          "Some localities cap the acreage covered and may tax extra land or structures separately.[6][9]",
+          "Joint ownership can reduce, prorate, or complicate the exemption amount.[4]"
+        ],
+        "data_shape_notes": "Local-ordinance-driven program with varying income and asset tests, optional disability coverage, annual application requirements, and county-by-county administration rather than a single statewide benefits formula.",
+        "_raw": "{\n  \"name\": \"Virginia Property Tax Exemption for Elderly/Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No single statewide income table exists. Virginia law lets each county, city, or town set its own income and asset rules by local ordinance. Examples from current local programs include Chesterfield County: total household income under $65,400; Spotsylvania County: income $68,000 or less; York County: one-owner income $59,650 or less, two-owner income $68,200 or less, with higher limits if one or both owners are disabled.[8][11][12]\",\n    \"asset_limits\": \"No statewide asset limit exists. Localities set their own rules. Examples: Chesterfield County excludes the home and allows assets up to $514,000; Spotsylvania County requires net worth less than $250,000, excluding the home and up to 10 acres; York County caps assets at $220,000 excluding the residence, furnishings, and ten acres of land.[8][11][12]\",\n    \"other_requirements\": [\n      \"The property must be owned by the applicant and occupied as the sole dwelling.[1][3]\",\n      \"Local ordinances may also extend eligibility to people who are permanently and totally disabled.[1][3]\",\n      \"Jointly owned property may qualify on a prorated basis if at least one owner is 65+ or, if the locality allows it, permanently and totally disabled.[4]\",\n      \"The exemption can apply only to the real estate portion authorized by the local ordinance, and some localities limit the acreage covered (often up to 10 acres, but some counties use less).[6][9][10]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A local real estate tax exemption, deferral, or combination of both on the qualifying dwelling and sometimes the land under it. Virginia law allows the locality to exempt or defer all or part of the tax, and some local programs also offer mobile home relief and, in some places, vehicle tax relief. The exact dollar value depends entirely on the local ordinance.[1][3][5][7][8][9][10][12]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through the local Commissioner of the Revenue or local Department of Social Services, depending on the locality.[7][8][10][12]\",\n      \"Check the locality’s official tax relief webpage for the application instructions and downloadable form.[5][7][8][9][10][12]\",\n      \"Phone example: York County Commissioner of the Revenue at 757-890-3382.[12]\"\n    ],\n    \"processing_time\": \"Varies by locality; many programs require annual filing before a local deadline, commonly around April 1 or June 30, and the locality then determines eligibility for the upcoming tax year.[7][10][12]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Local Tax Relief for the Elderly and Disabled application form (name varies by locality).\",\n      \"Some localities require annual reapplication.[7][10][12]\"\n    ],\n    \"documents\": [\n      \"Proof of age or disability\",\n      \"Proof of ownership\",\n      \"Proof of occupancy as the sole dwelling\",\n      \"Income documentation for the household\",\n      \"Asset documentation excluding exempt items\",\n      \"If disabled, medical or Social Security proof of permanent and total disability\",\n      \"Any documents required by the specific county or city ordinance\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"The program exists under Virginia law statewide, but participation is optional for each county, city, and town, and the details are set locally by ordinance.[1][3]\",\n    \"regional_variations\": \"Yes. Income limits, asset limits, acreage covered, whether disability is included, whether vehicle relief is offered, filing deadlines, and the administering office all vary by locality.[1][4][5][7][8][9][10][11][12]\",\n    \"offices_or_providers\": [\n      \"Local Commissioner of the Revenue\",\n      \"Local Department of Social Services in some localities\"\n    ]\n  },\n  \"official_source\": \"https://law.lis.virginia.gov/vacodefull/title58.1/chapter32/article2/\",\n  \"gotchas\": [\n    \"This is not one uniform statewide exemption; the locality must opt in and set its own rules.[1][3]\",\n    \"The income and asset limits are not the same everywhere, so families must check the exact county or city ordinance.[8][11][12]\",\n    \"The disability option exists only if the local ordinance includes it.[1][3][4]\",\n    \"Annual filing is commonly required, so approval one year does not guarantee automatic renewal.[7][10][12]\",\n    \"Some localities cap the acreage covered and may tax extra land or structures separately.[6][9]\",\n    \"Joint ownership can reduce, prorate, or complicate the exemption amount.[4]\"\n  ],\n  \"data_shape_notes\": \"Local-ordinance-driven program with varying income and asset tests, optional disability coverage, annual application requirements, and county-by-county administration rather than a single statewide benefits formula.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "VA",
+    "stateName": "Virginia",
+    "classifiedAt": "2026-10-06T05:18:34.290Z",
+    "total": 7,
+    "typeSummary": {
+      "benefit": 7
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 3,
+      "local": 1
+    },
+    "complexitySummary": {
+      "deep": 6,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Medicaid for Aged, Blind, or Disabled (ABD)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Virginia Department of Social Services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Cover Virginia Call Center",
+              "type": "service-area"
+            },
+            {
+              "name": "Virginia Disability Determination Services through DARS",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Medicare Savings Programs (QMB, SLMB, QI)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Virginia Department of Social Services local offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Cover Virginia / Virginia Medicaid",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Supplemental Nutrition Assistance Program (SNAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Virginia Department of Social Services local offices",
+              "type": "service-area"
+            },
+            {
+              "name": "CommonHelp statewide application portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local PACE centers in Virginia's service areas[13]",
+              "type": "service-area"
+            },
+            {
+              "name": "InnovAge Virginia PACE in Charlottesville was one listed program with phone number 434-529-1300 and TTY 711[12]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Virginia Department of Social Services Energy Assistance Program, 801 E. Main Street, Richmond, VA 23219[1]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local departments of social services across Virginia",
+              "type": "service-area"
+            },
+            {
+              "name": "Enterprise Customer Service Center / Public Inquiries: 855-635-4370 or 1-800-230-6977[1][9]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Virginia Home-Delivered Meals Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Virginia Department for the Aging / DARS nutrition program statewide contact: 804-662-9319.[2]",
+              "type": "service-area"
+            },
+            {
+              "name": "Virginia Aging Services Service Finder portal.[6]",
+              "type": "service-area"
+            },
+            {
+              "name": "Fairfax Area Agency on Aging / Fairfax County Family Services.[3][13]",
+              "type": "service-area"
+            },
+            {
+              "name": "Loudoun County Nutrition Services.[4]",
+              "type": "service-area"
+            },
+            {
+              "name": "Prince William Area Agency on Aging.[7]",
+              "type": "service-area"
+            },
+            {
+              "name": "Arlington Aging and Disability Services Intake.[10]",
+              "type": "service-area"
+            },
+            {
+              "name": "Peninsula Agency on Aging / Senior Services of Southeastern Virginia.[5][9]",
+              "type": "service-area"
+            },
+            {
+              "name": "Encompass Community Supports (Culpeper, Fauquier, Madison, Orange, Rappahannock).[15]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Virginia Property Tax Exemption for Elderly/Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Commissioner of the Revenue",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Department of Social Services in some localities",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "VA",
+      "id": "va-medicaid-abd",
+      "name": "Medicaid for Aged, Blind, or Disabled (ABD)",
+      "legacyId": "medicaid-for-aged-blind-or-disabled-abd",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-medicare-savings-programs",
+      "name": "Medicare Savings Programs (QMB, SLMB, QI)",
+      "legacyId": "medicare-savings-programs-qmb-slmb-qi",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-snap-food-benefits",
+      "name": "Supplemental Nutrition Assistance Program (SNAP)",
+      "legacyId": "supplemental-nutrition-assistance-program-snap",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-pace-all-inclusive-care",
+      "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "legacyId": "program-of-all-inclusive-care-for-the-elderly-pace",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "legacyId": "low-income-home-energy-assistance-program-liheap",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-home-delivered-meals",
+      "name": "Virginia Home-Delivered Meals Program",
+      "legacyId": "virginia-home-delivered-meals-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "VA",
+      "id": "va-property-tax-exemption-elderly-disabled",
+      "name": "Virginia Property Tax Exemption for Elderly/Disabled",
+      "legacyId": "virginia-property-tax-exemption-for-elderly-disabled",
+      "programType": "benefit"
+    }
+  ]
+}

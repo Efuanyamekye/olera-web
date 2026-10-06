@@ -86,6 +86,10 @@ export interface ProgramRules {
    *  figure ruled out a couple who qualifies). */
   limitsConfirmOnly: boolean;
   medicaidGated: boolean;
+  /** Says it has an income or savings limit we couldn't read as a number
+   *  (Texas MEPD: "must meet income and resource limits"). It can't be
+   *  "likely" on age alone; it stays worth checking. */
+  unreadMeansTest: boolean;
   /** For people WITHOUT Medicaid (New York's EISEP, Pennsylvania's PACE drug
    *  program): having Medicaid rules it out. */
   notForMedicaid: boolean;
@@ -136,6 +140,15 @@ export function rulesOf(d: DraftLike): ProgramRules {
     assetLimitCouple: typeof coupleAssets === "number" && coupleAssets > 0 ? coupleAssets : null,
     countsHousehold: HOUSEHOLD_PROGRAM.test(d.name),
     limitsConfirmOnly: SNAP_PROGRAM.test(d.name),
+    // Regular Medicaid and SSI-type cash only: a care waiver or the VA
+    // pension is "likely" on its other rules by design (their limits net out
+    // care costs, so a number would rule out families who qualify).
+    unreadMeansTest:
+      /medicaid|medical assistance|medi-cal|mainecare|husky|\bssi\b|supplemental security|state supplement/i.test(d.name) &&
+      !isWaiverPath(d.name) &&
+      incomeLimitFromTable(se.incomeTable) == null &&
+      !(typeof assets === "number" && assets > 0) &&
+      (se.summary || []).some((x) => /\b(income|resource|asset)s?\b[^.]*\blimit|\blimits?\b[^.]*\b(income|resource|asset)/i.test(x) && !/\bno (income|asset|resource)/i.test(x)),
     // Not Medicare Savings Programs, whose summaries say "not eligible for
     // full Medicaid" although most people on full Medicaid also hold one.
     notForMedicaid: !/medicare savings|\bqmb\b|\bslmb\b|healthy horizons/i.test(d.name) && (se.summary || []).some((x) => NOT_FOR_MEDICAID.test(x)),
@@ -196,6 +209,7 @@ function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[]
   // (or them and a spouse); Ohio's SNAP holds only an age rule and read
   // likely for a parent living with her daughter's family.
   if (r.countsHousehold) out.push({ rule: "household", result: f.household === "alone" || f.household === "couple" ? "pass" : "unknown" });
+  if (r.unreadMeansTest) out.push({ rule: "income", result: "unknown" });
   if (r.notForMedicaid) out.push({ rule: "notMedicaid", result: f.medicaid === "has" ? "fail" : "unknown" });
   if (r.medicaidGated) out.push({ rule: "medicaid", result: f.medicaid === "has" ? "pass" : f.medicaid === "no" ? "fail" : "unknown" });
   if (r.veteranOnly) out.push({ rule: "veteran", result: f.veteran === "yes" ? "pass" : f.veteran === "no" ? "fail" : "unknown" });

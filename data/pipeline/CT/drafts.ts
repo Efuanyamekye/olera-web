@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.902Z
+ * Last updated: 2026-10-06T06:44:48.369Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1704,6 +1704,1208 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://portal.ct.gov/LTCOP",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ct-medicare-savings-program",
+      "name": "Medicare Savings Program (QMB/SLMB/QI)",
+      "shortName": "Medicare Savings Program",
+      "tagline": "If your parent is on Medicare and has limited income, Connecticut may pay their Medicare premiums and eliminate their out-of-pocket costs at the doctor.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Connecticut Department of Social Services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Connecticut DSS ConneCT online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Medicare does not pay for itself. Your parent pays a monthly Part B premium ($185/month in 2026), plus deductibles and coinsurance every time they use a doctor, specialist, or hospital. Connecticut's Medicare Savings Program (MSP) can cover some or all of those costs, depending on your parent's income. This is not Medicaid for long-term care. It is a targeted program that helps people with Medicare and limited income afford the cost of using Medicare.\n\nThe program has three tiers. QMB (Qualified Medicare Beneficiary) is the most valuable: it covers the Part B premium plus Medicare deductibles and coinsurance, meaning your parent's out-of-pocket costs at covered providers can be eliminated entirely. SLMB (Specified Low-Income Medicare Beneficiary) and QI (Qualifying Individual) each pay only the Part B premium. Which tier your parent qualifies for depends on monthly income: QMB covers singles under $2,807/month, SLMB up to $3,073/month, and QI up to $3,272/month (2026 limits).\n\nConnecticut administers MSP through the Department of Social Services (DSS). There is no waitlist. Enrollment is open year-round. If your parent qualifies, approval also triggers automatic enrollment in Medicare's Extra Help program, which lowers prescription drug costs under Part D.",
+      "savingsRange": "Up to $2,220/year in Part B premium savings alone (at the 2026 Part B premium of $185/month); QMB enrollees also eliminate Medicare deductibles and coinsurance on top of that.",
+      "savingsSource": "Part B premium figure is the 2026 standard amount published by the Centers for Medicare and Medicaid Services (CMS) at medicare.gov. The annual savings figure is derived from 12 months of that premium. QMB cost-sharing elimination is documented in CMS guidance on Medicare Savings Programs.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or under 65 if already on Medicare)",
+          "Enrolled in or eligible for Medicare Part A",
+          "Connecticut resident",
+          "Single income below $3,272/month (highest QI tier, 2026)",
+          "Couple income below $4,437/month (highest QI tier, 2026)"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in or eligible for Medicare Part A",
+          "Must be a Connecticut resident",
+          "Must meet income limits for at least one of the three tiers: QMB, SLMB, or QI",
+          "Citizenship and immigration status rules that apply to Medicare enrollment also apply here; U.S. citizens and lawful permanent residents who have lived in the U.S. for at least 5 years generally qualify"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through Connecticut DSS ConneCT, mail in form W-1QMB, or visit a DSS office; no processing time is published, but there is no waitlist.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check which tier fits your parent's income",
+            "description": "Compare your parent's total monthly income against the three tiers: QMB (single up to $2,807/month, couple up to $3,806/month), SLMB (single up to $3,073/month, couple up to $4,166/month), or QI (single up to $3,272/month, couple up to $4,437/month). These are 2026 limits and will change. Income includes Social Security, pension, wages, and investment income."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need your parent's Medicare card (showing their Medicare number), a recent Social Security award letter, proof of Connecticut residency, and proof of any other income sources. Having these ready prevents delays."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by mail, or in person",
+            "description": "Online: Go to connect.ct.gov and create or log into a ConneCT account. By mail: Download form W-1QMB from portal.ct.gov/dss and mail it to your local DSS office. In person: Bring documents to any Connecticut DSS office. All three routes go to the same DSS review process."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any DSS requests",
+            "description": "DSS may send a request for additional documents or a scheduled interview. Respond promptly. Missing a deadline can restart the clock or result in a denial."
+          },
+          {
+            "step": 5,
+            "title": "Watch for your approval notice",
+            "description": "DSS will mail a decision. If approved, Social Security Administration will be notified automatically and will adjust or eliminate the Part B premium deducted from your parent's Social Security check. No separate action is required for Extra Help (LIS) enrollment: it is automatic for MSP enrollees."
+          }
+        ],
+        "processingTime": "Connecticut DSS does not publish a specific statewide processing time for MSP. Contact DSS directly after submitting to ask about expected review timelines.",
+        "waitlist": null,
+        "tip": "If your parent's Part B premium is already being deducted from their Social Security payment, approval will result in that deduction stopping or being refunded prospectively. It will not always happen the same month as approval, so expect a 1-2 month lag.",
+        "urls": [
+          {
+            "label": "Apply online at DSS ConneCT",
+            "url": "https://www.connect.ct.gov"
+          },
+          {
+            "label": "MSP program page and form W-1QMB",
+            "url": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/apply"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card or Medicare number (from the red, white, and blue Medicare card or MyMedicare.gov account)",
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of Connecticut residency (utility bill, lease agreement, or Connecticut-issued ID with current address)",
+        "Proof of identity (Connecticut driver's license, state ID, or passport)",
+        "Proof of any pension or retirement income (most recent pension statement or award letter)",
+        "Proof of any wages, self-employment income, or disability benefits received",
+        "Bank statements or financial records if requested by DSS after submission (DSS will specify what they need; do not submit speculatively)",
+        "Any DSS renewal or redetermination notices already received if this is a renewal"
+      ],
+      "contacts": [
+        {
+          "label": "Connecticut DSS Benefits Center",
+          "phone": "(855) 626-6632",
+          "description": "Apply for MSP, ask eligibility questions, and get help with your application status. This is the primary DSS line for benefit programs including Medicare Savings Program.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "CT SHIP (State Health Insurance Assistance Program)",
+          "phone": "(800) 994-9422",
+          "description": "Free, unbiased Medicare counseling from Connecticut's federally funded SHIP program. SHIP counselors can explain which MSP tier fits your parent's situation and walk you through the application. They do not process applications themselves but can help you prepare.",
+          "hours": "Mon-Fri 9am-4pm ET"
+        },
+        {
+          "label": "Connecticut 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline that can direct you to your nearest DSS office or community assistance organization if the DSS Benefits Center line is busy. Cannot process MSP applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "QMB is the strongest tier and the one worth pursuing first. If your parent's income is close to the QMB limit, apply for QMB rather than assuming they only qualify for SLMB or QI. DSS will place them in the correct tier based on what they verify.",
+        "MSP approval automatically triggers Extra Help (Low Income Subsidy) enrollment for Part D prescription drug coverage. You do not need to apply for Extra Help separately. This can save hundreds of dollars per year on medications depending on your parent's drug plan.",
+        "Income limits change annually. If your parent was denied in a prior year, the current year limits may be higher. It is worth reapplying.",
+        "If your parent receives a bill from a Medicare provider and they are enrolled in QMB, that provider is legally prohibited from billing them for Medicare cost-sharing. If a provider bills them anyway, contact the DSS Benefits Center or CT SHIP for help disputing the bill."
+      ],
+      "relatedPrograms": [
+        "Connecticut Medicaid (HUSKY Health) for those who may qualify for full Medicaid coverage",
+        "Medicare Extra Help (Low Income Subsidy) for Part D prescription drug cost assistance",
+        "Connecticut Pharmaceutical Assistance Contract to the Elderly (PACE/PACPLUS) for additional drug cost help",
+        "Connecticut Home Care Program for Elders (CHCPE) for in-home care services"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier covers what",
+          "description": "MSP has three tiers. The differences matter because QMB covers far more than SLMB or QI.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimit": {
+                "single": "$2,807/month",
+                "couple": "$3,806/month"
+              },
+              "covers": [
+                "Medicare Part A premium (if applicable)",
+                "Medicare Part B premium ($185/month in 2026)",
+                "Medicare Part A deductible ($1,676 per benefit period in 2026)",
+                "Medicare Part B deductible ($257/year in 2026)",
+                "Medicare coinsurance and copayments for covered services"
+              ],
+              "note": "QMB enrollees cannot be billed by Medicare providers for cost-sharing amounts. This is the most financially protective tier."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimit": {
+                "single": "$3,073/month",
+                "couple": "$4,166/month"
+              },
+              "covers": [
+                "Medicare Part B premium ($185/month in 2026)"
+              ],
+              "note": "Deductibles and coinsurance are not covered. Your parent still pays those costs out of pocket."
+            },
+            {
+              "name": "QI (Qualifying Individual)",
+              "incomeLimit": {
+                "single": "$3,272/month",
+                "couple": "$4,437/month"
+              },
+              "covers": [
+                "Medicare Part B premium ($185/month in 2026)"
+              ],
+              "note": "Same premium benefit as SLMB. QI is funded separately and is subject to annual Congressional reauthorization, which has historically been renewed consistently."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "This program is not Medicaid for long-term care",
+          "body": "MSP helps your parent afford Medicare. It does not pay for nursing home care, assisted living, or home health aides beyond what Medicare already covers. If your parent needs long-term care coverage, look into Connecticut Medicaid (HUSKY Health) or the Connecticut Home Care Program for Elders (CHCPE) separately."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is just above the QMB limit. Is there any flexibility?",
+          "answer": "Income limits are firm as published, but what counts as income matters. Some income sources may be excluded or partially excluded in the calculation DSS uses. It is worth applying and letting DSS determine the figure, rather than assuming your parent does not qualify based on a rough estimate. If they are over QMB, DSS will automatically evaluate SLMB and QI thresholds in the same application."
+        },
+        {
+          "question": "Does my parent need to have Medicare Part B already, or can they apply for MSP first?",
+          "answer": "Your parent must be enrolled in or eligible for Medicare Part A to qualify for MSP. Part B enrollment is what generates the premium that MSP pays, so in practice they need both parts active to get the full QMB benefit. If your parent has not yet enrolled in Part B because of the cost, MSP approval can reduce that cost to zero and make enrollment financially feasible. Contact CT SHIP at (800) 994-9422 to work through the sequencing."
+        },
+        {
+          "question": "Can I apply for my parent on their behalf?",
+          "answer": "Yes. A family member, legal representative, or authorized caregiver can submit the application on a parent's behalf. On the W-1QMB form or the ConneCT online application, you will indicate that you are applying as an authorized representative. If you have power of attorney, include a copy of that document with the application."
+        },
+        {
+          "question": "A provider billed my parent for services even though they have QMB. What do we do?",
+          "answer": "Providers who accept Medicare are prohibited from billing QMB enrollees for Medicare deductibles or coinsurance. This is a federal protection under CMS rules. If a provider bills your parent anyway, ask them to resubmit the claim noting QMB status. If they refuse, contact CT SHIP at (800) 994-9422 or the DSS Benefits Center at (855) 626-6632 for help disputing the bill. You can also file a complaint with the Connecticut Insurance Department."
+        },
+        {
+          "question": "Will MSP affect my parent's eligibility for any other programs?",
+          "answer": "MSP approval automatically enrolls your parent in Medicare Extra Help (Low Income Subsidy), which reduces Part D drug plan premiums, deductibles, and copays. This is a significant secondary benefit. MSP itself is not Medicaid, so it generally does not trigger estate recovery. However, if your parent also receives full Connecticut Medicaid, different rules may apply. Consult CT SHIP or a DSS caseworker if your parent is dually enrolled."
+        },
+        {
+          "question": "How often does my parent need to renew MSP enrollment?",
+          "answer": "Connecticut DSS sends redetermination notices periodically. When your parent receives one, they must respond with updated income information to stay enrolled. The W-1QMBS form is the Spanish-language renewal form; the English renewal process uses the same MSP packet. Missing a renewal deadline can result in a gap in coverage, so treat DSS mail as time-sensitive."
+        },
+        {
+          "question": "Can my parent be on MSP and also apply for the Connecticut Home Care Program for Elders (CHCPE) at the same time?",
+          "answer": "Yes. MSP and CHCPE are separate programs with separate applications. MSP covers Medicare costs; CHCPE covers in-home care services. There is no rule preventing dual enrollment, and many people benefit from both. Apply for each through its own process: MSP through DSS ConneCT or form W-1QMB, and CHCPE through the DSS Home Care Unit at (800) 445-5394."
+        },
+        {
+          "question": "Are there asset limits my parent needs to worry about?",
+          "answer": "The Connecticut DSS sources we reviewed did not state a current asset limit for MSP. Some states have eliminated the asset test for Medicare Savings Programs entirely. Because we cannot confirm Connecticut's current policy from official published sources, we recommend calling DSS at (855) 626-6632 or CT SHIP at (800) 994-9422 and asking directly before assuming your parent is disqualified based on savings or property. Do not let uncertainty about assets stop you from applying."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "(855) 626-6632",
+      "sourceUrl": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/apply",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ct-state-ssi-supplement",
+      "name": "Connecticut State SSI Supplement",
+      "shortName": "CT State Supplement",
+      "tagline": "If your parent is 65 or older and living on Social Security or another fixed income in Connecticut, the state may add cash each month to help cover basic living costs.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Connecticut Department of Social Services regional offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Connecticut DSS central office, 55 Farmington Ave., Hartford, CT 06105",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Connecticut runs its own cash supplement on top of federal programs like Social Security and SSI. If your parent is 65 or older, living in Connecticut, and has income below the state's monthly limit, they may qualify for a state check each month. The amount is set case by case based on their specific income and living situation, so there is no single universal payment figure. What the program does is fill the gap between what your parent brings in and what Connecticut determines they need to live on.\n\nThis is not health coverage, not home care, and not food assistance. It is direct cash, deposited or mailed, that your parent can spend on whatever they need. It works alongside Social Security retirement, SSI, or veterans benefits because those existing income sources are typically required to qualify. Connecticut is supplementing that income, not replacing it.\n\nThe income limits for people living in the community (their own home or an apartment) are $1,054 per month for a single person and $1,710 per month combined for a couple. The asset limit is strict: $1,600 in liquid savings for an individual, $2,400 for a couple. If your parent has more than that in checking or savings, they may not qualify. Asset transfers made to get below that limit can also make them ineligible.",
+      "savingsRange": "",
+      "savingsSource": "The benefit amount is determined case by case by Connecticut DSS based on the difference between countable income and the state's standard of need. The official program page does not publish a fixed monthly payment figure. No specific dollar amount can be verified from the official source.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled)",
+          "Income below $1,054/month for a single person living in the community",
+          "Liquid assets below $1,600 for an individual",
+          "Must already have another income source (Social Security, SSI, or veterans benefits)",
+          "Must live in Connecticut and be a U.S. citizen or eligible non-citizen"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1054
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1710
+          }
+        ],
+        "assetLimits": {
+          "individual": 1600,
+          "couple": 2400,
+          "countedAssets": [
+            "Checking account balances",
+            "Savings account balances",
+            "Other liquid assets"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Connecticut",
+          "Must be a U.S. citizen or eligible non-citizen",
+          "Must already receive Social Security, SSI, veterans benefits, or another qualifying income source",
+          "Must not have transferred assets to get below the asset limit",
+          "People living in a boarding home or residential care home face a different income calculation because DSS includes the cost of that housing when determining eligibility"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the Connecticut DSS benefits portal, by phone at 1-855-626-6632, in person at a DSS regional office, or by mailing a printed Application for Benefits form.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need your parent's Social Security award letter, proof of Connecticut residency, proof of all income sources, and the current balance of any checking or savings accounts. Having these ready before you call or log in will prevent delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose your application method",
+            "description": "Online: go to portal.ct.gov and log in or create an account to submit the Application for Benefits form digitally. Phone: call 1-855-626-6632 (1-855-6-CONNECT) to apply with a DSS representative. In person: visit a Connecticut DSS regional office. Mail: download the Application for Benefits form, complete it, and mail it to the DSS office serving your parent's area."
+          },
+          {
+            "step": 3,
+            "title": "Submit all documentation at the same time",
+            "description": "Incomplete applications are the most common reason for delays. Include every required document with your initial submission. If applying by phone, the representative will tell you where to send supporting documents."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any DSS follow-up",
+            "description": "DSS may contact you to clarify income, residency, or asset information. Respond as quickly as possible to avoid having your application put on hold."
+          }
+        ],
+        "processingTime": "Not published for this specific program. Contact DSS at 1-855-626-6632 to ask about current processing times after submitting.",
+        "waitlist": null,
+        "tip": "If your parent lives in a boarding home or residential care home, the income calculation works differently than for community living. Tell DSS exactly where your parent lives when you apply, because the eligibility determination depends on it.",
+        "urls": [
+          {
+            "label": "Apply online through the CT DSS Connect portal",
+            "url": "https://portal.ct.gov/dss"
+          },
+          {
+            "label": "Official program page: State Supplement Cash Assistance",
+            "url": "https://portal.ct.gov/dss/knowledge-base/articles/cash-assistance/state-supplement-cash-assistance"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or most recent benefit statement",
+        "Proof of Connecticut residency (lease agreement, utility bill, or other official document showing your parent's current address)",
+        "Proof of all monthly income: Social Security, SSI, veterans benefits, pension, or any other source",
+        "Current balance of any checking or savings accounts (DSS will ask for this to verify the asset limit)",
+        "Proof of age (birth certificate, passport, or other government-issued document showing date of birth)",
+        "Immigration or citizenship documents if your parent was not born in the United States",
+        "Documentation of living arrangement: if your parent lives in a boarding home or residential care home, bring the monthly cost statement or lease from that facility",
+        "Veteran's discharge papers (DD-214) if veterans benefits are part of your parent's income"
+      ],
+      "contacts": [
+        {
+          "label": "Connecticut DSS Benefits Line (1-855-6-CONNECT)",
+          "phone": "1-855-626-6632",
+          "description": "Apply by phone, ask about eligibility, or check application status. This is the primary line to start the State Supplement application.",
+          "hours": "Mon-Fri, hours not specified on official program page; call during business hours"
+        },
+        {
+          "label": "Connecticut DSS Central Office",
+          "phone": null,
+          "description": "55 Farmington Ave., Hartford, CT 06105. Visit in person or contact your nearest regional DSS office for in-person assistance.",
+          "hours": "Contact DSS at 1-855-626-6632 to confirm regional office hours near you"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent lives in a boarding home or residential care home, the income limit is higher than the community-living standard because DSS factors in the cost of that housing. Do not assume your parent earns too much until DSS runs the actual calculation for their living situation.",
+        "The asset limit is $1,600 for an individual and applies to liquid assets. Even modest savings in a checking account can disqualify someone. If your parent recently moved money to a family member to get below this limit, DSS can and does review transfers, and that transfer can make them ineligible.",
+        "This program is often confused with federal SSI. They are separate. Your parent may receive both, or may receive only one. Receiving federal SSI does not automatically enroll someone in the Connecticut State Supplement; a separate state application is required.",
+        "Submit all documents with the initial application. Applications held for missing paperwork take longer to process, and the official source does not publish a formal processing deadline for this program."
+      ],
+      "relatedPrograms": [
+        "Federal Supplemental Security Income (SSI)",
+        "Connecticut Medicaid (HUSKY Health for aged, blind, and disabled individuals)",
+        "Connecticut SNAP food benefits for older adults",
+        "Connecticut Energy Assistance Program (CEAP/LIHEAP)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is cash, not services",
+          "body": "The State Supplement sends money directly to your parent. It does not arrange home care, health coverage, or meals. If your parent needs those, they require separate programs. The supplement is purely a monthly cash payment to help cover everyday living costs."
+        },
+        {
+          "type": "prose",
+          "title": "How the income limit works for boarding home residents",
+          "body": "If your parent lives in a boarding home or residential care home (RCH), Connecticut DSS does not apply the standard $1,054 community-living limit the same way. Instead, DSS counts the monthly cost of the boarding home or RCH as part of the needs calculation. This means someone who appears to exceed the community income limit may still qualify when DSS accounts for their housing costs. Always apply and let DSS run the numbers rather than assuming ineligibility based on income alone."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has $2,000 in savings. Does that automatically disqualify them?",
+          "answer": "For a single individual, the liquid asset limit is $1,600. A balance of $2,000 would put them over the limit and could result in denial. However, not every resource is necessarily counted as a liquid asset. Contact DSS at 1-855-626-6632 to go through the specific accounts your parent holds before assuming they are ineligible. Do not transfer funds to a family member to get below the limit without understanding the rules; transfers made to qualify can themselves cause a denial."
+        },
+        {
+          "question": "My parent already gets federal SSI. Do they need to apply separately for the Connecticut State Supplement?",
+          "answer": "Yes. The Connecticut State Supplement is a separate state-administered program. Receiving federal SSI does not automatically enroll your parent in the state supplement. They need to apply through Connecticut DSS at portal.ct.gov or by calling 1-855-626-6632."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent?",
+          "answer": "Yes. A family member or authorized representative can apply on the parent's behalf. When you call 1-855-626-6632 or apply online through the DSS Connect portal, be prepared to provide your relationship to the applicant. DSS may ask for documentation of your authority to act for them, particularly if there is a power of attorney in place."
+        },
+        {
+          "question": "What if my parent lives in an assisted living facility or residential care home? Does the income limit change?",
+          "answer": "Yes. For people living in a boarding home or residential care home, DSS uses a different income calculation that accounts for the monthly cost of that housing. The effective income threshold is higher than the $1,054 community-living limit. The exact figure depends on the cost of the facility. Apply and let DSS calculate eligibility based on your parent's specific situation."
+        },
+        {
+          "question": "How long will it take to know if my parent is approved?",
+          "answer": "Connecticut DSS has not published a formal processing deadline for this specific program on the official program page. After submitting, call 1-855-626-6632 to ask about the current processing timeline and to confirm your application was received. Submitting all documents at once rather than in pieces is the best way to avoid delays."
+        },
+        {
+          "question": "My parent gave money to a grandchild last year. Will that affect eligibility?",
+          "answer": "It can. Connecticut DSS reviews asset transfers made to qualify for this program. If DSS determines that assets were transferred to bring your parent below the $1,600 limit, they can deny the application or impose a penalty period. Be honest about any transfers when you apply, and ask the DSS representative how they evaluate transfer history for this program."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they are enrolled?",
+          "answer": "Your parent is required to report changes in income, assets, and living situation to DSS. A change, such as moving from their own home to a residential care home, or receiving an income increase, can affect both eligibility and the benefit amount. Contact DSS at 1-855-626-6632 as soon as a change occurs to avoid an overpayment that DSS may later seek to recover."
+        },
+        {
+          "question": "Can my parent receive both the Connecticut State Supplement and Connecticut Medicaid at the same time?",
+          "answer": "Potentially yes. Many people who qualify for the State Supplement also qualify for Connecticut Medicaid (HUSKY Health for aged, blind, and disabled adults) because both programs serve low-income older adults. They are separate programs with separate applications. If your parent is not already enrolled in Medicaid, ask the DSS representative about eligibility when you call to apply for the State Supplement."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-855-626-6632",
+      "sourceUrl": "https://portal.ct.gov/dss/knowledge-base/articles/cash-assistance/state-supplement-cash-assistance",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ct-property-tax-relief-seniors",
+      "name": "Connecticut Property Tax Relief for Seniors",
+      "shortName": "Senior Property Tax Relief",
+      "tagline": "If your parent owns their home in Connecticut and earns below roughly $46,000 a year, they may qualify for up to $1,250 off their annual property tax bill.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Municipal Assessor's Office in the applicant's town",
+            "type": "service-area"
+          },
+          {
+            "name": "Town senior center in some municipalities",
+            "type": "service-area"
+          },
+          {
+            "name": "Office of Policy and Management contact for state program questions",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, owns and lives in their Connecticut home, and has a modest income, the state's Elderly Homeowner Circuit Breaker program can reduce their property tax bill by up to $1,000 (single) or $1,250 (married) each year. That credit is applied directly to what they owe the town, so it shows up as a smaller tax bill rather than a separate check.\n\nThe program is run by Connecticut's Office of Policy and Management but administered locally. Your parent applies through their town assessor's office, not a state agency. Because each town sets its own filing process and sometimes publishes its own income thresholds tied to the current filing year, the steps and exact limits can look different depending on where your parent lives. The filing window is generally February 1 through May 15 each year, and missing it typically means waiting until the next year.\n\nSome towns layer on additional local tax relief programs on top of the state credit, so the total savings can exceed the state maximum in certain municipalities. Check with your parent's assessor office to find out what both the state and local programs offer before assuming the state cap is the final number.",
+      "savingsRange": "Up to $1,250/year for married couples; up to $1,000/year for single persons (state program maximum)",
+      "savingsSource": "Connecticut Office of Policy and Management, Homeowners Elderly/Disabled Circuit Breaker Tax Relief Program (portal.ct.gov/opm). These are the statutory maximums published by the state; individual awards depend on income and local mill rates.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (must be 65 by December 31 of the prior year in most towns)",
+          "Own and occupy the home as a primary residence, or hold life use of the property",
+          "Annual income below the applicable threshold for the filing year (check your town assessor for the exact figure)",
+          "Connecticut resident",
+          "No asset limit for the state program"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must apply through the municipal assessor's office in the town where the property is located.",
+          "Income limits vary by filing year. One official source lists $34,100 (single) and $41,600 (married); some municipal pages tied to the same state program show $46,300 (single/widowed) and $56,500 (married) for 2025 income. Confirm the correct limit with your local assessor before assuming your parent is ineligible.",
+          "Application window is generally February 1 through May 15 each year. Missing this window typically means losing the credit for that tax year.",
+          "Some towns require renewal every two years; others require annual re-filing. Ask the assessor which cycle applies.",
+          "A spouse may be included in the household income calculation; rules vary by town."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Apply in person or by mail at your parent's town assessor's office between February 1 and May 15; some towns also accept mailed or emailed submissions.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your parent's town assessor office",
+            "description": "Search '[town name] assessor's office Connecticut' or go to the town's official .gov website. Look for the Elderly/Disabled Tax Relief or Circuit Breaker section. Confirm the current year's income limit and whether your parent's filing deadline is the standard May 15 or an earlier local cutoff."
+          },
+          {
+            "step": 2,
+            "title": "Gather the required documents before the appointment",
+            "description": "You will need your parent's SSA-1099 showing Social Security income, their federal tax return if they filed one, proof of age (birth certificate, passport, or state ID), and proof that they own and occupy the property. If they did not file a federal return, bring statements covering any other income sources such as pension letters or 1099-R forms."
+          },
+          {
+            "step": 3,
+            "title": "Complete the municipal Circuit Breaker application form",
+            "description": "The form is titled something like 'Elderly/Disabled Homeowner Tax Relief Application' and is provided by the town assessor. It is not a standard statewide form; each town prints its own version based on state requirements. Complete it at the assessor's office or download it from the town website if offered."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application by May 15",
+            "description": "Deliver in person to the assessor's office, or mail if the town accepts mailed submissions (confirm first; not all do). Some towns accept email submissions. Keep a copy of everything you submit."
+          },
+          {
+            "step": 5,
+            "title": "Credit appears on the annual property tax bill",
+            "description": "If approved, the credit is applied to your parent's town property tax bill for that year. You will not receive a separate check. If you are unsure whether the credit was applied, call the assessor's office after the town issues its tax bills."
+          }
+        ],
+        "processingTime": "Processing depends on the town assessor's office. Most towns apply the credit to the annual tax bill issued after the close of the February 1 to May 15 filing window. No uniform state-level timeline is published.",
+        "waitlist": null,
+        "tip": "Call the assessor's office before gathering documents. Ask specifically: what is the income limit for this filing year, do you accept mailed applications, and what documentation do you require if my parent did not file a federal tax return? Rules vary enough between towns that a five-minute call can save a wasted trip.",
+        "urls": [
+          {
+            "label": "CT OPM: Elderly/Disabled Circuit Breaker Program Overview",
+            "url": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "SSA-1099 form showing your parent's Social Security income for the prior year",
+        "Federal income tax return (Form 1040) if your parent filed one",
+        "Proof of age: birth certificate, U.S. passport, or state-issued photo ID showing date of birth",
+        "Proof of property ownership and occupancy: property tax bill, deed, or mortgage statement showing the home as your parent's primary residence",
+        "If your parent did not file a federal return: statements from all other income sources, such as pension letters, 1099-R forms, or retirement account distribution statements",
+        "Proof of disability documentation if applying under disability rules rather than age rules (not required for applicants who qualify solely by age 65+)"
+      ],
+      "contacts": [
+        {
+          "label": "Your Town's Municipal Assessor's Office",
+          "phone": null,
+          "description": "This is where your parent applies. Search '[town name] assessor's office' on the town's official .gov website to find the direct number and address. The assessor's office handles applications, income limit questions, and credit status for this program.",
+          "hours": "Varies by town; most operate Monday through Friday during standard business hours"
+        },
+        {
+          "label": "CT Office of Policy and Management (state program questions)",
+          "phone": "(860) 418-6300",
+          "description": "For questions about the state Circuit Breaker program rules, not for filing an application. The application itself must go through the local assessor.",
+          "hours": "Monday through Friday, 8am to 5pm ET"
+        },
+        {
+          "label": "Connecticut 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line that can help you locate your parent's local assessor office if you are having trouble finding the right contact. This line does not process applications.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Income limits can look different depending on which source you check. One official state page lists $34,100 (single) and $41,600 (married); some municipal pages tied to the same state program show $46,300 (single/widowed) and $56,500 (married) for 2025 income. Always confirm the applicable limit with your parent's town assessor for the current filing year before concluding your parent is ineligible.",
+        "Some towns offer their own supplemental senior tax relief programs on top of the state credit. Do not stop researching after confirming the state program; ask the assessor whether the town has any additional relief, freeze, or exemption programs.",
+        "Many towns require renewal annually or on a two-year cycle. Even if your parent was approved last year, confirm whether they need to re-apply this filing period to avoid losing the credit.",
+        "If your parent did not file a federal income tax return, the assessor will still need documentation of all income sources. Gather Social Security, pension, and any other income statements before the appointment."
+      ],
+      "relatedPrograms": [
+        "Connecticut Additional Veterans Exemption (if your parent is a veteran, additional property tax relief may be available through the same assessor's office)",
+        "Connecticut Renter's Rebate Program for Elderly and Disabled (for parents who rent rather than own)",
+        "Connecticut SNAP Food Benefits for Seniors",
+        "Connecticut Low Income Home Energy Assistance Program (LIHEAP)"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "data": {
+            "stats": [
+              {
+                "label": "Maximum annual credit (married couple)",
+                "value": "$1,250"
+              },
+              {
+                "label": "Maximum annual credit (single person)",
+                "value": "$1,000"
+              },
+              {
+                "label": "Annual filing window",
+                "value": "Feb 1 to May 15"
+              },
+              {
+                "label": "Age requirement",
+                "value": "65 by Dec 31 of prior year"
+              }
+            ]
+          }
+        },
+        {
+          "type": "prose",
+          "title": "Why the income limit looks different on different websites",
+          "body": "Connecticut sets a base income threshold for the Circuit Breaker program at the state level, but towns are also permitted to publish updated figures that reflect the applicable filing year. This is why you may see $34,100 on one page and $46,300 on another for a single applicant. Both numbers may be technically correct for different filing years or different program interpretations. The safest approach is to call your parent's town assessor directly and ask what the income limit is for the current filing year. Do not rule your parent out based on a figure you found on a third-party or outdated page."
+        },
+        {
+          "type": "prose",
+          "title": "This is a tax credit, not a check",
+          "body": "The benefit reduces what your parent owes on their property tax bill. It does not arrive as a separate payment. If your parent's property tax bill is $3,000 and they receive a $1,000 credit, their bill drops to $2,000. If they have already paid the full bill before the credit was applied, some towns will issue a refund for the credit amount; ask the assessor how they handle that situation in your parent's town."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is above the $34,100 figure I saw online. Are they definitely ineligible?",
+          "answer": "Not necessarily. Connecticut allows towns to publish updated income thresholds for the current filing year, and some municipal pages show limits as high as $46,300 for a single or widowed applicant and $56,500 for a married couple for 2025 income. The only reliable way to confirm eligibility is to call your parent's town assessor and ask for the income limit for the current filing year. Do not assume your parent is ineligible based on a figure from an outdated or third-party source."
+        },
+        {
+          "question": "My parent missed the May 15 deadline. Can they still apply this year?",
+          "answer": "In most towns, missing the May 15 filing deadline means losing the credit for that tax year. Some towns have limited provisions for late filing in certain circumstances, but there is no statewide guarantee. Call the assessor's office immediately if the deadline has just passed; do not wait until next year to ask. The next opportunity is typically the following February 1 to May 15 window."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot go to the assessor's office themselves?",
+          "answer": "Many towns allow a family member or authorized representative to apply on the parent's behalf, but the rules vary. Some assessors will accept a mailed application with your parent's signature; others may require a power of attorney document. Call the assessor's office before the appointment to ask what they need if your parent cannot appear in person."
+        },
+        {
+          "question": "My parent does not file a federal tax return. Does that disqualify them?",
+          "answer": "No. Not filing a federal return does not disqualify your parent. However, the assessor will still need documentation of all income sources. Bring the SSA-1099, any pension or retirement income letters, 1099-R forms, and statements from any other income source. Call ahead and ask the assessor exactly what they need in lieu of a tax return for your parent's specific income situation."
+        },
+        {
+          "question": "My parent's town has its own senior tax relief program. Should they apply to that separately?",
+          "answer": "Yes. Some towns offer additional local tax credits, freezes, or exemptions on top of the state Circuit Breaker program, and those programs require a separate application or an additional form at the same assessor appointment. Ask the assessor explicitly whether the town offers any local senior tax relief beyond the state program and whether you need to complete anything extra to receive it."
+        },
+        {
+          "question": "Does my parent need to re-apply every year?",
+          "answer": "It depends on the town. Some towns require annual re-application; others operate on a two-year renewal cycle. Even if your parent was approved previously, call the assessor's office at the start of each February filing window to confirm whether a new application or a renewal form is required that year. Missing a required renewal can result in losing the credit."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(860) 418-6300",
+      "sourceUrl": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ct-connpace-prescription-assistance",
+      "name": "ConnPace (Connecticut Pharmaceutical Assistance)",
+      "shortName": "ConnPACE Rx Help",
+      "tagline": "If your parent is 65+ and earns under $25,100 a year, ConnPACE can cap their prescription copays at $16.25 per fill and keep drug costs from spiraling on a fixed income.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Connecticut Department of Social Services / ConnPACE program administration",
+            "type": "service-area"
+          },
+          {
+            "name": "Local senior centers may distribute application information, but the program itself is statewide",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, lives in Connecticut, and earns under $25,100 a year as a single person (or under $33,800 as a married couple), ConnPACE can make their prescriptions dramatically more affordable. Instead of paying full retail or unpredictable out-of-pocket costs, they pay a $45 annual enrollment fee and a maximum copay of $16.25 per prescription. The program covers most medications, including insulin and insulin syringes.\n\nConnPACE does not replace Medicare Part D. If your parent is eligible for Medicare, they must also enroll in a Part D drug plan. ConnPACE then works alongside Part D to keep your parent's share of costs capped under the program's rules. That coordination is important: without ConnPACE, a Part D beneficiary can face variable cost-sharing that changes year to year. With ConnPACE, the per-prescription cost should not exceed $16.25 for covered drugs.\n\nThere is no asset test for ConnPACE, which means the program does not look at your parent's savings, home, or other property. Eligibility turns on age, Connecticut residency (at least six months), and income. If your parent does not have other prescription coverage that pays toward all of their drugs, they may qualify. Call 1-800-423-5026 to confirm current-year income limits before applying, since the thresholds are adjusted annually.",
+      "savingsRange": "Up to $16.25 maximum copay per prescription after a $45 annual enrollment fee, based on the ConnPACE program's published cost-sharing structure.",
+      "savingsSource": "Connecticut DSS ConnPACE program materials (https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf) state a $45 annual registration fee and a maximum $16.25 pharmacy copay per prescription. Total annual savings depend on the number and cost of your parent's prescriptions and cannot be stated as a single dollar figure without that information.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (some materials note under-65 with disability; confirm when you call)",
+          "Connecticut resident for at least 6 months before applying",
+          "Annual income under $25,100 (single) or $33,800 (married)",
+          "No other prescription coverage that pays toward all prescriptions",
+          "No asset test"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2092
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2817
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must have lived in Connecticut for at least 183 days (six months) before applying.",
+          "Medicare-eligible participants must enroll in a Medicare Part D prescription drug plan; ConnPACE coordinates with Part D rather than replacing it.",
+          "Must not have other prescription coverage that already pays at least part of the cost of all prescriptions.",
+          "Must pay the $45 annual ConnPACE registration fee.",
+          "Some drugs are excluded from coverage; brand versus generic coverage can depend on the specific drug and Part D formulary.",
+          "Prescriptions purchased out of state, including mail order, are not covered."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "The simplest way to apply is to call ConnPACE directly at 1-800-423-5026; a representative will walk you through the enrollment form.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent meets the income limit for the current year",
+            "description": "Income limits are adjusted annually for Social Security cost-of-living increases. Before gathering documents, call 1-800-423-5026 to confirm the current-year threshold. For 2026, the published figures are $25,100 for a single person and $33,800 for a married couple."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you call or apply",
+            "description": "You will need proof of Connecticut residency, proof of your parent's age, proof of income, their Medicare card and current Part D plan information if they have Medicare, and information about any existing prescription coverage. See the full document checklist on this page."
+          },
+          {
+            "step": 3,
+            "title": "Request and complete the ConnPACE Application for Enrollment",
+            "description": "Call 1-800-423-5026 to request the application form or download materials from the Connecticut DSS website. Complete the ConnPACE Application for Enrollment with your parent's income, residency, and prescription coverage information."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application with the $45 registration fee",
+            "description": "Mail the completed application and supporting documents along with the $45 annual registration fee to the address provided on the application form. Keep a copy of everything you send."
+          },
+          {
+            "step": 5,
+            "title": "Present the ConnPACE card at the pharmacy",
+            "description": "Once enrolled, your parent will receive a ConnPACE card. They present it at a participating Connecticut pharmacy when picking up covered prescriptions. Their copay should not exceed $16.25 per prescription for covered drugs."
+          }
+        ],
+        "processingTime": "Not stated in published program materials. Call 1-800-423-5026 to ask about current processing times.",
+        "waitlist": null,
+        "tip": "If your parent is already on Medicare and has not yet enrolled in a Part D plan, they will need to do that before ConnPACE can coordinate benefits. Call 1-800-423-5026 and let them know your parent's Medicare status; they can point you to the right Part D enrollment resources.",
+        "urls": [
+          {
+            "label": "ConnPACE Program PDF (Connecticut DSS)",
+            "url": "https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of Connecticut residency, such as a utility bill, lease agreement, or state-issued document showing your parent's Connecticut address",
+        "Proof of age, such as a birth certificate, passport, or state-issued ID",
+        "Most recent Social Security award letter showing current annual benefit amount",
+        "Medicare card showing Part A and/or Part B coverage, and the name of your parent's current Medicare Part D prescription drug plan",
+        "Information about any other prescription drug coverage your parent currently has (policy name, insurer, and whether it pays toward all prescriptions)",
+        "Proof of any other income sources, such as pension or retirement benefit statements",
+        "Identity documents for the applicant and spouse if married (Social Security card or equivalent)",
+        "Payment of the $45 annual registration fee (check or money order payable to ConnPACE or as directed on the application)"
+      ],
+      "contacts": [
+        {
+          "label": "ConnPACE Program Line",
+          "phone": "1-800-423-5026",
+          "description": "The direct ConnPACE application and enrollment line. Call here to request the application form, ask about current income limits, and get help with enrollment.",
+          "hours": "Call to confirm current hours; Connecticut DSS business hours are generally Mon-Fri 8am-4:30pm CT."
+        },
+        {
+          "label": "Connecticut 2-1-1 (Infoline)",
+          "phone": "2-1-1",
+          "description": "Connecticut's statewide information and referral line. They can direct you to the ConnPACE line or to local senior centers that distribute application materials. They do not process ConnPACE applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has Medicare, they must be enrolled in a Part D drug plan before ConnPACE can coordinate benefits. If they are not yet in a Part D plan, ask the ConnPACE line for guidance on enrollment options.",
+        "Income limits are adjusted each year for Social Security cost-of-living increases. Always confirm the current-year figure by calling 1-800-423-5026 before applying, rather than relying on figures you find in older printed materials."
+      ],
+      "relatedPrograms": [
+        "Medicare Extra Help (Low Income Subsidy)",
+        "CHOICES (Connecticut's SHIP Medicare counseling program)",
+        "Connecticut Medicaid (HUSKY Health)",
+        "SNAP Food Benefits (Connecticut DSS)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What ConnPACE does not cover",
+          "body": "ConnPACE covers most prescription medications but not all. Some drugs are excluded from the program. Prescriptions filled at out-of-state pharmacies or through mail-order pharmacies are not covered. The program does not cover non-prescription items, medical equipment, or services beyond prescription drugs. If a specific medication your parent takes is not covered, call 1-800-423-5026 to ask about alternatives."
+        },
+        {
+          "type": "prose",
+          "title": "How ConnPACE and Medicare Part D work together",
+          "body": "ConnPACE does not replace Medicare Part D. If your parent qualifies for Medicare, they must enroll in a Part D plan. ConnPACE then acts as a secondary payer, keeping the out-of-pocket cost for covered drugs at or below the $16.25 copay ceiling. If your parent also qualifies for Medicare's Extra Help (Low Income Subsidy) program, combining Extra Help, Part D, and ConnPACE may reduce costs further. The ConnPACE line at 1-800-423-5026 can walk you through how these programs interact for your parent's specific situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent earns just over the income limit. Is there any way they still qualify?",
+          "answer": "The income limits ($25,100 single, $33,800 married) are adjusted annually, so the threshold for the current year may differ slightly from what you have read. Call 1-800-423-5026 to confirm the exact figure for this enrollment year. If your parent's income is close to the line, it is worth calling before assuming they are ineligible."
+        },
+        {
+          "question": "My parent has Medicare but has never signed up for Part D because their prescriptions seemed manageable. Does that change with ConnPACE?",
+          "answer": "Yes. Medicare-eligible applicants must enroll in a Medicare Part D prescription drug plan as a condition of ConnPACE participation. ConnPACE coordinates with Part D rather than replacing it. If your parent is not yet in a Part D plan, Connecticut's CHOICES SHIP counseling program (1-800-994-9422) can help you compare plans at no cost before you enroll."
+        },
+        {
+          "question": "Can I apply for ConnPACE on behalf of my elderly parent?",
+          "answer": "Yes. A family member or authorized representative can complete and submit the ConnPACE Application for Enrollment on behalf of an elderly parent. You will need to sign as the representative on the application. Call 1-800-423-5026 to confirm what authorization documentation is required if you are not named on any legal documents such as a power of attorney."
+        },
+        {
+          "question": "My parent has private prescription coverage through a former employer. Does that disqualify them?",
+          "answer": "It may. ConnPACE generally requires that applicants not have other prescription coverage that pays at least part of the cost of all of their prescriptions. If the employer plan covers some but not all of your parent's drugs, there may still be a path to eligibility. Call 1-800-423-5026 and describe your parent's existing coverage; the program can tell you whether they qualify."
+        },
+        {
+          "question": "Can my parent use ConnPACE at any pharmacy, including mail order?",
+          "answer": "No. ConnPACE only covers prescriptions filled at participating Connecticut pharmacies. Out-of-state purchases, including mail-order pharmacies, are not covered. If your parent currently uses a mail-order pharmacy, you would need to switch to a participating in-state location to use ConnPACE benefits. Ask the ConnPACE line for a list of participating pharmacies."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they enroll?",
+          "answer": "ConnPACE income limits are checked at enrollment and may be reviewed at renewal. If your parent's income rises above the annual threshold during an enrollment period, contact the program at 1-800-423-5026 to understand how it affects their coverage. Failing to report a significant income change could create problems at renewal."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Pill",
+      "phone": "1-800-423-5026",
+      "sourceUrl": "https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ct-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program (Connecticut)",
+      "shortName": "CT Caregiver Support",
+      "tagline": "If you are caring for an aging parent or a relative with a disability in Connecticut, this program can connect you with respite care, counseling, and local services at little or no cost.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Senior Resources/Eastern CT Area Agency on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "North Central Area Agency on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Agency on Aging of South Central Connecticut",
+            "type": "service-area"
+          },
+          {
+            "name": "Western Connecticut Area Agency on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are an adult caring for an aging parent or a family member with a disability in Connecticut, this program is designed to support you directly, not just the person you care for. Through your local Area Agency on Aging, you can access respite care (temporary relief so you can rest), caregiver counseling, training, support groups, and help connecting to other local services. At least one Connecticut Area Agency on Aging states that caregivers may receive up to $3,500 in services per grant year, subject to available funding.\n\nThe program covers several caregiving situations that families often overlook. You may qualify if you are 18 or older and caring for someone 60 or older, or caring for someone with Alzheimer's disease or a related condition at any age. If you are 55 or older, you may also qualify as a grandparent or relative caregiver raising a child under 18, or caring for an adult age 18 to 59 with a disability.\n\nThis is not a cash benefit. The program provides services and referrals. Your income as the caregiver is not the primary eligibility test; what matters is who you are caring for and the nature of your caregiving relationship. Because the program is administered locally through Area Agencies on Aging, the specific services available and any cost-sharing may differ depending on where you live in Connecticut.",
+      "savingsRange": "Up to $3,500 in services per grant year (amount stated by at least one Connecticut Area Agency on Aging; other local agencies may differ)",
+      "savingsSource": "One Connecticut Area Agency on Aging's publicly posted program terms; this is a local service cap, not a statewide guaranteed amount. The figure appears in local AAA program documentation, not a single statewide standard.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You are the caregiver, age 18 or older",
+          "Caring for someone age 60+ OR someone with Alzheimer's or a related condition",
+          "Or age 55+ caring for a child under 18 or an adult with a disability",
+          "Care recipient must be a Connecticut resident living in the community",
+          "No income limit for caregivers; no asset limit identified"
+        ],
+        "ageRequirement": "18+ (caregiver); 55+ for grandparent/relative caregiver track",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "At least one Connecticut Area Agency on Aging may screen care recipients to confirm they need help with at least two activities of daily living (such as bathing, dressing, or eating) or have a cognitive or mental impairment requiring substantial supervision. This varies by local agency.",
+        "otherRequirements": [
+          "Both a caregiver and a care recipient must be identified in the application.",
+          "The care recipient must live in the community in Connecticut, not in a nursing facility.",
+          "Eligible relationships include: adult child or family caregiver for someone 60+; caregiver for someone with Alzheimer's or a related disorder at any age; grandparent or relative age 55+ raising a child under 18; or adult age 55+ caring for a relative age 18 to 59 with a disability.",
+          "Caregiver income is reviewed to help identify other support sources, but it is not the deciding factor for eligibility."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call 1-800-994-9422 to be connected to your local Area Agency on Aging, which handles intake and determines what services are available to you.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the statewide aging services line",
+            "description": "Call 1-800-994-9422. This line connects you to Connecticut's aging services network and routes you to the Area Agency on Aging serving your region. Have the care recipient's address ready so the line can route you correctly."
+          },
+          {
+            "step": 2,
+            "title": "Or call your regional Area Agency on Aging directly",
+            "description": "If you know your region, you can call directly: Senior Resources/Eastern CT: 860-887-3561. North Central Area Agency on Aging: 860-724-6443. Agency on Aging of South Central CT: 203-785-8533. Western CT Area Agency on Aging: 203-757-5449."
+          },
+          {
+            "step": 3,
+            "title": "Complete the caregiver intake and application",
+            "description": "Your local AAA will conduct an intake conversation and ask you to complete a Caregiver Services Application. Be ready to describe who you care for, how you provide care, and what kind of help you need. You do not need to gather financial records before this call; income information is only requested if the AAA needs to assess cost-sharing."
+          },
+          {
+            "step": 4,
+            "title": "Receive a service plan and referrals",
+            "description": "Based on your intake, the AAA will connect you with available services such as respite care, counseling, training, or referrals to local programs. Available services and any cost-sharing depend on your local agency and current funding."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard was identified in official Connecticut materials. Ask your local AAA what to expect when you call.",
+        "waitlist": "No statewide waitlist policy was identified. Availability depends on local Area Agency on Aging funding and service capacity. Ask your local AAA about current availability when you call.",
+        "tip": "You do not need to have everything figured out before you call. The intake conversation is designed to help you identify what you need. Call first; gather documents only if the AAA asks you to.",
+        "urls": [
+          {
+            "label": "Connecticut NFCSP Official Program Page",
+            "url": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Name, address, and date of birth of the person you are caring for (to confirm Connecticut residency and age eligibility)",
+        "A brief description of the care you provide and why you need support (the AAA will ask this during intake)",
+        "Your own name and contact information as the caregiver",
+        "Documentation of the care recipient's age, such as a Medicare card, birth certificate, or other government-issued ID, if the AAA requests it",
+        "If the care recipient has Alzheimer's disease or a related condition, any diagnosis letter or medical documentation the AAA asks for",
+        "Income information for the care recipient if your local AAA requests a cost-share determination; this is not required for all applicants"
+      ],
+      "contacts": [
+        {
+          "label": "CT Statewide Aging Services Line",
+          "phone": "1-800-994-9422",
+          "description": "The main entry point for the National Family Caregiver Support Program in Connecticut. This line routes you to your local Area Agency on Aging, which handles intake and services.",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "Senior Resources / Eastern CT Area Agency on Aging",
+          "phone": "860-887-3561",
+          "description": "Serves eastern Connecticut. Call directly if you are in that region.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "North Central Area Agency on Aging",
+          "phone": "860-724-6443",
+          "description": "Serves north central Connecticut. Call directly if you are in that region.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Agency on Aging of South Central CT",
+          "phone": "203-785-8533",
+          "description": "Serves south central Connecticut. Call directly if you are in that region.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Western CT Area Agency on Aging",
+          "phone": "203-757-5449",
+          "description": "Serves western Connecticut. Call directly if you are in that region.",
+          "hours": "Contact for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "The $3,500 annual service cap was publicly stated by at least one Connecticut Area Agency on Aging. Other local agencies may have different caps or cost-share arrangements. Ask your local AAA what applies in your area.",
+        "If the person you care for has Alzheimer's disease or a related disorder, they may qualify regardless of age. You do not need to wait until they turn 60.",
+        "Grandparents and relative caregivers age 55 or older raising a child under 18 qualify under a separate track. Mention your specific caregiving situation when you call so the AAA can match you to the right services."
+      ],
+      "relatedPrograms": [
+        "Connecticut Home Care Program for Elders (CHCPE)",
+        "Connecticut Community First Choice (Medicaid HCBS)",
+        "CHOICES Health Insurance Assistance Program (CT SHIP)",
+        "Statewide Respite Care Program (Connecticut)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program supports caregivers, not just care recipients",
+          "body": "Most government programs focus on the person receiving care. This one is specifically for you as the caregiver. Counseling, training, and respite care are all available directly to you. You do not need to route everything through your parent's care plan."
+        },
+        {
+          "type": "callout",
+          "title": "Services vary by region",
+          "body": "Connecticut administers this program through four Area Agencies on Aging, and each can differ in what services are available, whether cost-sharing applies, and how quickly they can help. The statewide line (1-800-994-9422) will connect you to the right local office."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is under 60 but has Alzheimer's disease. Does this program apply?",
+          "answer": "Yes. Connecticut's program includes caregivers of people with Alzheimer's disease or a related disorder at any age. You do not need to wait until your parent turns 60. When you call, tell the intake staff that the diagnosis is Alzheimer's or a related condition so they can apply the correct eligibility track."
+        },
+        {
+          "question": "My income is higher than average. Does that disqualify me?",
+          "answer": "No. Your income as the caregiver is not the primary eligibility test in Connecticut. The program looks at who you are caring for and the caregiving relationship. Income information may be requested by your local AAA to identify cost-sharing or to connect you with other funding sources, but it is not what determines whether you qualify."
+        },
+        {
+          "question": "How long will I wait to receive services?",
+          "answer": "There is no statewide standard for processing time or waitlists. Availability depends on your local Area Agency on Aging and current funding levels. The only way to know your wait is to call. Ask specifically about current service availability when you reach your local AAA."
+        },
+        {
+          "question": "Can I apply for this program and the Connecticut Home Care Program for Elders at the same time?",
+          "answer": "Yes, and it often makes sense to do so. This program supports you as the caregiver, while the Connecticut Home Care Program for Elders (CHCPE) provides in-home services for the care recipient. They serve different needs and are not mutually exclusive. Your local Area Agency on Aging can help you identify which programs your parent may also qualify for."
+        },
+        {
+          "question": "I am a grandparent raising my grandchild. Does this count?",
+          "answer": "Yes, if you are age 55 or older and serving as a grandparent or relative caregiver for a child under 18. This is a specific eligible category in Connecticut's program. Make sure to mention your situation during intake so the AAA applies the correct track."
+        },
+        {
+          "question": "What happens if my needs change after I am enrolled?",
+          "answer": "Contact your local Area Agency on Aging directly. Services can be adjusted based on changing circumstances, though changes are subject to available funding. Because local agencies administer the program independently, there is no single statewide reassessment schedule; your AAA will tell you how their process works."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "1-800-994-9422",
+      "sourceUrl": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ct-home-delivered-meals",
+      "name": "Connecticut Home-Delivered Meals Program",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60+ and can't safely get to a meal site or cook for themselves, Connecticut will deliver prepared meals to their door at no cost, regardless of income.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "My Place CT senior nutrition resource directory",
+            "type": "service-area"
+          },
+          {
+            "name": "WCAAA / local Meals on Wheels service",
+            "type": "service-area"
+          },
+          {
+            "name": "LifeBridge Community Services (New Haven area)",
+            "type": "service-area"
+          },
+          {
+            "name": "TEAM, Inc. (Valley region)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Connecticut's Home-Delivered Meals Program brings prepared meals directly to your parent's home if they are 60 or older and can't safely get to a senior meal site or prepare their own food. The program is free. There is no income test and no asset test.\n\nMeals are delivered by a local provider, typically a Meals on Wheels affiliate or Area Agency on Aging contractor in your parent's region. Depending on the local provider and your parent's assessed need, meals may arrive one to seven days per week. State rules allow up to two meals per day. Meals may be hot, cold, or frozen.\n\nBecause Connecticut routes this program through local providers rather than one central office, where you call and how quickly service starts depends on where your parent lives. Some areas have waitlists when demand exceeds funding. Families who need immediate help should call 2-1-1 Connecticut or their local Area Agency on Aging to get on a list as soon as possible.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The Connecticut Senior Nutrition Program charges no fees and has no income or asset limits. Source: Connecticut Department of Aging and Disability Services, portal.ct.gov/ads/programs-and-services/senior-nutrition-program.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older (or spouse of an eligible participant)",
+          "Unable to attend a senior community café or congregate meal site",
+          "Unable to safely prepare or obtain meals at home",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "A program staff member conducts a short screening that covers your parent's nutritional health, activity level, living situation, and ability to travel. The key question is whether your parent can realistically get to a senior meal site or safely prepare food at home. If they cannot, they qualify for home-delivered meals.",
+        "otherRequirements": [
+          "Must be unable to attend a Senior Community Café (congregate meal site) to qualify for home delivery specifically.",
+          "Must be unable to prepare or obtain nourishing meals on their own.",
+          "Some local programs describe this as being homebound and unable to shop, cook, travel to a meal site, or drive.",
+          "Some local providers also serve younger adults with disabilities; ask your local provider if your parent is under 60.",
+          "When demand exceeds funding, priority goes to individuals with the greatest social and economic need."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call 2-1-1 Connecticut or your local Area Agency on Aging for a referral and screening; there is no single statewide application office, and wait times vary by region.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local provider",
+            "description": "Connecticut delivers this program through local Area Agencies on Aging and nutrition contractors, not one central office. Use the My Place CT senior nutrition directory at myplace.ct.gov to identify the provider serving your parent's town. If you're not sure who to call, dial 2-1-1 (available 24 hours) and ask for senior nutrition or Meals on Wheels in your area."
+          },
+          {
+            "step": 2,
+            "title": "Call and request a screening",
+            "description": "Contact the local provider directly and say your parent needs home-delivered meals. A staff member will ask about your parent's age, living situation, ability to travel to a meal site, and ability to prepare food. This screening determines eligibility and how many meals per week your parent needs. You can complete this call on your parent's behalf."
+          },
+          {
+            "step": 3,
+            "title": "Complete the registration and assessment",
+            "description": "The provider will walk you through a registration form and a brief intake assessment. You will need basic information: your parent's age, address, living situation, and any relevant health or mobility information. No financial documents are required because there is no income or asset test."
+          },
+          {
+            "step": 4,
+            "title": "Confirm delivery schedule and start date",
+            "description": "Once approved, the provider will confirm how many days per week meals will be delivered and when service starts. If the local provider has a waitlist, ask to be placed on it immediately and ask about priority status. State rules allow up to two meals per day; frequency depends on assessed need and local capacity."
+          }
+        ],
+        "processingTime": "No single statewide processing time is published. Some areas start service quickly after the screening call; others have waitlists. Contact your local provider to get a realistic estimate for your region.",
+        "waitlist": "Possible. When local funding is limited, providers may reduce meal frequency or require a waitlist. The state gives priority to people with the greatest social and economic need. Ask your local provider about current wait times when you call.",
+        "tip": "Call as soon as you think your parent might qualify. Even if a waitlist exists, you can't get on it until you call. Being on the list earlier almost always means faster service.",
+        "urls": [
+          {
+            "label": "My Place CT Senior Nutrition Directory",
+            "url": "https://myplace.ct.gov"
+          },
+          {
+            "label": "CT ADS Senior Nutrition Program (official program page)",
+            "url": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your parent's name, date of birth, and home address (needed for the intake call)",
+        "A brief description of why your parent cannot attend a congregate meal site or prepare food at home (staff will ask this during screening)",
+        "Contact information for the person applying or helping with the application (you, as the family caregiver)",
+        "Any physician or social worker referral documentation if you have one (not required, but can support the screening)",
+        "Information about your parent's living situation, such as whether they live alone or with others"
+      ],
+      "contacts": [
+        {
+          "label": "2-1-1 Connecticut (Statewide Referral and Local Provider Connection)",
+          "phone": "2-1-1",
+          "description": "Dial 2-1-1 and ask for senior nutrition or Meals on Wheels in your parent's town. The 2-1-1 specialist will connect you with the local Area Agency on Aging or nutrition provider that serves your parent's address. This is the fastest way to find the right local number if you don't know your provider.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "LifeBridge Community Services (New Haven area)",
+          "phone": null,
+          "description": "Serves New Haven area residents with home-delivered meals. Find current contact information through the My Place CT directory at myplace.ct.gov or by calling 2-1-1.",
+          "hours": "Contact via 2-1-1 or myplace.ct.gov for current hours"
+        },
+        {
+          "label": "TEAM, Inc. (Valley region)",
+          "phone": null,
+          "description": "Serves Valley region residents with home-delivered meals. Find current contact information through the My Place CT directory at myplace.ct.gov or by calling 2-1-1.",
+          "hours": "Contact via 2-1-1 or myplace.ct.gov for current hours"
+        },
+        {
+          "label": "CT Department of Aging and Disability Services (Program Information)",
+          "phone": "(860) 424-5274",
+          "description": "The state agency overseeing the Senior Nutrition Program. Call here for general program questions or if you have trouble reaching your local provider. They do not process individual applications directly.",
+          "hours": "Mon-Fri, standard state business hours"
+        }
+      ],
+      "applicationNotes": [
+        "There is no income test and no asset test. If you've been told your parent makes too much or has too many assets, that information is incorrect. Anyone 60 or older who cannot safely attend a meal site or prepare food at home qualifies.",
+        "If your parent is being discharged from a hospital or rehabilitation facility, ask the discharge planner to initiate a home-delivered meals referral before they leave. This can speed up the local screening process significantly.",
+        "If your parent is on a waitlist, ask the provider whether their situation qualifies for priority status. People with the greatest social and economic need are served first; this includes people who are homebound, isolated, or at nutritional risk."
+      ],
+      "relatedPrograms": [
+        "Connecticut Home Care Program for Elders (CHCPE)",
+        "Connecticut Senior Community Café Program (congregate meals for those who can travel)",
+        "SNAP (Supplemental Nutrition Assistance Program) for additional food purchasing help",
+        "Connecticut Community First Choice (for broader in-home support services)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income limit. No asset limit.",
+          "body": "Connecticut's home-delivered meals program does not test income or assets. Families sometimes assume they won't qualify because their parent owns a home or receives Social Security. That assumption is wrong. The only questions that matter are age (60+) and whether your parent can safely get to a meal site or cook for themselves."
+        },
+        {
+          "type": "prose",
+          "title": "What to expect from the meals",
+          "body": "Meals are prepared and delivered by your local provider. They may be hot, cold, or frozen depending on your local program. State rules allow up to two meals per day. Delivery frequency ranges from one to seven days per week depending on your parent's assessed need and the local provider's capacity. The meals are designed to meet nutritional standards for older adults. A delivery volunteer also provides a brief check-in, which can be a meaningful daily contact for a parent who lives alone."
+        },
+        {
+          "type": "prose",
+          "title": "How service varies by region",
+          "body": "Connecticut uses a local delivery network, not one central office. The provider serving your parent's town, the meal schedule available, and current waitlist conditions all depend on where your parent lives. The My Place CT directory at myplace.ct.gov lists local providers by address. If you can't find the right provider, call 2-1-1 and they will connect you."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is retired and owns their home. Do they still qualify?",
+          "answer": "Yes. Connecticut's home-delivered meals program has no income test and no asset test. Home ownership, retirement savings, and Social Security income do not affect eligibility. The only requirements are being 60 or older and being unable to safely attend a meal site or prepare meals at home."
+        },
+        {
+          "question": "How long is the waitlist, really?",
+          "answer": "It depends on your parent's region and local provider capacity. Some areas start service quickly; others have waitlists when funding is limited. The state does not publish a single statewide wait time. Call your local provider or 2-1-1 and ask directly about current availability in your parent's town. Getting on the list immediately is the most important step, because wait times are calculated from the date you first contact the provider."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to call themselves?",
+          "answer": "Yes, you can call on your parent's behalf. Family caregivers regularly initiate the screening and registration process. You will need to provide basic information about your parent's situation, including their age, address, and why they cannot attend a meal site or prepare food at home. The local provider may want to speak briefly with your parent at some point, but the initial inquiry and much of the paperwork can be handled by you."
+        },
+        {
+          "question": "My parent is already enrolled. What happens if their needs change or they go into the hospital?",
+          "answer": "Contact your local provider directly if your parent's situation changes. If they are hospitalized, notify the provider so meal delivery can be paused. When your parent returns home, especially if they are more limited than before, let the provider know so the delivery schedule and meal quantity can be reassessed. You do not need to re-apply from scratch; a reassessment is handled by the same provider."
+        },
+        {
+          "question": "My parent can sometimes make it to a meal site, but not always. Do they qualify for home delivery?",
+          "answer": "This depends on the local provider's assessment. Home-delivered meals are generally reserved for people who cannot attend congregate meal sites. If your parent's ability to travel is inconsistent or declining, explain that during the screening call. Providers take functional limitations seriously, and the assessment is meant to reflect your parent's realistic day-to-day capacity, not their best days."
+        },
+        {
+          "question": "Can my parent receive both this program and SNAP at the same time?",
+          "answer": "Yes. These are separate programs with different purposes. SNAP provides a monthly benefit for purchasing groceries, while home-delivered meals provide prepared food directly. Many older adults use both. If your parent is not currently enrolled in SNAP, that application goes through the Connecticut Department of Social Services at portal.ct.gov/dss or by calling (855) 626-6632."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "211",
+      "sourceUrl": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

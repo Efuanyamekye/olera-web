@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T05:10:24.459Z
+ * Last updated: 2026-10-06T06:44:48.380Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2846,6 +2846,199 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:37:58.975Z"
         }
       ]
+    },
+    {
+      "id": "ky-property-tax-homestead-exemption-current",
+      "name": "KY Property Tax Homestead Exemption",
+      "shortName": "Homestead Exemption",
+      "tagline": "If your parent owns their home in Kentucky and is 65 or older, they may qualify to have $49,100 shaved off their home's assessed value before property taxes are calculated.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County Property Valuation Administrator (PVA) office in the county where the home is located",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Kentucky homeowners who are 65 or older can have $49,100 subtracted from their home's assessed value before property taxes are calculated. That means your parent pays taxes on a lower number, not the full market value of the home. The actual dollar savings depend on your county's tax rate, but every qualifying homeowner gets the same $49,100 reduction statewide for the 2025 and 2026 assessment years.\n\nThis program has no income test and no asset test. It does not matter how much your parent earns or has in savings. The only requirements are that they own the home, that it is their primary residence on January 1 of the tax year, and that they are 65 or older by that assessment date. Homeowners who are totally disabled and receiving disability payments can also qualify regardless of age.\n\nApplications are handled county by county through the local Property Valuation Administrator (PVA) office. The deadline to file is December 31 of the tax year. Some counties accept applications online or by mail; others require an in-person visit. Once approved, the exemption typically renews automatically, but you should confirm this with your county PVA.",
+      "savingsRange": "Up to $49,100 reduction in assessed value per tax year (2025-2026); actual tax savings depend on your county's local tax rate",
+      "savingsSource": "Kentucky Department of Revenue, Homestead Exemption program page; the $49,100 figure is the statewide fixed exemption amount for the 2025-2026 assessment years (revenue.ky.gov).",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ by January 1 of the tax year (or totally disabled and receiving disability payments)",
+          "Must own the home",
+          "Must occupy the home as primary residence on January 1",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Applicants who are not yet 65 may qualify if they are classified as totally disabled under the program's definition and are actively receiving disability payments. Not every disability automatically qualifies; the applicant must meet the program's specific disability classification. Contact your county PVA to confirm what documentation is needed.",
+        "otherRequirements": [
+          "Must own the home outright or hold title to it",
+          "Home must be the applicant's principal place of residence on January 1 of the tax year",
+          "Home must qualify as a residential unit on the January 1 assessment date",
+          "Application (Form 62A350) must be submitted to the county PVA by December 31 of the tax year",
+          "Some counties require a government-issued photo ID; check with your local PVA"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Form 62A350 with your county's Property Valuation Administrator (PVA) office by December 31 of the tax year; online, by mail, or in person depending on your county.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your county PVA office",
+            "description": "Go to revenue.ky.gov and search for your county's Property Valuation Administrator. Each county administers this program independently. The office you contact must be in the county where the home is located."
+          },
+          {
+            "step": 2,
+            "title": "Download or request Form 62A350",
+            "description": "The form is titled 'Application for Exemption Under the Homestead/Disability Amendment' (Revenue Form 62A350). You can download it from revenue.ky.gov or pick it up at your county PVA office. Some county PVA offices also have it available on their own websites."
+          },
+          {
+            "step": 3,
+            "title": "Gather your documents",
+            "description": "At minimum, you will need proof of age (such as a birth certificate, passport, or driver's license), proof of ownership and residence, and a government-issued photo ID if your county requires it. If applying under disability, gather documentation of the disability classification and proof of disability payments. Call your county PVA first to confirm exactly what they need, because requirements vary."
+          },
+          {
+            "step": 4,
+            "title": "Submit the completed application",
+            "description": "Submit Form 62A350 and your supporting documents to your county PVA office. Depending on the county, you can file online through the county PVA website (where available), by mail to the county PVA office, or in person. The deadline is December 31 of the tax year for which you are seeking the exemption."
+          },
+          {
+            "step": 5,
+            "title": "Confirm approval and future renewals",
+            "description": "After filing, follow up with your county PVA to confirm the application was received and approved. Ask whether your county renews the exemption automatically in future years or whether you need to refile. This varies by county."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Approval timing depends on the local PVA office. File well before the December 31 deadline to allow time for any follow-up on missing documents.",
+        "waitlist": null,
+        "tip": "If your parent turned 65 at any point during the tax year, they may qualify for that year's exemption even if their birthday falls after January 1. Confirm the exact eligibility date with your county PVA, and do not wait until late December to apply.",
+        "urls": [
+          {
+            "label": "Kentucky Department of Revenue: Homestead Exemption",
+            "url": "https://revenue.ky.gov/Property/Residential-Farm-Commercial-Property/Pages/Homestead-Exemption.aspx"
+          },
+          {
+            "label": "Form 62A350 (Application for Exemption Under the Homestead/Disability Amendment)",
+            "url": "https://revenue.ky.gov/Forms/62A350.pdf"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age: birth certificate, U.S. passport, or Kentucky driver's license showing your parent is 65 or older",
+        "Proof of ownership: property deed or most recent property tax bill showing your parent's name on the home",
+        "Proof of primary residence: utility bill, voter registration card, or similar document linking your parent's name to this address",
+        "Government-issued photo ID (required by some counties; confirm with your local PVA whether this is needed)",
+        "Completed Form 62A350 (Application for Exemption Under the Homestead/Disability Amendment)",
+        "If applying under disability: documentation of the disability classification and proof that disability payments are currently being received (such as an award letter from Social Security Disability Insurance or Supplemental Security Income)"
+      ],
+      "contacts": [
+        {
+          "label": "Kentucky Department of Revenue: Property Tax",
+          "phone": "(502) 564-4581",
+          "description": "The Kentucky Department of Revenue can answer questions about the statewide Homestead Exemption program and direct you to your county PVA office. For the actual application, contact your local county PVA.",
+          "hours": "Mon-Fri 8am-4:30pm ET"
+        },
+        {
+          "label": "Your county Property Valuation Administrator (PVA)",
+          "phone": null,
+          "description": "The county PVA office where your parent's home is located is the office that accepts and processes the application. Phone numbers vary by county. Find your county PVA at revenue.ky.gov or search '[your county] PVA Kentucky'.",
+          "hours": "Varies by county; typically Mon-Fri business hours"
+        }
+      ],
+      "applicationNotes": [
+        "This benefit is not income-based. Do not let your parent assume they make too much to qualify. Any homeowner 65 or older who lives in the home qualifies, regardless of income or savings.",
+        "The January 1 assessment date is the determining date for eligibility. Your parent must own and occupy the home as their primary residence on that date. If they moved in after January 1 or sold the home before that date, they would not qualify for that year.",
+        "Disability applicants face an additional step: the program requires a specific classification of 'total disability' combined with active receipt of disability payments. Not every disability qualifies automatically. Ask your county PVA what documentation they require before filing.",
+        "Document requirements vary by county. One county may require a photo ID while another does not. Call your county PVA before assembling your documents to avoid delays from missing paperwork."
+      ],
+      "relatedPrograms": [
+        "KY Circuit Breaker Property Tax Credit (income-based property tax relief for low-income seniors)",
+        "KY SNAP Food Benefits (grocery assistance for lower-income older adults)",
+        "KY LIHEAP Energy Assistance (utility bill help for qualifying households)",
+        "KY Extra Help / Low Income Subsidy (Medicare prescription cost assistance)"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "The numbers that matter",
+          "stats": [
+            {
+              "value": "$49,100",
+              "label": "Reduction in assessed home value before taxes are calculated (2025-2026)"
+            },
+            {
+              "value": "65+",
+              "label": "Minimum age to qualify (or totally disabled and receiving disability payments)"
+            },
+            {
+              "value": "Dec 31",
+              "label": "Application deadline each tax year"
+            }
+          ]
+        },
+        {
+          "type": "prose",
+          "heading": "How the math works",
+          "body": "The exemption does not give your parent a check. It reduces the taxable value of the home, which lowers the property tax bill.\n\nHere is an example: if your parent's home is assessed at $150,000, the exemption reduces the taxable value to $100,900 ($150,000 minus $49,100). Your parent pays taxes only on the $100,900. The actual dollar savings depend on your county's combined tax rate. A county with a tax rate of $0.50 per $100 of assessed value would produce savings of roughly $245 per year from this exemption alone. Higher tax rate counties would produce larger savings.\n\nTo estimate the savings for your parent's specific home, ask your county PVA for the local tax rate and multiply it against the $49,100 exemption amount."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's home is worth more than $49,100. Does the exemption still help?",
+          "answer": "Yes. The $49,100 is deducted from the assessed value before taxes are calculated, no matter what the home is worth. A home assessed at $200,000 would be taxed as if it were worth $150,900. The exemption is applied to every qualifying home the same way, with no cap on home value."
+        },
+        {
+          "question": "My parent already applied years ago. Do they need to reapply every year?",
+          "answer": "In many counties, the exemption renews automatically once approved. However, this is not guaranteed statewide. Contact your county PVA to confirm whether your parent's exemption is on file and whether it renews automatically or requires a new application each year."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot get to the PVA office?",
+          "answer": "Most county PVA offices allow applications to be submitted by mail, and some accept them online. If your parent cannot appear in person, ask the county PVA whether mail or online submission is available and whether a caregiver or power of attorney can sign on the parent's behalf. If you have a durable power of attorney for your parent, bring that document when inquiring."
+        },
+        {
+          "question": "My parent is under 65 but is disabled. Can they still qualify?",
+          "answer": "Yes, but with an additional requirement. The applicant must be classified as totally disabled under the program's definition and must be actively receiving disability payments (such as Social Security Disability Insurance). Not every disability qualifies automatically. Contact your county PVA and ask specifically what documentation they need to verify the disability classification before you apply."
+        },
+        {
+          "question": "My parent rents their home. Does this exemption apply?",
+          "answer": "No. The Homestead Exemption applies only to homeowners. Your parent must own the property and occupy it as their primary residence. Renters are not eligible. If your parent rents and needs financial relief, look into the KY Circuit Breaker Property Tax Credit, which is a separate program for lower-income renters and homeowners."
+        },
+        {
+          "question": "My parent owns two properties. Can they claim the exemption on both?",
+          "answer": "No. The exemption applies only to the home your parent owns and occupies as their primary residence. A vacation home, rental property, or second home does not qualify. The residence must be their principal place of living on January 1 of the tax year."
+        },
+        {
+          "question": "What if my parent moves to an assisted living facility or nursing home? Do they lose the exemption?",
+          "answer": "If your parent no longer occupies the home as their primary residence on January 1, they generally would not qualify for that year's exemption. The program requires that the home be the applicant's owned and occupied personal residence on the January 1 assessment date. If your parent has moved to a care facility and the home is now vacant or rented, contact your county PVA to understand how eligibility is affected."
+        },
+        {
+          "question": "Can my parent use this exemption and still apply for other tax relief programs?",
+          "answer": "Yes. The Homestead Exemption is separate from the KY Circuit Breaker Property Tax Credit, which provides additional relief for lower-income seniors. If your parent qualifies for both, they can benefit from both programs. Ask your county PVA or call the Kentucky Department of Revenue at (502) 564-4581 to ask which programs stack together."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(502) 564-4581",
+      "sourceUrl": "https://revenue.ky.gov/Property/Residential-Farm-Commercial-Property/Pages/Homestead-Exemption.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

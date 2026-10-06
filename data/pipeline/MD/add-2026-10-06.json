@@ -1,0 +1,424 @@
+{
+  "state": "MD",
+  "addedAt": "2026-10-06T06:07:17.081Z",
+  "dive": {
+    "state": "MD",
+    "stateName": "Maryland",
+    "diveAt": "2026-10-06T06:03:02.071Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Maryland Medical Assistance - Regular Medicaid/ABD",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "note": "Maryland’s ABD (Aged, Blind, Disabled) Medicaid uses very low monthly income limits. The available official Maryland materials in the search results show $350/month for one person and $392/month for a married couple/spouse case for ABD Medicaid.[4][5][14]",
+            "household_table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": "$350"
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": "$392"
+              }
+            ],
+            "important_caveat": "The state also distinguishes between categorically needy/regular ABD coverage and medically needy/spend-down pathways, so people above the basic income limit may still qualify through spend-down if they meet the program’s medically needy rules.[4][9]"
+          },
+          "asset_limits": {
+            "note": "Official Maryland materials in the search results show ABD asset limits of $2,500 for one person and $3,000 for a married couple/spouse case.[4][5][14]",
+            "household_table": [
+              {
+                "household_size": 1,
+                "asset_limit": "$2,500"
+              },
+              {
+                "household_size": 2,
+                "asset_limit": "$3,000"
+              }
+            ],
+            "what_counts": "Maryland’s general Medicaid materials indicate asset limits apply for age 65+, blind, disabled, or long-term-care-related eligibility.[1][6][12]",
+            "what_is_exempt": "The search results do not provide a complete Maryland-specific exempt-asset list for ABD regular Medicaid, so the exact exemption list should be verified with the local agency before applying."
+          },
+          "other_requirements": [
+            "Must be a Maryland resident.[1]",
+            "Must be a U.S. citizen or a qualified non-citizen who meets immigration requirements.[1]",
+            "Must meet the technical category requirement: age 65+, blind, or disabled.[1][6]",
+            "Must meet the financial rules for the coverage group, including income and asset limits.[1][6]",
+            "For some pathways, may need to meet medical eligibility for a certain level of care.[1][2]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Regular Maryland Medical Assistance covers medically necessary health care for eligible ABD individuals, and Maryland LTSS coverage can include long-term care services and supports when the person qualifies medically and financially.[1][2][8][12] The search results specifically confirm nursing facility long-term care coverage for eligible low-income individuals and mention home-based and facility-based LTSS, but do not provide a single fixed dollar benefit amount because this is an insurance-style service program rather than a cash benefit.[2][8][11][12]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Maryland’s myDHR portal (used for long-term care applications and related Medicaid applications).[11][13]",
+            "In person at your local Department of Social Services office.[11][13]",
+            "By mail to the appropriate county office or the Bureau of Long Term Care, depending on where you live and what type of long-term care application you are filing.[11]"
+          ],
+          "processing_time": "A written, telephonic, or electronic Medicaid application must be decided promptly, no later than 30 days after filing with the Department or its designee, or 10 days when filed with the local health department.[7]",
+          "waitlist": null,
+          "forms": [
+            "The search results did not identify a specific standalone ABD form number.",
+            "For long-term care applications, Maryland references a long-term care application submitted through myDHR or by paper/in-person routes.[11][13]"
+          ],
+          "documents": [
+            "Proof of Maryland residency",
+            "Proof of U.S. citizenship or qualified immigration status",
+            "Proof of age (for ABD by age 65+)",
+            "Medical proof of disability or blindness if applying under those categories",
+            "Income proof such as Social Security, pension, wages, or other benefits",
+            "Asset/bank statements and other resource records",
+            "Health insurance cards and Medicare information if applicable",
+            "Any long-term care or nursing facility records if applying for LTSS"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide program, but application routing for long-term care differs by county: Baltimore City and Anne Arundel, Baltimore, and Prince George’s counties use the Bureau of Long Term Care; other counties use the local department of social services.[11]",
+          "regional_variations": "The core eligibility rules are statewide, but processing path and office handling for long-term care applications vary by region.[11] The search results do not show different eligibility rules by county, but they do show different intake offices and potentially different handling locations for certain applications.[11]",
+          "offices_or_providers": [
+            "Bureau of Long Term Care for Baltimore City and Anne Arundel, Baltimore, and Prince George’s counties.[11]",
+            "Local Department of Social Services in other Maryland counties.[11]"
+          ]
+        },
+        "official_source": "https://health.maryland.gov/mmcp/eligibility/Pages/generalrequirements.aspx",
+        "gotchas": [
+          "ABD Medicaid is not just age-based; the applicant also has to fit the disability/blindness/age category and the financial rules.[1][6]",
+          "The income and asset limits are very low, and married couples have a different limit than single applicants.[4][5][14]",
+          "People who are over the basic income limit may still qualify through medically needy/spend-down rules.[4][9]",
+          "Long-term care Medicaid uses additional medical-necessity rules beyond basic ABD financial eligibility.[1][2][12]",
+          "Application routing depends on county for long-term care cases, so families can send forms to different offices depending on where the person lives.[11]",
+          "The search results do not show a single universal ABD form number or a complete exempt-asset list, so families should confirm details before filing."
+        ],
+        "data_shape_notes": "This program is statewide and category-based, but eligibility depends on a mix of age/disability status, very low income, and very low assets; long-term care applications also have county-specific intake paths and may involve spend-down or medical-necessity rules.",
+        "_raw": "{\n  \"name\": \"Maryland Medical Assistance - Regular Medicaid/ABD\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"note\": \"Maryland’s ABD (Aged, Blind, Disabled) Medicaid uses very low monthly income limits. The available official Maryland materials in the search results show $350/month for one person and $392/month for a married couple/spouse case for ABD Medicaid.[4][5][14]\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": \"$350\"\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": \"$392\"\n        }\n      ],\n      \"important_caveat\": \"The state also distinguishes between categorically needy/regular ABD coverage and medically needy/spend-down pathways, so people above the basic income limit may still qualify through spend-down if they meet the program’s medically needy rules.[4][9]\"\n    },\n    \"asset_limits\": {\n      \"note\": \"Official Maryland materials in the search results show ABD asset limits of $2,500 for one person and $3,000 for a married couple/spouse case.[4][5][14]\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"asset_limit\": \"$2,500\"\n        },\n        {\n          \"household_size\": 2,\n          \"asset_limit\": \"$3,000\"\n        }\n      ],\n      \"what_counts\": \"Maryland’s general Medicaid materials indicate asset limits apply for age 65+, blind, disabled, or long-term-care-related eligibility.[1][6][12]\",\n      \"what_is_exempt\": \"The search results do not provide a complete Maryland-specific exempt-asset list for ABD regular Medicaid, so the exact exemption list should be verified with the local agency before applying.\"\n    },\n    \"other_requirements\": [\n      \"Must be a Maryland resident.[1]\",\n      \"Must be a U.S. citizen or a qualified non-citizen who meets immigration requirements.[1]\",\n      \"Must meet the technical category requirement: age 65+, blind, or disabled.[1][6]\",\n      \"Must meet the financial rules for the coverage group, including income and asset limits.[1][6]\",\n      \"For some pathways, may need to meet medical eligibility for a certain level of care.[1][2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Regular Maryland Medical Assistance covers medically necessary health care for eligible ABD individuals, and Maryland LTSS coverage can include long-term care services and supports when the person qualifies medically and financially.[1][2][8][12] The search results specifically confirm nursing facility long-term care coverage for eligible low-income individuals and mention home-based and facility-based LTSS, but do not provide a single fixed dollar benefit amount because this is an insurance-style service program rather than a cash benefit.[2][8][11][12]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Maryland’s myDHR portal (used for long-term care applications and related Medicaid applications).[11][13]\",\n      \"In person at your local Department of Social Services office.[11][13]\",\n      \"By mail to the appropriate county office or the Bureau of Long Term Care, depending on where you live and what type of long-term care application you are filing.[11]\"\n    ],\n    \"processing_time\": \"A written, telephonic, or electronic Medicaid application must be decided promptly, no later than 30 days after filing with the Department or its designee, or 10 days when filed with the local health department.[7]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"The search results did not identify a specific standalone ABD form number.\",\n      \"For long-term care applications, Maryland references a long-term care application submitted through myDHR or by paper/in-person routes.[11][13]\"\n    ],\n    \"documents\": [\n      \"Proof of Maryland residency\",\n      \"Proof of U.S. citizenship or qualified immigration status\",\n      \"Proof of age (for ABD by age 65+)\",\n      \"Medical proof of disability or blindness if applying under those categories\",\n      \"Income proof such as Social Security, pension, wages, or other benefits\",\n      \"Asset/bank statements and other resource records\",\n      \"Health insurance cards and Medicare information if applicable\",\n      \"Any long-term care or nursing facility records if applying for LTSS\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide program, but application routing for long-term care differs by county: Baltimore City and Anne Arundel, Baltimore, and Prince George’s counties use the Bureau of Long Term Care; other counties use the local department of social services.[11]\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but processing path and office handling for long-term care applications vary by region.[11] The search results do not show different eligibility rules by county, but they do show different intake offices and potentially different handling locations for certain applications.[11]\",\n    \"offices_or_providers\": [\n      \"Bureau of Long Term Care for Baltimore City and Anne Arundel, Baltimore, and Prince George’s counties.[11]\",\n      \"Local Department of Social Services in other Maryland counties.[11]\"\n    ]\n  },\n  \"official_source\": \"https://health.maryland.gov/mmcp/eligibility/Pages/generalrequirements.aspx\",\n  \"gotchas\": [\n    \"ABD Medicaid is not just age-based; the applicant also has to fit the disability/blindness/age category and the financial rules.[1][6]\",\n    \"The income and asset limits are very low, and married couples have a different limit than single applicants.[4][5][14]\",\n    \"People who are over the basic income limit may still qualify through medically needy/spend-down rules.[4][9]\",\n    \"Long-term care Medicaid uses additional medical-necessity rules beyond basic ABD financial eligibility.[1][2][12]\",\n    \"Application routing depends on county for long-term care cases, so families can send forms to different offices depending on where the person lives.[11]\",\n    \"The search results do not show a single universal ABD form number or a complete exempt-asset list, so families should confirm details before filing.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide and category-based, but eligibility depends on a mix of age/disability status, very low income, and very low assets; long-term care applications also have county-specific intake paths and may involve spend-down or medical-necessity rules.\"\n}"
+      },
+      {
+        "name": "Maryland Medical Assistance - Medically Needy Pathway",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "This is a non-MAGI Medicaid pathway for people whose income and resources are above other Medicaid categories but within Maryland's medically needy standards. Maryland's official schedule says the medically needy income standard for a household of 1 is $350/month ($4,200/year), and for 2 it is $392/month ($4,700/year); for 3 it is $434/month ($5,200/year), with the pattern continuing by household size in the state schedule.[4][11][15]",
+            "table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": 350,
+                "annual_income_limit": 4200
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": 392,
+                "annual_income_limit": 4700
+              },
+              {
+                "household_size": 3,
+                "monthly_income_limit": 434,
+                "annual_income_limit": 5200
+              },
+              {
+                "household_size": 4,
+                "monthly_income_limit": 475,
+                "annual_income_limit": 5700
+              }
+            ],
+            "notes": "Maryland uses a 6-month consideration period for medically needy spenddown; the state schedule shows the 6-month standard as $2,100 for 1 person, $2,350 for 2, $2,600 for 3, $2,850 for 4, and $3,126 for 5.[4][11]"
+          },
+          "asset_limits": {
+            "summary": "Maryland's medically needy pathway includes a resource test, but the exact countable-resource limits depend on the category and are set in the Medicaid rules and schedules rather than in the broad eligibility page.[11][15]",
+            "what_counts": [
+              "countable resources / assets used for Medicaid eligibility determination",
+              "income and resources are measured against medically needy standards[11][15]"
+            ],
+            "what_is_exempt": [
+              "The official sources retrieved do not list the full exempt-asset list on the eligibility page; families should expect common Medicaid exemptions like a primary home and one vehicle to be evaluated under Maryland Medicaid rules, but the exact exemptions should be confirmed in the application review.[11][15]"
+            ]
+          },
+          "other_requirements": [
+            "Must fit a medically needy coverage group, such as aged, blind, disabled, child, or caretaker-relative medically needy categories.[15]",
+            "Must be a Maryland resident and apply through Maryland Medicaid channels.[2][7]",
+            "Must meet the spenddown/consideration-period rule if income is above the medically needy income standard.[4][11][15]",
+            "The official Maryland page says eligibility also depends on income level, age, family size, and disability status depending on the coverage group.[7]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Maryland Medical Assistance provides Medicaid coverage for eligible medically needy applicants; the sources retrieved do not identify a special cash amount, but instead describe coverage for Medicaid health services and long-term-care related eligibility categories.[9][15]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.marylandhealthconnection.gov",
+            "App: Maryland Health Connection mobile app",
+            "Phone: 1-855-642-8572",
+            "In person: local health department",
+            "In person: local department of social services",
+            "Online for some applications: https://www.marylandbenefits.gov",
+            "Mail: completed form to the local department of social services"
+          ],
+          "processing_time": "The official Maryland page says coverage can start right away if you are eligible, but it does not give a single fixed processing-time range for the medically needy pathway.[2]",
+          "waitlist": null,
+          "forms": [
+            "Maryland Medical Assistance application (paper application used by local departments; the retrieved source identifies a 9701 application PDF, but the visible snippet does not provide a clearer public title beyond the application form itself).[12]"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Maryland residency",
+            "Social Security numbers for applicants",
+            "Proof of income",
+            "Proof of assets/resources",
+            "Proof of age or disability if applying under an aged/blind/disabled medically needy category",
+            "Information about household members and any current health coverage",
+            "Any medical bills if using a spenddown/consideration-period route"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Maryland program; applications are handled through Maryland Health Connection, local health departments, and local departments of social services.[2][9]",
+          "regional_variations": "The core eligibility standard is statewide, but application handling can vary by office and local department. The retrieved sources do not show county-specific medically needy benefit differences or county-specific eligibility thresholds.[2][11]",
+          "offices_or_providers": [
+            "Maryland Health Connection",
+            "Local health departments",
+            "Local departments of social services"
+          ]
+        },
+        "official_source": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx",
+        "gotchas": [
+          "The medically needy pathway is not the same as regular MAGI Medicaid income-based eligibility; it is a non-MAGI route with a spenddown/consideration-period structure.[4][11][15]",
+          "People with income above the monthly medically needy limit may still qualify if enough medical expenses are counted during the 6-month consideration period.[4][11][15]",
+          "The income standard is very low compared with many families' expectations, so many applicants qualify only after medical-expense spenddown is applied.[4][15]",
+          "The official eligibility page says the only way to know for sure is to apply, because income and asset limits are updated annually and exceptions can apply.[1]",
+          "A family comparing this to nursing-home or long-term-care Medicaid should check whether the person is applying as aged/disabled medically needy, because the category affects the financial test.[15]"
+        ],
+        "data_shape_notes": "This program uses a medically needy spenddown model with a fixed statewide income standard and a 6-month consideration period, rather than a simple yes/no income cutoff.[4][11][15]",
+        "_raw": "{\n  \"name\": \"Maryland Medical Assistance - Medically Needy Pathway\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"This is a non-MAGI Medicaid pathway for people whose income and resources are above other Medicaid categories but within Maryland's medically needy standards. Maryland's official schedule says the medically needy income standard for a household of 1 is $350/month ($4,200/year), and for 2 it is $392/month ($4,700/year); for 3 it is $434/month ($5,200/year), with the pattern continuing by household size in the state schedule.[4][11][15]\",\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": 350,\n          \"annual_income_limit\": 4200\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": 392,\n          \"annual_income_limit\": 4700\n        },\n        {\n          \"household_size\": 3,\n          \"monthly_income_limit\": 434,\n          \"annual_income_limit\": 5200\n        },\n        {\n          \"household_size\": 4,\n          \"monthly_income_limit\": 475,\n          \"annual_income_limit\": 5700\n        }\n      ],\n      \"notes\": \"Maryland uses a 6-month consideration period for medically needy spenddown; the state schedule shows the 6-month standard as $2,100 for 1 person, $2,350 for 2, $2,600 for 3, $2,850 for 4, and $3,126 for 5.[4][11]\"\n    },\n    \"asset_limits\": {\n      \"summary\": \"Maryland's medically needy pathway includes a resource test, but the exact countable-resource limits depend on the category and are set in the Medicaid rules and schedules rather than in the broad eligibility page.[11][15]\",\n      \"what_counts\": [\n        \"countable resources / assets used for Medicaid eligibility determination\",\n        \"income and resources are measured against medically needy standards[11][15]\"\n      ],\n      \"what_is_exempt\": [\n        \"The official sources retrieved do not list the full exempt-asset list on the eligibility page; families should expect common Medicaid exemptions like a primary home and one vehicle to be evaluated under Maryland Medicaid rules, but the exact exemptions should be confirmed in the application review.[11][15]\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must fit a medically needy coverage group, such as aged, blind, disabled, child, or caretaker-relative medically needy categories.[15]\",\n      \"Must be a Maryland resident and apply through Maryland Medicaid channels.[2][7]\",\n      \"Must meet the spenddown/consideration-period rule if income is above the medically needy income standard.[4][11][15]\",\n      \"The official Maryland page says eligibility also depends on income level, age, family size, and disability status depending on the coverage group.[7]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Maryland Medical Assistance provides Medicaid coverage for eligible medically needy applicants; the sources retrieved do not identify a special cash amount, but instead describe coverage for Medicaid health services and long-term-care related eligibility categories.[9][15]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.marylandhealthconnection.gov\",\n      \"App: Maryland Health Connection mobile app\",\n      \"Phone: 1-855-642-8572\",\n      \"In person: local health department\",\n      \"In person: local department of social services\",\n      \"Online for some applications: https://www.marylandbenefits.gov\",\n      \"Mail: completed form to the local department of social services\"\n    ],\n    \"processing_time\": \"The official Maryland page says coverage can start right away if you are eligible, but it does not give a single fixed processing-time range for the medically needy pathway.[2]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Maryland Medical Assistance application (paper application used by local departments; the retrieved source identifies a 9701 application PDF, but the visible snippet does not provide a clearer public title beyond the application form itself).[12]\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Maryland residency\",\n      \"Social Security numbers for applicants\",\n      \"Proof of income\",\n      \"Proof of assets/resources\",\n      \"Proof of age or disability if applying under an aged/blind/disabled medically needy category\",\n      \"Information about household members and any current health coverage\",\n      \"Any medical bills if using a spenddown/consideration-period route\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Maryland program; applications are handled through Maryland Health Connection, local health departments, and local departments of social services.[2][9]\",\n    \"regional_variations\": \"The core eligibility standard is statewide, but application handling can vary by office and local department. The retrieved sources do not show county-specific medically needy benefit differences or county-specific eligibility thresholds.[2][11]\",\n    \"offices_or_providers\": [\n      \"Maryland Health Connection\",\n      \"Local health departments\",\n      \"Local departments of social services\"\n    ]\n  },\n  \"official_source\": \"https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx\",\n  \"gotchas\": [\n    \"The medically needy pathway is not the same as regular MAGI Medicaid income-based eligibility; it is a non-MAGI route with a spenddown/consideration-period structure.[4][11][15]\",\n    \"People with income above the monthly medically needy limit may still qualify if enough medical expenses are counted during the 6-month consideration period.[4][11][15]\",\n    \"The income standard is very low compared with many families' expectations, so many applicants qualify only after medical-expense spenddown is applied.[4][15]\",\n    \"The official eligibility page says the only way to know for sure is to apply, because income and asset limits are updated annually and exceptions can apply.[1]\",\n    \"A family comparing this to nursing-home or long-term-care Medicaid should check whether the person is applying as aged/disabled medically needy, because the category affects the financial test.[15]\"\n  ],\n  \"data_shape_notes\": \"This program uses a medically needy spenddown model with a fixed statewide income standard and a 6-month consideration period, rather than a simple yes/no income cutoff.[4][11][15]\"\n}"
+      },
+      {
+        "name": "Maryland HCBS Waivers - Medicaid Waiver Programs",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "For the senior-focused Maryland Home and Community-Based Options Waiver (Community Options Waiver / HCBOW), Maryland applies Medicaid financial eligibility rules for long-term care rather than a single simple household-income table. The official materials available here confirm financial eligibility is required, but they do not provide a waiver-specific income chart in the sources retrieved. A separate Maryland Medicaid long-term care standard often used for ABD/waiver-related coverage shows countable income and asset rules can vary by coverage group; publicly available Maryland materials also note countable assets may be limited to $2,000 for an individual or $2,500 in some eligibility categories, depending on the program. The exact monthly income standard for this waiver should be verified with Maryland Medicaid or Maryland Access Point before applying.",
+          "asset_limits": "Maryland Medicaid long-term care coverage generally uses a low asset standard. Public Maryland sources indicate countable assets may not exceed $2,000 or $2,500 depending on eligibility category. What counts as an asset typically includes bank accounts, cash, stocks, and other liquid resources. Common exemptions in Medicaid long-term care generally include the applicant’s primary home in some situations, one vehicle, personal belongings, and certain prepaid burial arrangements, but the exact treatment depends on the coverage category and whether a spouse remains in the community. For waiver applicants, Medicaid will review both financial and medical eligibility.",
+          "other_requirements": [
+            "Must require a nursing facility level of care",
+            "Must choose to receive services in the community",
+            "Must have a cost-neutral plan of services that supports safe community living",
+            "Must be medically, technically, and financially eligible",
+            "For community applicants, must first be placed on the statewide registry and receive an invitation to apply",
+            "If already in a nursing facility and Medicaid has paid for services for at least 30 days, the person may apply with no wait"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Home- and community-based long-term care supports that help an eligible adult remain outside an institution. The program is described as providing services and support in the home and community instead of in an institution. The retrieved official sources do not list a fixed dollar cap or hourly allotment in the material available here. The actual service package is individualized through a person-centered service plan and a cost-neutral plan.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Call Maryland Access Point at 844-627-5465 to get on the Community Options Waiver Registry",
+            "Contact a local Maryland Access Point site for screening",
+            "If the person is already in a nursing facility, ask the facility social worker to begin the process",
+            "After receiving an invitation, submit a Medicaid application"
+          ],
+          "processing_time": "No fixed processing time was provided in the retrieved official sources. Timing depends heavily on registry position, whether the person is already in a nursing facility, and how quickly medical and financial eligibility can be completed after invitation.",
+          "waitlist": "Yes. The Community Options Waiver has a waitlist/registry. Community applicants are placed on the statewide registry and wait for an invitation to apply. A nursing-facility resident who has had Medicaid-paid services for at least 30 days may apply without waiting.",
+          "forms": [
+            "Medicaid application after invitation to apply",
+            "Renewal Application for 1915(c) HCBS Waiver (January 1, 2023) is referenced in Maryland materials, but the retrieved sources do not show a single universally required form number for initial community applicants"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Maryland residency",
+            "Proof of income",
+            "Bank statements and other asset records",
+            "Social Security number",
+            "Medicare and Medicaid cards, if any",
+            "Medical records showing nursing-facility level of care need",
+            "Information about current care providers and medications",
+            "If in a nursing facility, contact information for the facility social worker"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide in Maryland, but access is managed through the statewide registry and local Maryland Access Point offices. Community applicants are not accepted on a first-come, first-served open enrollment basis; they wait for an invitation. Nursing-facility residents with qualifying Medicaid-paid stays can apply without the same wait.",
+          "regional_variations": "The core waiver rules are statewide, but wait times and local entry points can vary because applicants are routed through Maryland Access Point sites and the statewide registry. Counties may also have different local contact numbers for screening, even though the program itself is statewide.",
+          "offices_or_providers": [
+            "Maryland Access Point (statewide entry system)",
+            "Local county Maryland Access Point offices",
+            "Nursing facility social workers for residents"
+          ]
+        },
+        "official_source": "https://health.maryland.gov/mmcp/ltss/Pages/community-options-waiver.aspx",
+        "gotchas": [
+          "This is not an immediate-open-enrollment program for community applicants; most people must get on the registry and wait for an invitation.",
+          "Being medically eligible is not enough; the applicant must also meet financial and technical Medicaid rules.",
+          "People often miss the nursing-facility exception: a resident whose Medicaid has paid for at least 30 days may apply with no wait.",
+          "The services are not a fixed cash benefit; they are individualized supports delivered through a waiver service plan.",
+          "Maryland has multiple HCBS waivers, but for elderly adults the relevant senior waiver is usually the Community Options Waiver, not the developmental-disability or child waivers.",
+          "Income and asset rules can be affected by spousal situations and eligibility category, so the dollar limit may not be identical for every applicant."
+        ],
+        "data_shape_notes": "This program is statewide but waitlist-gated, and eligibility is a combination of medical, technical, and financial rules rather than a simple household-size income chart. Benefits are individualized services, not a flat payment, and access often differs depending on whether the applicant is in the community or already in a nursing facility.",
+        "_raw": "{\n  \"name\": \"Maryland HCBS Waivers - Medicaid Waiver Programs\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"For the senior-focused Maryland Home and Community-Based Options Waiver (Community Options Waiver / HCBOW), Maryland applies Medicaid financial eligibility rules for long-term care rather than a single simple household-income table. The official materials available here confirm financial eligibility is required, but they do not provide a waiver-specific income chart in the sources retrieved. A separate Maryland Medicaid long-term care standard often used for ABD/waiver-related coverage shows countable income and asset rules can vary by coverage group; publicly available Maryland materials also note countable assets may be limited to $2,000 for an individual or $2,500 in some eligibility categories, depending on the program. The exact monthly income standard for this waiver should be verified with Maryland Medicaid or Maryland Access Point before applying.\",\n    \"asset_limits\": \"Maryland Medicaid long-term care coverage generally uses a low asset standard. Public Maryland sources indicate countable assets may not exceed $2,000 or $2,500 depending on eligibility category. What counts as an asset typically includes bank accounts, cash, stocks, and other liquid resources. Common exemptions in Medicaid long-term care generally include the applicant’s primary home in some situations, one vehicle, personal belongings, and certain prepaid burial arrangements, but the exact treatment depends on the coverage category and whether a spouse remains in the community. For waiver applicants, Medicaid will review both financial and medical eligibility.\",\n    \"other_requirements\": [\n      \"Must require a nursing facility level of care\",\n      \"Must choose to receive services in the community\",\n      \"Must have a cost-neutral plan of services that supports safe community living\",\n      \"Must be medically, technically, and financially eligible\",\n      \"For community applicants, must first be placed on the statewide registry and receive an invitation to apply\",\n      \"If already in a nursing facility and Medicaid has paid for services for at least 30 days, the person may apply with no wait\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Home- and community-based long-term care supports that help an eligible adult remain outside an institution. The program is described as providing services and support in the home and community instead of in an institution. The retrieved official sources do not list a fixed dollar cap or hourly allotment in the material available here. The actual service package is individualized through a person-centered service plan and a cost-neutral plan.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call Maryland Access Point at 844-627-5465 to get on the Community Options Waiver Registry\",\n      \"Contact a local Maryland Access Point site for screening\",\n      \"If the person is already in a nursing facility, ask the facility social worker to begin the process\",\n      \"After receiving an invitation, submit a Medicaid application\"\n    ],\n    \"processing_time\": \"No fixed processing time was provided in the retrieved official sources. Timing depends heavily on registry position, whether the person is already in a nursing facility, and how quickly medical and financial eligibility can be completed after invitation.\",\n    \"waitlist\": \"Yes. The Community Options Waiver has a waitlist/registry. Community applicants are placed on the statewide registry and wait for an invitation to apply. A nursing-facility resident who has had Medicaid-paid services for at least 30 days may apply without waiting.\",\n    \"forms\": [\n      \"Medicaid application after invitation to apply\",\n      \"Renewal Application for 1915(c) HCBS Waiver (January 1, 2023) is referenced in Maryland materials, but the retrieved sources do not show a single universally required form number for initial community applicants\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Maryland residency\",\n      \"Proof of income\",\n      \"Bank statements and other asset records\",\n      \"Social Security number\",\n      \"Medicare and Medicaid cards, if any\",\n      \"Medical records showing nursing-facility level of care need\",\n      \"Information about current care providers and medications\",\n      \"If in a nursing facility, contact information for the facility social worker\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide in Maryland, but access is managed through the statewide registry and local Maryland Access Point offices. Community applicants are not accepted on a first-come, first-served open enrollment basis; they wait for an invitation. Nursing-facility residents with qualifying Medicaid-paid stays can apply without the same wait.\",\n    \"regional_variations\": \"The core waiver rules are statewide, but wait times and local entry points can vary because applicants are routed through Maryland Access Point sites and the statewide registry. Counties may also have different local contact numbers for screening, even though the program itself is statewide.\",\n    \"offices_or_providers\": [\n      \"Maryland Access Point (statewide entry system)\",\n      \"Local county Maryland Access Point offices\",\n      \"Nursing facility social workers for residents\"\n    ]\n  },\n  \"official_source\": \"https://health.maryland.gov/mmcp/ltss/Pages/community-options-waiver.aspx\",\n  \"gotchas\": [\n    \"This is not an immediate-open-enrollment program for community applicants; most people must get on the registry and wait for an invitation.\",\n    \"Being medically eligible is not enough; the applicant must also meet financial and technical Medicaid rules.\",\n    \"People often miss the nursing-facility exception: a resident whose Medicaid has paid for at least 30 days may apply with no wait.\",\n    \"The services are not a fixed cash benefit; they are individualized supports delivered through a waiver service plan.\",\n    \"Maryland has multiple HCBS waivers, but for elderly adults the relevant senior waiver is usually the Community Options Waiver, not the developmental-disability or child waivers.\",\n    \"Income and asset rules can be affected by spousal situations and eligibility category, so the dollar limit may not be identical for every applicant.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but waitlist-gated, and eligibility is a combination of medical, technical, and financial rules rather than a simple household-size income chart. Benefits are individualized services, not a flat payment, and access often differs depending on whether the applicant is in the community or already in a nursing facility.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MD",
+    "stateName": "Maryland",
+    "classifiedAt": "2026-10-06T06:03:02.076Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 3
+    },
+    "programs": [
+      {
+        "name": "Maryland Medical Assistance - Regular Medicaid/ABD",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Bureau of Long Term Care for Baltimore City and Anne Arundel, Baltimore, and Prince George’s counties.[11]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Department of Social Services in other Maryland counties.[11]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Maryland Medical Assistance - Medically Needy Pathway",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Maryland Health Connection",
+              "type": "service-area"
+            },
+            {
+              "name": "Local health departments",
+              "type": "service-area"
+            },
+            {
+              "name": "Local departments of social services",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Maryland HCBS Waivers - Medicaid Waiver Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Maryland Access Point (statewide entry system)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county Maryland Access Point offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Nursing facility social workers for residents",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MD",
+      "id": "md-medicaid-abd-regular",
+      "name": "Maryland Medical Assistance - Regular Medicaid/ABD",
+      "legacyId": "maryland-medical-assistance-regular-medicaid-abd",
+      "programType": "benefit"
+    },
+    {
+      "state": "MD",
+      "id": "md-medical-assistance-medically-needy",
+      "name": "Maryland Medical Assistance - Medically Needy Pathway",
+      "legacyId": "maryland-medical-assistance-medically-needy-pathway",
+      "programType": "benefit"
+    },
+    {
+      "state": "MD",
+      "id": "md-hcbs-community-options-waiver",
+      "name": "Maryland HCBS Waivers - Medicaid Waiver Programs",
+      "legacyId": "maryland-hcbs-waivers-medicaid-waiver-programs",
+      "programType": "benefit"
+    }
+  ]
+}

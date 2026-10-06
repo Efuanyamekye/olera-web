@@ -2,8 +2,8 @@
   "state": "MI",
   "stateName": "Michigan",
   "draftedAt": "2026-04-13T22:29:50.209Z",
-  "total": 15,
-  "successful": 15,
+  "total": 18,
+  "successful": 18,
   "programs": [
     {
       "id": "choice-waiver",
@@ -2899,6 +2899,702 @@
       "icon": "Coins",
       "phone": "1-800-772-1213",
       "sourceUrl": "https://www.ssa.gov/ssi/text-benefits-ussi.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-home-help-program",
+      "name": "Home Help Program",
+      "shortName": "Home Help",
+      "tagline": "If your parent has Medicaid and needs hands-on help with bathing, dressing, or other daily tasks, Michigan may pay for a trained aide to come to their home.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county MDHHS office where the client resides",
+            "type": "service-area"
+          },
+          {
+            "name": "MDHHS statewide Home Help page",
+            "type": "service-area"
+          },
+          {
+            "name": "Michigan Department of Health and Human Services provider/program page for Home Help",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Michigan's Home Help Program pays for personal care aides to come to your parent's home and assist with daily tasks they can no longer do safely on their own. That can include bathing, dressing, grooming, getting in and out of bed, preparing meals, doing laundry, and taking medications. If your parent is on Medicaid and struggling with even one of these tasks, this program may cover real, scheduled help at no cost to them.\n\nThis is not a cash payment to your family. It is an authorization for services, meaning the state pays an aide directly after your parent's needs are assessed. The number of hours approved is based on what the MDHHS Adult Services Worker determines your parent needs; there is no fixed statewide cap or dollar amount. Every care plan is individualized.\n\nThe program is available statewide, but applications go through the county MDHHS office where your parent lives. Timing and assessor availability can vary by county. The most important thing to know before you call: your parent must have active Michigan Medicaid (not just Medicare) to qualify.",
+      "savingsRange": "",
+      "savingsSource": "Free service; the program authorizes and pays for personal care services directly. No dollar amount or hour cap is published statewide by MDHHS.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Must have active Michigan Medicaid (not Medicare alone)",
+          "Must need hands-on help with at least one daily task such as bathing or dressing",
+          "Must live at home or in an apartment, not a nursing facility",
+          "Must complete an in-home assessment by an MDHHS Adult Services Worker",
+          "A Medicaid-approved medical provider must certify the need in writing"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must need hands-on physical assistance with at least one activity of daily living (ADL). ADLs include bathing, dressing, eating, grooming, moving around the home, transferring (getting in and out of a bed or chair), and toileting. Needing help only with housekeeping or errands, without a hands-on personal care need, is not enough to qualify. An MDHHS Adult Services Worker will conduct an in-home visit to assess this need and build a care plan.",
+        "otherRequirements": [
+          "Must have active Michigan Medicaid Fee for Service coverage at the time of application and ongoing. Having Medicare alone does not qualify your parent.",
+          "A Medicaid-approved physician or other qualifying medical provider must complete form MDHHS-6200 (Adult Services Medical Needs Certification) confirming the need for care. A family member cannot fill out this form.",
+          "Your parent must live in a home or apartment in the community. People residing in nursing facilities are not eligible.",
+          "Your parent (or their legal guardian or representative) must sign the DHS-390 Adult Services Application."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply by contacting the county MDHHS office where your parent lives; no single statewide processing time is published, so start as early as possible.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm Medicaid is active",
+            "description": "Before anything else, verify your parent has active Michigan Medicaid Fee for Service coverage. If you are unsure, call the MDHHS Beneficiary Help Line at (800) 642-3195. Medicare alone is not enough to qualify."
+          },
+          {
+            "step": 2,
+            "title": "Contact your county MDHHS office",
+            "description": "Call, visit in person, mail, or fax a request to the county MDHHS office where your parent lives. Tell them you are requesting Home Help services. You can find your county office at michigan.gov/mdhhs or call the main MDHHS line at (855) 275-6424."
+          },
+          {
+            "step": 3,
+            "title": "Submit the DHS-390 application",
+            "description": "The county office will provide or accept a completed DHS-390 (Adult Services Application). This form must be signed by your parent or their legal guardian or authorized representative. Submit it to your county MDHHS office by mail, fax, or in person."
+          },
+          {
+            "step": 4,
+            "title": "Have your parent's doctor complete MDHHS-6200",
+            "description": "Ask your parent's Medicaid-approved physician or provider to complete the MDHHS-6200 (Adult Services Medical Needs Certification) form. This form must come from a qualifying medical provider; a family member cannot complete it. Return the completed form to the county MDHHS office."
+          },
+          {
+            "step": 5,
+            "title": "Complete the in-home assessment",
+            "description": "An MDHHS Adult Services Worker will schedule a home visit to assess your parent's needs. Be ready to describe specifically which daily tasks your parent cannot do without hands-on help. The assessor uses this visit to build your parent's individualized care plan and determine approved service hours."
+          },
+          {
+            "step": 6,
+            "title": "Services begin after authorization",
+            "description": "After the assessment is complete and the care plan is approved, the county office will authorize services and connect your parent with a provider. Service start timing depends on local MDHHS processing; no statewide guarantee is published."
+          }
+        ],
+        "processingTime": "No official statewide processing timeline is published by MDHHS. Timing depends on how quickly the referral, forms, and Adult Services Worker home visit can be completed at your county office. Starting early and submitting all documents at once reduces delays.",
+        "waitlist": "No formal statewide waitlist was identified in official MDHHS sources. Service start depends on local county processing capacity and how quickly the assessment and authorization are completed.",
+        "tip": "Submit the DHS-390 and the MDHHS-6200 at the same time, if possible. Applications stall most often when the medical certification form is missing or arrives late. Ask the county office for the MDHHS-6200 form at your first contact so you can get it to your parent's doctor right away.",
+        "urls": [
+          {
+            "label": "MDHHS Home Help Program page",
+            "url": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent"
+          },
+          {
+            "label": "Find your county MDHHS office",
+            "url": "https://www.michigan.gov/mdhhs/keep-mi-healthy/manage-your-benefits/county-offices"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of active Michigan Medicaid coverage (Medicaid card or a benefits letter from MDHHS)",
+        "Completed DHS-390 Adult Services Application, signed by your parent or their legal guardian or authorized representative",
+        "Completed MDHHS-6200 Adult Services Medical Needs Certification form, filled out by a Medicaid-approved physician or medical provider",
+        "Government-issued photo ID for your parent (driver's license, state ID, or passport)",
+        "Proof of Michigan residency for the home or apartment where your parent lives (a utility bill, lease agreement, or other official document showing the address)",
+        "Legal documentation if you are applying as a guardian, conservator, or authorized representative (guardianship order or power of attorney)",
+        "Medicare card if your parent has one (not required to qualify, but helpful for complete records)"
+      ],
+      "contacts": [
+        {
+          "label": "MDHHS Local County Office (application door)",
+          "phone": "(855) 275-6424",
+          "description": "Call to be connected to your county MDHHS office or to get the direct number for the office where your parent lives. This is where you start the Home Help application. Have your parent's Medicaid information ready.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "MDHHS Beneficiary Help Line",
+          "phone": "(800) 642-3195",
+          "description": "Use this line to verify your parent's Medicaid coverage status before applying. Does not process Home Help applications directly.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line. Can help you locate your county MDHHS office if you cannot reach the lines above. Does not process Home Help applications.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is being discharged from a hospital or skilled nursing facility, ask the discharge planner about starting a Home Help referral before they leave. Hospital social workers can sometimes initiate contact with MDHHS directly.",
+        "If your parent's condition worsens after they are enrolled, request a reassessment through the county MDHHS office. Approved hours can be adjusted if the Adult Services Worker determines the current plan no longer meets their needs.",
+        "Some third-party websites reference a form called the DHS-54A for medical certification. The official MDHHS program page names the MDHHS-6200 as the required form. Confirm with your county office which form they are currently using before asking your parent's doctor to complete it.",
+        "This program authorizes services, not cash. If a family member is providing the care and expects to be paid, that arrangement has specific rules under Michigan Medicaid. Ask the county MDHHS worker explicitly about whether a family caregiver can be enrolled as the paid provider under your parent's care plan."
+      ],
+      "relatedPrograms": [
+        "MI Choice Medicaid Waiver (home and community-based waiver for people who would otherwise need nursing home care)",
+        "Program of All-inclusive Care for the Elderly (PACE, Michigan)",
+        "Michigan Medicaid Fee for Service",
+        "Area Agency on Aging caregiver support services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Medicare is not enough to qualify",
+          "body": "Your parent must have active Michigan Medicaid to be eligible for Home Help. Medicare, even with a supplement plan, does not qualify them. If your parent does not have Medicaid yet, contact MDHHS to ask about Medicaid enrollment before applying for Home Help."
+        },
+        {
+          "type": "callout",
+          "title": "What the program covers",
+          "body": "Home Help can cover bathing, personal hygiene, dressing, grooming, mobility assistance inside the home, transferring (getting in and out of a bed or chair), toileting, help with eating, medication setup or administration, laundry, light housekeeping, meal preparation, and cleanup. The specific services authorized depend on what the MDHHS Adult Services Worker determines your parent needs during the in-home assessment."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has Medicare and a supplement plan but not Medicaid. Do they qualify?",
+          "answer": "No. Home Help requires active Michigan Medicaid, specifically Medicaid Fee for Service coverage. Medicare alone, including Medicare Advantage or a Medigap supplement, does not qualify your parent. If your parent might be eligible for Medicaid, contact MDHHS at (855) 275-6424 to ask about applying for Medicaid first."
+        },
+        {
+          "question": "Can I be paid to care for my own parent through this program?",
+          "answer": "Possibly, but it depends on specific rules under Michigan Medicaid for family caregivers as paid providers. This is not automatic. When you speak with the county MDHHS Adult Services Worker during the assessment, ask directly whether a family member can be enrolled as the authorized paid provider under your parent's Home Help care plan."
+        },
+        {
+          "question": "My parent only needs help with housekeeping and grocery shopping. Does that qualify?",
+          "answer": "Not on its own. To qualify, your parent must need hands-on physical assistance with at least one activity of daily living, such as bathing, dressing, getting out of bed, or toileting. Housekeeping alone, without a personal care need, does not meet the functional requirement. If your parent needs both, document the personal care needs clearly when you contact MDHHS."
+        },
+        {
+          "question": "How many hours of help will my parent actually get?",
+          "answer": "There is no fixed statewide hour cap. The number of approved hours is determined individually by the MDHHS Adult Services Worker based on your parent's assessed needs. To get the most accurate outcome, be specific during the home visit about every daily task your parent cannot do safely on their own."
+        },
+        {
+          "question": "What if my parent's needs change after they are enrolled?",
+          "answer": "Contact the county MDHHS office and request a reassessment. An Adult Services Worker can revisit the care plan and adjust authorized hours if your parent's condition has changed. There is no penalty for requesting a reassessment, and you do not have to wait for a scheduled review period."
+        },
+        {
+          "question": "How long will it take to get services started?",
+          "answer": "No official statewide processing time is published by MDHHS. Timing depends on your county office's workload and how quickly the referral, both forms (DHS-390 and MDHHS-6200), and the in-home assessment can be completed. Submitting both forms at the same time and avoiding any documentation gaps is the most effective way to reduce delays."
+        },
+        {
+          "question": "Can my parent apply if they live in an apartment rather than a house?",
+          "answer": "Yes. Home Help is available to people living in their own home or apartment in the community. The program is specifically for people in community settings, not nursing facilities or other institutional care."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to do it themselves?",
+          "answer": "You can apply on behalf of your parent if you are their legal guardian, conservator, or authorized representative. You will need documentation of that legal authority, such as a guardianship order or a durable power of attorney for health care. The DHS-390 application must be signed by your parent or their authorized representative."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(855) 275-6424",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-home-heating-credit",
+      "name": "Michigan Home Heating Credit",
+      "shortName": "Home Heating Credit",
+      "tagline": "If your parent rents or owns a home in Michigan and has a modest income, they may qualify for a state tax credit that offsets winter heating costs, with no age requirement and no asset test.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Michigan Department of Treasury",
+            "type": "service-area"
+          },
+          {
+            "name": "Local libraries",
+            "type": "service-area"
+          },
+          {
+            "name": "MDHHS offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Community agencies",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent lives in Michigan and pays for their own heat, either as a homeowner or a renter, they may qualify for the Michigan Home Heating Credit. This is a state tax credit that reduces the financial burden of heating costs. There is no age requirement, and there is no asset test. Eligibility is based on household size and annual income.\n\nThe credit is claimed by filing Form MI-1040CR-7 with the Michigan Department of Treasury. Your parent does not need to file a Michigan income tax return to claim it; the form can be submitted on its own. The income limits vary by household size: a single-person household qualifies with income up to $17,243 per year (2025 income, claimed in 2026), while a two-person household qualifies up to $23,185. The exact credit amount varies based on income, household size, and whether your parent rents or owns.\n\nOne critical deadline: the claim must be postmarked or received by September 30 each year. A tax extension does not extend this deadline. Filing early also results in priority processing. If your parent has never filed this claim before, or if it lapsed during a difficult year, this is worth revisiting now.",
+      "savingsRange": "",
+      "savingsSource": "The Michigan Department of Treasury does not publish a fixed statewide credit amount. The actual credit varies by household size, income level, and occupancy status. No specific dollar figures were available from official sources reviewed.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "No age requirement",
+          "Must own or rent a Michigan homestead (primary residence)",
+          "Income within annual limits based on household size (e.g., up to $17,243/year for a single person)",
+          "No asset test",
+          "Must file Form MI-1040CR-7 by September 30"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1437
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1932
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2427
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2922
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 3418
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 3913
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 4408
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 4903
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must own or be contracted to pay rent and occupy the homestead as a primary residence in Michigan",
+          "Must not be a full-time student claimed as a dependent on another person's tax return",
+          "Must not have lived in college or university-operated housing for the entire year",
+          "Must not have lived in a licensed care facility for the entire year",
+          "Claim must be postmarked or received by September 30",
+          "Shared-housing residents qualify but the credit is prorated",
+          "Part-year Michigan residents receive a prorated credit based on days occupied"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Form MI-1040CR-7 online, by mail, or with your Michigan income tax return; the form is free and the deadline is September 30 each year.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Get Form MI-1040CR-7",
+            "description": "Download the MI-1040CR-7 Home Heating Credit Claim and its Instruction Book from michigan.gov/taxes. You can also pick up a paper copy at a local library, MDHHS office, or community agency. The instruction book includes Table A, which shows the income ceiling for your parent's household size."
+          },
+          {
+            "step": 2,
+            "title": "Gather household information",
+            "description": "You will need: Social Security numbers and dates of birth for everyone in the household, total household income for the year, and rent or property tax information depending on whether your parent rents or owns. If your parent only lived in Michigan for part of the year, note the exact number of days occupied."
+          },
+          {
+            "step": 3,
+            "title": "Complete the form",
+            "description": "Use the instruction book to determine the correct number of household exemptions and locate the matching income ceiling in Table A. If household income is above the ceiling for that exemption count, the claim will not be approved. If income is within the limit, complete the remaining sections of MI-1040CR-7 based on whether your parent rents or owns."
+          },
+          {
+            "step": 4,
+            "title": "File by September 30",
+            "description": "If your parent also files a Michigan income tax return (MI-1040), attach MI-1040CR-7 to that return. If they do not file a Michigan income tax return, submit MI-1040CR-7 on its own. File online through Michigan Treasury e-filing options at michigan.gov/taxes, or mail the completed form to the Michigan Department of Treasury. The postmark or receipt date must be on or before September 30."
+          }
+        ],
+        "processingTime": "No official processing time is published. The Michigan Department of Treasury indicates that claims filed earlier receive priority processing.",
+        "waitlist": null,
+        "tip": "Your parent can claim this credit even if they have never filed a Michigan income tax return. The form stands alone. If they missed prior years, each year's claim must be filed separately and by that year's deadline.",
+        "urls": [
+          {
+            "label": "Michigan Home Heating Credit Information (Michigan.gov)",
+            "url": "https://www.michigan.gov/taxes/questions/iit/accordion/heating/home-heating-credit-information-1"
+          },
+          {
+            "label": "Michigan Treasury E-Filing",
+            "url": "https://www.michigan.gov/taxes"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security numbers for all household members (have cards or SSA letters on hand)",
+        "Total household income for the year (Social Security award letters, pension statements, any other income sources)",
+        "Rent payment records and lease agreement if your parent rents (landlord name and address may be required)",
+        "Property tax statement or mortgage statement if your parent owns the home",
+        "Dates of birth for all household members",
+        "Number of days your parent occupied the Michigan homestead if they lived there only part of the year",
+        "Michigan Individual Income Tax Return (MI-1040) if your parent is also filing a state income tax return"
+      ],
+      "contacts": [
+        {
+          "label": "Michigan Department of Treasury Individual Income Tax",
+          "phone": "(517) 636-4486",
+          "description": "Call for questions about Form MI-1040CR-7, eligibility, and filing requirements. This is the Michigan Treasury line that handles individual income tax and heating credit questions.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "A statewide referral line that can connect you to local libraries, MDHHS offices, and community agencies where your parent can get help completing the MI-1040CR-7 form. This line does not process the credit itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "The September 30 deadline is firm. A Michigan income tax extension does not extend the heating credit deadline. If September 30 passes, the claim for that tax year cannot be filed.",
+        "People in shared-housing situations (for example, multiple adults sharing a rental) do qualify, but the credit is prorated. Make sure to document the living arrangement accurately on the form.",
+        "If your parent moved into a licensed care facility or nursing home during the year, they may still qualify for a partial credit for the months they lived in their own homestead. The credit would be prorated based on days occupied.",
+        "Filing early matters. The Michigan Department of Treasury prioritizes claims received before the deadline approaches. Do not wait until late September."
+      ],
+      "relatedPrograms": [
+        "Michigan Energy Assistance Program (MEAP)",
+        "Low Income Home Energy Assistance Program (LIHEAP) in Michigan",
+        "Michigan Weatherization Assistance Program",
+        "Michigan Home Heating Shutoff Protections (winter moratorium)"
+      ],
+      "contentSections": [
+        {
+          "type": "income-table",
+          "title": "2026 Income Limits by Household Size (2025 Income)",
+          "description": "Your parent's total household resources for 2025 must fall at or below the ceiling for their household size. If income exceeds the ceiling, the claim is not approved. Monthly figures below are approximate (annual ceiling divided by 12).",
+          "data": [
+            {
+              "householdExemptions": 1,
+              "annualCeiling": 17243,
+              "standardAllowance": 500
+            },
+            {
+              "householdExemptions": 2,
+              "annualCeiling": 23185,
+              "standardAllowance": 725
+            },
+            {
+              "householdExemptions": 3,
+              "annualCeiling": 29127,
+              "standardAllowance": 950
+            },
+            {
+              "householdExemptions": 4,
+              "annualCeiling": 35069,
+              "standardAllowance": 1175
+            },
+            {
+              "householdExemptions": 5,
+              "annualCeiling": 41011,
+              "standardAllowance": 1400
+            },
+            {
+              "householdExemptions": 6,
+              "annualCeiling": 46953,
+              "standardAllowance": 1625
+            },
+            {
+              "householdExemptions": 7,
+              "annualCeiling": 52895,
+              "standardAllowance": 1850
+            },
+            {
+              "householdExemptions": 8,
+              "annualCeiling": 58837,
+              "standardAllowance": 2075
+            }
+          ],
+          "source": "https://www.michigan.gov/taxes/questions/iit/accordion/heating/home-heating-credit-information-1"
+        },
+        {
+          "type": "callout",
+          "title": "No Tax Return? Your parent can still file.",
+          "body": "Many older adults no longer file a Michigan income tax return because their income falls below the filing threshold. That does not disqualify them from the Home Heating Credit. Form MI-1040CR-7 can be filed on its own, completely separate from any income tax return."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is in a nursing home now. Can they still claim this credit?",
+          "answer": "Only if they did not live in the licensed care facility for the entire year. If your parent lived in their own home or rental for part of the year before moving, they may qualify for a prorated credit based on the days they occupied their homestead. They would not qualify if they were in a licensed care facility for all 12 months. Document the move-in date carefully when completing the form."
+        },
+        {
+          "question": "My parent shares a house with another adult. Does that disqualify them?",
+          "answer": "No, but it reduces the credit. Shared-housing claims are prorated based on the living arrangement. Your parent still needs to file MI-1040CR-7 and document the shared-housing situation accurately. The instruction book for MI-1040CR-7 explains the proration calculation."
+        },
+        {
+          "question": "My parent has never filed a Michigan income tax return. Can they still get this credit?",
+          "answer": "Yes. The Home Heating Credit does not require your parent to file a Michigan income tax return. Form MI-1040CR-7 can be submitted on its own to the Michigan Department of Treasury. Many lower-income seniors qualify for this credit precisely because their income is too low to trigger a state tax filing requirement."
+        },
+        {
+          "question": "We missed last year's September 30 deadline. Can we still file for that year?",
+          "answer": "No. The September 30 deadline is strict and applies year by year. A missed deadline means that year's credit cannot be claimed. The best step now is to file for the current year before September 30. If you have questions about your specific situation, call the Michigan Department of Treasury at (517) 636-4486."
+        },
+        {
+          "question": "My parent got a tax extension. Does that push the heating credit deadline?",
+          "answer": "No. A Michigan income tax filing extension does not extend the September 30 deadline for Form MI-1040CR-7. These are treated separately. Even if your parent's MI-1040 is on extension, the MI-1040CR-7 must still be postmarked or received by September 30."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes, with proper authorization. If you have power of attorney or are acting as your parent's legal representative, you can complete and file MI-1040CR-7 on their behalf. Include documentation of your authority with the filing. If you need help with the form, local libraries, MDHHS offices, and community agencies can assist. You can also call 2-1-1 to find local filing assistance."
+        },
+        {
+          "question": "My parent rents, but the landlord pays the utility bill directly. Can they still qualify?",
+          "answer": "This depends on whether your parent is paying rent that covers heating costs. The eligibility rules distinguish between different occupancy and payment arrangements. Review the MI-1040CR-7 Instruction Book carefully, which walks through renter eligibility. If the situation is unclear, call the Michigan Department of Treasury at (517) 636-4486 before filing."
+        },
+        {
+          "question": "Is there an asset test? Would my parent's savings account disqualify them?",
+          "answer": "No separate asset test was identified in the official program materials reviewed. Eligibility is based on household income and homestead status, not bank balances or property holdings. If this changes in a future program year, the Michigan Department of Treasury will publish updated instructions with Form MI-1040CR-7."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Thermometer",
+      "phone": "(517) 636-4486",
+      "sourceUrl": "https://www.michigan.gov/taxes/questions/iit/accordion/heating/home-heating-credit-information-1",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-meap-energy-assistance",
+      "name": "Michigan Energy Assistance Program (MEAP)",
+      "shortName": "Energy Assistance",
+      "tagline": "If your parent is struggling to pay heating or electric bills in Michigan, MEAP can provide payment help and arrearage relief through a local provider near them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wayne Metro Community Action Agency",
+            "type": "service-area"
+          },
+          {
+            "name": "Barry County United Way",
+            "type": "service-area"
+          },
+          {
+            "name": "Bureau of Community Action and Economic Opportunity",
+            "type": "service-area"
+          },
+          {
+            "name": "Local MEAP providers connected through 2-1-1",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent is on a fixed income and struggling to keep up with energy bills in Michigan, the Michigan Energy Assistance Program (MEAP) can help pay electricity, natural gas, propane, heating oil, or other fuel costs for their primary home. MEAP also helps with past-due balances (arrearages) and can provide energy efficiency services depending on what the local provider offers.\n\nMEAP is run through local community organizations across the state, not a single state office. That means the specific amount of help your parent receives, and how they apply, depends on which provider serves their county. The income limit for a one-person household is $36,043 per year (about $3,004 per month). If your parent already receives SSI, SNAP, TANF, or certain other public benefits, they may qualify automatically without needing to document their income separately.\n\nThe fastest way to find your parent's local MEAP provider is to call 2-1-1. That call connects you to the right local agency, which can then screen your parent for eligibility and walk you through the application. If your parent has a shutoff notice or is already past due, mention that immediately: some providers can move faster in crisis situations.",
+      "savingsRange": "",
+      "savingsSource": "MEAP benefit amounts are set by individual local providers within state program rules. No single statewide dollar figure is published. The Michigan Public Service Commission's official program page (michigan.gov/mpsc) describes the benefit as variable by provider and situation.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Household income at or below 60% of State Median Income (about $36,043/year for a single person)",
+          "Primary residence in Michigan served by a participating electric utility",
+          "May qualify automatically if parent receives SSI, SNAP, TANF, WIC, Head Start, or State Disability Assistance",
+          "No asset limit identified in official MEAP materials",
+          "Must apply through a local MEAP provider, not a central state office"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3004
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3940
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4876
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 5852
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 6788
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 7725
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 8383
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 9403
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Parent's utility provider must participate in the Low Income Energy Assistance Fund surcharge collection system. Not every utility in Michigan participates.",
+          "Assistance is for a primary residence only, not a vacation home or second property.",
+          "Parents already receiving State Emergency Relief (SER), Home Heating Credit (HHC), SNAP/FAP, TANF/FIP, WIC, Head Start, SSI, or State Disability Assistance (SDA) may qualify categorically, meaning income documentation may not be required."
+        ],
+        "povertyLevelReference": "60% State Median Income (SMI)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The simplest starting point is calling 2-1-1, which connects your parent to their local MEAP provider; processing time varies by provider and local demand.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call 2-1-1 to find your parent's local MEAP provider",
+            "description": "Dial 2-1-1 from any Michigan phone. Tell the operator you are looking for MEAP energy assistance. They will connect you to the local community agency that administers MEAP in your parent's county. Have your parent's address ready."
+          },
+          {
+            "step": 2,
+            "title": "Ask about intake options: phone, online, or in-person",
+            "description": "Local providers each run their own intake. Some, like Wayne Metro Community Action Agency, have an online application portal. Others take applications by phone or in-person appointment. Ask the local provider which method is fastest given current volume."
+          },
+          {
+            "step": 3,
+            "title": "Gather documents before the intake appointment",
+            "description": "Most providers will ask for proof of income, a recent utility bill, and proof of identity. If your parent receives SSI, SNAP, or another qualifying benefit, bring documentation of that enrollment instead of income records, because it may qualify them automatically."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application through the local provider",
+            "description": "Complete the intake form the local provider gives you. There is no single statewide MEAP form. The provider reviews the application and determines the assistance package, which can include bill payment, arrearage help, or energy efficiency services."
+          },
+          {
+            "step": 5,
+            "title": "If there is a shutoff notice, say so immediately",
+            "description": "Tell the provider about any active disconnection notice or past-due balance at the start of the call. Some providers can expedite crisis cases. Do not wait until the end of the conversation to mention it."
+          }
+        ],
+        "processingTime": "No single statewide processing time is published. Timing depends on the local MEAP provider and current intake volume in your parent's area.",
+        "waitlist": "No statewide waitlist was identified in official MEAP materials. Availability depends on provider funding and local demand at the time of application.",
+        "tip": "If your parent already receives SSI, SNAP, or State Disability Assistance, mention that in the first sentence of the call. Categorical eligibility from those programs may allow the provider to skip income verification entirely, which speeds up the process.",
+        "urls": [
+          {
+            "label": "Michigan Public Service Commission: Energy Assistance Programs",
+            "url": "https://www.michigan.gov/mpsc/consumer/energy-assistance"
+          },
+          {
+            "label": "Wayne Metro MEAP Application Portal (Wayne County residents)",
+            "url": "https://www.waynemetro.org"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent utility bill showing your parent's account name and service address",
+        "Proof of identity for your parent (state-issued ID, driver's license, or passport)",
+        "Proof of household income: Social Security award letter, pension statement, or most recent federal tax return if self-employed",
+        "If your parent receives SSI, SNAP, TANF, WIC, or State Disability Assistance: a copy of the award or enrollment letter for that program (this may replace income documentation)",
+        "Shutoff notice or past-due balance notice from the utility, if one exists",
+        "Names and dates of birth for all people living in the household",
+        "Proof of residency if the utility bill is not in your parent's name (a lease agreement or other document showing they live at that address)",
+        "Any additional documentation the local provider requests during intake (requirements can vary by agency)"
+      ],
+      "contacts": [
+        {
+          "label": "Michigan 2-1-1 (MEAP Provider Referral)",
+          "phone": "2-1-1",
+          "description": "Dial 2-1-1 from any Michigan phone to be connected to your parent's local MEAP provider. This is the official first step. The 2-1-1 operator does not process MEAP applications directly but will transfer you to the agency that does.",
+          "hours": "Available 24 hours, 7 days a week. Local provider intake hours vary."
+        },
+        {
+          "label": "Wayne Metro Community Action Agency (Wayne County)",
+          "phone": "(313) 388-9799",
+          "description": "Administers MEAP for Wayne County residents. Offers an online application portal in addition to phone and in-person intake.",
+          "hours": "Check waynemetro.org for current hours"
+        },
+        {
+          "label": "Michigan Public Service Commission Consumer Assistance",
+          "phone": "(800) 292-9555",
+          "description": "The state regulatory office that oversees energy assistance programs. Call this number if you have questions about whether your parent's utility participates in MEAP, or if you need help navigating a utility dispute.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's utility is not on the Low Income Energy Assistance Fund surcharge list, they may not be eligible for MEAP through that utility. Call 2-1-1 or (800) 292-9555 to confirm participation before gathering documents.",
+        "MEAP is separate from Michigan's Home Heating Credit (a state tax credit) and State Emergency Relief (SER). Your parent may qualify for more than one. Ask the MEAP provider whether SER or Home Heating Credit is also an option.",
+        "If your parent has an active shutoff notice, tell the provider immediately when you call. Some local providers have crisis pathways that can move faster than standard processing.",
+        "You can apply on your parent's behalf as their adult child or authorized representative. Have your parent's basic information with you and be prepared to explain your relationship to the household."
+      ],
+      "relatedPrograms": [
+        "Michigan Home Heating Credit (state tax credit for heating costs, filed with state tax return)",
+        "State Emergency Relief (SER) (emergency energy and utility help through MDHHS)",
+        "Low Income Home Energy Assistance Program (LIHEAP) (federal heating assistance, also accessed through local providers)",
+        "Michigan Weatherization Assistance Program (free home insulation and efficiency upgrades to reduce energy bills long-term)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "MEAP is not one program with one benefit amount",
+          "body": "Many families call expecting a fixed dollar credit, the way some other programs work. MEAP does not work that way. Your parent's local provider decides the actual assistance package: how much bill payment help, how much arrearage relief, and whether efficiency services are included. Two families in different Michigan counties with identical incomes and bills may receive different amounts. That is by design. The amount is set by the local provider within state program rules, not by a state schedule."
+        },
+        {
+          "type": "callout",
+          "title": "Already on SSI, SNAP, or SDA? You may not need income documents.",
+          "body": "If your parent already receives SSI, SNAP/FAP, TANF/FIP, WIC, Head Start, State Emergency Relief, Home Heating Credit, or State Disability Assistance, they may qualify for MEAP categorically. That means their enrollment in one of those programs may substitute for income verification. Mention this at the start of your call to the local provider."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's utility is threatening to disconnect service. Can MEAP stop that in time?",
+          "answer": "Possibly, but you need to act immediately. Call 2-1-1 today and tell the operator your parent has an active disconnection notice. Some local MEAP providers have crisis pathways that move faster than standard processing. Also ask whether Michigan's State Emergency Relief (SER) program through MDHHS can help in parallel, since SER is specifically designed for urgent situations. Do not wait for the disconnection to happen before calling."
+        },
+        {
+          "question": "Can I apply for MEAP on behalf of my elderly parent, or do they have to call themselves?",
+          "answer": "Yes, you can apply as an authorized representative or on your parent's behalf. Have your parent's basic information ready: their address, utility account details, income sources, and the names and birthdates of everyone in the household. Let the provider know at the start of the call that you are the adult child helping your parent apply."
+        },
+        {
+          "question": "My parent's income is just above the limit for a single person. Is there any flexibility?",
+          "answer": "The income ceiling for a one-person household is $36,043 per year (about $3,004/month) under the 60% State Median Income rule. If your parent lives with you or other household members, the limit is higher because it adjusts by household size: $47,279 for two people, $58,515 for three. If household size is being counted incorrectly, that could affect eligibility. Ask the provider how they are defining your parent's household before assuming they do not qualify."
+        },
+        {
+          "question": "My parent already gets SSI. Do they still need to go through the full application?",
+          "answer": "SSI is one of the categorical qualifying programs for MEAP, which means SSI enrollment may substitute for income documentation. Your parent still needs to contact their local MEAP provider and complete intake, but the process may be simpler. Bring the SSI award letter to the appointment or have it ready for the call."
+        },
+        {
+          "question": "Can my parent get help with both electricity and natural gas through MEAP?",
+          "answer": "MEAP covers electricity, natural gas, propane, heating oil, and other deliverable fuels used for heat. Whether your parent gets help with one or multiple fuel types depends on what the local provider offers and what your parent's situation requires. Ask the provider specifically what types of energy costs they can address."
+        },
+        {
+          "question": "Can my parent apply for MEAP and the Michigan Home Heating Credit at the same time?",
+          "answer": "Yes, and they are different programs. The Home Heating Credit is a Michigan state tax credit claimed on the MI-1040CR-7 form when filing state taxes. MEAP is a direct assistance program administered through local community agencies. Qualifying for one does not prevent your parent from using the other. Ask the MEAP provider whether they can also screen your parent for SER or other overlapping programs at the same time."
+        },
+        {
+          "question": "What if my parent rents and the landlord pays the utility bills?",
+          "answer": "MEAP assistance is for a primary residence, and eligibility is tied to the household that uses the energy. If your parent's utility costs are included in their rent and the account is in the landlord's name, eligibility for MEAP in that situation is something to raise directly with the local provider. Bring any lease documentation that shows what your parent pays for and to whom. The provider will tell you whether the arrangement qualifies."
+        },
+        {
+          "question": "How do I know which local provider serves my parent's county?",
+          "answer": "Call 2-1-1 from any Michigan phone. The operator will identify the correct local MEAP provider for your parent's address and connect you. You can also visit michigan.gov/mpsc and look under energy assistance resources. Wayne County residents can contact Wayne Metro Community Action Agency directly at (313) 388-9799."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "2-1-1",
+      "sourceUrl": "https://www.michigan.gov/mpsc/consumer/energy-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-06"
     }

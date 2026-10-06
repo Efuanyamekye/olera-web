@@ -1,0 +1,9 @@
+[
+  {
+    "state": "DE",
+    "id": "de-medicaid-aged-blind-disabled",
+    "name": "Regular Medicaid / Aged Blind and Disabled",
+    "legacyId": "regular-medicaid-aged-blind-and-disabled",
+    "programType": "benefit"
+  }
+]

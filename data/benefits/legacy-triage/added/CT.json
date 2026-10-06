@@ -1,0 +1,44 @@
+[
+  {
+    "state": "CT",
+    "id": "ct-medicare-savings-program",
+    "name": "Medicare Savings Program (QMB/SLMB/QI)",
+    "legacyId": "medicare-savings-program-qmb-slmb-qi",
+    "programType": "benefit"
+  },
+  {
+    "state": "CT",
+    "id": "ct-state-ssi-supplement",
+    "name": "Connecticut State SSI Supplement",
+    "legacyId": "connecticut-state-ssi-supplement",
+    "programType": "benefit"
+  },
+  {
+    "state": "CT",
+    "id": "ct-property-tax-relief-seniors",
+    "name": "Connecticut Property Tax Relief for Seniors",
+    "legacyId": "connecticut-property-tax-relief-for-seniors",
+    "programType": "benefit"
+  },
+  {
+    "state": "CT",
+    "id": "ct-connpace-prescription-assistance",
+    "name": "ConnPace (Connecticut Pharmaceutical Assistance)",
+    "legacyId": "connpace-connecticut-pharmaceutical-assistance",
+    "programType": "benefit"
+  },
+  {
+    "state": "CT",
+    "id": "ct-national-family-caregiver-support-program",
+    "name": "National Family Caregiver Support Program (Connecticut)",
+    "legacyId": "national-family-caregiver-support-program-connecticut",
+    "programType": "benefit"
+  },
+  {
+    "state": "CT",
+    "id": "ct-home-delivered-meals",
+    "name": "Connecticut Home-Delivered Meals Program",
+    "legacyId": "connecticut-home-delivered-meals-program",
+    "programType": "benefit"
+  }
+]

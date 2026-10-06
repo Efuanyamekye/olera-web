@@ -1,0 +1,30 @@
+[
+  {
+    "state": "TX",
+    "id": "tx-medicaid-elderly-disabilities",
+    "name": "Texas Medicaid for the Elderly and People with Disabilities",
+    "legacyId": "texas-medicaid-for-the-elderly-and-people-with-disabilities",
+    "programType": "benefit"
+  },
+  {
+    "state": "TX",
+    "id": "tx-primary-home-care-community-care",
+    "name": "Primary Home Care (Community Care)",
+    "legacyId": "primary-home-care-community-care",
+    "programType": "benefit"
+  },
+  {
+    "state": "TX",
+    "id": "tx-respite-care-services",
+    "name": "Texas Respite Care Services",
+    "legacyId": "texas-respite-care-services",
+    "programType": "benefit"
+  },
+  {
+    "state": "TX",
+    "id": "tx-community-attendant-services",
+    "name": "Community Attendant Services (CAS)",
+    "legacyId": null,
+    "programType": "benefit"
+  }
+]

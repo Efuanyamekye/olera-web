@@ -1,0 +1,23 @@
+[
+  {
+    "state": "MN",
+    "id": "mn-supplemental-aid-msa",
+    "name": "Minnesota Supplemental Aid (MSA)",
+    "legacyId": "minnesota-supplemental-aid-msa",
+    "programType": "benefit"
+  },
+  {
+    "state": "MN",
+    "id": "mn-liheap-energy-assistance",
+    "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+    "legacyId": "low-income-home-energy-assistance-program-liheap",
+    "programType": "benefit"
+  },
+  {
+    "state": "MN",
+    "id": "mn-property-tax-refund-seniors",
+    "name": "Minnesota Property Tax Refund (PTF) for Seniors",
+    "legacyId": "minnesota-property-tax-refund-ptf-for-seniors",
+    "programType": "benefit"
+  }
+]

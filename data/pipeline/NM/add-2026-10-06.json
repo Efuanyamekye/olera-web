@@ -1,0 +1,774 @@
+{
+  "state": "NM",
+  "addedAt": "2026-10-06T05:36:39.959Z",
+  "dive": {
+    "state": "NM",
+    "stateName": "New Mexico",
+    "diveAt": "2026-10-06T05:29:23.465Z",
+    "total": 6,
+    "parsed": 6,
+    "programs": [
+      {
+        "name": "Centennial Care Aged, Blind, and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For aged, blind, and disabled Medicaid in New Mexico, eligibility is tied to Medicaid financial rules and the specific category the person qualifies under; the state says people qualify when they meet one of the Medicaid eligibility categories, and the process considers many financial and non-financial factors[2]. For this aged/blind/disabled pathway, publicly available sources confirm there are income limits, but the exact current dollar table was not available in the gathered official materials[2][3]. If the person is already eligible for SSI, that generally aligns with this category[1][4].",
+          "asset_limits": "Asset limits apply for aged/blind/disabled Medicaid, but the exact current dollar cap and full countable-vs-exempt asset rules were not stated in the gathered official sources[2][3]. The available materials indicate the program uses standard Medicaid financial tests and detailed eligibility rules rather than a simple yes/no categorical rule[2].",
+          "other_requirements": [
+            "Must be a New Mexico resident[3][7]",
+            "Must be a U.S. citizen or otherwise meet qualified immigration status rules used by New Mexico Medicaid[3][7]",
+            "Must fit one of the Medicaid eligibility categories for aged, blind, or disabled individuals[2][3]",
+            "Must meet the state’s disability/blindness criteria if qualifying through disability rather than age[2][7]",
+            "For long-term services and supports through the Community Benefit, the person must also need a nursing facility level of care[10][11][14]"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Centennial Care provides a full Medicaid benefit package including physical health services, behavioral health services, and long-term services and supports (LTSS)[11]. The program specifically includes a Community Benefit that can cover personal care and home- and community-based services for members who qualify and need a nursing facility level of care[11][12]. The gathered sources do not provide a per-month dollar cap or fixed weekly hour allotment for this category; benefits are service-based and determined by medical/functional need[11][14].",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: YesNM / state Medicaid application portal[3][10]",
+            "Phone: Medicaid Call Center / Consolidated Customer Service Center at 1-800-283-4465[9][10]",
+            "In person: local Income Support Division (ISD) field office[3][10]",
+            "Mail: paper Medicaid application can be mailed to Central ASPEN Scanning Area, PO Box 830, Bernalillo, NM 87004[15]"
+          ],
+          "processing_time": "The gathered sources confirm that eligibility is determined through the state Medicaid system and that functional eligibility for Community Benefit is determined by the MCO, but they do not give a specific average processing-time window[2][13][14].",
+          "waitlist": "No general waitlist was identified for the Medicaid aged/blind/disabled category; however, Community Benefit services require nursing facility level of care and are subject to functional assessment by the MCO[11][14].",
+          "forms": [
+            "Medicaid Application (paper application referenced by the state)[10][15]",
+            "No specific form number was identified in the gathered sources"
+          ],
+          "documents": [
+            "Social Security card or proof of identity[10]",
+            "Medicare card, if the person has Medicare[10]",
+            "Proof of income such as Social Security award letters, pension statements, or pay stubs[10]",
+            "Bank statements, including historical statements if requested during eligibility review[10]",
+            "Life insurance policies[10]",
+            "Property deeds or other real-estate ownership documents[10]",
+            "Pre-need burial contracts or burial-fund information[10]",
+            "Proof of New Mexico residency[3][7]",
+            "Proof of citizenship or eligible immigration status[3][7]",
+            "Medical/disability documentation if qualifying through disability rather than age[2][7]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New Mexico; eligibility is statewide Medicaid eligibility, but service delivery is through contracted managed-care organizations and local offices[1][2][10].",
+          "regional_variations": "The underlying eligibility rules are statewide, but practical access can vary by managed-care organization, local ISD office, and local service providers. The gathered sources did not identify county-specific eligibility differences[2][10][14].",
+          "offices_or_providers": [
+            "New Mexico Health Care Authority / Medical Assistance Division[1][2]",
+            "Income Support Division (ISD) field offices[3][10]",
+            "Managed care organizations that perform functional eligibility for Community Benefit[10][14]",
+            "Aging & Disability Resource Center at 1-800-432-2080 was referenced as a help line in the gathered materials[10]"
+          ]
+        },
+        "official_source": "https://www.hca.nm.gov/public-information-and-communications/public_information_and_communications/centennial-care-2-0/",
+        "gotchas": [
+          "People often confuse the aged/blind/disabled Medicaid category with the Community Benefit. The Medicaid category is the gateway; the Community Benefit requires an additional nursing facility level of care determination[11][14].",
+          "Enrollment is not just about age. Being 65+ can qualify a person for the aged category, but financial rules still matter[2][3][7].",
+          "The functional eligibility decision for Community Benefit is made by the managed care organization, not just the income office[10][14].",
+          "The available official materials did not provide a simple public one-line asset table, so families usually need an eligibility worker to verify countable assets and exemptions[2].",
+          "Some Medicaid populations are excluded from Centennial Care or handled differently under separate rules, so not every disabled or Medicare-related category maps to the same pathway[1][12]."
+        ],
+        "data_shape_notes": "This program is a statewide Medicaid category with layered eligibility: first the person must fit the aged/blind/disabled Medicaid rules, then some long-term-care help requires a separate nursing-facility-level-of-care assessment. Benefits are service-based rather than a cash amount, and the practical access path runs through both the state eligibility office and the managed-care system[2][11][14].",
+        "_raw": "{\n  \"name\": \"Centennial Care Aged, Blind, and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For aged, blind, and disabled Medicaid in New Mexico, eligibility is tied to Medicaid financial rules and the specific category the person qualifies under; the state says people qualify when they meet one of the Medicaid eligibility categories, and the process considers many financial and non-financial factors[2]. For this aged/blind/disabled pathway, publicly available sources confirm there are income limits, but the exact current dollar table was not available in the gathered official materials[2][3]. If the person is already eligible for SSI, that generally aligns with this category[1][4].\",\n    \"asset_limits\": \"Asset limits apply for aged/blind/disabled Medicaid, but the exact current dollar cap and full countable-vs-exempt asset rules were not stated in the gathered official sources[2][3]. The available materials indicate the program uses standard Medicaid financial tests and detailed eligibility rules rather than a simple yes/no categorical rule[2].\",\n    \"other_requirements\": [\n      \"Must be a New Mexico resident[3][7]\",\n      \"Must be a U.S. citizen or otherwise meet qualified immigration status rules used by New Mexico Medicaid[3][7]\",\n      \"Must fit one of the Medicaid eligibility categories for aged, blind, or disabled individuals[2][3]\",\n      \"Must meet the state’s disability/blindness criteria if qualifying through disability rather than age[2][7]\",\n      \"For long-term services and supports through the Community Benefit, the person must also need a nursing facility level of care[10][11][14]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Centennial Care provides a full Medicaid benefit package including physical health services, behavioral health services, and long-term services and supports (LTSS)[11]. The program specifically includes a Community Benefit that can cover personal care and home- and community-based services for members who qualify and need a nursing facility level of care[11][12]. The gathered sources do not provide a per-month dollar cap or fixed weekly hour allotment for this category; benefits are service-based and determined by medical/functional need[11][14].\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: YesNM / state Medicaid application portal[3][10]\",\n      \"Phone: Medicaid Call Center / Consolidated Customer Service Center at 1-800-283-4465[9][10]\",\n      \"In person: local Income Support Division (ISD) field office[3][10]\",\n      \"Mail: paper Medicaid application can be mailed to Central ASPEN Scanning Area, PO Box 830, Bernalillo, NM 87004[15]\"\n    ],\n    \"processing_time\": \"The gathered sources confirm that eligibility is determined through the state Medicaid system and that functional eligibility for Community Benefit is determined by the MCO, but they do not give a specific average processing-time window[2][13][14].\",\n    \"waitlist\": \"No general waitlist was identified for the Medicaid aged/blind/disabled category; however, Community Benefit services require nursing facility level of care and are subject to functional assessment by the MCO[11][14].\",\n    \"forms\": [\n      \"Medicaid Application (paper application referenced by the state)[10][15]\",\n      \"No specific form number was identified in the gathered sources\"\n    ],\n    \"documents\": [\n      \"Social Security card or proof of identity[10]\",\n      \"Medicare card, if the person has Medicare[10]\",\n      \"Proof of income such as Social Security award letters, pension statements, or pay stubs[10]\",\n      \"Bank statements, including historical statements if requested during eligibility review[10]\",\n      \"Life insurance policies[10]\",\n      \"Property deeds or other real-estate ownership documents[10]\",\n      \"Pre-need burial contracts or burial-fund information[10]\",\n      \"Proof of New Mexico residency[3][7]\",\n      \"Proof of citizenship or eligible immigration status[3][7]\",\n      \"Medical/disability documentation if qualifying through disability rather than age[2][7]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New Mexico; eligibility is statewide Medicaid eligibility, but service delivery is through contracted managed-care organizations and local offices[1][2][10].\",\n    \"regional_variations\": \"The underlying eligibility rules are statewide, but practical access can vary by managed-care organization, local ISD office, and local service providers. The gathered sources did not identify county-specific eligibility differences[2][10][14].\",\n    \"offices_or_providers\": [\n      \"New Mexico Health Care Authority / Medical Assistance Division[1][2]\",\n      \"Income Support Division (ISD) field offices[3][10]\",\n      \"Managed care organizations that perform functional eligibility for Community Benefit[10][14]\",\n      \"Aging & Disability Resource Center at 1-800-432-2080 was referenced as a help line in the gathered materials[10]\"\n    ]\n  },\n  \"official_source\": \"https://www.hca.nm.gov/public-information-and-communications/public_information_and_communications/centennial-care-2-0/\",\n  \"gotchas\": [\n    \"People often confuse the aged/blind/disabled Medicaid category with the Community Benefit. The Medicaid category is the gateway; the Community Benefit requires an additional nursing facility level of care determination[11][14].\",\n    \"Enrollment is not just about age. Being 65+ can qualify a person for the aged category, but financial rules still matter[2][3][7].\",\n    \"The functional eligibility decision for Community Benefit is made by the managed care organization, not just the income office[10][14].\",\n    \"The available official materials did not provide a simple public one-line asset table, so families usually need an eligibility worker to verify countable assets and exemptions[2].\",\n    \"Some Medicaid populations are excluded from Centennial Care or handled differently under separate rules, so not every disabled or Medicare-related category maps to the same pathway[1][12].\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Medicaid category with layered eligibility: first the person must fit the aged/blind/disabled Medicaid rules, then some long-term-care help requires a separate nursing-facility-level-of-care assessment. Benefits are service-based rather than a cash amount, and the practical access path runs through both the state eligibility office and the managed-care system[2][11][14].\"\n}"
+      },
+      {
+        "name": "Qualified Medicare Beneficiary (QMB)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "New Mexico QMB is a Medicare Savings Program for people who already have Medicare Part A or are conditionally eligible for it. The income limit is 100% of the Federal Poverty Level (FPL) for the household/budget group. For 2026, the published monthly limits are: 1 person: $1,330; 2 people: $1,804; 3 people: $2,278; 4 people: $2,752; 5 people: $3,226; 6 people: $3,700; 7 people: $4,174; 8 people: $4,648; add $474 for each additional person. New Mexico’s eligibility materials also show the same QMB limits for 2026 and note the program is based on 100% FPL. [1][2][3]",
+          "asset_limits": "No resource/asset test is required for QMB in New Mexico as of the current guidance. The state’s eligibility pamphlet says there is no resource test for this category, and the 2026 materials note that the resource limit for QMB is no longer required for eligibility determination. This means the usual Medicare Savings Program asset review does not apply for QMB in New Mexico right now. [1][2]",
+          "other_requirements": [
+            "The applicant must already have Medicare Part A or be conditionally eligible for Medicare Part A.",
+            "The applicant must meet New Mexico Medicaid financial eligibility rules for the QMB category.",
+            "The applicant must have countable income under 100% FPL.",
+            "No separate minimum age is stated for QMB in New Mexico; the category applies to people on Medicare, which usually means 65+ or qualifying under Medicare disability rules."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "QMB pays Medicare premiums and Medicare cost-sharing for Medicare-covered services: the Part A premium if the person is conditionally eligible for Part A, the Part B premium, Medicare deductibles, and Medicare coinsurance amounts. The state materials also describe QMB as covering Medicare premiums plus deductible and coinsurance amounts on Medicare-covered services. No Medicaid card is issued for QMB alone. [1][2]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through New Mexico benefits application portal: yes.nm.gov",
+            "By phone through New Mexico Medicaid/eligibility call center: 1-855-637-6574",
+            "Through local Income Support Division office for in-person help",
+            "By mail using the state Medicaid application process if directed by the local office"
+          ],
+          "processing_time": "No QMB-specific processing time was found in the official materials reviewed. New Mexico’s QMB guidance does not publish a separate turnaround time, so families should expect standard Medicaid eligibility processing time through the local eligibility office. [1][2]",
+          "waitlist": null,
+          "forms": [
+            "No QMB-only form number was identified in the official materials reviewed",
+            "New Mexico Medicaid application/eligibility determination through the state system"
+          ],
+          "documents": [
+            "Medicare card or proof of Medicare Part A entitlement",
+            "Proof of monthly income for the applicant and spouse if married",
+            "Social Security award letter or benefit verification if applicable",
+            "Proof of identity",
+            "Proof of New Mexico residency",
+            "Any immigration/citizenship documents if requested by the eligibility worker",
+            "Bank statements or other financial records if the worker requests verification, even though QMB itself has no resource test"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide New Mexico Medicaid benefit; no county restriction was identified.",
+          "regional_variations": "The QMB eligibility rules and benefits are statewide. The main variation is administrative: families apply through the local Income Support Division office serving their area, and processing speed can differ by office workload. No regional benefit differences were identified.",
+          "offices_or_providers": [
+            "New Mexico Health Care Authority / Medicaid eligibility system",
+            "Local Income Support Division offices"
+          ]
+        },
+        "official_source": "https://www.hca.nm.gov/lookingforinformation/medical-assistance-division-1/",
+        "gotchas": [
+          "QMB is not a general cash benefit or long-term care program; it is Medicare cost-sharing help.",
+          "Many people miss that QMB requires Medicare Part A or conditional Part A eligibility.",
+          "Families often expect a Medicaid card, but QMB-only recipients may not receive one.",
+          "QMB is based on income only in New Mexico right now; assets are not counted for this category.",
+          "The key income limit changed for 2026, so older dollar figures from prior years are wrong.",
+          "QMB covers Medicare-covered services only; it does not make non-Medicare services free.",
+          "If the person has income slightly above QMB, they may still qualify for other Medicare Savings Programs such as SLIMB or QI, but those are different categories."
+        ],
+        "data_shape_notes": "This program is unusual because it is a statewide Medicaid eligibility category tied to Medicare, with a strict income cap, no current asset test, and benefits limited to Medicare premiums/deductibles/coinsurance rather than broader healthcare coverage.",
+        "_raw": "{\n  \"name\": \"Qualified Medicare Beneficiary (QMB)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"New Mexico QMB is a Medicare Savings Program for people who already have Medicare Part A or are conditionally eligible for it. The income limit is 100% of the Federal Poverty Level (FPL) for the household/budget group. For 2026, the published monthly limits are: 1 person: $1,330; 2 people: $1,804; 3 people: $2,278; 4 people: $2,752; 5 people: $3,226; 6 people: $3,700; 7 people: $4,174; 8 people: $4,648; add $474 for each additional person. New Mexico’s eligibility materials also show the same QMB limits for 2026 and note the program is based on 100% FPL. [1][2][3]\",\n    \"asset_limits\": \"No resource/asset test is required for QMB in New Mexico as of the current guidance. The state’s eligibility pamphlet says there is no resource test for this category, and the 2026 materials note that the resource limit for QMB is no longer required for eligibility determination. This means the usual Medicare Savings Program asset review does not apply for QMB in New Mexico right now. [1][2]\",\n    \"other_requirements\": [\n      \"The applicant must already have Medicare Part A or be conditionally eligible for Medicare Part A.\",\n      \"The applicant must meet New Mexico Medicaid financial eligibility rules for the QMB category.\",\n      \"The applicant must have countable income under 100% FPL.\",\n      \"No separate minimum age is stated for QMB in New Mexico; the category applies to people on Medicare, which usually means 65+ or qualifying under Medicare disability rules.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"QMB pays Medicare premiums and Medicare cost-sharing for Medicare-covered services: the Part A premium if the person is conditionally eligible for Part A, the Part B premium, Medicare deductibles, and Medicare coinsurance amounts. The state materials also describe QMB as covering Medicare premiums plus deductible and coinsurance amounts on Medicare-covered services. No Medicaid card is issued for QMB alone. [1][2]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through New Mexico benefits application portal: yes.nm.gov\",\n      \"By phone through New Mexico Medicaid/eligibility call center: 1-855-637-6574\",\n      \"Through local Income Support Division office for in-person help\",\n      \"By mail using the state Medicaid application process if directed by the local office\"\n    ],\n    \"processing_time\": \"No QMB-specific processing time was found in the official materials reviewed. New Mexico’s QMB guidance does not publish a separate turnaround time, so families should expect standard Medicaid eligibility processing time through the local eligibility office. [1][2]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No QMB-only form number was identified in the official materials reviewed\",\n      \"New Mexico Medicaid application/eligibility determination through the state system\"\n    ],\n    \"documents\": [\n      \"Medicare card or proof of Medicare Part A entitlement\",\n      \"Proof of monthly income for the applicant and spouse if married\",\n      \"Social Security award letter or benefit verification if applicable\",\n      \"Proof of identity\",\n      \"Proof of New Mexico residency\",\n      \"Any immigration/citizenship documents if requested by the eligibility worker\",\n      \"Bank statements or other financial records if the worker requests verification, even though QMB itself has no resource test\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide New Mexico Medicaid benefit; no county restriction was identified.\",\n    \"regional_variations\": \"The QMB eligibility rules and benefits are statewide. The main variation is administrative: families apply through the local Income Support Division office serving their area, and processing speed can differ by office workload. No regional benefit differences were identified.\",\n    \"offices_or_providers\": [\n      \"New Mexico Health Care Authority / Medicaid eligibility system\",\n      \"Local Income Support Division offices\"\n    ]\n  },\n  \"official_source\": \"https://www.hca.nm.gov/lookingforinformation/medical-assistance-division-1/\",\n  \"gotchas\": [\n    \"QMB is not a general cash benefit or long-term care program; it is Medicare cost-sharing help.\",\n    \"Many people miss that QMB requires Medicare Part A or conditional Part A eligibility.\",\n    \"Families often expect a Medicaid card, but QMB-only recipients may not receive one.\",\n    \"QMB is based on income only in New Mexico right now; assets are not counted for this category.\",\n    \"The key income limit changed for 2026, so older dollar figures from prior years are wrong.\",\n    \"QMB covers Medicare-covered services only; it does not make non-Medicare services free.\",\n    \"If the person has income slightly above QMB, they may still qualify for other Medicare Savings Programs such as SLIMB or QI, but those are different categories.\"\n  ],\n  \"data_shape_notes\": \"This program is unusual because it is a statewide Medicaid eligibility category tied to Medicare, with a strict income cap, no current asset test, and benefits limited to Medicare premiums/deductibles/coinsurance rather than broader healthcare coverage.\"\n}"
+      },
+      {
+        "name": "New Mexico Turquoise Care Community Benefit (home and community-based services)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For elderly applicants, the commonly cited 2026 Medicaid/Community Benefit income limits are $994/month for a single applicant and $1,491/month for a married couple, regardless of whether one or both spouses apply.[12] Eligibility also requires being financially eligible for full-coverage Medicaid through the state, so the program is not a simple stand-alone private-pay waiver.[4][9][12]",
+          "asset_limits": "An asset/resource limit applies, but the gathered official material here does not spell out the exact dollar amount or a full exempt-countable asset list. The official guidance indicates eligibility depends on long-term care needs, medical criteria, and financial situation.[9][14] Families should expect Medicaid-style asset rules and should verify current resource limits with the Aging and Disability Resource Center or the Income Support Division before applying.[3][9]",
+          "other_requirements": [
+            "Must be a New Mexico resident.[5][9]",
+            "Must have full Medicaid category eligibility or waiver-category eligibility.[4][5]",
+            "Must meet nursing facility level of care (NF LOC) criteria.[2][3][4][5][7]",
+            "Must have an assessed need for services; a care coordinator/assessment determines this.[2][3]",
+            "Turquoise Care members, including Native Americans needing long-term care services, are required to be in Turquoise Care for Community Benefits.[8]",
+            "Applicants must be eligible for Medicaid under state rules and, for some pathways, may need an available enrollment slot unless already Medicaid-eligible under the state plan.[7]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The Community Benefit is the home and community-based services package for people who meet nursing facility level of care but want to remain at home or in the community.[2][3][5] Covered services listed in the materials include adult day health, assisted living, behavior support consultation, community transition services, emergency response systems, employment supports, home health aide, homemaker/personal care, customized community supports, private duty nursing for adults, respite, skilled maintenance therapy services, specialized therapies, environmental/home modifications such as ramps and grab bars, related goods, nutritional counseling, and medically tailored home-delivered meals for some members in care coordination.[2][7] Some services are available through self-direction, and the self-directed option gives the member control over how services are provided.[2][4]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call the New Mexico Aging and Disability Resource Center (ADRC) at 1-800-432-2080 (TTY: 505-476-4939).[9][14]",
+            "Apply through the New Mexico Aging and Disability Resource Center / options counseling entry point for Community Benefit registration.[3][9]",
+            "Apply for Medicaid first or alongside the Community Benefit pathway through the state Medicaid eligibility process; the exact Medicaid application route was referenced in secondary guidance, but the official entry point identified in the materials is the ADRC.[3][12]"
+          ],
+          "processing_time": "No official statewide processing-time standard was identified in the gathered materials. Eligibility depends on completion of a nursing facility level-of-care assessment and Medicaid financial review, so timing can vary by case and by whether a service slot or state-plan pathway is involved.[2][3][4][7]",
+          "waitlist": "A waitlist may exist in practice depending on enrollment slots and pathway; the federal approval material notes some enrollees can access the Community Benefit without an available enrollment slot, to the extent the state is maintaining a waiting list.[7] The materials reviewed do not provide a current statewide waitlist length.",
+          "forms": [
+            "No specific Community Benefit application form number was identified in the gathered official materials.",
+            "The brochure and ADRC guidance indicate registration starts by contacting the ADRC rather than by a standalone public Community Benefit form.[3][9][14]"
+          ],
+          "documents": [
+            "Proof of New Mexico residency",
+            "Proof of age",
+            "Proof of citizenship or immigration status for Medicaid eligibility",
+            "Income verification",
+            "Asset/resource documentation",
+            "Medical records relevant to functional need and nursing facility level of care",
+            "Medicaid card or other proof of full Medicaid eligibility, if already enrolled",
+            "Contact information for doctors, caregivers, and current service providers",
+            "Information about current living situation and care needs"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to New Mexico residents who meet Medicaid, financial, and nursing-facility-level-of-care requirements.[5][9]",
+          "regional_variations": "The gathered sources do not show county-specific eligibility rules, but regional differences can show up in provider availability, managed care organization administration, and local assessment timelines.[2][3][8][9] The program itself is statewide, yet actual access to particular services such as adult day, assisted living, home modifications, or self-directed supports depends on local provider networks.",
+          "offices_or_providers": [
+            "New Mexico Aging and Disability Resource Center (ADRC) statewide entry point at 1-800-432-2080 (TTY: 505-476-4939).[9][14]",
+            "Turquoise Care managed care organizations administer the benefit package.[1][2][8]"
+          ]
+        },
+        "official_source": "https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/",
+        "gotchas": [
+          "This is not just a home-care coupon program; applicants must first meet nursing facility level of care, which is a high medical/functional threshold.[2][3][4][5][7]",
+          "Financial eligibility is through Medicaid rules, not a simple income-only screen, so assets matter and can delay or disqualify applicants if not handled correctly.[4][9][12]",
+          "The Community Benefit is delivered through Turquoise Care managed care organizations, so the exact coordination experience can differ by plan.[1][2][8]",
+          "Some services require care coordination or prior authorization, and some benefits are only available in certain arrangements such as self-direction or specific managed care pathways.[2][9]",
+          "Families often miss the ADRC as the entry point; the state explicitly uses the ADRC/options counseling route for registration.[3][9][14]",
+          "The state may maintain a waiting list for some categories, but the approval material indicates some Medicaid-eligible enrollees can access the benefit without an available slot.[7]"
+        ],
+        "data_shape_notes": "This program has a layered structure: statewide Medicaid eligibility first, then nursing facility level-of-care determination, then service authorization through Turquoise Care managed care and the ADRC entry point.[2][3][4][5][7][9] Benefits are service-based rather than cash-based, and access can vary by provider network and managed care administration rather than by household size.",
+        "_raw": "{\n  \"name\": \"New Mexico Turquoise Care Community Benefit (home and community-based services)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For elderly applicants, the commonly cited 2026 Medicaid/Community Benefit income limits are $994/month for a single applicant and $1,491/month for a married couple, regardless of whether one or both spouses apply.[12] Eligibility also requires being financially eligible for full-coverage Medicaid through the state, so the program is not a simple stand-alone private-pay waiver.[4][9][12]\",\n    \"asset_limits\": \"An asset/resource limit applies, but the gathered official material here does not spell out the exact dollar amount or a full exempt-countable asset list. The official guidance indicates eligibility depends on long-term care needs, medical criteria, and financial situation.[9][14] Families should expect Medicaid-style asset rules and should verify current resource limits with the Aging and Disability Resource Center or the Income Support Division before applying.[3][9]\",\n    \"other_requirements\": [\n      \"Must be a New Mexico resident.[5][9]\",\n      \"Must have full Medicaid category eligibility or waiver-category eligibility.[4][5]\",\n      \"Must meet nursing facility level of care (NF LOC) criteria.[2][3][4][5][7]\",\n      \"Must have an assessed need for services; a care coordinator/assessment determines this.[2][3]\",\n      \"Turquoise Care members, including Native Americans needing long-term care services, are required to be in Turquoise Care for Community Benefits.[8]\",\n      \"Applicants must be eligible for Medicaid under state rules and, for some pathways, may need an available enrollment slot unless already Medicaid-eligible under the state plan.[7]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The Community Benefit is the home and community-based services package for people who meet nursing facility level of care but want to remain at home or in the community.[2][3][5] Covered services listed in the materials include adult day health, assisted living, behavior support consultation, community transition services, emergency response systems, employment supports, home health aide, homemaker/personal care, customized community supports, private duty nursing for adults, respite, skilled maintenance therapy services, specialized therapies, environmental/home modifications such as ramps and grab bars, related goods, nutritional counseling, and medically tailored home-delivered meals for some members in care coordination.[2][7] Some services are available through self-direction, and the self-directed option gives the member control over how services are provided.[2][4]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the New Mexico Aging and Disability Resource Center (ADRC) at 1-800-432-2080 (TTY: 505-476-4939).[9][14]\",\n      \"Apply through the New Mexico Aging and Disability Resource Center / options counseling entry point for Community Benefit registration.[3][9]\",\n      \"Apply for Medicaid first or alongside the Community Benefit pathway through the state Medicaid eligibility process; the exact Medicaid application route was referenced in secondary guidance, but the official entry point identified in the materials is the ADRC.[3][12]\"\n    ],\n    \"processing_time\": \"No official statewide processing-time standard was identified in the gathered materials. Eligibility depends on completion of a nursing facility level-of-care assessment and Medicaid financial review, so timing can vary by case and by whether a service slot or state-plan pathway is involved.[2][3][4][7]\",\n    \"waitlist\": \"A waitlist may exist in practice depending on enrollment slots and pathway; the federal approval material notes some enrollees can access the Community Benefit without an available enrollment slot, to the extent the state is maintaining a waiting list.[7] The materials reviewed do not provide a current statewide waitlist length.\",\n    \"forms\": [\n      \"No specific Community Benefit application form number was identified in the gathered official materials.\",\n      \"The brochure and ADRC guidance indicate registration starts by contacting the ADRC rather than by a standalone public Community Benefit form.[3][9][14]\"\n    ],\n    \"documents\": [\n      \"Proof of New Mexico residency\",\n      \"Proof of age\",\n      \"Proof of citizenship or immigration status for Medicaid eligibility\",\n      \"Income verification\",\n      \"Asset/resource documentation\",\n      \"Medical records relevant to functional need and nursing facility level of care\",\n      \"Medicaid card or other proof of full Medicaid eligibility, if already enrolled\",\n      \"Contact information for doctors, caregivers, and current service providers\",\n      \"Information about current living situation and care needs\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to New Mexico residents who meet Medicaid, financial, and nursing-facility-level-of-care requirements.[5][9]\",\n    \"regional_variations\": \"The gathered sources do not show county-specific eligibility rules, but regional differences can show up in provider availability, managed care organization administration, and local assessment timelines.[2][3][8][9] The program itself is statewide, yet actual access to particular services such as adult day, assisted living, home modifications, or self-directed supports depends on local provider networks.\",\n    \"offices_or_providers\": [\n      \"New Mexico Aging and Disability Resource Center (ADRC) statewide entry point at 1-800-432-2080 (TTY: 505-476-4939).[9][14]\",\n      \"Turquoise Care managed care organizations administer the benefit package.[1][2][8]\"\n    ]\n  },\n  \"official_source\": \"https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/\",\n  \"gotchas\": [\n    \"This is not just a home-care coupon program; applicants must first meet nursing facility level of care, which is a high medical/functional threshold.[2][3][4][5][7]\",\n    \"Financial eligibility is through Medicaid rules, not a simple income-only screen, so assets matter and can delay or disqualify applicants if not handled correctly.[4][9][12]\",\n    \"The Community Benefit is delivered through Turquoise Care managed care organizations, so the exact coordination experience can differ by plan.[1][2][8]\",\n    \"Some services require care coordination or prior authorization, and some benefits are only available in certain arrangements such as self-direction or specific managed care pathways.[2][9]\",\n    \"Families often miss the ADRC as the entry point; the state explicitly uses the ADRC/options counseling route for registration.[3][9][14]\",\n    \"The state may maintain a waiting list for some categories, but the approval material indicates some Medicaid-eligible enrollees can access the benefit without an available slot.[7]\"\n  ],\n  \"data_shape_notes\": \"This program has a layered structure: statewide Medicaid eligibility first, then nursing facility level-of-care determination, then service authorization through Turquoise Care managed care and the ADRC entry point.[2][3][4][5][7][9] Benefits are service-based rather than cash-based, and access can vary by provider network and managed care administration rather than by household size.\"\n}"
+      },
+      {
+        "name": "SNAP (Supplemental Nutrition Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "overview": "New Mexico SNAP eligibility is based on household income and size, with special rules for households that include someone age 60 or older or a person with a disability. The state’s FY 2026 income standards shown by HCA list the 130% gross-income test, 100% net-income test, and 200% FPG categorical-eligibility benchmark.",
+            "household_table": [
+              {
+                "household_size": 1,
+                "100%_fpg_net_income": 1305,
+                "130%_fpg_gross_income": 1696,
+                "200%_fpg_categorical_eligibility": 2610,
+                "max_monthly_allotment": 298
+              },
+              {
+                "household_size": 2,
+                "100%_fpg_net_income": 1763,
+                "130%_fpg_gross_income": 2292,
+                "200%_fpg_categorical_eligibility": 3526,
+                "max_monthly_allotment": 546
+              },
+              {
+                "household_size": 3,
+                "100%_fpg_net_income": 2221,
+                "130%_fpg_gross_income": 2888,
+                "200%_fpg_categorical_eligibility": 4442,
+                "max_monthly_allotment": 785
+              },
+              {
+                "household_size": 4,
+                "100%_fpg_net_income": 2680,
+                "130%_fpg_gross_income": 3483,
+                "200%_fpg_categorical_eligibility": 5360,
+                "max_monthly_allotment": 994
+              },
+              {
+                "household_size": 5,
+                "100%_fpg_net_income": 3138,
+                "130%_fpg_gross_income": 4079,
+                "200%_fpg_categorical_eligibility": 6276,
+                "max_monthly_allotment": 1183
+              },
+              {
+                "household_size": 6,
+                "100%_fpg_net_income": 3596,
+                "130%_fpg_gross_income": 4675,
+                "200%_fpg_categorical_eligibility": 7192,
+                "max_monthly_allotment": 1421
+              },
+              {
+                "household_size": 7,
+                "100%_fpg_net_income": 4055,
+                "130%_fpg_gross_income": 5270,
+                "200%_fpg_categorical_eligibility": 8110,
+                "max_monthly_allotment": 1571
+              },
+              {
+                "household_size": 8,
+                "100%_fpg_net_income": 4513,
+                "130%_fpg_gross_income": 5866,
+                "200%_fpg_categorical_eligibility": 9026,
+                "max_monthly_allotment": 1789
+              }
+            ],
+            "each_additional_person": {
+              "100%_fpg_net_income": 459,
+              "130%_fpg_gross_income": 596,
+              "200%_fpg_categorical_eligibility": 918,
+              "max_monthly_allotment": 218
+            }
+          },
+          "asset_limits": {
+            "countable_resource_limits": {
+              "households_without_senior_or_disabled_member": 2250,
+              "households_with_at_least_one_member_age_60_or_older_or_disabled": 3250
+            },
+            "what_counts": [
+              "Liquid and non-liquid assets are counted as resources under New Mexico rule language.",
+              "Federal guidance referenced by outside eligibility summaries typically counts things like cash and bank balances as resources."
+            ],
+            "what_is_exempt": [
+              "A home is generally not counted as a resource.",
+              "Vehicles are generally not counted as resources."
+            ]
+          },
+          "other_requirements": [
+            "Must apply and complete an interview if required.",
+            "Benefits start from the date of application if approved.",
+            "Household must meet SNAP household rules and report required information.",
+            "New Mexico uses adjusted net income in some determinations, subtracting deductions such as standard deduction, shelter costs, and medical deduction."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly SNAP benefits are loaded onto an EBT card and can be used to buy eligible food items. New Mexico’s FY 2026 maximum monthly allotment ranges from $298 for a 1-person household to $1,789 for an 8-person household, with $218 added per additional person.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online via the New Mexico HCA/YES application portal: https://www.yes.state.nm.us/",
+            "By phone at 800-283-4465",
+            "In person through local state staff/offices",
+            "By mail after requesting or submitting the application form through HCA"
+          ],
+          "processing_time": "Standard applications can take up to 30 days. If the household is expedited-eligible, benefits may be issued within 7 days. Applicants are often scheduled for an interview in about 10 days.",
+          "waitlist": null,
+          "forms": [
+            "SNAP application (New Mexico HCA application; specific form number was not provided in the gathered sources)"
+          ],
+          "documents": [
+            "Identification for household members",
+            "Proof of income",
+            "Proof of housing costs such as rent or mortgage",
+            "Utility bills if asked for shelter deductions",
+            "Medical expense proof for elderly or disabled household members if claiming that deduction",
+            "Immigration/citizenship documents if applicable",
+            "Social Security numbers if available for household members applying"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "SNAP is statewide in New Mexico; eligibility rules are set by household circumstances, not by county.",
+          "regional_variations": "No county-based eligibility differences were identified. Practical differences may include local office availability and interview scheduling, but the program rules are statewide.",
+          "offices_or_providers": [
+            "New Mexico Health Care Authority (statewide administration)",
+            "Local HCA offices and state staff",
+            "YES portal for online application"
+          ]
+        },
+        "official_source": "https://www.hca.nm.gov/lookingforassistance/supplemental_nutrition_assistance_program__snap/",
+        "gotchas": [
+          "For an elderly loved one, medical expenses can matter a lot because SNAP uses deductions, including medical costs, when determining adjusted net income.",
+          "Households with a member age 60 or older or disabled have higher resource limits than other households.",
+          "The maximum benefit is not the benefit everyone gets; it depends on household size and net income after deductions.",
+          "Applying starts the clock: benefits, if approved, are based on the application date.",
+          "An interview is usually required, so missing the interview can slow or stop the case.",
+          "The phone number 800-283-4465 is the main contact for applications/questions, and the YES portal is the main online route.",
+          "There is no waitlist structure like some service programs; SNAP is an entitlement program, so the key issue is eligibility and processing time rather than a waiting list."
+        ],
+        "data_shape_notes": "SNAP is income- and household-size-based, with deductions that can substantially change eligibility for older adults; benefits scale by household size and net income, and resource limits differ when someone in the household is age 60+ or disabled.",
+        "_raw": "{\n  \"name\": \"SNAP (Supplemental Nutrition Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"overview\": \"New Mexico SNAP eligibility is based on household income and size, with special rules for households that include someone age 60 or older or a person with a disability. The state’s FY 2026 income standards shown by HCA list the 130% gross-income test, 100% net-income test, and 200% FPG categorical-eligibility benchmark.\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"100%_fpg_net_income\": 1305,\n          \"130%_fpg_gross_income\": 1696,\n          \"200%_fpg_categorical_eligibility\": 2610,\n          \"max_monthly_allotment\": 298\n        },\n        {\n          \"household_size\": 2,\n          \"100%_fpg_net_income\": 1763,\n          \"130%_fpg_gross_income\": 2292,\n          \"200%_fpg_categorical_eligibility\": 3526,\n          \"max_monthly_allotment\": 546\n        },\n        {\n          \"household_size\": 3,\n          \"100%_fpg_net_income\": 2221,\n          \"130%_fpg_gross_income\": 2888,\n          \"200%_fpg_categorical_eligibility\": 4442,\n          \"max_monthly_allotment\": 785\n        },\n        {\n          \"household_size\": 4,\n          \"100%_fpg_net_income\": 2680,\n          \"130%_fpg_gross_income\": 3483,\n          \"200%_fpg_categorical_eligibility\": 5360,\n          \"max_monthly_allotment\": 994\n        },\n        {\n          \"household_size\": 5,\n          \"100%_fpg_net_income\": 3138,\n          \"130%_fpg_gross_income\": 4079,\n          \"200%_fpg_categorical_eligibility\": 6276,\n          \"max_monthly_allotment\": 1183\n        },\n        {\n          \"household_size\": 6,\n          \"100%_fpg_net_income\": 3596,\n          \"130%_fpg_gross_income\": 4675,\n          \"200%_fpg_categorical_eligibility\": 7192,\n          \"max_monthly_allotment\": 1421\n        },\n        {\n          \"household_size\": 7,\n          \"100%_fpg_net_income\": 4055,\n          \"130%_fpg_gross_income\": 5270,\n          \"200%_fpg_categorical_eligibility\": 8110,\n          \"max_monthly_allotment\": 1571\n        },\n        {\n          \"household_size\": 8,\n          \"100%_fpg_net_income\": 4513,\n          \"130%_fpg_gross_income\": 5866,\n          \"200%_fpg_categorical_eligibility\": 9026,\n          \"max_monthly_allotment\": 1789\n        }\n      ],\n      \"each_additional_person\": {\n        \"100%_fpg_net_income\": 459,\n        \"130%_fpg_gross_income\": 596,\n        \"200%_fpg_categorical_eligibility\": 918,\n        \"max_monthly_allotment\": 218\n      }\n    },\n    \"asset_limits\": {\n      \"countable_resource_limits\": {\n        \"households_without_senior_or_disabled_member\": 2250,\n        \"households_with_at_least_one_member_age_60_or_older_or_disabled\": 3250\n      },\n      \"what_counts\": [\n        \"Liquid and non-liquid assets are counted as resources under New Mexico rule language.\",\n        \"Federal guidance referenced by outside eligibility summaries typically counts things like cash and bank balances as resources.\"\n      ],\n      \"what_is_exempt\": [\n        \"A home is generally not counted as a resource.\",\n        \"Vehicles are generally not counted as resources.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must apply and complete an interview if required.\",\n      \"Benefits start from the date of application if approved.\",\n      \"Household must meet SNAP household rules and report required information.\",\n      \"New Mexico uses adjusted net income in some determinations, subtracting deductions such as standard deduction, shelter costs, and medical deduction.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly SNAP benefits are loaded onto an EBT card and can be used to buy eligible food items. New Mexico’s FY 2026 maximum monthly allotment ranges from $298 for a 1-person household to $1,789 for an 8-person household, with $218 added per additional person.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online via the New Mexico HCA/YES application portal: https://www.yes.state.nm.us/\",\n      \"By phone at 800-283-4465\",\n      \"In person through local state staff/offices\",\n      \"By mail after requesting or submitting the application form through HCA\"\n    ],\n    \"processing_time\": \"Standard applications can take up to 30 days. If the household is expedited-eligible, benefits may be issued within 7 days. Applicants are often scheduled for an interview in about 10 days.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"SNAP application (New Mexico HCA application; specific form number was not provided in the gathered sources)\"\n    ],\n    \"documents\": [\n      \"Identification for household members\",\n      \"Proof of income\",\n      \"Proof of housing costs such as rent or mortgage\",\n      \"Utility bills if asked for shelter deductions\",\n      \"Medical expense proof for elderly or disabled household members if claiming that deduction\",\n      \"Immigration/citizenship documents if applicable\",\n      \"Social Security numbers if available for household members applying\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"SNAP is statewide in New Mexico; eligibility rules are set by household circumstances, not by county.\",\n    \"regional_variations\": \"No county-based eligibility differences were identified. Practical differences may include local office availability and interview scheduling, but the program rules are statewide.\",\n    \"offices_or_providers\": [\n      \"New Mexico Health Care Authority (statewide administration)\",\n      \"Local HCA offices and state staff\",\n      \"YES portal for online application\"\n    ]\n  },\n  \"official_source\": \"https://www.hca.nm.gov/lookingforassistance/supplemental_nutrition_assistance_program__snap/\",\n  \"gotchas\": [\n    \"For an elderly loved one, medical expenses can matter a lot because SNAP uses deductions, including medical costs, when determining adjusted net income.\",\n    \"Households with a member age 60 or older or disabled have higher resource limits than other households.\",\n    \"The maximum benefit is not the benefit everyone gets; it depends on household size and net income after deductions.\",\n    \"Applying starts the clock: benefits, if approved, are based on the application date.\",\n    \"An interview is usually required, so missing the interview can slow or stop the case.\",\n    \"The phone number 800-283-4465 is the main contact for applications/questions, and the YES portal is the main online route.\",\n    \"There is no waitlist structure like some service programs; SNAP is an entitlement program, so the key issue is eligibility and processing time rather than a waiting list.\"\n  ],\n  \"data_shape_notes\": \"SNAP is income- and household-size-based, with deductions that can substantially change eligibility for older adults; benefits scale by household size and net income, and resource limits differ when someone in the household is age 60+ or disabled.\"\n}"
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "standard": "Households must have income at or below 150% of the federal poverty guideline for LIHEAP in New Mexico.[11][15]",
+            "detail": "New Mexico’s LIHEAP pages also state that benefits are available to income-qualifying residents, and the state plan describes LIHEAP income eligibility as 150% of the federal poverty guideline.[10][11][15]",
+            "full_table": "A full dollar-by-household-size table is not provided in the retrieved official pages. The state posts NM LIHEAP FFY 2027 Point and Income Guidelines, but the actual table values were not visible in the retrieved snippet.[13]",
+            "important_note": "Federal LIHEAP rules may also require that no household be excluded if income is below 110% of the state poverty level, but the exact New Mexico dollar table must be checked in the state’s posted guidelines for the applicable program year.[15]"
+          },
+          "asset_limits": "The retrieved official plan says New Mexico checks whether an assets test is used, but the visible excerpt does not show the actual asset rule or exemptions.[11] No asset-limit dollar amount or exempt-asset list was available in the retrieved pages.",
+          "other_requirements": [
+            "Must be a New Mexico resident seeking help with home energy costs.[10][12]",
+            "Must meet program guidelines and income eligibility rules.[10][11][15]",
+            "Applications are handled through the YesNM portal or local Human Services/Income Support Division offices.[1][2][3][4]",
+            "For residents on Indian lands, some tribes administer their own LIHEAP programs; others are served through New Mexico area offices.[6]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "LIHEAP helps pay heating and cooling energy costs. In New Mexico, the program can help with gas, electricity, propane, and bulk fuel such as wood and pellets.[10] The retrieved sources did not show a fixed dollar benefit amount; the assistance appears to vary by household circumstances and the program year.[10][11]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: YesNM / yes.nm.gov[1][3][4][9][12]",
+            "Phone: New Mexico Human Services Customer Service Center, 1-800-283-4465[1][2][3][12]",
+            "In person: local Income Support Division / Human Services office[2][3][4]",
+            "Fax: 1-855-804-8960 to the Central ASPEN Scanning Area (CASA), as shown on the application form[3]",
+            "Mail: Central ASPEN Scanning Area (CASA), PO Box 830, Bernalillo, NM 87004[3]"
+          ],
+          "processing_time": "A specific processing-time guarantee was not shown in the retrieved official pages.",
+          "waitlist": null,
+          "forms": [
+            "LHP-602 English LIHEAP Application[3]",
+            "LIHEAP application form (same application referenced on agency pages)[2][3][8]"
+          ],
+          "documents": [
+            "Signed LIHEAP application form[3][8]",
+            "Information needed for household income eligibility review[11][15]",
+            "Utility account and bill information for the home energy costs being requested[10]",
+            "Any documents requested by the local office after review of the application[4]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide in New Mexico, but residents on Indian lands may apply through tribal LIHEAP programs if their tribe administers one; otherwise they use New Mexico area offices.[6]",
+          "regional_variations": "The program is statewide, but administration is local through Human Services/Income Support Division offices, and some tribal areas have separate administration. The retrieved sources also note 40 offices across the state for in-person help.[2][5][6]",
+          "offices_or_providers": [
+            "New Mexico Health Care Authority / Income Support Division",
+            "Local Human Services offices across New Mexico",
+            "Tribal LIHEAP administering agencies on Indian lands where applicable"
+          ]
+        },
+        "official_source": "https://www.hca.nm.gov/lookingforassistance/low_income_home_energy_assistance_program/",
+        "gotchas": [
+          "The program is not one fixed cash amount; assistance is tied to home energy needs and the household’s eligibility.[10][11]",
+          "The application should not be mailed to the New Mexico Gas Company or the HSD main office; it goes to a local office or the CASA mailing/fax route listed on the form.[2][3]",
+          "Residents on Indian lands may have a different application path depending on whether the tribe runs its own LIHEAP program.[6]",
+          "The retrieved pages do not expose the current dollar income table or any asset-exemption details, so families should verify the current annual guideline before applying.[13][15]",
+          "Families helping an elderly relative should not assume age alone qualifies someone; LIHEAP is income- and household-based, not age-based.[10][11][15]"
+        ],
+        "data_shape_notes": "This program is income-based, statewide, and administered through local offices. Benefits are energy-assistance payments rather than service hours, and access can vary by household size, program year, and whether the household is served by a tribal administrator.",
+        "_raw": "{\n  \"name\": \"Low-Income Home Energy Assistance Program (LIHEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"standard\": \"Households must have income at or below 150% of the federal poverty guideline for LIHEAP in New Mexico.[11][15]\",\n      \"detail\": \"New Mexico’s LIHEAP pages also state that benefits are available to income-qualifying residents, and the state plan describes LIHEAP income eligibility as 150% of the federal poverty guideline.[10][11][15]\",\n      \"full_table\": \"A full dollar-by-household-size table is not provided in the retrieved official pages. The state posts NM LIHEAP FFY 2027 Point and Income Guidelines, but the actual table values were not visible in the retrieved snippet.[13]\",\n      \"important_note\": \"Federal LIHEAP rules may also require that no household be excluded if income is below 110% of the state poverty level, but the exact New Mexico dollar table must be checked in the state’s posted guidelines for the applicable program year.[15]\"\n    },\n    \"asset_limits\": \"The retrieved official plan says New Mexico checks whether an assets test is used, but the visible excerpt does not show the actual asset rule or exemptions.[11] No asset-limit dollar amount or exempt-asset list was available in the retrieved pages.\",\n    \"other_requirements\": [\n      \"Must be a New Mexico resident seeking help with home energy costs.[10][12]\",\n      \"Must meet program guidelines and income eligibility rules.[10][11][15]\",\n      \"Applications are handled through the YesNM portal or local Human Services/Income Support Division offices.[1][2][3][4]\",\n      \"For residents on Indian lands, some tribes administer their own LIHEAP programs; others are served through New Mexico area offices.[6]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"LIHEAP helps pay heating and cooling energy costs. In New Mexico, the program can help with gas, electricity, propane, and bulk fuel such as wood and pellets.[10] The retrieved sources did not show a fixed dollar benefit amount; the assistance appears to vary by household circumstances and the program year.[10][11]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: YesNM / yes.nm.gov[1][3][4][9][12]\",\n      \"Phone: New Mexico Human Services Customer Service Center, 1-800-283-4465[1][2][3][12]\",\n      \"In person: local Income Support Division / Human Services office[2][3][4]\",\n      \"Fax: 1-855-804-8960 to the Central ASPEN Scanning Area (CASA), as shown on the application form[3]\",\n      \"Mail: Central ASPEN Scanning Area (CASA), PO Box 830, Bernalillo, NM 87004[3]\"\n    ],\n    \"processing_time\": \"A specific processing-time guarantee was not shown in the retrieved official pages.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"LHP-602 English LIHEAP Application[3]\",\n      \"LIHEAP application form (same application referenced on agency pages)[2][3][8]\"\n    ],\n    \"documents\": [\n      \"Signed LIHEAP application form[3][8]\",\n      \"Information needed for household income eligibility review[11][15]\",\n      \"Utility account and bill information for the home energy costs being requested[10]\",\n      \"Any documents requested by the local office after review of the application[4]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide in New Mexico, but residents on Indian lands may apply through tribal LIHEAP programs if their tribe administers one; otherwise they use New Mexico area offices.[6]\",\n    \"regional_variations\": \"The program is statewide, but administration is local through Human Services/Income Support Division offices, and some tribal areas have separate administration. The retrieved sources also note 40 offices across the state for in-person help.[2][5][6]\",\n    \"offices_or_providers\": [\n      \"New Mexico Health Care Authority / Income Support Division\",\n      \"Local Human Services offices across New Mexico\",\n      \"Tribal LIHEAP administering agencies on Indian lands where applicable\"\n    ]\n  },\n  \"official_source\": \"https://www.hca.nm.gov/lookingforassistance/low_income_home_energy_assistance_program/\",\n  \"gotchas\": [\n    \"The program is not one fixed cash amount; assistance is tied to home energy needs and the household’s eligibility.[10][11]\",\n    \"The application should not be mailed to the New Mexico Gas Company or the HSD main office; it goes to a local office or the CASA mailing/fax route listed on the form.[2][3]\",\n    \"Residents on Indian lands may have a different application path depending on whether the tribe runs its own LIHEAP program.[6]\",\n    \"The retrieved pages do not expose the current dollar income table or any asset-exemption details, so families should verify the current annual guideline before applying.[13][15]\",\n    \"Families helping an elderly relative should not assume age alone qualifies someone; LIHEAP is income- and household-based, not age-based.[10][11][15]\"\n  ],\n  \"data_shape_notes\": \"This program is income-based, statewide, and administered through local offices. Benefits are energy-assistance payments rather than service hours, and access can vary by household size, program year, and whether the household is served by a tribal administrator.\"\n}"
+      },
+      {
+        "name": "New Mexico Home-Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit for the core New Mexico Aging Network/Area Agency on Aging home-delivered meals program. State sources say persons age 60 or older qualify without any income requirement, and a spouse may qualify regardless of age. Some local providers may add their own screening for homebound status, need, or priority, but not income limits.",
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be age 60 or older, or the spouse of an eligible senior regardless of age",
+            "Must be homebound or unable to attend a meal site due to a temporary or permanent condition",
+            "Often must be unable to prepare meals or lack another regular source of meal preparation/assistance",
+            "Some providers also serve a dependent caregiver or spouse living with the eligible recipient",
+            "Local program intake/assessment is typically required"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "A nutritious meal delivered to the home. State descriptions emphasize that meals are delivered by staff and may also include a brief wellness/social check-in. Some local providers describe delivery Monday through Friday; weekends and major holidays are generally not served. The statewide sources do not give a universal dollar value or statewide hours-per-week cap.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call the Aging and Disability Resource Center at 1-800-432-2080",
+            "Contact your local Area Agency on Aging (AAA) through the New Mexico Aging Network",
+            "For Bernalillo County/Albuquerque area, call Senior Information & Assistance Hotline at 505-764-6400",
+            "For Santa Fe County, call 505-992-3069"
+          ],
+          "processing_time": "No statewide processing-time standard was published in the sources reviewed. Local programs typically complete an eligibility/intake assessment before starting service.",
+          "waitlist": "Possible in some local areas, but no statewide waitlist policy or uniform timeline was published. Availability can vary by county/provider.",
+          "forms": [
+            "No statewide form number was identified in the sources reviewed",
+            "Local intake/eligibility assessment forms may be used by individual providers"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of residence/address",
+            "Basic contact information",
+            "Information about mobility, homebound status, or difficulty preparing meals",
+            "Any information the local provider asks for during intake or assessment"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide through the New Mexico Aging Network, but delivery is administered locally by Area Agencies on Aging and provider agencies. Bernalillo County is served by the Albuquerque AAA; non-metro counties are funded through the Non-Metro Area Agency on Aging.",
+          "regional_variations": "Yes. Eligibility is broadly statewide, but service rules, donation requests, delivery days, intake process, and availability can differ by county or provider. Santa Fe County, for example, states delivery is Monday through Friday with no weekend or major holiday delivery and requests a suggested donation of $1.50 per meal. Albuquerque/City of Albuquerque uses its own hotline and eligibility assessment. Some providers may serve temporarily homebound people, while others focus on permanent homebound status.",
+          "offices_or_providers": [
+            "Aging and Disability Resource Center (statewide information line): 1-800-432-2080",
+            "Albuquerque AAA / City of Albuquerque Senior Affairs: 505-764-6400",
+            "Santa Fe County Senior Services: 505-992-3069",
+            "New Mexico Aging and Long-Term Services Department"
+          ]
+        },
+        "official_source": "https://www.aging.nm.gov/aging-network/nutrition/",
+        "gotchas": [
+          "There is no statewide income test for the core program; the main gatekeepers are age, homebound status, and local intake rules.",
+          "The program is not uniform statewide. Each county/provider can run its own delivery schedule, screening, and service capacity.",
+          "Some local programs ask for a suggested donation, but donation is not the same as a fee and is usually not required.",
+          "A spouse may qualify even if younger, which families often miss.",
+          "Temporary homebound status can qualify in some local areas, but not all providers apply the rule the same way.",
+          "The statewide phone number is for information and referral; actual meal delivery is handled locally."
+        ],
+        "data_shape_notes": "This is a statewide, locally administered service with no income limit, no universal dollar benefit, and provider-by-provider variation in intake, delivery frequency, and availability.",
+        "_raw": "{\n  \"name\": \"New Mexico Home-Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit for the core New Mexico Aging Network/Area Agency on Aging home-delivered meals program. State sources say persons age 60 or older qualify without any income requirement, and a spouse may qualify regardless of age. Some local providers may add their own screening for homebound status, need, or priority, but not income limits.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be age 60 or older, or the spouse of an eligible senior regardless of age\",\n      \"Must be homebound or unable to attend a meal site due to a temporary or permanent condition\",\n      \"Often must be unable to prepare meals or lack another regular source of meal preparation/assistance\",\n      \"Some providers also serve a dependent caregiver or spouse living with the eligible recipient\",\n      \"Local program intake/assessment is typically required\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"A nutritious meal delivered to the home. State descriptions emphasize that meals are delivered by staff and may also include a brief wellness/social check-in. Some local providers describe delivery Monday through Friday; weekends and major holidays are generally not served. The statewide sources do not give a universal dollar value or statewide hours-per-week cap.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the Aging and Disability Resource Center at 1-800-432-2080\",\n      \"Contact your local Area Agency on Aging (AAA) through the New Mexico Aging Network\",\n      \"For Bernalillo County/Albuquerque area, call Senior Information & Assistance Hotline at 505-764-6400\",\n      \"For Santa Fe County, call 505-992-3069\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was published in the sources reviewed. Local programs typically complete an eligibility/intake assessment before starting service.\",\n    \"waitlist\": \"Possible in some local areas, but no statewide waitlist policy or uniform timeline was published. Availability can vary by county/provider.\",\n    \"forms\": [\n      \"No statewide form number was identified in the sources reviewed\",\n      \"Local intake/eligibility assessment forms may be used by individual providers\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of residence/address\",\n      \"Basic contact information\",\n      \"Information about mobility, homebound status, or difficulty preparing meals\",\n      \"Any information the local provider asks for during intake or assessment\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide through the New Mexico Aging Network, but delivery is administered locally by Area Agencies on Aging and provider agencies. Bernalillo County is served by the Albuquerque AAA; non-metro counties are funded through the Non-Metro Area Agency on Aging.\",\n    \"regional_variations\": \"Yes. Eligibility is broadly statewide, but service rules, donation requests, delivery days, intake process, and availability can differ by county or provider. Santa Fe County, for example, states delivery is Monday through Friday with no weekend or major holiday delivery and requests a suggested donation of $1.50 per meal. Albuquerque/City of Albuquerque uses its own hotline and eligibility assessment. Some providers may serve temporarily homebound people, while others focus on permanent homebound status.\",\n    \"offices_or_providers\": [\n      \"Aging and Disability Resource Center (statewide information line): 1-800-432-2080\",\n      \"Albuquerque AAA / City of Albuquerque Senior Affairs: 505-764-6400\",\n      \"Santa Fe County Senior Services: 505-992-3069\",\n      \"New Mexico Aging and Long-Term Services Department\"\n    ]\n  },\n  \"official_source\": \"https://www.aging.nm.gov/aging-network/nutrition/\",\n  \"gotchas\": [\n    \"There is no statewide income test for the core program; the main gatekeepers are age, homebound status, and local intake rules.\",\n    \"The program is not uniform statewide. Each county/provider can run its own delivery schedule, screening, and service capacity.\",\n    \"Some local programs ask for a suggested donation, but donation is not the same as a fee and is usually not required.\",\n    \"A spouse may qualify even if younger, which families often miss.\",\n    \"Temporary homebound status can qualify in some local areas, but not all providers apply the rule the same way.\",\n    \"The statewide phone number is for information and referral; actual meal delivery is handled locally.\"\n  ],\n  \"data_shape_notes\": \"This is a statewide, locally administered service with no income limit, no universal dollar benefit, and provider-by-provider variation in intake, delivery frequency, and availability.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NM",
+    "stateName": "New Mexico",
+    "classifiedAt": "2026-10-06T05:29:23.469Z",
+    "total": 6,
+    "typeSummary": {
+      "navigator": 1,
+      "benefit": 5
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 3
+    },
+    "complexitySummary": {
+      "simple": 1,
+      "deep": 4,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Centennial Care Aged, Blind, and Disabled",
+        "programType": "navigator",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "New Mexico Health Care Authority / Medical Assistance Division[1][2]",
+              "type": "service-area"
+            },
+            {
+              "name": "Income Support Division (ISD) field offices[3][10]",
+              "type": "service-area"
+            },
+            {
+              "name": "Managed care organizations that perform functional eligibility for Community Benefit[10][14]",
+              "type": "service-area"
+            },
+            {
+              "name": "Aging & Disability Resource Center at 1-800-432-2080 was referenced as a help line in the gathered materials[10]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "provider-list"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Qualified Medicare Beneficiary (QMB)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "New Mexico Health Care Authority / Medicaid eligibility system",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Income Support Division offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "New Mexico Turquoise Care Community Benefit (home and community-based services)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "New Mexico Aging and Disability Resource Center (ADRC) statewide entry point at 1-800-432-2080 (TTY: 505-476-4939).[9][14]",
+              "type": "service-area"
+            },
+            {
+              "name": "Turquoise Care managed care organizations administer the benefit package.[1][2][8]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "SNAP (Supplemental Nutrition Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "New Mexico Health Care Authority (statewide administration)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local HCA offices and state staff",
+              "type": "service-area"
+            },
+            {
+              "name": "YES portal for online application",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "New Mexico Health Care Authority / Income Support Division",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Human Services offices across New Mexico",
+              "type": "service-area"
+            },
+            {
+              "name": "Tribal LIHEAP administering agencies on Indian lands where applicable",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "New Mexico Home-Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Aging and Disability Resource Center (statewide information line): 1-800-432-2080",
+              "type": "service-area"
+            },
+            {
+              "name": "Albuquerque AAA / City of Albuquerque Senior Affairs: 505-764-6400",
+              "type": "service-area"
+            },
+            {
+              "name": "Santa Fe County Senior Services: 505-992-3069",
+              "type": "service-area"
+            },
+            {
+              "name": "New Mexico Aging and Long-Term Services Department",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NM",
+      "id": "nm-centennial-care-aged-blind-disabled",
+      "name": "Centennial Care Aged, Blind, and Disabled",
+      "legacyId": "centennial-care-aged-blind-and-disabled",
+      "programType": "navigator"
+    },
+    {
+      "state": "NM",
+      "id": "nm-qmb-medicare-savings",
+      "name": "Qualified Medicare Beneficiary (QMB)",
+      "legacyId": "qualified-medicare-beneficiary-qmb",
+      "programType": "benefit"
+    },
+    {
+      "state": "NM",
+      "id": "nm-turquoise-care-community-benefit-hcbs",
+      "name": "New Mexico Turquoise Care Community Benefit (home and community-based services)",
+      "legacyId": "centennial-care-home-and-community-based-services-waiver",
+      "programType": "benefit"
+    },
+    {
+      "state": "NM",
+      "id": "nm-snap-food-benefits",
+      "name": "SNAP (Supplemental Nutrition Assistance Program)",
+      "legacyId": "snap-supplemental-nutrition-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "NM",
+      "id": "nm-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "legacyId": "low-income-home-energy-assistance-program-liheap",
+      "programType": "benefit"
+    },
+    {
+      "state": "NM",
+      "id": "nm-home-delivered-meals",
+      "name": "New Mexico Home-Delivered Meals",
+      "legacyId": "new-mexico-home-delivered-meals",
+      "programType": "benefit"
+    }
+  ]
+}

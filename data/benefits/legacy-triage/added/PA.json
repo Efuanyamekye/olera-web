@@ -1,0 +1,30 @@
+[
+  {
+    "state": "PA",
+    "id": "pa-aged-blind-disabled-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "PA",
+    "id": "pa-liheap-heating-assistance",
+    "name": "LIHEAP",
+    "legacyId": "liheap",
+    "programType": "benefit"
+  },
+  {
+    "state": "PA",
+    "id": "pa-property-tax-rent-rebate",
+    "name": "Property Tax/Rent Rebate Program",
+    "legacyId": "property-tax-rent-rebate-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "PA",
+    "id": "pa-state-ssi-supplement",
+    "name": "State SSI Supplement",
+    "legacyId": "state-ssi-supplement",
+    "programType": "benefit"
+  }
+]

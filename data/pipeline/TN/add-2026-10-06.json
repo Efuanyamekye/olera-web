@@ -1,0 +1,137 @@
+{
+  "state": "TN",
+  "addedAt": "2026-10-06T06:35:27.528Z",
+  "dive": {
+    "state": "TN",
+    "stateName": "Tennessee",
+    "diveAt": "2026-10-06T06:34:01.609Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "TennCare CHOICES in Long-Term Services and Supports",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For CHOICES HCBS, the individual must generally be eligible for an institutional Medicaid category or be an SSI cash recipient. The official LTSS Assistors’ Guide states that gross countable income must not exceed 300% of the SSI Federal Benefit Rate, which it lists as $2,901 per month for 2025; this limit is updated annually. CHOICES materials also state that some applicants qualify through Medicaid institutional eligibility rather than a standalone CHOICES income test. [3][5]",
+          "asset_limits": "CHOICES eligibility includes resource/asset limits through TennCare Medicaid rules. The official CHOICES materials mention a home equity limit, and that the person cannot be in a penalty period for an uncompensated transfer of assets. TennCare’s FAQ confirms that TennCare looks at bank accounts, property, or other resources depending on coverage type. The exact resource limit is tied to Medicaid long-term care eligibility and can vary by category; CHOICES materials do not present a simple public household-size table. [4][5]",
+          "other_requirements": [
+            "Must be age 65 or older, or age 21 or older with a physical disability. [1][10]",
+            "Must meet medical level-of-care criteria, meaning help is needed with activities of daily living and the person needs the level of care provided in a nursing home. [1][3][12]",
+            "Must be a Tennessee resident. [3]",
+            "Must be a U.S. citizen, U.S. national, or otherwise eligible noncitizen. [3]",
+            "Must have a valid Social Security number or proof of application, unless exempt. [3]",
+            "For CHOICES home- and community-based services, the person must be eligible for institutional Medicaid or be an SSI cash recipient. [5]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "CHOICES provides long-term services and supports for eligible older adults and adults with physical disabilities, either in the home/community or in a nursing facility. Services described in official materials include nursing facility services, personal care, home help, and other supports needed because of loss of ability to do activities of daily living such as bathing, dressing, eating, transfers, toileting, housework, meal preparation, medication management, shopping, and money management. The program is organized into groups: Group 1 for people receiving nursing home care, Group 2 for adults and seniors who qualify for nursing-home level care but receive home care instead, and Group 3 for adults and seniors who do not meet nursing-home level care but need enough help to avoid it. [1][8][10][12]",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "If you already have TennCare, call your TennCare health plan (MCO); the number is on your TennCare card. [6]",
+            "If you do not have TennCare, call the Area Agency on Aging and Disability statewide line at 1-866-836-6678 to be directed to your local AAAD. [1][6]",
+            "Use the TN.gov CHOICES page and local AAAD map to find the correct local agency. [1][6]",
+            "Current TennCare members can also contact their health plan using member resources; LTSS help desk number listed by TennCare is 1-877-224-0219. [7]"
+          ],
+          "processing_time": "No single statewide processing time is stated in the sources reviewed. Eligibility is determined through the LTSS/PAE process, and timing can depend on medical and financial review plus local availability. [3]",
+          "waitlist": "Official materials reviewed do not describe a universal statewide waitlist for all CHOICES applicants. Access is route- and service-dependent, and placement is tied to eligibility and available program slots/services. [1][5][8]",
+          "forms": [
+            "Pre Admission Evaluation (PAE) for medical level-of-care determination [3]"
+          ],
+          "documents": [
+            "Proof of identity and Tennessee residency [3]",
+            "Social Security number or proof of application if one has not yet been issued, unless exempt [3]",
+            "Proof of citizenship, U.S. nationality, or eligible immigration status if applicable [3]",
+            "Income proof such as SSA/SSI award letters, pension stubs, or other income statements [3][4]",
+            "Asset/resource information such as bank statements, property information, and other resource records if applicable [4][5]",
+            "Medical information showing need for nursing-home level care, including help needed with daily activities [1][3]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available across Tennessee, but applicants are routed through their local Area Agency on Aging and Disability if they do not already have TennCare; current TennCare members apply through their health plan. [1][6]",
+          "regional_variations": "The program itself is statewide, but application support and service coordination run through local AAADs and managed care health plans, so local office staffing and provider networks can affect access and timing. TennCare materials point users to a county-based AAAD map for local contact information. [1][6][8]",
+          "offices_or_providers": [
+            "Local Area Agency on Aging and Disability (AAAD) offices, found by county map [1]",
+            "TennCare health plans for current members: BlueCare, UnitedHealthcare Community Plan, and Wellpoint are listed by TennCare as plan contacts for applying for CHOICES [1]"
+          ]
+        },
+        "official_source": "https://www.tn.gov/tenncare/long-term-services-supports/choices.html",
+        "gotchas": [
+          "CHOICES is not a simple income-only program; applicants must also meet a nursing-home level-of-care medical test. [1][3]",
+          "The financial rules are tied to Medicaid long-term care eligibility, not a standard family-size subsidy table. [4][5]",
+          "Many families miss that current TennCare members usually apply through their health plan, while uninsured/non-TennCare applicants go through the local AAAD. [1][6]",
+          "Group 3 exists for people who do not meet nursing-home level care but still need support to remain at home, so not every CHOICES participant is entering from the same medical-intensity category. [8]",
+          "Transfers of assets and home equity can affect eligibility, so giving away money or property can create problems. [5]",
+          "The public-facing program materials do not present one simple statewide processing timeline, so local review speed can vary. [3][6]"
+        ],
+        "data_shape_notes": "This program is a statewide, Medicaid-linked LTSS program with both medical and financial eligibility, and benefits are organized by group/priority rather than by household size. Access is also split by enrollment status: existing TennCare members apply through their managed care plan, while others start with their local AAAD. [1][3][6][8]",
+        "_raw": "{\n  \"name\": \"TennCare CHOICES in Long-Term Services and Supports\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For CHOICES HCBS, the individual must generally be eligible for an institutional Medicaid category or be an SSI cash recipient. The official LTSS Assistors’ Guide states that gross countable income must not exceed 300% of the SSI Federal Benefit Rate, which it lists as $2,901 per month for 2025; this limit is updated annually. CHOICES materials also state that some applicants qualify through Medicaid institutional eligibility rather than a standalone CHOICES income test. [3][5]\",\n    \"asset_limits\": \"CHOICES eligibility includes resource/asset limits through TennCare Medicaid rules. The official CHOICES materials mention a home equity limit, and that the person cannot be in a penalty period for an uncompensated transfer of assets. TennCare’s FAQ confirms that TennCare looks at bank accounts, property, or other resources depending on coverage type. The exact resource limit is tied to Medicaid long-term care eligibility and can vary by category; CHOICES materials do not present a simple public household-size table. [4][5]\",\n    \"other_requirements\": [\n      \"Must be age 65 or older, or age 21 or older with a physical disability. [1][10]\",\n      \"Must meet medical level-of-care criteria, meaning help is needed with activities of daily living and the person needs the level of care provided in a nursing home. [1][3][12]\",\n      \"Must be a Tennessee resident. [3]\",\n      \"Must be a U.S. citizen, U.S. national, or otherwise eligible noncitizen. [3]\",\n      \"Must have a valid Social Security number or proof of application, unless exempt. [3]\",\n      \"For CHOICES home- and community-based services, the person must be eligible for institutional Medicaid or be an SSI cash recipient. [5]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"CHOICES provides long-term services and supports for eligible older adults and adults with physical disabilities, either in the home/community or in a nursing facility. Services described in official materials include nursing facility services, personal care, home help, and other supports needed because of loss of ability to do activities of daily living such as bathing, dressing, eating, transfers, toileting, housework, meal preparation, medication management, shopping, and money management. The program is organized into groups: Group 1 for people receiving nursing home care, Group 2 for adults and seniors who qualify for nursing-home level care but receive home care instead, and Group 3 for adults and seniors who do not meet nursing-home level care but need enough help to avoid it. [1][8][10][12]\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"If you already have TennCare, call your TennCare health plan (MCO); the number is on your TennCare card. [6]\",\n      \"If you do not have TennCare, call the Area Agency on Aging and Disability statewide line at 1-866-836-6678 to be directed to your local AAAD. [1][6]\",\n      \"Use the TN.gov CHOICES page and local AAAD map to find the correct local agency. [1][6]\",\n      \"Current TennCare members can also contact their health plan using member resources; LTSS help desk number listed by TennCare is 1-877-224-0219. [7]\"\n    ],\n    \"processing_time\": \"No single statewide processing time is stated in the sources reviewed. Eligibility is determined through the LTSS/PAE process, and timing can depend on medical and financial review plus local availability. [3]\",\n    \"waitlist\": \"Official materials reviewed do not describe a universal statewide waitlist for all CHOICES applicants. Access is route- and service-dependent, and placement is tied to eligibility and available program slots/services. [1][5][8]\",\n    \"forms\": [\n      \"Pre Admission Evaluation (PAE) for medical level-of-care determination [3]\"\n    ],\n    \"documents\": [\n      \"Proof of identity and Tennessee residency [3]\",\n      \"Social Security number or proof of application if one has not yet been issued, unless exempt [3]\",\n      \"Proof of citizenship, U.S. nationality, or eligible immigration status if applicable [3]\",\n      \"Income proof such as SSA/SSI award letters, pension stubs, or other income statements [3][4]\",\n      \"Asset/resource information such as bank statements, property information, and other resource records if applicable [4][5]\",\n      \"Medical information showing need for nursing-home level care, including help needed with daily activities [1][3]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available across Tennessee, but applicants are routed through their local Area Agency on Aging and Disability if they do not already have TennCare; current TennCare members apply through their health plan. [1][6]\",\n    \"regional_variations\": \"The program itself is statewide, but application support and service coordination run through local AAADs and managed care health plans, so local office staffing and provider networks can affect access and timing. TennCare materials point users to a county-based AAAD map for local contact information. [1][6][8]\",\n    \"offices_or_providers\": [\n      \"Local Area Agency on Aging and Disability (AAAD) offices, found by county map [1]\",\n      \"TennCare health plans for current members: BlueCare, UnitedHealthcare Community Plan, and Wellpoint are listed by TennCare as plan contacts for applying for CHOICES [1]\"\n    ]\n  },\n  \"official_source\": \"https://www.tn.gov/tenncare/long-term-services-supports/choices.html\",\n  \"gotchas\": [\n    \"CHOICES is not a simple income-only program; applicants must also meet a nursing-home level-of-care medical test. [1][3]\",\n    \"The financial rules are tied to Medicaid long-term care eligibility, not a standard family-size subsidy table. [4][5]\",\n    \"Many families miss that current TennCare members usually apply through their health plan, while uninsured/non-TennCare applicants go through the local AAAD. [1][6]\",\n    \"Group 3 exists for people who do not meet nursing-home level care but still need support to remain at home, so not every CHOICES participant is entering from the same medical-intensity category. [8]\",\n    \"Transfers of assets and home equity can affect eligibility, so giving away money or property can create problems. [5]\",\n    \"The public-facing program materials do not present one simple statewide processing timeline, so local review speed can vary. [3][6]\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide, Medicaid-linked LTSS program with both medical and financial eligibility, and benefits are organized by group/priority rather than by household size. Access is also split by enrollment status: existing TennCare members apply through their managed care plan, while others start with their local AAAD. [1][3][6][8]\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "TN",
+    "stateName": "Tennessee",
+    "classifiedAt": "2026-10-06T06:34:01.612Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "TennCare CHOICES in Long-Term Services and Supports",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agency on Aging and Disability (AAAD) offices, found by county map [1]",
+              "type": "service-area"
+            },
+            {
+              "name": "TennCare health plans for current members: BlueCare, UnitedHealthcare Community Plan, and Wellpoint are listed by TennCare as plan contacts for applying for CHOICES [1]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "TN",
+      "id": "tn-tenncare-choices-ltss",
+      "name": "TennCare CHOICES in Long-Term Services and Supports",
+      "legacyId": "tenncare-choices-in-long-term-services-and-supports",
+      "programType": "benefit"
+    }
+  ]
+}

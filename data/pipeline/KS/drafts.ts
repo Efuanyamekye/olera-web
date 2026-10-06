@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.823Z
+ * Last updated: 2026-10-06T06:44:48.379Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2486,6 +2486,459 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:37:38.319Z"
         }
       ]
+    },
+    {
+      "id": "ks-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "Kansas ABD Medicaid",
+      "tagline": "Full health coverage through KanCare for Kansas adults 65 and older, or adults who are blind or disabled, with low income and limited savings.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "KanCare Clearinghouse",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living in Kansas with a monthly income below $994, they may qualify for Aged, Blind, and Disabled (ABD) Medicaid. This program covers doctor visits, hospital care, prescriptions, and more through KanCare, Kansas's Medicaid managed care system. It can also cover some preventive dental care, eye exams, and eyeglasses for adults.\n\nTo qualify, your parent must meet both an income test and a resource (savings) test. Income must be at or below $994 per month for a single person, or $1,491 per month combined for a couple. Countable assets, things like cash, bank accounts, and investments, cannot exceed $2,000 for an individual or $3,000 for a couple. The family home and some other essential items are typically excluded from that count, but the exact exemption list should be confirmed with the KanCare Clearinghouse before applying.\n\nThis program is not automatic. Your parent must submit a separate Medicaid application even if they already receive Social Security or SSI. If your parent also needs long-term care services such as help with bathing, dressing, or medication management, there is an additional functional assessment beyond the financial screen. Start the process early, because gathering documents and completing the assessment can take time.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid is health coverage with no premium for eligible enrollees. The dollar value of coverage varies based on services used and cannot be stated as a fixed figure.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or blind or disabled under Social Security rules",
+          "Income at or below $994/month (individual) or $1,491/month (couple)",
+          "Countable assets at or below $2,000 (individual) or $3,000 (couple)",
+          "Kansas resident and U.S. citizen or qualifying immigration status",
+          "Must apply separately; not automatic with SSI or Social Security"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 994
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1491
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Investments (stocks, bonds, mutual funds)",
+            "Other countable liquid assets"
+          ],
+          "exemptAssets": [
+            "The specific Kansas exemption list is not fully confirmed in available state sources. Kansas uses SSI-style resource rules, so some essential items such as a primary home and one vehicle are commonly excluded. Confirm the complete list with the KanCare Clearinghouse at 1-800-792-4884 before applying."
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "If your parent needs long-term care services (help with bathing, dressing, medication management, or other daily activities), the state conducts a functional assessment of Activities of Daily Living (ADLs) and Instrumental Activities of Daily Living (IADLs) in addition to the financial screen. This assessment determines which services your parent can receive. It is separate from basic medical coverage eligibility.",
+        "otherRequirements": [
+          "Must live in Kansas",
+          "Must be a U.S. citizen or have qualifying immigration status",
+          "Must be age 65 or older, blind under Social Security rules, or disabled under Social Security rules",
+          "Must not already qualify for a different categorically needy Medicaid group under the Kansas state plan",
+          "Must file a separate Medicaid application for this eligibility group (SSI receipt alone does not enroll you)"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the Kansas KanCare portal, or call the KanCare Clearinghouse at 1-800-792-4884; processing time has not been published as a fixed statewide number, so ask when you call.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "Collect your parent's Social Security card and award letter, proof of Kansas residency (a utility bill or lease), proof of age or disability, income records, and current bank account balances. Having these ready prevents delays after you submit."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online: go to kancare.ks.gov and use the Apply Now portal. By phone: call the KanCare Clearinghouse at 1-800-792-4884, Monday through Friday. By mail: send the completed application to KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601. In person: contact your local Kansas Department for Children and Families (DCF) office to ask about in-person assistance."
+          },
+          {
+            "step": 3,
+            "title": "Submit the ABD Medicaid application",
+            "description": "Request or complete the Medicaid application for the aged, blind, or disabled eligibility group. This is a separate form from standard KanCare Medicaid. The specific form number was not confirmed in available state materials; the Clearinghouse at 1-800-792-4884 can confirm which form applies to your parent's situation."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional documentation",
+            "description": "After submission, the Clearinghouse may contact you for missing documents. Respond promptly, because unanswered requests can delay or close the case. Keep copies of everything you send."
+          },
+          {
+            "step": 5,
+            "title": "Complete the functional assessment if long-term care is needed",
+            "description": "If your parent needs help with daily activities and is applying for home and community-based or long-term care services, a state assessor will schedule a separate in-person or phone assessment of your parent's functional needs. This happens after the financial review."
+          },
+          {
+            "step": 6,
+            "title": "Receive the eligibility determination",
+            "description": "You will receive a written notice of approval or denial. If approved, your parent will be enrolled in KanCare and assigned to a managed care organization (MCO). If denied, the notice will explain why and describe your right to appeal."
+          }
+        ],
+        "processingTime": "No exact statewide processing timeline was confirmed in available state materials. Ask the KanCare Clearinghouse at 1-800-792-4884 for a current estimate when you call.",
+        "waitlist": null,
+        "tip": "If your parent receives SSI, they are not automatically enrolled in ABD Medicaid in Kansas. You must file a separate application. Call 1-800-792-4884 to start.",
+        "urls": [
+          {
+            "label": "KanCare Apply Now portal",
+            "url": "https://www.kancare.ks.gov/apply-now/eligibility"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (shows current monthly benefit amount)",
+        "Proof of Kansas residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Social Security card for your parent (and for all household members)",
+        "Proof of age (birth certificate or passport)",
+        "Proof of U.S. citizenship or qualifying immigration status (U.S. passport, birth certificate, or naturalization certificate)",
+        "Income records for all sources (pension statements, VA benefit letters, any other monthly income)",
+        "Current balances for all checking and savings accounts (Kansas will ask for this as part of the resource review; ask the Clearinghouse at 1-800-792-4884 what documentation format they require)",
+        "Investment account statements (stocks, bonds, annuities) showing current value",
+        "Proof of disability or blindness determination if not already on file with Social Security (SSA disability award letter, medical records, or physician statement)",
+        "Medicare card, if your parent has Medicare (Part A and/or Part B)",
+        "Any existing health insurance cards or premium statements",
+        "Legal documents showing who is authorized to act for your parent, if someone other than your parent is applying on their behalf (power of attorney, guardianship order)",
+        "Medical or functional documentation if your parent will need long-term care services (physician notes, hospital records, care assessments)"
+      ],
+      "contacts": [
+        {
+          "label": "KanCare Clearinghouse",
+          "phone": "1-800-792-4884",
+          "description": "The primary application office for ABD Medicaid in Kansas. Call here to apply, check eligibility, ask about required documents, or get status on a pending application.",
+          "hours": "Monday through Friday, business hours (exact hours not confirmed in state materials; call to verify)"
+        },
+        {
+          "label": "KanCare Online Application",
+          "phone": null,
+          "description": "Apply online at kancare.ks.gov. Use the Apply Now section and select the Medicaid application for aged, blind, or disabled adults.",
+          "hours": "Available online at any time"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent does not have to wait until they are out of money to apply. Apply as soon as income and assets are within the limits, because processing takes time and coverage cannot be backdated indefinitely.",
+        "If your parent has a savings account, inheritance, or other asset that pushes them over the $2,000 resource limit, they may not qualify yet. Certain assets are exempt under SSI-style rules, but the exact Kansas list should be confirmed with the Clearinghouse before spending down or transferring any funds.",
+        "If your parent is already enrolled in a different Medicaid category, the state may route them there instead of ABD Medicaid. Ask the Clearinghouse to confirm which eligibility group applies.",
+        "If your parent is hospitalized, a hospital social worker or discharge planner can often help initiate the application. You do not have to wait until discharge."
+      ],
+      "relatedPrograms": [
+        "KanCare HCBS Frail Elderly Waiver",
+        "Kansas PACE (Program of All-inclusive Care for the Elderly)",
+        "Kansas Medicare Savings Programs (QMB, SLMB, QI)",
+        "Kansas Extra Help (Low Income Subsidy for Part D prescription costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What ABD Medicaid covers",
+          "body": "Once enrolled, your parent receives health coverage through KanCare, which includes doctor visits, hospital care, prescription drugs, lab work, and mental health services. The program can also cover some preventive dental care, eye exams, and eyeglasses for adults. If your parent qualifies for long-term care services, coverage can extend to home and community-based services or nursing facility care, depending on the functional assessment results."
+        },
+        {
+          "type": "callout",
+          "title": "The asset limit is easy to misread",
+          "body": "The $2,000 countable asset limit for a single person does not include everything your parent owns. The primary home and some other items are typically excluded under SSI-style rules. But a savings account balance, a CD, or stocks generally do count. Before assuming your parent does not qualify, call the KanCare Clearinghouse at 1-800-792-4884 and ask which of your parent's assets are countable. Do not transfer or spend assets before getting that answer."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "Yes. The primary residence is typically excluded from the countable resource limit under the SSI-style rules Kansas uses for ABD Medicaid. The $2,000 limit applies to countable assets such as bank accounts, cash, and investments. However, the exact Kansas exemption list is not fully published in the sources we reviewed. Call the KanCare Clearinghouse at 1-800-792-4884 to confirm which of your parent's assets are excluded before applying."
+        },
+        {
+          "question": "My parent already gets SSI. Do they automatically have ABD Medicaid?",
+          "answer": "No. In Kansas, SSI receipt and Medicaid enrollment are related but not the same thing. Your parent must file a separate Medicaid application for the ABD eligibility group. Call the KanCare Clearinghouse at 1-800-792-4884 or apply at kancare.ks.gov to start that process."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot do it themselves?",
+          "answer": "Yes. A family member, legal guardian, or anyone holding a valid power of attorney can apply on your parent's behalf. You will need to provide documentation of your authority to act (such as the power of attorney document or guardianship order) along with your parent's application materials."
+        },
+        {
+          "question": "What if my parent's income is just slightly above $994 per month?",
+          "answer": "Kansas uses a medically needy pathway for some applicants whose income exceeds the limit. This pathway allows your parent to spend down excess income on medical costs to meet the income threshold. Ask the KanCare Clearinghouse at 1-800-792-4884 whether a spend-down applies to your parent's situation and how it works in practice."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a Medicare Savings Program at the same time?",
+          "answer": "Yes, and it is worth doing both if your parent has Medicare. Medicare Savings Programs (QMB, SLMB, QI) help pay Medicare premiums and cost-sharing, while ABD Medicaid covers services Medicare does not. The KanCare Clearinghouse can screen your parent for both programs during the same call to 1-800-792-4884."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their needs change?",
+          "answer": "Your parent's managed care organization (MCO) coordinates ongoing care. If your parent's health or functional needs increase, you can request a new assessment for additional services. If income or assets change in a way that affects eligibility, you are required to report that to the KanCare Clearinghouse. Annual redeterminations also occur, during which the state reviews continued eligibility."
+        },
+        {
+          "question": "How long does it take to get a decision after applying?",
+          "answer": "Kansas has not published a fixed statewide processing timeline in available state materials. If your parent needs long-term care services, the process takes longer because a functional assessment must be completed after the financial review. Ask the KanCare Clearinghouse at 1-800-792-4884 for a current estimate and request expedited review if your parent has an urgent medical need."
+        },
+        {
+          "question": "What if the application is denied?",
+          "answer": "The denial notice will explain the reason and describe your parent's right to appeal. You have the right to request a fair hearing to challenge the decision. Read the notice carefully, because there is a deadline to file an appeal. If the denial was due to missing documents, you may be able to reapply quickly once those are gathered."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-792-4884",
+      "sourceUrl": "https://www.kancare.ks.gov/apply-now/eligibility",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ks-kancare-medicare-buy-in",
+      "name": "KanCare Medicare Buy-In Programs",
+      "shortName": "Medicare Savings Programs",
+      "tagline": "If your parent is on Medicare with a limited income, Kansas may pay their monthly premiums and even their copays and deductibles, saving hundreds to thousands of dollars a year.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "KanCare Clearinghouse",
+            "type": "service-area"
+          },
+          {
+            "name": "Kansas Department for Children and Families local offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Kansas Department for Aging and Disability Services information line for Medicare-buy-in questions",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on Medicare and living on a fixed income, Kansas may pay their Medicare premiums and cost-sharing through a set of programs called the Medicare Savings Programs, administered under KanCare. Depending on your parent's income, Kansas can pay their Medicare Part B premium (currently $185/month in 2025), and if their income is low enough, also cover Medicare deductibles, coinsurance, and copayments for every Medicare-covered service they use.\n\nThere are three tiers. QMB (Qualified Medicare Beneficiary) is the most comprehensive: it covers the Part B premium and prohibits any Medicare provider from billing your parent for Medicare cost-sharing. SLMB and QI cover only the Part B premium. The right tier depends on your parent's monthly income and the assets they have on hand.\n\nThis is worth pursuing even if your parent already has Medicare. The program does not replace Medicare; it pays what Medicare would otherwise charge your parent out of pocket. Enrollment requires meeting both an income test and an asset test, so you will need to gather documentation of both. The QI tier is first-come, first-served and can close if federal funding runs out, so applying early matters.",
+      "savingsRange": "Up to $2,220/year for Part B premium coverage alone (at $185/month); QMB enrollees may save substantially more because Medicare cost-sharing is also covered, though total savings depend on how much Medicare care your parent uses.",
+      "savingsSource": "Part B premium figure from Medicare.gov 2025 standard premium. Total QMB savings are not published as a fixed maximum because they depend on individual health care utilization; the Part B premium offset is the verifiable floor.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or under 65 on Medicare due to disability)",
+          "Kansas resident enrolled in Medicare Part A or Part B",
+          "Income below $1,816/month for a single person (varies by tier)",
+          "Assets below $9,660 for a single person (QMB/SLMB) or $9,950 (QI)",
+          "Meets citizenship or qualified immigrant requirements"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9660,
+          "couple": 14470,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Stocks and bonds",
+            "Non-retirement cash assets",
+            "Other non-exempt resources"
+          ],
+          "exemptAssets": [
+            "The home your parent lives in",
+            "One vehicle",
+            "Personal belongings and household goods",
+            "Burial space and certain burial funds",
+            "Most retirement accounts (treatment varies; confirm with KanCare)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in Medicare Part A and/or Part B (the buy-in process can arrange Part B enrollment for eligible applicants)",
+          "Must be a Kansas resident",
+          "Must meet citizenship or qualified immigrant requirements for KanCare",
+          "QI (the highest income tier) is first-come, first-served and subject to annual federal funding; there is no waitlist for QMB or SLMB"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at applyforKanCare.ks.gov or call the KanCare Clearinghouse at 800-792-4884; expect a Medicaid-style eligibility review rather than instant approval.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify which tier your parent may qualify for",
+            "description": "Compare your parent's gross monthly income to the three tiers: QMB (up to $1,350/month single), SLMB (up to $1,616/month single), or QI (up to $1,816/month single). Also confirm their countable assets are under $9,660 (single, QMB/SLMB) or $9,950 (single, QI). This narrows which benefit they can expect before you apply."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents",
+            "description": "You will need your parent's Medicare card, Social Security award letter, proof of Kansas residency, and current income records. If they have countable assets such as bank accounts or investments, have current statements available. See the full document list below."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, or by mail",
+            "description": "Online: go to applyforKanCare.ks.gov and complete the KanCare/Medicaid application, which covers Medicare Savings Programs. By phone: call the KanCare Clearinghouse at 800-792-4884. By mail: send a completed paper application to KanCare Clearinghouse, P.O. Box 3599, Topeka, KS 66601-3599. You can also visit a Kansas DCF office in person."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional information",
+            "description": "The Clearinghouse may contact you for clarification or missing documents. Respond promptly. Delays in providing documents are the most common reason applications stall. For QI, timing matters because federal funds are allocated annually and on a first-come, first-served basis."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility determination",
+            "description": "Kansas will send a written notice of approval or denial. If approved for QMB, Medicare providers are prohibited from billing your parent for Medicare cost-sharing from that point forward. If denied, the notice will explain the reason and your right to appeal."
+          }
+        ],
+        "processingTime": "Not published officially; expect a Medicaid-style review period. Plan for several weeks. QI determinations can be further affected by funding availability.",
+        "waitlist": "QMB and SLMB have no waitlist. QI is first-come, first-served and may effectively close if annual federal funding is exhausted. Apply as early in the calendar year as possible for QI.",
+        "tip": "If your parent's income is just above a tier cutoff, ask the Clearinghouse whether any medical expenses can be deducted before the income test is applied. Some deductions may bring them into a lower, more generous tier.",
+        "urls": [
+          {
+            "label": "Apply online at applyforKanCare.ks.gov",
+            "url": "https://applyforKanCare.ks.gov"
+          },
+          {
+            "label": "KEESM 2911: Kansas Medicare Buy-In Policy Reference",
+            "url": "https://khap.kdhe.ks.gov/KEESM/Oct_2023_Output/keesm2911.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card showing Part A and/or Part B coverage",
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of Kansas residency such as a utility bill, lease agreement, or state-issued ID showing a Kansas address",
+        "Social Security numbers for your parent and any household members included in the application",
+        "Proof of any other income: pension statements, paycheck stubs, or bank deposit records showing recurring deposits",
+        "Current balances for any checking or savings accounts (KanCare will ask about countable resources; have account information on hand)",
+        "Investment account statements if your parent holds stocks, bonds, or non-retirement cash assets",
+        "Photo identification for your parent and any household members",
+        "Immigration or citizenship documents if your parent was not born in the United States",
+        "Any current Medicaid or Medicare notices already received, including denial letters or existing award letters"
+      ],
+      "contacts": [
+        {
+          "label": "KanCare Clearinghouse",
+          "phone": "800-792-4884",
+          "description": "The primary application point for KanCare Medicare Savings Programs. Call to apply by phone, ask eligibility questions, or check the status of a submitted application.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Kansas KDADS Information Line",
+          "phone": "785-296-4986",
+          "description": "Kansas Department for Aging and Disability Services. Can answer general questions about Medicare buy-in options and direct you to appropriate resources.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Kansas SHIP (State Health Insurance Assistance Program)",
+          "phone": "800-860-5260",
+          "description": "Free, unbiased Medicare counseling. SHIP counselors can help you understand which tier your parent qualifies for and assist with the application. They do not process the application themselves but can walk you through every step.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        }
+      ],
+      "applicationNotes": [
+        "QMB is the only tier that prohibits Medicare providers from billing your parent for deductibles, coinsurance, and copayments. If your parent is approved for SLMB or QI, providers can still bill them for cost-sharing. Know which tier you are approved for.",
+        "If your parent is already enrolled in a Medicare Advantage plan, QMB protection still applies, but how cost-sharing is handled can vary by plan. Confirm with both KanCare and the Medicare Advantage plan after approval.",
+        "The income and asset tests are separate gates. Being under the income limit does not guarantee approval if countable assets are over the limit. Check both before applying.",
+        "If your parent is not yet enrolled in Medicare Part B because of the premium cost, the KanCare buy-in process can arrange Part B enrollment as part of eligibility. Do not let the current premium cost stop you from applying."
+      ],
+      "relatedPrograms": [
+        "KanCare Medicaid (full Medicaid coverage for very low-income seniors)",
+        "Medicare Extra Help / Low Income Subsidy (federal program that reduces Part D prescription drug costs)",
+        "Kansas LIEAP (Low Income Energy Assistance Program)",
+        "SNAP Food Assistance for seniors in Kansas"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier does your parent qualify for?",
+          "description": "There are three Medicare Savings Program tiers in Kansas. Each has a different income range and a different benefit. Your parent qualifies for the most generous tier their income allows.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "singleIncome": "Up to $1,350/month",
+              "coupleIncome": "Up to $1,824/month",
+              "assetLimitSingle": "$9,660",
+              "assetLimitCouple": "$14,470",
+              "benefit": "Pays Medicare Part A premium (if owed), Medicare Part B premium, and all Medicare deductibles, coinsurance, and copayments. Providers cannot bill your parent for any Medicare cost-sharing.",
+              "highlight": true
+            },
+            {
+              "name": "SLMB / LMB (Specified Low-Income Medicare Beneficiary)",
+              "singleIncome": "$1,351 to $1,616/month",
+              "coupleIncome": "$1,825 to $2,184/month",
+              "assetLimitSingle": "$9,660",
+              "assetLimitCouple": "$14,470",
+              "benefit": "Pays Medicare Part B premium only. Your parent is still responsible for Medicare deductibles, coinsurance, and copayments.",
+              "highlight": false
+            },
+            {
+              "name": "QI / ELMB (Qualifying Individual)",
+              "singleIncome": "$1,617 to $1,816/month",
+              "coupleIncome": "$2,185 to $2,455/month",
+              "assetLimitSingle": "$9,950",
+              "assetLimitCouple": "$14,910",
+              "benefit": "Pays Medicare Part B premium only. First-come, first-served; funding can run out before the year ends.",
+              "highlight": false
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "QMB enrollees cannot be billed for Medicare cost-sharing",
+          "body": "If your parent qualifies for QMB, federal law prohibits any Medicare provider from charging them deductibles, coinsurance, or copayments for Medicare-covered services. If a provider bills your parent anyway, your parent has the right to refuse to pay and to report the billing to 1-800-MEDICARE (1-800-633-4227). This protection applies at the doctor's office, hospital, and skilled nursing facility."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,400/month. Do they qualify for anything?",
+          "answer": "Yes. At $1,400/month for a single person, they fall in the SLMB/LMB income range ($1,351 to $1,616/month). Kansas would pay their Medicare Part B premium, currently $185/month in 2025. They would still owe Medicare deductibles and copayments. If their income were under $1,350/month, they would qualify for the more generous QMB tier, which covers cost-sharing too."
+        },
+        {
+          "question": "My parent has about $15,000 in a savings account. Does that disqualify them?",
+          "answer": "It depends on the tier. For QMB and SLMB, the asset limit for a single person is $9,660. For QI, it is $9,950. A $15,000 savings account would put a single person over the limit for all three tiers. However, the home they live in, one vehicle, and personal belongings do not count. If some of that $15,000 is in a retirement account, call the KanCare Clearinghouse at 800-792-4884 to ask how Kansas treats it, because retirement account rules can vary."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent who cannot manage paperwork on their own?",
+          "answer": "Yes. An authorized representative, such as an adult child, can apply on behalf of a parent. You will need to be identified on the application as the representative. If you have legal authority such as a power of attorney, have that document available. The KanCare Clearinghouse at 800-792-4884 can explain what is needed to add a representative to the case."
+        },
+        {
+          "question": "My parent is already on Medicare. Does applying for this program change or interrupt their Medicare coverage?",
+          "answer": "No. This program does not replace or interrupt Medicare. It pays what Medicare would otherwise charge your parent. Their doctor network, Medicare Advantage plan, and Part D drug plan stay the same. The only change is that Kansas begins paying certain costs on your parent's behalf."
+        },
+        {
+          "question": "My parent qualifies for QI but I heard funding runs out. How worried should we be?",
+          "answer": "The concern is real. QI is funded through an annual federal allocation and is awarded on a first-come, first-served basis. If funds are exhausted before the year ends, new applicants may not be approved until the next funding year. Apply as early in the year as possible. If your parent's income is close to the SLMB upper limit ($1,616/month single), they may also want to confirm whether they qualify for SLMB instead, which does not have a funding cap."
+        },
+        {
+          "question": "Can my parent apply for both this program and Medicare Extra Help (the Part D subsidy) at the same time?",
+          "answer": "Yes, and they should. Medicare Extra Help (also called the Low Income Subsidy) reduces prescription drug costs under Medicare Part D. If your parent qualifies for QMB, SLMB, or QI, they may automatically qualify for a form of Extra Help as well. Apply for both through KanCare and through the Social Security Administration (ssa.gov or 800-772-1213), or ask a Kansas SHIP counselor at 800-860-5260 to help coordinate both applications."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they are enrolled?",
+          "answer": "Your parent is required to report changes in income to KanCare. A change in income could shift them from one tier to another or end eligibility entirely. KanCare also conducts annual eligibility renewals. If income increases, Kansas will send a notice explaining any change to benefits. It is better to report changes proactively than to risk an overpayment situation that must be repaid later."
+        },
+        {
+          "question": "A Medicare provider billed my QMB-enrolled parent for a copay. Do they have to pay it?",
+          "answer": "No. Federal law prohibits Medicare providers from billing QMB enrollees for Medicare cost-sharing. Your parent can refuse to pay. If the billing continues, contact 1-800-MEDICARE (1-800-633-4227) to file a complaint. You can also contact the KanCare Clearinghouse at 800-792-4884 for documentation of their QMB status to provide to the provider."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "800-792-4884",
+      "sourceUrl": "https://khap.kdhe.ks.gov/KEESM/Oct_2023_Output/keesm2911.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

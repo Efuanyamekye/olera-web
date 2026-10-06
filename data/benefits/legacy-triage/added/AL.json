@@ -1,0 +1,16 @@
+[
+  {
+    "state": "AL",
+    "id": "al-medicaid-aged-disabled",
+    "name": "Alabama Medicaid for Aged/Disabled",
+    "legacyId": "alabama-medicaid-for-aged-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "AL",
+    "id": "al-snap-food-benefits",
+    "name": "Alabama SNAP (Food Assistance Program)",
+    "legacyId": null,
+    "programType": "benefit"
+  }
+]

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.891Z
+ * Last updated: 2026-10-06T06:44:48.399Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2262,6 +2262,437 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-13"
+    },
+    {
+      "id": "oh-medicare-premium-assistance",
+      "name": "Medicare Premium Assistance Programs",
+      "shortName": "Medicare Savings Programs",
+      "tagline": "If your parent is on Medicare with a limited income, Ohio may pay some or all of their monthly premiums, deductibles, and copays automatically.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County Department of Job and Family Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Ohio Medicaid Consumer Hotline",
+            "type": "service-area"
+          },
+          {
+            "name": "Ohio SHIP / OSHIIP counseling network",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Medicare costs add up fast. Even with Medicare coverage, your parent may owe monthly premiums, annual deductibles, and copays on every doctor visit. Ohio's Medicare Savings Programs (sometimes called MSPs) are designed to cover those costs for people on Medicare with low to moderate incomes. Depending on which program your parent qualifies for, the state can pay their Medicare Part B premium ($185/month in 2025), and in the most generous tier, also cover deductibles and copays.\n\nThere are four programs stacked by income level: QMB, SLMB, QI, and QDWI. Most family caregivers are looking at the first three. QMB is the broadest: it can pay Part A premiums, Part B premiums, deductibles, coinsurance, and copays. SLMB and QI cover the Part B premium only. Income limits range from $1,330/month for a single person at the QMB level up to $1,796/month for a single person at the QI level (2026 figures). Asset limits also apply, so savings and financial accounts factor in.\n\nYou do not fill out a separate MSP application in Ohio. You apply through the standard Medicaid application, and the county determines which tier your parent qualifies for. If your parent already has Medicaid, they may already be enrolled. If they have Medicare but not Medicaid, this may still be open to them.",
+      "savingsRange": "Up to $2,220/year for the Part B premium alone (SLMB and QI tiers); QMB adds coverage of deductibles and cost-sharing on top of premiums, with total savings depending on how much Medicare care your parent uses.",
+      "savingsSource": "Part B premium savings calculated from the 2025 standard Medicare Part B premium of $185/month published by CMS (cms.gov). QMB cost-sharing savings vary based on actual healthcare utilization and cannot be stated as a fixed maximum. QMB cost-sharing protections are described at medicare.gov.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must have Medicare Part A",
+          "Must live in Ohio",
+          "Income at or below $1,796/month for a single person (QI tier, 2026)",
+          "Assets at or below $9,950 for a single person (QMB/SLMB/QI tiers)",
+          "QDWI tier is for working disabled individuals under 65 with different limits"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Bank accounts",
+            "Cash",
+            "Retirement accounts",
+            "Other countable resources under Medicaid-style resource rules"
+          ],
+          "exemptAssets": [
+            "Primary home you live in",
+            "Personal belongings",
+            "One vehicle",
+            "Some burial and life insurance arrangements (subject to Medicaid-style rules)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be entitled to Medicare Part A",
+          "Must live in Ohio",
+          "QDWI is limited to working disabled individuals under age 65, with separate income limits ($2,660/month single, $3,607/month couple) and lower asset limits ($4,000 single, $6,000 couple)",
+          "Eligibility is determined through the Ohio Medicaid application, not a separate MSP form"
+        ],
+        "povertyLevelReference": "QMB: ~100% FPL; SLMB: ~100-120% FPL; QI: ~120-135% FPL (all include a $20 income disregard)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at benefits.ohio.gov or by calling 1-800-324-8680; processing time is not publicly stated but an interview may be required.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm Medicare Part A enrollment",
+            "description": "Your parent must be enrolled in Medicare Part A to qualify for QMB, SLMB, or QI. Check their red, white, and blue Medicare card. If they are not yet enrolled, contact Social Security at 1-800-772-1213 before applying."
+          },
+          {
+            "step": 2,
+            "title": "Check income and assets before applying",
+            "description": "For a single person: income must be at or below $1,330/month (QMB), $1,596/month (SLMB), or $1,796/month (QI). Assets must be at or below $9,950. Gather recent bank statements and income documents so you can answer questions accurately."
+          },
+          {
+            "step": 3,
+            "title": "Apply using the Ohio Medicaid application",
+            "description": "Ohio does not have a separate MSP application. Apply online at benefits.ohio.gov, call 1-800-324-8680, mail a paper application to your county Department of Job and Family Services (DJFS), or apply in person at your county DJFS office. When you apply, the county will screen for which MSP tier your parent qualifies for."
+          },
+          {
+            "step": 4,
+            "title": "Complete the interview if required",
+            "description": "The county DJFS may schedule a phone or in-person interview. Have income and asset documents ready. The interviewer will determine which program tier applies."
+          },
+          {
+            "step": 5,
+            "title": "Watch for the determination letter",
+            "description": "After the county processes the application, your parent will receive a letter stating which program they qualify for, or explaining why they were denied. If denied, the letter will include appeal rights and timelines."
+          },
+          {
+            "step": 6,
+            "title": "Renew annually",
+            "description": "QI in particular is subject to annual renewal and limited federal funding. Watch for renewal notices and respond promptly to avoid a gap in coverage."
+          }
+        ],
+        "processingTime": "Not publicly stated by Ohio Medicaid. An interview may be required, which can add time. Contact your county DJFS for a current estimate.",
+        "waitlist": null,
+        "tip": "If your parent is already enrolled in Ohio Medicaid, ask the caseworker whether they have also been enrolled in an MSP tier. The programs overlap but are not always assigned automatically.",
+        "urls": [
+          {
+            "label": "Apply online: Ohio Benefits",
+            "url": "https://benefits.ohio.gov"
+          },
+          {
+            "label": "Ohio Medicaid program information",
+            "url": "https://medicaid.ohio.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (to verify Part A enrollment)",
+        "Most recent Social Security award letter or benefit verification letter",
+        "Proof of Ohio residency (utility bill, lease agreement, or Ohio-issued ID with current address)",
+        "Most recent bank statements for all checking and savings accounts (current balances; the county will advise on the period they require)",
+        "Pension, annuity, or retirement income statements",
+        "Investment account statements (stocks, bonds, CDs, IRAs, annuities)",
+        "Life insurance policies with face values listed",
+        "Documentation of any other income sources (rental income, VA benefits, etc.)",
+        "Proof of identity (driver's license, state ID, or birth certificate)",
+        "Any legal documents if a representative is applying on behalf of your parent (power of attorney, guardianship papers)"
+      ],
+      "contacts": [
+        {
+          "label": "Ohio Medicaid Consumer Hotline",
+          "phone": "1-800-324-8680",
+          "description": "Call to apply by phone or ask questions about eligibility for Medicare Savings Programs. This line can initiate the Medicaid application used to screen for all MSP tiers.",
+          "hours": "Mon-Fri 7am-8pm ET, Sat 8am-5pm ET"
+        },
+        {
+          "label": "OSHIIP (Ohio Senior Health Insurance Information Program)",
+          "phone": "1-800-686-1578",
+          "description": "Free, unbiased counseling from trained volunteers who can explain which MSP tier fits your parent's situation and help you prepare before you apply. This line does not process applications but can save you time.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "County Department of Job and Family Services",
+          "phone": null,
+          "description": "Your county DJFS office processes applications locally and may conduct interviews. Find your county office at jfs.ohio.gov/county.",
+          "hours": "Varies by county"
+        }
+      ],
+      "applicationNotes": [
+        "Ohio uses the standard Medicaid application to screen for all four MSP tiers at once. You do not need to know which tier your parent qualifies for before applying; the county determines that.",
+        "QI (Qualifying Individual) is funded by a federal block grant, and slots can be limited. If your parent's income is in the QI range, apply as early in the calendar year as possible. Annual renewal matters for this tier.",
+        "SLMB and QI only pay the Medicare Part B premium. They do not cover deductibles or copays. If your parent has frequent doctor visits or hospitalizations, QMB coverage is significantly more valuable. If their income is slightly above the QMB limit, ask the caseworker whether any deductions could bring them into QMB range.",
+        "If your parent is denied because of assets, do not give up without reviewing which assets the county counted. The primary home, one vehicle, and personal belongings are generally not counted under Medicaid-style rules."
+      ],
+      "relatedPrograms": [
+        "Ohio Medicaid (full Medicaid coverage for very low-income Ohioans)",
+        "Extra Help / Low Income Subsidy (federal program that reduces Medicare Part D prescription drug costs)",
+        "OSHIIP Medicare Counseling (free help navigating Medicare plan choices)",
+        "SNAP Food Benefits (if income is low enough for MSP, your parent may also qualify for food assistance)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier could your parent qualify for?",
+          "description": "There are four Medicare Savings Program tiers in Ohio. Each has different income limits and covers different costs. The tier with the highest income limit is not always the best: QMB covers the most even though it requires the lowest income.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeSingle": "$1,330/month",
+              "incomeCouple": "$1,804/month",
+              "covers": "Medicare Part A premiums, Part B premiums, deductibles, coinsurance, and copays",
+              "note": "The most comprehensive tier. Providers cannot bill your parent for Medicare cost-sharing if they are enrolled in QMB."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeSingle": "$1,596/month",
+              "incomeCouple": "$2,164/month",
+              "covers": "Medicare Part B premium only",
+              "note": "Does not cover deductibles or copays."
+            },
+            {
+              "name": "QI (Qualifying Individual)",
+              "incomeSingle": "$1,796/month",
+              "incomeCouple": "$2,435/month",
+              "covers": "Medicare Part B premium only",
+              "note": "Subject to annual federal funding limits. Requires renewal each year. Apply early in the calendar year."
+            },
+            {
+              "name": "QDWI (Qualified Disabled and Working Individuals)",
+              "incomeSingle": "$2,660/month",
+              "incomeCouple": "$3,607/month",
+              "covers": "Medicare Part A premium only",
+              "note": "For working disabled individuals under age 65 who lost premium-free Part A. Asset limit is lower: $4,000 single, $6,000 couple. Different eligibility structure than the other tiers."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "QMB includes a billing protection most families don't know about",
+          "body": "If your parent qualifies for QMB, Medicare providers are legally prohibited from billing them for Medicare cost-sharing. That means no bills for deductibles, coinsurance, or copays from any provider who accepts Medicare. If a provider does bill them, your parent has the right to dispute it. This protection applies regardless of whether the provider also accepts Medicaid."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is slightly above the QMB limit. Is there anything that could lower their countable income?",
+          "answer": "Possibly. Ohio uses Medicaid income rules, and some income types may be excluded or reduced before the limit is applied. All four tiers also include a $20 general income disregard, which is already built into the published limits above. Ask your county DJFS caseworker whether any other deductions apply to your parent's specific income sources, such as irregular income or certain expenses."
+        },
+        {
+          "question": "My parent has a savings account with $12,000. Does that disqualify them automatically?",
+          "answer": "It depends on what else they own and what counts. The asset limit for QMB, SLMB, and QI is $9,950 for a single person, but the primary home, one vehicle, and personal belongings are generally not counted. If the $12,000 is their only significant asset and they own their home, the home would not count against the limit. A caseworker can tell you exactly how the county calculates countable assets for your parent's situation. It is worth applying even if you are unsure."
+        },
+        {
+          "question": "Can I apply for these programs on behalf of my parent?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of an elderly parent. Bring documentation of your authority to act, such as a signed power of attorney or court-ordered guardianship, when you apply. Call 1-800-324-8680 or go to benefits.ohio.gov to start."
+        },
+        {
+          "question": "My parent already has full Ohio Medicaid. Do they need to apply separately for a Medicare Savings Program?",
+          "answer": "Probably not, but confirm with your caseworker. People with full Medicaid are often automatically enrolled in QMB, which is the most comprehensive MSP tier. However, enrollment is not always automatic. Ask your parent's Medicaid caseworker at the county DJFS to verify whether an MSP tier is active on their account."
+        },
+        {
+          "question": "What is the difference between SLMB and QI if they both just pay the Part B premium?",
+          "answer": "The income range is different and the funding structure differs. SLMB serves people between roughly 100% and 120% of the Federal Poverty Level. QI serves people between roughly 120% and 135% FPL. QI is funded by a federal block grant, which means annual funding can run out; slots are limited and the program must be renewed each year. If your parent qualifies for SLMB, that tier is generally more stable than QI."
+        },
+        {
+          "question": "Can my parent apply for Extra Help (Low Income Subsidy for Part D drugs) at the same time?",
+          "answer": "Yes, and they should. Extra Help reduces Medicare Part D prescription drug costs and has separate but similar income limits. If your parent qualifies for QMB, SLMB, or QI, Social Security automatically enrolls them in Extra Help as well. If your parent applies for MSP and is approved, watch for an Extra Help notice from Social Security. If none arrives, call Social Security at 1-800-772-1213 to apply separately."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they are enrolled?",
+          "answer": "Your parent is required to report changes in income and assets to their county DJFS. If income rises above the limit for their current tier, they may be moved to a lower tier or lose eligibility. Conversely, if income drops, they may qualify for a higher tier with more coverage. Report changes promptly to avoid overpayments that could need to be repaid."
+        },
+        {
+          "question": "My parent received a bill from a doctor even though they have QMB. Is that legal?",
+          "answer": "No. Providers who accept Medicare are prohibited from billing QMB enrollees for Medicare deductibles, coinsurance, or copays. If your parent receives such a bill, they should tell the provider they are enrolled in QMB and show their Medicaid card. If the provider refuses to correct the bill, contact the Ohio Medicaid Consumer Hotline at 1-800-324-8680 or call 1-800-MEDICARE (1-800-633-4227) to report the issue."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "1-800-324-8680",
+      "sourceUrl": "https://medicaid.ohio.gov",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "oh-homestead-exemption",
+      "name": "Homestead Exemption",
+      "shortName": "Property Tax Exemption",
+      "tagline": "If your parent is 65+ and owns their home in Ohio, they may qualify to have part of their home's value excluded from property taxes, lowering their annual tax bill.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County auditor offices in each Ohio county",
+            "type": "service-area"
+          },
+          {
+            "name": "County-specific online filing portals where available",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Ohio's Homestead Exemption reduces your parent's property tax bill by excluding part of their home's taxable value from assessment. For seniors who qualify, counties describe the reduction as exempting the first $25,000 to $29,000 of the home's appraised value from taxation. The actual dollar savings depends on your parent's local tax rate, so the benefit varies by county.\n\nThis is a property tax exemption, not a cash benefit, food assistance, or healthcare program. It lowers what your parent owes each year on their home. Your parent must own and live in the home as their primary residence. Vacation homes and rental properties do not qualify.\n\nThe program is run by each county's auditor office, so the application process, available filing methods (online, mail, or in person), and processing time all vary by county. The income limit for 2026 applications is $41,000 in Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income for the applicant and their spouse combined. Social Security income may not count toward that threshold in some counties, but you should verify this with your county auditor before applying.",
+      "savingsRange": "",
+      "savingsSource": "The benefit is a property tax reduction tied to local tax rates, which vary by county. No statewide average dollar savings figure is published by the Ohio Department of Taxation. The reduction is based on exempting the first $25,000 to $29,000 of the home's appraised value from taxation, per Ohio Department of Taxation guidance and county auditor pages.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 by December 31 of the application year",
+          "Own and live in the home as primary residence",
+          "Ohio Adjusted Gross Income at or below $41,000 for 2026 applications (applicant and spouse combined)",
+          "No asset limit",
+          "Must apply with the county auditor where the home is located"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must own and occupy the home as the principal place of residence",
+          "Must turn 65 by December 31 of the year for which the exemption is sought",
+          "Home must be your parent's primary residence, not a vacation home or rental property",
+          "Only up to one acre of land associated with the home is covered",
+          "Application must be filed with the county auditor in the county where the property is located"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File form DTE 105A with your parent's county auditor by mail, in person, or online if the county offers it.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent's county auditor office",
+            "description": "Every county has its own auditor's office. Find yours by visiting tax.ohio.gov/individual/resources/homestead-exemption, which links to county auditor contacts. Your parent must file in the county where the home is located."
+          },
+          {
+            "step": 2,
+            "title": "Get form DTE 105A",
+            "description": "Download the Homestead Exemption Application for Senior Citizens, Disabled Persons, and Surviving Spouses (form DTE 105A) from your county auditor's website or from tax.ohio.gov. Some counties offer fillable PDFs or online filing portals. Others primarily accept paper forms."
+          },
+          {
+            "step": 3,
+            "title": "Gather income information for the prior tax year",
+            "description": "The application requires your parent's (and their spouse's) Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income from the prior year's Ohio income tax return. Have that return available. Social Security income may not count toward the limit, but verify this with your county auditor."
+          },
+          {
+            "step": 4,
+            "title": "Submit the completed application",
+            "description": "File the completed DTE 105A with your county auditor by the deadline. Submission options vary: some counties accept online filing, others require mail or in-person drop-off. Contact your county auditor's office to confirm."
+          },
+          {
+            "step": 5,
+            "title": "Wait for income verification",
+            "description": "If your parent has not yet filed their Ohio income tax return, the county auditor will wait for the Ohio Department of Taxation to process it before approving the exemption. There is no single statewide processing time. County offices do not publish a fixed turnaround."
+          }
+        ],
+        "processingTime": "No statewide processing time is published. Approval depends on when Ohio income tax returns are processed by the Department of Taxation and verified by the county auditor. Timing varies by county.",
+        "waitlist": null,
+        "tip": "Call your county auditor's office before mailing anything. County practices vary significantly: some offer online filing that saves time; others require a paper form with specific supporting documents. A five-minute call confirms the fastest path.",
+        "urls": [
+          {
+            "label": "Ohio Department of Taxation: Homestead Exemption",
+            "url": "https://tax.ohio.gov/individual/resources/homestead-exemption"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed form DTE 105A (Homestead Exemption Application for Senior Citizens, Disabled Persons, and Surviving Spouses)",
+        "Ohio income tax return from the prior year, showing Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income for your parent and their spouse",
+        "Proof of age if requested by the county (birth certificate or government-issued photo ID with date of birth)",
+        "Income information for the spouse, if applicable, from the prior tax year",
+        "Any county-specific supporting documents requested by the auditor (call your county auditor's office to ask before submitting)"
+      ],
+      "contacts": [
+        {
+          "label": "Your County Auditor's Office (Ohio)",
+          "phone": null,
+          "description": "Applications are filed with the county auditor where the property is located. Phone numbers, office hours, and online filing availability vary by county. Find your county's contact at tax.ohio.gov/individual/resources/homestead-exemption.",
+          "hours": "Varies by county. Most county offices are open Monday through Friday during business hours."
+        },
+        {
+          "label": "Ohio Department of Taxation: General Inquiry",
+          "phone": "(800) 282-1780",
+          "description": "The Ohio Department of Taxation can answer questions about the statewide program rules and direct you to your county auditor. They do not process applications directly.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "The income limit for 2025 applications was $40,000 in Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income. For 2026 applications, the limit is $41,000. The threshold adjusts annually for inflation.",
+        "Some counties exclude Social Security income from the income calculation; others may count spousal taxable income. Do not assume before checking with your county auditor, because the county's own worksheet instructions govern the test.",
+        "If your parent has not yet filed their Ohio income tax return when they apply, the county will wait for the Department of Taxation to process and verify the return before finalizing approval. Filing the tax return early speeds up the process.",
+        "This exemption applies only to your parent's primary residence. If they move to an assisted living facility or nursing home and no longer occupy the home as their primary residence, eligibility ends."
+      ],
+      "relatedPrograms": [
+        "HEAP (Home Energy Assistance Program) Ohio",
+        "Ohio's Senior Community Services Medicaid Waiver (PASSPORT)",
+        "Ohio Property Tax Rollback and Homestead for Disabled Veterans (form DTE 105I)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What this program does NOT cover",
+          "body": "The Homestead Exemption reduces property taxes on your parent's home. It is not a healthcare benefit, cash assistance program, food benefit, or caregiving service. If you are looking for help with medical costs, home care, or daily living support, those are separate programs."
+        },
+        {
+          "type": "prose",
+          "title": "How the tax reduction works",
+          "body": "The exemption removes part of your parent's home's appraised value from the calculation used to set their property tax bill. Ohio's statewide form describes the reduction as applying to up to $25,000 of the home's market value. Some county auditor offices describe the current exemption as covering the first $29,000 of appraised value. Because property tax rates differ by county and taxing district, the actual dollar savings is specific to your parent's location. Your county auditor can estimate the reduction once you provide the home's current appraised value."
+        },
+        {
+          "type": "prose",
+          "title": "Income: what counts and what may not",
+          "body": "The income test is based on Ohio Adjusted Gross Income (OAGI) or Ohio Modified Adjusted Gross Income (OMAGI) from the prior tax year, depending on how your county describes it. The limit covers the applicant and their spouse combined, not all household members. Social Security income may be excluded from the calculation in at least some counties. Spousal taxable income generally does count. Because counties use slightly different terminology and worksheet instructions, verify the exact calculation with your county auditor before applying."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security is their main income. Does that count against the $41,000 limit?",
+          "answer": "In at least some counties, Social Security income does not count toward the Ohio income threshold. However, this is not uniform across all county auditor offices. Check your county auditor's current application worksheet before assuming Social Security is excluded. If your parent's only income is Social Security and it is excluded, they likely qualify on income grounds."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent?",
+          "answer": "Yes. A family member, legal representative, or power of attorney can assist with or submit the application. You will need to complete form DTE 105A with your parent's information. Contact your county auditor's office to ask whether they require a copy of any power of attorney documentation when someone applies on another person's behalf."
+        },
+        {
+          "question": "Does my parent need to reapply every year?",
+          "answer": "Generally, once approved, your parent does not need to reapply each year as long as eligibility does not change. However, counties may require periodic income verification. Contact your county auditor to understand whether any annual filing or renewal is required."
+        },
+        {
+          "question": "My parent moved into a nursing home. Can they still get this exemption?",
+          "answer": "No. The exemption requires the home to be your parent's primary residence. If your parent permanently moves to a nursing home or assisted living facility and no longer lives in the home, they no longer qualify. Notify your county auditor if your parent's living situation changes."
+        },
+        {
+          "question": "Does the home's value affect eligibility? What if it is a high-value home?",
+          "answer": "There is no home value cap in the research reviewed for this program. Eligibility is based on age, income, and primary residency, not on the appraised value of the home. However, the exemption itself is calculated on the first $25,000 to $29,000 of the home's appraised value, so a higher-value home does not receive a proportionally larger exemption."
+        },
+        {
+          "question": "My parent did not file an Ohio income tax return last year. Can they still apply?",
+          "answer": "Possibly. The county auditor must verify income, and the standard path uses the Ohio income tax return. If your parent did not file (for example, because income was below the filing threshold), contact your county auditor directly. Some counties may accept alternative income documentation or have a process for non-filers."
+        },
+        {
+          "question": "Can my parent get this exemption and also apply for HEAP energy assistance?",
+          "answer": "Yes. These are separate programs with separate applications and eligibility rules. The Homestead Exemption reduces property taxes; Ohio's Home Energy Assistance Program (HEAP) helps with utility costs. Qualifying for one does not affect eligibility for the other. Applying for both is common and reasonable for seniors on fixed incomes."
+        },
+        {
+          "question": "My parent's spouse has a higher income. Does that disqualify them?",
+          "answer": "It depends on the combined total. The income limit for 2026 is $41,000 in Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income for both the applicant and their spouse together. If the combined figure exceeds $41,000, your parent would not qualify under the income test for that application year. Social Security income for either spouse may not count toward this total in some counties, so verify the worksheet with your county auditor."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HouseLine",
+      "phone": "(800) 282-1780",
+      "sourceUrl": "https://tax.ohio.gov/individual/resources/homestead-exemption",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {
