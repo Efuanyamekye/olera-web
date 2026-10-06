@@ -121,6 +121,7 @@ export default function ConnectionCard(props: ConnectionCardProps) {
             phone={phone}
             requestDate={hook.pendingRequestDate}
             connectionId={hook.connectionId}
+            justSent={hook.justSent}
           />
         )}
 

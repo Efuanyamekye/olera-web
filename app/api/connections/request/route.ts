@@ -15,7 +15,8 @@ import { syncIntentToProfile, recipientMap, timelineMap, careTypeMap } from "@/l
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
 import { markAdsLeadConversion } from "@/lib/ad-boost/ads-conversion.server";
 import { readManagedUtmFromRequest, managedUtmMetadata, type ManagedUtm } from "@/lib/ad-boost/managed-utm";
-import { holdProviderLeadNotifications } from "@/lib/leads/provider-notifications.server";
+import { holdProviderLeadNotifications, sendProviderLeadNotifications } from "@/lib/leads/provider-notifications.server";
+import { stampNextBestOption } from "@/lib/connections/next-best-option.server";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1017,7 +1018,8 @@ export async function POST(request: Request) {
     // Managed-ads attribution from the provider-page-load cookie (set by
     // ManagedUtmCapture). Cookie rides along on this same-origin fetch, so no
     // client caller needs to thread UTM. See lib/ad-boost/managed-utm.
-    const managedUtm = readManagedUtmFromRequest(request);
+    // let: a next-best-option request clears it below (3b).
+    let managedUtm = readManagedUtmFromRequest(request);
     const {
       providerId,
       providerName,
@@ -1031,6 +1033,7 @@ export async function POST(request: Request) {
       visit_id: visitId,
       cta_variant: ctaVariant,
       entry_point: entryPoint,
+      from_connection_id: fromConnectionId,
     } = body as {
       providerId: string;
       providerName: string;
@@ -1050,6 +1053,8 @@ export async function POST(request: Request) {
       visit_id?: string;
       cta_variant?: string;
       entry_point?: string; // Lead capture entry point (custom_quote, book_consultation, message_host)
+      /** next_best_option only: the inquiry the family just sent, whose answers carry over. */
+      from_connection_id?: string;
     };
 
     if (!providerId || !providerName) {
@@ -1339,6 +1344,37 @@ export async function POST(request: Request) {
       }
     }
 
+    // 3b. "Next best option" (lib/connections/next-best-option.server.ts): the
+    // family just answered the qualifying questions for another provider, so
+    // carry those answers over instead of sending this provider a blank lead.
+    // Only from an inquiry this same family sent; anything else is ignored and
+    // the request proceeds as an ordinary one.
+    let carriedFrom: string | null = null;
+    let carriedFromProviderId: string | null = null;
+    let carried: Record<string, unknown> = {};
+    // The managed-ads cookie names a campaign, not a provider, and it was set
+    // by the page the family is still on: the FIRST provider's page. Kept, it
+    // would credit this second provider's inquiry to that provider's Ad Boost
+    // campaign and fire its ad conversion. This family came from our offer.
+    if (entryPoint === "next_best_option") managedUtm = {};
+    if (entryPoint === "next_best_option" && fromConnectionId) {
+      const { data: original } = await db
+        .from("connections")
+        .select("id, from_profile_id, to_profile_id, type, message")
+        .eq("id", fromConnectionId)
+        .maybeSingle();
+      if (original && original.from_profile_id === fromProfileId && original.type === "inquiry") {
+        carriedFrom = original.id;
+        carriedFromProviderId = original.to_profile_id as string;
+        try {
+          const parsed = JSON.parse(original.message || "{}");
+          if (parsed && typeof parsed === "object") carried = parsed as Record<string, unknown>;
+        } catch {
+          carried = {};
+        }
+      }
+    }
+
     // 4. Check for existing active connection (prevent duplicates)
     // Only pending/accepted connections block reconnection.
     // Expired (withdrawn/ended) and declined connections allow a fresh request.
@@ -1433,7 +1469,7 @@ export async function POST(request: Request) {
     const careType = intentData?.careType || (seekerCareTypes.length > 0 ? seekerCareTypes[0] : null);
     const urgency = intentData?.urgency || seekerTimeline;
 
-    const messagePayload = JSON.stringify({
+    const messageFields: Record<string, unknown> = {
       // Seeker identity (always available)
       seeker_name: seekerName,
       seeker_first_name: firstName,
@@ -1453,7 +1489,20 @@ export async function POST(request: Request) {
       // Legacy field for backward compatibility
       additional_notes: intentData?.additionalNotes || null,
       contact_preference: null,
-    });
+    };
+    // Fill what this request left blank from the inquiry it follows (3b).
+    // Location stays this provider's: the family is looking near them.
+    for (const key of [
+      "seeker_phone", "care_recipient", "care_type", "care_type_other", "urgency",
+      "payment_method", "care_need", "message", "additional_notes", "contact_preference",
+    ]) {
+      const have = messageFields[key];
+      const prior = carried[key];
+      if ((have === null || have === undefined || have === "") && prior !== null && prior !== undefined && prior !== "") {
+        messageFields[key] = prior;
+      }
+    }
+    const messagePayload = JSON.stringify(messageFields);
 
     // 7. Build auto-intro message
     let autoIntro: string;
@@ -1487,6 +1536,10 @@ export async function POST(request: Request) {
     if (entryPoint) connectionMetadata.entry_point = entryPoint;
     if (sessionId) connectionMetadata.session_id = sessionId;
     if (visitId) connectionMetadata.visit_id = visitId;
+    if (carriedFrom) {
+      connectionMetadata.source = "next_best_option";
+      connectionMetadata.from_connection_id = carriedFrom;
+    }
 
     // Thread starts empty - provider must send the first real message
     connectionMetadata.thread = [];
@@ -1619,6 +1672,31 @@ export async function POST(request: Request) {
       managedUtm: managedUtm || null,
       isFirstLead: isFirstLeadAuth,
     });
+    // A next-best-option request already carries the family's answers (3b):
+    // there is no enrichment step coming to release it, so release it now
+    // rather than making this provider wait for the ten-minute ceiling.
+    if (carriedFrom) {
+      await sendProviderLeadNotifications({ connectionId: newConnection.id, releasedBy: "enrichment" }).catch((err) =>
+        console.error("[connections/request] next-best-option release failed", err),
+      );
+      // The funnel's last step, and a line in #notifications (TJ, 6 Oct): the
+      // offer only matters if families take it, so every take is visible.
+      await stampNextBestOption(db, carriedFrom, {
+        sent_at: new Date().toISOString(),
+        sent_connection_id: newConnection.id,
+      });
+      try {
+        const { data: first } = carriedFromProviderId
+          ? await db.from("business_profiles").select("display_name").eq("id", carriedFromProviderId).maybeSingle()
+          : { data: null };
+        const who = (typeof carried.seeker_first_name === "string" && carried.seeker_first_name) || "A family";
+        await sendSlackAlert(
+          `↪️ Next best option taken: ${who} asked ${first?.display_name ?? "a provider"}, then sent their request to ${providerName} from our offer. Both have their details. ${getSiteUrl()}/admin/relationships/families/${fromProfileId}`,
+        );
+      } catch (err) {
+        console.error("[connections/request] next-best-option alert failed", err);
+      }
+    }
 
     // 9d-ii. WhatsApp enrichment conversation to seeker (fire-and-forget)
     try {
