@@ -14,8 +14,8 @@ import { getSiteUrl } from "@/lib/site-url";
  *
  * Pinging her straight away does not race a provider. Unqualified leads are
  * held from providers until the family answers the qualifying text, so Ces is
- * the first person to ring. The one exception is a provider's own ad, where the
- * provider is told at once too; the message says so, so she can mention it.
+ * the first person to ring. A provider's own ad is handed to her when the
+ * family answers or after an hour; the message names her so Ces can say so.
  *
  * Slack user ids are not secrets. The env var exists so the person on call can
  * change without a deploy; the default is Ces.
@@ -29,7 +29,10 @@ export type CareTeamPing = {
   phone: string;
   /** "Home care for a parent", or null when the form did not ask. */
   need: string | null;
-  /** The provider who already has this family, when it came from their own ad. */
+  /**
+   * The provider whose own ad this came from. She does not have the family yet:
+   * handToPrimary passes it on when they answer our text, or after an hour.
+   */
   providerName?: string | null;
   /** When they submitted. Drives the call-time hint. */
   submittedAt: Date;
@@ -51,7 +54,7 @@ export function careTeamPingText(p: CareTeamPing, siteUrl: string): string {
     ? `${siteUrl}/admin/relationships/families/${p.seekerId}`
     : `${siteUrl}/admin/relationships/families?tab=call`;
   const who = p.providerName
-    ? `${p.providerName} has it too (their own ad), so say you are calling alongside them.`
+    ? `From the ${p.providerName} ad. They get this family when it answers our text, or in an hour, so if you reach them first, say ${p.providerName} will be in touch.`
     : "No provider has it yet. You are the first call.";
   return [
     `📞 *New family · ${p.city}* (${p.source})`,

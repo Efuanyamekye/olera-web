@@ -226,6 +226,8 @@ type CityLeadRow = {
   /** Handed to the provider whose own ad brought them in (primary.server.ts). */
   handed_at: string | null;
   handed_request_id: string | null;
+  /** The offer that holds the family now. Cleared by a move (move.server.ts). */
+  accepted_offer_id: string | null;
 };
 
 type CityMsgRow = {
@@ -926,7 +928,7 @@ async function loadFeeds(
       db
         .from("city_leads")
         .select(
-          "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at, handed_at, handed_request_id",
+          "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at, handed_at, handed_request_id, accepted_offer_id",
         )
         .in("care_seeker_id", g)
         .limit(1000),
@@ -1462,11 +1464,20 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   // the provider, a note of what they said) parks it for three more days, and
   // a dated next step parks it until that step is done. After thirty days it
   // stops asking, because a stale handover is history, not a task.
-  const acceptedOffer = (f.cityOffers.get(p.id) ?? []).find((o) => o.accepted_at);
-  const handedProviderId = lead?.handed_request_id
-    ? f.requestProvider.get(lead.handed_request_id) ?? null
-    : acceptedOffer?.provider_id ?? null;
-  const handedAtIso = lead?.handed_at ?? acceptedOffer?.accepted_at ?? null;
+  // The holder is whoever holds the family NOW. An offer that was moved away or
+  // released keeps its accepted_at, so "first offer with accepted_at" would name
+  // an agency that no longer has them; lead.accepted_offer_id is cleared on a
+  // move. A taken offer outranks the own-ad handover, since an admin can move a
+  // handed family on to another agency.
+  const acceptedOffer = lead?.accepted_offer_id
+    ? (f.cityOffers.get(p.id) ?? []).find((o) => o.id === lead.accepted_offer_id && o.accepted_at)
+    : undefined;
+  const handedProviderId = acceptedOffer
+    ? acceptedOffer.provider_id
+    : lead?.handed_request_id
+      ? f.requestProvider.get(lead.handed_request_id) ?? null
+      : null;
+  const handedAtIso = acceptedOffer?.accepted_at ?? lead?.handed_at ?? null;
   const handedTo =
     lead && handedAtIso && handedProviderId
       ? { name: f.providerNames.get(handedProviderId) ?? "the provider", at: handedAtIso }

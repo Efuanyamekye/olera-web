@@ -96,10 +96,6 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   if (r.flags.includes("tried_three")) {
     return { phrase: "Close out", tone: "warn", age };
   }
-  if (r.flags.includes("check_provider") && r.handed_to) {
-    const n = Math.floor((Date.now() - new Date(r.handed_to.at).getTime()) / 86_400_000);
-    return { phrase: "Check with provider", tone: "warn", age: `handed over ${days(n)} ago` };
-  }
   if (r.flags.includes("awaiting_reply")) {
     return { phrase: "Waiting on us", tone: "warn", age: quiet };
   }
@@ -117,6 +113,10 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     const n = r.outcome ? Math.floor((Date.now() - new Date(r.outcome.at).getTime()) / 86_400_000) : null;
     const said = n === null ? quiet : n <= 0 ? "said so today" : `said so ${days(n)} ago`;
     return { phrase: "Provider never replied", tone: "act", age: said };
+  }
+  if (r.flags.includes("check_provider") && r.handed_to) {
+    const n = Math.floor((Date.now() - new Date(r.handed_to.at).getTime()) / 86_400_000);
+    return { phrase: "Check with provider", tone: "warn", age: `handed over ${days(n)} ago` };
   }
   if (r.episode.state === "closed") {
     // The reason goes in the small line. "Closed — no connection formed" is 29
@@ -231,9 +231,6 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
     return `Called ${r.missed_calls} times, never reached. Text them twice on different days, then archive as Never answered.`;
   }
 
-  if (r.flags.includes("check_provider") && r.handed_to) {
-    return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
-  }
 
   if (r.flags.includes("promise_owed")) {
     if (r.reach.note) return `Promised a call. ${capitalise(r.reach.note)}.`;
@@ -246,6 +243,10 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
 
   if (r.flags.includes("provider_no_show")) {
     return "Told us the provider never got back to them.";
+  }
+
+  if (r.flags.includes("check_provider") && r.handed_to) {
+    return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
   }
 
   if (r.benefits?.letter_to_read) {
