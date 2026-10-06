@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 /**
  * POST /api/provider/olera-reviews/[id]/flag
@@ -43,12 +44,7 @@ export async function POST(
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("slug")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "slug");
 
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });

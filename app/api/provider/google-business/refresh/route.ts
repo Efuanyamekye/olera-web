@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { readGoogleReviews, refreshGoogleReviews, type RefreshTarget } from "@/lib/providers";
 import { MANUAL_REFRESH_MIN_DAYS, manualRefreshAllowed } from "@/lib/providers/review-refresh-plan";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 /**
  * The provider's own "Refresh reviews" button (account settings, Google
@@ -22,12 +23,7 @@ async function resolveTarget(): Promise<{ target: RefreshTarget } | { error: Nex
   const db = getServiceClient();
   const { data: account } = await db.from("accounts").select("id").eq("user_id", user.id).single();
   if (!account) return { error: NextResponse.json({ error: "No account found" }, { status: 400 }) };
-  const { data: profile } = await db
-    .from("business_profiles")
-    .select("id, source_provider_id, metadata")
-    .eq("account_id", account.id)
-    .in("type", ["organization", "caregiver"])
-    .single();
+  const { data: profile } = await activeProviderProfile(db, account.id, "id, source_provider_id, metadata");
   if (!profile) return { error: NextResponse.json({ error: "No provider profile found" }, { status: 400 }) };
   const meta = (profile.metadata || {}) as { google_metadata?: { place_id?: string } };
   let placeId = meta.google_metadata?.place_id ?? null;

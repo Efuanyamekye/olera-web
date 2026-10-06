@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 /**
  * POST /api/provider/questions/mark-read
@@ -48,12 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's provider profile
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("id, slug, source_provider_id")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "id, slug, source_provider_id");
 
     if (!profile) {
       return NextResponse.json(

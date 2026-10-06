@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import { reviewRequestEmail } from "@/lib/email-templates";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 interface ReviewRequestClient {
   name: string;
@@ -67,12 +68,7 @@ export async function GET() {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("id, metadata")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "id, metadata");
 
     if (!profile) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
@@ -219,12 +215,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await db
-      .from("business_profiles")
-      .select("id, display_name, slug, metadata, email")
-      .eq("account_id", account.id)
-      .in("type", ["organization", "caregiver"])
-      .single();
+    const { data: profile } = await activeProviderProfile(db, account.id, "id, display_name, slug, metadata, email");
 
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
