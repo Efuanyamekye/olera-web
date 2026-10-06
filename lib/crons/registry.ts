@@ -947,7 +947,7 @@ export const CRON_REGISTRY: CronJob[] = [
     description: "Daily, after the brief: Cortex posts in #cortex what the directory system did overnight (with undo links, only when something happened), the weekly state of the directory on Mondays, pull requests built from approved briefs that await a look, and summaries of meeting notes that landed in Notion (action items first). Keyed in cortex_posts so nothing is said twice.",
     recipientCohort: "The team, in #cortex (CORTEX_SLACK_CHANNEL) and any channel in CORTEX_MEETING_CHANNELS.",
     audience: "Internal",
-    fn: "notify",
+    fn: "digest",
     schedule: "0 6 * * *",
     humanSchedule: "Daily at 06:00 UTC",
     path: "/api/cron/cortex-voice",

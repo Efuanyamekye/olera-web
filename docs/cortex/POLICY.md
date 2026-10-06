@@ -35,6 +35,10 @@ What Cortex may do on its own, what it must ask for, and how it reports. Set wit
 - Delete a row. Soft delete only, with a reason the CHECK allows.
 - Scrape Google Maps with a browser at volume. The free API tier is the volume path; the browser is for the ambiguous hundred a month.
 
+## Backlog is not a queue
+
+A brief whose `note` starts with `backlog` is parked on purpose (TJ: "not saying we should do it now, but just putting that in the backlog"). The runner skips it and the morning post does not nag about it. It is built when TJ says go, by changing the note.
+
 ## How it builds
 
 Approved briefs in `cortex_handoffs` are built by a runner on TJ's Mac that starts Claude Code headless against a fresh worktree off `staging`, with the repo's skills and memory. Cortex scopes and narrates; Claude Code writes the code; TJ merges. The runner closes the brief with the pull request URL and the morning post lists PRs waiting for a look until they are merged or dropped.
