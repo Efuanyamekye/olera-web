@@ -36,7 +36,10 @@ const base = {
   complexity: "low",
   savingsSource: "",
   savingsVerified: false,
-  contentStatus: "published",
+  // Not "published": the program page shows a named "Verified by" credit for
+  // published content, and no person has reviewed these yet. "draft" shows
+  // the dated "Auto-researched" badge instead.
+  contentStatus: "draft",
   draftedAt: CHECKED,
   lastVerifiedDate: CHECKED,
   geographicScope: { type: "federal", stateVariation: false },
