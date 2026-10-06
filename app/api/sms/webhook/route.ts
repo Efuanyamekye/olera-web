@@ -420,6 +420,23 @@ async function captureCityQualification(
       return null;
     }
 
+    // The answer is consumed here, so the inbox should not also hold it as a
+    // text waiting for a human: William Snowden's "100% Disabled Veteran" sat
+    // in the SMS inbox as needs-reply for four days after it had already
+    // started his offer chain (Oct 2026). Best-effort, same as the notices.
+    const inboundLast10 = last10(phone);
+    if (inboundLast10) {
+      await db
+        .from("sms_inbound")
+        .update({ handled_at: new Date().toISOString(), handled_by: "sms-webhook:city-qualification" })
+        .eq("phone_last10", inboundLast10)
+        .eq("body", body)
+        .is("handled_at", null)
+        .then(({ error: handledError }) => {
+          if (handledError) console.error("[sms-webhook] City qualification inbox mark failed:", handledError);
+        });
+    }
+
     // An answer that lands in a column and tells nobody is the same as no
     // answer. Both of these are best-effort and neither may fail the capture:
     // the words are already saved, and the webhook must still 200.
