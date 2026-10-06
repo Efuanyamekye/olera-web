@@ -1,5 +1,6 @@
 import { getServiceClient } from "@/lib/admin";
 import { buildHighlights } from "@/lib/provider-highlights";
+import { ensureProviderProfileId, findNearbyOptions } from "@/lib/connections/next-best-option.server";
 import type { AiTrustSignals, CMSData, GoogleReviewsData } from "@/lib/types";
 
 /**
@@ -126,6 +127,20 @@ function haversineMi(lat1: number, lng1: number, lat2: number, lng2: number): nu
  * ("responsive"), then fills remaining slots with other matching providers so the
  * cascade is never empty when options exist.
  */
+const CANDIDATE_COLUMNS = "id, display_name, slug, care_types, metadata, image_url, lat, lng, source_provider_id";
+
+interface CandidateRow {
+  id: string;
+  display_name: string | null;
+  slug: string | null;
+  care_types: string[] | null;
+  metadata: Record<string, unknown> | null;
+  image_url: string | null;
+  lat: number | null;
+  lng: number | null;
+  source_provider_id: string | null;
+}
+
 export async function findAlternativeProviders(
   db: ReturnType<typeof getServiceClient>,
   excludeProfileId: string,
@@ -135,25 +150,70 @@ export async function findAlternativeProviders(
   /** Family coordinates — when provided, each card gets a distance. */
   familyLat?: number | null,
   familyLng?: number | null,
+  /** The family, so a provider they already asked is never suggested again. */
+  familyProfileId?: string | null,
+  /** False on a dry run: use providers that already have an account row, create none. */
+  createMissing = true,
 ): Promise<RecommendedProvider[]> {
-  if (!city || !state || careTypes.length === 0) return [];
+  // DISTANCE FIRST (6 Oct 2026). The city match below only draws on providers
+  // that already have an account row (about 2,400 of 74,000 in the directory)
+  // and in the exact same city, so 13 of 253 recent inquiries had three
+  // alternatives and the rescue reached about three families a week. The
+  // post-inquiry offer's lookup searches the whole directory within 30 miles
+  // of the provider they asked; take its top three, creating the account rows
+  // the one-tap intro link needs. Falls back to the city match when the
+  // provider has no coordinates or fewer than three qualify.
+  let candidates: CandidateRow[] = [];
+  const anchorMiles = new Map<string, number>();
+  try {
+    const nearby = await findNearbyOptions(db, { anchorProfileId: excludeProfileId, familyProfileId, limit: 3 });
+    if (nearby.length >= 3) {
+      const ids: string[] = [];
+      for (const o of nearby) {
+        const id = createMissing
+          ? await ensureProviderProfileId(db, o.providerId)
+          : ((await db.from("business_profiles").select("id").eq("source_provider_id", o.providerId).limit(1).maybeSingle()).data?.id as
+              | string
+              | undefined) ?? null;
+        if (!id || id === excludeProfileId) continue;
+        ids.push(id);
+        anchorMiles.set(id, o.distanceMi);
+      }
+      if (ids.length >= 3) {
+        const { data } = await db.from("business_profiles").select(CANDIDATE_COLUMNS).in("id", ids);
+        // Keep the lookup's ranking (responsive, rating band, distance).
+        candidates = ((data ?? []) as unknown as CandidateRow[]).sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+      }
+    }
+  } catch (err) {
+    console.error("[alternatives] nearby lookup failed, using the city match", err);
+  }
+  const byDistance = candidates.length >= 3;
 
-  const { data: candidates } = await db
-    .from("business_profiles")
-    .select("id, display_name, slug, care_types, metadata, image_url, lat, lng, source_provider_id")
-    .eq("type", "organization")
-    .eq("is_active", true)
-    .eq("city", city)
-    .eq("state", state)
-    .neq("id", excludeProfileId)
-    .limit(50);
+  if (!byDistance) {
+    if (!city || !state || careTypes.length === 0) return [];
+    const { data } = await db
+      .from("business_profiles")
+      .select(CANDIDATE_COLUMNS)
+      .eq("type", "organization")
+      .eq("is_active", true)
+      .eq("city", city)
+      .eq("state", state)
+      .neq("id", excludeProfileId)
+      .limit(50);
+    candidates = (data ?? []) as unknown as CandidateRow[];
+  }
 
-  if (!candidates?.length) return [];
+  if (!candidates.length) return [];
 
-  const matching = candidates.filter((p) => {
-    const cts = (p.care_types as string[]) || [];
-    return cts.some((ct) => careTypes.includes(ct));
-  });
+  // The distance lookup has already matched the care type, on the directory's
+  // labels; account rows mix labels and codes, so re-filtering would drop them.
+  const matching = byDistance
+    ? candidates
+    : candidates.filter((p) => {
+        const cts = (p.care_types as string[]) || [];
+        return cts.some((ct) => careTypes.includes(ct));
+      });
   if (matching.length === 0) return [];
 
   // Responsiveness: who has a real (non-auto) provider reply in the last 60 days.

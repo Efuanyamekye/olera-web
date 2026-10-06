@@ -851,6 +851,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            !dryRun,
           );
           if (alts.length >= 3) {
             const m = metaOf(r2trigger);
@@ -969,6 +971,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            !dryRun,
           );
           const hasAlts3 = alts3.length >= 3;
           return {
@@ -1029,6 +1033,8 @@ export async function GET(request: NextRequest) {
             (provider?.care_types as string[]) || [],
             familyLat,
             familyLng,
+            fam.familyId,
+            !dryRun,
           );
           const hasAlts4 = alts4.length >= 2;
           return {
