@@ -1,0 +1,939 @@
+{
+  "state": "CA",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "CA-A",
+      "programs": [
+        {
+          "name": "Medi-Cal (Aged, Blind and Disabled Federal Poverty Level program)",
+          "alsoKnownAs": [
+            "Medi-Cal",
+            "Medicaid",
+            "ABD FPL"
+          ],
+          "agency": "CA DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Already on Medi-Cal; her countable income ($1,050 - $20 - $202.90 Part B) is about $827, far under the limit, and $1,200 savings is far under the asset limit, so renewal should hold.",
+          "keyRule": "ABD FPL: countable income at or below 138% FPL ($1,836/mo individual from April 2026) after $20 and Part B premium disregards; non-MAGI asset limit reinstated 1 Jan 2026 at $130,000 individual.",
+          "source": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/non-magi/abd-fpl.html",
+          "evidence": "official"
+        },
+        {
+          "name": "In-Home Supportive Services",
+          "alsoKnownAs": [
+            "IHSS"
+          ],
+          "agency": "CDSS via LA County DPSS IHSS",
+          "verdict": "likely",
+          "reason": "She has Medi-Cal, is 65+, lives in her own home and needs hands-on help with bathing, dressing and medication. The daughter can enroll as her paid IHSS provider. Night wandering is the textbook trigger for Protective Supervision.",
+          "keyRule": "Must be 65+/blind/disabled, have or be eligible for Medi-Cal, and live at home; Protective Supervision (up to 195 hrs/mo non-severe, 283 hrs/mo severe) for mental impairment needing 24-hour supervision.",
+          "source": "https://dpss.lacounty.gov/en/senior-and-disabled/ihss.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income / State Supplementary Payment",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "SSI/SSP"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Countable income $1,030 ($1,050 - $20) is below California's 2026 SSI/SSP standard of $1,233.94 for an aged person living independently, and $1,200 savings is under SSI's $2,000 resource limit, so she should get roughly $204/mo SSI/SSP if not already receiving it.",
+          "keyRule": "2026 CA SSI/SSP aged individual, independent living: $1,233.94/mo ($994 federal + $239.94 SSP); SSI resource limit $2,000.",
+          "source": "https://cdss.ca.gov/Portals/13/SHD/ParaRegIndex/SSI%20Monthly%20Payment%20Amounts%202026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Qualified Medicare Beneficiary",
+          "alsoKnownAs": [
+            "QMB",
+            "Medicare Savings Program",
+            "MSP"
+          ],
+          "agency": "DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Countable income $1,030 is under the QMB limit; QMB pays her Part B premium and Medicare cost-sharing. She may already be enrolled through Medi-Cal buy-in; worth confirming.",
+          "keyRule": "CA QMB: countable income at or below 100% FPL + $20 (about $1,350/mo individual for 2026); asset limit $130,000 from 1 Jan 2026.",
+          "source": "https://cahealthadvocates.org/low-income-help/medicare-savings-programs-msps/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Anyone with full Medi-Cal, an MSP or SSI is automatically deemed eligible for Extra Help.",
+          "keyRule": "Automatic (deemed) eligibility for people with Medicaid, an MSP or SSI.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "CalFresh",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "CDSS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "SSI/SSP recipients have been eligible for CalFresh since June 2019, and her gross income is far under the limit.",
+          "keyRule": "Gross income at or below 200% FPL ($2,610/mo, 1 person, Oct 2025-Sep 2026) under broad-based categorical eligibility; SSI cash-out ended 1 June 2019.",
+          "source": "https://dpss.lacounty.gov/en/food/calfresh/gross-income.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Multipurpose Senior Services Program",
+          "alsoKnownAs": [
+            "MSSP"
+          ],
+          "agency": "CA Dept of Aging via local MSSP sites",
+          "verdict": "possible",
+          "reason": "She is 65+ and on Medi-Cal; depends on being found nursing-facility certifiable and on an open MSSP slot.",
+          "keyRule": "Age 65+, Medi-Cal eligible, certified or certifiable for nursing facility placement.",
+          "source": "https://daas.sbcounty.gov/aging/mssp/",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community-Based Alternatives Waiver",
+          "alsoKnownAs": [
+            "HCBA waiver",
+            "HCB Alternatives"
+          ],
+          "agency": "DHCS via waiver agencies",
+          "verdict": "possible",
+          "reason": "Would add care management and in-home services beyond IHSS, but needs nursing-facility level of care and the waiver has had a waitlist since July 2023.",
+          "keyRule": "Nursing Facility Level of Care plus Medi-Cal; enrollment capped with waitlist.",
+          "source": "https://www.disabilityrightsca.org/publications/the-home-and-community-based-alternatives-hcb-alternatives-waiver",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (AltaMed, Habitat Health, K-Day serve 90011) under Medicare/Medi-Cal",
+          "verdict": "possible",
+          "reason": "PACE plans serve 90011, she is over 55 with Medi-Cal; depends on the state certifying nursing-home level of care and on her agreeing to switch all care to the PACE team.",
+          "keyRule": "Age 55+, lives in service area, certified as needing nursing home level of care, able to live safely in community.",
+          "source": "https://211la.org/services/Hx6gjl1XOuyppq5DUbnly9EcxBJKoN/pace-programs",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Community-Based Adult Services / Alzheimer's Day Care Resource Center",
+          "alsoKnownAs": [
+            "CBAS",
+            "adult day health care",
+            "ADCRC"
+          ],
+          "agency": "DHCS / CA Dept of Aging",
+          "verdict": "possible",
+          "reason": "Full-scope Medi-Cal plus dementia would fit CBAS; needs a doctor's order and a center assessment. A dementia-specialised day center gives daytime supervision while the daughter works.",
+          "keyRule": "Full-scope Medi-Cal, cognitive impairment or chronic condition, at risk of institutionalisation, physician prescription.",
+          "source": "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "HEAP"
+          ],
+          "agency": "CA Dept of Community Services & Development via local agency",
+          "verdict": "likely",
+          "reason": "Her income is far under the limit; depends on her paying an energy bill and on funding at the local agency.",
+          "keyRule": "Household income at or below 60% State Median Income: $3,331.66/mo for 1 person (2026).",
+          "source": "https://www.csd.ca.gov/Pages/LIHEAP-Income-Eligibility.aspx",
+          "evidence": "official"
+        },
+        {
+          "name": "California Alternate Rates for Energy",
+          "alsoKnownAs": [
+            "CARE",
+            "SoCalGas CARE"
+          ],
+          "agency": "CPUC via the utility (SoCalGas for gas; LADWP serves 90011 electricity and runs its own discount)",
+          "verdict": "likely",
+          "reason": "$12,600/yr is under the CARE limit; applies to her SoCalGas bill if the account is in her name.",
+          "keyRule": "Household income at or below $43,280/yr for 1-2 people (June 2026-May 2027).",
+          "source": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-costs/care-fera-program",
+          "evidence": "official"
+        },
+        {
+          "name": "California Caregiver Resource Centers (Los Angeles Caregiver Resource Center)",
+          "alsoKnownAs": [
+            "CRC",
+            "LACRC",
+            "USC Family Caregiver Support Center"
+          ],
+          "agency": "California Caregiver Resource Center network; LA CRC run by the USC Family Caregiver Support Center",
+          "verdict": "likely",
+          "reason": "The daughter cares for an adult with progressive dementia in LA County; the CRC offers consultation, respite and support groups.",
+          "keyRule": "Serves family caregivers of adults with severe, progressive brain impairment onset after 18, living in LA County.",
+          "source": "https://losangelescrc.usc.edu/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support Program",
+            "Area Agency on Aging"
+          ],
+          "agency": "Los Angeles Department of Aging (City of LA AAA; 90011 is inside the City of LA)",
+          "verdict": "likely",
+          "reason": "The daughter is an unpaid family caregiver of someone 60+.",
+          "keyRule": "Older Americans Act Title III-E: caregivers of adults 60+ or of people with Alzheimer's at any age.",
+          "source": "https://aging.lacity.gov/family-caregiver-resources",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "She has dementia and an unpaid caregiver; depends on being in Original Medicare (not a Medicare Advantage/Medi-Medi plan or PACE) and on a GUIDE practice accepting her. Respite capped at $2,625 for the 2026-27 year.",
+          "keyRule": "Dementia diagnosis, Medicare A and B, not in Medicare Advantage or PACE, not in hospice or long-term nursing home.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Pension / Aid and Attendance",
+          "alsoKnownAs": [
+            "A&A"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "She is not a veteran or a veteran's surviving spouse.",
+          "keyRule": "Requires wartime veteran or surviving spouse.",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "In-Home Supportive Services (ask for Protective Supervision)",
+        "phoneOrWhere": "LA County IHSS Application Hotline 888-944-4477 (TTY 800-735-2922)",
+        "why": "She already has Medi-Cal, so the biggest unmet need is paid hands-on help and supervision; IHSS can pay the daughter, and night wandering makes the Protective Supervision assessment urgent."
+      },
+      "notes": "SSI/SSP: if she is not already on SSI, she probably qualifies for a small check (~$204/mo); her Medi-Cal may already come through SSI. CA asset limit of $130,000 is temporary; it drops to $21,000 individual on 1 July 2027 per secondary sources (Justice in Aging / CANHR), which would not affect her. GUIDE availability depends on whether she is in a Medi-Medi (D-SNP) plan, common for LA duals. The 2026 dollar figure for ABD FPL ($1,836) is from a secondary source (CA Health Advocates) computed from 2026 FPL; the rule itself is from DPSS policy."
+    },
+    {
+      "familyId": "CA-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "A&A",
+            "Aid & Attendance"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Served 1962-1965, which includes days after 5 Aug 1964 (Vietnam era) with more than 90 days active duty, honorable, age 65+. Net worth (~$38,000 + $37,200 income) is far under $163,699. Income $37,200 minus medical costs above $1,141 (two Part B premiums alone are about $4,870/yr) lands near $33,470, under the $34,488 married-with-A&A cap, and any paid in-home care raises the benefit. Needing help bathing supports the A&A rating.",
+          "keyRule": "MAPR veteran with one dependent + A&A: $34,488/yr (from 1 Dec 2025); net worth limit $163,699; medical expenses deductible above 5% of MAPR ($1,141); wartime: Vietnam era outside RVN 5 Aug 1964-7 May 1975, 90 days active with 1 day wartime.",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment (with respite, home health aide, adult day health care, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "VA health care",
+            "VHA",
+            "Geriatrics and Extended Care"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "Honorably discharged wartime veteran can apply; the priority group (and access) depends on income vs VA thresholds, which a granted VA pension would resolve in his favour. Once enrolled, VA can fund in-home respite and homemaker/home health aide.",
+          "keyRule": "Enrollment by priority group; pension recipients are placed in Priority Group 5.",
+          "source": "https://www.va.gov/health-care/eligibility/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "The wife qualifies as a General Caregiver as soon as he is enrolled in VA health care; gives skills training, peer support, and up to 30 days respite a year.",
+          "keyRule": "Veteran must be enrolled in VA health care; no rating requirement.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating, so the stipend program is closed to him even though it now covers all eras.",
+          "keyRule": "Veteran needs a VA service-connected disability rating of 70% or higher.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medi-Cal (Aged, Blind and Disabled Federal Poverty Level program)",
+          "alsoKnownAs": [
+            "Medi-Cal",
+            "Medicaid",
+            "ABD FPL"
+          ],
+          "agency": "CA DHCS via LA County DPSS",
+          "verdict": "possible",
+          "reason": "Countable income $3,100 - $20 - $405.80 (both Part B premiums) is about $2,674, roughly $184 over the $2,490 couple limit. Any Medigap/Part D premiums they pay are also deducted and could close the gap; otherwise Medi-Cal with a share of cost. Savings $38,000 is under the $195,000 couple asset limit.",
+          "keyRule": "ABD FPL couple limit 138% FPL ($2,490/mo from April 2026) after $20, Part B and other health-insurance premium deductions; couple asset limit $195,000 (2026).",
+          "source": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/non-magi/abd-fpl.html",
+          "evidence": "official"
+        },
+        {
+          "name": "In-Home Supportive Services",
+          "alsoKnownAs": [
+            "IHSS"
+          ],
+          "agency": "CDSS via LA County DPSS IHSS",
+          "verdict": "possible",
+          "reason": "He needs bathing help and supervision, so he would get IHSS hours, and his wife could be his paid provider; the catch is Medi-Cal eligibility. Under the Community First Choice Option, spousal impoverishment rules can protect her income (MMMNA $4,067 in 2026) and reduce or eliminate a share of cost.",
+          "keyRule": "IHSS requires Medi-Cal eligibility; spousal impoverishment protections apply to IHSS only under CFCO (aid code 2K).",
+          "source": "https://canhr.org/using-californias-spousal-impoverishment-rule-for-home-and-community-based-services/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB/SLMB/QI)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "DHCS via LA County DPSS",
+          "verdict": "unlikely",
+          "reason": "Countable income about $3,080 is above even the QI couple limit.",
+          "keyRule": "CA QI couple limit about $2,455/mo (135% FPL + $20, 2026).",
+          "source": "https://cahealthadvocates.org/low-income-help/medicare-savings-programs-msps/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Countable income about $3,080/mo is above 150% FPL for a couple (about $2,705/mo on 2026 guidelines). Would flip to automatic if Medi-Cal is granted.",
+          "keyRule": "Income at or below 150% FPL; 2026 couple resource limit $36,100 (they also exceed it at $38,000).",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "CalFresh",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "CDSS via LA County DPSS",
+          "verdict": "possible",
+          "reason": "Gross $3,100 is just under the $3,526 two-person limit; the benefit (possibly small) depends on their rent/mortgage and medical expenses over $35/mo.",
+          "keyRule": "Gross income at or below 200% FPL ($3,526/mo for 2, Oct 2025-Sep 2026); elderly/disabled medical deduction.",
+          "source": "https://dpss.lacounty.gov/en/food/calfresh/gross-income.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "HEAP"
+          ],
+          "agency": "CA Dept of Community Services & Development via local agency",
+          "verdict": "likely",
+          "reason": "$3,100/mo is under the two-person limit; depends on paying an energy bill and local funding.",
+          "keyRule": "60% SMI: $4,356.83/mo for 2 people (2026).",
+          "source": "https://www.csd.ca.gov/Pages/LIHEAP-Income-Eligibility.aspx",
+          "evidence": "official"
+        },
+        {
+          "name": "California Alternate Rates for Energy",
+          "alsoKnownAs": [
+            "CARE",
+            "SoCalGas CARE"
+          ],
+          "agency": "CPUC via the utility (SoCalGas for gas; LADWP serves 90011 electricity and runs its own discount)",
+          "verdict": "likely",
+          "reason": "$37,200/yr is under the $43,280 limit for 1-2 people; applies to SoCalGas if they have a gas account.",
+          "keyRule": "Household income at or below $43,280/yr for 1-2 people (June 2026-May 2027).",
+          "source": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-costs/care-fera-program",
+          "evidence": "official"
+        },
+        {
+          "name": "California Caregiver Resource Centers (Los Angeles Caregiver Resource Center)",
+          "alsoKnownAs": [
+            "CRC",
+            "LACRC",
+            "USC Family Caregiver Support Center"
+          ],
+          "agency": "California Caregiver Resource Center network; LA CRC run by the USC Family Caregiver Support Center",
+          "verdict": "likely",
+          "reason": "Exhausted wife caring for a spouse with dementia in LA County is the CRC's core client; respite and consultation.",
+          "keyRule": "Caregivers of adults with severe, progressive brain impairment in LA County.",
+          "source": "https://losangelescrc.usc.edu/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support Program",
+            "Area Agency on Aging"
+          ],
+          "agency": "Los Angeles Department of Aging (City of LA AAA; 90011 is inside the City of LA)",
+          "verdict": "likely",
+          "reason": "Wife is an unpaid caregiver of someone 60+; respite, training, case assistance.",
+          "keyRule": "OAA Title III-E caregivers of adults 60+.",
+          "source": "https://aging.lacity.gov/family-caregiver-resources",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "Dementia with an unpaid caregiver fits; depends on Original Medicare and a participating practice. Respite up to $2,625 for 2026-27.",
+          "keyRule": "Dementia, Medicare A and B, not Medicare Advantage/PACE.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Community-Based Adult Services / Alzheimer's Day Care Resource Center",
+          "alsoKnownAs": [
+            "CBAS",
+            "adult day health care",
+            "ADCRC"
+          ],
+          "agency": "DHCS / CA Dept of Aging",
+          "verdict": "possible",
+          "reason": "Adult day for daytime supervision would directly relieve the wife; CBAS is free only with Medi-Cal, otherwise private pay or VA adult day health care.",
+          "keyRule": "Full-scope Medi-Cal for CBAS funding.",
+          "source": "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (AltaMed, Habitat Health, K-Day serve 90011) under Medicare/Medi-Cal",
+          "verdict": "possible",
+          "reason": "PACE serves 90011; without Medi-Cal they would pay the monthly Medi-Cal portion privately. Depends on nursing-home level of care certification.",
+          "keyRule": "Age 55+, service area, nursing home level of care.",
+          "source": "https://211la.org/services/Hx6gjl1XOuyppq5DUbnly9EcxBJKoN/pace-programs",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Property Tax Postponement",
+          "alsoKnownAs": [
+            "PTP"
+          ],
+          "agency": "California State Controller's Office",
+          "verdict": "possible",
+          "reason": "Only if they own their home with at least 40% equity; income $37,200 is under the limit.",
+          "keyRule": "Age 62+ (or blind/disabled), owner-occupied, household income at or below $55,181 (some SCO pages list $57,002 for 2026-27), 40% equity, no reverse mortgage.",
+          "source": "https://www.sco.ca.gov/ardtax_fact_sheet.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income / State Supplementary Payment",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "SSI/SSP"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Couple income is above the SSI/SSP couple standard.",
+          "keyRule": "2026 CA SSI/SSP aged couple independent living: $2,098.83/mo.",
+          "source": "https://cdss.ca.gov/Portals/13/SHD/ParaRegIndex/SSI%20Monthly%20Payment%20Amounts%202026.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Veterans Pension with Aid and Attendance (plus VA health care enrollment)",
+        "phoneOrWhere": "LA County Dept of Military and Veterans Affairs, 877-452-8387 (877-4LA-VETS), Bob Hope Patriotic Hall, 1816 S. Figueroa St",
+        "why": "It is the one program they clearly qualify for that pays cash they can spend on in-home help for the exhausted wife; filing an Intent to File locks the start date, and VA health care enrollment opens VA respite and caregiver support."
+      },
+      "notes": "VA pension estimate assumes they pay both Part B premiums themselves and have no other unreimbursed medical costs; paid care or Medigap premiums would increase it. Whose name the $800 pension is in matters for the IHSS/CFCO spousal budgeting. VA health care priority group for a non-service-connected veteran depends on VA income thresholds not looked up here (marked inferred). CA's PTP income limit appears as both $55,181 and $57,002 for 2026-27 in sources."
+    },
+    {
+      "familyId": "CA-C",
+      "programs": [
+        {
+          "name": "Medi-Cal (Aged, Blind and Disabled Federal Poverty Level program)",
+          "alsoKnownAs": [
+            "Medi-Cal",
+            "Medicaid",
+            "ABD FPL"
+          ],
+          "agency": "CA DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Countable couple income: his $1,350 - $20 - $202.90 Part B plus half of her wages after $65 ($167.50) is about $1,295, well under the $2,490 couple limit; savings $4,500.",
+          "keyRule": "ABD FPL couple limit 138% FPL ($2,490/mo from April 2026), $20 any-income, $65 + half earned-income, and Part B disregards.",
+          "source": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/non-magi/abd-fpl.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Medi-Cal (MAGI) for the spouse",
+          "alsoKnownAs": [
+            "Medi-Cal",
+            "Medicaid expansion"
+          ],
+          "agency": "CA DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "His wife is 63 and not on Medicare; household MAGI of $1,750 is under 138% FPL for two ($2,489/mo).",
+          "keyRule": "MAGI Medi-Cal for adults 19-64 at or below 138% FPL; no asset test for MAGI.",
+          "source": "https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Qualified Medicare Beneficiary",
+          "alsoKnownAs": [
+            "QMB",
+            "Medicare Savings Program",
+            "MSP"
+          ],
+          "agency": "DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Countable income about $1,498 (no Part B disregard for MSP) is under the couple QMB limit; saves $202.90/mo and Medicare cost-sharing.",
+          "keyRule": "CA QMB couple about $1,823/mo (100% FPL + $20, 2026); assets under $195,000.",
+          "source": "https://cahealthadvocates.org/low-income-help/medicare-savings-programs-msps/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic once he has Medi-Cal or QMB; independently his income is under 150% FPL for a couple and savings under the resource limit.",
+          "keyRule": "150% FPL; 2026 couple resource limit $36,100; deemed with Medicaid/MSP.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "CalFresh",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "CDSS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Gross $1,750 is far under the two-person limit and the household has a disabled/elderly member, so medical and uncapped shelter deductions apply.",
+          "keyRule": "Gross at or below 200% FPL ($3,526/mo for 2).",
+          "source": "https://dpss.lacounty.gov/en/food/calfresh/gross-income.html",
+          "evidence": "official"
+        },
+        {
+          "name": "In-Home Supportive Services",
+          "alsoKnownAs": [
+            "IHSS"
+          ],
+          "agency": "CDSS via LA County DPSS IHSS",
+          "verdict": "possible",
+          "reason": "Once on Medi-Cal he is eligible to apply, but he bathes and dresses himself; hours would come only from medication help, accompaniment to appointments and cueing, so the assessed hours may be low. Protective Supervision unlikely at this stage.",
+          "keyRule": "IHSS hours set by functional assessment; requires Medi-Cal.",
+          "source": "https://dpss.lacounty.gov/en/senior-and-disabled/ihss.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance conversion (Compassionate Allowance)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowances"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-onset Alzheimer's is a Compassionate Allowance condition. He was diagnosed at 64, before full retirement age; if he took reduced early retirement, an SSDI claim could replace it with his unreduced benefit. Depends on his work credits, onset date and when he claimed retirement.",
+          "keyRule": "SSDI requires disability before full retirement age and insured status; early-onset Alzheimer's is on the Compassionate Allowances list.",
+          "source": "https://www.ssa.gov/compassionateallowances/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "HEAP"
+          ],
+          "agency": "CA Dept of Community Services & Development via local agency",
+          "verdict": "likely",
+          "reason": "$1,750/mo is well under the two-person limit.",
+          "keyRule": "60% SMI: $4,356.83/mo for 2 (2026).",
+          "source": "https://www.csd.ca.gov/Pages/LIHEAP-Income-Eligibility.aspx",
+          "evidence": "official"
+        },
+        {
+          "name": "California Alternate Rates for Energy",
+          "alsoKnownAs": [
+            "CARE",
+            "SoCalGas CARE"
+          ],
+          "agency": "CPUC via the utility (SoCalGas for gas; LADWP serves 90011 electricity and runs its own discount)",
+          "verdict": "likely",
+          "reason": "$21,000/yr is under the $43,280 limit; also auto-qualifies via CalFresh/Medi-Cal.",
+          "keyRule": "Income at or below $43,280/yr for 1-2 people, or enrollment in CalFresh/Medi-Cal.",
+          "source": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-costs/care-fera-program",
+          "evidence": "official"
+        },
+        {
+          "name": "California Caregiver Resource Centers (Los Angeles Caregiver Resource Center)",
+          "alsoKnownAs": [
+            "CRC",
+            "LACRC",
+            "USC Family Caregiver Support Center"
+          ],
+          "agency": "California Caregiver Resource Center network; LA CRC run by the USC Family Caregiver Support Center",
+          "verdict": "likely",
+          "reason": "Wife caring for an adult with early-onset Alzheimer's (onset after 18) in LA County.",
+          "keyRule": "Caregivers of adults with severe, progressive brain impairment onset after 18.",
+          "source": "https://losangelescrc.usc.edu/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support Program",
+            "Area Agency on Aging"
+          ],
+          "agency": "Los Angeles Department of Aging (City of LA AAA; 90011 is inside the City of LA)",
+          "verdict": "likely",
+          "reason": "He is over 60 and his wife is his unpaid caregiver.",
+          "keyRule": "OAA Title III-E: caregivers of adults 60+ or of people with Alzheimer's of any age.",
+          "source": "https://aging.lacity.gov/family-caregiver-resources",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "Dementia diagnosis; respite benefit requires moderate-to-high complexity tier, so early stage may get care navigation but limited respite. Depends on Original Medicare and a participating practice.",
+          "keyRule": "Dementia, Medicare A and B, not in MA/PACE; respite for qualifying tiers with unpaid caregiver.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Community-Based Adult Services / Alzheimer's Day Care Resource Center",
+          "alsoKnownAs": [
+            "CBAS",
+            "adult day health care",
+            "ADCRC"
+          ],
+          "agency": "DHCS / CA Dept of Aging",
+          "verdict": "possible",
+          "reason": "With Medi-Cal he could attend an Alzheimer's day program, but CBAS requires risk of institutionalisation, which his current level may not meet.",
+          "keyRule": "Full-scope Medi-Cal, at risk of institutionalisation, doctor's order.",
+          "source": "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (AltaMed, Habitat Health, K-Day serve 90011) under Medicare/Medi-Cal",
+          "verdict": "unlikely",
+          "reason": "He still bathes and dresses himself, so he is unlikely to be certified at nursing-home level of care yet.",
+          "keyRule": "Must be certified as needing nursing home level of care.",
+          "source": "https://211la.org/services/Hx6gjl1XOuyppq5DUbnly9EcxBJKoN/pace-programs",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income / State Supplementary Payment",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "SSI/SSP"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His own $1,350 Social Security alone exceeds the SSI/SSP standard.",
+          "keyRule": "2026 CA SSI/SSP aged/disabled individual independent living: $1,233.94/mo.",
+          "source": "https://cdss.ca.gov/Portals/13/SHD/ParaRegIndex/SSI%20Monthly%20Payment%20Amounts%202026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "VA benefits",
+          "alsoKnownAs": [
+            "VA Pension"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "Not a veteran.",
+          "keyRule": "Requires veteran or survivor status.",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medi-Cal (with Medicare Savings Program and CalFresh on the same application)",
+        "phoneOrWhere": "LA County DPSS Customer Service Center 866-613-3777, or apply online at BenefitsCal",
+        "why": "One application can cover his Medi-Cal and QMB (saving the $202.90 Part B premium and copays), give his 63-year-old wife health coverage, add CalFresh, and unlock IHSS and adult day care later."
+      },
+      "notes": "Worth a separate call to SSA (800-772-1213) about converting to SSDI: if he took early retirement after his Alzheimer's onset, SSDI could raise his monthly benefit for life. Her $400 wages treatment assumes standard $65 + half earned income disregard. Whether the ABD FPL couple limit or individual limit applies when only one spouse is aged/disabled was not confirmed from DHCS text; he qualifies under either."
+    },
+    {
+      "familyId": "CA-D",
+      "programs": [
+        {
+          "name": "Medi-Cal (Aged, Blind and Disabled Federal Poverty Level program)",
+          "alsoKnownAs": [
+            "Medi-Cal",
+            "Medicaid",
+            "ABD FPL"
+          ],
+          "agency": "CA DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Only her own income counts: $1,400 - $20 - $202.90 Part B is about $1,177, under the $1,836 individual limit, and $9,000 savings is far under $130,000. Living in her daughter's home does not add the daughter's income.",
+          "keyRule": "ABD FPL individual limit 138% FPL ($1,836/mo from April 2026); asset limit $130,000 (2026).",
+          "source": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/non-magi/abd-fpl.html",
+          "evidence": "official"
+        },
+        {
+          "name": "In-Home Supportive Services",
+          "alsoKnownAs": [
+            "IHSS"
+          ],
+          "agency": "CDSS via LA County DPSS IHSS",
+          "verdict": "likely",
+          "reason": "Needs hands-on help with bathing, dressing, toileting and mobility; once Medi-Cal is approved the daughter can be her paid IHSS provider. Living in a relative's home counts as living at home. Domestic hours may be prorated because she shares the household.",
+          "keyRule": "65+, Medi-Cal eligible, lives at home (not a facility), functional need assessed by social worker.",
+          "source": "https://dpss.lacounty.gov/en/senior-and-disabled/ihss.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Survivors Pension",
+            "Widow's pension",
+            "A&A"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Late husband served in the Navy 1951-1954 (Korean conflict) with honorable discharge and she has not remarried. Her $16,800 income minus medical costs above $935 (Part B alone is about $2,435/yr) is about $15,300, under the $18,697 A&A cap, worth roughly $3,400/yr before counting paid care. Net worth far under $163,699.",
+          "keyRule": "Surviving spouse with A&A MAPR $18,697/yr (from 1 Dec 2025); net worth limit $163,699; Korean conflict 27 Jun 1950-31 Jan 1955; deduct medical expenses above 5% of MAPR.",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Specified Low-Income Medicare Beneficiary",
+          "alsoKnownAs": [
+            "SLMB",
+            "Medicare Savings Program",
+            "MSP"
+          ],
+          "agency": "DHCS via LA County DPSS",
+          "verdict": "likely",
+          "reason": "Countable income $1,380 is just over the QMB limit (~$1,350) but under SLMB (~$1,616), so Part B is paid. Full Medi-Cal would cover the premium through the state buy-in anyway.",
+          "keyRule": "CA SLMB 100-120% FPL + $20 (about $1,616/mo individual, 2026).",
+          "source": "https://cahealthadvocates.org/low-income-help/medicare-savings-programs-msps/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Countable $1,380/mo is under 150% FPL ($1,995/mo) and $9,000 is under the $18,090 resource limit; automatic once Medi-Cal is granted.",
+          "keyRule": "Income at or below 150% FPL; 2026 individual resource limit $18,090.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "Multipurpose Senior Services Program",
+          "alsoKnownAs": [
+            "MSSP"
+          ],
+          "agency": "CA Dept of Aging via local MSSP sites",
+          "verdict": "possible",
+          "reason": "65+ and needs heavy help, so likely nursing-facility certifiable; depends on Medi-Cal approval and an open slot.",
+          "keyRule": "65+, Medi-Cal, nursing facility certifiable.",
+          "source": "https://daas.sbcounty.gov/aging/mssp/",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community-Based Alternatives Waiver",
+          "alsoKnownAs": [
+            "HCBA waiver",
+            "HCB Alternatives"
+          ],
+          "agency": "DHCS via waiver agencies",
+          "verdict": "possible",
+          "reason": "Nursing-facility level of care is plausible, but there is a waitlist.",
+          "keyRule": "NFLOC plus Medi-Cal; capped enrollment.",
+          "source": "https://www.disabilityrightsca.org/publications/the-home-and-community-based-alternatives-hcb-alternatives-waiver",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (AltaMed, Habitat Health, K-Day serve 90011) under Medicare/Medi-Cal",
+          "verdict": "possible",
+          "reason": "PACE serves 90011 and she likely meets nursing-home level of care; depends on state certification and her choosing PACE over her own doctors.",
+          "keyRule": "55+, service area, nursing home level of care.",
+          "source": "https://211la.org/services/Hx6gjl1XOuyppq5DUbnly9EcxBJKoN/pace-programs",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Community-Based Adult Services / Alzheimer's Day Care Resource Center",
+          "alsoKnownAs": [
+            "CBAS",
+            "adult day health care",
+            "ADCRC"
+          ],
+          "agency": "DHCS / CA Dept of Aging",
+          "verdict": "possible",
+          "reason": "Adult day health would give the daughter working hours back; needs Medi-Cal, doctor's order and assessment.",
+          "keyRule": "Full-scope Medi-Cal, at risk of institutionalisation.",
+          "source": "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support Program",
+            "Area Agency on Aging"
+          ],
+          "agency": "Los Angeles Department of Aging (City of LA AAA; 90011 is inside the City of LA)",
+          "verdict": "likely",
+          "reason": "The daughter is an unpaid caregiver of a parent over 60.",
+          "keyRule": "OAA Title III-E caregivers of adults 60+.",
+          "source": "https://aging.lacity.gov/family-caregiver-resources",
+          "evidence": "official"
+        },
+        {
+          "name": "California Caregiver Resource Centers (Los Angeles Caregiver Resource Center)",
+          "alsoKnownAs": [
+            "CRC",
+            "LACRC",
+            "USC Family Caregiver Support Center"
+          ],
+          "agency": "California Caregiver Resource Center network; LA CRC run by the USC Family Caregiver Support Center",
+          "verdict": "possible",
+          "reason": "Only if the mother has a cognitive or brain impairment (dementia, stroke, Parkinson's); the facts describe physical dependence, not a diagnosis.",
+          "keyRule": "CRCs serve caregivers of adults with brain impairment onset after 18.",
+          "source": "https://losangelescrc.usc.edu/",
+          "evidence": "official"
+        },
+        {
+          "name": "CalFresh",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "CDSS via LA County DPSS",
+          "verdict": "unlikely",
+          "reason": "She cannot buy and cook separately, so she is in her daughter's SNAP household. The separate-household exception for elderly disabled members fails because the others' income ($5,500 for 2 people) is over 165% FPL (~$2,976/mo), and the combined $6,900 for 3 is over the $4,442 gross limit.",
+          "keyRule": "7 CFR 273.1(a)(2)(ii): separate household only if others' income at or below 165% FPL; CalFresh gross limit 200% FPL = $4,442/mo for 3.",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/subpart-A",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "HEAP"
+          ],
+          "agency": "CA Dept of Community Services & Development via local agency",
+          "verdict": "unlikely",
+          "reason": "LIHEAP counts the whole household sharing the energy bill: about $6,900/mo for 3 is over the limit.",
+          "keyRule": "60% SMI: $5,382/mo for 3 people (2026).",
+          "source": "https://www.csd.ca.gov/Pages/LIHEAP-Income-Eligibility.aspx",
+          "evidence": "official"
+        },
+        {
+          "name": "California Alternate Rates for Energy",
+          "alsoKnownAs": [
+            "CARE",
+            "SoCalGas CARE"
+          ],
+          "agency": "CPUC via the utility (SoCalGas for gas; LADWP serves 90011 electricity and runs its own discount)",
+          "verdict": "unlikely",
+          "reason": "Household income about $82,800/yr is over the 3-person limit.",
+          "keyRule": "CARE limit $54,640/yr for 3 people (June 2026-May 2027).",
+          "source": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-costs/care-fera-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income / State Supplementary Payment",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "SSI/SSP"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$1,380 countable income exceeds even the independent-living SSI/SSP standard, and living in her daughter's home lowers the standard further.",
+          "keyRule": "2026 CA SSI/SSP aged individual: $1,233.94 independent living; $907.87 in household of another.",
+          "source": "https://cdss.ca.gov/Portals/13/SHD/ParaRegIndex/SSI%20Monthly%20Payment%20Amounts%202026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Caregiver programs (PCAFC / PGCSS)",
+          "alsoKnownAs": [
+            "VA caregiver stipend"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "These support caregivers of veterans; she is a veteran's surviving spouse, not a veteran.",
+          "keyRule": "Care recipient must be an eligible veteran enrolled in VA health care.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "unlikely",
+          "reason": "GUIDE requires a dementia diagnosis, which is not part of her facts.",
+          "keyRule": "Dementia diagnosis required.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medi-Cal plus In-Home Supportive Services",
+        "phoneOrWhere": "LA County IHSS Application Hotline 888-944-4477; Medi-Cal application via DPSS 866-613-3777 or BenefitsCal",
+        "why": "Medi-Cal is the gate to IHSS, and IHSS can pay the daughter for the hours she cut from work, the largest and fastest dollar value; apply for both at once."
+      },
+      "notes": "File the VA Survivors Pension (Intent to File) right after, via LA County MVA 877-452-8387. Medi-Cal excludes the A&A/medical-expense portion of a VA pension but may count basic pension; she should still stay under $1,836. If she pays her daughter under a written care agreement, that payment is a deductible medical expense for VA (raises the pension) but is income to the daughter. CalFresh/LIHEAP verdicts assume she shares food and utilities with the daughter's household."
+    }
+  ]
+}

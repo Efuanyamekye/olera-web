@@ -32,6 +32,10 @@ const PROBE_LABELS: Record<string, { label: string; question: string }> = {
     label: "Provider reachability",
     question: "Can Olera reach the providers holding unanswered questions?",
   },
+  benefits_finder_weekly: {
+    label: "Benefits Finder",
+    question: "How many families finished the Benefits Finder this week, and what did the Navigator send them?",
+  },
   traffic_by_page_family: {
     label: "Organic traffic",
     question: "Which page family gained or lost organic reach?",

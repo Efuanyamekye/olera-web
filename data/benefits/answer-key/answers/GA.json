@@ -1,0 +1,784 @@
+{
+  "state": "GA",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "GA-A",
+      "programs": [
+        {
+          "name": "Elderly and Disabled Waiver Program (CCSP and SOURCE)",
+          "alsoKnownAs": [
+            "EDWP",
+            "CCSP",
+            "Community Care Services Program",
+            "SOURCE",
+            "Medicaid HCBS waiver",
+            "Structured Family Caregiving"
+          ],
+          "agency": "Georgia DCH; intake and waitlist through the Atlanta Regional Commission ADRC (Empowerline)",
+          "verdict": "possible",
+          "reason": "Her income ($1,050) is under $2,982, her savings ($1,200) are under $2,000, and her needs (bathing, dressing, medication, night wandering) strongly suggest nursing-facility level of care. Enrollment depends on the assessment and the waiting list. Her cost share would be small (income above the $994 personal needs allowance).",
+          "keyRule": "Nursing-facility level of care; Medicaid CAP income limit $2,982/month (300% of SSI, applicant's own income); resources $2,000 (community spouse may keep up to $162,660); waiting list prioritized by need",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - QMB",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "likely",
+          "reason": "Income $1,050 is under the 100% FPL limit and savings are under the resource limit; pays Part B and Medicare cost-sharing.",
+          "keyRule": "QMB $1,330/month individual (4/2026); resources $9,950 federal 2026 (Georgia chart still shows $9,660)",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with Medicaid or QMB.",
+          "keyRule": "Deemed eligible with Medicaid/MSP; otherwise 2026 income ~$1,995/month, resources $18,090",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program (SNAP), including Senior SNAP (ESAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Senior SNAP",
+            "ESAP"
+          ],
+          "agency": "Georgia DFCS",
+          "verdict": "likely",
+          "reason": "She is a 60+ one-person household with only Social Security, so she is categorically eligible with no asset test and qualifies for the simplified Senior SNAP application; her net income is well under 100% FPL.",
+          "keyRule": "Elderly AU: no gross income test; net at or below 100% FPL; BBCE (TCOS) removes the resource test at or below 130% FPL (200% if all adults elderly/disabled)",
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/3400/",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program (LIHEAP)",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "energy assistance"
+          ],
+          "agency": "Georgia DFCS through the local Community Action Agency (Fulton County)",
+          "verdict": "likely",
+          "reason": "Annual income $12,600 is far under the 1-person limit; 65+ can apply from the first workday of December. Requires that she pays her own heating bill.",
+          "keyRule": "Gross annual household income at or below 60% of state median income ($34,549 for 1, FY2026); heating benefit $400-$810",
+          "source": "https://liheapch.acf.gov/profiles/povertytables/FY2026/gasmi.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,030 exceeds the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994 individual / $1,491 couple (countable = income minus $20); Georgia pays no state supplement to people living at home",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (ARC Area Agency on Aging)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "Empowerline caregiver support",
+            "respite vouchers"
+          ],
+          "agency": "Atlanta Regional Commission Area Agency on Aging (Empowerline)",
+          "verdict": "likely",
+          "reason": "Her daughter is an unpaid caregiver for a 79-year-old with dementia.",
+          "keyRule": "Caregivers 18+ caring for someone 60+ or living with Alzheimer's/related conditions; respite, counseling, training; subject to funding",
+          "source": "https://atlantaregional.org/what-we-do/aging-services-and-resources/",
+          "evidence": "official"
+        },
+        {
+          "name": "Non-Medicaid Home and Community Based Services and State-Funded Alzheimer's Program",
+          "alsoKnownAs": [
+            "Community Based Services",
+            "CBS",
+            "Alzheimer's respite",
+            "in-home respite",
+            "adult day care"
+          ],
+          "agency": "Georgia DHS Division of Aging Services via ARC Area Agency on Aging",
+          "verdict": "possible",
+          "reason": "She has dementia and is 60+, but these services are funding-limited with waitlists; Medicaid members are usually steered to EDWP.",
+          "keyRule": "Age 60+ for OAA/state CBS services; state Alzheimer's program serves people of any age with ADRD and their caregivers; services rationed by priority screening and waitlists",
+          "source": "https://aging.georgia.gov/document/document/inhomerespitecareguide62804pdf/download",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE (Volunteers of America Senior CommUnity Care of Georgia)",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "Georgia DCH / Medicare; Georgia's only PACE organization",
+          "verdict": "possible",
+          "reason": "She is on Medicaid and likely meets NF level of care; ZIP 30310 coverage was not confirmed (call VOA 404-541-0260).",
+          "keyRule": "Age 55+, live in the PACE service area (parts of Fulton, DeKalb, Clayton, Cobb), nursing-facility level of care, able to live safely in the community",
+          "source": "https://www.voa.org/services/pace-program-of-inclusive-care-for-the-elderly/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (e.g., Emory Integrated Memory Care in Atlanta)",
+          "verdict": "possible",
+          "reason": "She has dementia; depends on Original Medicare and enrolling with an Atlanta GUIDE participant.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Fulton County / City of Atlanta senior homestead exemptions",
+          "alsoKnownAs": [
+            "senior homestead exemption",
+            "Atlanta school senior exemption",
+            "senior homestead freeze",
+            "age 70 full value exemption"
+          ],
+          "agency": "Fulton County Board of Assessors",
+          "verdict": "possible",
+          "reason": "She is 65+ with Social Security only, so she would meet the income-tested exemptions, but only if she owns and occupies her home.",
+          "keyRule": "Owner-occupant. Fulton County $50,000 senior (65+, no income test, county operations); City of Atlanta School $25,000 (65+ or disabled, Georgia net income at or below $25,000; Social Security is not Georgia-taxable); senior freeze (65+, federal AGI at or below $39,000); age 70 full value county exemption (income test). Apply by April 1",
+          "source": "https://www.fultoncountyga.gov/-/media/Departments/Board-of-Assessors/2023-Homestead-Exemption-Guide_final-draft.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Elderly and Disabled Waiver (CCSP/SOURCE) screening and waitlist placement",
+        "phoneOrWhere": "Empowerline / Atlanta Regional Commission ADRC, 404-463-3333",
+        "why": "Georgia's Medicaid plan has no general in-home personal care outside the waiver, so EDWP is the route to an aide, adult day care and respite. The waitlist is prioritized by need, so screening now matters most. The same call reaches caregiver support and Alzheimer's respite."
+      },
+      "notes": "In Georgia an aged person with $1,050 income is over the SSI-related limit ($994 FBR), so her current 'Medicaid' may be QMB-only or Medically Needy rather than full Medicaid. Either way she qualifies financially for EDWP under the $2,982 special income limit. Georgia's 2026 ABD chart still lists the 2025 MSP resource limit ($9,660); the federal 2026 figure is $9,950. Georgia has a Structured Family Caregiving service under EDWP, but it requires a live-in caregiver, and her daughter lives 20 minutes away."
+    },
+    {
+      "familyId": "GA-B",
+      "programs": [
+        {
+          "name": "VA Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Aid and Attendance",
+            "A&A",
+            "VA pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (free help from a Georgia Department of Veterans Service field office)",
+          "verdict": "likely",
+          "reason": "He served in the Vietnam era (wartime from 8/5/1964 for service outside Vietnam), is 65+, and needs help bathing and supervision for dementia. After deducting Medicare Part B for both above the $1,141 threshold, countable income is about $33,471, under the $34,488 A&A rate with a spouse. That pays about $85/month now and much more if they pay for care. Net worth is well under $163,699.",
+          "keyRule": "MAPR with one dependent spouse, A&A $34,488/yr (12/1/2025); medical expenses over 5% of basic MAPR ($1,141) deducted; net worth limit $163,699",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment (with Homemaker/Home Health Aide, Respite, Adult Day Health)",
+          "alsoKnownAs": [
+            "VA health care",
+            "H/HHA",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (Atlanta VA Health Care System)",
+          "verdict": "possible",
+          "reason": "He can enroll as an honorably discharged wartime veteran. In-home aide and respite depend on a clinical need determination and possible copays.",
+          "keyRule": "Enrollment priority depends on income versus VA thresholds; VA pension recipients are Priority Group 5",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program"
+          ],
+          "agency": "VA Caregiver Support Program",
+          "verdict": "likely",
+          "reason": "His wife qualifies once he is enrolled in VA health care, since he needs ADL help and supervision.",
+          "keyRule": "Veteran enrolled in VA health care needing personal care services; no rating required",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating.",
+          "keyRule": "Requires service-connected rating of 70% or higher",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Elderly and Disabled Waiver Program (CCSP and SOURCE)",
+          "alsoKnownAs": [
+            "EDWP",
+            "CCSP",
+            "Community Care Services Program",
+            "SOURCE",
+            "Medicaid HCBS waiver",
+            "Structured Family Caregiving"
+          ],
+          "agency": "Georgia DCH; intake and waitlist through the Atlanta Regional Commission ADRC (Empowerline)",
+          "verdict": "possible",
+          "reason": "Georgia counts only his income against $2,982, which is very likely met, and spousal rules let his wife keep all $38,000 (limit up to $162,660). Eligibility depends on whether he meets nursing-facility level of care (bathing help plus dementia supervision) and on the waiting list.",
+          "keyRule": "Nursing-facility level of care; Medicaid CAP income limit $2,982/month (300% of SSI, applicant's own income); resources $2,000 (community spouse may keep up to $162,660); waiting list prioritized by need",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB / SLMB / QI)",
+          "alsoKnownAs": [
+            "QMB",
+            "SLMB",
+            "QI-1"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "unlikely",
+          "reason": "Couple countable income ($3,080) is over the QI-1 limit and savings exceed $14,910.",
+          "keyRule": "QI-1 $2,435/month couple; resources $14,910 couple",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Income (~$3,080) is over ~$2,705 (150% FPL couple) and savings ($38,000) exceed $36,100.",
+          "keyRule": "2026: income ~$32,460/yr couple; resources $36,100 couple",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Georgia ABD Medicaid (SSI-related / Medically Needy)",
+          "alsoKnownAs": [
+            "Medicaid"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "unlikely",
+          "reason": "Couple income is far over the $1,491 couple limit and savings exceed the $3,000/$4,000 resource limits.",
+          "keyRule": "ABD: $1,491 couple (FBR); resources $3,000 couple (Medically Needy $4,000)",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "Senior SNAP"
+          ],
+          "agency": "Georgia DFCS",
+          "verdict": "possible",
+          "reason": "Both are 60+, so there is no gross test and no asset test (BBCE up to 200% FPL), but net income must be at or below about $1,804. They would need high shelter or out-of-pocket medical/care costs to get there.",
+          "keyRule": "Elderly AU: net income at or below 100% FPL; uncapped shelter deduction; medical expenses over $35",
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/3400/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program (LIHEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Georgia DFCS through the local Community Action Agency (Fulton County)",
+          "verdict": "likely",
+          "reason": "Annual income $37,200 is under the 2-person limit of $45,179; they can apply in the 65+ December window if they pay their own heating bill.",
+          "keyRule": "Gross annual household income at or below 60% of state median income ($45,179 for 2, FY2026)",
+          "source": "https://liheapch.acf.gov/profiles/povertytables/FY2026/gasmi.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (ARC Area Agency on Aging)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "Empowerline caregiver support",
+            "respite vouchers"
+          ],
+          "agency": "Atlanta Regional Commission Area Agency on Aging (Empowerline)",
+          "verdict": "likely",
+          "reason": "His 80-year-old wife is the sole, exhausted caregiver of a person with dementia.",
+          "keyRule": "Caregivers 18+ caring for someone 60+ or living with Alzheimer's/related conditions; respite, counseling, training; subject to funding",
+          "source": "https://atlantaregional.org/what-we-do/aging-services-and-resources/",
+          "evidence": "official"
+        },
+        {
+          "name": "Non-Medicaid Home and Community Based Services and State-Funded Alzheimer's Program",
+          "alsoKnownAs": [
+            "Community Based Services",
+            "CBS",
+            "Alzheimer's respite",
+            "in-home respite",
+            "adult day care"
+          ],
+          "agency": "Georgia DHS Division of Aging Services via ARC Area Agency on Aging",
+          "verdict": "possible",
+          "reason": "He is 60+ with dementia; respite or adult day care through the state Alzheimer's program depends on funding and waitlist priority.",
+          "keyRule": "Age 60+ for OAA/state CBS services; state Alzheimer's program serves people of any age with ADRD and their caregivers; services rationed by priority screening and waitlists",
+          "source": "https://aging.georgia.gov/document/document/inhomerespitecareguide62804pdf/download",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE (Volunteers of America Senior CommUnity Care of Georgia)",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "Georgia DCH / Medicare; Georgia's only PACE organization",
+          "verdict": "possible",
+          "reason": "Depends on NF level of care and confirming 30310 is in the service area; without Medicaid they pay the Medicaid share privately.",
+          "keyRule": "Age 55+, live in the PACE service area (parts of Fulton, DeKalb, Clayton, Cobb), nursing-facility level of care, able to live safely in the community",
+          "source": "https://www.voa.org/services/pace-program-of-inclusive-care-for-the-elderly/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (e.g., Emory Integrated Memory Care in Atlanta)",
+          "verdict": "possible",
+          "reason": "He has dementia and an unpaid caregiver; depends on Original Medicare and a GUIDE participant.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Fulton County / City of Atlanta senior homestead exemptions",
+          "alsoKnownAs": [
+            "senior homestead exemption",
+            "Atlanta school senior exemption",
+            "senior homestead freeze",
+            "age 70 full value exemption"
+          ],
+          "agency": "Fulton County Board of Assessors",
+          "verdict": "possible",
+          "reason": "They are 65+; the Fulton $50,000 senior exemption has no income test and the senior freeze (AGI at or below $39,000) likely fits, but only if they own and occupy their home.",
+          "keyRule": "Owner-occupant. Fulton County $50,000 senior (65+, no income test, county operations); City of Atlanta School $25,000 (65+ or disabled, Georgia net income at or below $25,000; Social Security is not Georgia-taxable); senior freeze (65+, federal AGI at or below $39,000); age 70 full value county exemption (income test). Apply by April 1",
+          "source": "https://www.fultoncountyga.gov/-/media/Departments/Board-of-Assessors/2023-Homestead-Exemption-Guide_final-draft.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Pension with Aid and Attendance (plus VA health care enrollment)",
+        "phoneOrWhere": "Georgia Department of Veterans Service field office or VA 1-800-827-1000; forms 21P-527EZ and 21-2680",
+        "why": "He qualifies on today's facts, and A&A grows with paid care, which his exhausted wife needs. VA enrollment also opens VA respite and caregiver support. Then call Empowerline (404-463-3333) to start EDWP screening."
+      },
+      "notes": "Georgia applies spousal impoverishment rules to EDWP with a community spouse resource allowance up to $162,660, so the $38,000 savings do not bar him (unlike NC CAP/DA). If his own income were over $2,982, a Qualified Income (Miller) Trust would be needed, but that is unlikely with $3,100 total. The A&A estimate assumes standard Part B premiums. The Fulton exemption figures come from the 2023 county guide; 2026 Fulton County School District senior exemptions do not apply inside the City of Atlanta (Atlanta Public Schools)."
+    },
+    {
+      "familyId": "GA-C",
+      "programs": [
+        {
+          "name": "Medicare Savings Program - QMB",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "likely",
+          "reason": "Countable couple income is about $1,497 (SSI-style disregards on $1,350 Social Security and $400 wages), under $1,804, and savings $4,500 are under $14,910.",
+          "keyRule": "QMB $1,804/month couple (4/2026); resources $14,910 couple",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with QMB.",
+          "keyRule": "Deemed eligible with MSP",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "Georgia DFCS",
+          "verdict": "likely",
+          "reason": "Gross $1,750 is under 130% FPL, so they are categorically eligible (no asset test); with an elderly member, net income of about $1,460 after the earned-income and standard deductions is under the 2-person net limit.",
+          "keyRule": "Net at or below 100% FPL ($1,804 for 2, FY2027 figures); BBCE at or below 130% FPL removes the resource test",
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/3210/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program (LIHEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Georgia DFCS through the local Community Action Agency (Fulton County)",
+          "verdict": "likely",
+          "reason": "Annual income $21,000 is far below the 2-person limit of $45,179; requires responsibility for the heating bill.",
+          "keyRule": "Gross annual household income at or below 60% SMI ($45,179 for 2, FY2026)",
+          "source": "https://liheapch.acf.gov/profiles/povertytables/FY2026/gasmi.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Elderly and Disabled Waiver Program (CCSP and SOURCE)",
+          "alsoKnownAs": [
+            "EDWP",
+            "CCSP",
+            "Community Care Services Program",
+            "SOURCE",
+            "Medicaid HCBS waiver",
+            "Structured Family Caregiving"
+          ],
+          "agency": "Georgia DCH; intake and waitlist through the Atlanta Regional Commission ADRC (Empowerline)",
+          "verdict": "unlikely",
+          "reason": "Financially he would pass (his $1,350 is under $2,982 and spousal rules protect savings), but he can bathe and dress and needs mainly IADL help, which is unlikely to meet nursing-facility level of care.",
+          "keyRule": "Nursing-facility level of care required",
+          "source": "https://medicaid.georgia.gov/programs/all-programs/waiver-programs",
+          "evidence": "official"
+        },
+        {
+          "name": "Georgia ABD Medicaid (SSI-related / Medically Needy)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "full Medicaid"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "unlikely",
+          "reason": "Georgia has no 100%-FPL aged category; their countable income is over the $1,491 couple SSI-related limit and savings exceed the $3,000/$4,000 limits.",
+          "keyRule": "ABD $1,491 couple; resources $3,000 couple (Medically Needy $4,000)",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Georgia Pathways to Coverage",
+          "alsoKnownAs": [
+            "Pathways",
+            "Georgia Medicaid expansion"
+          ],
+          "agency": "Georgia DCH",
+          "verdict": "unlikely",
+          "reason": "Pathways is for adults 19-64; he is 66 and on Medicare.",
+          "keyRule": "Ages 19-64, income up to 100% FPL, with qualifying-activity requirement",
+          "source": "https://dch.georgia.gov/georgiapathways",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance (conversion from early retirement)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowance"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-onset Alzheimer's is a Compassionate Allowance. If he is under full retirement age and was insured at onset, SSDI can remove the early-retirement reduction. Depends on birth date and work record.",
+          "keyRule": "Under full retirement age and insured for disability at onset",
+          "source": "https://www.ssa.gov/compassionateallowances/conditions.htm",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His own Social Security ($1,330 countable) exceeds the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994 individual / $1,491 couple (countable = income minus $20); Georgia pays no state supplement to people living at home",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (ARC Area Agency on Aging)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "Empowerline caregiver support",
+            "respite vouchers"
+          ],
+          "agency": "Atlanta Regional Commission Area Agency on Aging (Empowerline)",
+          "verdict": "likely",
+          "reason": "His wife is an unpaid caregiver of a person with Alzheimer's (eligible at any age with dementia).",
+          "keyRule": "Caregivers 18+ caring for someone 60+ or living with Alzheimer's/related conditions; respite, counseling, training; subject to funding",
+          "source": "https://atlantaregional.org/what-we-do/aging-services-and-resources/",
+          "evidence": "official"
+        },
+        {
+          "name": "Non-Medicaid Home and Community Based Services and State-Funded Alzheimer's Program",
+          "alsoKnownAs": [
+            "Community Based Services",
+            "CBS",
+            "Alzheimer's respite",
+            "in-home respite",
+            "adult day care"
+          ],
+          "agency": "Georgia DHS Division of Aging Services via ARC Area Agency on Aging",
+          "verdict": "possible",
+          "reason": "The state-funded Alzheimer's program serves people of any age with ADRD and their caregivers (respite, adult day care), subject to funding and waitlists.",
+          "keyRule": "Age 60+ for OAA/state CBS services; state Alzheimer's program serves people of any age with ADRD and their caregivers; services rationed by priority screening and waitlists",
+          "source": "https://aging.georgia.gov/document/document/inhomerespitecareguide62804pdf/download",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (e.g., Emory Integrated Memory Care in Atlanta)",
+          "verdict": "possible",
+          "reason": "He has dementia and a caregiver; depends on Original Medicare and enrolling with a GUIDE participant.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Fulton County / City of Atlanta senior homestead exemptions",
+          "alsoKnownAs": [
+            "senior homestead exemption",
+            "Atlanta school senior exemption",
+            "senior homestead freeze",
+            "age 70 full value exemption"
+          ],
+          "agency": "Fulton County Board of Assessors",
+          "verdict": "possible",
+          "reason": "He is 65+ and their Georgia taxable income is low (Social Security excluded), so the Atlanta school and Fulton senior exemptions would likely fit, but only if they own and occupy their home.",
+          "keyRule": "Owner-occupant. Fulton County $50,000 senior (65+, no income test, county operations); City of Atlanta School $25,000 (65+ or disabled, Georgia net income at or below $25,000; Social Security is not Georgia-taxable); senior freeze (65+, federal AGI at or below $39,000); age 70 full value county exemption (income test). Apply by April 1",
+          "source": "https://www.fultoncountyga.gov/-/media/Departments/Board-of-Assessors/2023-Homestead-Exemption-Guide_final-draft.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicare Savings Program (QMB) plus SNAP",
+        "phoneOrWhere": "Georgia DFCS: gateway.ga.gov or 877-423-4746; free help from GeorgiaCares (SHIP) 1-866-552-4464",
+        "why": "QMB saves $202.90/month in Part B premiums, removes Medicare cost-sharing and brings Extra Help automatically; SNAP can go on the same Gateway application."
+      },
+      "notes": "The SSDI conversion depends on his exact birth date (full retirement age 66 and some months vs 67) and earnings record. The Georgia MSP resource figure on the state chart is stale ($9,660 individual); the couple figure $14,910 matches 2026."
+    },
+    {
+      "familyId": "GA-D",
+      "programs": [
+        {
+          "name": "VA Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Survivors Pension",
+            "widow's pension",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (free help from a Georgia Department of Veterans Service field office)",
+          "verdict": "likely",
+          "reason": "Her late husband had Korean War-period service with an honorable discharge and she has not remarried. Her $16,800/yr less Medicare Part B over the 5% deductible is about $14,950, under the $18,697 A&A rate, which pays about $312/month and more if she pays for care. Net worth is well under $163,699.",
+          "keyRule": "Surviving spouse A&A MAPR $18,697/yr (12/1/2025); net worth limit $163,699; Korean conflict 6/27/1950-1/31/1955",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - SLMB",
+          "alsoKnownAs": [
+            "SLMB",
+            "MSP"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "likely",
+          "reason": "Only her income counts: $1,380 countable is over QMB ($1,330) but under SLMB ($1,596), and $9,000 savings are under the resource limit. Pays her Part B premium.",
+          "keyRule": "SLMB $1,596/month individual (4/2026); resources $9,950 federal 2026 ($9,660 on the Georgia chart)",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with SLMB; also within limits on its own.",
+          "keyRule": "Deemed eligible with MSP; 2026 resources $18,090 individual",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Elderly and Disabled Waiver Program (CCSP and SOURCE)",
+          "alsoKnownAs": [
+            "EDWP",
+            "CCSP",
+            "Community Care Services Program",
+            "SOURCE",
+            "Medicaid HCBS waiver",
+            "Structured Family Caregiving"
+          ],
+          "agency": "Georgia DCH; intake and waitlist through the Atlanta Regional Commission ADRC (Empowerline)",
+          "verdict": "unlikely",
+          "reason": "Her income ($1,400) is under $2,982 and her needs clearly meet nursing-facility level of care, but $9,000 savings exceed the $2,000 limit. After a spend-down she would qualify, and Structured Family Caregiving could then pay her live-in daughter.",
+          "keyRule": "Nursing-facility level of care; Medicaid CAP income limit $2,982/month (300% of SSI, applicant's own income); resources $2,000 (community spouse may keep up to $162,660); waiting list prioritized by need",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Georgia ABD Medicaid (SSI-related / Medically Needy)",
+          "alsoKnownAs": [
+            "Medicaid"
+          ],
+          "agency": "Georgia DFCS (apply via gateway.ga.gov or 877-423-4746) for the Department of Community Health",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,380 exceeds the $994 SSI-related limit and savings exceed $2,000.",
+          "keyRule": "ABD $994 individual; resources $2,000",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP"
+          ],
+          "agency": "Georgia DFCS",
+          "verdict": "unlikely",
+          "reason": "She shares meals in her daughter's household, so the daughter's ~$5,500/month counts; the separate-household exception fails because others' income exceeds 165% FPL.",
+          "keyRule": "7 CFR 273.1(a)(2)(ii) 165% FPL test for elderly/disabled separate household",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program (LIHEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Georgia DFCS through the local Community Action Agency (Fulton County)",
+          "verdict": "unlikely",
+          "reason": "Household income (hers plus the daughter's, about $82,800/yr) exceeds the 3-person limit of $55,810, and the energy bill is the daughter's.",
+          "keyRule": "Gross annual household income at or below 60% SMI ($55,810 for 3, FY2026)",
+          "source": "https://liheapch.acf.gov/profiles/povertytables/FY2026/gasmi.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,380 exceeds the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994 individual / $1,491 couple (countable = income minus $20); Georgia pays no state supplement to people living at home",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (ARC Area Agency on Aging)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "Empowerline caregiver support",
+            "respite vouchers"
+          ],
+          "agency": "Atlanta Regional Commission Area Agency on Aging (Empowerline)",
+          "verdict": "likely",
+          "reason": "Her daughter is the unpaid caregiver of an 88-year-old who cannot be left alone.",
+          "keyRule": "Caregivers 18+ caring for someone 60+ or living with Alzheimer's/related conditions; respite, counseling, training; subject to funding",
+          "source": "https://atlantaregional.org/what-we-do/aging-services-and-resources/",
+          "evidence": "official"
+        },
+        {
+          "name": "Non-Medicaid Home and Community Based Services and State-Funded Alzheimer's Program",
+          "alsoKnownAs": [
+            "Community Based Services",
+            "CBS",
+            "Alzheimer's respite",
+            "in-home respite",
+            "adult day care"
+          ],
+          "agency": "Georgia DHS Division of Aging Services via ARC Area Agency on Aging",
+          "verdict": "possible",
+          "reason": "She is 60+ with heavy ADL needs; in-home or respite services depend on priority screening and waitlists.",
+          "keyRule": "Age 60+ for OAA/state CBS services; state Alzheimer's program serves people of any age with ADRD and their caregivers; services rationed by priority screening and waitlists",
+          "source": "https://aging.georgia.gov/document/document/inhomerespitecareguide62804pdf/download",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE (Volunteers of America Senior CommUnity Care of Georgia)",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "Georgia DCH / Medicare; Georgia's only PACE organization",
+          "verdict": "possible",
+          "reason": "She likely meets NF level of care; depends on the service area and, without Medicaid, private payment of the Medicaid share.",
+          "keyRule": "Age 55+, live in the PACE service area (parts of Fulton, DeKalb, Clayton, Cobb), nursing-facility level of care, able to live safely in the community",
+          "source": "https://www.voa.org/services/pace-program-of-inclusive-care-for-the-elderly/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Caregiver Support Program",
+          "alsoKnownAs": [
+            "PGCSS",
+            "PCAFC"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "These programs serve caregivers of veterans; she is a surviving spouse.",
+          "keyRule": "Care recipient must be an enrolled veteran",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (e.g., Emory Integrated Memory Care in Atlanta)",
+          "verdict": "unlikely",
+          "reason": "No dementia diagnosis is given.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Fulton County / City of Atlanta senior homestead exemptions",
+          "alsoKnownAs": [
+            "senior homestead exemption",
+            "Atlanta school senior exemption",
+            "senior homestead freeze",
+            "age 70 full value exemption"
+          ],
+          "agency": "Fulton County Board of Assessors",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home, so she is not the owner-occupant.",
+          "keyRule": "Owner-occupant. Fulton County $50,000 senior (65+, no income test, county operations); City of Atlanta School $25,000 (65+ or disabled, Georgia net income at or below $25,000; Social Security is not Georgia-taxable); senior freeze (65+, federal AGI at or below $39,000); age 70 full value county exemption (income test). Apply by April 1",
+          "source": "https://www.fultoncountyga.gov/-/media/Departments/Board-of-Assessors/2023-Homestead-Exemption-Guide_final-draft.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Survivors Pension with Aid and Attendance",
+        "phoneOrWhere": "Georgia Department of Veterans Service field office or VA 1-800-827-1000; forms 21P-534EZ and 21-2680",
+        "why": "She qualifies on current facts, and the amount rises toward $1,558/month if she pays her daughter or others for care under a written agreement. Then SLMB through DFCS and caregiver support through Empowerline (404-463-3333)."
+      },
+      "notes": "The strongest long-term path is spending savings below $2,000 to qualify for EDWP. Structured Family Caregiving under EDWP can pay an adult child who lives with the participant (spouses excluded), which matches this family, but that rule was verified only from secondary sources. VA pension interacts with Medicaid: the A&A/medical-expense portions are generally excluded, but the base pension counts. Assumes she shares meals and the home belongs to the daughter."
+    }
+  ]
+}

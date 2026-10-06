@@ -7,6 +7,7 @@ import { getServiceClient } from "@/lib/admin";
 import { buildWarRoomFactPack } from "@/lib/war-room/analyst.server";
 import { warRoomCapabilityEvidence } from "@/lib/war-room/capabilities";
 import {
+  STANDING_PROBE_IDS,
   isWarRoomProbeId,
   runWarRoomProbe,
   warRoomProbeMenu,
@@ -427,7 +428,7 @@ const DOSSIER_SCHEMA = {
           type: "string",
           enum: [
             "question_to_claim_conversion", "question_inventory_health", "provider_contactability",
-            "traffic_by_page_family", "revenue_by_product", "support_backlog_composition", "none",
+            "traffic_by_page_family", "revenue_by_product", "support_backlog_composition", "benefits_finder_weekly", "none",
           ],
         },
         question: { type: "string", maxLength: 350 },
@@ -3058,7 +3059,11 @@ export async function runWarRoomInvestigationProbes(runId: string, limit = 6) {
   for (const [probeId, investigationIds] of ordered.slice(limit)) {
     skipped.push({ probeId, investigations: investigationIds.length });
   }
-  for (const [probeId, investigationIds] of ordered.slice(0, limit)) {
+  // Standing probes run every scan, outside the bound: they are the brief's
+  // own daily readings of a priority, not answers a condition is waiting on.
+  // One that a condition also asked for runs once, under that condition.
+  const standing = STANDING_PROBE_IDS.filter((probeId) => !wanted.has(probeId)).map((probeId) => [probeId, []] as [WarRoomProbeId, string[]]);
+  for (const [probeId, investigationIds] of [...ordered.slice(0, limit), ...standing]) {
     let result;
     try {
       result = await runWarRoomProbe(db, probeId);
@@ -3068,20 +3073,35 @@ export async function runWarRoomInvestigationProbes(runId: string, limit = 6) {
       failed.push({ probeId, reason: probeError instanceof Error ? probeError.message : String(probeError) });
       continue;
     }
+    const details = {
+      probe_id: result.probeId,
+      headline: result.headline,
+      detail: result.detail,
+      rows: result.rows.slice(0, 20),
+      caveat: result.caveat,
+      measured_at: result.measuredAt,
+    };
+    if (!investigationIds.length) {
+      // A standing reading belongs to no condition (migration 271 lets the
+      // event stand alone). Before that migration the insert fails on the
+      // NOT NULL, which must cost the reading, not the scan.
+      const { error: standingError } = await db.from("war_room_investigation_events").insert({
+        investigation_id: null, discovery_run_id: runId, event_type: "probe_completed", actor: "war-room", details,
+      });
+      if (standingError) {
+        failed.push({ probeId, reason: `standing_reading_not_saved:${standingError.message}` });
+        continue;
+      }
+      executed.push({ probeId: result.probeId, investigations: 0 });
+      continue;
+    }
     const { error: eventError } = await db.from("war_room_investigation_events").insert(
       investigationIds.map((investigationId) => ({
         investigation_id: investigationId,
         discovery_run_id: runId,
         event_type: "probe_completed",
         actor: "war-room",
-        details: {
-          probe_id: result.probeId,
-          headline: result.headline,
-          detail: result.detail,
-          rows: result.rows.slice(0, 20),
-          caveat: result.caveat,
-          measured_at: result.measuredAt,
-        },
+        details,
       })),
     );
     if (eventError) throw eventError;

@@ -1,0 +1,782 @@
+{
+  "state": "PA",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "PA-A",
+      "programs": [
+        {
+          "name": "Community HealthChoices home and community-based services (CHC Waiver LTSS)",
+          "alsoKnownAs": [
+            "CHC",
+            "CHC Waiver",
+            "Medicaid waiver",
+            "MLTSS"
+          ],
+          "agency": "PA Department of Human Services, Office of Long-Term Living (via CHC managed care plans)",
+          "verdict": "likely",
+          "reason": "She is already on Medicaid and Medicare, so she is a full dual and is enrolled in a CHC plan; her ADL needs (bathing, dressing), medication help and night wandering should score nursing facility clinically eligible (NFCE) on the FED, unlocking in-home personal assistance, adult day, PERS, etc. Income $1,050 and savings $1,200 are well inside the limits.",
+          "keyRule": "HCBS income at or below 300% of the SSI rate ($2,982/mo in 2026); countable resources at or below $2,000 after a $6,000 disregard (effectively $8,000); NFCE by FED: at least 3 partial deficits or 1 full deficit",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Living Independence for the Elderly",
+          "alsoKnownAs": [
+            "LIFE",
+            "PACE (Program of All-Inclusive Care for the Elderly)",
+            "Mercy LIFE",
+            "NewCourtland LIFE",
+            "InnovAge LIFE"
+          ],
+          "agency": "PA DHS / local LIFE provider",
+          "verdict": "likely",
+          "reason": "An alternative to the CHC waiver: she is 79, her needs should meet nursing facility level of care, she has Medicaid (so LIFE costs her nothing), and 19140 is listed in Mercy LIFE's service area. Adult day plus all care in one program suits someone living alone with dementia.",
+          "keyRule": "Age 55+, nursing facility clinically eligible, lives in a LIFE provider's service area, Medicaid-eligible or able to private pay; Mercy LIFE lists ZIP 19140 in its service area (secondary source)",
+          "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medical Assistance for older adults (Healthy Horizons categorically needy)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "MA",
+            "Healthy Horizons"
+          ],
+          "agency": "PA DHS, Philadelphia County Assistance Office",
+          "verdict": "likely",
+          "reason": "Already enrolled per the facts; $1,050/month is under 100% FPL for one (about $1,350 with the $20 disregard) and $1,200 is under the $2,000 resource limit, so renewals should hold.",
+          "keyRule": "Income at or below 100% FPL; resources $2,000 (one person)",
+          "source": "http://services.dpw.state.pa.us/oimpolicymanuals/ma/319_Healthy_Horizons/319_Appendix_A.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Qualified Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "As a full dual with income $1,050 (under $1,350) and savings $1,200, the state should be paying her Part B premium; confirm Part B is not being deducted from her Social Security.",
+          "keyRule": "QMB 2026: income $1,350/mo individual, resources $9,950",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Full-benefit dual eligibles are deemed eligible for Extra Help automatically.",
+          "keyRule": "Automatic for full Medicaid duals; otherwise income under 150% FPL and resources under $16,590 (2026)",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "PA DHS, County Assistance Office",
+          "verdict": "likely",
+          "reason": "One-person household, gross $1,050 is far under the $2,610 PA limit; as a 60+ member she gets the uncapped shelter and medical-expense deductions, so a small monthly benefit is expected.",
+          "keyRule": "PA gross income limit 1 person $2,610/mo (Oct 2025-Sep 2026, broad-based categorical eligibility); 60+ households may deduct medical costs over $35/mo",
+          "source": "https://www.pa.gov/agencies/dhs/resources/snap/snap-income-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "PA DHS",
+          "verdict": "likely",
+          "reason": "Household income $12,600/yr is under the $23,940 limit for one; eligible if she is responsible for heating costs (season opens November 2, 2026).",
+          "keyRule": "150% FPL: $23,940/yr for 1 person (2026-27)",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/providers/documents/liheap-vendors/2026-2027-liheap-important-facts-for-customers.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Property Tax/Rent Rebate Program",
+          "alsoKnownAs": [
+            "PTRR",
+            "PA-1000"
+          ],
+          "agency": "PA Department of Revenue",
+          "verdict": "possible",
+          "reason": "Age 79 and countable income about $6,300 (half of $12,600 Social Security) puts her in the top rebate bracket (up to $1,000) if she owns or rents her home; the facts do not say.",
+          "keyRule": "Owner or renter age 65+ (or widow(er) 50+, or disabled 18+) with household income of $48,110 or less; half of Social Security is excluded from income; rebate $380 to $1,000 by bracket",
+          "source": "https://www.pa.gov/agencies/revenue/ptrr",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program",
+          "alsoKnownAs": [
+            "CSP",
+            "Family Caregiver Support Program",
+            "National Family Caregiver Support Program"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "possible",
+          "reason": "Her daughter is the main unpaid caregiver and she has dementia with ADL needs; but the daughter lives 20 minutes away and works full time, so whether she counts as the 'primary caregiver' and whether CSP duplicates CHC services is the AAA's call.",
+          "keyRule": "Care receiver 60+ (or any age with Alzheimer's) with functional deficits; reimbursement sliding scale 100% at or below 200% FPL, none above 380% FPL",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "OPTIONS Program",
+          "alsoKnownAs": [
+            "OPTIONS",
+            "state-funded in-home services"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "unlikely",
+          "reason": "OPTIONS is for people who are financially or clinically ineligible for Medicaid LTSS; she is on Medicaid and should qualify for CHC, so OPTIONS would only bridge until CHC services start.",
+          "keyRule": "OPTIONS serves people ineligible for MA LTSS and requires a mandatory MA eligibility determination",
+          "source": "https://www.pa.gov/services/aging/apply-for-options-program",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE / PACENET (Pharmaceutical Assistance Contract for the Elderly)",
+          "alsoKnownAs": [
+            "PACE",
+            "PACENET",
+            "PA prescription assistance"
+          ],
+          "agency": "PA Department of Aging",
+          "verdict": "unlikely",
+          "reason": "She has Medicaid; PACE/PACENET excludes people enrolled in the DHS Medicaid prescription benefit, and as a dual she already has Part D with full Extra Help.",
+          "keyRule": "Cannot be enrolled in the Department of Human Services' Medicaid prescription benefit",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,030 ($1,050 minus the $20 disregard) exceeds the $994 federal SSI rate.",
+          "keyRule": "SSI federal benefit rate $994/mo individual (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Community HealthChoices LTSS assessment (via her CHC plan service coordinator, or PA Enrollment Services / Independent Enrollment Broker)",
+        "phoneOrWhere": "CHC Helpline / Independent Enrollment Broker 1-844-824-3655, or the member services number on her CHC plan card; PCA Helpline 215-765-9040 as backup",
+        "why": "She already has Medicaid, so the only thing standing between her and paid in-home help is the functional (FED) assessment; a person with dementia who lives alone and wanders at night needs hands-on help now, and nothing else on the list delivers it."
+      },
+      "notes": "Wandering at night while living alone is a safety issue a counselor would flag; if the CHC care plan cannot cover nights, LIFE or a nursing facility conversation may follow. Confirm she is full Medicaid (not QMB-only) on the card; the facts say 'has Medicaid'. LIFE ZIP coverage for 19140 comes from a secondary directory and should be confirmed with the IEB."
+    },
+    {
+      "familyId": "PA-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "Aid and Attendance",
+            "A&A",
+            "Improved Pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "He served 1962-1965 on active duty, overlapping the Vietnam-era period that starts Aug 5, 1964 for service outside Vietnam, with honorable discharge, and is over 65. Household income $37,200/yr exceeds the $34,488 MAPR, but deductible medical costs count: the two Part B premiums alone ($202.90 x 2 x 12 = $4,870, minus the $1,141 5% threshold) bring countable income to about $33,471, so a pension (about $85/mo from premiums alone, more if they pay for in-home care) is payable. Net worth $75,200 (savings + income) is under $163,699.",
+          "keyRule": "Veteran with spouse, A&A MAPR $34,488 (Dec 2025); net worth limit $163,699; 90 days active duty with 1 day in a wartime period (Vietnam era outside Vietnam Aug 5, 1964-May 7, 1975); unreimbursed medical expenses above 5% of MAPR are deducted",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "OPTIONS Program",
+          "alsoKnownAs": [
+            "OPTIONS",
+            "state-funded in-home services"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "likely",
+          "reason": "He is 60+, needs help bathing and supervision, and is not on Medicaid; OPTIONS has no income limit, but at $3,100/mo for two they are above the $2,398 no-cost-share line and would pay part of the cost. Waitlists are common in Philadelphia.",
+          "keyRule": "Age 60+, unmet needs affecting daily functioning; no income limit; cost share on a sliding scale from 133% to 300% FPL (2026 scale: $0 cost share up to $2,398/mo for 2)",
+          "source": "https://www.pa.gov/services/aging/apply-for-options-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program",
+          "alsoKnownAs": [
+            "CSP",
+            "Family Caregiver Support Program",
+            "National Family Caregiver Support Program"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "likely",
+          "reason": "His wife is his only, exhausted caregiver, he is 60+ with an ADL deficit (bathing) and dementia; household income $3,100/mo is under 200% FPL for two (about $3,607), the 100% reimbursement tier for respite, adult day and supplies.",
+          "keyRule": "Care receiver 60+ with functional deficits; reimbursement 100% at or below 200% FPL, sliding to none above 380% FPL",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Community HealthChoices home and community-based services (CHC Waiver LTSS)",
+          "alsoKnownAs": [
+            "CHC",
+            "CHC Waiver",
+            "Medicaid waiver",
+            "MLTSS"
+          ],
+          "agency": "PA Department of Human Services, Office of Long-Term Living (via CHC managed care plans)",
+          "verdict": "possible",
+          "reason": "Depends on the FED assessment: bathing help plus daytime supervision for moderate dementia may or may not produce 3 partial deficits. Financially, under spousal impoverishment his wife keeps at least $32,532 of the $38,000 and he may keep $8,000, so resources pass with no spend-down; his own income must be at or below $2,982 (only the split of the $2,300 Social Security and $800 pension between them is unknown).",
+          "keyRule": "300% SSI ($2,982/mo) applicant income; $2,000 + $6,000 disregard resources; community spouse resource allowance minimum $32,532 (2026); NFCE by FED",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Living Independence for the Elderly",
+          "alsoKnownAs": [
+            "LIFE",
+            "PACE (Program of All-Inclusive Care for the Elderly)",
+            "Mercy LIFE",
+            "NewCourtland LIFE",
+            "InnovAge LIFE"
+          ],
+          "agency": "PA DHS / local LIFE provider",
+          "verdict": "possible",
+          "reason": "He is 55+ in a ZIP listed for Mercy LIFE; eligibility turns on nursing facility clinical eligibility and either Medicaid eligibility (likely reachable under spousal impoverishment) or private pay.",
+          "keyRule": "Age 55+, nursing facility clinically eligible, lives in a LIFE provider's service area, Medicaid-eligible or able to private pay; Mercy LIFE lists ZIP 19140 in its service area (secondary source)",
+          "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
+          "evidence": "secondary"
+        },
+        {
+          "name": "PACE / PACENET (Pharmaceutical Assistance Contract for the Elderly)",
+          "alsoKnownAs": [
+            "PACE",
+            "PACENET",
+            "PA prescription assistance"
+          ],
+          "agency": "PA Department of Aging",
+          "verdict": "likely",
+          "reason": "Both 65+, PA residents, no Medicaid; combined prior-year income about $37,200 is inside the PACENET couple band ($17,701-$41,500).",
+          "keyRule": "PACENET married couple combined income $17,701-$41,500; age 65+; COLA moratorium through Dec 31, 2027",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services (with VA health care home and community-based care: Homemaker/Home Health Aide, respite, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VA health care)",
+          "verdict": "possible",
+          "reason": "His wife can get VA caregiver support (training, respite, peer support) and he can get VA in-home care such as Homemaker/Home Health Aide or Veteran-Directed Care, but only if he is enrolled in VA health care; enrollment and priority group are not given.",
+          "keyRule": "General caregiver support is open to caregivers of veterans enrolled in VA health care; home and community-based services depend on clinical need",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating.",
+          "keyRule": "PCAFC requires a single or combined service-connected disability rating of 70% or higher",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "official"
+        },
+        {
+          "name": "Property Tax/Rent Rebate Program",
+          "alsoKnownAs": [
+            "PTRR",
+            "PA-1000"
+          ],
+          "agency": "PA Department of Revenue",
+          "verdict": "possible",
+          "reason": "Countable income is about $23,400 (half of $27,600 Social Security plus $9,600 pension), under $48,110, giving a $380 rebate if they own or rent; housing status is not given.",
+          "keyRule": "Owner or renter age 65+ (or widow(er) 50+, or disabled 18+) with household income of $48,110 or less; half of Social Security is excluded from income; rebate $380 to $1,000 by bracket",
+          "source": "https://www.pa.gov/agencies/revenue/ptrr",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "PA DHS, County Assistance Office",
+          "verdict": "possible",
+          "reason": "Gross $3,100 is under PA's $3,526 limit for two, so there is no asset test under broad-based categorical eligibility, but net income after the standard, medical (Medicare premiums over $35) and shelter deductions decides whether any benefit is payable; with modest housing costs the benefit would be minimal or zero.",
+          "keyRule": "PA gross income limit 2 people $3,526/mo (Oct 2025-Sep 2026)",
+          "source": "https://www.pa.gov/agencies/dhs/resources/snap/snap-income-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "PA DHS",
+          "verdict": "unlikely",
+          "reason": "Household income $37,200/yr exceeds the limit for two.",
+          "keyRule": "150% FPL: $32,460/yr for 2 people (2026-27)",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/providers/documents/liheap-vendors/2026-2027-liheap-important-facts-for-customers.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB / SLMB / QI)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "unlikely",
+          "reason": "Couple income $3,100/mo exceeds even the QI limit, and savings $38,000 exceed the $14,910 couple resource limit.",
+          "keyRule": "QI 2026 couple income $2,455/mo; resources $14,910",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Income of about $3,100/mo is over 150% FPL for a couple (about $2,705) and savings $38,000 exceed the $33,100 couple resource limit.",
+          "keyRule": "150% FPL income; couple resources $33,100 (2026)",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medical Assistance for older adults (Healthy Horizons categorically needy)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "MA",
+            "Healthy Horizons"
+          ],
+          "agency": "PA DHS, Philadelphia County Assistance Office",
+          "verdict": "unlikely",
+          "reason": "Income and savings are far above the categorically needy limits; Medicaid would come only through the HCBS (300% SSI) route.",
+          "keyRule": "100% FPL income; $3,000 resources for two",
+          "source": "http://services.dpw.state.pa.us/oimpolicymanuals/ma/319_Healthy_Horizons/319_Appendix_A.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Income and resources both far exceed SSI limits.",
+          "keyRule": "SSI couple rate $1,491/mo; resources $3,000 couple",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "PCA Helpline (OPTIONS assessment, Caregiver Support Program, referral for CHC/LIFE)",
+        "phoneOrWhere": "Philadelphia Corporation for Aging Helpline 215-765-9040 (Caregiver Support Program direct: 215-995-4372)",
+        "why": "The 80-year-old wife is the only caregiver and is exhausted; one AAA call starts a needs assessment and the fastest hands-on relief (respite, in-home help, adult day). The VA pension is real money but takes months, so it is the second call (VA 1-800-827-1000 or an accredited veterans service officer)."
+      },
+      "notes": "Which spouse receives how much of the $2,300 Social Security and the $800 pension is not given; if all $3,100 were his, he would exceed the 300% SSI cap and PA has no Miller trust for HCBS, so CHC would fail. The VA pension estimate assumes standard Part B premiums with no IRMAA; any Medigap, Part D or paid in-home care raises the deduction and the pension. Mercy LIFE ZIP coverage is from a secondary directory."
+    },
+    {
+      "familyId": "PA-C",
+      "programs": [
+        {
+          "name": "Qualified Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "Couple gross income $1,750 is under the $1,824 couple limit before any disregards (countable is about $1,498 after the $20 general and $65-plus-half earned-income disregards), and $4,500 savings are under $14,910. QMB pays his $202.90 Part B premium and Medicare cost-sharing.",
+          "keyRule": "QMB 2026 couple income $1,824/mo, resources $14,910",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Anyone with QMB is automatically eligible for Extra Help.",
+          "keyRule": "Deemed eligible through MSP; otherwise 150% FPL and $33,100 couple resources",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE / PACENET (Pharmaceutical Assistance Contract for the Elderly)",
+          "alsoKnownAs": [
+            "PACE",
+            "PACENET",
+            "PA prescription assistance"
+          ],
+          "agency": "PA Department of Aging",
+          "verdict": "likely",
+          "reason": "He is 65+ and the couple's prior-year income of about $21,000 is in the PACENET couple band; PACENET still helps alongside Extra Help.",
+          "keyRule": "PACENET married couple combined income $17,701-$41,500; age 65+",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "PA DHS, County Assistance Office",
+          "verdict": "likely",
+          "reason": "Two-person household with gross $1,750, well under $3,526; with the 20% earned-income deduction and shelter costs a monthly benefit is expected.",
+          "keyRule": "PA gross income limit 2 people $3,526/mo",
+          "source": "https://www.pa.gov/agencies/dhs/resources/snap/snap-income-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "PA DHS",
+          "verdict": "likely",
+          "reason": "Household income $21,000/yr is under $32,460 for two, if they pay for heat.",
+          "keyRule": "150% FPL: $32,460/yr for 2 people (2026-27)",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/providers/documents/liheap-vendors/2026-2027-liheap-important-facts-for-customers.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Property Tax/Rent Rebate Program",
+          "alsoKnownAs": [
+            "PTRR",
+            "PA-1000"
+          ],
+          "agency": "PA Department of Revenue",
+          "verdict": "possible",
+          "reason": "He is 66; countable income about $12,900 (half of $16,200 Social Security plus $4,800 wages) puts them in the $770 bracket if they own or rent.",
+          "keyRule": "Owner or renter age 65+ (or widow(er) 50+, or disabled 18+) with household income of $48,110 or less; half of Social Security is excluded from income; rebate $380 to $1,000 by bracket",
+          "source": "https://www.pa.gov/agencies/revenue/ptrr",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowance"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "He was diagnosed with early-onset Alzheimer's at about 64. If he is still under full retirement age (67 if born in 1960) and has enough recent work credits, an SSDI claim could replace a reduced early-retirement benefit with his full benefit, with back pay up to 12 months; whether he already reached FRA and his work record are not given.",
+          "keyRule": "SSDI is payable only before full retirement age and requires disability-insured status; Young-Onset Alzheimer's Disease is a Compassionate Allowance condition (POMS DI 23022.385)",
+          "source": "https://secure.ssa.gov/apps10/poms.nsf/lnx/0423022385",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program",
+          "alsoKnownAs": [
+            "CSP",
+            "Family Caregiver Support Program",
+            "National Family Caregiver Support Program"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "possible",
+          "reason": "PA serves a person of any age with Alzheimer's who has functional deficits, and the wife is the primary caregiver; household income $1,750 is under 200% FPL (100% reimbursement). He has no ADL help needs yet (only medication, money and driving), so the assessment decides.",
+          "keyRule": "Care receiver 60+ with functional deficits or any age with Alzheimer's; 100% reimbursement at or below 200% FPL",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "OPTIONS Program",
+          "alsoKnownAs": [
+            "OPTIONS",
+            "state-funded in-home services"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "possible",
+          "reason": "He is 66 with unmet daily needs from dementia; at $1,750/mo for two they are under the $2,398 no-cost-share line, but OPTIONS is assessment- and waitlist-driven.",
+          "keyRule": "Age 60+, unmet needs; 2026 scale $0 cost share up to $2,398/mo for 2",
+          "source": "https://www.pa.gov/services/aging/apply-for-options-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Community HealthChoices home and community-based services (CHC Waiver LTSS)",
+          "alsoKnownAs": [
+            "CHC",
+            "CHC Waiver",
+            "Medicaid waiver",
+            "MLTSS"
+          ],
+          "agency": "PA Department of Human Services, Office of Long-Term Living (via CHC managed care plans)",
+          "verdict": "possible",
+          "reason": "Financially he would pass (his $1,350 income is under $2,982; $4,500 savings are protected by spousal impoverishment), but he can bathe and dress, so NFCE depends on whether the FED cognition domain produces enough deficits.",
+          "keyRule": "NFCE: at least 3 partial deficits or 1 full deficit on the FED; 300% SSI income; $8,000 effective resource limit",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Living Independence for the Elderly",
+          "alsoKnownAs": [
+            "LIFE",
+            "PACE (Program of All-Inclusive Care for the Elderly)",
+            "Mercy LIFE",
+            "NewCourtland LIFE",
+            "InnovAge LIFE"
+          ],
+          "agency": "PA DHS / local LIFE provider",
+          "verdict": "possible",
+          "reason": "He is 55+ in a listed ZIP, but must be nursing facility clinically eligible, which is doubtful at his current level of need.",
+          "keyRule": "Age 55+, nursing facility clinically eligible, lives in a LIFE provider's service area, Medicaid-eligible or able to private pay; Mercy LIFE lists ZIP 19140 in its service area (secondary source)",
+          "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medical Assistance for older adults (Healthy Horizons categorically needy)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "MA",
+            "Healthy Horizons"
+          ],
+          "agency": "PA DHS, Philadelphia County Assistance Office",
+          "verdict": "unlikely",
+          "reason": "Income passes, but the couple's $4,500 savings exceed the $3,000 resource limit for two.",
+          "keyRule": "Healthy Horizons categorically needy resources: $2,000 one person, $3,000 two persons",
+          "source": "http://services.dpw.state.pa.us/oimpolicymanuals/ma/319_Healthy_Horizons/319_Appendix_A.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Savings of $4,500 exceed the $3,000 couple resource limit, and countable income (about $1,498) is above the $1,491 couple rate.",
+          "keyRule": "SSI couple resources $3,000; FBR $1,491 couple (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "QMB + Extra Help application (with PACENET), via PA MEDI counseling",
+        "phoneOrWhere": "PA MEDI Helpline 1-800-783-7067 (free Medicare counseling through the local AAA); apply via COMPASS or DHS Consumer Service Center 1-866-550-4355",
+        "why": "QMB is the surest, largest win: it removes his $202.90/month Part B premium and Medicare cost-sharing and automatically brings Extra Help. Every other item depends on an assessment or waitlist."
+      },
+      "notes": "The SSDI angle needs his exact birth date and work history; a counselor should check whether he took early retirement after diagnosis. His wife (63) has no Medicare and is not covered by QMB; she may need her own coverage (not in scope). As his dementia progresses, re-run the FED for CHC/LIFE."
+    },
+    {
+      "familyId": "PA-D",
+      "programs": [
+        {
+          "name": "Community HealthChoices home and community-based services (CHC Waiver LTSS)",
+          "alsoKnownAs": [
+            "CHC",
+            "CHC Waiver",
+            "Medicaid waiver",
+            "MLTSS"
+          ],
+          "agency": "PA Department of Human Services, Office of Long-Term Living (via CHC managed care plans)",
+          "verdict": "likely",
+          "reason": "Her needs (bathing, dressing, toileting, mobility, cannot be left alone) should score NFCE. Income $1,400 is under $2,982. Savings $9,000 are about $1,000 over the effective $8,000 limit, which a counselor would close by designating up to $1,500 as a burial fund or paying for needed items. Under participant direction her daughter can be hired and paid as her personal care worker.",
+          "keyRule": "300% SSI ($2,982/mo) income; resources $2,000 after a $6,000 disregard; NFCE by FED; CHC participant-directed PAS may employ a family member",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Living Independence for the Elderly",
+          "alsoKnownAs": [
+            "LIFE",
+            "PACE (Program of All-Inclusive Care for the Elderly)",
+            "Mercy LIFE",
+            "NewCourtland LIFE",
+            "InnovAge LIFE"
+          ],
+          "agency": "PA DHS / local LIFE provider",
+          "verdict": "likely",
+          "reason": "Age 88 in a listed ZIP with clear nursing-facility-level needs; once Medicaid-eligible (same small resource fix) LIFE costs nothing and adds adult day and full medical care.",
+          "keyRule": "Age 55+, nursing facility clinically eligible, lives in a LIFE provider's service area, Medicaid-eligible or able to private pay; Mercy LIFE lists ZIP 19140 in its service area (secondary source)",
+          "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Survivors Pension",
+            "Death Pension",
+            "Widow's pension",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Her late husband served 1951-1954, which covers the Korean conflict period (Jun 27, 1950-Jan 31, 1955), honorable discharge, and she has not remarried. Her income $16,800/yr is already under the $18,697 surviving-spouse A&A MAPR; after her Part B premiums ($2,435/yr minus the $584 threshold) countable income is about $14,949, so roughly $3,748/yr (about $312/mo), more if she pays her daughter under a care agreement. Net worth $25,800 is far under $163,699.",
+          "keyRule": "Surviving spouse A&A MAPR $18,697 (Dec 2025); net worth limit $163,699; veteran had 90 days active duty with 1 day of wartime service",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/survivors-pension/rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Specified Low-Income Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "SLMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "Her own income $1,400 is above the $1,350 QMB limit but under the $1,616 SLMB limit, and $9,000 is under $9,950; SLMB pays her Part B premium. Only her income counts.",
+          "keyRule": "SLMB 2026: income $1,616/mo, resources $9,950 (individual)",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Income $1,400 is under 150% FPL for one and $9,000 is under $16,590; SLMB approval makes it automatic.",
+          "keyRule": "150% FPL income; individual resources $16,590 (2026)",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "OPTIONS Program",
+          "alsoKnownAs": [
+            "OPTIONS",
+            "state-funded in-home services"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "likely",
+          "reason": "She is 88 with large unmet needs and not on Medicaid, so OPTIONS can bridge until CHC starts; her $1,400 is under the $1,769 no-cost-share line for one.",
+          "keyRule": "Age 60+, unmet needs; 2026 scale $0 cost share up to $1,769/mo for 1; must pursue MA determination",
+          "source": "https://www.pa.gov/services/aging/apply-for-options-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program",
+          "alsoKnownAs": [
+            "CSP",
+            "Family Caregiver Support Program",
+            "National Family Caregiver Support Program"
+          ],
+          "agency": "PA Department of Aging via Philadelphia Corporation for Aging (AAA)",
+          "verdict": "likely",
+          "reason": "The daughter is the primary caregiver of a 60+ parent with ADL deficits. The program sizes reimbursement on the income of the household where the care receiver lives, so the daughter's household income counts here: about $82,800/yr for three is roughly 300% FPL, inside the 380% cap, so she qualifies at a reduced reimbursement percentage.",
+          "keyRule": "Reimbursement on a sliding scale by care receiver's household income: 100% at or below 200% FPL, none above 380% FPL",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE / PACENET (Pharmaceutical Assistance Contract for the Elderly)",
+          "alsoKnownAs": [
+            "PACE",
+            "PACENET",
+            "PA prescription assistance"
+          ],
+          "agency": "PA Department of Aging",
+          "verdict": "likely",
+          "reason": "She is 65+, not on Medicaid, and her $16,800 income is in the PACENET single band.",
+          "keyRule": "PACENET single income $14,501-$33,500",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Dependency and Indemnity Compensation",
+          "alsoKnownAs": [
+            "DIC"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "DIC pays far more than survivors pension but only if her husband's death was service-connected; nothing in the facts says so. Worth confirming what her 'small widow's pension' is.",
+          "keyRule": "Surviving spouse of a veteran whose death was service-connected",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/survivors-pension/rates/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Property Tax/Rent Rebate Program",
+          "alsoKnownAs": [
+            "PTRR",
+            "PA-1000"
+          ],
+          "agency": "PA Department of Revenue",
+          "verdict": "possible",
+          "reason": "She is eligible by age and income ($16,800 with half of Social Security excluded) only if she pays rent or property tax; living in her daughter's home she probably does neither.",
+          "keyRule": "Owner or renter age 65+ (or widow(er) 50+, or disabled 18+) with household income of $48,110 or less; half of Social Security is excluded from income; rebate $380 to $1,000 by bracket",
+          "source": "https://www.pa.gov/agencies/revenue/ptrr",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "State SNAP agency (county assistance office)",
+          "verdict": "unlikely",
+          "reason": "She almost certainly eats with the daughter's family, so they are one SNAP household and the daughter's $5,500/mo counts. She could only be a separate household as an elderly person unable to prepare meals if the others' income were at or below 165% of poverty (about $2,976/mo for two), and $5,500 is well above that.",
+          "keyRule": "7 CFR 273.1: people who live together and buy/prepare food together are one SNAP household; an elderly (60+) member who cannot purchase/prepare meals can be a separate household only if the others' income is at or below 165% of poverty",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/subpart-A/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "PA DHS",
+          "verdict": "unlikely",
+          "reason": "LIHEAP counts everyone living in the home; the daughter's household income (about $82,800/yr with hers) is far above the $40,980 limit for three.",
+          "keyRule": "150% FPL: $40,980/yr for 3 people (2026-27)",
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/providers/documents/liheap-vendors/2026-2027-liheap-important-facts-for-customers.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medical Assistance for older adults (Healthy Horizons categorically needy)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "MA",
+            "Healthy Horizons"
+          ],
+          "agency": "PA DHS, Philadelphia County Assistance Office",
+          "verdict": "unlikely",
+          "reason": "$1,400 is above 100% FPL for one (about $1,350 with disregard) and $9,000 exceeds the $2,000 resource limit; Medicaid comes through the HCBS 300% route instead.",
+          "keyRule": "100% FPL income; $2,000 resources",
+          "source": "http://services.dpw.state.pa.us/oimpolicymanuals/ma/319_Healthy_Horizons/319_Appendix_A.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Income $1,400 exceeds the $994 SSI rate, and she lives in another person's household.",
+          "keyRule": "SSI FBR $994/mo (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Community HealthChoices LTSS application and assessment",
+        "phoneOrWhere": "PA Enrollment Services / Independent Enrollment Broker 1-844-824-3655 (or PCA Helpline 215-765-9040)",
+        "why": "She needs total help and her daughter has already cut work hours. The CHC waiver is the only program that pays for substantial daily care and can pay the daughter herself through participant direction; the IEB starts both the FED and the Medicaid application. VA survivors pension with A&A is the second call."
+      },
+      "notes": "The daughter's income does not count for Medicaid, VA, MSP, Extra Help or PACENET, but it does count for SNAP, LIHEAP and the Caregiver Support Program sliding scale because those use the whole household; that is why those verdicts differ. The $1,000 resource gap should be handled with a burial-fund designation or spending on her own needs, never a gift (5-year look-back). Confirm what the 'small widow's pension' is: if it is already VA survivors pension, the ask is to add A&A."
+    }
+  ]
+}

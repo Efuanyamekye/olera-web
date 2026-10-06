@@ -25,6 +25,7 @@ export const WAR_ROOM_PROBE_KINDS = [
   "traffic_by_page_family",
   "revenue_by_product",
   "support_backlog_composition",
+  "benefits_finder_weekly",
   "none",
 ] as const;
 

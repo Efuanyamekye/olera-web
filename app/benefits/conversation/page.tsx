@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { zipToState } from "@/lib/benefits/zip-lookup";
+import { zipToCounty, zipToState } from "@/lib/benefits/zip-lookup";
 import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
@@ -80,6 +80,9 @@ export default function BenefitsConversationPage() {
   const [need, setNeed] = useState<FinderNeed | null>(null);
   const [zip, setZip] = useState("");
   const [stateCode, setStateCode] = useState<string | null>(null);
+  // The county picks the family's own Area Agency on Aging; without it the
+  // plan falls back to the state's first agency alphabetically.
+  const [county, setCounty] = useState<string | null>(null);
   const [facts, setFacts] = useState<KnownFacts>(EMPTY);
   const [asked, setAsked] = useState<FactKey[]>([]);
   const [turn, setTurn] = useState<ConversationTurn | null>(null);
@@ -219,13 +222,16 @@ export default function BenefitsConversationPage() {
     who,
     zip,
     stateCode,
+    county,
     place: stateName,
     age: facts.age,
     needs: need ? [need] : ["care"],
     household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
     income: facts.income ?? (asked.includes("income") ? "unsure" : null),
-    medicaid: null,
-    veteran: facts.veteran ?? "no",
+    // Carry what the conversation learned; a fact it never asked stays unknown
+    // rather than "no", which would rule programs out unasked.
+    medicaid: facts.medicaid === "has" ? "alreadyHas" : facts.medicaid === "no" ? "doesNotHave" : asked.includes("medicaid") ? "notSure" : null,
+    veteran: facts.veteran ?? (asked.includes("veteran") ? "unsure" : null),
     dailyHelp: facts.dailyHelp,
     savings: facts.savings,
   });
@@ -340,6 +346,12 @@ export default function BenefitsConversationPage() {
               completed("zip");
               remember();
               setStateCode(st);
+              setCounty(null);
+              void zipToCounty(zip).then(setCounty);
+              // Someone filling it in for their spouse has answered the
+              // household question already; don't ask "Does your spouse live
+              // with a spouse or partner?"
+              if (who === "spouse") setFacts((f) => (f.household ? f : { ...f, household: "couple" }));
               setTurn(null);
               setStep("engine");
             }}
