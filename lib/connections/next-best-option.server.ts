@@ -101,12 +101,24 @@ export async function findNextBestOption(
   db: SupabaseClient,
   opts: { anchorProfileId: string; familyProfileId: string },
 ): Promise<NextBestOption | null> {
+  return (await findNearbyOptions(db, { ...opts, limit: 1 }))[0] ?? null;
+}
+
+/**
+ * The same lookup, ranked, up to `limit` providers. The provider-silent rescue
+ * email (lib/family-comms/alternatives.ts) takes three; the post-inquiry offer
+ * takes one. Empty when the anchor has no coordinates or nothing qualifies.
+ */
+export async function findNearbyOptions(
+  db: SupabaseClient,
+  opts: { anchorProfileId: string; familyProfileId?: string | null; limit: number },
+): Promise<NextBestOption[]> {
   const { data: anchor } = await db
     .from("business_profiles")
     .select("id, display_name, source_provider_id, lat, lng, category, care_types")
     .eq("id", opts.anchorProfileId)
     .maybeSingle();
-  if (!anchor) return null;
+  if (!anchor) return [];
 
   let lat = typeof anchor.lat === "number" ? anchor.lat : null;
   let lng = typeof anchor.lng === "number" ? anchor.lng : null;
@@ -127,14 +139,12 @@ export async function findNextBestOption(
     category ??
     primaryCategory(anchor.category) ??
     primaryCategory(((anchor.care_types as string[] | null) ?? [])[0]);
-  if (lat === null || lng === null || !category) return null;
+  if (lat === null || lng === null || !category) return [];
 
   // Providers this family has already asked — never offer one twice.
-  const { data: asked } = await db
-    .from("connections")
-    .select("to_profile_id")
-    .eq("from_profile_id", opts.familyProfileId)
-    .eq("type", "inquiry");
+  const { data: asked } = opts.familyProfileId
+    ? await db.from("connections").select("to_profile_id").eq("from_profile_id", opts.familyProfileId).eq("type", "inquiry")
+    : { data: [] as { to_profile_id: string }[] };
   const askedProfileIds = Array.from(new Set((asked ?? []).map((c) => c.to_profile_id as string)));
   const askedDirectoryIds = new Set<string>();
   if (anchor.source_provider_id) askedDirectoryIds.add(anchor.source_provider_id);
@@ -171,7 +181,7 @@ export async function findNextBestOption(
     // The same place listed twice (a typo'd duplicate a few yards away) is not
     // a second option.
     .filter((c) => !(c.miles < 0.3 && nameStem(c.p.provider_name) === nameStem(anchor.display_name)));
-  if (!candidates.length) return null;
+  if (!candidates.length) return [];
 
   // Responsive = a real provider reply in the last 60 days, on any inquiry.
   const responsive = new Set<string>();
@@ -213,8 +223,7 @@ export async function findNextBestOption(
     return a.miles - b.miles;
   });
 
-  const best = candidates[0];
-  return {
+  return candidates.slice(0, opts.limit).map((best) => ({
     providerId: best.p.provider_id,
     slug: best.p.slug!,
     name: best.p.provider_name!,
@@ -223,7 +232,59 @@ export async function findNextBestOption(
     distanceMi: Math.round(best.miles * 10) / 10,
     rating: best.p.google_rating,
     reviewCount: best.p.google_reviews_data?.review_count ?? null,
-  };
+  }));
+}
+
+/**
+ * The business_profiles id for a directory provider, creating the unclaimed
+ * row if it does not exist yet. Same fields and race handling as the inquiry
+ * route's directory branch (app/api/connections/request), which is what would
+ * create it anyway the moment a family wrote to them. The rescue email needs
+ * the id up front, because its one-tap "Introduce me" link carries it.
+ */
+export async function ensureProviderProfileId(db: SupabaseClient, directoryId: string): Promise<string | null> {
+  const find = async () =>
+    (await db.from("business_profiles").select("id").eq("source_provider_id", directoryId).limit(1).maybeSingle()).data?.id as
+      | string
+      | undefined;
+  const existing = await find();
+  if (existing) return existing;
+  const { data: dir } = await db
+    .from("olera-providers")
+    .select("provider_name, slug, provider_category, main_category, city, state, phone, provider_logo, provider_images, lat, lon")
+    .eq("provider_id", directoryId)
+    .maybeSingle();
+  if (!dir?.provider_name) return null;
+  const careTypes = [dir.provider_category, dir.main_category].filter(
+    (v, i, a): v is string => typeof v === "string" && !!v && a.indexOf(v) === i,
+  );
+  const { data: created, error } = await db
+    .from("business_profiles")
+    .insert({
+      source_provider_id: directoryId,
+      slug: dir.slug || directoryId,
+      type: "organization",
+      category: dir.provider_category,
+      display_name: dir.provider_name,
+      phone: dir.phone,
+      city: dir.city,
+      state: dir.state,
+      lat: typeof dir.lat === "number" ? dir.lat : null,
+      lng: typeof dir.lon === "number" ? dir.lon : null,
+      image_url: dir.provider_logo || (dir.provider_images as string | null)?.split(" | ")?.[0] || null,
+      care_types: careTypes,
+      claim_state: "unclaimed",
+      verification_state: "unverified",
+      source: "seeded",
+      is_active: true,
+      metadata: {},
+    })
+    .select("id")
+    .maybeSingle();
+  if (created?.id) return created.id as string;
+  if (error?.code === "23505") return (await find()) ?? null;
+  if (error) console.error("[next-best-option] provider profile create failed", error);
+  return null;
 }
 
 /**
