@@ -20,7 +20,7 @@ import { getSiteUrl } from "@/lib/site-url";
  * The mention notifies her as fast as a DM would, and the channel lets anyone
  * covering see that the lead arrived and who is on it (TJ, 6 Oct). The
  * channel is private, so the bot posts there only once someone has typed
- * /invite @Cortex in it; until then the post fails with not_in_channel and the
+ * /invite @Olera v2 Alerts (the bot Cortex posts as) in it; until then the post fails with not_in_channel and the
  * ping falls back to a DM, then to the shared webhook channel.
  *
  * Slack ids are not secrets. The env vars exist so the person on call or the
