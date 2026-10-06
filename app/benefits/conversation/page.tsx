@@ -348,6 +348,10 @@ export default function BenefitsConversationPage() {
               setStateCode(st);
               setCounty(null);
               void zipToCounty(zip).then(setCounty);
+              // Someone filling it in for their spouse has answered the
+              // household question already; don't ask "Does your spouse live
+              // with a spouse or partner?"
+              if (who === "spouse") setFacts((f) => (f.household ? f : { ...f, household: "couple" }));
               setTurn(null);
               setStep("engine");
             }}
