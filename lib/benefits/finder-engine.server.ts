@@ -21,7 +21,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { rulesOf, explain, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine } from "@/lib/benefits/conversation";
 import type { WaiverProgram } from "@/data/waiver-library";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
 import { ageMeetsMin } from "@/lib/benefits/age";
 import { pickCallContact, stripParen } from "@/lib/benefits/call-script";
@@ -64,7 +64,7 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
   health: ["healthcare"],
 };
 
-const PAYS_FOR_CARE = /waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
+const PAYS_FOR_CARE = /aid (and|&) attendance|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -304,8 +304,12 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
 
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   const helping = isHelpingSomeone(a);
+  // "PACE (Pharmaceutical Assistance ...)" is Pennsylvania's drug program,
+  // not the all-inclusive care program; it led every Pennsylvania plan
+  // (answer key, 6 Oct 2026).
+  const drugProgram = (s: Screened) => /pharmac/i.test(s.raw.name);
   const wants = (re: RegExp | null, category?: BenefitCategory[]) => (s: Screened) =>
-    (re ? re.test(s.raw.name) || re.test(s.raw.shortName || "") : true) && (!category || category.includes(s.category));
+    (re ? (re.test(s.raw.name) || re.test(s.raw.shortName || "")) && !(re === PAYS_FOR_CARE && drugProgram(s)) : true) && (!category || category.includes(s.category));
 
   const preferences: ((s: Screened) => boolean)[] = [];
   if (helping && a.caregiverNeeds.some((n) => n === "break" || n === "learn" || n === "talk")) {
@@ -371,8 +375,9 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
     })(),
   ]);
 
-  // Same program set as the /m plan: canonical ids, benefits only.
-  const programs = getCanonicalProgramIds(stateSlug)
+  // The state's canonical programs plus the federal ones it doesn't hold
+  // (Extra Help, SSI, VA pension); benefits only.
+  const programs = getPlanProgramIds(stateSlug)
     .map((id) => getEnrichedProgram(stateSlug, id))
     .filter((p): p is WaiverProgram => !!p && p.programType === "benefit");
 

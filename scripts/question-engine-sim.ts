@@ -16,14 +16,14 @@
  *   npx -y tsx@4 scripts/question-engine-sim.ts
  */
 import { rulesOf, statusOf, nextQuestion, EMPTY_FACTS, ANSWERS, type KnownFacts, type FactKey, type AnswerPriors } from "@/lib/benefits/question-engine";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
 
 const perState: Record<string, ReturnType<typeof rulesOf>[]> = {};
 for (const s of US_STATES) {
   const slug = getStateSlug(s.value);
   if (!slug) continue;
-  perState[s.value] = getCanonicalProgramIds(slug)
+  perState[s.value] = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit")
     .map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
