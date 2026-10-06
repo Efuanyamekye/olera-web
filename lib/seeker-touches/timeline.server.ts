@@ -513,7 +513,13 @@ function touchToItem(t: FamilyTouchRow): SeekerTimelineItem {
     channel: t.channel === "note" ? "in_app" : t.channel,
     occurred_at: t.occurred_at,
     title: t.summary,
-    detail: t.detail,
+    // A note longer than one line is stored whole in `detail` with its first
+    // 240 characters as `summary`. Render the whole note as the body, not the
+    // summary with the rest in the small grey line: Ces logged a 470-character
+    // call note on 5 Oct, saw it cut off mid-word, saved it again, and asked
+    // whether the log had a character limit.
+    full_text: t.detail ?? null,
+    detail: null,
     source: t.source,
     status: [outcome, t.next_action ? `next: ${t.next_action}` : null].filter(Boolean).join(" · ") || null,
     contact_handle: t.contact_handle,
