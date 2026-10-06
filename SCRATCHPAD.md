@@ -7,27 +7,24 @@
 
 ## Current Focus
 
-### 2026-10-06 — Benefits: researched answer key, federal programs, catalog filled, household/couple rules (`jolly-ramanujan`, #2379 #2380 → PROD via #2382; #2385 open)
+### 2026-10-06 — Benefits: answer key, federal programs, full catalog, no wrong "likely" (`jolly-ramanujan`; ALL IN PROD via #2382, #2391, #2394, #2408)
 
-**Done (in production via #2382):**
-- **Answer key instead of CARES labels** (TJ: CARES "isn't divine authority"; the study isn't starting yet, build the best product). `data/benefits/answer-key/`: 40 dementia-caregiver families, 4 archetypes × TX FL CA NY PA OH NC GA IL MI, researched from official sources *without reading our data*. Scorer `scripts/benefits-answer-key-score.ts` replays the conversation through the engine. Run it before any recommendation change.
-- **Local agency routing (#2379):** the conversation never sent the county, and ~31% of ZIP prefixes have no agency on file. The plan now names the Eldercare Locator instead of the state's first agency alphabetically (Philadelphia was getting Berks).
-- **Federal programs (#2380):** Extra Help, SSI, and the VA pension with A&A, in `data/benefits/federal-programs.ts` via `getPlanProgramIds`. Pages are noindex and marked "Auto-researched", never "published" (published shows a fake Ces/DuBose reviewer credit). Pennsylvania's PACE drug program no longer leads every PA plan. Saved `/m` plans keep federal programs.
-- Deleted prod test rows: "Test AAA" (agency table) and "Test Program" (federal table). Backups are in the session scratchpad.
-
-**Open: #2385 (catalog + household/couple):**
-- 263 legacy-library programs were hidden from the finder (no programType), including Medicaid ABD in ~25 states. Triage is in `data/benefits/legacy-triage/` (`decisions.json` holds the hand calls): 142 drafted via the new `scripts/benefits-add-programs.js` (append-only), 44 mapped, 80 left as pages (legal, ombudsman, SHIP). 181 legacy ids redirect via `replaced.json` → `duplicateTarget`. Every state now has all 6 core program types; the finder sees 622 programs, up from 472.
-- **Engine:** new household answer `family`. A couple is judged against couple limits. Whole-home programs (SNAP, energy) are never "likely" for someone living with family. SNAP limits confirm only, never rule out. A `notForMedicaid` rule (EISEP, PA PACE). Medicaid/SSI with unreadable limits is never "likely" on age alone.
-- **Data corrections (appliedCorrections):** TX caregiver support (carried STAR+PLUS figures), KY caregiver (grandparent table). MT/NV LIHEAP retyped from navigator to benefit. NV PACE dropped (no provider).
-- **Score (conversation):** wrong "likely" 19→4, 181/181 programs found, first call agrees 48%. Median questions 6 (was 5); **TJ to confirm keeping the extra "who do they live with" question.**
+**Shipped (production, main 9ee622f0c):**
+- **Researched answer key** (`data/benefits/answer-key/`): 40 dementia-caregiver families, 10 states, researched from official sources without reading our data. `scripts/benefits-answer-key-score.ts` replays the conversation. **Score every recommendation change before it ships.** Final: wrong "likely" 0 (conversation and form), 181/181 researched programs we hold are found, and the first call agrees with the research 48% of the time (was 20%).
+- **Federal programs** (Extra Help, SSI, VA pension with A&A) in `data/benefits/federal-programs.ts`, via `getPlanProgramIds`. Pages are noindex and "Auto-researched".
+- **Catalog:** 263 hidden legacy programs triaged (`data/benefits/legacy-triage/`): 142 drafted via `scripts/benefits-add-programs.js`, 44 mapped, 80 left as pages. `replaced.json` redirects 181 legacy ids. Every state now has all 6 core program types; the finder sees 622 programs (was 472).
+- **Engine:** a household answer (alone / spouse / family) and couple limits; SNAP limits only confirm; `requiresMedicaid()` reads "must have Medicaid" rules; `likelyCap` (PACE county named, live-in caregiver, dementia-only, whole-home only in the conversation). "Also likely" folds at 4. The call script starts Medicaid on the same call when the program needs it.
+- **Routing:** the full-ZIP county (`data/geo/zip-county-5.json`; 5,232 ZIPs were sent to another county's agency); Eldercare Locator when there's no agency on file.
+- **Build:** `outputFileTracingExcludes` keeps data/pipeline and data/benefits out of functions (two had hit Vercel's 250 MB limit).
+- **Fact-check:** the 45 states with new drafts (#2404) plus the weekly NH–RI run (#2374). Migration 271 has run.
+- Prod test rows deleted (Test AAA, Test Program).
 
 **Next Up:**
-- TJ: confirm the 6th question, then `/pre-test` + `/pr-merge` #2385 → `/promote-to-main`.
-- TJ runs migration 271 (other session's #2378, standing Benefits probe): `ALTER TABLE war_room_investigation_events ALTER COLUMN investigation_id DROP NOT NULL;`
-- The 142 new drafts need the fact-check (the weekly rotation gets them) plus 38 high lint findings (phone drift, 2-1-1 anchors).
-- The remaining wrong "likely" calls need new facts: PACE service area (TX), FL HCE needs a live-in caregiver, dementia-only programs (Project C.A.R.E.).
-- 241 counties have no agency row; ZIP→county uses only 3 digits (Hialeah → Broward).
-- The caseworker doc (APdQ3n36UeTbSLhqUu1kGJ) is stale: Phase 3 still says "not started".
+- The fact-check review queue (311 flags, mostly ambiguous FPL tiers, phones and aggregator sources) is in #2404, for whoever owns benefits data.
+- The caseworker doc (APdQ3n36UeTbSLhqUu1kGJ) is stale: Phase 3 is shipped and Phase 2 (the scoreboard) is the answer key.
+- Researched programs still not held: VA health care, SSDI conversion, GUIDE, county tax exemptions (66 of 247, mostly not catalog material).
+- ZIP table is from the 2000 census; the 2020 Census file is blocked to scripts (newer ZIPs fall back to 3 digits).
+- Tooling: this session lost Desktop access mid-way. The scratchpad clone + public anon key run the scorer, and GitHub Actions runs the fact-check (keys in GH secrets).
 
 ### 2026-10-04 — Robbie's first pilot family (Richard, Dallas ad): reply sent, no Cortex (`graceful-franklin`, no app code)
 
