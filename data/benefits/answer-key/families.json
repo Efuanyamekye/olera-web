@@ -92,7 +92,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "FL-A",
@@ -183,7 +184,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "CA-A",
@@ -274,7 +276,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "NY-A",
@@ -365,7 +368,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "PA-A",
@@ -456,7 +460,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "OH-A",
@@ -547,7 +552,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "NC-A",
@@ -638,7 +644,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "GA-A",
@@ -729,7 +736,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "IL-A",
@@ -820,7 +828,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     },
     {
       "id": "MI-A",
@@ -911,7 +920,8 @@
       "dailyHelpDetail": "Needs help with bathing, dressing, toileting and moving around; cannot be left alone",
       "disability": true,
       "caregiver": "Daughter, 58, cut her work hours to care for her",
-      "archetype": "D"
+      "archetype": "D",
+      "householdMonthlyIncome": 6900
     }
   ]
 }

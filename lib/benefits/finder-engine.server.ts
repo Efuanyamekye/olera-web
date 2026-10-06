@@ -322,7 +322,10 @@ function likelyCap(p: WaiverProgram, a: FinderAnswers, county: string | null, en
   const summary = p.structuredEligibility?.summary || [];
   const text = [p.name, ...summary, ...((p.geographicScope as { localEntities?: { name?: string }[] } | undefined)?.localEntities || []).map((e) => e.name || "")].join(" ");
   const rules = rulesOf(p as Parameters<typeof rulesOf>[0]);
-  if (rules.countsHousehold && (a.household === "3" || (hasConv && engine === "check"))) {
+  // Only the conversation asks for the person's own income; the form asks a
+  // household of two or more for the whole household's, which a whole-home
+  // program can judge, so the form keeps its own call.
+  if (hasConv && rules.countsHousehold && (a.household === "3" || engine === "check")) {
     return "It counts the income of everyone in the home, so it depends on the whole household.";
   }
   if (SERVICE_AREA.test(p.name) || summary.some((x) => LIVES_IN_AREA.test(x))) {
