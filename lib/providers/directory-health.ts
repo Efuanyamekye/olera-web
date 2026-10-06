@@ -21,7 +21,10 @@ export type ProviderForHealth = {
   provider_id: string;
   provider_name: string | null;
   deleted: boolean;
+  /** Google's status at the last observation; the previous pass's word. */
   google_status: string | null;
+  /** Google's name at the last observation. A name already seen is never flagged twice. */
+  google_name: string | null;
 };
 
 export type HealthDecision =
@@ -63,14 +66,21 @@ export function isCosmeticRename(stored: string | null, observed: string): boole
 export function decideHealthActions(provider: ProviderForHealth, observed: StatusObservation): HealthDecision[] {
   const out: HealthDecision[] = [];
   if (observed.status === "CLOSED_PERMANENTLY") {
-    if (!provider.deleted) out.push({ kind: "closed_archived", undo: { deleted: false, deleted_at: null, deletion_reason: null } });
+    // Google said closed last time too and the provider is live: a person
+    // restored it (Undo). Their word beats a repeat of Google's.
+    const humanRestored = provider.google_status === "CLOSED_PERMANENTLY" && !provider.deleted;
+    if (!provider.deleted && !humanRestored) out.push({ kind: "closed_archived", undo: { deleted: false, deleted_at: null, deletion_reason: null } });
     return out;
   }
   if (observed.status === "CLOSED_TEMPORARILY" && provider.google_status !== "CLOSED_TEMPORARILY") {
     out.push({ kind: "closed_temporarily" });
   }
   const name = observed.googleName?.trim();
-  if (name && provider.provider_name && name !== provider.provider_name.trim()) {
+  // A name seen on an earlier pass was flagged or applied then; repeating it
+  // monthly would pile up duplicate flags, and would re-apply a cosmetic
+  // rename a person had undone.
+  const alreadySeen = !!name && provider.google_name?.trim() === name;
+  if (name && !alreadySeen && provider.provider_name && name !== provider.provider_name.trim()) {
     if (isCosmeticRename(provider.provider_name, name)) {
       out.push({ kind: "rename_applied", newName: name, undo: { provider_name: provider.provider_name } });
     } else {

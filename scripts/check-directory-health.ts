@@ -6,7 +6,7 @@
 import assert from "node:assert/strict";
 import { decideHealthActions, isCosmeticRename, normalizeProviderName, planStatusPass } from "../lib/providers/directory-health";
 
-const open = { provider_id: "a", provider_name: "Sunrise Senior Living of Dallas", deleted: false, google_status: "OPERATIONAL" };
+const open = { provider_id: "a", provider_name: "Sunrise Senior Living of Dallas", deleted: false, google_status: "OPERATIONAL", google_name: "Sunrise Senior Living of Dallas" };
 
 // Permanently closed: archive, and say nothing about the name.
 assert.deepEqual(
@@ -15,6 +15,11 @@ assert.deepEqual(
 );
 // Already archived: nothing to do again.
 assert.deepEqual(decideHealthActions({ ...open, deleted: true }, { status: "CLOSED_PERMANENTLY", googleName: null }), []);
+// A person restored a provider Google still calls closed: their word stands.
+assert.deepEqual(decideHealthActions({ ...open, google_status: "CLOSED_PERMANENTLY" }, { status: "CLOSED_PERMANENTLY", googleName: null }), []);
+// A name already seen on an earlier pass is never flagged or applied again.
+assert.deepEqual(decideHealthActions({ ...open, google_name: "Brookdale Dallas" }, { status: "OPERATIONAL", googleName: "Brookdale Dallas" }), []);
+assert.deepEqual(decideHealthActions({ ...open, google_name: "SUNRISE SENIOR LIVING - DALLAS" }, { status: "OPERATIONAL", googleName: "SUNRISE SENIOR LIVING - DALLAS" }), []);
 // Temporarily closed: a flag, once. A repeat observation is silent.
 assert.deepEqual(decideHealthActions(open, { status: "CLOSED_TEMPORARILY", googleName: null }).map((d) => d.kind), ["closed_temporarily"]);
 assert.deepEqual(decideHealthActions({ ...open, google_status: "CLOSED_TEMPORARILY" }, { status: "CLOSED_TEMPORARILY", googleName: null }), []);

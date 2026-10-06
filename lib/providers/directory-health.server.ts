@@ -41,7 +41,7 @@ export async function applyStatusObservation(
 ): Promise<AppliedHealth> {
   const { data, error } = await db
     .from("olera-providers")
-    .select("provider_id, provider_name, deleted, google_status")
+    .select("provider_id, provider_name, deleted, google_status, google_name")
     .eq("provider_id", providerId)
     .maybeSingle();
   if (error) throw error;
@@ -61,7 +61,10 @@ export async function applyStatusObservation(
     if (decision.kind === "closed_archived") {
       update.deleted = true;
       update.deleted_at = nowIso;
-      update.deletion_reason = "google:CLOSED_PERMANENTLY";
+      // deletion_reason is a CHECK of five values (migration 081); "data_sweep"
+      // is the one that 301s the page to its city (provider_request is a 410).
+      // The ledger row carries the real reason, Google's CLOSED_PERMANENTLY.
+      update.deletion_reason = "data_sweep";
       rows.push({
         provider_id: providerId, kind: decision.kind, source, applied_at: nowIso,
         evidence: { status: observed.business_status, google_name: observed.google_name, provider_name: provider.provider_name },
