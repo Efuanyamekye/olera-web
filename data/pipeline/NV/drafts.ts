@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-05T18:20:47.958Z
+ * Last updated: 2026-10-06T09:18:23.566Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -921,7 +921,7 @@ export const drafts: PipelineStateDrafts = {
       "name": "Nevada Energy Assistance Program (EAP) / LIHEAP",
       "shortName": "Nevada Energy Assistance",
       "tagline": "Help your loved one pay heating bills with up to $3,136/year in assistance, no savings limits.",
-      "programType": "navigator",
+      "programType": "benefit",
       "complexity": "simple",
       "geographicScope": {
         "type": "federal",
@@ -2929,7 +2929,6 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -3277,6 +3276,408 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adsd.nv.gov/programs/seniors/tap/tap_prog/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "nv-maabd-medicaid",
+      "name": "Medical Assistance to the Aged, Blind, and Disabled (MAABD)",
+      "shortName": "Nevada MAABD",
+      "tagline": "Full Medicaid coverage for low-income Nevadans 65 and older, covering doctor visits, prescriptions, hospital stays, and sometimes long-term care at home or in a facility.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Nevada Department of Social Services / Division of Welfare and Supportive Services (state administration)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local district offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Access Nevada online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living on a fixed income in Nevada, MAABD is the Medicaid program most likely to cover their medical care. It pays for physician visits, prescription medications, emergency room care, and short-term hospital stays. Depending on your parent's situation, it can also cover home- and community-based waiver services or long-term care in a facility.\n\nThe income limit is strict: $994/month for a single person or $1,491/month combined for a married couple (2026 figures). The asset limit is equally strict: $2,000 in countable resources for one person, $3,000 for a couple. Nearly every income source counts, including Social Security, pensions, IRA payments, and property income. This is not the same program as regular Medicaid; MAABD uses SSI-style rules, which means the math works differently than most families expect.\n\nIf your parent does not receive SSI but has very low income and limited assets, they may still qualify here. MAABD is its own eligibility pathway. The program can also cover up to three months of medical bills before the application date if your parent was eligible during that period.",
+      "savingsRange": "",
+      "savingsSource": "MAABD provides in-kind medical coverage, not a cash benefit. The value depends on your parent's health needs and is not published as a fixed dollar figure by the state.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled under 65)",
+          "Single person: income below $994/month (2026)",
+          "Married couple: combined income below $1,491/month (2026)",
+          "Countable assets: $2,000 or less for one person; $3,000 for a couple",
+          "Nevada resident"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 994
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1491
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Cash on hand",
+            "Additional real property beyond primary residence (status of primary home not confirmed in cited Nevada materials)"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Nevada resident",
+          "Must be a U.S. citizen or qualified immigrant (non-citizens may qualify only for limited emergency medical coverage)",
+          "Applicants under 65 must meet Social Security Administration disability or blindness criteria",
+          "If applying for long-term care or home- and community-based waiver services, additional functional review may be required",
+          "If countable resources drop below the limit on any single day of the month, the applicant is eligible for that full month"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through Access Nevada or call (775) 684-0800; plan for processing to take longer if a disability determination is involved.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Use the Access Nevada pre-screening tool",
+            "description": "Go to https://accessnevada.dwss.nv.gov/ and use the pre-screening tool to confirm which application path fits your parent's situation. This takes about 10 minutes and helps avoid submitting the wrong form."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need your parent's Social Security award letter, proof of all income sources, current account balances, proof of Nevada residency, and proof of age. If applying through the disability pathway, gather medical records now. The state will request them within 45 days of your application, and missing records are the most common reason cases are delayed."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application",
+            "description": "Apply online at https://accessnevada.dwss.nv.gov/, call (775) 684-0800, visit a local DWSS district office, or mail a completed Form 2920 (Application for Assistance to Aged, Blind and Disabled) to your local district office. If your parent also needs SNAP food benefits, the combined form is titled MAABD-SNAP."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from the district office",
+            "description": "After submission, the district office may contact you for additional documents, particularly medical records if a disability determination is needed. Respond promptly: the cited Nevada manual requires medical records to be received within 45 days of the district office's request."
+          },
+          {
+            "step": 5,
+            "title": "Ask about retroactive coverage",
+            "description": "If your parent had medical expenses in the three months before their application date and was eligible during that time, ask the worker to review those months for prior-period coverage. You may need to submit an MAABD Addendum (Form 2059-EM) to support this request."
+          }
+        ],
+        "processingTime": "No exact statewide deadline is published for standard MAABD cases. Disability-based applications can take longer if medical evidence is needed; the state manual gives applicants 45 days to provide requested medical records after the district office asks for them.",
+        "waitlist": null,
+        "tip": "If your parent's assets are slightly over the $2,000 limit, check whether they drop below that amount at any point during the month. The program allows eligibility for the entire month if assets are under the limit on even one day.",
+        "urls": [
+          {
+            "label": "Apply online through Access Nevada",
+            "url": "https://accessnevada.dwss.nv.gov/"
+          },
+          {
+            "label": "Nevada DSS MAABD program page",
+            "url": "https://www.dss.nv.gov/programs/Medicaid/apply-for-assistance/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of Nevada residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or other government-issued document)",
+        "Statements for all income sources: pension, IRA distributions, annuity payments, wages, property rental income, dividends, alimony",
+        "Current balances for all checking and savings accounts (bring the most recent statements available)",
+        "Social Security card or Social Security number documentation for all household members",
+        "Citizenship or qualified immigration status documents, if applicable",
+        "Medical records supporting a disability or blindness determination, if applying under those categories",
+        "Documentation of nursing facility care, home care arrangements, or waiver program referrals if applying for long-term care coverage",
+        "Legal documents authorizing a representative to apply on your parent's behalf, if someone other than the applicant is completing the application"
+      ],
+      "contacts": [
+        {
+          "label": "Nevada DWSS Benefits Line",
+          "phone": "(775) 684-0800",
+          "description": "Apply for MAABD, ask eligibility questions, and request an application form from the Division of Welfare and Supportive Services.",
+          "hours": "Contact Nevada DWSS for current hours; hours may vary by district office."
+        },
+        {
+          "label": "Access Nevada Online Portal",
+          "phone": null,
+          "description": "Apply online, use the pre-screening tool, and upload documents at https://accessnevada.dwss.nv.gov/.",
+          "hours": "Available online 24 hours; submitted applications are processed during business hours."
+        },
+        {
+          "label": "Nevada 211",
+          "phone": "2-1-1",
+          "description": "General information and referral line. Can direct you to the nearest DWSS district office if you cannot reach the benefits line directly. Does not process MAABD applications.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is applying through the disability or blindness pathway and is under 65, the disability determination follows Social Security Administration criteria. Gathering complete medical records before you apply will significantly reduce delays.",
+        "MAABD is not the same as standard Medicaid based on income percentage (called MAGI Medicaid). The income and asset counting rules are stricter and work differently. A caseworker who handles MAGI cases may not be familiar with MAABD rules; ask specifically to speak with someone who handles aged, blind, and disabled cases.",
+        "If your parent was hospitalized or incurred large medical bills in the three months before applying, ask about retroactive coverage at the time of application. Do not wait until after approval.",
+        "Nearly all income sources are counted: Social Security, pensions, IRA distributions, wages, property rental income, stock dividends, and alimony. If your parent receives income from multiple sources, list all of them on the application to avoid processing delays."
+      ],
+      "relatedPrograms": [
+        "Nevada Medicaid Home- and Community-Based Waiver Services (for MAABD recipients needing in-home care support)",
+        "Supplemental Nutrition Assistance Program (SNAP) for Seniors (can be applied for simultaneously using the MAABD-SNAP combined form)",
+        "Nevada Senior Medicare Patrol / SHIP (free Medicare counseling for Nevadans also enrolled in or applying for Medicaid)",
+        "Supplemental Security Income (SSI) (separate federal program; SSI recipients may automatically qualify for Medicaid in Nevada)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What MAABD actually covers",
+          "body": "Physician visits. Prescription medications. Emergency room care. Short-term hospital stays. For some applicants, this program also covers home- and community-based waiver services (meaning in-home caregiving support) or care in an adult group care facility. The exact services available to your parent depend on their medical situation and which MAABD category they qualify under. There is no published dollar ceiling; the program covers medically necessary care within those categories."
+        },
+        {
+          "type": "prose",
+          "title": "How income is counted: what surprises families",
+          "body": "MAABD counts nearly every dollar your parent receives each month. That includes Social Security retirement or disability payments, pension checks, IRA or retirement account distributions, wages if they are still working, rental income from any property, stock dividends, and alimony. The 2026 limit is $994/month for a single person.\n\nIf your parent is married, the combined household income must stay below $1,491/month. There is no larger household-size table for MAABD the way there is for marketplace Medicaid.\n\nIf your parent's income is slightly above the limit, ask the caseworker about whether any deductions apply under SSI-style budgeting rules. The cited Nevada materials confirm that SSI-style methodology is used, but the full list of allowable deductions requires case-by-case review by a DWSS worker."
+        },
+        {
+          "type": "prose",
+          "title": "The asset limit and the one-day rule",
+          "body": "Your parent cannot have more than $2,000 in countable assets at any point if they are single ($3,000 for a couple). Countable assets include bank account balances, CDs, stocks, bonds, and cash on hand.\n\nThe cited Nevada rule has one important detail: if countable resources are under the limit on any single day in the month, your parent is eligible for that entire month. If assets briefly dip below the threshold, document it.\n\nThe cited Nevada materials do not publish a complete list of which assets are exempt (such as whether the primary home is excluded). Do not assume standard Medicaid exemptions apply without confirming with a DWSS caseworker."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it's worth more than $2,000?",
+          "answer": "The cited Nevada MAABD materials confirm there is a $2,000 countable resource limit but do not publish the full list of exempt assets, including whether and how a primary home is treated. For standard Medicaid programs, a primary residence is typically excluded from the resource test, but we cannot confirm that here without verified Nevada MAABD documentation. Ask a DWSS caseworker directly: call (775) 684-0800 and ask specifically about exempt assets under MAABD."
+        },
+        {
+          "question": "My parent gets Social Security and a small pension. Does all of it count toward the income limit?",
+          "answer": "Yes. Under MAABD's SSI-style budgeting rules, nearly all income sources are counted, including Social Security retirement or disability payments and pension income. Combined, these must stay below $994/month for a single person (2026 limit). If your parent's total is above that, ask a DWSS worker whether any income deductions apply to their specific situation before assuming they are ineligible."
+        },
+        {
+          "question": "My parent doesn't receive SSI. Can they still apply for MAABD?",
+          "answer": "Yes. MAABD is a separate eligibility pathway from SSI. Applicants who do not qualify for SSI or who were previously denied SSI can still qualify for MAABD if they meet Nevada's income, asset, and age or disability criteria. Apply through Access Nevada at https://accessnevada.dwss.nv.gov/ or call (775) 684-0800."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent?",
+          "answer": "Yes, but you will need to bring legal documentation authorizing you to act on your parent's behalf, such as a power of attorney. Include these documents with the application. If your parent cannot complete the application themselves and you do not yet have a legal document in place, contact a DWSS district office to ask about authorized representative procedures."
+        },
+        {
+          "question": "My parent had a hospital stay two months ago and wasn't enrolled. Can MAABD cover those bills?",
+          "answer": "Possibly. MAABD can cover up to three months of medical expenses before the application date if your parent was eligible during that time. You must ask for this retroactive coverage at the time of application; it is not automatic. Bring documentation of the medical expenses and mention the prior period when you speak with the caseworker. The MAABD Addendum (Form 2059-EM) may be required."
+        },
+        {
+          "question": "Can I apply for MAABD and SNAP at the same time?",
+          "answer": "Yes. Nevada has a combined application form titled MAABD-SNAP that lets you apply for both programs in a single submission. Access it through the Access Nevada portal at https://accessnevada.dwss.nv.gov/ or request a paper copy by calling (775) 684-0800. Applying together saves time and ensures both programs review the same household information."
+        },
+        {
+          "question": "What happens if my parent's assets go over $2,000 temporarily, such as after receiving a tax refund?",
+          "answer": "Exceeding the asset limit causes ineligibility, but the program has a one-day rule: if your parent's countable resources drop below $2,000 on any single day of the month, they are eligible for that full month. If a lump sum comes in and is spent on allowable expenses before the end of the month, document the dates and balances carefully. If your parent loses coverage because of a temporary spike in assets, they can reapply once assets return below the limit."
+        },
+        {
+          "question": "My parent is under 65 and has a serious disability. Can they qualify?",
+          "answer": "Yes, through the disability pathway. Applicants under 65 must meet Social Security Administration criteria for disability or blindness as applied by Nevada. This requires medical documentation, and the district office will request medical records within the process; the cited Nevada manual requires those records to be submitted within 45 days of the office's request. Gathering records before you apply will reduce delays significantly."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(775) 684-0800",
+      "sourceUrl": "https://www.dss.nv.gov/programs/Medicaid/apply-for-assistance/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nv-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are caring for an aging parent in Nevada, this program can connect you with free counseling, respite care, and training so you do not have to do it alone.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Nevada Care Connection Resource Centers",
+            "type": "service-area"
+          },
+          {
+            "name": "Nevada Aging and Disability Services Division (ADSD)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local regional centers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are the primary person helping an aging parent, the Family Caregiver Support Program exists for you, not just your parent. Funded through federal Title III-E of the Older Americans Act and delivered locally across Nevada, this program provides unpaid family caregivers with counseling, caregiver training, support groups, respite care (temporary relief so you can take a break), and referrals to other community services. There are no income or asset tests to meet.\n\nEligibility is based on who you are caring for and your relationship to them. If your parent is 60 or older, you qualify as a caregiver. If your parent has Alzheimer's disease or a related dementia, the program may serve you regardless of your parent's age. Services are free, though the specific mix of what is available, and how quickly you can access respite funds, depends on your county and local provider capacity.\n\nBecause services are delivered through Nevada Care Connection Resource Centers across the state, your starting point is a call or visit to find what is available near you. Coordinators will assess your situation and connect you to the right mix of support.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You are an unpaid family caregiver age 18 or older",
+          "Your parent or loved one is age 60 or older",
+          "Dementia caregivers may qualify even if care recipient is under 60",
+          "No income or asset test",
+          "Grandparents 55+ caring for a child 18 or younger may also qualify"
+        ],
+        "ageRequirement": "18+ (caregiver); 60+ (care recipient, with dementia exception)",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "You must be an informal (unpaid) caregiver. Paid personal attendants and institutional care providers are not eligible.",
+          "Grandparents or other relative caregivers who are 55 or older and caring for a child 18 or younger may also be served.",
+          "Services depend on local availability and your assessed caregiver needs. What is offered in Washoe County may differ from what is available in rural Nevada."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Start at nevadacareconnection.org or call your regional Nevada Care Connection Resource Center; a coordinator will screen your needs and connect you to available services.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Visit Nevada Care Connection or call your local center",
+            "description": "Go to nevadacareconnection.org to find your nearest Nevada Care Connection Resource Center, or call the statewide Nevada Aging and Disability Services Division (ADSD) line to be directed to the right regional contact. This is your entry point into the program."
+          },
+          {
+            "step": 2,
+            "title": "Speak with a caregiver support coordinator",
+            "description": "A coordinator will ask you about your caregiving situation: who you are caring for, what kind of help you need, and what services are currently available near you. This is not a formal application in the traditional sense; it is a needs assessment conversation."
+          },
+          {
+            "step": 3,
+            "title": "Gather basic information before your call",
+            "description": "Have ready your name and contact information, your parent's name, age, and general condition, and any existing care or benefit documents that could help staff understand their needs. No financial records are required."
+          },
+          {
+            "step": 4,
+            "title": "Receive a service plan or referral",
+            "description": "Based on your conversation, the coordinator will connect you to available services: counseling, a support group, caregiver training, or respite care. If local respite funds are limited, ask about waitlist status and alternative resources."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard has been published. Ask your coordinator how quickly specific services can begin in your area.",
+        "waitlist": "No statewide waitlist policy has been published. Respite care funding in particular may be limited by local provider capacity. Ask about current availability when you first call.",
+        "tip": "If your parent has Alzheimer's or another dementia, say that clearly at the start of your call. Dementia caregivers may access services even if the care recipient is under 60, and some local programs target dementia caregivers specifically.",
+        "urls": [
+          {
+            "label": "Nevada Care Connection (start here)",
+            "url": "https://www.nevadacareconnection.org/"
+          },
+          {
+            "label": "Nevada ADSD ADRC Program Page",
+            "url": "https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your name and contact information (to reach you after the initial call)",
+        "Your parent's name, date of birth, and general condition or diagnosis",
+        "Your parent's current living situation (lives alone, with you, in assisted living, etc.)",
+        "Proof of your parent's age if requested, such as a birth certificate, Medicare card, or state ID",
+        "Any existing care plans, physician letters, or benefit documents that describe your parent's functional needs",
+        "Basic information about other caregivers or family members involved, if any"
+      ],
+      "contacts": [
+        {
+          "label": "Nevada Care Connection",
+          "phone": "(800) 992-0900",
+          "description": "Statewide entry point for Nevada aging services. Operators can connect you to your regional caregiver support coordinator and available services near you.",
+          "hours": "Mon-Fri, business hours (confirm with your regional center)"
+        },
+        {
+          "label": "Nevada Aging and Disability Services Division (ADSD)",
+          "phone": "(775) 687-4210",
+          "description": "State agency that administers the Family Caregiver Support Program. Call if you cannot reach your regional center or need help navigating the system.",
+          "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "2-1-1 Nevada",
+          "phone": "2-1-1",
+          "description": "General community resource helpline. Can transfer you to aging services if you are unsure which office to contact, but does not handle the program directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If you are in crisis because you cannot safely continue caregiving, say so at the start of your call. Some local centers can prioritize urgent situations, particularly for respite care.",
+        "Because services are delivered locally, the mix of counseling, training, and respite available to you depends on your county. If one service is not available near you, ask the coordinator what alternatives exist regionally.",
+        "This is not a paid caregiver wage program. It provides support services to you as a caregiver, not direct payment for the hours you spend caregiving. If you are looking for paid caregiver programs, ask the coordinator about Nevada Medicaid personal care options separately."
+      ],
+      "relatedPrograms": [
+        "Nevada Medicaid Personal Care Services",
+        "Nevada ADRC Options Counseling",
+        "Alzheimer's Association Nevada Chapter Caregiver Support",
+        "PACE (Program of All-inclusive Care for the Elderly) Nevada"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is not a cash benefit program",
+          "body": "Many caregivers search for a program that will pay them for the hours they spend helping a parent. This program does not do that. What it does provide is free counseling, training, respite care, and referrals to services that can reduce the burden on you. If paid caregiver wages are what you need, ask your coordinator specifically about Nevada Medicaid personal care programs."
+        },
+        {
+          "type": "prose",
+          "title": "What services can you actually get?",
+          "body": "The program funds six categories of support, though local availability varies. Information and assistance: help understanding what services your parent qualifies for and how to access them. Counseling: one-on-one sessions to help you manage caregiver stress, grief, or complex family dynamics. Support groups: peer connections with other Nevada caregivers in similar situations. Caregiver training: skills instruction on topics like safe transfers, medication management, or dementia behaviors. Respite care: temporary relief from caregiving responsibilities, which may be in-home or at an adult day center. Supplemental services: smaller items or services that fill gaps not covered elsewhere. The specific mix of what is funded and how quickly you can access it depends on your region and the local provider. Ask your coordinator directly which of these are currently available near you."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Do I have to prove my income or my parent's income to qualify?",
+          "answer": "No. The Family Caregiver Support Program does not have an income test. Eligibility is based on your relationship to the care recipient and their age or condition, not on what either of you earns or owns. You will not be asked to submit pay stubs, tax returns, or bank statements."
+        },
+        {
+          "question": "My parent has dementia but is only 58. Can I still get help?",
+          "answer": "Yes. Caregivers of people living with Alzheimer's disease or a related dementia may be served regardless of the care recipient's age. Tell the coordinator about the dementia diagnosis at the start of your call so they can connect you to the right services."
+        },
+        {
+          "question": "How long will it take to actually get respite care?",
+          "answer": "There is no statewide answer to this question. Respite funding is limited by local provider capacity and available funds, which vary by county. Some areas may be able to arrange respite quickly; others may have a waitlist. When you call your regional center, ask specifically: how long is the current wait for respite care in my area? Get that answer in writing or follow up by email."
+        },
+        {
+          "question": "I live in rural Nevada. Will I actually be able to access services?",
+          "answer": "The program is statewide, but services are delivered locally through Nevada Care Connection Resource Centers. In rural areas, some services such as in-person support groups or in-home respite may be limited. Ask your coordinator what is available in your specific county and whether any services can be provided by phone or virtually."
+        },
+        {
+          "question": "Can I apply for this program at the same time as Nevada Medicaid personal care?",
+          "answer": "Yes. These are separate programs. The Family Caregiver Support Program supports you as the caregiver; Nevada Medicaid personal care provides paid assistance directly to your parent. You can pursue both at the same time. Your Nevada Care Connection coordinator can help you identify which Medicaid programs your parent may also qualify for."
+        },
+        {
+          "question": "I am a grandparent raising my grandchildren. Does this program apply to me?",
+          "answer": "It may. Grandparents who are 55 or older and caring for a child 18 or younger may be eligible for services under this program. Contact your regional Nevada Care Connection Resource Center and describe your situation to a coordinator; they will confirm whether local services are available for relative caregivers in your area."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "(800) 992-0900",
+      "sourceUrl": "https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

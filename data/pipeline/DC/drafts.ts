@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-03T00:12:50.206Z
+ * Last updated: 2026-10-06T06:44:48.370Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -865,6 +865,907 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "dc-medicaid-aged-blind-disabled",
+      "name": "DC Medicaid for Aged, Blind and Disabled",
+      "shortName": "DC ABD Medicaid",
+      "tagline": "If your parent is 65 or older in DC and has limited income and savings, they may qualify for full Medicaid coverage that pays for doctor visits, hospital stays, prescriptions, and more.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Economic Service Centers / ESA offices in DC",
+            "type": "service-area"
+          },
+          {
+            "name": "Department of Human Services Economic Security Administration Case Record Management Unit (mail address)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, or blind or disabled at any age, and lives in DC with a limited income and modest savings, DC Medicaid for Aged, Blind and Disabled (ABD) may cover the full cost of their medical care. That includes doctor visits, hospital stays, prescription drugs, lab work, and preventive care, with no premium and no deductible for most covered services.\n\nTo qualify, your parent's income must be at or below 100% of the Federal Poverty Level. DC's published figures put that at approximately $1,305 to $1,330 per month for a single person (the two sources show slightly different numbers; see the eligibility section for details). Their countable assets must be below $4,000. That sounds low, but the asset test does not count everything your parent owns; their home and primary vehicle are typically exempt.\n\nThis program is separate from DC Health Link and from DC Alliance. It uses a different application form and a different eligibility process. Because it is a non-MAGI (non-Modified Adjusted Gross Income) Medicaid category, it is designed specifically for people who are aged, blind, or disabled, and it carries its own income and resource rules. Getting this right matters: a wrong form or missing document is the most common reason applications stall.",
+      "savingsRange": "",
+      "savingsSource": "Free service: DC ABD Medicaid covers medical costs directly; there is no defined dollar benefit amount. Coverage value depends on the individual's medical needs and services used.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled at any age)",
+          "DC resident",
+          "Income at or below roughly $1,305 to $1,330/month for one person",
+          "Countable assets below $4,000 for one person",
+          "U.S. citizen or eligible immigration status"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1330
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1804
+          }
+        ],
+        "assetLimits": {
+          "individual": 4000,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Cash on hand",
+            "Additional real property (beyond primary home)"
+          ],
+          "exemptAssets": [
+            "Primary home (DC's official ABD page does not publish a full exempt-asset list; confirm current exemptions directly with DHCF)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a District of Columbia resident",
+          "Must be a U.S. citizen or have eligible immigration status",
+          "If applying as blind or disabled (under 65), must have a disability determination from the Social Security Administration or be evaluated by a physician"
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can apply online, by phone, by mail, by fax, or in person at a DC Economic Service Center; processing takes up to 45 days, or up to 60 days if a disability determination is needed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm which form your parent needs",
+            "description": "ABD Medicaid uses the Integrated Application for Medical Assistance, not the DC Health Link online flow. If your parent is applying based on a disability that has not yet been determined by SSA, a doctor-completed Medical Form may also be required. Call DHCF at (202) 727-5355 if you are unsure which path applies."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need proof of DC residency, proof of income, proof of countable assets, proof of age or identity, and citizenship or immigration documents. If applying as blind or disabled, bring the SSA disability determination letter or arrange for a physician to complete the Medical Form. Having everything ready at once prevents processing delays."
+          },
+          {
+            "step": 3,
+            "title": "Submit your application",
+            "description": "Online: districtdirect.dc.gov. By phone: (202) 727-5355. By mail: Department of Human Services, Economic Security Administration, Case Record Management Unit, P.O. Box 91560, Washington, DC 20090. By fax: (202) 671-4400. In person: any DC Economic Service Center. There is no in-person interview requirement."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any requests for additional information",
+            "description": "If the caseworker needs more documentation, they will contact you. Missing or late documents are the most common cause of application delays. Ask for confirmation in writing of what is outstanding and when it is due."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility decision",
+            "description": "DC must process the application within 45 days, or within 60 days if a disability determination is part of the review. If approved, Medicaid coverage can be backdated to the first day of the month in which you applied, so apply as soon as your parent is ready."
+          }
+        ],
+        "processingTime": "Up to 45 days; up to 60 days if a disability determination is needed.",
+        "waitlist": null,
+        "tip": "DC's published income figures for the ABD category differ slightly between sources ($1,305/month on one DHCF fact sheet and $1,330/month on the official ABD page). Before you rule your parent out, call (202) 727-5355 to confirm the current limit. Do not self-screen them out based on a number that may be outdated.",
+        "urls": [
+          {
+            "label": "Apply online at District Direct",
+            "url": "https://districtdirect.dc.gov"
+          },
+          {
+            "label": "DC DHCF: Aged, Blind and Disabled Medicaid",
+            "url": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows current monthly benefit amount)",
+        "Proof of DC residency: a utility bill, lease agreement, or DC-issued government document in your parent's name",
+        "Government-issued photo ID or birth certificate to verify age and identity",
+        "SSA disability determination letter (required if applying as blind or disabled and SSA has already made a determination)",
+        "Proof of all other income sources: pension statements, VA benefit letters, annuity statements",
+        "Current balances for all checking and savings accounts (DC will ask for this; bring the most recent account statement available)",
+        "Documentation of any certificates of deposit, stocks, bonds, or investment accounts",
+        "Documents for any additional real property owned (deed or tax statement for property other than the primary home)",
+        "U.S. citizenship documents (U.S. passport or birth certificate) or eligible immigration status documents",
+        "Medicare card if your parent has Medicare (not required for ABD Medicaid, but useful for coordinating coverage if both apply)",
+        "Doctor-completed Medical Form if SSA has not yet issued a disability determination and one is required for your parent's case"
+      ],
+      "contacts": [
+        {
+          "label": "DC Department of Human Services: Benefits Line",
+          "phone": "(202) 727-5355",
+          "description": "Apply for ABD Medicaid, check application status, and ask eligibility questions. This is the program's direct application line.",
+          "hours": "Contact DHCF at dhcf.dc.gov to confirm current hours before calling."
+        },
+        {
+          "label": "DC DHCF: Department of Health Care Finance",
+          "phone": null,
+          "description": "Program oversight agency for DC Medicaid. Visit dhcf.dc.gov for policy information, fact sheets, and the official ABD program page.",
+          "hours": null
+        },
+        {
+          "label": "DC Economic Service Centers (in-person applications)",
+          "phone": "(202) 727-5355",
+          "description": "Walk-in application sites operated by the DC Economic Security Administration. No in-person interview is required, but staff can assist with completing the Integrated Application for Medical Assistance.",
+          "hours": "Contact ESA at (202) 727-5355 to confirm current locations and hours."
+        }
+      ],
+      "applicationNotes": [
+        "ABD Medicaid uses the Integrated Application for Medical Assistance, not the DC Health Link online application used for MAGI Medicaid. Using the wrong form can delay or void your application. If you are unsure which applies, call (202) 727-5355 before submitting.",
+        "Income under the limit is necessary but not sufficient. If your parent's countable assets exceed $4,000, they will be denied even with qualifying income. Review assets before applying, and ask DHCF which assets are exempt in your parent's specific situation.",
+        "If your parent is applying as disabled and SSA has not yet made a determination, a physician may need to complete a Medical Form as part of the review. This can extend processing time toward the 60-day limit. Arrange for the physician form early.",
+        "Coverage can be backdated to the first day of the month in which you apply. Do not wait for the perfect moment to submit; apply as soon as you have the core documents, and supplement later if needed."
+      ],
+      "relatedPrograms": [
+        "DC Medicare Savings Programs (help paying Medicare premiums, deductibles, and copays for people who have both Medicare and low income)",
+        "DC PACE (Program of All-inclusive Care for the Elderly; one team manages all medical and long-term care for people who need nursing-facility-level care but want to stay home)",
+        "DC Medicaid Long-Term Care (separate Medicaid pathway for nursing facility or home and community-based services beyond standard ABD coverage)",
+        "DC Supplemental Security Income (SSI) (federal cash assistance for aged, blind, and disabled people with low income; SSI recipients often qualify for Medicaid automatically)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two income figures appear in official DC sources",
+          "body": "DC's DHCF ABD program page lists $1,330/month for a single person as the income limit. A separate DHCF fact sheet lists $1,305/month for the same category. The difference may reflect a publication lag or a rounding difference between federal poverty tables. Do not self-screen your parent out based on either number alone. Call (202) 727-5355 to confirm the figure that applies at the time you apply."
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid actually covers",
+          "body": "DC Medicaid for ABD is full-coverage Medicaid. It is not a premium subsidy or a partial benefit. For eligible residents, it pays for physician visits, hospital care, prescription drugs, laboratory services, mental health treatment, and preventive care. DC's published ABD program page confirms the eligibility category but does not enumerate a fixed service cap or dollar ceiling for standard ABD Medicaid; the scope of coverage is defined by DC's Medicaid state plan. If your parent also qualifies for DC's long-term care Medicaid pathways or a Medicare Savings Program, those are separate applications with separate rules."
+        },
+        {
+          "type": "prose",
+          "title": "ABD Medicaid is not DC Health Link",
+          "body": "DC Health Link uses MAGI (Modified Adjusted Gross Income) rules and an online application at districtdirect.dc.gov designed for working-age adults and families. ABD Medicaid uses non-MAGI rules: it counts resources (assets), it applies different income standards, and it uses the Integrated Application for Medical Assistance. If your parent previously applied through DC Health Link and was told they did not qualify, that result does not necessarily mean they cannot qualify for ABD Medicaid. The two programs have different rules and different application paths."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that count against the $4,000 asset limit?",
+          "answer": "The primary home is generally exempt from the asset test for Medicaid-eligible individuals who live in it. DC's official ABD page confirms the $4,000 resource limit but does not publish a complete exempt-asset list in its public-facing materials. Call DHCF at (202) 727-5355 to get the current list of what is and is not counted. Do not assume the home disqualifies your parent before checking."
+        },
+        {
+          "question": "My parent receives Social Security of $1,350/month. Are they over the income limit?",
+          "answer": "It depends on which figure DC is using at the time you apply. DC's published sources show $1,305 and $1,330 per month as the ABD income limit for a single person, and those figures may be updated. At $1,350, your parent may be just over, but call (202) 727-5355 to confirm the current standard before ruling them out. Some income may also be excluded depending on how DC calculates countable income under Medicaid rules."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent?",
+          "answer": "Yes. DC allows an authorized representative to apply on a person's behalf. You will need to document your authority, whether through a signed statement from your parent, a power of attorney, or legal guardianship. Bring that documentation when you submit the application. Call (202) 727-5355 to confirm what form of authorization DC currently accepts."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a Medicare Savings Program at the same time?",
+          "answer": "Yes, and in many cases they should. A Medicare Savings Program helps pay Medicare premiums, deductibles, and copays for people who have both Medicare and low income. These are separate Medicaid categories with separate eligibility rules, but DC allows concurrent applications. Applying for both at once reduces paperwork and avoids gaps. Ask the caseworker at (202) 727-5355 to screen for both programs when you call."
+        },
+        {
+          "question": "How long will the application take, and what can slow it down?",
+          "answer": "DC must process a standard ABD application within 45 days. If a disability determination is needed and your parent does not already have one from SSA, the deadline extends to 60 days. The most common causes of delay are missing documents and incomplete forms. Submit everything at once, keep a copy of everything you send, and follow up if you have not heard anything after 30 days."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "DC requires Medicaid recipients to report changes in income, resources, household composition, and address. If your parent's situation changes, report it promptly to (202) 727-5355 or through districtdirect.dc.gov. Failing to report changes can result in overpayment recovery or termination of benefits. Eligibility is reviewed periodically, and DC will send a renewal notice when a redetermination is required."
+        },
+        {
+          "question": "My parent is in the hospital right now. Is it too late to apply?",
+          "answer": "No. You can apply while your parent is hospitalized, and approval can be backdated to cover costs from the first day of the month in which you applied. Hospital social workers or discharge planners can often help initiate the process. Call (202) 727-5355 or apply online at districtdirect.dc.gov as soon as possible so the application date is established."
+        },
+        {
+          "question": "What if my parent was denied DC Health Link coverage? Should they still try for ABD Medicaid?",
+          "answer": "Yes, absolutely. DC Health Link uses MAGI Medicaid rules designed for working-age adults. ABD Medicaid uses a completely different eligibility test that accounts for age, disability, and assets under a separate federal and DC standard. A denial from DC Health Link says nothing about ABD eligibility. Submit the Integrated Application for Medical Assistance and let DHCF make the ABD determination."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(202) 727-5355",
+      "sourceUrl": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "dc-medicare-savings-programs-qmb-slmb-qi",
+      "name": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+      "shortName": "DC Medicare Savings",
+      "tagline": "If your parent has Medicare and earns under $4,010/month, DC may pay their Medicare premiums, deductibles, and copayments entirely.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "District of Columbia Department of Health Care Finance (DHCF)",
+            "type": "service-area"
+          },
+          {
+            "name": "Income Maintenance Administration (IMA), 645 H Street, N.E., Washington, DC 20002",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent has Medicare and lives in DC on a fixed income, they may be paying hundreds of dollars a month in premiums, deductibles, and copayments they don't have to pay. The DC Medicare Savings Program (MSP) covers those costs. The most generous tier, Qualified Medicare Beneficiary (QMB), pays Medicare Part A and Part B premiums plus all Medicare deductibles, coinsurance, and copayments. That means doctor visits, hospital stays, and outpatient care can cost your parent nothing out of pocket for Medicare-covered services.\n\nDC's income limit for QMB is significantly higher than what you'll find on Medicare.gov. In 2026, a single person can earn up to $4,010/month and still qualify. A two-person household can earn up to $5,430/month. This is roughly three times the federal poverty level, which means many DC residents who assume they earn too much to qualify are actually eligible.\n\nTwo additional tiers exist: Specified Low-Income Medicare Beneficiary (SLMB) and Qualifying Individual (QI). Both help pay the Medicare Part B premium but have lower income ceilings than DC's expanded QMB. Because DC's QMB income limit is so high, most DC residents who qualify for SLMB or QI will also qualify for the more comprehensive QMB benefit. Apply first and let DC Medicaid place your parent in the right tier.",
+      "savingsRange": "Up to $2,088/year in Medicare Part B premium alone (2026 standard premium of $174/month), plus Medicare deductibles and copayments that vary by how much care your parent uses",
+      "savingsSource": "Medicare Part B standard premium of $174/month is published by CMS at medicare.gov. Total savings depend on how much Medicare-covered care your parent uses in a year; QMB eliminates all Medicare cost-sharing, so actual savings are higher for people with frequent doctor visits or hospitalizations.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Has Medicare Part A or Part B (or both)",
+          "DC resident",
+          "Single person income up to $4,010/month (QMB, 2026)",
+          "Two-person household income up to $5,430/month (QMB, 2026)",
+          "U.S. citizen or eligible immigration status"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 4010
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5430
+          }
+        ],
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Cash",
+            "Checking account balances",
+            "Savings account balances",
+            "Certificates of deposit",
+            "Stocks and bonds"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "One vehicle",
+            "Household goods and personal effects",
+            "Burial spaces"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a District of Columbia resident",
+          "Must be entitled to Medicare Part A or Part B (or both)",
+          "Must be a U.S. citizen or have eligible immigration status",
+          "Income and resources must fall within the applicable MSP category limits"
+        ],
+        "povertyLevelReference": "300% FPL plus $20 disregard (DC QMB, 2026)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call (202) 698-4220 to start enrollment or visit the DC DHCF MSP page to download the application packet; processing time is not published, so ask when you call.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm Medicare enrollment",
+            "description": "Your parent must already have Medicare Part A or Part B before applying. If they are not yet enrolled in Medicare, contact Social Security at (800) 772-1213 first. Have the Medicare card ready before you call DC Medicaid."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "Collect the Medicare card or award letter, proof of DC residency (such as a utility bill or lease), proof of citizenship or immigration status, a Social Security award letter showing current monthly benefit amount, and any other income statements (pension, retirement, part-time wages). You may also need current account balances for checking, savings, or CD accounts."
+          },
+          {
+            "step": 3,
+            "title": "Apply by phone, in person, or by mail",
+            "description": "Call (202) 698-4220 to apply for QMB enrollment or get the application mailed to you. To apply in person, call (202) 724-5506 to find the nearest DC Income Maintenance Administration service center. The DC DHCF MSP application packet is also available at dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb. You can submit the completed packet by mail to Income Maintenance Administration, 645 H Street, N.E., Washington, DC 20002."
+          },
+          {
+            "step": 4,
+            "title": "Submit the Medicare MSP Application Packet",
+            "description": "Complete the Medicare MSP Application Packet provided by DC DHCF. Include all supporting documents. Submit everything together; missing documents are a common reason applications are delayed. Ask for a confirmation or case number when you submit."
+          },
+          {
+            "step": 5,
+            "title": "Wait for eligibility determination",
+            "description": "DC DHCF does not publish a specific processing deadline for this program. Ask at the time of submission how long to expect and what the status-check process is. If you do not hear back within 45 days, call (202) 698-4220 to follow up."
+          }
+        ],
+        "processingTime": "Not published in official DC DHCF materials; ask DC DHCF or IMA for current turnaround time when submitting your application.",
+        "waitlist": "No waitlist has been described for QMB in DC. QI, the least comprehensive MSP tier, is subject to annual federal enrollment caps nationally; if QI enrollment closes, affected applicants may be placed on a waiting list until the next federal fiscal year.",
+        "tip": "Because DC's QMB income limit ($4,010/month for one person) is much higher than the federal standard, many families are surprised their parent qualifies. Apply even if you think they earn too much. The DC Medicaid office will place your parent in the most beneficial tier they qualify for.",
+        "urls": [
+          {
+            "label": "DC DHCF QMB Program Page",
+            "url": "https://dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card or Social Security award letter showing Medicare entitlement (Part A or Part B)",
+        "Proof of DC residency (utility bill, lease agreement, or DC government-issued document)",
+        "Social Security award letter showing current monthly benefit amount",
+        "Proof of citizenship or eligible immigration status (U.S. birth certificate, U.S. passport, or immigration documents)",
+        "Pension or retirement income statements showing current monthly amount",
+        "Pay stubs or employer income statements if your parent has any earned income",
+        "Current balances for any checking or savings accounts (DC Medicaid may request statements; confirm the period they require at application)",
+        "Certificates of deposit, stocks, or bond account statements if applicable",
+        "Photo ID for the applicant (driver's license, DC ID, or passport)",
+        "Legal representative documents (power of attorney, guardianship order, or authorized representative form) if a family member is applying on the parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "DC QMB Enrollment Line",
+          "phone": "(202) 698-4220",
+          "description": "Call to apply for QMB enrollment or ask about your parent's eligibility. This is the enrollment number listed on the DC DHCF QMB fact sheet.",
+          "hours": "Contact DC DHCF to confirm current hours"
+        },
+        {
+          "label": "DC Income Maintenance Administration: Find Your Nearest Center",
+          "phone": "(202) 724-5506",
+          "description": "Call to locate the closest IMA service center for in-person application submission. IMA is located at 645 H Street, N.E., Washington, DC 20002.",
+          "hours": "Contact IMA to confirm current hours"
+        }
+      ],
+      "applicationNotes": [
+        "DC's QMB income limit ($4,010/month for one person in 2026) is roughly three times the standard federal QMB limit. If you checked Medicare.gov and thought your parent earns too much, check DC's limit before giving up.",
+        "The DC materials reviewed here do not publish a separate DC asset table. Before you assume your parent's savings disqualify them, call (202) 698-4220 and ask which assets are counted. The federal exemptions (primary home, one vehicle, household goods) are generous.",
+        "QI enrollment is subject to federal annual caps. If your parent applies near the end of the federal fiscal year (September), ask specifically whether QI spots are still available. Most DC residents who qualify for QI will also qualify for the more comprehensive QMB benefit, which is not capped.",
+        "If your parent is enrolled in QMB, Medicare providers are prohibited by federal law from billing them for Medicare cost-sharing. If your parent receives a bill for a Medicare deductible or copayment after QMB approval, they can dispute it and should call (202) 698-4220 for help."
+      ],
+      "relatedPrograms": [
+        "DC Medicaid (full Medicaid coverage for people with very low income who also qualify)",
+        "DC Extra Help / Low Income Subsidy (federal program that reduces Medicare Part D prescription drug costs)",
+        "DC Prescription Drug Program (state pharmaceutical assistance for DC residents with Medicare)",
+        "DC SHIP (State Health Insurance Assistance Program, free counseling to help your parent compare Medicare options)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which MSP tier will my parent be placed in?",
+          "body": "DC Medicaid places your parent in the tier that matches their income. You do not choose the tier; the eligibility worker determines it.\n\nQMB (Qualified Medicare Beneficiary): Income up to $4,010/month for one person or $5,430/month for two (DC 2026 standard). Covers Medicare Part A premiums, Part B premiums, deductibles, coinsurance, and copayments. This is the most comprehensive tier.\n\nSLMB (Specified Low-Income Medicare Beneficiary): Federal income limit of $1,616/month for a single person or $2,184/month for a couple (2026). Pays Medicare Part B premium only. Because DC's QMB limit is so much higher, most DC residents who would qualify for SLMB will qualify for QMB instead.\n\nQI (Qualifying Individual): Federal income limit of $1,816/month for a single person or $2,455/month for a couple (2026). Pays Medicare Part B premium only. Subject to annual federal enrollment caps. Apply early in the federal fiscal year if your parent's income falls in this range.",
+          "callout": "Because DC's QMB income limit is nearly three times the federal standard, apply for QMB first. DC Medicaid will determine the correct tier."
+        },
+        {
+          "type": "callout",
+          "title": "What QMB actually protects your parent from",
+          "body": "QMB is not an insurance plan. It does not replace Medicare. What it does: it pays the bills Medicare generates. That includes the Medicare Part B premium ($174/month in 2026 at the standard rate), the Part A deductible ($1,676 per benefit period in 2026), hospital coinsurance, and doctor visit copayments. For a parent who sees multiple specialists or had a hospitalization in the past year, QMB can eliminate thousands of dollars in annual cost-sharing."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent earns $3,200/month from Social Security and a pension. Is that too much to qualify?",
+          "answer": "No, not for DC's QMB program. DC's QMB income limit for a single person is $4,010/month in 2026 (after a $20 income disregard), which is much higher than the federal standard of $1,313/month. Your parent at $3,200/month falls well within DC's limit. Call (202) 698-4220 to apply."
+        },
+        {
+          "question": "Will DC look at my parent's savings account balance or their home's value?",
+          "answer": "The federal MSP asset limits are $9,950 for one person and $14,910 for a couple in 2026. The primary home and one vehicle are exempt and do not count toward those limits. Household goods and personal effects are also exempt. DC's published materials do not restate a separate DC-only asset table, so call (202) 698-4220 before assuming your parent's savings disqualify them."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent, or do they have to apply themselves?",
+          "answer": "Yes. A family member can apply on behalf of a parent as an authorized representative. Bring or submit a copy of your power of attorney, guardianship order, or a completed authorized representative form. DC DHCF or IMA staff can tell you which form they use. Call (202) 724-5506 to ask before your visit."
+        },
+        {
+          "question": "My parent keeps getting billed by their doctor even though they have QMB. Is that legal?",
+          "answer": "No. Federal law prohibits Medicare providers from billing QMB enrollees for Medicare deductibles, coinsurance, or copayments. If your parent receives such a bill, they should not pay it. Contact DC DHCF at (202) 698-4220 for help disputing the charge. You can also contact your State Health Insurance Assistance Program (SHIP) counselor for free support."
+        },
+        {
+          "question": "Can my parent apply for QMB and Extra Help (Low Income Subsidy) at the same time?",
+          "answer": "Yes, and it is worth doing. QMB covers Medicare Part A and Part B costs. Extra Help (also called the Low Income Subsidy) is a separate federal program that reduces Medicare Part D prescription drug costs. Many people who qualify for QMB also qualify for Extra Help. Apply for both. You can apply for Extra Help through Social Security at ssa.gov/medicare/prescriptionhelp or by calling (800) 772-1213."
+        },
+        {
+          "question": "Does QMB cover services that Medicare does not cover, like dental or vision?",
+          "answer": "No. QMB only covers the costs that Medicare itself generates: premiums, deductibles, and cost-sharing for Medicare-covered services. It does not expand what Medicare covers. If your parent needs dental or vision coverage, ask DC DHCF whether they also qualify for full DC Medicaid, which may cover some of those services."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they are enrolled?",
+          "answer": "Your parent is required to report income changes to DC Medicaid. A significant increase could move them to a lower MSP tier or end eligibility. DC Medicaid conducts periodic renewals. At renewal, they will re-evaluate income and resources. If your parent's income drops, they should also report that because they may qualify for a more comprehensive tier."
+        },
+        {
+          "question": "My parent has Medicare Advantage instead of traditional Medicare. Do they still qualify?",
+          "answer": "Yes. Medicare Advantage (Part C) plans are still Medicare. Your parent must be entitled to Medicare Part A or Part B; the format of their Medicare coverage does not disqualify them. Call (202) 698-4220 to confirm how QMB interacts with their specific Medicare Advantage plan, because cost-sharing structures vary by plan."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "(202) 698-4220",
+      "sourceUrl": "https://dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "dc-snap-food-benefits",
+      "name": "DC SNAP (Supplemental Nutrition Assistance Program)",
+      "shortName": "DC Food Benefits",
+      "tagline": "If your parent is 60 or older and living on a fixed income in DC, they may qualify for up to $298/month in grocery benefits loaded directly onto an EBT card.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "District of Columbia Department of Human Services (Economic Security Administration)",
+            "type": "service-area"
+          },
+          {
+            "name": "District Direct public benefits call center",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "DC SNAP puts money directly on an EBT card every month that your parent can use like a debit card at most grocery stores, supermarkets, and farmers markets. For a single older adult, that is up to $298/month toward food. For a two-person household, up to $546/month. Benefits are loaded automatically and renew as long as your parent stays eligible.\n\nHouseholds with a member age 60 or older get a meaningful break on the eligibility rules. Your parent does not have to pass the gross income test that most applicants face. They only need to meet the net income limit (gross income minus allowable deductions like medical expenses and rent costs), which is $1,032/month for a single person (FY2026). The asset limit is also higher: up to $4,500 in countable resources rather than the standard $3,000.\n\nIf your parent's situation is urgent, ask about expedited SNAP when you call. Households that qualify can receive benefits within 7 days. Standard processing takes up to 30 days.",
+      "savingsRange": "Up to $3,576/year for a one-person household (FY2026 maximum allotment of $298/month)",
+      "savingsSource": "DC Department of Human Services SNAP eligibility page; FY2026 maximum monthly allotment of $298 for a household of one, effective October 1, 2025 through September 30, 2026.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "DC resident",
+          "Age 60+ households only need to meet net income limit ($1,032/month for one person)",
+          "Asset limit up to $4,500 for households with a member age 60 or older",
+          "Net income after allowable deductions must be at or below 100% of the Federal Poverty Level",
+          "SSI recipients may qualify automatically"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1032
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1395
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 1758
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2120
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 2483
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 2846
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 3209
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 3571
+          }
+        ],
+        "assetLimits": {
+          "individual": 4500,
+          "couple": 4500,
+          "countedAssets": [
+            "Cash on hand",
+            "Money in checking or savings accounts",
+            "Investments and other countable liquid resources"
+          ],
+          "exemptAssets": [
+            "DC's SNAP page does not publish a full exemption list; ask the caseworker which assets are excluded when you apply"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a DC resident",
+          "Households with a member age 60 or older only need to pass the net income test, not the gross income test",
+          "SSI recipients may qualify automatically without a separate income or asset review",
+          "All household members who apply together must be counted in the income and size calculation"
+        ],
+        "povertyLevelReference": "100% FPL (net income); 130% FPL (gross income, applies to households without an elderly or disabled member)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the District Direct portal, by phone at 202-727-5355, or in person at a DC DHS Economic Security Administration office; standard processing takes up to 30 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you apply",
+            "description": "You will need your parent's proof of identity, proof of DC residency, proof of income for everyone in the household, and proof of housing costs. If your parent has medical expenses, gather those records too; they can reduce the countable income and increase the monthly benefit amount."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online: go to the District Direct portal at dhs.dc.gov and complete the SNAP application. By phone: call 202-727-5355 (TTY users: 711; TDD: 1-800-537-7699), Monday through Friday during business hours. In person: visit a DC DHS Economic Security Administration service location or a community-based intake office."
+          },
+          {
+            "step": 3,
+            "title": "Ask about expedited benefits if food is an immediate need",
+            "description": "When you call or apply online, tell the caseworker if your parent has very little food or income right now. Households that meet emergency criteria can receive SNAP benefits within 7 days rather than the standard 30."
+          },
+          {
+            "step": 4,
+            "title": "Complete your interview",
+            "description": "DC SNAP requires an eligibility interview as part of the application. This can usually be completed by phone. The caseworker will go through income, household composition, and expenses. Have your documents ready so the interview moves quickly."
+          },
+          {
+            "step": 5,
+            "title": "Submit any missing documents promptly",
+            "description": "After the interview, DHS may request additional documents. Missing paperwork is the most common reason applications are delayed. Submit everything requested as quickly as possible to avoid pushing past the 30-day decision window."
+          },
+          {
+            "step": 6,
+            "title": "Receive your EBT card and benefits",
+            "description": "If approved, your parent will receive an EBT card. Benefits are loaded monthly on a set date. The card works at most grocery stores, supermarkets, and authorized retailers in DC and across the country."
+          }
+        ],
+        "processingTime": "Up to 30 days for standard applications; 7 days for households that qualify for expedited food assistance",
+        "waitlist": null,
+        "tip": "Medical expenses matter for older adults. Out-of-pocket medical costs your parent pays (prescriptions, copays, transportation to medical appointments) can be deducted from gross income when calculating the net income test. Reporting these expenses accurately can lower countable income, improve eligibility, and increase the monthly benefit amount. Ask the caseworker about the medical expense deduction when you apply.",
+        "urls": [
+          {
+            "label": "Apply online through District Direct (DC DHS public benefits portal)",
+            "url": "https://dhs.dc.gov/service/snap-eligibility-requirements"
+          },
+          {
+            "label": "DC SNAP eligibility requirements (official program page)",
+            "url": "https://dhs.dc.gov/service/snap-eligibility-requirements"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of identity (government-issued photo ID such as a DC driver's license, state ID, or passport)",
+        "Proof of DC residency (a utility bill, lease agreement, or other official document showing your parent's DC address)",
+        "Proof of income for all household members (Social Security award letter, SSI award letter, pension statement, or pay stubs)",
+        "Proof of rent or mortgage payments (lease agreement or most recent mortgage statement)",
+        "Most recent utility bills if claiming a utility deduction (electric, gas, or water bills in your parent's name)",
+        "Documentation of out-of-pocket medical expenses if your parent is age 60 or older (receipts, prescription records, or a letter from the provider showing costs paid)",
+        "Social Security numbers for all household members applying (if available)",
+        "Bank account information showing current balances for any checking or savings accounts (DC DHS may request this to verify countable resources against the $4,500 limit for elderly households)",
+        "SSI award letter or other benefit award letters if your parent receives SSI or other government assistance",
+        "Immigration status documents if any household member is a non-citizen",
+        "Legal documents if you are applying as an authorized representative on behalf of your parent (power of attorney or written authorization)"
+      ],
+      "contacts": [
+        {
+          "label": "DC DHS District Direct Benefits Line",
+          "phone": "202-727-5355",
+          "description": "Apply for SNAP, check application status, report changes, and ask eligibility questions. This is the primary application line for DC SNAP.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "TTY (for deaf or hard-of-hearing callers)",
+          "phone": "711",
+          "description": "Relay service for applicants who are deaf or hard of hearing; connects to the same DC DHS line.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "TDD Line",
+          "phone": "1-800-537-7699",
+          "description": "Alternate TDD line for applicants with hearing or speech disabilities.",
+          "hours": "Monday through Friday, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's food situation is urgent right now, say so immediately when you call 202-727-5355. Households with very low income or resources can receive SNAP benefits within 7 days under expedited processing. You have to ask; the system does not flag this automatically.",
+        "Households with a member age 60 or older skip the gross income test entirely. If your parent's gross income looks too high at first glance, the net income test (after deductions for rent, utilities, and medical expenses) is what actually determines eligibility. Do not assume they don't qualify without running the net calculation.",
+        "Out-of-pocket medical expenses can significantly reduce countable net income for elderly applicants. Prescriptions, copays, and transportation to medical appointments all may qualify as deductions. Bring documentation of these costs to the interview.",
+        "SSI recipients may be approved automatically without a full income or asset review. If your parent receives SSI, mention this when you apply; it can shorten the process."
+      ],
+      "relatedPrograms": [
+        "DC LIHEAP (Low Income Home Energy Assistance Program) for help with utility bills",
+        "DC Medicaid for health coverage if your parent has low income",
+        "DC Meals on Wheels / Senior Nutrition Program for home-delivered meals",
+        "DC Weatherization Assistance Program for energy efficiency improvements"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "What DC SNAP pays (FY2026 maximum monthly allotments)",
+          "body": "1 person: $298/month. 2 people: $546/month. 3 people: $785/month. 4 people: $994/month. 5 people: $1,183/month. Benefits are loaded onto an EBT card and renew monthly. Minimum benefit: $24/month.",
+          "source": "DC DHS SNAP eligibility page; effective October 1, 2025 through September 30, 2026"
+        },
+        {
+          "type": "prose",
+          "heading": "The income rule that most older adults miss",
+          "body": "Most SNAP applicants must pass two income tests: a gross income test (no more than 130% of the Federal Poverty Level) and a net income test (no more than 100% FPL after deductions). Households with a member age 60 or older only need to pass the net income test. That matters because allowable deductions such as rent, utilities, and out-of-pocket medical expenses are subtracted before the net figure is calculated. A parent with a gross income that looks too high may still qualify once those deductions are applied. The net income limit for a single person is $1,032/month (FY2026)."
+        },
+        {
+          "type": "prose",
+          "heading": "What your parent can and cannot buy with SNAP",
+          "body": "SNAP benefits work at most grocery stores, supermarkets, convenience stores, and authorized farmers markets across DC and the country. Your parent can buy bread, cereals, produce, meat, dairy, and seeds or plants that produce food. They cannot use SNAP to buy alcohol, tobacco, vitamins or supplements, hot prepared foods, or non-food household items like cleaning supplies or toiletries."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security income is more than $1,032/month. Does that automatically disqualify them?",
+          "answer": "Not necessarily. Households with a member age 60 or older only need to pass the net income test, not the gross income test. Net income is calculated after subtracting allowable deductions: rent or mortgage costs, utility expenses, and out-of-pocket medical expenses your parent pays. If your parent pays significant rent or has regular medical costs, their net income could fall below $1,032/month even if their gross income is higher. Apply and let the caseworker run the net calculation before assuming they don't qualify."
+        },
+        {
+          "question": "My parent has savings in a bank account. Will that disqualify them?",
+          "answer": "Households with a member age 60 or older can have up to $4,500 in countable resources (cash, bank accounts, and investments). If your parent's savings are below that threshold, assets alone will not disqualify them. The standard limit for other households is $3,000, so the elderly/disabled limit is a meaningful advantage. If your parent has more than $4,500 in savings, ask the caseworker which assets count and which may be exempt; DC's published rules focus on countable resources and do not list every exemption."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they can't manage the process themselves?",
+          "answer": "Yes. You can apply as an authorized representative on your parent's behalf. You will need documentation showing you have that authority, such as a power of attorney or a written authorization signed by your parent. When you call 202-727-5355, tell the caseworker that you are applying as a representative; they will walk you through what is required."
+        },
+        {
+          "question": "How quickly can my parent get benefits if they are out of food right now?",
+          "answer": "Households that meet the emergency criteria can receive SNAP benefits within 7 days through expedited processing. This is not automatic. You have to ask for it when you call 202-727-5355 or submit your application. Tell the caseworker your parent's current food and income situation at the start of the call so they can flag the case for expedited review."
+        },
+        {
+          "question": "My parent receives SSI. Do they still have to go through the full application?",
+          "answer": "SSI recipients may qualify for SNAP automatically without a full income and asset review, because SSI already documents that income and resources fall below program thresholds. When you apply, mention that your parent receives SSI and provide the SSI award letter. The caseworker can confirm whether categorical eligibility applies and whether the process can be shortened."
+        },
+        {
+          "question": "Can my parent be enrolled in DC SNAP and also receive home-delivered meals through a senior nutrition program at the same time?",
+          "answer": "Yes. SNAP and DC senior nutrition programs (such as home-delivered meals through the DC Office on Aging) are separate programs with separate eligibility rules. Receiving one does not affect the other. Many older adults benefit from both: SNAP covers grocery purchases while meal delivery programs provide hot meals for days when cooking is difficult. Ask about both when you contact DC DHS."
+        },
+        {
+          "question": "What happens if my parent's income or household situation changes after they are enrolled?",
+          "answer": "Your parent is required to report changes that affect eligibility, such as an increase in income, a change in household size, or a significant change in expenses. Changes should be reported to DC DHS at 202-727-5355. Benefits are recalculated based on the updated information, which could increase or decrease the monthly allotment. Enrollment is also subject to periodic recertification reviews; DHS will notify your parent when recertification paperwork is due."
+        },
+        {
+          "question": "What if the application is denied? Can we appeal?",
+          "answer": "Yes. If DC DHS denies the application or reduces benefits, your parent has the right to request a fair hearing to appeal the decision. The denial notice will include information about the appeal process and deadline. You can also call 202-727-5355 to ask about the reason for the denial before deciding whether to appeal or to reapply with additional documentation."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "202-727-5355",
+      "sourceUrl": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "dc-liheap-energy-assistance",
+      "name": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+      "shortName": "DC Energy Assistance",
+      "tagline": "If your parent lives in DC and pays their own utility bills, they may qualify for up to $1,800 a year toward heating and electric costs.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "District of Columbia Department of Energy & Environment (DOEE)",
+            "type": "service-area"
+          },
+          {
+            "name": "Front Door DC",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent lives in DC and is struggling to keep up with utility bills, DC LIHEAP pays between $250 and $1,800 per year directly toward their energy costs. The benefit is not a loan and does not have to be repaid. It covers households that pay their own gas or electric bills, including renters who pay utilities separately from rent.\n\nThe program is run by the District of Columbia Department of Energy and Environment (DOEE). Eligibility is based on household size and income. A single-person household qualifies with income up to $5,153 per month (FY2026), which means many seniors on Social Security or a modest pension will meet the threshold. If your parent already receives SNAP, TANF, or SSI, they are automatically income-eligible without a separate income calculation.\n\nImportant timing note: as of October 2, 2026, DOEE has stopped accepting new LIHEAP applications for the current fiscal year. If your parent missed this window, you can still gather documents now and apply as soon as the next application period opens, which typically runs in the fall. Emergency disconnection assistance has its own process; if your parent's service has been shut off or they have received a disconnection notice, contact DOEE directly to ask whether emergency funds remain available.",
+      "savingsRange": "$250 to $1,800 per year",
+      "savingsSource": "DC DOEE FY2026 LIHEAP benefit matrix; the range reflects the minimum and maximum regular benefit under the matrix, which varies by household size, income, dwelling type, and fuel type. Source: doee.dc.gov/liheap.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "DC resident",
+          "Responsible for paying home energy costs",
+          "Household income at or below 60% of DC State Median Income (up to $5,153/month for a single person in FY2026)",
+          "Automatic eligibility if any household member receives SNAP, TANF, or SSI",
+          "No age requirement"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 5153
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 6739
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 8325
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 9911
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 11496
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 13082
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a DC resident at the time of application.",
+          "Household must be directly responsible for paying home energy costs. If utilities are included in rent, the applicant must provide documentation showing direct energy cost responsibility.",
+          "Emergency assistance requires a disconnection notice or a utility letter confirming service has already been shut off.",
+          "All required documents must be submitted with the application."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the DOEE website or Front Door DC, or submit a paper application by mail or in person; no processing time is published by the program.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the application window",
+            "description": "As of October 2, 2026, DOEE is not accepting new LIHEAP applications for FY2026. Visit doee.dc.gov/liheap to confirm when the next application period opens. New fiscal year cycles typically open in the fall."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before applying",
+            "description": "You will need a government-issued photo ID for the applicant, Social Security cards for all household members, recent Washington Gas, PEPCO, and DC Water bills, and proof of current income for everyone in the household. If applying for emergency assistance, also have any disconnection notice or utility shutoff letter ready."
+          },
+          {
+            "step": 3,
+            "title": "Apply online or in person",
+            "description": "Online: go to doee.dc.gov/liheap and follow the application link. You can also apply through Front Door DC at frontdoor.dc.gov/liheap-and-udp. For a paper application, download the LIHEAP application form from the DOEE site, complete it, attach copies of all required documents, and submit it through the intake process described on the program page."
+          },
+          {
+            "step": 4,
+            "title": "Submit complete documentation",
+            "description": "Missing documents are the most common reason applications are delayed. Submit copies of all required documents at the same time as your application. Do not send originals."
+          },
+          {
+            "step": 5,
+            "title": "Follow up on your application",
+            "description": "DOEE does not publish a standard processing timeline. After submitting, contact DOEE at (202) 299-3336 to confirm receipt and ask about status. If your parent has received a disconnection notice, mention it immediately; emergency cases may be handled differently."
+          }
+        ],
+        "processingTime": "Not specified in published DOEE materials.",
+        "waitlist": "No waitlist is described in official program materials. However, as of October 2, 2026, DOEE is not accepting new applications for the current fiscal year. Funds are limited and the program closes when allocations are exhausted.",
+        "tip": "If your parent receives SNAP, TANF, or SSI, bring documentation of that benefit when applying. It satisfies the income test automatically and simplifies the process.",
+        "urls": [
+          {
+            "label": "DOEE LIHEAP program page",
+            "url": "https://doee.dc.gov/liheap"
+          },
+          {
+            "label": "Front Door DC utility assistance page",
+            "url": "https://www.frontdoor.dc.gov/liheap-and-udp"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Government-issued unexpired photo ID for the applicant (driver's license, DC ID, or passport)",
+        "Most recent PEPCO or Washington Gas bill showing the applicant's name and service address",
+        "Proof of current income for all household members (Social Security award letter, pension statement, pay stubs, or SSI/TANF/SNAP benefit letter)",
+        "Social Security cards for all household members",
+        "Most recent DC Water bill if the household pays water separately",
+        "Disconnection notice or utility company letter confirming service has been shut off (required only if applying for emergency assistance)",
+        "Utility bill or other documentation showing direct responsibility for energy costs (required only if utilities are included in rent)"
+      ],
+      "contacts": [
+        {
+          "label": "DC DOEE Energy Assistance",
+          "phone": "(202) 299-3336",
+          "description": "The primary contact for DC LIHEAP questions and application status. Call here first to ask about the current application window and emergency assistance availability.",
+          "hours": "Mon-Fri, business hours (confirm current hours at doee.dc.gov/liheap)"
+        },
+        {
+          "label": "Front Door DC",
+          "phone": "(202) 737-0938",
+          "description": "DC's unified benefits access point. Can assist with LIHEAP intake and connect your parent to related utility and energy programs.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "DC 311",
+          "phone": "3-1-1",
+          "description": "General DC government information line. Can direct you to the correct DOEE office or Front Door DC location if the numbers above are unavailable.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "The program closed to new FY2026 applications as of October 2, 2026. If your parent missed this window, start collecting documents now so you can apply immediately when the next cycle opens, typically in fall.",
+        "If your parent's utility service has been disconnected or they have received a shutoff notice, contact DOEE directly at (202) 299-3336 before assuming the program is closed to you. Emergency funds may still be available on a separate track.",
+        "If utilities are included in your parent's rent, they may still qualify, but they must provide documentation proving direct energy cost responsibility. Ask DOEE what form of proof is acceptable for their specific lease arrangement.",
+        "The benefit amount is not fixed. It is calculated using the FY2026 LIHEAP benefit matrix based on household size, income, dwelling type (single-family vs. multifamily), and fuel type. Your parent's actual benefit could fall anywhere from $250 to $1,800."
+      ],
+      "relatedPrograms": [
+        "DC Utility Discount Program (UDP)",
+        "DC Weatherization Assistance Program",
+        "DC Supplemental Nutrition Assistance Program (SNAP)",
+        "DC Temporary Assistance for Needy Families (TANF)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "Automatic eligibility if your parent already gets SNAP, SSI, or TANF",
+          "body": "If at least one person in your parent's household currently receives SNAP, SSI, or TANF, they meet the income requirement for LIHEAP automatically. You do not need to calculate income or submit income documentation for that threshold. Bring the benefit award letter as proof when applying."
+        },
+        {
+          "type": "prose",
+          "heading": "How the benefit amount is calculated",
+          "body": "DC does not pay a flat amount. The actual benefit is determined by the FY2026 LIHEAP benefit matrix, which accounts for household size, annual income relative to the State Median Income, whether the home is single-family or multifamily, and the type of fuel used. The minimum regular benefit is $250 and the maximum is $1,800. Because the formula is complex, you will not know your parent's exact benefit until DOEE processes the application. Larger households and lower incomes generally receive higher amounts."
+        },
+        {
+          "type": "callout",
+          "heading": "Program closed as of October 2, 2026",
+          "body": "DOEE is not accepting new LIHEAP applications for the current fiscal year as of October 2, 2026. Visit doee.dc.gov/liheap for updates on when applications reopen. If your parent faces an active disconnection, call (202) 299-3336 to ask specifically about emergency assistance availability."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's utilities are included in their rent. Can they still apply?",
+          "answer": "Yes, but they must provide proof that they are directly responsible for energy costs. This could be a utility bill in their name, a clause in the lease, or another document that DOEE accepts. Call (202) 299-3336 before applying to ask exactly what documentation DOEE requires for your parent's specific lease situation. Missing this document is a common reason applications are held up."
+        },
+        {
+          "question": "My parent already receives SSI. Do they still have to prove income?",
+          "answer": "No separate income calculation is needed. Households with at least one member receiving SSI, SNAP, or TANF are categorically eligible for LIHEAP. Bring the SSI award letter when applying to satisfy the income requirement without submitting pay stubs or other income documentation."
+        },
+        {
+          "question": "My parent got a disconnection notice this week. Is it too late to get emergency help?",
+          "answer": "Possibly not. Even though DOEE closed regular LIHEAP applications as of October 2, 2026, emergency assistance for active disconnections may be handled separately. Call DOEE at (202) 299-3336 immediately and tell them your parent has received a disconnection notice or that service has been shut off. Have the notice ready to reference. Do not assume the program is fully closed without asking specifically about emergency funds."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the process themselves?",
+          "answer": "Yes. A family member or authorized representative can complete and submit the application on behalf of an elderly parent. Bring documentation of your authority to act if DOEE requests it, such as a power of attorney or other written authorization. Contact DOEE at (202) 299-3336 to confirm what representative documentation they accept before applying."
+        },
+        {
+          "question": "How much will my parent actually receive? The range of $250 to $1,800 is very wide.",
+          "answer": "The exact amount is determined by the FY2026 LIHEAP benefit matrix using your parent's household size, income level, dwelling type, and fuel type. DOEE calculates it during processing. You will not know the specific figure until the application is reviewed. Generally, lower income relative to the State Median Income and larger household size result in a higher benefit. There is no way to calculate the precise amount without submitting the application."
+        },
+        {
+          "question": "Can my parent apply for DC LIHEAP and the DC Utility Discount Program at the same time?",
+          "answer": "Yes. The DC Utility Discount Program (UDP) is a separate program that reduces monthly utility bills on an ongoing basis, while LIHEAP provides an annual payment. Many households that qualify for one will qualify for the other. Applying for both is worth doing. Front Door DC at frontdoor.dc.gov/liheap-and-udp covers both programs and can help you navigate applying for each."
+        },
+        {
+          "question": "Is there an asset limit? Will my parent be disqualified if they have savings?",
+          "answer": "No. DC LIHEAP does not have an asset test. Eligibility is based entirely on household income and DC residency, not on savings, property, or other assets. A parent with a modest savings account is not disqualified."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they receive the benefit?",
+          "answer": "LIHEAP is a one-time annual benefit, not a continuous enrollment. Your parent is not required to report income changes mid-year once the benefit has been issued. Eligibility is determined at the time of application for each program year. When the next cycle opens, their income at that point will determine whether they qualify again."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "(202) 299-3336",
+      "sourceUrl": "https://doee.dc.gov/liheap",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

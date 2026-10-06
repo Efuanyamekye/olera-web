@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
   // served from public/, because its exhibits are screenshots of the admin
   // panel. A file read through a runtime-built path is not traced on its own,
   // so it is named here or the route 404s in production.
+  // Benefits program data is compiled into the code that imports it; no
+  // route reads these folders from disk. Routes that read a file through a
+  // runtime-built path (the war-room workflow step's credentials read, the
+  // admin inbox) get whole directories traced in, and the drafts (32 MB) took
+  // two of them past Vercel's 250 MB function limit (6 Oct 2026). docs/ stays:
+  // the MedJobs SOP route reads its PDFs from there.
+  outputFileTracingExcludes: {
+    "*": ["./data/pipeline/**", "./data/benefits/**"],
+  },
   outputFileTracingIncludes: {
     // The SOP route reads these through a path built at runtime, which the
     // tracer cannot follow. Without these entries the route works locally and

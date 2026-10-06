@@ -16,14 +16,14 @@
  *   npx -y tsx@4 scripts/question-engine-sim.ts
  */
 import { rulesOf, statusOf, nextQuestion, EMPTY_FACTS, ANSWERS, type KnownFacts, type FactKey, type AnswerPriors } from "@/lib/benefits/question-engine";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
 
 const perState: Record<string, ReturnType<typeof rulesOf>[]> = {};
 for (const s of US_STATES) {
   const slug = getStateSlug(s.value);
   if (!slug) continue;
-  perState[s.value] = getCanonicalProgramIds(slug)
+  perState[s.value] = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit")
     .map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
@@ -37,7 +37,7 @@ const MIX: Required<AnswerPriors>["weights"] = {
   dailyHelp: { none: 25, some: 40, lots: 35 }, // ASSUMED: families looking for care
   savings: { under2000: 40, under10000: 30, over10000: 30 }, // ASSUMED
   disability: { yes: 30, no: 70 }, // ASSUMED
-  household: { alone: 60, couple: 40 }, // ASSUMED
+  household: { alone: 45, couple: 35, family: 20 }, // ASSUMED
 };
 const BASE_NOT_SURE: Record<FactKey, number> = { age: 0.02, income: 0.15, medicaid: 0.18, veteran: 0.02, dailyHelp: 0.05, savings: 0.3, disability: 0.1, household: 0.01 };
 // The form asks household too ("How many people live in the home?").

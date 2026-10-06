@@ -23,13 +23,15 @@ import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendEmail } from "@/lib/email";
 import { sendSlackAlert } from "@/lib/slack";
 import { getSiteUrl } from "@/lib/site-url";
-import { generateCityThreadUrl } from "@/lib/claim-tokens";
-import { providerSignInUrl } from "@/lib/city-ads/provider-links.server";
+import { generateCityThreadUrl, generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { inboxPathFor, providerSignInUrl } from "@/lib/city-ads/provider-links.server";
+import { memberEmails } from "@/lib/auth/profile-access.server";
 import { cityThreadProviderEmail } from "@/lib/email-templates";
 import { getCityConfig } from "@/lib/city-ads/config";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
 import { resolvePrimaryCampaign } from "@/lib/city-ads/primary.server";
 import { offerStillHolds } from "@/lib/city-ads/offer-holds";
+import { providerAlertPhone } from "@/lib/city-ads/provider-alert-phone";
 
 export type ThreadAuthor = "olera" | "provider" | "family";
 
@@ -208,6 +210,7 @@ export async function getFamilyTimeline(
 export interface ThreadProvider {
   id: string;
   name: string;
+  /** Where her alerts are texted: `metadata.alert_phone` if set, else the profile phone. */
   phone: string | null;
   email: string | null;
   /**
@@ -259,6 +262,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   if (!id) return null;
   const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email, metadata, account_id").eq("id", id).maybeSingle();
   const email = (p?.email as string | null) ?? null;
+  const alertPhone = providerAlertPhone(p as { phone?: string | null; metadata?: unknown } | null);
   const extra = (p?.metadata as { alert_emails?: unknown } | null)?.alert_emails;
   const alertEmails = Array.isArray(extra)
     ? Array.from(new Set(extra.filter((e): e is string => typeof e === "string" && e.includes("@")).map((e) => e.trim().toLowerCase())))
@@ -267,7 +271,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   return {
     id,
     name: (p?.display_name as string | null) ?? primary?.providerName ?? "Your care provider",
-    phone: p?.phone ? normalizeUSPhone(p.phone as string) : null,
+    phone: alertPhone ? normalizeUSPhone(alertPhone) : null,
     email,
     alertEmails,
     via: holderId || p?.account_id ? "inbox" : "campaign",
@@ -399,6 +403,8 @@ export async function notifyProvider(
     });
   }
   const recipients = [provider.email, ...(provider.alertEmails ?? [])].filter((e): e is string => !!e);
+  // Team members (migration 272) get a link that signs them in as themselves.
+  const members = provider.via === "inbox" ? new Set(await memberEmails(db, provider.id)) : new Set<string>();
   for (const to of recipients) {
     await sendEmail({
       to,
@@ -408,9 +414,15 @@ export async function notifyProvider(
         headline: what.headline,
         quote: what.quote ?? null,
         body: what.body,
-        // Only the owner's own address gets a signed-in link; copied staff
-        // get the plain link and sign in themselves.
-        ctaUrl: to === provider.email ? await providerEmailUrl(db, lead, provider) : url,
+        // The owner's address gets a link that signs in as the owner. A team
+        // member's gets one that signs in as that member. Anyone else copied
+        // gets the plain link and signs in themselves.
+        ctaUrl:
+          to === provider.email
+            ? await providerEmailUrl(db, lead, provider)
+            : members.has(to.toLowerCase())
+              ? generateFamilyInboxUrl(to.toLowerCase(), inboxPathFor(lead.id), getSiteUrl())
+              : url,
         ctaLabel: provider.via === "inbox" ? "Open your inbox" : "Open your campaign",
       }),
       replyTo: "support@olera.care",

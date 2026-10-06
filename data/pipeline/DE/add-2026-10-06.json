@@ -1,0 +1,136 @@
+{
+  "state": "DE",
+  "addedAt": "2026-10-06T06:27:44.014Z",
+  "dive": {
+    "state": "DE",
+    "stateName": "Delaware",
+    "diveAt": "2026-10-06T06:26:23.421Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Delaware’s Aged, Blind, and Disabled (ABD) Medicaid is an SSI-related Medicaid pathway for people age 65+, blind, or permanently disabled.[9][10] The program uses SSI-related income/resource rules, and Delaware guidance says eligibility is generally based on SSI income and resource standards.[10] Delaware also says applicants are often likely eligible if household income is at or below 100% of the Federal Poverty Level for their household size, but the state’s ABD-specific dollar limits in the gathered sources are not laid out in a full official table.[2][3][4]",
+            "single": "$994/month, per the 2026 ABD figure surfaced in the gathered materials.[14][15]",
+            "couple": "$1,491/month combined, per the 2026 ABD figure surfaced in the gathered materials.[14][15]",
+            "household_size_table": "Not published in the gathered official sources for ABD as a full household-size table; Delaware’s FAQ says general Medicaid income standards track Federal Poverty Level by family size, but the ABD-specific limits in the gathered sources are the single and married figures above.[2][3][14][15]"
+          },
+          "asset_limits": {
+            "limit": "$2,000 for an individual and $3,000 for a married couple, as reflected in the gathered Delaware ABD eligibility materials.[14][15]",
+            "what_counts": "The gathered sources say SSI-related eligibility uses SSI income and resource standards, but they do not provide a Delaware-specific exhaustive asset list in the retrieved pages.[10]",
+            "what_is_exempt": "The retrieved official pages do not spell out a full exemption list for ABD. Because Delaware ties this pathway to SSI-related standards, some assets may be excluded under SSI rules, but the specific Delaware exemption list was not present in the gathered sources.[10]"
+          },
+          "other_requirements": [
+            "Must be age 65 or older, blind, or permanently disabled.[9][10]",
+            "If the person receives SSI, they are automatically eligible for Medicaid in Delaware.[9][10]",
+            "Eligibility is for people whose income is too low to meet the cost of necessary medical services.[4][8]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Medicaid covers doctor visits, hospital care, lab services, prescription drugs, transportation, routine shots for children, mental health services, and substance abuse services.[5] The gathered sources do not show a special ABD-only dollar allowance, hour cap, or tiered service amount for this pathway.[5]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through ASSIST: https://assist.dhss.delaware.gov",
+            "By phone: Medicaid Customer Relations at 1-800-372-2022 or (302) 255-9500",
+            "By phone: ASSIST help line at (302) 255-9040",
+            "By mail: print the Application for Health Insurance/Medicaid, complete it, and mail it to the address provided on the form",
+            "In person: local Division of Social Services office / State Service Center identified by DHSS"
+          ],
+          "processing_time": "The gathered official sources do not give a specific processing-time target for ABD Medicaid.",
+          "waitlist": null,
+          "forms": [
+            "Application for Health Insurance/Medicaid",
+            "ASSIST self-screening / online application"
+          ],
+          "documents": [
+            "Verification of income.[2][3]",
+            "Signed and dated application form completed in ink if applying by mail.[2][3]",
+            "Any proof needed to establish disability, blindness, age, or SSI status if requested by DSS/DMMA"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Delaware program; no county restriction was identified in the gathered sources.[2][3][4][8]",
+          "regional_variations": "The gathered sources do not show benefit differences by county or region. Delaware says applicants can be directed to the nearest DSS office or State Service Center, so office location may vary, but the program rules themselves appear statewide.[2][3]",
+          "offices_or_providers": [
+            "Local Division of Social Services (DSS) offices / State Service Centers in Delaware"
+          ]
+        },
+        "official_source": "https://dhss.delaware.gov/dmma/home/medicaid/faq/",
+        "gotchas": [
+          "ABD Medicaid is not the same as Medicaid for families with children; Delaware’s income rules can differ across program types.[1][2][3]",
+          "SSI recipients are automatically eligible, so many families miss that SSA/SSI status can shortcut the Medicaid eligibility decision.[9][10]",
+          "The gathered official pages mention general Federal Poverty Level guidance, but the ABD pathway is SSI-related and resource-based, so families should not rely only on the broad family-size poverty guidance.[2][3][10]",
+          "The retrieved official pages do not provide a clean, official public table for every ABD income scenario, so the exact numbers in this answer come from the ABD-specific figures surfaced in the gathered materials.[14][15]",
+          "Delaware Medicaid covers transportation and some behavioral health services, but the gathered sources did not show a separate ABD-only package of extra long-term-care services; those are usually handled through separate waiver or long-term-care programs rather than regular ABD Medicaid.[5]"
+        ],
+        "data_shape_notes": "This program is statewide and entitlement-based for people who meet SSI-related age/disability and financial standards; the main data shape is a mix of fixed SSI-related income/resource limits plus standard Medicaid medical benefits, not a regional slot or waitlist program.[9][10][14][15]",
+        "_raw": "{\n  \"name\": \"Regular Medicaid / Aged Blind and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Delaware’s Aged, Blind, and Disabled (ABD) Medicaid is an SSI-related Medicaid pathway for people age 65+, blind, or permanently disabled.[9][10] The program uses SSI-related income/resource rules, and Delaware guidance says eligibility is generally based on SSI income and resource standards.[10] Delaware also says applicants are often likely eligible if household income is at or below 100% of the Federal Poverty Level for their household size, but the state’s ABD-specific dollar limits in the gathered sources are not laid out in a full official table.[2][3][4]\",\n      \"single\": \"$994/month, per the 2026 ABD figure surfaced in the gathered materials.[14][15]\",\n      \"couple\": \"$1,491/month combined, per the 2026 ABD figure surfaced in the gathered materials.[14][15]\",\n      \"household_size_table\": \"Not published in the gathered official sources for ABD as a full household-size table; Delaware’s FAQ says general Medicaid income standards track Federal Poverty Level by family size, but the ABD-specific limits in the gathered sources are the single and married figures above.[2][3][14][15]\"\n    },\n    \"asset_limits\": {\n      \"limit\": \"$2,000 for an individual and $3,000 for a married couple, as reflected in the gathered Delaware ABD eligibility materials.[14][15]\",\n      \"what_counts\": \"The gathered sources say SSI-related eligibility uses SSI income and resource standards, but they do not provide a Delaware-specific exhaustive asset list in the retrieved pages.[10]\",\n      \"what_is_exempt\": \"The retrieved official pages do not spell out a full exemption list for ABD. Because Delaware ties this pathway to SSI-related standards, some assets may be excluded under SSI rules, but the specific Delaware exemption list was not present in the gathered sources.[10]\"\n    },\n    \"other_requirements\": [\n      \"Must be age 65 or older, blind, or permanently disabled.[9][10]\",\n      \"If the person receives SSI, they are automatically eligible for Medicaid in Delaware.[9][10]\",\n      \"Eligibility is for people whose income is too low to meet the cost of necessary medical services.[4][8]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Medicaid covers doctor visits, hospital care, lab services, prescription drugs, transportation, routine shots for children, mental health services, and substance abuse services.[5] The gathered sources do not show a special ABD-only dollar allowance, hour cap, or tiered service amount for this pathway.[5]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through ASSIST: https://assist.dhss.delaware.gov\",\n      \"By phone: Medicaid Customer Relations at 1-800-372-2022 or (302) 255-9500\",\n      \"By phone: ASSIST help line at (302) 255-9040\",\n      \"By mail: print the Application for Health Insurance/Medicaid, complete it, and mail it to the address provided on the form\",\n      \"In person: local Division of Social Services office / State Service Center identified by DHSS\"\n    ],\n    \"processing_time\": \"The gathered official sources do not give a specific processing-time target for ABD Medicaid.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Health Insurance/Medicaid\",\n      \"ASSIST self-screening / online application\"\n    ],\n    \"documents\": [\n      \"Verification of income.[2][3]\",\n      \"Signed and dated application form completed in ink if applying by mail.[2][3]\",\n      \"Any proof needed to establish disability, blindness, age, or SSI status if requested by DSS/DMMA\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Delaware program; no county restriction was identified in the gathered sources.[2][3][4][8]\",\n    \"regional_variations\": \"The gathered sources do not show benefit differences by county or region. Delaware says applicants can be directed to the nearest DSS office or State Service Center, so office location may vary, but the program rules themselves appear statewide.[2][3]\",\n    \"offices_or_providers\": [\n      \"Local Division of Social Services (DSS) offices / State Service Centers in Delaware\"\n    ]\n  },\n  \"official_source\": \"https://dhss.delaware.gov/dmma/home/medicaid/faq/\",\n  \"gotchas\": [\n    \"ABD Medicaid is not the same as Medicaid for families with children; Delaware’s income rules can differ across program types.[1][2][3]\",\n    \"SSI recipients are automatically eligible, so many families miss that SSA/SSI status can shortcut the Medicaid eligibility decision.[9][10]\",\n    \"The gathered official pages mention general Federal Poverty Level guidance, but the ABD pathway is SSI-related and resource-based, so families should not rely only on the broad family-size poverty guidance.[2][3][10]\",\n    \"The retrieved official pages do not provide a clean, official public table for every ABD income scenario, so the exact numbers in this answer come from the ABD-specific figures surfaced in the gathered materials.[14][15]\",\n    \"Delaware Medicaid covers transportation and some behavioral health services, but the gathered sources did not show a separate ABD-only package of extra long-term-care services; those are usually handled through separate waiver or long-term-care programs rather than regular ABD Medicaid.[5]\"\n  ],\n  \"data_shape_notes\": \"This program is statewide and entitlement-based for people who meet SSI-related age/disability and financial standards; the main data shape is a mix of fixed SSI-related income/resource limits plus standard Medicaid medical benefits, not a regional slot or waitlist program.[9][10][14][15]\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "DE",
+    "stateName": "Delaware",
+    "classifiedAt": "2026-10-06T06:26:23.425Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Division of Social Services (DSS) offices / State Service Centers in Delaware",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "DE",
+      "id": "de-medicaid-aged-blind-disabled",
+      "name": "Regular Medicaid / Aged Blind and Disabled",
+      "legacyId": "regular-medicaid-aged-blind-and-disabled",
+      "programType": "benefit"
+    }
+  ]
+}

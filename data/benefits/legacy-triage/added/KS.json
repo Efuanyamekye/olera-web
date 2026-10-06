@@ -1,0 +1,16 @@
+[
+  {
+    "state": "KS",
+    "id": "ks-aged-blind-disabled-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "KS",
+    "id": "ks-kancare-medicare-buy-in",
+    "name": "KanCare Medicare Buy-In Programs",
+    "legacyId": "kancare-medicare-buy-in-programs",
+    "programType": "benefit"
+  }
+]

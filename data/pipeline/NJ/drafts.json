@@ -2,8 +2,8 @@
   "state": "NJ",
   "stateName": "New Jersey",
   "draftedAt": "2026-04-13T21:50:19.555Z",
-  "total": 8,
-  "successful": 8,
+  "total": 17,
+  "successful": 17,
   "programs": [
     {
       "id": "stay-nj-property-tax-relief",
@@ -1360,6 +1360,1934 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28"
+    },
+    {
+      "id": "nj-familycare-aged-blind-disabled-abd",
+      "name": "NJ FamilyCare Aged, Blind, Disabled (ABD) Programs",
+      "shortName": "NJ FamilyCare ABD",
+      "tagline": "If your parent is 65 or older and on a limited income in New Jersey, they may qualify for full Medicaid health coverage through NJ FamilyCare's ABD program.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local County Social Service Agency",
+            "type": "service-area"
+          },
+          {
+            "name": "County Social Service Agency directory referenced by NJ FamilyCare",
+            "type": "service-area"
+          },
+          {
+            "name": "1-800-356-1561 for help locating the correct county office",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent is 65 or older (or is blind or disabled) and their income and savings are not enough to cover their medical care, NJ FamilyCare ABD may provide full Medicaid health coverage at little or no cost. The program is designed specifically for people whose resources fall short of what care actually costs.\n\nNJ FamilyCare ABD is not a single plan; it is a set of Medicaid pathways, each with its own rules around income and assets. One pathway, the Medicaid Only Program, is for people who do not receive SSI but whose income and resources fall under SSI standards. Because eligibility depends on which pathway applies to your parent's situation, the most reliable way to know if they qualify is to submit an application.\n\nApplications are handled by your parent's county social service agency. The state program is uniform across New Jersey, but county offices manage the paperwork, may request different supporting documents, and have their own processing timelines. Based on one county's published timeline, processing has been taking roughly 6 to 12 weeks, though this varies. Apply as soon as possible because coverage cannot begin before the application date.",
+      "savingsRange": "",
+      "savingsSource": "Free service: NJ FamilyCare ABD provides Medicaid health coverage; it is not a cash benefit and has no fixed dollar payout to cite.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or determined blind or disabled by SSA or New Jersey",
+          "New Jersey resident",
+          "U.S. citizen or qualified immigrant (some immigrants must have 5 years of lawful permanent residence)",
+          "Income and countable resources below program limits (exact figures require verification at application)",
+          "Household composition matters: a spouse's income and resources may be counted together with your parent's"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or qualified immigrant. Adult qualified immigrants must have held lawful permanent resident status for at least five years before applying.",
+          "Income and countable resources must fall within program limits. For the Medicaid Only pathway, limits follow SSI standards, but the full statewide asset and income table is not published in a single official document. Verify current limits directly with your county social service agency before applying.",
+          "If your parent is married, their spouse's income and resources are counted together with theirs when determining eligibility.",
+          "Disability-based applicants must have a disability determination from the Social Security Administration or from the State of New Jersey."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can apply online, by phone, by mail, or in person at your parent's county social service agency; processing has been taking approximately 6 to 12 weeks in counties that have published timelines.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "You will need proof of identity, New Jersey residency, income, citizenship or immigration status, and bank or asset information. If applying based on disability, gather medical records or any SSA disability determination letter. Having these ready before you open the application reduces processing delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose your application method",
+            "description": "Online is the fastest starting point. Go to https://njfamilycare.dhs.state.nj.us/abd.htm for the ABD-specific portal, or https://njfamilycare.dhs.state.nj.us/apply.aspx for the general NJ FamilyCare portal. If you prefer to apply by phone, call 1-800-356-1561. To apply in person or by mail, contact your county social service agency. Call 1-800-356-1561 if you are unsure which county office handles your parent's case."
+          },
+          {
+            "step": 3,
+            "title": "Complete the NJ FamilyCare Aged, Blind, Disabled Program Application",
+            "description": "Fill out the NJ FamilyCare Aged, Blind, Disabled Program Application. If applying by mail or in person, print and complete any supplemental forms the county requests. An Application Checklist is available in English and Spanish on the NJ FamilyCare website to help confirm you have everything."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application and respond to county requests promptly",
+            "description": "After submission, your parent's county social service agency handles intake. They may follow up for additional documents specific to your parent's case. Respond to any requests quickly, because missing documents are the most common reason applications stall. Keep copies of everything you send."
+          },
+          {
+            "step": 5,
+            "title": "Wait for the eligibility determination",
+            "description": "Processing has been taking approximately 6 to 12 weeks in counties that have published timelines. This is not a statewide guarantee, so check with your county office for their current wait. If approved, coverage begins from the application date, not the approval date, so applying early matters."
+          }
+        ],
+        "processingTime": "Approximately 6 to 12 weeks based on one county's published timeline. This figure is not confirmed statewide; ask your county social service agency for their current processing time when you apply.",
+        "waitlist": null,
+        "tip": "Apply as soon as you think your parent may qualify. Medicaid coverage under this program can start from the application date, not the date of approval. Waiting costs real coverage time.",
+        "urls": [
+          {
+            "label": "NJ FamilyCare ABD Application Portal",
+            "url": "https://njfamilycare.dhs.state.nj.us/abd.htm"
+          },
+          {
+            "label": "NJ FamilyCare General Application Portal",
+            "url": "https://njfamilycare.dhs.state.nj.us/apply.aspx"
+          },
+          {
+            "label": "NJ FamilyCare ABD Official Program Page",
+            "url": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/aged-disabled/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSA benefit verification letter (shows monthly income amount)",
+        "Proof of New Jersey residency (utility bill, lease, or state-issued document with your parent's current address)",
+        "Proof of identity (driver's license, state ID, or passport)",
+        "Proof of U.S. citizenship or qualified immigrant status (birth certificate, U.S. passport, or immigration documents such as a green card)",
+        "Proof of age if not already on an ID (birth certificate or passport)",
+        "Proof of all income sources (pension statements, retirement account distributions, any other monthly income)",
+        "Current balances for any checking or savings accounts (the county office will ask for financial asset information; the specific account history period they require varies by county, so ask when you apply)",
+        "Investment or asset documents if applicable (stocks, bonds, or annuity statements)",
+        "If applying based on disability: SSA disability determination letter or medical records supporting the disability claim",
+        "If your parent is married: the same income and asset documents for the spouse, because household resources are counted together",
+        "Any supplemental forms or additional documentation the county office requests after reviewing your application"
+      ],
+      "contacts": [
+        {
+          "label": "NJ FamilyCare ABD Application Line",
+          "phone": "1-800-356-1561",
+          "description": "Start an application, ask eligibility questions, or get connected to your county social service agency. This is the program's primary application entry point.",
+          "hours": "Contact the line to confirm current hours; hours are not published in the official sources reviewed."
+        },
+        {
+          "label": "Local County Social Service Agency",
+          "phone": "1-800-356-1561",
+          "description": "Your parent's county agency handles intake, document review, and eligibility determination. Call the number above to be directed to the correct county office if you are unsure which one applies.",
+          "hours": "Varies by county. Ask when you call."
+        }
+      ],
+      "applicationNotes": [
+        "If your parent receives SSI, they are likely already enrolled in Medicaid and may not need to apply separately through this program. Confirm with your county office.",
+        "If your parent is married, their spouse's income and assets are counted together with theirs. This can affect which eligibility pathway applies, so gather financial documents for both spouses before applying.",
+        "The county office may request documents not listed on the standard checklist based on your parent's specific situation. Plan for at least one follow-up request after initial submission.",
+        "If your parent is applying based on disability and does not already have an SSA disability determination, the process may take longer because a separate disability review is required."
+      ],
+      "relatedPrograms": [
+        "NJ FamilyCare (standard Medicaid for families and children)",
+        "NJ Pharmaceutical Assistance to the Aged and Disabled (PAAD)",
+        "New Jersey's Global Options Medicaid Waiver (home and community-based services for people who would otherwise need nursing home care)",
+        "Medicare Savings Programs in New Jersey (help paying Medicare premiums for people who have both Medicare and limited income)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "This is not one program; it is a set of Medicaid pathways.",
+          "body": "NJ FamilyCare ABD covers several eligibility tracks, including one for people who receive SSI and others for people who do not but still have limited income and resources. Because the rules differ by track, the state's own guidance says the only way to know for sure if your parent qualifies is to apply. Do not assume your parent doesn't qualify based on income alone without checking."
+        },
+        {
+          "type": "callout",
+          "heading": "Income and asset limits are not published in a single public table.",
+          "body": "Official NJ FamilyCare materials confirm that income and countable resources are evaluated, and that the Medicaid Only pathway follows SSI standards, but a full statewide income and asset chart is not available in a single published document. Call 1-800-356-1561 or contact your county social service agency to get current figures before deciding whether to apply."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is above SSI limits. Does that automatically disqualify them?",
+          "answer": "Not necessarily. NJ FamilyCare ABD includes multiple eligibility pathways, and not all of them use SSI income limits as a hard cutoff. Some pathways allow for deductions or spend-down arrangements that can reduce countable income on paper. The official guidance says the only way to know for certain is to apply. Call 1-800-356-1561 to get a screening before assuming your parent doesn't qualify."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot manage the process themselves?",
+          "answer": "Yes. A family member or authorized representative can complete and submit the application. If you are acting as a legal representative (through power of attorney or guardianship), bring those legal documents along with the application materials. Contact your county social service agency at 1-800-356-1561 to confirm what documentation they require for a representative filing."
+        },
+        {
+          "question": "Will my parent's house count against them when determining asset eligibility?",
+          "answer": "The primary home is generally treated as an exempt asset under Medicaid rules, meaning it typically does not count against eligibility while your parent lives there. However, exact rules around home equity, co-ownership, and what happens if your parent moves out are complex and vary by circumstance. Do not assume the home is automatically excluded in every situation. Ask the county social service agency to walk through your parent's specific case."
+        },
+        {
+          "question": "Can my parent apply for NJ FamilyCare ABD and a Medicare Savings Program at the same time?",
+          "answer": "Yes, and doing both at once is often a smart move. Medicare Savings Programs help pay Medicare premiums for people with limited income, and they are administered through the same county social service agencies. When you contact your county office to apply for NJ FamilyCare ABD, ask whether your parent also qualifies for a Medicare Savings Program. One conversation can open both applications."
+        },
+        {
+          "question": "How long does it actually take to get a decision?",
+          "answer": "At least one county has published a processing time of approximately 6 to 12 weeks, but this is not a statewide guarantee. Processing time depends on the county office's current workload and how quickly all required documents are submitted. Missing documents are the most common cause of delays. Ask your county office for their current timeline when you apply, and submit all documents at once to avoid back-and-forth."
+        },
+        {
+          "question": "My parent is a green card holder. Do they qualify?",
+          "answer": "Qualified immigrants, including lawful permanent residents, may be eligible, but adult qualified immigrants generally must have held lawful permanent resident status for at least five years before applying. Some exceptions apply, including for people who are refugees or asylees. If your parent received their green card less than five years ago, call 1-800-356-1561 before assuming they are ineligible, because the immigration rules are specific and depend on the visa category."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-356-1561",
+      "sourceUrl": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/aged-disabled/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-familycare-mltss-waiver",
+      "name": "NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver",
+      "shortName": "NJ MLTSS Waiver",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home or in an assisted living setting, this Medicaid program covers personal care, home modifications, meals, and more, at little or no cost to your family.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)",
+            "type": "service-area"
+          },
+          {
+            "name": "County Social Service Agency / County Welfare Agency / Board of Social Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Division of Disability Services at 1-888-285-3036 for children through age 20",
+            "type": "service-area"
+          },
+          {
+            "name": "NJ FamilyCare managed care organizations",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and needs daily help with bathing, dressing, medication management, or other personal care tasks, NJ FamilyCare MLTSS can cover the full cost of that care through New Jersey Medicaid. This is not just home care: it can include nursing facility care, assisted living, home modifications like wheelchair ramps, home-delivered meals, a personal emergency response system, and a dedicated care manager who coordinates every service under one plan.\n\nThe program works differently from a standard insurance plan. Once your parent qualifies, a NJ FamilyCare managed care organization takes over coordinating all covered medical and long-term care. Your parent gets one care team instead of separate doctors, agencies, and benefit offices. That coordination is included at no additional cost.\n\nQualifying requires passing two tests: a financial test (income and assets within Medicaid long-term-care limits) and a clinical test (a formal assessment showing your parent needs nursing-home-level care). Both tests must be met. Starting the process at your county Area Agency on Aging or Aging and Disability Resource Connection (ADRC) is the most reliable first step, because they conduct the clinical screening and can connect you directly to the financial eligibility process.",
+      "savingsRange": "",
+      "savingsSource": "Free service: MLTSS is a Medicaid waiver that covers the cost of long-term services and supports; there is no standard dollar savings figure applicable to all participants because benefits are determined by individual clinical need and the managed care plan.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or under 65 and determined blind or disabled)",
+          "New Jersey resident and U.S. citizen or qualified noncitizen",
+          "Countable assets $2,000 or less (home and one vehicle are excluded)",
+          "Income within Medicaid long-term-care limits, or income trust established if over limit",
+          "Clinically assessed as needing nursing-home-level care"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Cash value of life insurance policies",
+            "Additional real property (property other than the primary home)"
+          ],
+          "exemptAssets": [
+            "Primary home the applicant lives in",
+            "One vehicle used by the applicant"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must be assessed as needing nursing-home level of care. This is a clinical determination, not just a diagnosis or age. A screener evaluates whether your parent requires daily assistance with activities like bathing, dressing, eating, or medication management at the level that would otherwise require a nursing facility. The screening is conducted by the county ADRC or Area Agency on Aging for adults 21 and older.",
+        "otherRequirements": [
+          "Must be a New Jersey resident",
+          "Must be a U.S. citizen or qualified noncitizen",
+          "Must meet NJ FamilyCare Medicaid long-term-care financial eligibility rules",
+          "If monthly income exceeds $2,982 (2026), a Qualified Income Trust (QIT) must be established to remain eligible; income above the limit is deposited into the trust rather than used directly",
+          "For adults 21+, eligibility screening starts through the county ADRC or Area Agency on Aging",
+          "Medicaid's five-year look-back period applies: asset transfers made within the past five years may create a period of ineligibility"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Adults 21 and older should start by contacting their county Area Agency on Aging or ADRC, which conducts the required clinical screening before the financial application can be completed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Contact your county ADRC or Area Agency on Aging",
+            "description": "For adults 21 and older, call your county Area Agency on Aging or Aging and Disability Resource Connection (ADRC). They conduct the required nursing-home level-of-care screening. You cannot complete the MLTSS process without this clinical assessment. Find your county ADRC at nj.gov/humanservices/doas/home or ask your county social services office for a referral."
+          },
+          {
+            "step": 2,
+            "title": "Complete the clinical level-of-care screening",
+            "description": "A screener will evaluate whether your parent needs nursing-home-level care based on their ability to perform daily activities such as bathing, dressing, eating, and medication management. This assessment happens before or alongside the financial application. Bring any medical records, physician statements, or current care plans that document your parent's needs."
+          },
+          {
+            "step": 3,
+            "title": "Submit the NJ FamilyCare financial application",
+            "description": "Apply online at njfamilycare.dhs.state.nj.us/apply.aspx, in person at your county social services or welfare agency, or by mail using the paper NJ FamilyCare application. Gather documents proving income, assets, residency, age, and citizenship before you apply. If your parent's income exceeds $2,982/month, ask the county office about establishing a Qualified Income Trust (QIT) before or at the same time as applying."
+          },
+          {
+            "step": 4,
+            "title": "Enroll with a NJ FamilyCare managed care organization (MCO)",
+            "description": "Once both eligibility determinations are approved, your parent will be enrolled in a NJ FamilyCare managed care plan. The MCO will assign a care manager who coordinates all covered services, including home care, nursing facility care if needed, meals, and medical services. You may have a choice of MCOs depending on your county."
+          },
+          {
+            "step": 5,
+            "title": "Work with the care manager to set up services",
+            "description": "After enrollment, the MCO care manager conducts an assessment of your parent's specific needs and develops an individual service plan. The services your parent receives, such as home modifications, personal care hours, respite care, or assisted living placement, depend on what that assessment finds, not just on the diagnosis or age."
+          }
+        ],
+        "processingTime": "Processing time is not a single fixed number. MLTSS requires completing both a clinical screening and a financial eligibility determination. Timing depends on how quickly both parts are completed and on your county and managed care plan. Ask your county ADRC and county social services office for current expected timelines when you begin.",
+        "waitlist": "No formal statewide waitlist is identified in the source material. Access depends on completing both the clinical screening and financial eligibility determination, then enrolling with a NJ FamilyCare managed care organization. Processing speed can vary by county.",
+        "tip": "Do not skip the county ADRC step and go straight to the online application. The financial application alone will not complete your parent's eligibility. The clinical screening must happen through the county ADRC or Area Agency on Aging, and missing it delays everything.",
+        "urls": [
+          {
+            "label": "NJ FamilyCare Online Application",
+            "url": "https://njfamilycare.dhs.state.nj.us/apply.aspx"
+          },
+          {
+            "label": "NJ MLTSS Program Official Page",
+            "url": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/mltss/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter or benefit verification letter showing monthly income amount",
+        "Proof of New Jersey residency (utility bill, lease agreement, or government-issued document showing current address)",
+        "Proof of age (birth certificate, passport, or state-issued ID with date of birth)",
+        "Proof of U.S. citizenship or qualified noncitizen status (U.S. passport, naturalization certificate, or immigration documents)",
+        "Proof of all monthly income sources (pension or retirement income statements, any rental income documentation, VA benefit letters if applicable)",
+        "Current balances for any checking, savings, or certificate of deposit accounts (the county office will specify what periods and formats are needed; balances are assessed as of the first day of the month)",
+        "Documentation of any other countable assets such as stocks, bonds, annuities, or investment accounts",
+        "Documentation of life insurance policies, including face value and any cash surrender value",
+        "Deed or mortgage statement for the primary home (to confirm it is the applicant's residence and exempt from the asset limit)",
+        "Vehicle registration showing the vehicle used by the applicant (to confirm the one-vehicle exemption)",
+        "Medical records, physician statements, or current care plans documenting the need for nursing-home-level care",
+        "Any existing Medicaid or NJ FamilyCare case number or enrollment information if previously enrolled",
+        "Legal representative documentation such as a power of attorney, guardianship order, or healthcare proxy if someone other than the applicant is applying on their behalf",
+        "If income exceeds $2,982/month: information needed to establish a Qualified Income Trust (QIT), including legal assistance to draft the trust document; the county office can advise on next steps"
+      ],
+      "contacts": [
+        {
+          "label": "County Area Agency on Aging / ADRC (Clinical Screening Entry Point)",
+          "phone": null,
+          "description": "For adults 21 and older, this is where the MLTSS process begins. Your county ADRC or Area Agency on Aging conducts the required nursing-home level-of-care screening. Find your county contact at nj.gov/humanservices/doas/home or call your county social services office and ask to be connected to the Area Agency on Aging.",
+          "hours": "Varies by county; typically Monday through Friday during business hours"
+        },
+        {
+          "label": "County Social Service Agency / Board of Social Services (Financial Application)",
+          "phone": null,
+          "description": "Handles the NJ FamilyCare financial eligibility determination and application. Contact your county welfare agency or Board of Social Services to submit paperwork in person or by mail. Find your county office directory at nj.gov/humanservices/county/.",
+          "hours": "Varies by county; typically Monday through Friday during business hours"
+        },
+        {
+          "label": "Division of Disability Services (Children through Age 20 Only)",
+          "phone": "1-888-285-3036",
+          "description": "For applicants under 21, call this number and press 2, then press 1. This division handles the entry point for MLTSS for children and young adults through age 20.",
+          "hours": "Monday through Friday during business hours"
+        },
+        {
+          "label": "NJ FamilyCare Information Line",
+          "phone": "1-800-701-0710",
+          "description": "General NJ FamilyCare information line. Can answer questions about the program and direct you to the right county office, but cannot conduct the clinical screening or process your financial application. Use this if you are unsure which county office to contact first.",
+          "hours": "Monday through Friday, 8am to 5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is currently in a hospital or rehabilitation facility, the discharge planner or social worker can often initiate the MLTSS screening process before discharge. Ask specifically about MLTSS when planning discharge, because the program can sometimes prevent a permanent nursing home admission.",
+        "If your parent's income exceeds $2,982/month, do not assume they are ineligible. A Qualified Income Trust (QIT) allows excess income to be deposited monthly into a trust account and may restore eligibility. Setting up a QIT requires a legal document; ask the county social services office to explain the process and consider consulting an elder law attorney.",
+        "The $2,000 asset limit is measured on the first day of each month. If your parent has more than $2,000 in countable assets, they are ineligible for that month. Assets transferred within the past five years may be subject to Medicaid's look-back rules and could create a penalty period. This is one of the most consequential parts of the application; do not make financial transfers without understanding the look-back period first.",
+        "The services your parent actually receives after enrollment depend on the individual care assessment the managed care organization conducts, not just on the diagnosis or on having qualified for the program. More detailed documentation of your parent's daily care needs at the clinical screening stage can help ensure the full scope of needed services is captured in the care plan."
+      ],
+      "relatedPrograms": [
+        "NJ FamilyCare (standard Medicaid for New Jersey residents)",
+        "NJ Global Options for Long-Term Care Waiver (an older HCBS waiver program that MLTSS largely replaced, but may be relevant for existing enrollees)",
+        "New Jersey PAAD (Pharmaceutical Assistance to the Aged and Disabled, for prescription drug costs)",
+        "New Jersey SHIP (State Health Insurance Assistance Program, free counseling on Medicare and Medicaid options)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two tests, not one",
+          "body": "Many families apply for MLTSS through the financial application online and wait, not knowing the process is stalled because the clinical screening has not happened yet. Your parent must pass both a financial test (income and assets within Medicaid long-term-care limits) and a clinical test (a formal assessment that they need nursing-home-level care). Both must be completed. Start with your county ADRC or Area Agency on Aging to make sure the clinical screening is initiated first or in parallel."
+        },
+        {
+          "type": "prose",
+          "title": "What services does MLTSS actually cover?",
+          "body": "Once enrolled, your parent's managed care plan covers a broad range of services. These include personal care assistance at home, nursing facility care if needed, assisted living, care management (a single coordinator who manages all covered services), home and vehicle modifications such as ramps or grab bars, home-delivered meals, a personal emergency response system (a medical alert device), respite care for family caregivers, mental health and substance use services, and the full range of NJ FamilyCare Plan A health benefits including prescription drugs.\n\nThe specific services your parent receives depend on what the MCO's care assessment determines. A person with higher care needs will have a more intensive service plan than someone with lower needs. The care manager works with your family to identify what support is needed and helps arrange each service."
+        },
+        {
+          "type": "prose",
+          "title": "Understanding the income rules",
+          "body": "For 2026, Medicaid's monthly income limit for long-term-care eligibility is $2,982 for a single person. If your parent's income is at or below that amount, they may qualify based on income alone. If their income is above $2,982, they may still qualify by establishing a Qualified Income Trust (QIT, sometimes called a Miller Trust). Each month, the income above the limit is deposited into the QIT account rather than used freely, and Medicaid treats the person as if their income is within limits.\n\nSetting up a QIT requires a legal trust document. The county social services office can explain what is required, but families often work with an elder law attorney to set it up correctly. Once the trust is in place, the income deposited into it is typically used toward the cost of care, with Medicaid covering what remains."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it's worth more than $2,000?",
+          "answer": "Yes. The home your parent lives in is excluded from the $2,000 asset limit entirely, regardless of its value. One vehicle is also excluded. The $2,000 limit applies only to countable assets such as bank account balances, CDs, stocks, and other liquid or financial resources. However, if your parent owns additional real property beyond their primary home, that property does count toward the limit."
+        },
+        {
+          "question": "My parent transferred money to family members recently. Does that affect eligibility?",
+          "answer": "It can. MLTSS uses Medicaid's institutional long-term-care financial rules, which include a five-year look-back period. If your parent transferred assets for less than fair market value within the past five years, Medicaid may impose a period of ineligibility. The length of the penalty depends on the amount transferred. Do not make additional financial transfers before speaking with the county social services office or an elder law attorney."
+        },
+        {
+          "question": "My parent's income is over $2,982/month. Are they automatically disqualified?",
+          "answer": "No. Income above the $2,982/month Medicaid long-term-care limit (2026) does not automatically end eligibility if a Qualified Income Trust (QIT) is established correctly. The QIT is a legal trust document where the excess income is deposited each month. Medicaid then treats the person as within the income limit. Ask the county social services office about the QIT process, and consider consulting an elder law attorney to set it up."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent?",
+          "answer": "Yes. A family member with legal authority can apply on behalf of a parent. You will need documentation of that authority, such as a durable power of attorney, guardianship order, or healthcare proxy. Bring those documents when you contact the county ADRC or submit the NJ FamilyCare application. Without documentation of legal authority, the county may require the applicant to participate directly in the process."
+        },
+        {
+          "question": "What happens after my parent enrolls? Can the care plan change as their needs change?",
+          "answer": "Yes. After enrollment, the managed care organization assigns a care manager who conducts an initial assessment and develops a service plan. If your parent's condition changes, you can request a reassessment at any time. The care manager is your point of contact for adding, changing, or removing services. Keep the care manager informed of significant changes in your parent's health or living situation so the plan stays current."
+        },
+        {
+          "question": "Can my parent apply for MLTSS and still receive other NJ Medicaid benefits at the same time?",
+          "answer": "MLTSS is part of NJ FamilyCare, so enrollment generally includes NJ FamilyCare Plan A health coverage as well as long-term services. Your parent does not need to apply separately for those benefits; they are coordinated through the managed care organization. If your parent currently receives other Medicaid benefits, ask the county social services office how those will transition when MLTSS enrollment begins."
+        },
+        {
+          "question": "How long will it take to get services started after applying?",
+          "answer": "There is no single fixed processing timeline for MLTSS. The process has two parts: the clinical screening (conducted by the county ADRC) and the financial eligibility determination (through the NJ FamilyCare application). Both must be completed before enrollment with a managed care plan can begin. Timing depends on how quickly documentation is gathered, how the county is currently processing applications, and how quickly the MCO can complete its own care assessment. Ask your county ADRC for current expected timelines when you begin."
+        },
+        {
+          "question": "My parent is in the hospital right now. Can we start the application from there?",
+          "answer": "Yes, and starting from the hospital can be the fastest route. Ask to speak with the hospital's discharge planner or social worker and tell them your parent may need nursing-home-level care through MLTSS. Discharge planners are familiar with the MLTSS clinical screening process and can often initiate it before your parent leaves the hospital. Acting early can help avoid a gap in care at discharge."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Wheelchair",
+      "phone": "1-800-701-0710",
+      "sourceUrl": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/mltss/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-familycare-medicare-savings-programs-current",
+      "name": "NJ FamilyCare Medicare Savings Programs",
+      "shortName": "Medicare Savings Programs",
+      "tagline": "If your parent is on Medicare with limited income, New Jersey may pay their Medicare premiums and other out-of-pocket costs, saving over $2,000 a year.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County State Health Insurance Assistance Program (SHIP)",
+            "type": "service-area"
+          },
+          {
+            "name": "NJSave / NJ FamilyCare application support lines",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is enrolled in Medicare Part A and Part B and lives on a fixed income, New Jersey may pay some or all of their Medicare costs through the Medicare Savings Programs (MSP). Depending on their income, the state can cover the Medicare Part B premium (currently $185/month in 2026), and at the highest benefit tier, also cover deductibles, copayments, and coinsurance. That adds up to more than $2,000 a year in savings for many families.\n\nThere are three tiers: QMB, SLMB, and QI-1. Each tier has a different income limit and covers different costs. QMB is the most generous and covers the broadest set of Medicare cost-sharing. SLMB and QI-1 focus on the Part B premium. All three tiers share the same asset limit and are administered through NJ FamilyCare.\n\nThis is not the same as full Medicaid. Your parent keeps their Medicare coverage; the state just steps in to pay costs Medicare would otherwise bill to them. To qualify, your parent must already be enrolled in both Medicare Part A and Part B, live in New Jersey, and meet the income and asset limits described below.",
+      "savingsRange": "Over $2,000/year for eligible individuals (NJ state figure; exact savings depend on which tier your parent qualifies for)",
+      "savingsSource": "New Jersey Department of Human Services official MSP program page states the state can pay the Part B premium and save eligible people over $2,000 per year. Source: nj.gov/humanservices/doas/services/l-p/msp/",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Enrolled in Medicare Part A and Part B",
+          "New Jersey resident",
+          "Income below $21,546/year (single) depending on tier",
+          "Assets below $9,950 (single) or $14,910 (couple)",
+          "Not already eligible for full NJ FamilyCare Medicaid"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Checking accounts",
+            "Savings accounts",
+            "Liquid resources and countable assets"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "One car"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in Medicare Part A and Part B",
+          "Must be a New Jersey resident",
+          "Must not be financially eligible for full NJ FamilyCare Medicaid",
+          "Income and asset limits apply to all three tiers"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through NJSave at nj.gov, or call 1-800-701-0710 for help completing the application by phone.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check income and assets before you apply",
+            "description": "Confirm your parent's gross annual income against the tier limits: QMB (single $15,960/year, couple $21,640/year), SLMB (single $19,152/year, couple $25,968/year), QI-1 (single $21,546/year, couple $29,214/year). Check liquid assets: the limit is $9,950 for a single person and $14,910 for a couple. The home and one car do not count toward the asset limit."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "You will need your parent's Medicare card showing Part A and Part B enrollment, proof of New Jersey residency, proof of income (such as a Social Security award letter or pension statement), and information about countable assets such as current bank account balances. See the full document list below."
+          },
+          {
+            "step": 3,
+            "title": "Apply online through NJSave or by phone",
+            "description": "Go to nj.gov/njsave and complete the NJSave application online. If your parent needs help or prefers phone enrollment, call 1-800-701-0710 (TTY: 711). A paper NJSave application is also available if you prefer to mail it in. Call 1-800-792-9745 for general program questions before or during the process."
+          },
+          {
+            "step": 4,
+            "title": "Get free in-person help through SHIP",
+            "description": "If the application feels complicated, your county's State Health Insurance Assistance Program (SHIP) offers free one-on-one help. SHIP counselors can walk through the form with your parent and help identify which tier they qualify for. Contact 1-800-792-9745 to find your local SHIP office."
+          },
+          {
+            "step": 5,
+            "title": "Track your application and respond promptly",
+            "description": "After submitting, watch for any requests for additional documents. Responding quickly prevents delays. No specific statewide processing time has been published by NJ FamilyCare, so follow up if you have not heard back within 30 days."
+          }
+        ],
+        "processingTime": "No specific statewide processing time is published in official NJ FamilyCare materials. Follow up if you have not heard within 30 days of submitting.",
+        "waitlist": null,
+        "tip": "If your parent already receives Supplemental Security Income (SSI), they may qualify automatically; confirm with 1-800-701-0710.",
+        "urls": [
+          {
+            "label": "NJSave Online Application",
+            "url": "https://www.nj.gov/njsave"
+          },
+          {
+            "label": "NJ FamilyCare Medicare Savings Programs Official Page",
+            "url": "https://www.nj.gov/humanservices/doas/services/l-p/msp/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card showing both Part A and Part B enrollment",
+        "Most recent Social Security award letter showing monthly benefit amount",
+        "Proof of New Jersey residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Pension or retirement income statements showing current monthly or annual amount",
+        "Current balances for any checking or savings accounts (NJ asks for current liquid asset information; bring the most recent statement or the account number so you can state the balance)",
+        "Documentation of any other regular income (annuity statements, VA benefit letters, rental income records)",
+        "Government-issued photo ID or proof of identity (such as a driver's license or passport)",
+        "Social Security number for the applicant"
+      ],
+      "contacts": [
+        {
+          "label": "NJ FamilyCare MSP Application and Enrollment Support",
+          "phone": "1-800-701-0710",
+          "description": "Call to get help completing the NJSave application by phone or to ask about the enrollment process. TTY: 711.",
+          "hours": "Contact line for application support; hours not specified in official materials. Call during standard business hours."
+        },
+        {
+          "label": "NJ FamilyCare General Information Line",
+          "phone": "1-800-792-9745",
+          "description": "General program questions about the Medicare Savings Programs, including how to find your local SHIP office for free in-person help.",
+          "hours": "Contact line for general inquiries; hours not specified in official materials."
+        }
+      ],
+      "applicationNotes": [
+        "The three tiers (QMB, SLMB, QI-1) have different income limits but the same asset limits. Your parent may qualify for one tier but not another; the NJSave application screens for all three at once, so you do not need to apply separately for each.",
+        "Many families miss the asset test. The home and one car are excluded, but checking accounts, savings accounts, and other liquid resources count. If your parent's liquid assets are just above the limit, ask the application support line about what assets are counted and whether any deductions apply.",
+        "This program is specifically for people who already have Medicare Part A and Part B. If your parent only has Part A or is not yet enrolled in Medicare, they must enroll in Part B before applying. Contact Social Security at 1-800-772-1213 for Medicare enrollment questions.",
+        "Free help is available at no cost through your county SHIP office. SHIP counselors are not affiliated with insurance companies and can help your parent compare options and complete the NJSave application. Call 1-800-792-9745 to find your local SHIP."
+      ],
+      "relatedPrograms": [
+        "NJ Extra Help (Low Income Subsidy) for Medicare Part D prescription costs",
+        "NJ FamilyCare Medicaid (for those who may meet full Medicaid income limits)",
+        "NJ Pharmaceutical Assistance to the Aged and Disabled (PAAD)",
+        "Senior Gold Prescription Discount Program"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier does your parent qualify for?",
+          "description": "All three tiers require Medicare Part A and Part B enrollment, New Jersey residency, and assets below $9,950 (single) or $14,910 (couple). The difference is income and what gets covered.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimit": "Single: $15,960/year. Couple: $21,640/year.",
+              "whatItCovers": "Medicare Part A premium, Part B premium, deductibles, copayments, and coinsurance. This is the broadest coverage.",
+              "bestFor": "Parents with the lowest incomes who face ongoing Medicare cost-sharing."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimit": "Single: $19,152/year. Couple: $25,968/year.",
+              "whatItCovers": "Medicare Part B premium only (currently $185/month in 2026).",
+              "bestFor": "Parents with moderate incomes who need help with the monthly Part B premium."
+            },
+            {
+              "name": "QI-1 (Qualifying Individual)",
+              "incomeLimit": "Single: $21,546/year. Couple: $29,214/year.",
+              "whatItCovers": "Medicare Part B premium only. Funding for QI-1 is limited and approved annually by Congress; renewal is not guaranteed year to year.",
+              "bestFor": "Parents with the highest incomes among MSP-eligible individuals who still need Part B premium help."
+            }
+          ]
+        },
+        {
+          "type": "stat-callout",
+          "stats": [
+            {
+              "label": "Potential annual savings",
+              "value": "Over $2,000/year",
+              "note": "Per NJ Department of Human Services for eligible individuals"
+            },
+            {
+              "label": "Asset limit (single person)",
+              "value": "$9,950",
+              "note": "Home and one car are excluded"
+            },
+            {
+              "label": "Highest income limit (QI-1, single)",
+              "value": "$21,546/year",
+              "note": "2026 limit per NJ official materials"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a home. Does that disqualify them from the asset limit?",
+          "answer": "No. New Jersey specifically excludes the primary home and one car from the asset calculation. Only liquid assets and countable financial resources apply toward the $9,950 (single) or $14,910 (couple) limit. If your parent's only assets are their home and a modest savings account, they may still qualify."
+        },
+        {
+          "question": "My parent is close to but slightly above the income limit. Is there anything we can do?",
+          "answer": "The income limits are fixed for each tier, so there is no formal spend-down process for the Medicare Savings Programs the way there is for full Medicaid. However, some income may not count in the calculation. Call 1-800-701-0710 to have a counselor review what income is counted; in some cases, deductions or exclusions apply."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot complete the form themselves?",
+          "answer": "Yes. A family member or authorized representative can complete the NJSave application on behalf of the applicant. If you have legal authority such as power of attorney, mention that when you call 1-800-701-0710. SHIP counselors can also assist if you need in-person support."
+        },
+        {
+          "question": "Can my parent apply for this and Extra Help for prescriptions at the same time?",
+          "answer": "Yes, and it is worth doing both in the same session. Enrollment in QMB, SLMB, or QI-1 may automatically qualify your parent for Extra Help (the Low Income Subsidy that reduces Medicare Part D drug costs). Ask about this when you call 1-800-701-0710 or when completing the NJSave application."
+        },
+        {
+          "question": "What does QMB actually cover day to day, and does my parent still get billed?",
+          "answer": "Under QMB, Medicare providers are not allowed to bill your parent for Medicare cost-sharing, which includes deductibles, copayments, and coinsurance. If your parent receives a bill from a provider while enrolled in QMB, they can dispute it. Call 1-800-701-0710 or contact your local SHIP office at 1-800-792-9745 if this happens."
+        },
+        {
+          "question": "How often does my parent need to renew, and what happens if they miss the renewal?",
+          "answer": "NJ FamilyCare conducts periodic renewals for Medicare Savings Programs enrollment. The state will send a renewal notice; respond promptly with updated income and asset information to avoid a gap in coverage. If coverage lapses, your parent can reapply through NJSave at any time. There is no open enrollment window restriction."
+        },
+        {
+          "question": "My parent is in a Medicare Advantage plan, not original Medicare. Do they still qualify?",
+          "answer": "Yes. Medicare Advantage plans still require Medicare Part A and Part B enrollment, and that enrollment is what the Medicare Savings Programs look at. If your parent meets the income and asset limits, the MSP can still pay their Part B premium and applicable cost-sharing regardless of whether they use original Medicare or a Medicare Advantage plan."
+        },
+        {
+          "question": "Is there a waitlist for these programs?",
+          "answer": "No waitlist applies to the Medicare Savings Programs in New Jersey. Eligibility is based on income and assets; if your parent qualifies, they are enrolled. Funding is subject to annual Congressional approval for the QI-1 tier specifically, but there is no queue to join for any tier."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-800-701-0710",
+      "sourceUrl": "https://www.nj.gov/humanservices/doas/services/l-p/msp/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-snap-food-benefits",
+      "name": "NJ SNAP (Supplemental Nutrition Assistance Program)",
+      "shortName": "NJ SNAP",
+      "tagline": "If your parent is on a fixed income in New Jersey, they may qualify for up to $298/month toward groceries loaded automatically onto a card they can use at most grocery stores.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County Social Service Agencies across New Jersey",
+            "type": "service-area"
+          },
+          {
+            "name": "NJHelps.gov",
+            "type": "service-area"
+          },
+          {
+            "name": "MyNJHelps.gov",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and living on Social Security, a pension, or other fixed income, they may qualify for NJ SNAP: a monthly grocery benefit loaded onto an EBT card they can use at most supermarkets and many farmers markets. For a one-person household, the monthly benefit ranges from $95 to $298. For a two-person household, it ranges from $95 to $546.\n\nSeniors often assume SNAP is only for low-income families with children. That is not the case. In New Jersey, households that include someone age 60 or older or a person with a disability are treated differently under SNAP rules: they may qualify even if their gross monthly income is above the standard limit that applies to other households. If your parent was turned away before or never applied because they thought they earned too much, it may be worth checking again.\n\nThe program is run statewide through New Jersey's county social service agencies. Your parent applies once, completes a phone or in-person interview with their county, and if approved, receives benefits within 30 days. Households in urgent financial situations may receive benefits within 7 days. The card works like a debit card at checkout; the cashier does not need to know it is a government benefit.",
+      "savingsRange": "$95 to $298/month for a one-person household; $95 to $546/month for a two-person household (FY2027 benefit range)",
+      "savingsSource": "New Jersey Department of Human Services, NJ SNAP program page (nj.gov/humanservices/njsnap), monthly benefit range table",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must live in New Jersey",
+          "Gross monthly income generally below $2,461 (one person) or $3,337 (two people)",
+          "Seniors age 60+ or people with disabilities may qualify above standard income limits",
+          "Must complete a county interview",
+          "Assets are reviewed; limits not fully published in official NJ source"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2461
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3337
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4212
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 5088
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5964
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6839
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 7715
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 8591
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in New Jersey",
+          "Household must meet SNAP rules for income, resources, and household composition",
+          "Must complete an interview with the county social services agency",
+          "Must provide verification documents requested by the county",
+          "Households with a member age 60 or older or with a disability may qualify above the standard gross income limit and may receive different treatment on other eligibility rules"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to start is the online application at NJHelps.gov, which takes 20 to 40 minutes; a county interview follows and most cases are decided within 30 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather basic information before you start",
+            "description": "Before opening the application, collect your parent's monthly income sources (Social Security award letter, pension statement), proof of New Jersey address, and basic household information. You do not need to have every document in hand to submit the application, but having income figures ready speeds it up."
+          },
+          {
+            "step": 2,
+            "title": "Submit the application online at NJHelps.gov",
+            "description": "Go to NJHelps.gov (also accessible at MyNJHelps.gov) and complete the NJ SNAP application. The form takes roughly 20 to 40 minutes. You can save and return if needed. Submit electronically when complete. If you prefer to apply in person, go to your county's social services agency; call 2-1-1 to find the office nearest you."
+          },
+          {
+            "step": 3,
+            "title": "Complete the required interview with your county",
+            "description": "After submission, your county social services agency will schedule an interview. This is required; benefits cannot be approved without it. The interview is typically by phone and covers your parent's income, household situation, and expenses. Some counties also offer in-person interviews. Your county will contact you to schedule."
+          },
+          {
+            "step": 4,
+            "title": "Submit verification documents the county requests",
+            "description": "After or during the interview, the county will tell you exactly which documents they need. Submit everything they ask for as quickly as possible, because the 30-day processing clock can be affected by missing paperwork. Documents are typically submitted to your county office in person, by mail, or by fax depending on the county."
+          },
+          {
+            "step": 5,
+            "title": "Receive your EBT card and start using benefits",
+            "description": "If approved, your parent will receive a Families First EBT card in the mail. Benefits are loaded to the card monthly. The card works like a debit card at most grocery stores and many farmers markets in New Jersey. It cannot be used to buy alcohol, tobacco, vitamins, or prepared hot foods."
+          }
+        ],
+        "processingTime": "Most cases are decided within 30 days of application. Households in urgent situations (very low income, minimal resources, or facing immediate food hardship) may qualify for expedited benefits within 7 days.",
+        "waitlist": null,
+        "tip": "If your parent is in an urgent situation, ask specifically about expedited processing when you call or during the interview. Not everyone qualifies, but if they do, benefits can arrive within 7 days instead of 30.",
+        "urls": [
+          {
+            "label": "Apply online at NJHelps.gov",
+            "url": "https://www.njhelps.org"
+          },
+          {
+            "label": "NJ SNAP program overview",
+            "url": "https://www.nj.gov/humanservices/njsnap/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (shows current monthly benefit amount)",
+        "Proof of New Jersey residency: a utility bill, lease agreement, or other document showing your parent's name and address",
+        "Photo ID for the applicant (driver's license, state ID, or passport)",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Most recent rent or mortgage statement (housing costs can affect benefit calculation)",
+        "Most recent utility bills (heating, electric, or phone; utility expenses can increase the benefit amount)",
+        "Proof of age or disability status if your parent is 60 or older or has a documented disability (birth certificate, Medicare card if applicable, or disability award letter)",
+        "Information about any other household members' income if your parent lives with others",
+        "Any other documents the county requests during or after the interview"
+      ],
+      "contacts": [
+        {
+          "label": "NJ SNAP County Social Services (via 2-1-1 NJ)",
+          "phone": "2-1-1",
+          "description": "Dial 2-1-1 to be connected to your county's social services agency, which handles NJ SNAP applications, interviews, and questions. This is the correct first call; 2-1-1 routes you to your county's specific office rather than handling the application itself.",
+          "hours": "2-1-1 operates 24 hours, 7 days a week; county offices are generally Mon-Fri 8am-4:30pm"
+        },
+        {
+          "label": "NJ Division of Family Development (NJ SNAP program office)",
+          "phone": "(609) 588-2401",
+          "description": "State-level program office for NJ SNAP. Best for policy questions or escalated issues after working with your county. Your county agency handles the actual application.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "Households that include someone age 60 or older or a person with a disability may qualify even if gross income is above the standard limits in the table above. If your parent was previously told they earn too much, that answer may have been based on the wrong eligibility track.",
+        "SNAP is not automatic for seniors. An interview with the county is required even if your parent already receives Social Security or other government benefits. The application is not complete without it.",
+        "County offices administer cases, so interview scheduling, acceptable document formats, and processing speed can vary. If one county's office is slow to schedule, ask whether there is a SNAP Navigator who can help move the process along.",
+        "If your parent is applying and already has a disconnection notice or has very little money for food right now, say so when you contact the county. Emergency processing within 7 days exists for qualifying situations, but you have to ask."
+      ],
+      "relatedPrograms": [
+        "NJ LIHEAP (Low Income Home Energy Assistance Program): helps with heating and cooling bills",
+        "NJ Pharmaceutical Assistance to the Aged and Disabled (PAAD): reduces prescription costs for seniors",
+        "NJ Senior Gold: prescription benefit for seniors who do not qualify for PAAD",
+        "NJ 3SquaresNJ / County Food Pantry Network: emergency food if SNAP approval is pending"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What the EBT card can and cannot buy",
+          "body": "The Families First EBT card works like a debit card at most grocery stores and many farmers markets. Your parent can use it to buy bread, meat, produce, dairy, canned goods, and most packaged foods. They cannot use it to buy alcohol, tobacco, vitamins and supplements, pet food, or prepared hot foods (like a rotisserie chicken that is sold hot). There is no cash-back option. The card balance carries over month to month if not fully used."
+        },
+        {
+          "type": "callout",
+          "title": "Asset limits: what we know and what we do not",
+          "body": "SNAP does review household resources (cash, checking and savings account balances, and similar liquid assets) as part of eligibility. However, the official New Jersey SNAP materials do not publish a specific dollar limit for asset tests. Certain resources are excluded under federal SNAP rules, including the home your parent lives in. Because the official state source does not publish a full asset table, we are not stating a specific limit here. When your parent completes the county interview, the caseworker will ask about resources and explain what counts. If you want to understand this before the interview, ask the county caseworker directly."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is above the limit in the table. Are they definitely ineligible?",
+          "answer": "Not necessarily. Households that include someone age 60 or older or a person with a disability may qualify under different income rules than the standard gross income limits. The limits shown in the table above apply to most households, but seniors and people with disabilities can sometimes qualify above those figures. The only way to know for certain is to apply or ask your county agency directly. Do not assume a denial based on the standard table."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent, or do they have to do it themselves?",
+          "answer": "Yes. A family member or other authorized representative can apply on behalf of an elderly or disabled person. You can complete the NJHelps.gov application on their behalf and participate in the county interview as their representative. You will need to be identified as the authorized representative during the application. The county can explain the representative process if you call before applying."
+        },
+        {
+          "question": "My parent already gets SSI or Medicaid. Do they automatically get SNAP?",
+          "answer": "No. SNAP is a separate application in New Jersey and is not automatic even for people who receive SSI, Medicaid, or other government benefits. Your parent must apply through NJHelps.gov or their county office and complete an interview. That said, receiving SSI or Medicaid may simplify some parts of the eligibility review."
+        },
+        {
+          "question": "Can my parent apply for SNAP and NJ LIHEAP at the same time?",
+          "answer": "Yes. SNAP and LIHEAP are separate programs with separate applications, but nothing prevents applying to both at the same time. Applying to both is worth doing because receiving certain utility assistance can actually increase the SNAP benefit amount through a deduction in the benefit calculation. Start both applications in the same period so the LIHEAP enrollment can be documented when SNAP eligibility is reviewed."
+        },
+        {
+          "question": "How long does approval take, and can we get faster help if my parent has no food now?",
+          "answer": "Most cases are approved within 30 days. If your parent has very little money and an immediate need for food, ask specifically about expedited processing when you contact the county. Qualifying households can receive benefits within 7 days. Not everyone qualifies for expedited processing, but the county caseworker will screen for it. Tell them about the urgency at the start of the conversation."
+        },
+        {
+          "question": "What happens if my parent's income or household situation changes after they are enrolled?",
+          "answer": "Your parent is required to report certain changes to their county agency, such as a significant increase in income or a change in household size. Changes can affect the benefit amount or eligibility. At each recertification (the periodic renewal review), the county will reassess the full situation. If income drops or a new expense arises between renewals, your parent can also report changes proactively, which may increase their benefit."
+        },
+        {
+          "question": "My parent was denied SNAP before. Is it worth applying again?",
+          "answer": "It may be. SNAP income limits are adjusted annually, and households with a member age 60 or older are evaluated under different rules than standard households. If the previous denial was based on income and your parent is 60 or older, the standard income table may not have been the correct standard. A new application will be evaluated under current rules. There is no penalty for reapplying."
+        },
+        {
+          "question": "Does my parent's home count against them in the asset test?",
+          "answer": "Under federal SNAP rules, the home a person lives in is excluded from the asset test. It does not count as a resource. The NJ SNAP materials do not publish a full list of what is counted or excluded beyond this, so if your parent has savings accounts, investment accounts, or other assets, the county caseworker will review those during the interview and explain what counts in their specific situation."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "2-1-1",
+      "sourceUrl": "https://www.nj.gov/humanservices/njsnap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-liheap-home-energy-assistance",
+      "name": "NJ LIHEAP (Low Income Home Energy Assistance Program)",
+      "shortName": "NJ Energy Assistance",
+      "tagline": "If your parent pays a heating or cooling bill in New Jersey and earns below a certain income, they may receive up to $4,878 toward energy costs this season.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Authorized local community action agencies in each county",
+            "type": "service-area"
+          },
+          {
+            "name": "New Jersey Energy Assistance Hotline: 1-800-510-3102",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on a fixed income and struggling to pay a heating or cooling bill in New Jersey, LIHEAP can help. The program provides a direct payment toward home energy costs, up to $4,878 per household including any emergency or repair payments. The benefit goes directly to the utility company or fuel supplier, so your parent never has to manage a reimbursement.\n\nThis is not a senior-only program. Any New Jersey household that meets the income limit qualifies, including households where your parent lives with you. A single person can earn up to $2,518 per month (gross) and still qualify for FY2026. If your parent rents and heat is included in the rent, they may still qualify, as long as their lease shows they are responsible for that energy cost.\n\nThe application season runs October 1 through June 30 each year, and funding is limited. Applying early in the season reduces the risk of funds running out. You can apply online at energyassistance.nj.gov or by calling 1-800-510-3102 to be connected with your county's community action agency.",
+      "savingsRange": "Up to $4,878 per household per program year (FY2026 maximum, including standard payments, emergency assistance, and emergency furnace repair payments). Average heating awards run approximately $360 and average medically necessary cooling awards approximately $300, but individual amounts vary by household circumstances.",
+      "savingsSource": "NJ Department of Community Affairs LIHEAP program materials and FY2026 income limit table published at nj.gov/dca/dhcr/offices/hea.shtml. The $4,878 figure is the state-published maximum. Averages of $360 (heating) and $300 (medically necessary cooling) are cited in NJ utility program materials.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "New Jersey resident",
+          "Household income at or below 60% of NJ State Median Income (e.g., $2,518/month for a single person)",
+          "Responsible for home heating or cooling costs, whether you pay directly or heat is included in rent",
+          "Must apply between October 1 and June 30 while funds last",
+          "No age requirement; no asset test"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2518
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3291
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4064
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4837
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5610
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6383
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 6509
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6636
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a New Jersey resident with documentation of residency.",
+          "Must be responsible for home heating or cooling costs, either by paying the utility directly or because energy costs are included in rent.",
+          "Must apply during the open season (October 1 through June 30) while funds last.",
+          "Income is calculated on a household basis; all members' income counts toward the limit.",
+          "If applying for medically necessary cooling assistance, medical documentation of the condition may be required."
+        ],
+        "povertyLevelReference": "60% of NJ State Median Income (FY2026)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at energyassistance.nj.gov; you can also call 1-800-510-3102 to apply by phone or get connected to your county's community action agency.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm the season is open",
+            "description": "LIHEAP accepts applications October 1 through June 30 only, and funding is limited. If you are applying after February, call 1-800-510-3102 to confirm funds are still available in your county before gathering documents."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before you start",
+            "description": "You will need proof of New Jersey residency, proof of income for all household members, and your most recent utility bill or lease showing you are responsible for heating costs. Incomplete applications are the most common reason for delays. Having everything ready before you open the application saves significant time."
+          },
+          {
+            "step": 3,
+            "title": "Apply online or by phone",
+            "description": "Online: go to energyassistance.nj.gov and complete the Home Energy/USF/Weatherization Program Application. This is the same combined form used for LIHEAP and USF (Universal Service Fund). Phone: call 1-800-510-3102 to reach the NJ Energy Assistance Hotline, which will connect you with the community action agency serving your county."
+          },
+          {
+            "step": 4,
+            "title": "Submit to your county community action agency",
+            "description": "If you applied online, your application routes to the authorized community action agency in your county. If you applied by phone or in person, that agency handles processing. Processing timelines depend on county agency workload and how complete your application is. There is no single statewide processing guarantee."
+          },
+          {
+            "step": 5,
+            "title": "Check your application status",
+            "description": "After submitting, you can check your status at nj.gov/dca/dcaid. If the agency needs additional documents, respond promptly; missing documentation is the most common reason applications stall."
+          },
+          {
+            "step": 6,
+            "title": "Benefit is paid directly to the utility or fuel supplier",
+            "description": "If approved, the payment goes directly to your parent's utility company or fuel supplier. Your parent will receive a notice. No reimbursement process or check to manage."
+          }
+        ],
+        "processingTime": "Processing time is not guaranteed by the state; it varies by county agency workload and application completeness. Applying early in the season (October through December) typically results in faster processing than applying in spring when demand peaks and funds may be running low.",
+        "waitlist": "There is no formal statewide waitlist. However, LIHEAP is funded seasonally and accepted while funds last. Applying late in the season (after April) carries a real risk of funding exhaustion before your application is processed.",
+        "tip": "If your parent has received a utility shutoff notice, call 1-800-510-3102 immediately and say there is an active disconnection notice. Emergency assistance may be available with faster processing. Do not wait to gather every document before calling in a crisis.",
+        "urls": [
+          {
+            "label": "Apply Online: NJ Energy Assistance Portal",
+            "url": "https://www.energyassistance.nj.gov"
+          },
+          {
+            "label": "Check Application Status",
+            "url": "https://www.nj.gov/dca/dcaid"
+          },
+          {
+            "label": "Official NJ LIHEAP Program Page",
+            "url": "https://www.nj.gov/dca/dhcr/offices/hea.shtml"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent utility bill (electric, gas, or oil) showing the account in the household's name, or lease agreement showing heating costs are included in rent",
+        "Proof of New Jersey residency (utility bill, signed lease, or state-issued document with current address)",
+        "Proof of income for all household members: Social Security award letter, pension statement, pay stubs, or SSI/SSDI benefit letter",
+        "Government-issued photo ID for the applicant (driver's license, state ID, or passport)",
+        "Social Security cards or numbers for all household members",
+        "Proof of identity and residency for any additional household members as requested by the county agency",
+        "Fuel supplier account number or heating oil delivery account information, if heat comes from a supplier rather than a utility",
+        "Documentation of any public benefits received by household members (if used to verify income in place of other income documents)",
+        "If applying for medically necessary cooling assistance: a letter or documentation from a physician stating the medical condition that requires air conditioning",
+        "Any additional documents requested by the local community action agency after initial review"
+      ],
+      "contacts": [
+        {
+          "label": "NJ Energy Assistance Hotline",
+          "phone": "1-800-510-3102",
+          "description": "The primary line for LIHEAP applications and questions. Staff can take your information, connect you to your county's community action agency, and help with emergencies including active shutoff notices.",
+          "hours": "Contact the hotline directly to confirm current hours; hours may vary by season."
+        },
+        {
+          "label": "NJ Energy Assistance Online Portal",
+          "phone": null,
+          "description": "Apply directly at energyassistance.nj.gov without calling. The online application covers LIHEAP, USF, and Weatherization in a single combined form.",
+          "hours": "Available online; apply at energyassistance.nj.gov"
+        },
+        {
+          "label": "Application Status Self-Service",
+          "phone": null,
+          "description": "Check the status of a submitted application at nj.gov/dca/dcaid. Use this before calling the hotline for status updates.",
+          "hours": "Available online at nj.gov/dca/dcaid"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a utility shutoff notice, call 1-800-510-3102 immediately and say there is an active disconnection notice. Emergency assistance under LIHEAP may allow for faster processing, and utility companies serving NJ customers are required to check for program eligibility before disconnecting.",
+        "The LIHEAP application in New Jersey is the same combined form as the USF (Universal Service Fund) and Weatherization applications. Completing one form makes you considered for all three programs. USF and LIHEAP are different programs with different benefits; receiving one does not guarantee the other.",
+        "If your parent lives with you and the household income combined exceeds the limit, they will not qualify. Income is counted on a household basis, not per individual. If your parent lives alone or with another low-income person, the single or two-person income limit applies.",
+        "An older adult in assisted living or a care facility where the facility pays all utilities is unlikely to qualify, because the household must be responsible for the energy costs. Call 1-800-510-3102 to confirm eligibility before starting the application."
+      ],
+      "relatedPrograms": [
+        "NJ Universal Service Fund (USF): monthly discounts on electric and gas bills for income-eligible households, applied for on the same combined application",
+        "NJ Weatherization Assistance Program: free home energy improvements (insulation, sealing, equipment upgrades) also applied for on the same combined form",
+        "NJ Lifeline Credit Program: annual credit on electric or gas bills for seniors 65+ and people with disabilities who meet income limits",
+        "NJ Low Income Household Water Assistance Program (LIHWAP): similar income-based assistance for water and wastewater bills"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Heat included in rent still counts",
+          "body": "A common reason families skip this application is the assumption that because the landlord pays the utility company directly, the tenant does not qualify. New Jersey LIHEAP allows households where heating costs are included in rent to apply, as long as the lease documents that the tenant is responsible for those costs. If your parent's rent includes heat, check the lease and apply."
+        },
+        {
+          "type": "callout",
+          "title": "The application closes June 30 and funding runs out before that",
+          "body": "LIHEAP is not open year-round. The season runs October 1 through June 30, and New Jersey distributes a fixed pool of federal funds on a first-come basis. If you are reading this in the spring, call 1-800-510-3102 to confirm funds remain available in your county before investing time in the application."
+        },
+        {
+          "type": "tier-comparison",
+          "title": "FY2026 Income Limits by Household Size",
+          "description": "These are the gross monthly income limits for LIHEAP eligibility in New Jersey for FY2026, based on 60% of State Median Income. All household members' income counts.",
+          "rows": [
+            {
+              "label": "1 person",
+              "monthlyLimit": "$2,518",
+              "annualLimit": "$30,216"
+            },
+            {
+              "label": "2 people",
+              "monthlyLimit": "$3,291",
+              "annualLimit": "$39,492"
+            },
+            {
+              "label": "3 people",
+              "monthlyLimit": "$4,064",
+              "annualLimit": "$48,768"
+            },
+            {
+              "label": "4 people",
+              "monthlyLimit": "$4,837",
+              "annualLimit": "$58,044"
+            },
+            {
+              "label": "5 people",
+              "monthlyLimit": "$5,610",
+              "annualLimit": "$67,320"
+            },
+            {
+              "label": "6 people",
+              "monthlyLimit": "$6,383",
+              "annualLimit": "$76,596"
+            },
+            {
+              "label": "7 people",
+              "monthlyLimit": "$6,509",
+              "annualLimit": "$78,108"
+            },
+            {
+              "label": "8 people",
+              "monthlyLimit": "$6,636",
+              "annualLimit": "$79,626"
+            },
+            {
+              "label": "Each additional person",
+              "monthlyLimit": "+$241",
+              "annualLimit": "+$2,885"
+            }
+          ],
+          "source": "nj.gov/dca/dhcr/offices/hea.shtml (FY2026 LIHEAP/USF income limit table)"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives with me. Does my income count against their eligibility?",
+          "answer": "Yes. LIHEAP is a household-based program, not an individual benefit. Every person living in the home counts as part of the household, and all household members' gross income is combined to determine eligibility. If the combined household income exceeds the limit for your household size, no one in the home qualifies. The limit for a household of two is $3,291 per month (FY2026); for three people it is $4,064 per month. If your parent lives alone, only their income counts."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent?",
+          "answer": "Yes. An authorized representative, including an adult child acting as caregiver, can apply on behalf of a household member who cannot apply themselves. You will need to provide your own identification and documentation showing you are acting on their behalf. Call 1-800-510-3102 or apply at energyassistance.nj.gov to start the process."
+        },
+        {
+          "question": "My parent's landlord pays the electric bill directly. Can they still qualify?",
+          "answer": "Possibly. If the lease or rental agreement shows that heating costs are included in the rent, the household may still qualify even if the tenant never writes a check directly to the utility. The key is that the lease must document the tenant's responsibility for those energy costs. Bring the lease to the application. If the lease is unclear, call 1-800-510-3102 before assuming your parent does not qualify."
+        },
+        {
+          "question": "Is there a savings or asset limit? Does my parent need to spend down bank accounts first?",
+          "answer": "No. New Jersey LIHEAP does not have an asset test based on the official program materials. There is no savings limit, no bank balance requirement, and no spend-down. Eligibility is based on household gross income and responsibility for home energy costs, not on how much money your parent has in savings."
+        },
+        {
+          "question": "My parent got a shutoff notice. Is it too late to apply?",
+          "answer": "No. Call 1-800-510-3102 immediately and tell them there is an active disconnection notice. LIHEAP includes emergency assistance provisions that may allow for faster action. New Jersey utility companies are also required to check for energy assistance program eligibility before disconnecting a customer. Do not wait to gather every document before calling in a crisis."
+        },
+        {
+          "question": "Can my parent receive LIHEAP and USF at the same time?",
+          "answer": "Yes, and the application is the same combined form. LIHEAP provides a one-time seasonal payment toward energy costs. USF (Universal Service Fund) provides an ongoing monthly discount on electric and gas bills for income-eligible households. They are separate programs with separate benefits. Completing the combined Home Energy/USF/Weatherization Application at energyassistance.nj.gov submits your parent for consideration for all three at once."
+        },
+        {
+          "question": "My parent needs help with summer cooling, not heating. Does LIHEAP cover that?",
+          "answer": "LIHEAP primarily covers heating costs, but New Jersey does offer assistance for medically necessary cooling. To qualify for cooling assistance, your parent's physician must document that the medical condition requires air conditioning. Average cooling awards run approximately $300, based on NJ utility program materials, though individual amounts vary. Apply through the same portal at energyassistance.nj.gov and note the medical cooling need."
+        },
+        {
+          "question": "What if we apply and the funds run out before a decision is made?",
+          "answer": "There is no formal statewide waitlist. If funding is exhausted before your application is processed, the application may not result in a benefit for that program year. This is the practical risk of applying late in the season. Applying early, ideally between October and December, significantly reduces this risk. If you are applying in spring, call 1-800-510-3102 to confirm funds are still available in your county before you start."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-800-510-3102",
+      "sourceUrl": "https://www.nj.gov/dca/dhcr/offices/hea.shtml",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-pace-program-all-inclusive-care-elderly",
+      "name": "New Jersey PACE (Program of All-Inclusive Care for the Elderly)",
+      "shortName": "NJ PACE",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, PACE covers everything: doctor visits, prescriptions, dental, home care, and transportation, all coordinated by one team.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local PACE organizations serving the applicant's county or region",
+            "type": "service-area"
+          },
+          {
+            "name": "New Jersey Division of Aging Services PACE page for statewide program information",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent qualifies for nursing home care but you want them to stay in their own home or yours, New Jersey PACE may be the most comprehensive program available to them. PACE replaces the fragmented system of separate doctors, specialists, home aides, and pharmacies with a single interdisciplinary team that manages all of your parent's care. That team handles primary care, dental care, prescriptions, home care, adult day health services, and transportation to every appointment.\n\nEligibility is based on clinical need and geography, not income or assets. Your parent must be 55 or older, require nursing home level of care (meaning a clinical assessment finds they need daily help with bathing, dressing, medication management, or similar tasks), and be able to live safely in the community with PACE support at the time they enroll. They must also live inside the service area of a local PACE organization. New Jersey has expanded PACE coverage across all 21 counties, but the specific provider and service boundaries still matter.\n\nFor families navigating Medicare and Medicaid, PACE is designed to work with both. If your parent has Medicaid, PACE is typically covered at no cost to them. If they have Medicare only, or both Medicare and Medicaid, PACE replaces most of what those programs would separately cover. Some participants who do not qualify for Medicaid pay a monthly premium. The NJ Division of Aging Services is the state authority for this program.",
+      "savingsRange": "",
+      "savingsSource": "Free service: PACE is covered by Medicare and Medicaid for eligible participants. Costs for those paying privately vary by local PACE organization and are not published statewide.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Needs nursing home level of care (daily help with bathing, dressing, or medication management)",
+          "Can live safely in the community with PACE support at enrollment",
+          "Lives inside a NJ PACE provider's service area",
+          "No income or asset test"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must meet nursing facility level of care, meaning a clinical assessment finds they need daily assistance with activities like bathing, dressing, eating, transferring, toileting, or managing medications. This is determined by the PACE organization's interdisciplinary team, not by the family.",
+        "otherRequirements": [
+          "Must live within the service area of a New Jersey PACE organization at the time of enrollment",
+          "Must be able to live safely in the community with PACE support (cannot require 24-hour institutional supervision that PACE cannot provide)",
+          "PACE is available to those on Medicare, Medicaid, both, or neither (private pay). Medicaid or Medicare enrollment is not itself a requirement for PACE eligibility, but it determines how costs are covered."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Contact the NJ Division of Aging Services or your local PACE organization directly; there is no single statewide application form, and the process begins with a clinical assessment by the PACE team.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check that your parent lives in a PACE service area",
+            "description": "Go to nj.gov/humanservices/doas/services/l-p/pace/ to find the PACE organizations operating in New Jersey. Your parent must live within a provider's coverage area to enroll. If you are unsure, call the NJ Division of Aging Services at (609) 943-3343 and ask which PACE organization, if any, serves your parent's zip code."
+          },
+          {
+            "step": 2,
+            "title": "Contact the local PACE organization directly",
+            "description": "Once you have identified the PACE provider for your parent's area, call them to request an enrollment inquiry. Each organization handles its own intake. They will ask about your parent's age, current care needs, and living situation to determine whether a clinical assessment makes sense."
+          },
+          {
+            "step": 3,
+            "title": "Gather key documents before the assessment call",
+            "description": "You do not need everything at the first call, but having proof of age, proof of NJ residence, and a current medication list ready will speed things up. If your parent has Medicare or Medicaid, have those card numbers or letters on hand."
+          },
+          {
+            "step": 4,
+            "title": "Complete the clinical eligibility assessment",
+            "description": "A PACE interdisciplinary team will conduct an assessment, typically at the PACE center or at your parent's home, to determine whether they meet nursing facility level of care and can safely live in the community with PACE support. This is the core eligibility gate."
+          },
+          {
+            "step": 5,
+            "title": "Review the enrollment agreement and begin services",
+            "description": "If your parent is found eligible, the PACE organization will walk you through an enrollment agreement covering how costs are handled (through Medicaid, Medicare, or private pay). Once signed, the PACE team takes over coordinating all care."
+          }
+        ],
+        "processingTime": "No statewide processing timeline is published. Timeline depends on the local PACE organization's assessment schedule.",
+        "waitlist": "No statewide waitlist has been identified in official NJ PACE materials. Availability depends on whether a PACE organization is operating in your parent's service area and whether they have capacity. Ask the local provider directly.",
+        "tip": "If your parent is being discharged from a hospital or rehabilitation facility, tell the discharge planner you are interested in PACE. They can often initiate the referral faster than an outside call.",
+        "urls": [
+          {
+            "label": "NJ Division of Aging Services: PACE Program Page",
+            "url": "https://www.nj.gov/humanservices/doas/services/l-p/pace/"
+          },
+          {
+            "label": "NJ Caregiver Hub: PACE Information",
+            "url": "https://nj.gov/caregivers/caregiver.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or state-issued ID showing date of birth)",
+        "Proof of New Jersey residence at an address within the PACE provider's service area (utility bill, lease agreement, or state-issued document)",
+        "Current medication list (names, dosages, and prescribing doctors)",
+        "Medicare card or Medicare Summary Notice, if your parent has Medicare",
+        "Medicaid ID card or Medicaid eligibility letter, if your parent has Medicaid",
+        "Medical records or a letter from a current physician documenting your parent's care needs and diagnoses",
+        "Insurance cards and contact information for current doctors and specialists",
+        "Legal documents authorizing you to act on your parent's behalf, if applicable (health care proxy, power of attorney, or guardianship paperwork)"
+      ],
+      "contacts": [
+        {
+          "label": "NJ Division of Aging Services",
+          "phone": "(609) 943-3343",
+          "description": "The state office overseeing PACE in New Jersey. Call to identify which PACE organization serves your parent's area and to get program information.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "NJ 2-1-1 Helpline",
+          "phone": "2-1-1",
+          "description": "General statewide helpline that can connect you to local aging services and transfer you to the right PACE contact if you are unsure who to call first.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent lives near a county border, ask both neighboring PACE organizations whether they can serve that address. Service area boundaries are drawn by each provider and may not follow county lines exactly.",
+        "PACE replaces Medicare and Medicaid as the primary payer for all covered services once your parent enrolls. Your parent will generally need to use the PACE team's network of providers rather than keeping their existing doctors, unless the PACE team arranges otherwise.",
+        "If your parent does not have Medicaid and is not yet enrolled, it may be worth applying for NJ FamilyCare (New Jersey's Medicaid program) at the same time you pursue PACE, since Medicaid coverage eliminates out-of-pocket costs for PACE participants.",
+        "PACE enrollment is voluntary. Your parent must agree to participate and can disenroll at any time, at which point their Medicare and Medicaid coverage reverts to the standard fee-for-service model."
+      ],
+      "relatedPrograms": [
+        "NJ FamilyCare (New Jersey Medicaid, which covers PACE costs for eligible participants)",
+        "NJ Global Options for Long-Term Care (Medicaid waiver for home and community-based services outside of PACE)",
+        "NJ Statewide Respite Care Program (short-term relief for family caregivers)",
+        "NJ Caregiver Hub (state resource connecting caregivers to local services)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What PACE actually replaces",
+          "body": "Most families managing a parent's care are coordinating between a primary care doctor, one or more specialists, a home health agency, a pharmacy, and transportation services. Each of those involves separate scheduling, separate billing, and separate conversations. Because PACE covers all of those under one program, your parent's entire care is managed by a single interdisciplinary team. That team includes doctors, nurses, social workers, therapists, and home care aides who communicate with each other directly. You no longer have to be the coordinator."
+        },
+        {
+          "type": "prose",
+          "title": "How costs work",
+          "body": "If your parent has both Medicare and Medicaid, PACE is typically available at no cost to them. If they have Medicare only, PACE covers the same services but may charge a monthly premium for the Medicaid portion of benefits. If they have neither Medicare nor Medicaid and choose to pay privately, the PACE organization sets a monthly rate. No statewide private-pay rate is published; contact the local PACE organization for their current figures.\n\nOnce enrolled, your parent cannot use Medicare or Medicaid to pay for services outside the PACE network, except in a genuine emergency. This is the trade-off: comprehensive, coordinated care in exchange for using the PACE team's providers."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent wants to stay home. Will PACE force them to go to a day center?",
+          "answer": "Adult day health services are part of PACE, and many participants attend a PACE center several days a week. However, PACE also provides home care. The interdisciplinary team builds a care plan around your parent's needs and preferences. The goal of PACE is to keep your parent living in the community, not to move them to a facility."
+        },
+        {
+          "question": "Can my parent keep their current doctors if they enroll in PACE?",
+          "answer": "Generally, no. Enrolling in PACE means your parent's care shifts to the PACE organization's interdisciplinary team. PACE becomes the primary manager of all medical and social services. If your parent has a long-standing specialist relationship they want to preserve, ask the local PACE organization during the assessment whether that provider can be incorporated into the care plan. It depends on the specific organization."
+        },
+        {
+          "question": "My parent has Medicare but not Medicaid. Can they still join PACE?",
+          "answer": "Yes. Medicare alone does not disqualify a person from PACE. If your parent has Medicare only, PACE will cover the Medicaid portion of services but may charge a monthly premium for it. The clinical eligibility requirements, age 55 or older, nursing facility level of care, and safe community living at enrollment, remain the same regardless of insurance status. Contact the local PACE organization for their current premium rates."
+        },
+        {
+          "question": "What happens if my parent's condition gets worse after they enroll?",
+          "answer": "The PACE interdisciplinary team continuously reassesses participants and adjusts care plans as needs change. If your parent eventually requires nursing home placement, PACE can arrange and cover that too, because nursing facility care is a covered PACE service. PACE is designed to follow a person's clinical trajectory, not to drop them when their needs increase."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the process themselves?",
+          "answer": "Yes. If you hold a health care proxy, durable power of attorney, or court-ordered guardianship for your parent, you can initiate the PACE inquiry and participate in the enrollment process on their behalf. Bring a copy of whatever legal document authorizes you to act for your parent when you contact the PACE organization."
+        },
+        {
+          "question": "What if there is no PACE provider in my parent's area?",
+          "answer": "New Jersey has expanded PACE to all 21 counties, but coverage still depends on a specific PACE organization operating in your parent's zip code. If no provider currently serves that area, New Jersey's Global Options for Long-Term Care Medicaid waiver and the NJ Statewide Respite Care Program may offer some of the same home and community-based services. Call the NJ Division of Aging Services at (609) 943-3343 to discuss alternatives."
+        },
+        {
+          "question": "Can my parent leave PACE if they change their mind?",
+          "answer": "Yes. PACE enrollment is voluntary and your parent can disenroll at any time. When they leave PACE, their Medicare and Medicaid coverage automatically reverts to the standard fee-for-service arrangement. There is no penalty for disenrolling, but they will need to re-establish care with outside providers after leaving."
+        },
+        {
+          "question": "Does PACE cover dental care and prescriptions, or just medical visits?",
+          "answer": "Yes. New Jersey PACE explicitly covers dental care and prescriptions in addition to primary care, specialist visits, home care, adult day health services, and transportation to appointments. Because PACE manages all covered services under one program, your parent does not pay separately for each type of service the way they would with standard Medicare or Medicaid."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(609) 943-3343",
+      "sourceUrl": "https://www.nj.gov/humanservices/doas/services/l-p/pace/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-family-caregiver-support-program",
+      "name": "New Jersey Family Caregiver Support Program",
+      "shortName": "NJ Caregiver Support",
+      "tagline": "If you're caring for a parent 60 or older in New Jersey, this program connects you to free counseling, respite options, and local support, with no income limit to get started.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging (AAA) in each county",
+            "type": "service-area"
+          },
+          {
+            "name": "Aging and Disability Resource Connection (ADRC)",
+            "type": "service-area"
+          },
+          {
+            "name": "NJ 211 caregiver navigation line",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are helping an aging parent stay home, this program is built for you, not your parent. The New Jersey Family Caregiver Support Program provides free services to family caregivers through local Area Agencies on Aging (AAA) in every New Jersey county. That can include caregiver counseling, information about respite options, help navigating local services, and connections to support groups. There is no income test to access basic services; middle-income families qualify alongside those with the greatest financial need.\n\nThe program covers caregivers of adults 60 and older, and caregivers of people of any age diagnosed with Alzheimer's disease or a related dementia. You do not need to be related by blood. You do not need a Medicaid case open. This is a state-funded caregiver support program, not a Medicaid benefit, so different rules apply.\n\nBecause services are delivered locally through county AAA and ADRC offices, what is available to you depends on where you live. Some counties have more respite resources and support groups than others. The first step is contacting your local AAA or calling 1-877-222-3737 to find out exactly what is offered in your area.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You are the caregiver (any age)",
+          "Your parent or loved one is 60 or older, OR has Alzheimer's or a related dementia at any age",
+          "No income limit to access basic services",
+          "No asset test",
+          "Available statewide through your county's Area Agency on Aging"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "You must be providing care to an adult age 60 or older, or to a person of any age with Alzheimer's disease or a related dementia.",
+          "Eligibility is based on the care recipient's age or diagnosis, not the caregiver's income or assets.",
+          "Priority for certain services is given to caregivers with the greatest social and economic need, which means limited services may be directed to those families first."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call 1-877-222-3737 to reach the NJ Aging and Disability Resource Connection, which will connect you to your county's AAA for a needs assessment and next steps.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the statewide ADRC line",
+            "description": "Call 1-877-222-3737. This is the New Jersey Aging and Disability Resource Connection line. Tell the counselor you are a family caregiver looking for caregiver support services. They will identify your county's Area Agency on Aging and connect you or give you the direct contact."
+          },
+          {
+            "step": 2,
+            "title": "Speak with your county AAA",
+            "description": "Your county's Area Agency on Aging conducts an intake conversation to understand your caregiving situation, your parent's needs, and what support would help most. Gather basic information beforehand: your parent's age, any diagnoses, and a brief description of the help you are currently providing."
+          },
+          {
+            "step": 3,
+            "title": "Get matched to local services",
+            "description": "Based on your conversation, the AAA will tell you which caregiver support services are available in your county. This may include counseling, caregiver training, support groups, respite referrals, or help navigating other programs. Specific offerings vary by county."
+          },
+          {
+            "step": 4,
+            "title": "Follow up as your situation changes",
+            "description": "There is no fixed enrollment period. Contact your county AAA again if your parent's care needs increase, if a crisis arises, or if you need a different type of support. You can also call NJ 211 (dial 2-1-1) at any time for general referrals to caregiver resources."
+          }
+        ],
+        "processingTime": "No official statewide processing timeline is published. Your county AAA sets its own intake schedule.",
+        "waitlist": "No statewide waitlist exists for this program. Availability of specific services (such as respite) can vary by county; ask your local AAA directly about current wait times for any service you need.",
+        "tip": "When you call, be ready to describe your current caregiving situation in plain terms: how many hours a day you help, what tasks you handle, and what is hardest right now. The more specific you are, the faster the AAA can match you to the right support.",
+        "urls": [
+          {
+            "label": "NJ Caregiver Support Program (official)",
+            "url": "https://nj.gov/caregivers/caregiver.html"
+          },
+          {
+            "label": "NJ 211 Caring for Caregivers",
+            "url": "https://nj211.org/initiative/caring-for-caregivers"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your parent's date of birth or age (to confirm they are 60 or older)",
+        "Your parent's diagnosis, if they have Alzheimer's disease or a related dementia (required if under 60)",
+        "Your contact information: name, phone number, and county of residence",
+        "A brief description of the caregiving you currently provide (tasks, hours, living situation)",
+        "Any relevant medical or functional information about your parent that helps describe the level of care needed"
+      ],
+      "contacts": [
+        {
+          "label": "NJ Aging and Disability Resource Connection (ADRC)",
+          "phone": "1-877-222-3737",
+          "description": "The primary entry point for caregiver support services statewide. Counselors can connect you to your county's Area Agency on Aging and explain what services are available near you.",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "NJ 211 Caregiver Line",
+          "phone": "211",
+          "description": "General helpline that can refer you to local caregiver resources and connect you to the right county office if you are unsure where to start. This line transfers rather than handling program intake directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "This is a caregiver support program, not a Medicaid program. Your parent does not need to be on Medicaid, and there is no income or asset test for basic services. Middle-income families are welcome.",
+        "If you are in a caregiving crisis (sudden hospitalization, caregiver burnout, no backup plan), tell the AAA that clearly when you call. Some counties prioritize crisis situations for faster intake.",
+        "Because services are delivered locally, what is available in Bergen County may differ from what is available in Cumberland County. If you feel your needs are not being met, ask whether adjacent county AAAs serve your area or have programs yours does not.",
+        "This program can run alongside Medicaid-based programs. If your parent is also on Medicaid or you are exploring Medicaid home care, caregiver support services here can supplement, not replace, those benefits."
+      ],
+      "relatedPrograms": [
+        "NJ Global Options for Long-Term Care (Medicaid home and community-based waiver)",
+        "NJ Personal Preference Program (Medicaid self-directed home care)",
+        "NJ SHIP (State Health Insurance Assistance Program, free Medicare counseling)",
+        "NJ Respite Coalition caregiver respite services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is for you, the caregiver, not just your parent.",
+          "body": "Most government programs require your parent to apply and qualify. This one is different. You, as the caregiver, are the primary beneficiary. The services (counseling, training, support groups, respite referrals) are designed to help you keep doing what you are doing without burning out. Your parent's age or diagnosis determines whether you are eligible, but the program exists to support you."
+        },
+        {
+          "type": "prose",
+          "title": "What services can you actually get?",
+          "body": "The program does not pay a fixed cash benefit or guarantee a specific package of services. Instead, your county AAA assesses your situation and connects you to what is available locally. Across the state, that typically includes: caregiver counseling and support groups, information about local respite care options (temporary relief so you can take a break), training to help you provide safer, more effective care, and help navigating other programs your parent may qualify for. The specific services and their availability depend on your county. No two county AAAs operate identically."
+        },
+        {
+          "type": "prose",
+          "title": "Who gets priority when services are limited?",
+          "body": "The program is open to all family caregivers meeting the basic criteria, regardless of income. But when a county has limited capacity for a specific service (like in-home respite), priority goes to caregivers with the greatest social and economic need. That means a middle-income family may wait longer for some services than a lower-income family in the same county. Ask your AAA directly how prioritization works for any service you are requesting."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is 58 and does not have dementia. Can I still get help through this program?",
+          "answer": "No. The program covers caregivers of adults who are 60 or older, or of people with Alzheimer's disease or a related dementia at any age. If your parent is under 60 and does not have a qualifying dementia diagnosis, this program does not apply. Contact NJ 211 (dial 2-1-1) for referrals to other caregiver resources that may serve younger care recipients."
+        },
+        {
+          "question": "Our household income is too high for most programs. Can we still apply?",
+          "answer": "Yes. There is no income test for basic access to caregiver support services under this program. Middle-income families qualify. Priority for some services goes to those with the greatest financial or social need, so you may wait longer for certain supports, but you are not disqualified. Call 1-877-222-3737 to start."
+        },
+        {
+          "question": "Does my parent have to be living with me to qualify?",
+          "answer": "The program does not require that you live with your parent. What matters is that you are providing care to an adult 60 or older, or a person with Alzheimer's or a related dementia. If you are managing their care from a distance or visiting regularly to help, you can still contact your county AAA to discuss what support is available."
+        },
+        {
+          "question": "What is the difference between this program and Medicaid home care?",
+          "answer": "They are completely separate. Medicaid home care programs (like NJ Global Options) pay for services provided to your parent and require your parent to meet Medicaid income and functional eligibility rules. The NJ Family Caregiver Support Program is a state-funded program that provides support to you as the caregiver, with no income test and no Medicaid enrollment required. You can use both at the same time if your parent qualifies for Medicaid."
+        },
+        {
+          "question": "How long will it take to actually get help after I call?",
+          "answer": "No statewide processing timeline is published for this program. Intake speed and service availability depend on your county's AAA. Ask directly when you call 1-877-222-3737 how long their current intake process takes and whether there is a wait for specific services like respite."
+        },
+        {
+          "question": "Can I get respite care paid for through this program?",
+          "answer": "Respite care (temporary relief so you can take a break) is one of the supports this program may help you access. However, it is not a guaranteed cash payment. Your county AAA will tell you whether funded respite options exist locally and whether there is a waitlist. Ask your AAA specifically about respite when you call."
+        },
+        {
+          "question": "My sibling and I both help care for our mother. Can we both get caregiver support?",
+          "answer": "Yes. The program serves family caregivers, and more than one person can be involved in a care situation. Contact your county AAA at 1-877-222-3737 to discuss the situation. The AAA will assess what is most useful given the full caregiving picture."
+        },
+        {
+          "question": "What if my needs change after I start receiving services?",
+          "answer": "Contact your county AAA again. There is no fixed enrollment period and no requirement to wait for a renewal cycle. If your parent's condition worsens, if a hospitalization occurs, or if your own capacity to provide care changes, the AAA can reassess and connect you to different or additional supports."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "1-877-222-3737",
+      "sourceUrl": "https://nj.gov/caregivers/caregiver.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-home-delivered-meals",
+      "name": "New Jersey Home Delivered Meals",
+      "shortName": "Home Delivered Meals",
+      "tagline": "If your parent is 60+ and homebound, they may qualify for a hot meal delivered to their door five days a week, at no cost, through their county's aging services office.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "County senior services or nutrition program offices",
+            "type": "service-area"
+          },
+          {
+            "name": "County Meals on Wheels providers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older, unable to cook for themselves, and doesn't have anyone at home to prepare meals, New Jersey's Home Delivered Meals program can arrange for a hot meal to be delivered to their door, typically five days a week. There is no statewide income limit. The program is not means-tested the way food stamps are; eligibility is based on your parent's functional situation, not their bank account.\n\nThe program is funded under the Older Americans Act and administered county by county through local Area Agencies on Aging. That means the specific delivery schedule, the intake process, and the paperwork your parent needs will depend on where they live. Most counties deliver on weekdays only, so this is not a seven-day solution on its own. A spouse living in the same home may also qualify for a meal if the primary participant is approved.\n\nApproval is not automatic after one phone call. Every application requires a needs assessment, which is a conversation with a county staff member about your parent's daily functioning and what support they already have at home. Plan for that step before your parent's first delivery. The fastest way to get started is to contact your county's Area Agency on Aging directly.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound (unable to leave home without difficulty)",
+          "Unable to prepare meals independently",
+          "No one available at home to prepare meals",
+          "Formal needs assessment required"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound (meaning they cannot easily leave home on their own) and unable to prepare their own meals. They must also lack a family member, friend, neighbor, or paid caregiver who is available to cook for them. A county staff member will conduct a needs assessment to confirm these conditions before approving services.",
+        "otherRequirements": [
+          "Must reside in the county where they apply (some counties require this)",
+          "Spouse living in the same home may also qualify for a meal if the primary participant is approved",
+          "Some counties require a doctor's note or medical documentation of homebound status",
+          "No statewide income limit; financial need may affect priority if county demand is high"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call your county's Area Agency on Aging to start; they will conduct a brief needs assessment by phone and tell you what documents your county requires.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your county's Area Agency on Aging",
+            "description": "New Jersey has county-level offices that run this program. Visit the NJ Division of Aging Services directory at nj.gov/humanservices/doas/home/ or call the NJ Aging and Disability Resource Connection at 1-877-222-3737 (Monday through Friday, 8am to 8pm) to get your county's direct number."
+          },
+          {
+            "step": 2,
+            "title": "Call and describe your parent's situation",
+            "description": "Tell the county office that your parent is 60 or older, homebound, and cannot prepare meals. They will screen your parent over the phone and tell you whether a full needs assessment is needed and what paperwork your county requires. Have your parent's date of birth and address ready."
+          },
+          {
+            "step": 3,
+            "title": "Complete the needs assessment",
+            "description": "A county staff member will conduct a formal assessment, either by phone or in person, to confirm your parent's homebound status, their ability to prepare food, and whether anyone else in the home can help. This step is required; services cannot start without it."
+          },
+          {
+            "step": 4,
+            "title": "Submit any required documents",
+            "description": "Some counties ask for a doctor's note confirming homebound status, proof of age, and proof of county residency. Requirements vary. Ask your county contact exactly what they need so you can submit everything at once and avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Wait for approval and first delivery",
+            "description": "Processing time varies by county. There is no published statewide timeline. Ask your county contact how long approval typically takes and whether there is a waitlist. Once approved, the county will schedule your parent's first delivery and tell you which days meals will arrive."
+          }
+        ],
+        "processingTime": "No statewide processing time is published. Timing varies by county; ask your county's Area Agency on Aging for a realistic estimate after the needs assessment.",
+        "waitlist": "No statewide waitlist policy is published. Some counties have waiting periods when demand is high. Ask your county office directly when you call.",
+        "tip": "If your parent is being discharged from a hospital or rehab facility and needs meals at home right away, tell the county that when you call. Some counties can expedite the assessment for post-discharge situations.",
+        "urls": [
+          {
+            "label": "NJ Division of Aging Services",
+            "url": "https://www.nj.gov/humanservices/doas/home/"
+          },
+          {
+            "label": "NJ Older Adult Resources Overview",
+            "url": "https://www.nj.gov/disabilities/resources-by-life-stages/older-adults/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or government-issued ID showing date of birth)",
+        "Proof of county residency, if required by your county (utility bill, lease, or official mail showing your parent's address)",
+        "Doctor's note or letter confirming homebound status and inability to prepare meals, if your county requests it",
+        "Completed county application form (your county's Area Agency on Aging will provide this)",
+        "Information about who else is in the household and whether anyone can prepare meals (you will be asked this during the needs assessment)"
+      ],
+      "contacts": [
+        {
+          "label": "NJ Aging and Disability Resource Connection",
+          "phone": "1-877-222-3737",
+          "description": "Call to get your county's Area Agency on Aging number and start the process. Staff can connect you to the right county office for your parent's address.",
+          "hours": "Mon-Fri 8am-8pm"
+        },
+        {
+          "label": "NJ Division of Aging Services",
+          "phone": "1-609-943-3436",
+          "description": "State-level office for general program questions. For applications, you will be directed to your county's local office.",
+          "hours": "Mon-Fri 8am-5pm"
+        }
+      ],
+      "applicationNotes": [
+        "There is no income limit for this program. Do not assume your parent earns too much to qualify; the eligibility test is about homebound status and the ability to prepare meals, not finances.",
+        "If your parent's county has a waitlist, ask whether financial need or medical urgency affects priority. Some counties prioritize applicants with greater need when demand exceeds capacity.",
+        "A spouse living in the same home may also receive a meal, but this is not automatic. Ask about it specifically when you call, as not all counties extend this to every household member."
+      ],
+      "relatedPrograms": [
+        "NJ Congregate Meals (senior center dining programs for those who can leave home)",
+        "NJ SNAP Food Assistance (monthly grocery benefit for low-income older adults)",
+        "NJ Personal Preference Program (self-directed home care for Medicaid-eligible seniors)",
+        "NJ Community Choice Counseling (free help exploring in-home care options)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "No income limit",
+          "body": "Many families skip this program assuming their parent earns too much. There is no statewide income test. Eligibility is based on your parent's physical situation: are they homebound, can they cook, and is there someone else at home to help? If the answer points to no, they likely qualify regardless of income."
+        },
+        {
+          "type": "prose",
+          "heading": "What the program does and does not cover",
+          "body": "Most counties deliver one hot meal per weekday, usually five days a week. This program is not designed to cover all meals for the week. It will not replace weekend meals, and it does not provide groceries or a meal stipend. If your parent needs more comprehensive food support, SNAP may cover the gaps for lower-income households. If your parent can leave home safely, congregate meal programs at local senior centers are another option and often have less paperwork."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has some savings. Does that disqualify them?",
+          "answer": "No. There is no asset limit and no income limit for New Jersey's Home Delivered Meals program. The program does not look at savings, investments, or income. Eligibility is based entirely on your parent's functional situation: are they homebound, can they prepare their own meals, and is there anyone at home to help them? Financial situation only comes into play in some counties if demand exceeds supply and staff need to prioritize applicants."
+        },
+        {
+          "question": "What if my parent has family nearby? Does that automatically disqualify them?",
+          "answer": "Not necessarily, but it is a factor the needs assessment will explore. The program requires that no family member, friend, neighbor, or paid caregiver is available to prepare meals. If you live nearby but work full-time and cannot cook for your parent daily, explain that during the assessment. The county will evaluate availability, not just physical proximity."
+        },
+        {
+          "question": "How long will it take before the first meal is delivered?",
+          "answer": "There is no published statewide timeline. Processing depends on your county's current caseload and whether there is a waitlist. Some counties can start services within a few weeks of the assessment; others may take longer. Ask your county's Area Agency on Aging for a realistic estimate when you call. If your parent is being discharged from a hospital, mention that; some counties can move faster in those situations."
+        },
+        {
+          "question": "Can my parent get meals on weekends too?",
+          "answer": "Most county programs deliver on weekdays only, typically five days a week. Weekend delivery is not standard statewide. Ask your county office what their specific schedule covers. For weekend meals, SNAP benefits or a local food pantry may help fill the gap."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to call themselves?",
+          "answer": "Yes, family members can initiate the application on their parent's behalf. When you call your county's Area Agency on Aging, tell them you are calling for a parent and provide your parent's name, address, and date of birth. The needs assessment may still involve speaking with your parent directly, either by phone or in person, but you can get the process started and handle most of the paperwork."
+        },
+        {
+          "question": "My parent's spouse also lives at home. Can the spouse get a meal too?",
+          "answer": "Possibly. Some counties will extend a meal to a spouse of an approved participant, but this is not automatic and not guaranteed statewide. Ask about it specifically when you contact your county's Area Agency on Aging. The spouse does not go through a separate full intake, but the county will need to know they are in the household."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "1-877-222-3737",
+      "sourceUrl": "https://www.nj.gov/disabilities/resources-by-life-stages/older-adults/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nj-ssi-state-supplement",
+      "name": "New Jersey SSI State Supplement",
+      "shortName": "NJ SSI Supplement",
+      "tagline": "If your parent is 65 or older with little to no income, they may qualify for up to $1,025 per month in combined federal and state cash support, paid automatically once SSI is approved.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Social Security Administration offices statewide",
+            "type": "service-area"
+          },
+          {
+            "name": "NJ Division of Disability Determination Services for SSI claims handling in New Jersey",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living on little to no income, New Jersey adds a cash supplement on top of the federal Supplemental Security Income (SSI) payment. There is no separate New Jersey application. The state supplement is paid automatically once your parent qualifies for SSI through Social Security.\n\nThe combined monthly amount depends on where your parent lives. A person living alone in their own home can receive up to $1,025.25 per month in 2026. Someone in a licensed residential health care facility can receive up to $1,204.05 per month. The amount is lower if your parent lives in someone else's household and receives support and maintenance from them, dropping to $706.98 per month in that situation.\n\nTo qualify, your parent's gross monthly income must be at or below $1,025.25 (for a single person) and their countable assets must stay under $2,000. The asset limit is strict: modest savings above that threshold can disqualify them. If your parent is already receiving SSI, they are already getting New Jersey's supplement. If they are not yet enrolled, the only door is a federal SSI application through Social Security.",
+      "savingsRange": "Up to $1,025.25/month for a single person living alone ($12,303/year); up to $1,204.05/month for someone in a licensed residential health care facility ($14,448.60/year) — 2026 combined federal and state amounts.",
+      "savingsSource": "SSA official 2026 payment amounts for New Jersey SSI recipients, published at ssa.gov/ssi. These are combined federal SSI plus New Jersey state supplement maximums, which vary by living arrangement.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled under SSA rules)",
+          "Gross monthly income at or below $1,025.25 (individual) or $1,516.35 (couple) in 2026",
+          "Countable assets under $2,000 (individual) or $3,000 (couple)",
+          "Must be a New Jersey resident",
+          "No separate NJ application required; approved SSI recipients receive the supplement automatically"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1025
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1516
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash",
+            "Checking and savings account balances",
+            "Other countable resources as defined by SSA under federal SSI rules"
+          ],
+          "exemptAssets": [
+            "Some assets are excluded under federal SSI rules; the full list of exemptions is governed by SSA, not a New Jersey-specific rule. Verify exemptions with SSA before applying."
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or meet SSA's noncitizen eligibility rules",
+          "Must live in a qualifying New Jersey living arrangement; the monthly payment amount changes based on whether your parent lives alone, with a spouse, in someone else's home, or in a licensed facility",
+          "Must meet all federal SSI nonfinancial requirements as determined by SSA"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply directly with Social Security by phone, online at ssa.gov, or in person at a local SSA office; there is no separate New Jersey supplement application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check income and asset limits before you call",
+            "description": "Your parent's gross monthly income must be at or below $1,025.25 (single person) and countable assets must be under $2,000. Cash and bank balances count toward that limit. If your parent owns their home and lives in it, that typically does not count as an asset under SSI rules, but verify with SSA."
+          },
+          {
+            "step": 2,
+            "title": "Start the application with Social Security",
+            "description": "Call SSA at 1-800-772-1213 (TTY: 1-800-325-0778), Monday through Friday, 8am to 7pm. You can also begin online at ssa.gov/ssi or visit a local Social Security office. SSA handles the entire SSI process, including New Jersey's supplement."
+          },
+          {
+            "step": 3,
+            "title": "Gather your documents before the interview",
+            "description": "SSA will schedule a phone or in-person interview to review your parent's information. Bring identification, proof of income, and information about all assets and living arrangements. See the document checklist on this page for the full list."
+          },
+          {
+            "step": 4,
+            "title": "Complete the SSA interview",
+            "description": "During the interview, SSA will ask about income, assets, living situation, and household members. Be specific about where your parent lives and whether anyone provides them food or housing support, because those answers directly affect the monthly payment amount."
+          },
+          {
+            "step": 5,
+            "title": "Receive the decision and first payment",
+            "description": "SSA will send a written decision. If approved, the combined federal and New Jersey payment is issued together as one monthly deposit. You do not need to contact a separate New Jersey agency."
+          }
+        ],
+        "processingTime": "Processing time varies. SSA does not publish a standard timeframe for New Jersey SSI applications in the sources available. Applications involving a disability or blindness determination can take longer than age-based applications. Ask SSA when you call.",
+        "waitlist": null,
+        "tip": "If your parent is 65 or older and is applying based on age alone (not disability), the process is generally faster because SSA does not need to make a separate disability determination. Mention your parent's age upfront when you call.",
+        "urls": [
+          {
+            "label": "Apply for SSI online at SSA.gov",
+            "url": "https://www.ssa.gov/ssi/"
+          },
+          {
+            "label": "SSA SSI benefit information",
+            "url": "https://www.ssa.gov/ssi/text-benefits-ussi.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card (or record of the Social Security number)",
+        "Government-issued photo ID such as a driver's license, state ID, or passport",
+        "Birth certificate or other proof of age",
+        "Most recent Social Security award letter or benefit verification letter (if your parent already receives any Social Security benefit)",
+        "Proof of all monthly income: pension statements, retirement account distributions, any wages, or other income sources",
+        "Current balances for all checking and savings accounts (SSA will ask for this; bring recent statements or be ready to state the balance)",
+        "Information about any other assets: certificates of deposit, stocks, bonds, or other financial accounts",
+        "Proof of New Jersey residency, such as a utility bill, lease agreement, or bank statement showing a New Jersey address",
+        "Information about the living arrangement: who else lives in the home, whether anyone provides food or financial support, and whether rent is paid",
+        "If your parent lives in a licensed residential health care facility, the name and address of the facility",
+        "Medicare or Medicaid card if your parent has one (not required, but SSA may ask)",
+        "Legal documents if you are applying on behalf of your parent, such as a power of attorney or guardianship papers"
+      ],
+      "contacts": [
+        {
+          "label": "Social Security Administration",
+          "phone": "1-800-772-1213",
+          "description": "The only application door for SSI and the New Jersey state supplement. Call to apply, ask eligibility questions, or schedule an in-person appointment at a local SSA office.",
+          "hours": "Mon-Fri 8am-7pm"
+        },
+        {
+          "label": "SSA TTY Line (for deaf or hard of hearing)",
+          "phone": "1-800-325-0778",
+          "description": "TTY-accessible line for the same SSI application and eligibility questions.",
+          "hours": "Mon-Fri 8am-7pm"
+        },
+        {
+          "label": "NJ Division of Disability Determination Services",
+          "phone": null,
+          "description": "Handles SSI disability determinations for New Jersey applicants under 65 who are applying based on disability or blindness. SSA will route disability cases to this office automatically; you do not contact them separately.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The New Jersey state supplement is not a separate benefit you apply for. It is added automatically to your parent's SSI check once SSA approves them. If your parent is already getting SSI and living in New Jersey, they are already receiving it.",
+        "Where your parent lives changes the monthly payment. A parent living alone gets up to $1,025.25/month. A parent who lives in someone else's household and receives free or reduced-cost food or housing from that person gets only $706.98/month. Be accurate about the living situation when you apply.",
+        "The $2,000 asset limit is firm. Even modest savings above that amount can result in denial. Before applying, review bank balances carefully. Some assets, such as the home your parent lives in, are excluded under federal SSI rules, but verify the full list with SSA.",
+        "If your parent is 65 or older and does not have a disability, SSA does not need to do a disability determination, which simplifies and can shorten the process. Apply as soon as you believe they may qualify, because SSI does not pay benefits retroactively for months before the application date."
+      ],
+      "relatedPrograms": [
+        "New Jersey Medicaid (NJ FamilyCare) for low-income seniors",
+        "Medicare Savings Programs (Extra Help with Part D premiums)",
+        "New Jersey PAAD (Pharmaceutical Assistance to the Aged and Disabled)",
+        "New Jersey SNAP food assistance for seniors"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Monthly payment by living situation (2026)",
+          "content": "Living alone or with others in own household: $1,025.25/month. Living with a spouse not eligible for SSI: $1,146.99/month. Living in someone else's household receiving support and maintenance: $706.98/month. Living in a licensed residential health care facility: $1,204.05/month. Living in a public general hospital or Medicaid-approved long-term care facility: $50.00/month. Couple living alone or with others: $1,475.35/month. Couple in someone else's household: $1,059.75/month. Couple in a licensed residential health care facility: $2,188.35/month. Source: SSA 2026 payment amounts for New Jersey."
+        },
+        {
+          "type": "prose",
+          "title": "Why the living arrangement matters so much",
+          "content": "SSI payment amounts are not the same for every recipient. The federal rules reduce the payment when someone provides your parent with free or discounted food or housing, because SSA treats that support as income. If your parent moves in with you and you cover their meals and rent without charging them market rate, their monthly SSI payment can drop to the 'living in someone else's household' rate of $706.98/month rather than the $1,025.25/month rate for someone living independently. This is one of the most common surprises families encounter after a parent moves in. Discuss the living arrangement honestly with SSA during the application."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that count against the $2,000 asset limit?",
+          "answer": "Under federal SSI rules, the home your parent lives in is generally excluded from countable resources and does not count toward the $2,000 limit. However, a second property, a vacation home, or a property they do not live in would typically count. Verify your parent's specific situation with SSA at 1-800-772-1213 before assuming any property is excluded."
+        },
+        {
+          "question": "My parent already receives Social Security retirement benefits. Can they still qualify?",
+          "answer": "Yes, but their Social Security retirement income counts toward the $1,025.25/month gross income limit. SSI excludes the first $20 of any income, so a person receiving $1,005 or less in monthly Social Security income may still be eligible. The SSI payment would be reduced dollar-for-dollar by countable income above excluded amounts, so the actual check may be small. It is still worth applying if income is close to the limit."
+        },
+        {
+          "question": "My parent moved in with me to save money. Will that change what they receive?",
+          "answer": "Probably yes. If your parent lives in your home and you provide food or housing at no charge or below market rate, SSA applies the 'in-kind support and maintenance' rules, which reduce the monthly SSI payment. In 2026, a person in that situation receives $706.98/month instead of $1,025.25/month. If your parent pays their fair share of household expenses, the reduction may not apply. Discuss the details with SSA when you apply."
+        },
+        {
+          "question": "Can I apply for SSI on behalf of my parent if they cannot manage it themselves?",
+          "answer": "Yes. A family member or other representative can apply on behalf of a parent who is unable to manage their own affairs. You may need to show legal authority such as a power of attorney, or SSA may designate you as a 'representative payee' who receives and manages the benefit on your parent's behalf. Bring any legal documents you have to the application interview."
+        },
+        {
+          "question": "How long will the application take?",
+          "answer": "SSA does not publish a standard processing time for New Jersey SSI applications. Applications for adults 65 or older who qualify based on age (not disability) typically move faster because there is no separate disability determination. Applications involving a disability claim may take several months. Ask SSA directly when you call 1-800-772-1213, as timelines can vary by office workload."
+        },
+        {
+          "question": "My parent qualifies for both SSI and Medicaid. Should they apply for both separately?",
+          "answer": "In New Jersey, SSI recipients are generally automatically enrolled in Medicaid. You do not need to submit a separate Medicaid application for your parent once SSI is approved. Confirm automatic Medicaid enrollment with SSA or the New Jersey Division of Medical Assistance and Health Services after approval, since Medicaid coverage can significantly reduce out-of-pocket medical costs."
+        },
+        {
+          "question": "What if my parent's income or assets go over the limit after they are approved?",
+          "answer": "Your parent is required to report changes in income, assets, or living arrangements to SSA. Exceeding the $2,000 asset limit or the income threshold can reduce or end the benefit. Report changes promptly by calling 1-800-772-1213. Failure to report changes can result in an overpayment that SSA will require your parent to pay back."
+        },
+        {
+          "question": "Can my parent receive SSI and SNAP at the same time?",
+          "answer": "Yes. SSI and SNAP are separate programs and your parent can receive both. In fact, SSI recipients in New Jersey may be categorically eligible for SNAP, which can simplify that application. Apply for SNAP through the New Jersey Division of Family Development or at nj.gov/humanservices/dfd/programs/."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-800-772-1213",
+      "sourceUrl": "https://www.ssa.gov/ssi/text-benefits-ussi.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

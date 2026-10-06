@@ -1,0 +1,37 @@
+[
+  {
+    "state": "CO",
+    "id": "co-medicaid-aged-blind-disabled",
+    "name": "Health First Colorado (Medicaid) for Aged, Blind, and Disabled",
+    "legacyId": "health-first-colorado-medicaid-for-aged-blind-and-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "CO",
+    "id": "co-leap-energy-assistance",
+    "name": "Colorado Energy Assistance Program (LEAP)",
+    "legacyId": "colorado-energy-assistance-program-leap",
+    "programType": "benefit"
+  },
+  {
+    "state": "CO",
+    "id": "co-senior-property-tax-exemption",
+    "name": "Senior Property Tax Exemption (PTEX)",
+    "legacyId": "senior-property-tax-exemption-ptex",
+    "programType": "benefit"
+  },
+  {
+    "state": "CO",
+    "id": "co-home-delivered-meals",
+    "name": "Home-Delivered Meals",
+    "legacyId": "home-delivered-meals",
+    "programType": "benefit"
+  },
+  {
+    "state": "CO",
+    "id": "co-family-caregiver-support-program",
+    "name": "Family Caregiver Support Program",
+    "legacyId": "family-caregiver-support-program",
+    "programType": "benefit"
+  }
+]

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.910Z
+ * Last updated: 2026-10-06T06:44:48.379Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2325,6 +2325,614 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/ombudsman/long-term-care-ombudsman/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "in-energy-assistance-program-ieap",
+      "name": "Indiana Energy Assistance Program (IEAP)",
+      "shortName": "Indiana Energy Assistance",
+      "tagline": "If your parent rents or owns in Indiana and income is modest, this program can help pay their heating and energy bills once per program year.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Indiana Housing and Community Development Authority statewide portal",
+            "type": "service-area"
+          },
+          {
+            "name": "County or regional Local Service Providers",
+            "type": "service-area"
+          },
+          {
+            "name": "Authorized local intake sites and subcontractors such as township trustees in some areas",
+            "type": "service-area"
+          },
+          {
+            "name": "Marion County / Indy EAP for Indianapolis-area applicants",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is a low- or moderate-income Indiana resident struggling to keep up with heating and energy costs, the Indiana Energy Assistance Program (IEAP) can apply a one-time benefit directly to their utility account each program year. The benefit amount varies by household size, income, and the local provider administering the program; IHCDA does not publish a fixed statewide dollar amount.\n\nThe program is open to both renters and homeowners. Your parent does not need to be a senior to qualify, but many older adults on fixed incomes are eligible. Income is measured using the most recent three months of household earnings for everyone in the home who is 18 or older. For a single-person household, the monthly income limit is approximately $2,796 (based on 60% of Indiana State Median Income for program year 2026-2027).\n\nApplications open October 1, 2026 at 8:00 AM Eastern and close April 30, 2027 at 5:00 PM Eastern. Because this window is seasonal and non-renewable until the next program year, applying as early as possible matters. Your parent must apply through the Local Service Provider that covers their home county, not through a statewide office.",
+      "savingsRange": "",
+      "savingsSource": "The Indiana Housing and Community Development Authority (IHCDA) administers IEAP as a federally funded LIHEAP block grant. Benefit amounts are set locally by each county's service provider and vary by household size, income, fuel type, and available funding. IHCDA does not publish a fixed statewide benefit amount. See in.gov/ihcda for program details.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Indiana resident for at least 30 days",
+          "Single-person household income at or below $2,796/month (60% State Median Income)",
+          "Income based on all household members age 18 and older, most recent 3 months",
+          "Must apply through the Local Service Provider for your home county",
+          "Application window: October 1, 2026 through April 30, 2027"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2796
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3659
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4517
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 5377
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 6238
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 7098
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 7259
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 7421
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 7582
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 7743
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Indiana and have resided at the dwelling for at least 30 days",
+          "Must be a U.S. citizen, U.S. national, or qualified non-citizen (per local provider guidance)",
+          "Income counted: all household members age 18 and older during the application period",
+          "Must apply through the Local Service Provider assigned to the primary residence address",
+          "Application window: October 1, 2026 at 8:00 AM Eastern through April 30, 2027 at 5:00 PM Eastern"
+        ],
+        "povertyLevelReference": "60% State Median Income (SMI)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is through the IHCDA online portal at ihcda.rhsconnect.com, or by contacting your county's Local Service Provider by phone to request an appointment or paper application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm the application window is open",
+            "description": "IEAP applications open October 1, 2026 at 8:00 AM Eastern. Applying before this date is not possible. If you are reading this before October 1, gather documents now so you are ready to apply on opening day."
+          },
+          {
+            "step": 2,
+            "title": "Find your county's Local Service Provider",
+            "description": "Every applicant must apply through the Local Service Provider for their home county. Visit in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/ to find the provider for your parent's address. Indianapolis-area families can contact Indy EAP directly through the Marion County office."
+          },
+          {
+            "step": 3,
+            "title": "Choose how to apply: online, phone, mail, or in person",
+            "description": "Online: Apply at ihcda.rhsconnect.com starting October 1. By phone: Call your county's Local Service Provider to request a phone appointment or a paper application by mail. In person: Visit the Local Service Provider office or an authorized intake site such as your township trustee's office."
+          },
+          {
+            "step": 4,
+            "title": "Gather and submit your documents",
+            "description": "You will need proof of income for all household members age 18 and older covering the most recent three months, proof of Indiana residency, a current utility bill showing the account name and address, and any additional forms your local provider requests. Submit everything together to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Follow up with your Local Service Provider",
+            "description": "Processing time is not guaranteed statewide; it varies by county and provider workload. After submitting, contact your local provider directly to confirm receipt and ask about the expected timeline. If the benefit is approved, it will be applied directly to your parent's utility account."
+          }
+        ],
+        "processingTime": "No statewide processing time guarantee exists. Timing varies by county and local provider workload. Contact your county's Local Service Provider directly after submitting to ask about the expected timeline.",
+        "waitlist": "No formal statewide waitlist exists. Some counties may experience backlogs or appointment delays during peak periods, particularly near the October opening and April deadline.",
+        "tip": "Apply as close to October 1 as possible. Funding is limited and distributed over the program year; early applicants are more likely to be served before funds are exhausted in their county.",
+        "urls": [
+          {
+            "label": "IHCDA Online Application Portal",
+            "url": "https://ihcda.rhsconnect.com/"
+          },
+          {
+            "label": "IEAP Program Information and Local Provider Finder",
+            "url": "https://www.in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent utility bill showing your parent's name and service address (electric, gas, or heating fuel account)",
+        "Proof of Indiana residency showing the current home address (lease agreement, mortgage statement, or utility bill)",
+        "Proof of income for the most recent three months for all household members age 18 and older: this can include Social Security award letters, pension or retirement statements, pay stubs, or SSA-1099 forms",
+        "Social Security award letter or benefit verification letter showing current monthly benefit amount",
+        "Government-issued photo ID for the applicant (state ID, driver's license, or passport)",
+        "Proof of U.S. citizenship or qualified non-citizen status for the applicant (Social Security card, passport, or immigration documents as applicable)",
+        "Names and dates of birth for all people living in the household",
+        "Any additional forms requested by the county Local Service Provider, which may vary by office"
+      ],
+      "contacts": [
+        {
+          "label": "IHCDA Online Application Portal",
+          "phone": null,
+          "description": "Apply directly online at ihcda.rhsconnect.com starting October 1. This is the fastest option if your parent has internet access.",
+          "hours": "Available during the program window: October 1, 2026 through April 30, 2027"
+        },
+        {
+          "label": "IEAP Local Service Provider (county office)",
+          "phone": null,
+          "description": "Each county has its own Local Service Provider that handles phone appointments, in-person applications, and paper applications by mail. Find the office for your parent's address at in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/. Phone numbers vary by county.",
+          "hours": "Hours vary by county office; contact your local provider directly"
+        },
+        {
+          "label": "Indiana 2-1-1",
+          "phone": "2-1-1",
+          "description": "Indiana's statewide helpline can help you locate your county's Local Service Provider if you are unsure where to apply. This line does not process IEAP applications but can direct you to the right office.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a utility shutoff notice, contact the Local Service Provider immediately and mention the disconnection threat. Some providers can expedite processing for households facing active disconnection.",
+        "Income is measured over the most recent three months for all household members age 18 and older, not just your parent's income. If a working adult child lives in the home, their income counts toward the household total.",
+        "Paper, in-person, and phone applications all go through the county Local Service Provider, not through a single statewide office. If your parent moves to a different county, they must apply through the new county's provider.",
+        "Some county-level providers publish their own intake instructions or slightly different thresholds. Confirm the specific requirements with the provider serving your parent's home address before submitting documents."
+      ],
+      "relatedPrograms": [
+        "Indiana Weatherization Assistance Program (WAP): free home energy efficiency improvements for income-eligible households",
+        "Indiana Lifeline Telephone Assistance: discounted phone service for low-income households",
+        "SNAP (Supplemental Nutrition Assistance Program): monthly food benefits for low-income Indiana residents",
+        "Indiana Medicaid: health coverage for low-income adults that may also connect to other utility and assistance programs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The April 30 deadline is firm",
+          "body": "If your parent misses the April 30, 2027 at 5:00 PM Eastern deadline, there is no extension. The next opportunity to apply will be when the following program year opens in October 2027. Apply early in the season."
+        },
+        {
+          "type": "callout",
+          "title": "No asset test",
+          "body": "IEAP does not have a statewide asset limit. Your parent is not required to spend down savings or report bank balances to qualify. Eligibility is based on household income and residency only."
+        },
+        {
+          "type": "prose",
+          "title": "Renters can apply too",
+          "body": "Your parent does not need to own their home to receive IEAP benefits. Renters qualify as long as they pay for energy costs directly or through their rent. The benefit is applied to the utility account on file for the residence."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I apply for my elderly parent on their behalf?",
+          "answer": "Yes. An authorized representative, such as an adult child, can apply on behalf of an elderly or disabled household member. You will need to identify yourself as the representative during the application and may be asked to provide documentation of your relationship or authority. Contact the county Local Service Provider to confirm their specific requirements before applying."
+        },
+        {
+          "question": "My parent's Social Security income is their only income. Do they likely qualify?",
+          "answer": "If your parent lives alone and receives $2,796 or less per month in total household income, they are within the income limit for a one-person household (60% of Indiana State Median Income for the 2026-2027 program year). Social Security income counts toward the three-month income total. Many single seniors on Social Security only do fall under this threshold, but the local provider makes the final determination."
+        },
+        {
+          "question": "My parent lives with me. Does my income count against them?",
+          "answer": "Yes. IEAP counts the income of all household members age 18 and older who live at the address during the application period. If you and your parent share a home, your income is included in the household total. Check the income table: a two-person household must have combined monthly income at or below $3,659 to qualify."
+        },
+        {
+          "question": "What if my parent faces a shutoff notice before October 1 or before the application is processed?",
+          "answer": "IEAP applications cannot be submitted before October 1, 2026. If your parent faces an imminent shutoff before that date or while waiting for processing, contact the county Local Service Provider immediately and explain the situation. Some providers can expedite cases involving active disconnection notices. Also contact Indiana 2-1-1 (dial 2-1-1) to ask about any emergency utility assistance programs available outside the IEAP window."
+        },
+        {
+          "question": "Can my parent apply for IEAP and the Indiana Weatherization Assistance Program at the same time?",
+          "answer": "Yes. IEAP and the Indiana Weatherization Assistance Program (WAP) are separate programs and can be pursued simultaneously. WAP provides free energy efficiency improvements to the home itself, such as insulation or furnace repair, which can lower long-term energy costs. Ask your Local Service Provider whether they also administer weatherization services or can refer you to the weatherization agency in your county."
+        },
+        {
+          "question": "How does the benefit get paid? Does my parent receive a check?",
+          "answer": "The benefit is applied directly to your parent's utility account; it is not paid as cash or a check to the household. The amount credited to the account varies by household circumstances, income, fuel type, and available local funding. IHCDA does not publish a fixed statewide benefit amount."
+        },
+        {
+          "question": "What if my parent's county provider has a long wait for appointments?",
+          "answer": "Some counties experience backlogs, especially shortly after the October 1 opening and approaching the April 30 deadline. If appointment waits are long, ask whether the provider accepts paper applications by mail or online applications through ihcda.rhsconnect.com, which may not require an in-person appointment. Applying online on or shortly after October 1 is the most likely way to avoid delays."
+        },
+        {
+          "question": "My parent was denied last year. Can they apply again this program year?",
+          "answer": "Yes. IEAP eligibility is determined fresh each program year based on current household income and circumstances. A denial in a prior year does not affect this year's application. If income or household size has changed, the outcome may be different. Apply through the Local Service Provider for your parent's current home address."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": null,
+      "sourceUrl": "https://www.in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "in-nfcsp-caregiver-support",
+      "name": "National Family Caregiver Support Program (NFCSP)",
+      "shortName": "Family Caregiver Support",
+      "tagline": "Free counseling, training, respite care, and support groups for Indiana adults caring for an aging parent or loved one.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Indiana Area Agencies on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "INconnect members",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are an unpaid family caregiver helping an older parent or relative, Indiana's National Family Caregiver Support Program can connect you with free services designed to reduce your load: individual counseling, caregiver training, support groups, respite care (temporary relief so you can take a break), and help connecting to additional resources. There is no income test and no asset test. The program is built for caregivers like you, not just for the person you are caring for.\n\nTo qualify, the person you care for must fall into one of three categories: a person age 60 or older; a child or an adult age 18 to 59 with a disability, when the caregiver is a grandparent or older relative age 55 or older; or a person of any age with Alzheimer's disease or a related disorder. You do not need to be related by blood; informal and family caregivers both qualify, as long as you are unpaid.\n\nServices are delivered through your local Area Agency on Aging, so what is available and how quickly you can access it depends on your region. The program may ask for a voluntary contribution if you are able, but your ability to contribute has no bearing on whether you receive services. Call 800-713-9023 to find your local agency and start.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "No income limit",
+          "No asset limit",
+          "Unpaid family or informal caregiver",
+          "Care recipient must be 60+, or have Alzheimer's/related disorder, or be a child/adult with disability when caregiver is 55+",
+          "Available statewide through local Area Agencies on Aging"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "You must be an unpaid caregiver (paid professional caregivers do not qualify)",
+          "The person you care for must be age 60 or older; OR a person of any age with Alzheimer's disease or a related disorder; OR a child or adult age 18-59 with a disability where the caregiver is a grandparent or older relative age 55 or older",
+          "Services are provided through Indiana Area Agencies on Aging and INconnect member organizations"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call 800-713-9023 to be connected to your local Area Agency on Aging, which will screen you and describe what services are available in your region.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Indiana FSSA helpline",
+            "description": "Call 800-713-9023. Tell the intake staff you are an unpaid family caregiver and want to connect with the Family Caregiver Support Program. They will identify your local Area Agency on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Complete a local intake",
+            "description": "Your local Area Agency on Aging will ask for basic information: the care recipient's age, your caregiving relationship, and how to reach you. There is no lengthy financial application. Some agencies conduct this intake by phone; others may do it in person."
+          },
+          {
+            "step": 3,
+            "title": "Learn what services are available in your region",
+            "description": "The mix of services (respite care, counseling, training, support groups) varies by local agency. Ask specifically what respite options exist and whether there is a waitlist for any service you need."
+          },
+          {
+            "step": 4,
+            "title": "Begin receiving services",
+            "description": "Once intake is complete, you will be connected to services your local agency can provide. No income or asset documentation is required."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Contact your local Area Agency on Aging for a realistic timeline in your region.",
+        "waitlist": "No statewide waitlist policy is published. Availability depends on your local Area Agency on Aging's capacity and regional funding. Ask about wait times when you call.",
+        "tip": "When you call, ask specifically about respite care availability and whether there is a waiting list. Respite options vary significantly by county and may have limited openings.",
+        "urls": [
+          {
+            "label": "Indiana FSSA Resource Guide",
+            "url": "https://www.in.gov/fssa/resource-guide/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Care recipient's date of birth or age (to confirm they meet one of the eligible categories)",
+        "Your name and contact information as the caregiver",
+        "A brief description of your caregiving relationship (for example, adult child caring for a parent, or grandparent caring for a grandchild with a disability)",
+        "Any local intake forms requested by your Area Agency on Aging at the time of your appointment"
+      ],
+      "contacts": [
+        {
+          "label": "Indiana FSSA Caregiver Support Line",
+          "phone": "800-713-9023",
+          "description": "Call to be connected to your local Area Agency on Aging and begin the intake process for caregiver support services",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "Indiana FSSA Resource Guide (online)",
+          "phone": null,
+          "description": "The official state resource page at in.gov/fssa/resource-guide/ lists local Area Agency on Aging contacts and additional program information",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "There is no income or asset test. Many caregivers assume they will not qualify because they are not low-income. That assumption is wrong for this program.",
+        "Services and wait times vary by county. If one service (such as respite care) is not immediately available in your area, ask the agency to place you on the list and ask what alternatives exist in the meantime.",
+        "If the agency asks for a voluntary contribution, you are not required to pay. Inability to contribute will not affect your access to services."
+      ],
+      "relatedPrograms": [
+        "PACE (Program of All-inclusive Care for the Elderly) Indiana",
+        "Indiana Medicaid Home and Community-Based Services (HCBS) Waivers",
+        "Alzheimer's Association Indiana Chapter caregiver support",
+        "Indiana's Older Americans Act Title III Home and Community Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "This program is for you, the caregiver.",
+          "body": "Most benefit programs are set up around the older adult. NFCSP is different. It exists to support the person doing the caregiving: you. Counseling, training, and respite care are all designed to help you sustain your role without burning out. You do not need to be a parent or child of the person you care for; informal caregivers qualify."
+        },
+        {
+          "type": "callout",
+          "heading": "What \"respite care\" means in practice",
+          "body": "Respite care means temporary relief for you. A trained helper steps in to care for your parent or loved one for a set period so you can rest, handle other responsibilities, or simply take a break. The exact form respite takes (in-home help, adult day services, short-term facility stays) depends on your local agency and what is funded in your region."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "I am not low-income. Does that disqualify me?",
+          "answer": "No. There is no income limit and no asset limit for this program. Eligibility is based on your caregiving relationship and the age or diagnosis of the person you care for, not your household finances. A voluntary contribution may be requested if you are able, but it has no bearing on whether you qualify."
+        },
+        {
+          "question": "I am caring for my spouse who has Alzheimer's. Do I qualify even though they are under 60?",
+          "answer": "Yes. The program has a separate eligibility path for caregivers of people with Alzheimer's disease or a related disorder, regardless of the care recipient's age. Call 800-713-9023 and explain the situation when you reach your local Area Agency on Aging."
+        },
+        {
+          "question": "How long is the wait for respite care?",
+          "answer": "No statewide waiting time is published. Availability depends entirely on your local Area Agency on Aging and how much respite funding it has. Some regions have openings; others maintain waitlists. Ask directly when you call: \"Is there a waitlist for respite care in my county, and how long is it?\""
+        },
+        {
+          "question": "I am not the parent or child of the person I care for. Do I still qualify?",
+          "answer": "Yes. The program covers informal caregivers, not just immediate family members. As long as you are providing unpaid care and the person you care for meets one of the eligible categories (age 60+, Alzheimer's diagnosis, or a child or adult with a disability when you are 55+), you qualify."
+        },
+        {
+          "question": "Can I use this program at the same time as other Indiana caregiver or aging services?",
+          "answer": "Yes. NFCSP does not prohibit participation in other programs. If your parent is enrolled in a Medicaid waiver or PACE, you can still access NFCSP services for yourself as their caregiver. Your local Area Agency on Aging can help coordinate what is available."
+        },
+        {
+          "question": "What happens if my caregiving situation changes after I enroll?",
+          "answer": "Contact your local Area Agency on Aging to report changes in the care recipient's condition or your caregiving role. They can reassess what services are appropriate. Because services are locally administered, the reassessment process varies by agency."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "800-713-9023",
+      "sourceUrl": "https://www.in.gov/fssa/resource-guide/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "in-medicaid-aged-blind-disabled",
+      "name": "Indiana Medicaid for the Aged, Blind and Disabled",
+      "shortName": "Indiana ABD Medicaid",
+      "tagline": "If your parent is 65 or older, blind, or disabled and living in Indiana, they may qualify for full Medicaid coverage of doctor visits, prescriptions, hospital care, and in-home support services at little or no cost.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Indiana Family and Social Services Administration (FSSA)",
+            "type": "service-area"
+          },
+          {
+            "name": "Division of Family Resources (DFR)",
+            "type": "service-area"
+          },
+          {
+            "name": "Indiana Medicaid member programs: Traditional Medicaid, Hoosier Care Connect, Indiana PathWays for Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Indiana Medicaid for the Aged, Blind and Disabled (ABD) provides health coverage for Hoosiers who are 65 or older, legally blind, or living with a qualifying disability. If your parent fits that profile and has limited income and assets, this program can cover their doctor visits, prescription drugs, inpatient and outpatient hospital care, emergency services, and medically necessary treatments. For parents who need hands-on daily support, certain pathways also cover in-home attendant care, adult day services, home-delivered meals, respite for family caregivers, and home modifications.\n\nThis is not one single plan. Indiana routes ABD members into different programs depending on age, medical need, and whether they need long-term services. Adults 60 and older are typically served through Indiana PathWays for Aging (launched July 1, 2024). Others may be placed into Traditional Medicaid or Hoosier Care Connect. Each pathway covers the core Medicaid benefit package, but the plan your parent lands in shapes which providers they see and what extra services they can access.\n\nIf your parent already receives SSI, they automatically receive Medicaid. No separate application is needed. For everyone else, the process starts with a single application at the Indiana FSSA Benefits Portal or by calling 1-800-403-0864.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, legally blind, or disabled under Social Security standards",
+          "Indiana resident",
+          "Income limits vary by pathway (Aged and Disabled HCBS waiver: no more than 300% of the federal SSI amount)",
+          "Asset limit: $2,000 for a single person in most ABD categories",
+          "SSI recipients qualify automatically"
+        ],
+        "ageRequirement": "65+ (or any age if blind or disabled; PathWays for Aging is for age 60+)",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Cash and checking or savings account balances",
+            "Stocks, bonds, and mutual funds",
+            "Certificates of deposit",
+            "Other liquid financial assets"
+          ],
+          "exemptAssets": [
+            "Primary home (the house your parent lives in)",
+            "One vehicle",
+            "Burial spaces",
+            "Certain burial funds within allowed limits",
+            "Personal effects and household goods"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For HCBS waiver services (in-home attendant care, adult day, home modifications, etc.), your parent must meet Nursing Facility Level of Care. This is a clinical assessment that determines whether they need regular help with activities like bathing, dressing, medication management, or mobility. The assessment is done by the state after application; your parent does not need to be in a nursing home to qualify.",
+        "otherRequirements": [
+          "Must be an Indiana resident",
+          "Disability (for non-aged applicants) must meet Social Security Administration standards; an existing SSA disability decision controls Indiana's determination",
+          "HCBS waiver applicants must live in, or be transitioning to, a non-institutional community setting",
+          "SSI recipients are automatically enrolled in Medicaid and do not need to apply separately"
+        ],
+        "povertyLevelReference": "100% FPL in some ABD eligibility groups; 300% of federal SSI amount for the Aged and Disabled HCBS waiver"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at the Indiana FSSA Benefits Portal or by phone at 1-800-403-0864; processing takes up to 90 days after a complete application is submitted.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "Collect their Social Security card, proof of identity, birth certificate or proof of age, proof of Indiana residency, income records (Social Security award letter, pension statements), and current bank account information. If applying on the basis of disability, gather any SSA disability determination letters. Having these ready prevents delays because Indiana does not begin processing until the application and all required documents are submitted."
+          },
+          {
+            "step": 2,
+            "title": "Submit the application",
+            "description": "Apply online at the Indiana FSSA Benefits Portal (https://www.in.gov/fssa/dfr/apply-online-for-health-coverage/). Alternatively, call 1-800-403-0864 Monday through Friday to apply by phone or request a paper application. You can also visit your local Division of Family Resources office in person. The form is called the Indiana Application for Health Coverage."
+          },
+          {
+            "step": 3,
+            "title": "Send supporting documents if not submitted online",
+            "description": "Mail or fax documents to the FSSA Document Center at P.O. Box 1810, Marion, IN 46952. Include your parent's name and case number on every page. Missing documents are the most common reason applications are delayed."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any follow-up requests",
+            "description": "The Division of Family Resources may contact you for additional information, especially if disability determination is needed. Respond promptly; unanswered requests extend processing time."
+          },
+          {
+            "step": 5,
+            "title": "Receive a decision and learn which pathway your parent is enrolled in",
+            "description": "Indiana will notify your parent of their eligibility decision and which plan they are assigned to: Traditional Medicaid, Hoosier Care Connect, or Indiana PathWays for Aging. If your parent is 60 or older, PathWays for Aging is the likely pathway. If HCBS waiver services are needed, a separate functional assessment will be scheduled."
+          }
+        ],
+        "processingTime": "Up to 90 days after a complete application and all required documents are submitted.",
+        "waitlist": "There is no waitlist for basic ABD Medicaid coverage. However, access to specific HCBS waiver services (such as in-home attendant care or adult day) depends on functional eligibility assessment and service authorization, which can take additional time after Medicaid is approved.",
+        "tip": "If your parent is already receiving SSI from Social Security, they do not need to apply. Medicaid coverage is automatic. Confirm enrollment by calling 1-800-403-0864.",
+        "urls": [
+          {
+            "label": "Indiana FSSA Apply Online for Health Coverage",
+            "url": "https://www.in.gov/fssa/dfr/apply-online-for-health-coverage/"
+          },
+          {
+            "label": "Indiana Medicaid Eligibility Guide",
+            "url": "https://www.in.gov/medicaid/members/apply-for-medicaid/eligibility-guide/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI determination letter (shows current monthly benefit amount)",
+        "Proof of identity: state-issued photo ID, driver's license, or U.S. passport",
+        "Proof of Indiana residency: utility bill, lease agreement, or other official document showing your parent's current address",
+        "Birth certificate or other proof of date of birth",
+        "Social Security card",
+        "Proof of citizenship or immigration status (U.S. birth certificate, U.S. passport, or immigration documents if applicable)",
+        "Proof of all income sources: pension statements, VA benefit letters, any other income documentation",
+        "Current balances for any checking or savings accounts (Indiana evaluates countable resources against the $2,000 asset limit)",
+        "Medicare card if your parent is enrolled in Medicare",
+        "Information about any other health insurance currently in effect",
+        "SSA disability determination letter if applying on the basis of disability (if no SSA decision exists, medical records documenting the disability may be needed)",
+        "Housing or residency documentation if applying for HCBS waiver services (to confirm community-based living)"
+      ],
+      "contacts": [
+        {
+          "label": "Indiana FSSA Benefits Line",
+          "phone": "1-800-403-0864",
+          "description": "Apply for Medicaid, check application status, or ask eligibility questions. This is the direct line to the Division of Family Resources.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Indiana FSSA Benefits Portal (online application)",
+          "phone": null,
+          "description": "Apply online at in.gov/fssa/dfr/apply-online-for-health-coverage/. Available any time.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Indiana 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline for Indiana social services. Can direct you to your nearest Division of Family Resources office if you need in-person help. This line does not process Medicaid applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Indiana does not start processing your parent's application until the application form and all required documents are received. Submit everything together to avoid delays.",
+        "If your parent is applying on the basis of disability and does not yet have an SSA disability determination, the review can take longer. An existing Social Security disability decision speeds this up significantly.",
+        "If your parent is 60 or older, ask specifically about Indiana PathWays for Aging when you call. This pathway launched July 1, 2024 and is the primary ABD route for that age group.",
+        "You can apply on behalf of your parent as their authorized representative. Let the caseworker know at the start of the call or note it on the paper application."
+      ],
+      "relatedPrograms": [
+        "Indiana PathWays for Aging",
+        "Indiana Aged and Disabled HCBS Waiver",
+        "Hoosier Care Connect",
+        "Indiana SSI (Supplemental Security Income)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Which pathway will my parent be placed in?",
+          "body": "Indiana uses three main pathways for ABD members. If your parent is 60 or older, they are typically enrolled in Indiana PathWays for Aging, which launched July 1, 2024 and coordinates both medical and long-term services. If they are under 60 or do not meet PathWays criteria, they may be enrolled in Hoosier Care Connect or Traditional Medicaid. All three pathways cover the core Medicaid benefit package. The difference is which managed care organization coordinates care and what additional services are available. Indiana will notify your parent of their assigned pathway after the application is approved."
+        },
+        {
+          "type": "callout",
+          "title": "What the HCBS waiver adds for parents who need daily help",
+          "body": "If your parent needs help with daily living and meets Nursing Facility Level of Care (a clinical assessment based on need for help with bathing, dressing, medication management, and similar tasks), they may also qualify for the Aged and Disabled HCBS waiver. This adds services that standard Medicaid does not cover: in-home attendant care, adult day services, assisted living support, home-delivered meals, home modifications, transportation, respite for family caregivers, and specialized medical equipment. The income limit for this waiver is 300% of the federal SSI amount. A separate functional assessment is required after Medicaid eligibility is established."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that disqualify them because of the $2,000 asset limit?",
+          "answer": "No. The primary home your parent lives in is an exempt asset and is not counted toward the $2,000 limit. One vehicle is also exempt. The asset test applies to countable resources such as cash, bank account balances, stocks, and bonds. If your parent's countable assets exceed $2,000, a spend-down or other planning steps may apply; contact the Division of Family Resources at 1-800-403-0864 to review their specific situation."
+        },
+        {
+          "question": "My parent already gets SSI. Do they need to apply for Medicaid separately?",
+          "answer": "No. SSI recipients in Indiana automatically receive Medicaid coverage. No separate Medicaid application is needed. If your parent is receiving SSI and does not have an active Medicaid card, call 1-800-403-0864 to confirm their enrollment status."
+        },
+        {
+          "question": "Can I apply on my parent's behalf, and what happens if they are in the hospital right now?",
+          "answer": "Yes. You can apply as your parent's authorized representative. Note that at the start of the application. You can also apply while your parent is hospitalized; discharge planners at Indiana hospitals are familiar with this process and can help initiate it. Medicaid coverage, once approved, can in some cases be backdated to the month of application."
+        },
+        {
+          "question": "How is this different from Medicare, and can my parent have both?",
+          "answer": "Medicare is federal health insurance your parent earns through work history, typically starting at age 65. Medicaid is a state and federal program based on income and assets, not work history. Many older adults qualify for both, which is called being a dual eligible. When a parent has both, Medicaid often covers costs that Medicare does not, including long-term services and supports. Having Medicare does not affect ABD Medicaid eligibility."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-403-0864",
+      "sourceUrl": "https://www.in.gov/medicaid/members/apply-for-medicaid/eligibility-guide/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

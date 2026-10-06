@@ -2288,7 +2288,7 @@
       "sourceUrl": "https://www.603legalaid.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "lastVerifiedDate": "2026-10-05",
       "dismissedFlags": [
         {
           "field": "phone",
@@ -2297,8 +2297,7 @@
           "reason": "page also lists ours ((888) 353-9944, (800) 639-5290)",
           "dismissedAt": "2026-10-05"
         }
-      ],
-      "lastVerifiedDate": "2026-10-05"
+      ]
     },
     {
       "id": "long-term-care-ombudsman",

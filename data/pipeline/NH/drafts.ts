@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-05T18:20:48.231Z
+ * Last updated: 2026-10-06T09:18:23.564Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2293,7 +2293,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.603legalaid.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "lastVerifiedDate": "2026-10-05",
       "dismissedFlags": [
         {
           "field": "phone",
@@ -2302,8 +2302,7 @@ export const drafts: PipelineStateDrafts = {
           "reason": "page also lists ours ((888) 353-9944, (800) 639-5290)",
           "dismissedAt": "2026-10-05"
         }
-      ],
-      "lastVerifiedDate": "2026-10-05"
+      ]
     },
     {
       "id": "long-term-care-ombudsman",

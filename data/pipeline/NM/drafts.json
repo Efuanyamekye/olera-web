@@ -2,8 +2,8 @@
   "state": "NM",
   "stateName": "New Mexico",
   "draftedAt": "2026-04-13T21:50:19.557Z",
-  "total": 6,
-  "successful": 6,
+  "total": 12,
+  "successful": 12,
   "programs": [
     {
       "id": "centennial-care-community-benefit",
@@ -1108,6 +1108,1207 @@
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "nm-centennial-care-aged-blind-disabled",
+      "name": "Centennial Care Aged, Blind, and Disabled",
+      "shortName": "NM Centennial Care ABD",
+      "tagline": "If your parent is 65 or older and living in New Mexico on a limited income, this Medicaid pathway can cover medical care, behavioral health, and potentially in-home help with daily tasks like bathing and dressing.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "New Mexico Health Care Authority / Medical Assistance Division",
+            "type": "service-area"
+          },
+          {
+            "name": "Income Support Division (ISD) field offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Managed care organizations that perform functional eligibility for Community Benefit",
+            "type": "service-area"
+          },
+          {
+            "name": "Aging and Disability Resource Center: 1-800-432-2080",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Centennial Care is New Mexico's Medicaid program. The Aged, Blind, and Disabled (ABD) category is the pathway for adults 65 and older, or for adults who are blind or have a qualifying disability, who meet the state's financial rules. If your parent qualifies, Centennial Care covers physical health, behavioral health, and prescription drugs under one Medicaid plan.\n\nBeyond basic medical coverage, Centennial Care includes a Community Benefit for members who need a nursing facility level of care (a clinical assessment of whether your parent requires daily help with bathing, dressing, medication management, or similar tasks). If your parent passes that assessment, the Community Benefit can pay for personal care and home- and community-based services, which may let them stay at home instead of moving to a facility.\n\nEligibility runs through two gates. First, your parent must meet the ABD Medicaid financial rules, which consider income and assets. The state does not publish a simple one-line dollar table for this category; an eligibility worker will review their specific income and assets. Second, if your parent wants in-home support through the Community Benefit, a managed care organization (MCO) performs a separate functional assessment. Starting the Medicaid application is the right first move regardless.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR blind or disabled under Medicaid criteria",
+          "New Mexico resident",
+          "U.S. citizen or qualified immigration status",
+          "Income and assets within Medicaid limits (exact figures require eligibility review)",
+          "Nursing facility level of care required for Community Benefit in-home services"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "To receive in-home or community-based support through the Community Benefit, your parent must meet Nursing Facility Level of Care. This is a clinical assessment conducted by the managed care organization to determine whether your parent needs daily help with activities like bathing, dressing, or medication management. The income eligibility decision and the functional eligibility decision are separate steps.",
+        "otherRequirements": [
+          "Must be a New Mexico resident",
+          "Must be a U.S. citizen or meet qualified immigration status requirements under New Mexico Medicaid",
+          "Must fit the aged, blind, or disabled Medicaid eligibility category",
+          "If qualifying through disability rather than age, must meet the state's disability or blindness criteria"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through YesNM, by phone at 1-800-283-4465, in person at a local ISD office, or by mailing a paper application; processing time is not publicly specified.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "Collect their Social Security card or photo ID, proof of income (Social Security award letter, pension statement), proof of New Mexico residency, and proof of citizenship or immigration status. If they are applying through disability rather than age, have medical or disability records ready. Having these on hand prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Submit the application through your preferred method",
+            "description": "Online: apply at YesNM (yes.nm.gov). By phone: call the Medicaid Call Center at 1-800-283-4465, Monday through Friday. In person: visit your local Income Support Division (ISD) office. By mail: send a paper application to Central ASPEN Scanning Area, PO Box 830, Bernalillo, NM 87004. All four methods open the same eligibility process."
+          },
+          {
+            "step": 3,
+            "title": "Complete the financial eligibility review",
+            "description": "An ISD eligibility worker will review your parent's income and assets against Medicaid financial rules. Because the ABD category has layered rules, the worker may ask for additional documents such as bank statements, life insurance policies, or property records. Respond to any requests quickly to avoid delays."
+          },
+          {
+            "step": 4,
+            "title": "Undergo functional assessment if in-home services are needed",
+            "description": "If your parent needs personal care or home-based support, the managed care organization (MCO) assigned to them will conduct a separate Nursing Facility Level of Care assessment. This is a clinical review, not a financial one. Contact the MCO directly once your parent is enrolled in Medicaid to initiate this step."
+          },
+          {
+            "step": 5,
+            "title": "Enroll with a managed care organization",
+            "description": "After Medicaid approves your parent, they will be enrolled with a Centennial Care MCO. The MCO coordinates medical, behavioral health, and long-term services. If you have questions about which MCO covers your parent's area or providers, call 1-800-283-4465."
+          }
+        ],
+        "processingTime": "The state has not published a specific average processing timeline for this category. Ask the eligibility worker for an estimated timeframe when you submit the application.",
+        "waitlist": "No general waitlist exists for the ABD Medicaid category itself. Access to Community Benefit in-home services requires a functional assessment by the MCO; ask the MCO about availability after Medicaid enrollment.",
+        "tip": "If your parent already receives SSI (Supplemental Security Income), that often aligns with ABD Medicaid eligibility. Mention SSI when you apply because it may simplify the financial review.",
+        "urls": [
+          {
+            "label": "Apply online at YesNM",
+            "url": "https://yes.nm.gov"
+          },
+          {
+            "label": "Centennial Care official program page",
+            "url": "https://www.hca.nm.gov/public-information-and-communications/public_information_and_communications/centennial-care-2-0/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or government-issued photo ID",
+        "Proof of New Mexico residency (utility bill, lease agreement, or state-issued document)",
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Proof of citizenship or eligible immigration status",
+        "Pension or retirement income statements",
+        "Medicare card, if your parent has Medicare",
+        "Bank account information: the eligibility worker will ask for current balances and may request statements; the state has not published a specific lookback period for this category, so bring what you have",
+        "Life insurance policies",
+        "Property deeds or real-estate ownership documents",
+        "Pre-need burial contracts or burial-fund documentation",
+        "Medical or disability records if your parent is applying through disability rather than age"
+      ],
+      "contacts": [
+        {
+          "label": "New Mexico Medicaid Call Center",
+          "phone": "1-800-283-4465",
+          "description": "Apply for Centennial Care Medicaid, ask eligibility questions, and get help with the application process",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Aging and Disability Resource Center",
+          "phone": "1-800-432-2080",
+          "description": "Information and referral line for older adults and people with disabilities; can help you understand your options and connect you to local services",
+          "hours": "Contact for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "The financial rules for the ABD Medicaid category are layered and not published as a simple income table. If you are unsure whether your parent qualifies, apply anyway and let the eligibility worker review the details.",
+        "Getting Medicaid approved and getting Community Benefit in-home services approved are two separate steps. Do not wait for one to start the other; begin the Medicaid application first."
+      ],
+      "relatedPrograms": [
+        "New Mexico PACE (Program of All-inclusive Care for the Elderly)",
+        "New Mexico Mi Via Self-Directed Waiver",
+        "New Mexico Medicaid Buy-In for Workers with Disabilities",
+        "New Mexico SNAP Food Benefits"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two eligibility steps, not one",
+          "body": "Families often apply for Centennial Care ABD expecting in-home help and then wait, not realizing that Community Benefit services require a second assessment by the managed care organization. Step one is financial Medicaid eligibility through ISD. Step two is a Nursing Facility Level of Care assessment through the MCO. Ask about both when you apply."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is from Social Security and a small pension. How do I know if they are over the income limit?",
+          "answer": "New Mexico does not publish a simple dollar cutoff for the ABD Medicaid category in its public materials. The eligibility worker applies rules that depend on the source and type of income, not just the total. The safest move is to apply and let the worker review the numbers. Call 1-800-283-4465 to start or to ask a quick screening question before you apply."
+        },
+        {
+          "question": "My parent owns their home. Does that disqualify them?",
+          "answer": "The home is generally counted as an exempt asset under Medicaid rules, meaning it typically does not count against asset limits when your parent lives in it. Other assets such as savings accounts, investments, and some life insurance policies do count. The exact rules are not published in a simple table for this category, so an eligibility worker will need to review your parent's full financial picture. Bring account statements and property documents to your appointment or application call."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the process themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on your parent's behalf. You may be asked to provide documentation of your authority to act for them, such as a power of attorney. Mention this at the start of the call or application so the eligibility worker can tell you exactly what they need."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their health needs get worse?",
+          "answer": "Once enrolled, your parent's MCO is responsible for coordinating care. If their needs increase, contact the MCO directly to request a reassessment for additional services, including a Nursing Facility Level of Care assessment if one has not already been done. You can also call 1-800-283-4465 to ask about options. Enrollment does not lock your parent into a fixed level of service."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-283-4465",
+      "sourceUrl": "https://www.hca.nm.gov/public-information-and-communications/public_information_and_communications/centennial-care-2-0/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nm-qmb-medicare-savings",
+      "name": "Qualified Medicare Beneficiary (QMB)",
+      "shortName": "QMB Medicare Savings",
+      "tagline": "If your parent has Medicare and a limited income, New Mexico's QMB program can eliminate their Medicare premiums, deductibles, and copays entirely.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "New Mexico Health Care Authority / Medicaid eligibility system",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Income Support Division offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on Medicare and their monthly income is $1,330 or less (single person, 2026), New Mexico's Qualified Medicare Beneficiary program can cover what Medicare doesn't: the Part B premium, deductibles, and coinsurance on Medicare-covered services. That means when your parent sees a Medicare-covered doctor, goes to the hospital, or has a procedure, their out-of-pocket share is paid by the state, not by them.\n\nQMB is a Medicaid category, not a separate insurance card. Your parent keeps their Medicare coverage exactly as it is. QMB sits underneath it and covers the cost-sharing that Medicare normally leaves behind. The Part B premium alone is $185/month in 2026, so enrollment can mean real monthly savings without changing any of their existing doctors or care.\n\nNew Mexico has removed the asset test for QMB as of current guidance, which means the program does not count your parent's savings account, home, or other assets when determining eligibility. Only monthly income is counted. If your parent's income is close to the limit, it is worth applying: there is no financial downside to checking.",
+      "savingsRange": "Up to $2,220/year in Part B premiums alone for one person (2026), plus Medicare deductibles and coinsurance on covered services",
+      "savingsSource": "The Part B premium of $185/month (2026) multiplied by 12 months equals $2,220/year. This figure comes from the Centers for Medicare and Medicaid Services (CMS) published Part B premium for 2026. QMB also covers Medicare deductibles and coinsurance, but those amounts vary by service use and cannot be predicted in advance.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must have Medicare Part A or be conditionally eligible for it",
+          "Income at or below $1,330/month for a single person (2026)",
+          "Income at or below $1,804/month for a two-person household (2026)",
+          "No asset or resource test in New Mexico as of 2026",
+          "Must be a New Mexico resident"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1330
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1804
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2278
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2752
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 3226
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 3700
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 4174
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 4648
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must have Medicare Part A or be conditionally eligible for Medicare Part A. Most people 65+ qualify automatically through Social Security; some qualify earlier through disability.",
+          "Must meet New Mexico Medicaid financial eligibility rules for the QMB category.",
+          "Must be a New Mexico resident.",
+          "For households larger than 8 people, add $474 per additional person to the 8-person monthly limit."
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at yes.nm.gov or call 1-855-637-6574; no QMB-specific processing timeline is published by the state, so plan for standard Medicaid eligibility processing time.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm Medicare Part A status",
+            "description": "QMB requires your parent to already have Medicare Part A or to be conditionally eligible for it. Check their red, white, and blue Medicare card or call Social Security at 1-800-772-1213 to confirm. If they only have Part B, talk to Social Security about Part A eligibility before applying."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need your parent's Medicare card, a recent Social Security award letter, proof of New Mexico residency (such as a utility bill or lease), and proof of identity. Gather these before starting the application so you can submit everything at once and avoid delays."
+          },
+          {
+            "step": 3,
+            "title": "Apply online or by phone",
+            "description": "Apply online at yes.nm.gov, the state's benefits portal. If you prefer phone help, call the New Mexico Medicaid eligibility line at 1-855-637-6574. If you or your parent need in-person help, contact your local Income Support Division office through the New Mexico Health Care Authority at hca.nm.gov."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from the eligibility worker",
+            "description": "The eligibility worker may request additional documents. QMB has no asset test in New Mexico, so you should not need to provide financial account records, but respond promptly to any request to avoid delays. If you disagree with a request or a denial, you have the right to appeal."
+          },
+          {
+            "step": 5,
+            "title": "Watch for approval notice and confirm with Social Security",
+            "description": "Once approved, the state notifies Social Security and Medicare. Because QMB pays the Part B premium, Social Security will stop withholding that amount from your parent's Social Security check. This may take one to two billing cycles. Your parent will not receive a separate Medicaid card for QMB alone."
+          }
+        ],
+        "processingTime": "No QMB-specific processing timeline is published by New Mexico. Expect standard Medicaid eligibility processing through the local Income Support Division office. Ask the eligibility worker for an estimated timeline when you apply.",
+        "waitlist": null,
+        "tip": "If your parent's income is slightly above the QMB limit, ask the eligibility worker whether they qualify for SLMB (Specified Low-Income Medicare Beneficiary) or QI (Qualifying Individual), which cover the Part B premium at higher income levels. These are different categories but applied through the same Medicaid process.",
+        "urls": [
+          {
+            "label": "Apply online at yes.nm.gov",
+            "url": "https://yes.nm.gov"
+          },
+          {
+            "label": "New Mexico Health Care Authority: Medical Assistance Division",
+            "url": "https://www.hca.nm.gov/lookingforinformation/medical-assistance-division-1/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card showing Part A coverage (the red, white, and blue card issued by CMS)",
+        "Most recent Social Security award letter or benefit verification letter showing monthly benefit amount",
+        "Proof of New Mexico residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of identity (driver's license, state ID, or passport)",
+        "Proof of any other monthly income (pension statements, Veterans benefit letters, or other income verification)",
+        "Immigration or citizenship documents if your parent is not a U.S. citizen, which the eligibility worker may request"
+      ],
+      "contacts": [
+        {
+          "label": "New Mexico Medicaid Eligibility Line",
+          "phone": "1-855-637-6574",
+          "description": "Apply for QMB and ask eligibility questions. This is the state Medicaid line that can open your parent's application.",
+          "hours": "Contact the line directly for current hours; hours may vary."
+        },
+        {
+          "label": "New Mexico Health Care Authority (program information)",
+          "phone": null,
+          "description": "Official program page for the Medical Assistance Division, which administers QMB in New Mexico. Visit hca.nm.gov for local office information.",
+          "hours": null
+        },
+        {
+          "label": "Social Security Administration (Part A confirmation)",
+          "phone": "1-800-772-1213",
+          "description": "Call to confirm your parent's Medicare Part A status or ask about conditional Part A eligibility. QMB requires Part A; Social Security can verify and explain options.",
+          "hours": "Mon-Fri 8am-7pm local time"
+        }
+      ],
+      "applicationNotes": [
+        "QMB recipients do not receive a Medicaid card. If your parent is enrolled in QMB only, they will not have a card to show providers. Providers are required by federal law to accept QMB and cannot bill QMB enrollees for Medicare cost-sharing; if a provider attempts to bill your parent, call 1-800-MEDICARE (1-800-633-4227) to report it.",
+        "The Part B premium is withheld from Social Security checks automatically. After QMB approval, it takes one to two billing cycles for Social Security to stop the withholding. Any premiums collected after the QMB effective date should be reimbursed; ask the eligibility worker about the effective date when you receive the approval notice.",
+        "If your parent's income is above $1,330/month (single) but below $1,597/month (single, 2026 SLMB limit) or $1,796/month (single, 2026 QI limit), ask specifically about SLMB or QI when you call. These programs cover only the Part B premium, not full cost-sharing, but they are applied through the same Medicaid eligibility process.",
+        "New Mexico currently requires no asset or resource documentation for QMB. If an eligibility worker asks for bank statements or financial account records, you can note that the 2026 QMB guidance removes the resource test. However, cooperating with all requests and asking questions politely is the fastest path to approval."
+      ],
+      "relatedPrograms": [
+        "Specified Low-Income Medicare Beneficiary (SLMB): covers Part B premium for people with income between 100% and 120% FPL",
+        "Qualifying Individual (QI): covers Part B premium for people with income between 120% and 135% FPL",
+        "New Mexico Low Income Subsidy (LIS/Extra Help): helps with Medicare Part D prescription drug costs",
+        "New Mexico Medicaid (full benefits): for people who may qualify for broader Medicaid coverage beyond Medicare cost-sharing"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Providers cannot bill QMB enrollees for Medicare cost-sharing",
+          "body": "Federal law prohibits Medicare providers from billing QMB enrollees for deductibles, coinsurance, or copays on Medicare-covered services. If a doctor's office, hospital, or other provider sends your parent a bill for these amounts, your parent does not have to pay it. Report billing violations to 1-800-MEDICARE (1-800-633-4227) or your State Health Insurance Assistance Program (SHIP)."
+        },
+        {
+          "type": "prose",
+          "title": "What QMB covers and what it does not",
+          "body": "QMB covers Medicare-related costs only: the Part A premium if your parent is conditionally eligible for Part A, the Part B premium ($185/month in 2026), Medicare deductibles, and Medicare coinsurance on Medicare-covered services.\n\nQMB does not cover services that Medicare itself does not cover, such as most dental care, routine vision, or hearing aids. It also does not provide a prescription drug benefit; that requires separate enrollment in a Medicare Part D plan and, if income qualifies, the Low Income Subsidy (Extra Help) program.\n\nQMB is not long-term care coverage. It will not pay for nursing home stays that are not Medicare-covered, personal care at home, or Medicaid home and community-based services. Those programs require separate applications."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has savings in the bank. Does that disqualify them from QMB?",
+          "answer": "No. New Mexico does not apply an asset or resource test to QMB as of the 2026 guidance. Savings accounts, a home, a car, and other assets are not counted for this program. Only monthly income is reviewed. If an eligibility worker raises asset questions, ask them to confirm the current QMB resource policy."
+        },
+        {
+          "question": "My parent only has Medicare Part B, not Part A. Can they still get QMB?",
+          "answer": "QMB requires Medicare Part A or conditional eligibility for Part A. If your parent has only Part B, call Social Security at 1-800-772-1213 to ask whether they can enroll in Part A. Some people can get Part A for free; others may owe a premium. A person conditionally eligible for Part A can still qualify for QMB, and QMB can then pay that Part A premium."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent?",
+          "answer": "Yes. You can apply as an authorized representative. When applying online at yes.nm.gov or calling 1-855-637-6574, indicate that you are acting on your parent's behalf. You may be asked to provide documentation of your authority to act for them, such as a power of attorney."
+        },
+        {
+          "question": "My parent's income is $1,400/month, which is above the QMB limit. Is there any help?",
+          "answer": "Yes. Two related programs have higher income limits. SLMB (Specified Low-Income Medicare Beneficiary) covers the Part B premium for single people with income up to approximately 120% FPL. QI (Qualifying Individual) covers the Part B premium up to approximately 135% FPL. Ask the eligibility worker at 1-855-637-6574 to screen your parent for all three Medicare Savings Program categories at the same time."
+        },
+        {
+          "question": "My parent got a bill from their doctor even though they have QMB. Do they have to pay it?",
+          "answer": "No. Federal law prohibits Medicare providers from billing QMB enrollees for Medicare cost-sharing amounts such as deductibles, coinsurance, and copays. Your parent should not pay these bills. Report the billing issue to 1-800-MEDICARE (1-800-633-4227). You can also contact the State Health Insurance Assistance Program (SHIP) in New Mexico for free help resolving the billing dispute."
+        },
+        {
+          "question": "How long does the application take, and when does coverage start?",
+          "answer": "New Mexico does not publish a specific processing timeline for QMB. Expect standard Medicaid eligibility review time through the local Income Support Division office. Ask the eligibility worker for an estimated date when you submit the application. Once approved, it can take one to two additional billing cycles for the Part B premium to stop being withheld from your parent's Social Security check."
+        },
+        {
+          "question": "Can my parent have both QMB and a Medicare Advantage (Part C) plan?",
+          "answer": "Yes. QMB can work alongside a Medicare Advantage plan. The plan must apply QMB protections and cannot charge your parent for Medicare cost-sharing covered by QMB. However, the specifics depend on the plan. Contact the Medicare Advantage plan directly and also call 1-800-MEDICARE to confirm how QMB applies to your parent's specific plan."
+        },
+        {
+          "question": "What happens if my parent's income rises above the limit after they are enrolled?",
+          "answer": "Your parent is required to report income changes to the New Mexico Income Support Division. If their income rises above the QMB limit, the state will review eligibility and may end the benefit or transition them to a different Medicare Savings Program category if they still qualify. The eligibility worker can explain the reporting process and timeline when you apply."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "1-855-637-6574",
+      "sourceUrl": "https://www.hca.nm.gov/lookingforinformation/medical-assistance-division-1/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nm-turquoise-care-community-benefit-hcbs",
+      "name": "New Mexico Turquoise Care Community Benefit (home and community-based services)",
+      "shortName": "Turquoise Care HCBS",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, this program can pay for aides, home modifications, adult day care, respite, and more, at no cost if they qualify for Medicaid.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "New Mexico Aging and Disability Resource Center (ADRC) statewide entry point at 1-800-432-2080 (TTY: 505-476-4939)",
+            "type": "service-area"
+          },
+          {
+            "name": "Turquoise Care managed care organizations administer the benefit package",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, qualifies for Medicaid, and needs the level of daily help that would otherwise require a nursing home, the New Mexico Turquoise Care Community Benefit can pay for the support that keeps them at home instead. That includes home health aides, homemaker and personal care services, adult day health programs, respite for you as a caregiver, emergency response systems, ramps and grab bars, medically tailored home-delivered meals, private duty nursing, and more. It is a service package, not a cash payment, and the services are provided through your parent's Turquoise Care managed care organization.\n\nThis program is not a simple sign-up. Your parent must first qualify for New Mexico Medicaid financially, with income at or below $994 per month for a single person (2026 limit), and must pass a clinical assessment confirming they need nursing-facility-level care. Both gates must be cleared before services begin. Because of those requirements, the application process has multiple steps and can take weeks to complete. Starting early matters, especially if your parent is still in the hospital or is about to be discharged from a rehab facility.\n\nThe single most important thing to know: the entry point is the New Mexico Aging and Disability Resource Center (ADRC), not your parent's doctor and not Medicaid directly. Calling the ADRC at 1-800-432-2080 starts the process. They coordinate the nursing-facility-level-of-care assessment and connect your family to the next steps.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the Community Benefit covers services at no cost to Medicaid-eligible enrollees. No dollar benefit figure is published by the New Mexico Aging and Long-Term Services Department for the service package as a whole.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "New Mexico resident",
+          "Income at or below $994/month for a single person (2026 Medicaid limit)",
+          "Qualifies for full New Mexico Medicaid coverage",
+          "Needs nursing-facility-level care but chooses to remain at home or in the community"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 994
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1491
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet Nursing Facility Level of Care (NF LOC). This is a clinical assessment, not a self-report. A care coordinator evaluates whether your parent needs daily assistance with activities like bathing, dressing, medication management, or mobility. Meeting this threshold is required before any Community Benefit services can be authorized.",
+        "otherRequirements": [
+          "Must be a New Mexico resident",
+          "Must qualify for full New Mexico Medicaid coverage, either through the standard state plan or a waiver-category pathway",
+          "Must have an assessed need for services determined by a care coordinator",
+          "Native Americans enrolled in Turquoise Care who need long-term care services are required to access services through Turquoise Care",
+          "Some enrollment pathways require an available enrollment slot; contact the ADRC to determine which pathway applies"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the New Mexico ADRC at 1-800-432-2080 to start; the full process involves a Medicaid financial review and a nursing-facility-level-of-care assessment, so timing varies by case.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the New Mexico ADRC",
+            "description": "Call 1-800-432-2080 (TTY: 505-476-4939). Tell them your parent is 65 or older, needs help remaining at home, and you want to learn about the Turquoise Care Community Benefit. They provide options counseling and coordinate what comes next. This call is the official entry point for Community Benefit registration."
+          },
+          {
+            "step": 2,
+            "title": "Apply for New Mexico Medicaid if not already enrolled",
+            "description": "If your parent is not already on full Medicaid, you will need to apply through New Mexico's Medicaid eligibility process, which involves the Income Support Division. The ADRC can guide you to the right pathway. Have income and asset documents ready because Medicaid financial rules apply, not just an income screen."
+          },
+          {
+            "step": 3,
+            "title": "Complete the nursing-facility-level-of-care assessment",
+            "description": "A care coordinator will conduct a clinical assessment of your parent's functional needs. This determines whether they meet NF LOC criteria. The assessment looks at daily activities like bathing, dressing, and medication management. Your parent does not need to be in a nursing home to qualify, but they must need that level of care."
+          },
+          {
+            "step": 4,
+            "title": "Enroll in a Turquoise Care managed care organization",
+            "description": "Once financial and functional eligibility are confirmed, services are delivered through a Turquoise Care managed care organization. The MCO assigns a care coordinator who works with your parent to authorize and arrange specific services such as home health aides, respite, adult day health, or home modifications."
+          },
+          {
+            "step": 5,
+            "title": "Services begin through your parent's care plan",
+            "description": "The care coordinator develops a plan based on your parent's assessed needs and available services in your region. Some services can be self-directed, meaning your parent or a designated representative controls how and by whom services are provided. Ask the ADRC or the MCO about the self-direction option."
+          }
+        ],
+        "processingTime": "No official statewide processing time is published. Completion depends on finishing both the Medicaid financial review and the nursing-facility-level-of-care assessment. Allow several weeks at minimum; more complex cases take longer.",
+        "waitlist": "A waitlist may exist for some enrollment pathways. The federal program approval notes that some Medicaid-eligible applicants can access the Community Benefit without an available enrollment slot. Current statewide waitlist length is not publicly reported. Ask the ADRC directly when you call.",
+        "tip": "If your parent is about to be discharged from a hospital or rehab facility, call the ADRC before discharge. Hospital discharge planners can sometimes help initiate the process while your parent is still in the facility, which can reduce the gap between discharge and services starting at home.",
+        "urls": [
+          {
+            "label": "New Mexico Aging and Long-Term Services Department: Turquoise Care Home and Community-Based Waiver",
+            "url": "https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of New Mexico residency (utility bill, lease agreement, or state-issued document showing your parent's current address)",
+        "Proof of age (birth certificate or passport)",
+        "Social Security award letter or most recent benefit statement showing monthly income",
+        "Proof of citizenship or qualifying immigration status for Medicaid eligibility",
+        "Medicaid card or other proof of current full Medicaid enrollment, if your parent is already enrolled",
+        "Income verification for any other sources such as pension or retirement statements",
+        "Current balances for any checking, savings, or other financial accounts (Medicaid asset rules apply; the ADRC or Income Support Division will tell you exactly what documentation is needed for your parent's situation, as the specific lookback and asset rules are determined during the Medicaid review)",
+        "Medical records or documentation relevant to your parent's functional needs and daily care requirements, to support the nursing-facility-level-of-care assessment",
+        "Names and contact information for your parent's current doctors and any existing care providers",
+        "Information about your parent's current living situation, including who else lives in the household",
+        "Legal documents if a representative such as a power of attorney or legal guardian is applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "New Mexico Aging and Disability Resource Center (ADRC)",
+          "phone": "1-800-432-2080",
+          "description": "The official entry point for the Turquoise Care Community Benefit. Call here first to begin options counseling and start the registration process. TTY: 505-476-4939.",
+          "hours": "Contact the ADRC to confirm current hours"
+        },
+        {
+          "label": "New Mexico Aging and Long-Term Services Department",
+          "phone": "505-476-4799",
+          "description": "The state agency overseeing the Turquoise Care program. For policy questions or if you need to escalate an issue.",
+          "hours": "Contact the department to confirm current hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is already enrolled in New Mexico Medicaid under the standard state plan, they may be able to access the Community Benefit without waiting for an enrollment slot under a separate waiver pathway. Ask the ADRC specifically about the state-plan route when you call.",
+        "Assets matter here, not just income. Even if your parent's monthly income is below $994, they may be disqualified or delayed if countable assets exceed Medicaid limits. Talk to the ADRC or an elder law attorney before applying if your parent owns property beyond their primary home, has significant savings, or recently transferred assets to a family member.",
+        "The program is administered by Turquoise Care managed care organizations, and the specific services available, the providers in your parent's area, and how quickly services start can vary by which MCO is assigned. Once enrolled, ask the care coordinator which services are currently available in your parent's location.",
+        "Native American families: Turquoise Care is the required pathway for Turquoise Care members who need long-term care services. The ADRC can provide guidance on how this requirement applies to your parent's specific situation."
+      ],
+      "relatedPrograms": [
+        "New Mexico Medicaid (income and asset eligibility that unlocks this program)",
+        "New Mexico Mi Via Self-Directed Medicaid Waiver (alternative self-directed waiver for some individuals)",
+        "New Mexico Supplemental Nutrition Assistance Program (SNAP) for seniors on fixed incomes",
+        "New Mexico Family Caregiver Support Program (respite and support for unpaid family caregivers)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two gates, both required",
+          "body": "Many families spend weeks gathering documents only to find out their parent does not meet the nursing-facility-level-of-care threshold, or vice versa. Your parent must clear both gates: Medicaid financial eligibility (income at or below $994/month for a single person in 2026, plus asset review) AND a clinical determination that they need nursing-home-level daily care. Call the ADRC first at 1-800-432-2080. They can tell you whether your parent is likely to clear both before you invest significant time in paperwork."
+        },
+        {
+          "type": "prose",
+          "title": "What the Community Benefit actually covers",
+          "body": "The benefit is a package of services, not a cash payment. Once enrolled, your parent's care coordinator authorizes services based on assessed need. Covered services include: home health aide and homemaker/personal care; adult day health programs; private duty nursing for adults; skilled maintenance therapy (physical, occupational, or speech therapy to maintain function); respite care for family caregivers; emergency response systems; environmental modifications such as wheelchair ramps, grab bars, and doorway widening; behavior support consultation; community transition services for people moving out of a nursing facility; customized community supports; employment supports; nutritional counseling; and medically tailored home-delivered meals for eligible members in care coordination. Some services are available through self-direction, which lets your parent choose and manage their own providers within program rules. Not every service is available in every region; ask the ADRC or your parent's MCO about local provider availability."
+        },
+        {
+          "type": "prose",
+          "title": "Asset limits: what we know and what to verify",
+          "body": "The research available confirms that Medicaid-style asset rules apply, and that both income and assets are reviewed. However, the exact dollar limit for countable assets and the full list of exempt versus countable resources was not specified in official published materials reviewed for this page. Because Medicaid asset rules can disqualify applicants or require spend-down, and because recent asset transfers can trigger a lookback review, families with savings, property beyond a primary home, or recent financial transfers should speak with the ADRC or an elder law attorney before applying. The Income Support Division handles the financial eligibility review. Contact the ADRC at 1-800-432-2080 to get current asset limit figures specific to your parent's situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,100 per month. Does that disqualify them?",
+          "answer": "The 2026 income limit for a single Medicaid applicant is $994 per month. At $1,100, your parent would exceed that limit under standard Medicaid rules. However, New Mexico has a Medicaid spend-down pathway for some applicants, and there may be deductions that bring countable income below the threshold. Call the ADRC at 1-800-432-2080 and describe the full income picture, including whether your parent pays health insurance premiums or has significant medical expenses, before assuming they are ineligible."
+        },
+        {
+          "question": "How do I know if my parent needs nursing-facility-level care? They are living at home now.",
+          "answer": "Living at home does not disqualify your parent; the clinical assessment measures need, not location. The assessment looks at whether your parent requires daily assistance with activities like bathing, dressing, transferring, or medication management, activities that would require nursing staff in a facility. If your parent needs hands-on help with several of these tasks every day, they may meet the threshold. The care coordinator conducts the assessment and makes the determination. You do not need to self-certify; the assessment will tell you."
+        },
+        {
+          "question": "Is there a waitlist, and how long is it?",
+          "answer": "A waitlist may exist for some enrollment pathways depending on available slots. The federal program approval does indicate that some Medicaid-eligible applicants can access the Community Benefit without waiting for an open slot through an alternative pathway. The state does not publish a current statewide waitlist length. When you call the ADRC at 1-800-432-2080, ask specifically about current wait times and whether your parent qualifies for the no-wait pathway."
+        },
+        {
+          "question": "Can I, as my parent's adult child, apply on their behalf?",
+          "answer": "Yes. You can contact the ADRC and initiate the process on your parent's behalf, especially if you hold power of attorney or are their legal guardian. Bring documentation of that legal authority when submitting paperwork. The care coordinator will need to speak with your parent at some point during the assessment, but you can handle much of the coordination."
+        },
+        {
+          "question": "Can my parent apply for this program and Medicaid at the same time?",
+          "answer": "Yes, and in many cases you must. The Community Benefit requires full Medicaid eligibility, so if your parent is not already enrolled in Medicaid, both applications run in parallel. The ADRC will guide you through both processes from the same entry point. Starting with the ADRC call at 1-800-432-2080 is the right move regardless of where your parent stands with Medicaid."
+        },
+        {
+          "question": "What happens if my parent's condition gets worse after they enroll?",
+          "answer": "The care coordinator reassesses your parent's needs periodically and can update the care plan if their condition changes. If needs increase significantly between scheduled reassessments, you can contact the MCO care coordinator to request an interim review. Services can be added or adjusted based on the updated assessment. Do not wait for the scheduled review if your parent's situation changes urgently."
+        },
+        {
+          "question": "Does my parent have to use providers the MCO assigns, or can they choose their own?",
+          "answer": "Some services under the Community Benefit are available through self-direction, which gives your parent control over who provides their care, including the option to hire a family member in some cases within program rules. Not all services are self-directable, and availability depends on the MCO and the service type. Ask the ADRC or the assigned care coordinator specifically about the self-direction option when services are being planned."
+        },
+        {
+          "question": "My parent owns their home. Will that count against them for Medicaid asset eligibility?",
+          "answer": "A primary residence is generally an exempt asset under Medicaid rules, meaning it typically does not count against the asset limit as long as your parent intends to return home or a spouse continues to live there. However, Medicaid rules around the home are complex, particularly if your parent moves into a facility, if there is significant home equity, or if the home was transferred to a family member in the past. Because the exact asset rules for this program were not fully published in the materials reviewed, verify current asset rules directly with the ADRC at 1-800-432-2080 or with an elder law attorney before applying."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "1-800-432-2080",
+      "sourceUrl": "https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nm-snap-food-benefits",
+      "name": "SNAP (Supplemental Nutrition Assistance Program)",
+      "shortName": "SNAP Food Benefits",
+      "tagline": "If your parent is on a fixed income in New Mexico, they may qualify for up to $298/month in grocery benefits loaded onto a debit-style card.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "New Mexico Health Care Authority (statewide administration)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local HCA offices and state staff",
+            "type": "service-area"
+          },
+          {
+            "name": "YES portal for online application",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and living on Social Security, a pension, or other fixed income, SNAP may cover a meaningful portion of their monthly grocery bill. Benefits are loaded onto an EBT card (a reloadable debit card accepted at most grocery stores and many farmers markets) and arrive each month without needing to be renewed constantly. For a single person in New Mexico, the maximum benefit is $298/month in FY2026. What your parent actually receives depends on household size and income after deductions.\n\nOlder adults often qualify for more SNAP than they expect, because the program allows deductions that reduce the income used in the calculation. Medical expenses your parent pays out of pocket can be deducted dollar-for-dollar above a $35 threshold. High shelter costs (rent, utilities) can also be deducted. These deductions matter: a senior with $1,500/month in Social Security and $400/month in rent and prescriptions may have a net income that qualifies them even if their gross income looks too high at first glance.\n\nThere is no waitlist. SNAP is an entitlement program, meaning everyone who meets the eligibility rules receives benefits. The key dates are the application date (benefits, if approved, are calculated from when you apply) and the interview (usually scheduled within about 10 days). Missing the interview is one of the most common reasons cases stall, so plan for that call.",
+      "savingsRange": "Up to $3,576/year for a one-person household (FY2026 maximum monthly allotment of $298)",
+      "savingsSource": "New Mexico Health Care Authority FY2026 income standards and maximum allotment table. The $298/month figure is the maximum for a household of one; actual benefits are lower for most households because they are calculated on net income after deductions.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "No age requirement, but seniors 60+ and people with disabilities get more favorable rules",
+          "Single person: gross income generally below $1,696/month (130% FPL), or up to $2,610/month under categorical eligibility",
+          "Asset limit: $3,250 in countable resources if someone in the household is 60+ or disabled",
+          "Home and vehicles are generally not counted as assets",
+          "Medical expenses above $35/month can reduce the income figure used in the calculation"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1696
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2292
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2888
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 3483
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4079
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 4675
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 5270
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 5866
+          }
+        ],
+        "assetLimits": {
+          "individual": 3250,
+          "couple": 3250,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Other liquid and non-liquid financial resources"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "Vehicles"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must complete an application and, in most cases, a required interview",
+          "Benefits are calculated from the date the application is submitted, not the interview date",
+          "Households must report required information about income and household composition",
+          "New Mexico uses a 200% FPL categorical eligibility benchmark that can extend eligibility beyond the standard 130% gross income test"
+        ],
+        "povertyLevelReference": "200% FPL (categorical eligibility benchmark); 130% FPL (standard gross income test)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at yes.state.nm.us or by calling 800-283-4465; standard processing takes up to 30 days, but households in crisis may get benefits within 7 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Apply online, by phone, or in person",
+            "description": "Submit your application at yes.state.nm.us (the New Mexico YES portal), call 800-283-4465, or visit a local New Mexico Health Care Authority office. You can also request a paper form and mail it in. Apply as soon as possible: if approved, benefits are calculated from the application date, not the interview date."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before or right after applying",
+            "description": "You will need identification, proof of your parent's income, housing costs, and (if relevant) medical expenses. Submitting these promptly prevents delays. See the document checklist on this page for specifics."
+          },
+          {
+            "step": 3,
+            "title": "Complete the required interview",
+            "description": "Most applicants are scheduled for a phone or in-person interview within about 10 days of applying. This interview is required in most cases; missing it will pause your case. When you apply, confirm how and when the interview will be conducted."
+          },
+          {
+            "step": 4,
+            "title": "Receive a decision and your EBT card",
+            "description": "Standard processing takes up to 30 days. If your parent's household qualifies for expedited SNAP (very low income or resources), benefits may be issued within 7 days. If approved, an EBT card is mailed and benefits are loaded monthly."
+          }
+        ],
+        "processingTime": "Up to 30 days for standard applications. Expedited processing within 7 days for qualifying households (very low income or resources).",
+        "waitlist": null,
+        "tip": "If your parent has significant out-of-pocket medical expenses (prescriptions, copays, home health costs), make sure to document them. Medical expenses above $35/month can be deducted from the income figure used to calculate the benefit, which can meaningfully increase what your parent receives or push their net income below the eligibility threshold.",
+        "urls": [
+          {
+            "label": "Apply online via the New Mexico YES portal",
+            "url": "https://www.yes.state.nm.us/"
+          },
+          {
+            "label": "New Mexico HCA SNAP program page",
+            "url": "https://www.hca.nm.gov/lookingforassistance/supplemental_nutrition_assistance_program__snap/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Photo ID for the applicant (driver's license, state ID, or passport)",
+        "Social Security award letter or other proof of monthly income (pension statement, retirement account distribution letter)",
+        "Most recent rent or mortgage statement showing monthly housing cost",
+        "Most recent utility bills (electric, gas, water) if claiming a shelter deduction",
+        "Receipts, Medicare Explanation of Benefits statements, or pharmacy printouts showing out-of-pocket medical expenses, if claiming the medical deduction",
+        "Social Security numbers for all household members who are applying",
+        "Proof of citizenship or immigration status for each household member applying",
+        "Current balances for any checking or savings accounts (the caseworker will ask; bring a recent statement or be ready to state the balance)"
+      ],
+      "contacts": [
+        {
+          "label": "New Mexico HCA SNAP Line",
+          "phone": "800-283-4465",
+          "description": "Apply, ask about eligibility, check the status of an existing application, or request a paper form. This is the main line for SNAP in New Mexico.",
+          "hours": "Contact the HCA directly to confirm current hours; call during standard weekday business hours as a starting point."
+        },
+        {
+          "label": "New Mexico YES Online Portal",
+          "phone": null,
+          "description": "Apply online at yes.state.nm.us. You can start and submit your application any time without waiting on hold.",
+          "hours": "Available online at yes.state.nm.us"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's household has very little income or very few resources right now, ask specifically about expedited SNAP when you call or apply. Qualifying households can receive benefits within 7 days instead of the standard 30.",
+        "The interview is required in most cases and is often scheduled about 10 days after you apply. If your parent cannot attend in person, ask whether a phone interview is available. A missed interview is one of the most common reasons cases are delayed.",
+        "Benefits are backdated to the application date, not the interview date. Apply now even if you have not yet gathered all your documents; you can submit supporting materials after.",
+        "New Mexico uses a categorical eligibility rule that raises the gross income limit to 200% of the Federal Poverty Level ($2,610/month for one person in FY2026). If your parent's income is above the standard 130% threshold but below 200%, they may still qualify."
+      ],
+      "relatedPrograms": [
+        "LIHEAP (Low Income Home Energy Assistance Program) New Mexico",
+        "New Mexico Medicaid (for health coverage alongside food assistance)",
+        "Senior Farmers Market Nutrition Program (New Mexico)",
+        "Supplemental Security Income (SSI)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What the EBT card can and cannot buy",
+          "body": "SNAP benefits can be used for most grocery store food items: fruits, vegetables, meat, dairy, bread, cereals, and non-alcoholic beverages. You cannot use SNAP for alcohol, tobacco, vitamins or supplements, hot prepared foods, or non-food household items like cleaning supplies or toiletries. Most major grocery chains in New Mexico accept EBT."
+        },
+        {
+          "type": "callout",
+          "title": "FY2026 maximum monthly allotments by household size",
+          "body": "1 person: $298. 2 people: $546. 3 people: $785. 4 people: $994. 5 people: $1,183. 6 people: $1,421. 7 people: $1,571. 8 people: $1,789. Add $218 per additional person. These are maximums; your parent's actual benefit depends on their net income after deductions. Source: New Mexico HCA FY2026 income standards."
+        },
+        {
+          "type": "prose",
+          "title": "Why the medical deduction matters for older adults",
+          "body": "SNAP calculates benefits based on net income, not gross income. For households with a member who is 60 or older or has a disability, medical expenses paid out of pocket that exceed $35/month can be deducted from the income used in that calculation. This includes prescription drug costs, medical copays, dental and vision expenses, home health aide costs, and certain medical transportation. If your parent spends $200/month on prescriptions, $165 of that ($200 minus the $35 threshold) can be deducted from their countable income. This deduction can either qualify a parent who would otherwise be over the income limit or increase the monthly benefit amount for someone already enrolled."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is above $1,696/month. Can they still qualify?",
+          "answer": "Possibly, yes. New Mexico has a categorical eligibility rule that raises the gross income limit to 200% of the Federal Poverty Level, which is $2,610/month for a single person in FY2026. Even if your parent's gross income is above the standard 130% threshold, they may still qualify under this expanded limit. Additionally, deductions for shelter costs and medical expenses can reduce the net income figure used in the final benefit calculation, sometimes significantly."
+        },
+        {
+          "question": "Will my parent's home or car count against them for asset limits?",
+          "answer": "No. In New Mexico, the primary home and vehicles are generally not counted as resources in the SNAP calculation. The asset limit that does apply to households with a member who is 60 or older is $3,250 in countable resources, which typically means cash and financial account balances. If you are unsure whether a specific asset counts, ask the caseworker directly when you call 800-283-4465."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot do it themselves?",
+          "answer": "Yes. An authorized representative can apply and manage SNAP on behalf of someone who is elderly or has a disability. You will need to indicate your representative status during the application. The YES online portal at yes.state.nm.us allows for this, or you can call 800-283-4465 to set it up by phone."
+        },
+        {
+          "question": "How long does it take to get the first benefits after applying?",
+          "answer": "Standard applications are processed within 30 days. If your parent qualifies for expedited SNAP (very low income or very few resources), benefits can be issued within 7 days. Benefits are calculated from the date the application is submitted, so applying sooner protects any retroactive benefit your parent might be owed."
+        },
+        {
+          "question": "My parent pays a lot out of pocket for medications and doctor visits. Does that help their SNAP application?",
+          "answer": "Yes, it can help significantly. For households with a member who is 60 or older or disabled, out-of-pocket medical expenses above $35/month can be deducted from the income used to calculate SNAP eligibility and benefit amount. That means a parent spending $300/month on prescriptions and copays could have $265 deducted from their countable income. Bring receipts, pharmacy printouts, or Explanation of Benefits statements to document these costs."
+        },
+        {
+          "question": "Can my parent receive both SNAP and Medicaid at the same time?",
+          "answer": "Yes. SNAP and Medicaid are separate programs with separate eligibility rules, and receiving one does not disqualify your parent from the other. Many older adults in New Mexico receive both. If your parent is already enrolled in Medicaid, mention that when you apply for SNAP, as it may simplify part of the eligibility determination."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they are enrolled?",
+          "answer": "Changes in income, household size, or living costs may affect the benefit amount. New Mexico requires SNAP households to report certain changes. If your parent's circumstances improve, their benefit may decrease; if costs rise or income drops, the benefit may increase. Contact the HCA at 800-283-4465 to report changes and ask what the reporting timelines are for your parent's specific case."
+        },
+        {
+          "question": "Is there a waitlist for SNAP in New Mexico?",
+          "answer": "No. SNAP is an entitlement program, meaning there is no waitlist. Everyone who meets the eligibility rules receives benefits. The only delay is the processing period, which is up to 30 days for standard cases or 7 days for expedited cases. The bottleneck is completing the application and interview, not availability of slots."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "800-283-4465",
+      "sourceUrl": "https://www.hca.nm.gov/lookingforassistance/supplemental_nutrition_assistance_program__snap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nm-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "shortName": "Energy Bill Help",
+      "tagline": "If your parent is on a fixed income in New Mexico, this program can help pay their heating and cooling bills so they aren't choosing between energy and groceries.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "New Mexico Health Care Authority / Income Support Division",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Human Services offices across New Mexico",
+            "type": "service-area"
+          },
+          {
+            "name": "Tribal LIHEAP administering agencies on Indian lands where applicable",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is struggling to pay heating or cooling bills in New Mexico, LIHEAP can help cover those costs directly. The program pays assistance toward gas, electricity, propane, and bulk fuels like wood and pellets. This is not a loan; it is a benefit applied to your parent's energy account.\n\nEligibility is based on household income and size, not age. Your parent does not need to be elderly to qualify, but many older adults on Social Security or fixed pensions fall within the income limits. The income cutoff is set at 150% of the federal poverty guideline, which means a household of one earning a modest fixed income will often qualify. New Mexico posts updated income tables each program year; the current figures are available at hca.nm.gov.\n\nThe benefit amount is not fixed. It varies based on your parent's household size, income, and energy needs. Because of that, the best way to find out what your parent would receive is to apply or call the Human Services Customer Service Center at 1-800-283-4465. New Mexico has 40 local offices across the state, and tribal households on Indian lands may apply through a tribal LIHEAP program if their tribe administers one.",
+      "savingsRange": "",
+      "savingsSource": "The New Mexico LIHEAP program does not publish a fixed benefit amount. Assistance varies by household circumstances and program year. A specific dollar figure cannot be verified from official sources at this time.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "New Mexico resident",
+          "Household income at or below 150% of the federal poverty guideline",
+          "Paying for home energy costs (heating, cooling, or both)",
+          "No age requirement; income and household size determine eligibility",
+          "Tribal households may apply through tribal programs if available"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a New Mexico resident seeking help with home energy costs",
+          "Must meet program income guidelines (150% of the federal poverty guideline for the applicable program year)",
+          "Applications are submitted through the YesNM portal (yes.nm.gov), by phone, in person at a local office, by fax, or by mail",
+          "Residents on Indian lands should ask whether their tribe administers its own LIHEAP program before applying through the state"
+        ],
+        "povertyLevelReference": "150% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at yes.nm.gov or by calling 1-800-283-4465; processing time is not published but submitting a complete application with all documents reduces delays.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check income eligibility before you apply",
+            "description": "New Mexico sets the income limit at 150% of the federal poverty guideline. The exact dollar table changes each program year. Visit hca.nm.gov and look for the current LIHEAP Point and Income Guidelines, or call 1-800-283-4465 to ask whether your parent's household income qualifies before gathering documents."
+          },
+          {
+            "step": 2,
+            "title": "Gather your parent's documents",
+            "description": "You will need a completed LHP-602 application form (available in English from the state), proof of your parent's household income, their most recent utility bill or energy account information, and any documents the local office requests after reviewing the application. Have the names and dates of birth for everyone living in the household ready."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application by your preferred method",
+            "description": "Online: create or log in to an account at yes.nm.gov and complete the application there. By phone: call 1-800-283-4465 and ask about LIHEAP. In person: visit one of the 40 local Income Support Division offices across New Mexico. By fax: fax the completed LHP-602 to 1-855-804-8960 (Central ASPEN Scanning Area, CASA). By mail: send to Central ASPEN Scanning Area (CASA), PO Box 830, Bernalillo, NM 87004. Do not mail the form to NM Gas Company or the main HSD office."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly if the office requests more documents",
+            "description": "After submitting, the local office may contact you for additional verification. Responding quickly prevents delays. If you applied online through yes.nm.gov, you can check status there. If you applied by mail or fax, call 1-800-283-4465 to follow up."
+          },
+          {
+            "step": 5,
+            "title": "Receive the benefit decision",
+            "description": "If approved, the assistance is applied to your parent's energy account; it is not paid directly to your parent in most cases. If denied, the notice will explain the reason and your right to appeal."
+          }
+        ],
+        "processingTime": "A specific processing time is not published in official New Mexico LIHEAP materials. Submit a complete application with all requested documents to avoid delays.",
+        "waitlist": null,
+        "tip": "If your parent has received a disconnection notice from their utility provider, tell the office when you apply. Crisis situations involving active shut-off notices may be handled on an expedited basis.",
+        "urls": [
+          {
+            "label": "Apply online at YesNM",
+            "url": "https://yes.nm.gov"
+          },
+          {
+            "label": "New Mexico LIHEAP program page",
+            "url": "https://www.hca.nm.gov/lookingforassistance/low_income_home_energy_assistance_program/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent utility bill for the home (electric, gas, or propane account showing account number and service address)",
+        "Proof of household income for all household members (Social Security award letter, pension statement, or most recent tax return)",
+        "Names and dates of birth for everyone living in the household",
+        "Completed LHP-602 LIHEAP application form (available in English from the state)",
+        "Proof of New Mexico residency (utility bill, lease agreement, or state-issued document showing current address)",
+        "If bulk fuel is used (wood, pellets, propane): information about the fuel supplier or most recent delivery invoice"
+      ],
+      "contacts": [
+        {
+          "label": "NM Human Services Customer Service Center",
+          "phone": "1-800-283-4465",
+          "description": "Apply for LIHEAP, ask about eligibility, and get help finding your nearest local Income Support Division office. This is the program's direct application line.",
+          "hours": "Contact the office for current hours"
+        },
+        {
+          "label": "YesNM Online Portal",
+          "phone": null,
+          "description": "Apply online at yes.nm.gov. You can create an account, submit the application, upload documents, and check status without calling.",
+          "hours": "Available online"
+        },
+        {
+          "label": "CASA Fax Line (document submission)",
+          "phone": "1-855-804-8960",
+          "description": "Fax the completed LHP-602 application and supporting documents to the Central ASPEN Scanning Area. Use this number only for faxing documents, not for questions.",
+          "hours": "Fax line"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a utility disconnection notice, tell the office immediately when you call or apply. Crisis cases with active shut-off threats may be processed faster than standard applications.",
+        "If your parent lives on Indian lands in New Mexico, ask whether their tribe administers its own LIHEAP program before applying through the state. The application path may be different, and tribal programs are not accessible through yes.nm.gov.",
+        "Do not mail the LHP-602 to the New Mexico Gas Company or the main Human Services Department office. Mail goes only to CASA at PO Box 830, Bernalillo, NM 87004, or fax to 1-855-804-8960.",
+        "Income limits change each program year. The figures posted at hca.nm.gov under 'LIHEAP Point and Income Guidelines' are the official current thresholds. Verify before assuming your parent qualifies or does not qualify based on a prior year."
+      ],
+      "relatedPrograms": [
+        "Weatherization Assistance Program (WAP) New Mexico",
+        "New Mexico Gas Company Low-Income Rate Assistance",
+        "New Mexico SNAP Food Benefits",
+        "Supplemental Security Income (SSI)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What energy costs does LIHEAP cover?",
+          "body": "LIHEAP in New Mexico covers heating and cooling costs including natural gas, electricity, propane, and bulk fuels such as wood and pellets. The benefit is applied to your parent's energy account, not paid as cash. The amount varies by household income, household size, and energy needs for that program year."
+        },
+        {
+          "type": "callout",
+          "title": "Age is not a requirement",
+          "body": "Many families assume LIHEAP is only for seniors. It is not. Any New Mexico household that meets the income limit at 150% of the federal poverty guideline can apply, regardless of age. That said, older adults on fixed Social Security income frequently fall within the qualifying range. The only way to confirm is to check the current income table at hca.nm.gov or call 1-800-283-4465."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is on Social Security only. Does that count as income for LIHEAP?",
+          "answer": "Yes. Social Security income is counted when determining LIHEAP eligibility. The income limit is 150% of the federal poverty guideline, which many older adults receiving only Social Security fall below. To confirm, check the current income table posted at hca.nm.gov or call 1-800-283-4465 with your parent's monthly Social Security amount and household size."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of an elderly parent. The application requires the parent's household income information, their energy account details, and the names and dates of birth for everyone in the household. If you are applying in person at a local office, bring any documentation showing you are authorized to act on their behalf."
+        },
+        {
+          "question": "My parent rents their home. Can they still get LIHEAP?",
+          "answer": "Yes, renters can qualify for LIHEAP as long as they are responsible for paying their own energy costs. If heat or electricity is included in their rent and paid by the landlord, eligibility may be different. Call 1-800-283-4465 to ask how the program handles your parent's specific rental situation."
+        },
+        {
+          "question": "How much will my parent actually receive?",
+          "answer": "The benefit amount is not fixed. It varies based on household income, household size, and energy needs for the current program year. New Mexico does not publish a standard dollar benefit on its public LIHEAP pages. The only way to find out what your parent would receive is to apply. Call 1-800-283-4465 or apply at yes.nm.gov."
+        },
+        {
+          "question": "What if my parent uses propane or wood for heat, not natural gas or electricity?",
+          "answer": "LIHEAP in New Mexico covers bulk fuels including propane, wood, and pellets, not just gas and electricity. When you apply, have your parent's most recent fuel delivery invoice or supplier information ready. The benefit process for bulk fuels may differ slightly from utility-account-based benefits, so ask the local office how payment is handled."
+        },
+        {
+          "question": "My parent's utility has already sent a shutoff notice. Is it too late to apply?",
+          "answer": "No. Apply immediately. Tell the local office or customer service representative at 1-800-283-4465 about the disconnection notice when you contact them. Crisis situations with active shutoff threats may be prioritized. Do not wait to gather every document before calling; report the emergency first."
+        },
+        {
+          "question": "Can my parent apply for LIHEAP and the Weatherization Assistance Program at the same time?",
+          "answer": "Yes. LIHEAP and the Weatherization Assistance Program (WAP) are separate programs with separate applications, but they are complementary. LIHEAP helps pay energy bills; WAP helps reduce energy costs long-term by improving home insulation and efficiency. Ask about WAP when you contact the Income Support Division, or visit the New Mexico Energy, Minerals and Natural Resources Department website for WAP information."
+        },
+        {
+          "question": "My parent lives on tribal land. Should they apply through the state or the tribe?",
+          "answer": "It depends on whether your parent's tribe administers its own LIHEAP program. Some tribes in New Mexico run their own programs; others are served through New Mexico's state area offices. Before applying online or through the state, contact your parent's tribal government or social services office to ask which path applies. Applying through the wrong channel could delay assistance."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-800-283-4465",
+      "sourceUrl": "https://www.hca.nm.gov/lookingforassistance/low_income_home_energy_assistance_program/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nm-home-delivered-meals",
+      "name": "New Mexico Home-Delivered Meals",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60+ and can't easily leave home, New Mexico will deliver a hot meal to their door on weekdays, at no required cost and with no income test.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Aging and Disability Resource Center (statewide information line): 1-800-432-2080",
+            "type": "service-area"
+          },
+          {
+            "name": "Albuquerque AAA / City of Albuquerque Senior Affairs: 505-764-6400",
+            "type": "service-area"
+          },
+          {
+            "name": "Santa Fe County Senior Services: 505-992-3069",
+            "type": "service-area"
+          },
+          {
+            "name": "New Mexico Aging and Long-Term Services Department",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older, homebound, and struggling to get regular meals, New Mexico's Home-Delivered Meals program can send a nutritious meal to their door on weekdays. There is no income test and no asset test. The main requirements are age and homebound status, meaning your parent has difficulty leaving home due to a temporary or permanent condition and cannot easily prepare their own food.\n\nThe program is run statewide through the New Mexico Aging Network, but delivered locally by Area Agencies on Aging and their provider partners. What that means in practice: delivery schedules, intake steps, and service availability can differ by county. Most local programs deliver Monday through Friday. Santa Fe County, for example, delivers on weekdays only, skips major holidays, and suggests a voluntary donation of $1.50 per meal, though donation is not required.\n\nOne detail families often miss: your parent's spouse may also qualify for meals regardless of their age, as long as your parent is eligible. And if your parent is only temporarily homebound, such as recovering from a surgery, some local providers will still serve them. Call your county's office to confirm.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older (spouse may qualify at any age)",
+          "Homebound or unable to attend a meal site",
+          "Unable to prepare meals independently or lacks regular help doing so",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound, meaning they have a temporary or permanent condition that makes it difficult to leave home or attend a congregate meal site, and they are unable to prepare their own meals or lack another regular source of meal preparation. Local programs conduct a brief intake assessment to confirm this.",
+        "otherRequirements": [
+          "Must live in New Mexico",
+          "Spouse of an eligible senior may qualify regardless of age",
+          "Some providers also serve a dependent caregiver living with the eligible recipient",
+          "Local intake or eligibility assessment is required before service begins"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the statewide Aging and Disability Resource Center at 1-800-432-2080 to be connected to your local Area Agency on Aging, which will conduct a brief intake assessment before starting service.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the statewide referral line",
+            "description": "Call 1-800-432-2080 (Aging and Disability Resource Center). Tell them you are looking for home-delivered meals for someone who is 60 or older and homebound. They will connect you to the correct local Area Agency on Aging for your county."
+          },
+          {
+            "step": 2,
+            "title": "Complete a local intake assessment",
+            "description": "Your local provider will conduct a brief eligibility and intake assessment. They will ask about your parent's age, homebound status, difficulty preparing meals, and living situation. Have your parent's proof of age and address available."
+          },
+          {
+            "step": 3,
+            "title": "Confirm delivery schedule and start date",
+            "description": "Once the intake is complete, the local provider will tell you when delivery can begin, how many days per week meals will arrive, and whether there is a waitlist in your area. Ask specifically about weekend coverage and holiday schedules."
+          }
+        ],
+        "processingTime": "No statewide standard is published. Local programs typically begin service after the intake assessment is complete. Timeline varies by county and current provider capacity.",
+        "waitlist": "Possible in some counties. No statewide waitlist policy exists. Ask your local provider directly when you call.",
+        "tip": "If you are in Albuquerque or Bernalillo County, skip the statewide line and call the Senior Information and Assistance Hotline directly at 505-764-6400. If you are in Santa Fe County, call 505-992-3069. These local lines can start your intake faster.",
+        "urls": [
+          {
+            "label": "New Mexico Aging Network Nutrition Programs",
+            "url": "https://www.aging.nm.gov/aging-network/nutrition/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or state-issued ID showing date of birth)",
+        "Proof of New Mexico residence (utility bill, lease agreement, or any official mail showing your parent's current address)",
+        "Basic contact information for your parent and a family contact or caregiver",
+        "A brief description of why your parent is homebound or unable to prepare meals (the intake worker will ask about this verbally; no formal medical letter is typically required at first contact, but be ready to describe the condition)",
+        "Medicare or Medicaid card if your parent has one (some local providers note coverage during intake, though neither is a program requirement)"
+      ],
+      "contacts": [
+        {
+          "label": "Albuquerque / Bernalillo County: Senior Information and Assistance Hotline",
+          "phone": "505-764-6400",
+          "description": "Direct line for Albuquerque and Bernalillo County residents. Start your intake here if your parent lives in this area.",
+          "hours": "Contact provider for current hours"
+        },
+        {
+          "label": "Santa Fe County Senior Services",
+          "phone": "505-992-3069",
+          "description": "Direct line for Santa Fe County residents. Handles intake and delivery coordination for that county.",
+          "hours": "Contact provider for current hours"
+        },
+        {
+          "label": "Aging and Disability Resource Center (statewide)",
+          "phone": "1-800-432-2080",
+          "description": "Statewide information and referral line. If you are outside Albuquerque or Santa Fe County, start here. They will connect you to the correct local Area Agency on Aging for your parent's county. This line refers you; meal delivery is handled locally.",
+          "hours": "Contact for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is only temporarily homebound, such as recovering from surgery or a fall, call anyway. Some local providers serve temporary homebound status, though not all apply this rule the same way.",
+        "Some local providers will also deliver a meal to a spouse or dependent caregiver living in the same home, even if that person is under 60. Ask about this when you call.",
+        "Local programs may ask for a suggested donation, often around $1.50 per meal in Santa Fe County. Donation is voluntary and cannot be required. Your parent will not be turned away for not donating."
+      ],
+      "relatedPrograms": [
+        "New Mexico Congregate Meals (senior meal sites for those who can travel)",
+        "New Mexico SNAP Food Benefits (monthly grocery assistance for eligible seniors)",
+        "New Mexico PACE (Program of All-inclusive Care for the Elderly)",
+        "New Mexico Caregiver Support Program"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No asset test.",
+          "body": "This program is funded through the Older Americans Act and the New Mexico Aging Network. Unlike most government benefits, there is no income limit and no asset limit. The only gates are age (60+) and homebound status. If your parent qualifies on those two points, they can receive meals regardless of savings, Social Security income, or pension."
+        },
+        {
+          "type": "callout",
+          "title": "Service varies by county",
+          "body": "New Mexico administers this program locally, which means delivery days, intake processes, waitlists, and donation requests differ by county. Santa Fe County delivers Monday through Friday, skips major holidays, and suggests a $1.50 per meal donation. Albuquerque uses its own hotline and eligibility process. When you call, ask specifically: how many days per week will meals arrive, is there a current waitlist, and does the program serve a spouse or caregiver in the same home."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent only needs meals for a few weeks while recovering from surgery. Do they still qualify?",
+          "answer": "Possibly yes. Some local providers in New Mexico serve people who are temporarily homebound, not just permanently. However, not every county applies this rule the same way. Call your local Area Agency on Aging and describe the situation. In Albuquerque, call 505-764-6400. In Santa Fe County, call 505-992-3069. Statewide, call 1-800-432-2080."
+        },
+        {
+          "question": "My parent's spouse is only 55. Can they get meals too?",
+          "answer": "Yes, in many cases. A spouse of an eligible senior can qualify for home-delivered meals regardless of their own age, as long as the primary recipient is 60 or older and meets homebound requirements. Some local providers also serve dependent caregivers living in the same home. Ask specifically about this when you call."
+        },
+        {
+          "question": "Is there a waitlist, and how long is it?",
+          "answer": "Waitlists are possible in some counties, but there is no statewide policy and no published statewide timeline. Availability depends on your county and the current capacity of the local provider. When you call, ask directly: is there a current waitlist, and if so, how long is the typical wait right now."
+        },
+        {
+          "question": "My parent has significant savings and a pension. Will that disqualify them?",
+          "answer": "No. The New Mexico Home-Delivered Meals program has no income limit and no asset limit for the core Aging Network program. Your parent's savings, investment accounts, and pension income are not considered. The only requirements are being 60 or older and meeting the homebound criteria."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't make the call themselves?",
+          "answer": "Yes. Family members and caregivers can call on a parent's behalf to initiate the intake process. You will need to provide your parent's basic information, including their age, address, and a description of why they are homebound or unable to prepare meals. The local provider may want to speak with your parent at some point during the intake, but the first call can come from you."
+        },
+        {
+          "question": "What if my parent is on SNAP already? Can they get home-delivered meals too?",
+          "answer": "Yes. Home-delivered meals and SNAP are separate programs with separate eligibility rules and benefits. Receiving meals through the Aging Network does not affect your parent's SNAP eligibility or benefit amount, and vice versa. Many seniors use both programs at the same time."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "1-800-432-2080",
+      "sourceUrl": "https://www.aging.nm.gov/aging-network/nutrition/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-05T18:20:48.075Z
+ * Last updated: 2026-10-06T09:18:23.569Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1757,7 +1757,6 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-23",
-      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -2650,6 +2649,187 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oksfmnp.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ok-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support",
+      "tagline": "If you are caring for an aging parent in Oklahoma, this program can connect you with free respite care, counseling, and support services so you are not doing this alone.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Area Agencies on Aging across Oklahoma",
+            "type": "service-area"
+          },
+          {
+            "name": "INCOG AAA for Creek, Osage, and Tulsa Counties",
+            "type": "service-area"
+          },
+          {
+            "name": "Southwestern Oklahoma Development Authority AAA",
+            "type": "service-area"
+          },
+          {
+            "name": "Southern Oklahoma Development Association AAA",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are caring for a parent or other older adult who needs help with daily tasks like bathing, dressing, or managing medications, the National Family Caregiver Support Program (NFCSP) can connect you with free services through your local Area Agency on Aging (AAA). That includes respite care (temporary relief so you can rest or handle other responsibilities), counseling, caregiver training, and help finding other local resources.\n\nThere is no income test and no asset test. Oklahoma's published materials state plainly that no income restrictions apply. The main eligibility requirement is about your parent's functional need: the person you are caring for must be 60 or older and need help with at least two activities of daily living, or have Alzheimer's disease, dementia, or another cognitive impairment that requires substantial supervision. Grandparents or relatives age 55 or older who are raising a grandchild or other child may also qualify for a separate track of caregiver support.\n\nBecause this program runs through local Area Agencies on Aging rather than a single state office, the specific services available to you depend on your county. Some local AAAs offer respite vouchers you can use to pay a relief caregiver; others provide in-home or facility-based respite directly. The first step is calling your local AAA or the statewide information line to find out exactly what is available where you live.",
+      "savingsRange": "",
+      "savingsSource": "Free service; no dollar benefit is published in Oklahoma's NFCSP materials. Services are provided at no cost through local Area Agencies on Aging.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "No income or asset limits",
+          "Care recipient must be age 60 or older",
+          "Care recipient must need help with at least 2 daily activities, or have dementia requiring supervision",
+          "Caregiver must be an adult family member or informal caregiver",
+          "Grandparent/relative caregivers age 55+ caring for a child may also qualify"
+        ],
+        "ageRequirement": "60+ (care recipient); 55+ for grandparent/relative caregiver track",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "The person you are caring for must need help with at least two activities of daily living (ADLs), such as bathing, dressing, eating, toileting, or transferring from bed to chair. Alternatively, they must have Alzheimer's disease, dementia, or another cognitive or mental impairment that requires substantial supervision to keep them safe.",
+        "otherRequirements": [
+          "Caregiver must be an adult family member or other informal (unpaid) caregiver",
+          "For grandparent/relative caregiver support: caregiver must be age 55 or older and a grandparent, step-grandparent, or other relative caring for a child age 18 or younger, or for a person with a disability",
+          "Services are delivered through the local Area Agency on Aging serving your county, not through a central state office"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call your local Area Agency on Aging or the statewide line at 1-800-211-2116 to find out what services are available in your county and get started.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the statewide information line",
+            "description": "Call 1-800-211-2116 to find the Area Agency on Aging that serves your county. Tell them you are a family caregiver and ask about the National Family Caregiver Support Program. They will connect you to the right local office."
+          },
+          {
+            "step": 2,
+            "title": "Contact your local AAA directly",
+            "description": "Your local AAA is the actual program office. They will ask about your parent's age, what help they need day-to-day, and your role as a caregiver. This conversation is also your intake screen. You can also reach the Oklahoma Human Services caregiver supports page at https://oklahoma.gov/okdhs/services/cap/fcs.html to find local AAA contact information."
+          },
+          {
+            "step": 3,
+            "title": "Gather basic information before your call",
+            "description": "You do not need a full document file for the first call. Have your parent's date of birth and a brief description of what help they currently need (bathing, dressing, medication reminders, supervision). The AAA intake worker will tell you what documents they need after the call."
+          },
+          {
+            "step": 4,
+            "title": "Complete local AAA intake paperwork",
+            "description": "Each AAA has its own intake form. The worker will send or go over the form with you. Return any requested documents promptly so your case can move forward. Ask the AAA specifically whether respite vouchers or direct respite services are available in your area."
+          },
+          {
+            "step": 5,
+            "title": "Receive a caregiver support plan",
+            "description": "Once intake is complete, the AAA case manager will work with you to identify which services fit your situation: respite care, counseling, support groups, training, or help finding other local programs."
+          }
+        ],
+        "processingTime": "No official statewide processing timeline is published. Ask your local AAA how long intake and service authorization typically takes in your county.",
+        "waitlist": "A statewide waitlist policy is not described in official materials. Availability depends on local AAA funding and capacity. Ask your local AAA directly whether there is a wait for respite or other services.",
+        "tip": "When you call, ask specifically whether your local AAA offers respite vouchers. Some Oklahoma AAAs provide vouchers that let you choose your own respite caregiver; others schedule respite directly. Knowing which model your AAA uses will help you plan.",
+        "urls": [
+          {
+            "label": "Oklahoma DHS Caregiver Supports Page",
+            "url": "https://oklahoma.gov/okdhs/services/cap/fcs.html"
+          },
+          {
+            "label": "Oklahoma NFCSP Policy",
+            "url": "https://oklahoma.gov/okdhs/library/policy/current/oac-340/chapter-105/subchapter-10/parts-7/national-family-caregiver-support-program.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of the care recipient's age (birth certificate, Medicare card, or state-issued ID)",
+        "Basic description of the care recipient's daily limitations (you can describe these verbally on your first call; the AAA will note them)",
+        "Your contact information and relationship to the care recipient",
+        "Proof of relationship if applying as a grandparent or relative caregiver (birth certificate showing family connection, legal guardianship papers if applicable)",
+        "Any diagnosis letter or medical records documenting Alzheimer's, dementia, or other cognitive impairment (if applicable; this supports the functional eligibility determination)",
+        "Any local AAA intake paperwork the AAA sends you after your initial call"
+      ],
+      "contacts": [
+        {
+          "label": "Oklahoma Aging Services Statewide Information Line",
+          "phone": "1-800-211-2116",
+          "description": "Call this number to find the Area Agency on Aging serving your county and get connected to the NFCSP program in your area. This is the starting point for most families.",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "Oklahoma Human Services Main Line",
+          "phone": "(405) 522-5050",
+          "description": "Oklahoma DHS main line; can direct you to caregiver support resources and the appropriate regional office if the line above is busy.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "There is no income or asset test for this program. Do not assume you are disqualified because your parent has savings or a pension.",
+        "The functional test matters more than age alone. Your parent must need help with at least two daily activities, or need supervision due to cognitive impairment. Be ready to describe what your parent cannot safely do on their own.",
+        "Services and availability vary by county. Call your local AAA to find out exactly which services (respite vouchers, in-home respite, counseling, support groups) are actually available where you live before counting on a specific type of help."
+      ],
+      "relatedPrograms": [
+        "Oklahoma Advantage Waiver (HCBS home and community-based services for older adults)",
+        "Oklahoma Medicaid ADvantage Program",
+        "Eldercare Locator (national AAA finder at eldercare.acl.gov)",
+        "LIHEAP Energy Assistance (if your parent also needs help with utility costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is a service program, not a cash benefit.",
+          "body": "NFCSP does not pay money directly to you or your parent. It provides services: respite care, counseling, support groups, training, and help finding other programs. Some local AAAs issue respite vouchers that give you flexibility in choosing a relief caregiver, but those vouchers go toward services, not into your bank account. Ask your AAA how respite is authorized and delivered in your county."
+        },
+        {
+          "type": "callout",
+          "title": "Grandparent and relative caregivers: there is a separate track for you.",
+          "body": "If you are age 55 or older and raising a grandchild or another relative's child (age 18 or younger), or caring for a family member with a disability, you may qualify for NFCSP's grandparent and relative caregiver support track. The functional requirements for the child or person with a disability are different from the older-adult track. Call 1-800-211-2116 and ask specifically about grandparent caregiver services."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has savings and a pension. Does that disqualify them from this program?",
+          "answer": "No. Oklahoma's NFCSP materials state that no income restrictions apply, and no asset test is described anywhere in the official program materials. Eligibility is based on your parent's age (60 or older) and their functional needs, not their finances. Do not self-screen out based on income or savings."
+        },
+        {
+          "question": "What if my parent only needs help with one activity of daily living, not two?",
+          "answer": "The standard eligibility rule requires help with at least two ADLs or a diagnosis of Alzheimer's, dementia, or another cognitive impairment that requires supervision. If your parent currently needs help with only one ADL but also has a cognitive impairment, they may still qualify under the cognitive impairment pathway. Call your local AAA at 1-800-211-2116 and describe the full picture; the intake worker will assess eligibility based on everything."
+        },
+        {
+          "question": "Is there a waitlist? How long will it take to get help?",
+          "answer": "Oklahoma does not publish a statewide waitlist policy. Whether there is a wait and how long it takes depends entirely on your local Area Agency on Aging and their current funding and capacity. Ask your AAA directly when you call: 'Is there currently a waitlist for respite care in my county, and how long is it?' Getting on the list as soon as possible is the only way to secure your place."
+        },
+        {
+          "question": "Can I choose who provides respite care for my parent?",
+          "answer": "It depends on your local AAA. Some Oklahoma AAAs issue respite vouchers that let you hire a relief caregiver of your choosing. Others schedule and deliver respite directly. When you call your local AAA, ask specifically: 'Do you offer respite vouchers, or do you assign a respite caregiver?' The answer will be different depending on your county."
+        },
+        {
+          "question": "Can I apply for NFCSP and other programs at the same time?",
+          "answer": "Yes. NFCSP is separate from Medicaid, Medicare, and other assistance programs. Applying for NFCSP does not affect your parent's eligibility for Medicaid waiver services, SNAP, or other benefits. If your parent also needs help with home-based medical care or personal care services, ask the AAA about the Oklahoma Advantage Waiver, which may cover additional services NFCSP does not."
+        },
+        {
+          "question": "What if my needs change after I am already enrolled?",
+          "answer": "You can contact your AAA case manager at any time to request a reassessment. If your parent's condition worsens or your caregiving situation changes significantly, tell your case manager. The AAA can adjust your support plan to add services or change the type of respite being provided based on current need."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "1-800-211-2116",
+      "sourceUrl": "https://oklahoma.gov/okdhs/library/policy/current/oac-340/chapter-105/subchapter-10/parts-7/national-family-caregiver-support-program.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

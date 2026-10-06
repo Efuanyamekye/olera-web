@@ -1,0 +1,23 @@
+[
+  {
+    "state": "MD",
+    "id": "md-medicaid-abd-regular",
+    "name": "Maryland Medical Assistance - Regular Medicaid/ABD",
+    "legacyId": "maryland-medical-assistance-regular-medicaid-abd",
+    "programType": "benefit"
+  },
+  {
+    "state": "MD",
+    "id": "md-medical-assistance-medically-needy",
+    "name": "Maryland Medical Assistance - Medically Needy Pathway",
+    "legacyId": "maryland-medical-assistance-medically-needy-pathway",
+    "programType": "benefit"
+  },
+  {
+    "state": "MD",
+    "id": "md-hcbs-community-options-waiver",
+    "name": "Maryland HCBS Waivers - Medicaid Waiver Programs",
+    "legacyId": "maryland-hcbs-waivers-medicaid-waiver-programs",
+    "programType": "benefit"
+  }
+]

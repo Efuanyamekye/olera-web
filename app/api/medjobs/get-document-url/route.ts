@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { activeProviderProfile } from "@/lib/providers/active-profile.server";
 
 const BUCKET = "student-documents";
 
@@ -73,12 +74,7 @@ export async function POST(req: NextRequest) {
       // 2. Paid access to view the student's profile
 
       // Provider profiles can be "organization" or "caregiver" type
-      const { data: providerProfile } = await admin
-        .from("business_profiles")
-        .select("id")
-        .eq("account_id", account.id)
-        .in("type", ["organization", "caregiver"])
-        .maybeSingle();
+      const { data: providerProfile } = await activeProviderProfile(admin, account.id, "id");
 
       if (!providerProfile) {
         console.log("[get-document-url] No organization/caregiver profile for account:", account.id);

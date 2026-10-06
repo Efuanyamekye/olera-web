@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.242Z
+ * Last updated: 2026-10-06T06:44:48.405Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2618,6 +2618,211 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null
+    },
+    {
+      "id": "ut-new-choices-waiver",
+      "name": "New Choices Waiver",
+      "shortName": "New Choices Waiver",
+      "tagline": "If your parent is in a nursing facility or hospital and wants to come home, this Utah Medicaid waiver may cover the care services that make that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Utah DHHS New Choices Waiver Program Office",
+            "type": "service-area"
+          },
+          {
+            "name": "Case management agencies serving local counties",
+            "type": "service-area"
+          },
+          {
+            "name": "Roads To Independence case management services in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Utah's New Choices Waiver is a Medicaid program designed to move people out of nursing facilities, hospitals, and similar institutions and back into a home or community setting. If your parent is currently in one of those facilities and needs ongoing help with daily activities like bathing, dressing, or medication management, this waiver may cover the services that allow them to live somewhere less restrictive.\n\nThe waiver covers services such as case management, adult day care, non-medical transportation, assistive technology, and personal support in a home, apartment, family member's home, assisted living, or other community setting. It also covers adult residential services in certified independent living facilities. A care coordinator manages the full service plan, so your family is not left piecing together separate providers alone.\n\nThis is not an open-enrollment program. Slots are limited and most are reserved for people already living in nursing facilities, hospitals, or other qualifying medical settings. Your parent must currently be in one of those settings and must meet a nursing-facility level of care standard before they can apply. If your parent is already home, they are not eligible to apply for this waiver.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the waiver covers home and community-based services at no direct cost to the beneficiary through Utah Medicaid. Provider reimbursement rates (such as $40.00 per day for adult residential services) are published by Utah Medicaid but represent what the state pays providers, not a cash benefit to families.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Currently living in a nursing facility, hospital, or qualifying medical institution in Utah",
+          "Age 65 or older, OR age 18-64 and disabled under Social Security Act criteria",
+          "Requires nursing-facility level of care (daily help with bathing, dressing, or medical needs)",
+          "Meets Utah Medicaid long-term care financial eligibility rules",
+          "Program is capacity-limited; qualifying does not guarantee immediate enrollment"
+        ],
+        "ageRequirement": "18+ (disability required if under 65); 65+ without disability requirement",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must require the level of care provided in a nursing facility. This is determined through a clinical assessment that evaluates whether they need daily help with activities like bathing, dressing, eating, mobility, or medication management. The assessment is conducted as part of the application process.",
+        "otherRequirements": [
+          "Must be a Utah resident",
+          "Must currently be living in a qualifying institutional setting such as a nursing facility, hospital, or other eligible medical facility (non-IMD); people already living at home cannot apply",
+          "Must have met a minimum length-of-stay requirement in the current facility type",
+          "Must meet Utah Medicaid long-term care financial eligibility rules (specific income and asset thresholds follow Medicaid long-term care rules; the waiver office will review these as part of the application)",
+          "Program serves a limited number of individuals; most available slots are reserved for people in nursing facilities, hospitals, or other medical facilities",
+          "Services are limited to what each person is individually assessed to need"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the New Choices Waiver Program Office to begin intake screening; the application is not available as an online form.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent is in a qualifying facility",
+            "description": "Your parent must currently be living in a nursing facility, hospital, or other qualifying institutional setting in Utah. If they are already at home, they are not eligible to apply. If you are unsure whether the current facility qualifies, ask the program office directly when you call."
+          },
+          {
+            "step": 2,
+            "title": "Call the New Choices Waiver Program Office",
+            "description": "Call 801-538-6155 and select option 6, or call toll-free at 800-662-9651 and select option 6. Phone staff are available Monday, Wednesday, Thursday, and Friday from 9:00 am to 12:00 pm. If you cannot reach someone, you can also email newchoiceswaiver@utah.gov or fax 801-323-1586."
+          },
+          {
+            "step": 3,
+            "title": "Complete the intake screening",
+            "description": "The program office will conduct an initial screening to determine whether your parent meets the basic eligibility criteria: Utah residency, current facility setting, length-of-stay requirement, and nursing-facility level of care need. Have the facility name, your parent's admission date, and basic medical history available."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application and supporting documents",
+            "description": "If your parent passes the initial screening, the program office will provide an application. You will need to submit proof of identity, proof of Utah residency, medical and functional records showing nursing-facility level of care, information about the current facility and length of stay, and Medicaid financial information. Gather these before or immediately after your call to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Wait for slot assignment",
+            "description": "Because the program has a limited number of slots and most are reserved for nursing facility residents, there may be a wait between application approval and actual enrollment. The program office will tell you where your parent stands. Ask specifically about priority tier and estimated timeline."
+          },
+          {
+            "step": 6,
+            "title": "Care assessment and service plan",
+            "description": "Once a slot is available, a care coordinator will conduct a full assessment and develop an individual service plan. Services are limited to what your parent is assessed to need, so the assessment matters. Ask the care coordinator about every service type the waiver covers so nothing is overlooked."
+          }
+        ],
+        "processingTime": "No fixed processing time is published by the program. Expect a wait because of limited slots. Contact the program office at 801-538-6155 (option 6) for the most current timeline.",
+        "waitlist": "Yes. The program is capacity-limited and most available slots are reserved for people currently in nursing facilities, hospitals, or qualifying medical facilities. Specific wait times by region or priority tier were not published in the reviewed official sources. Ask the program office directly for current wait estimates.",
+        "tip": "The program office phone line is only open Monday, Wednesday, Thursday, and Friday from 9:00 am to 12:00 pm. Do not call Tuesday or in the afternoon. If you miss those windows, email newchoiceswaiver@utah.gov so your inquiry is on record.",
+        "urls": [
+          {
+            "label": "Utah Medicaid New Choices Waiver Program Page",
+            "url": "https://medicaid.utah.gov/ltc-2/nc/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Name of your parent's current facility and their admission date (the intake screener will ask this on the first call)",
+        "Proof of Utah residency (utility bill, lease agreement, or state-issued document showing the facility address or a prior home address in Utah)",
+        "Proof of identity (state-issued ID, driver's license, or birth certificate)",
+        "Medical and functional records showing that your parent requires nursing-facility level of care (physician notes, care plans, or hospital discharge summaries are typically sufficient)",
+        "Information about length of stay in the current facility",
+        "Medicaid financial information for long-term care eligibility review (the program office will specify what is needed; Utah Medicaid long-term care rules govern the financial review, and the office will guide you through what to gather)",
+        "Social Security number for your parent",
+        "Discharge or placement planning documents if your parent's facility is actively planning a transition",
+        "Contact information for a legal representative or authorized agent if someone other than your parent is managing the application"
+      ],
+      "contacts": [
+        {
+          "label": "New Choices Waiver Program Office (Salt Lake)",
+          "phone": "(801) 538-6155",
+          "description": "Call and select option 6 to begin intake screening or ask eligibility questions. This is the program's own application office.",
+          "hours": "Mon, Wed, Thu, Fri: 9:00 am - 12:00 pm (closed Tuesday and afternoons)"
+        },
+        {
+          "label": "New Choices Waiver Toll-Free Line",
+          "phone": "(800) 662-9651",
+          "description": "Same program office, toll-free. Select option 6.",
+          "hours": "Mon, Wed, Thu, Fri: 9:00 am - 12:00 pm (closed Tuesday and afternoons)"
+        },
+        {
+          "label": "New Choices Waiver Email",
+          "phone": null,
+          "description": "Email newchoiceswaiver@utah.gov if you cannot reach the office by phone. Useful for submitting questions or documents outside of phone hours.",
+          "hours": null
+        },
+        {
+          "label": "Roads To Independence (Box Elder, Davis, Morgan, Salt Lake, Weber Counties)",
+          "phone": null,
+          "description": "Case management provider serving these five counties. Contact them through the waiver program office if your parent will live in one of these areas after transitioning out of the institution.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Your parent must still be in the qualifying facility when they apply. Do not wait until after discharge to call; once they leave the institution, they lose eligibility to apply for this waiver.",
+        "If your parent's facility has a discharge planner or social worker, ask that person to contact the New Choices Waiver office directly. Facility staff often have existing relationships with the program office and can accelerate the intake process.",
+        "Qualifying medically does not mean your parent will be enrolled immediately. Limited slots and a reservation structure mean there may be a wait even after approval. Ask the program office about your parent's priority tier and what you can do to prepare for transition in the meantime.",
+        "Financial eligibility follows Utah Medicaid long-term care rules, which have income and asset rules that are separate from standard Medicaid. If your parent has a spouse still living at home, spousal protection rules may apply. The program office can refer you to Medicaid for the financial review."
+      ],
+      "relatedPrograms": [
+        "Utah Medicaid Long-Term Care (the financial eligibility program that must also be met)",
+        "PASSPORT Waiver (Utah's other HCBS waiver for people who are already in the community)",
+        "Utah Aging and Adult Services Home and Community-Based Services",
+        "Utah State Long-Term Care Ombudsman (advocacy if your parent has concerns about their current facility)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Who this waiver is NOT for",
+          "body": "If your parent is already living at home and needs more support, this waiver is not the right application. The New Choices Waiver is specifically for people who are currently in a nursing facility, hospital, or qualifying medical institution and want to move into a community setting. People who are not already in one of those facilities cannot apply. Ask the program office about other Utah Medicaid home care options if your parent is already in the community."
+        },
+        {
+          "type": "prose",
+          "title": "What services the waiver actually covers",
+          "body": "The waiver covers services your parent is individually assessed to need. Not everyone receives every service. The official program materials describe the following covered service types: case management (a coordinator who oversees the full plan), adult day care, non-medical transportation, assistive technology devices, supportive services in a home or apartment (including a family member's home or assisted living), personal budget assistance, and adult residential services in certified independent living facilities.\n\nThe services are not a cash payment to your family. They are arranged and paid for through the waiver on your parent's behalf. Provider reimbursement rates published by Utah Medicaid include $40.00 per day for adult residential services and $4.72 per 15 minutes for personal budget assistance, but these are what the state pays providers, not what your parent receives in cash.\n\nBecause services are tailored to the individual assessment, it is worth asking the care coordinator at the time of assessment about every service type listed above. If a need is not raised during the assessment, it may not appear on the service plan."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent wants to move back home with us. Can they apply for this waiver before they leave the nursing facility?",
+          "answer": "Yes, and they should. Your parent must still be living in the qualifying facility when they apply. If they are discharged first, they lose eligibility to apply. Call the New Choices Waiver office at 801-538-6155 (option 6) before any discharge is finalized. The office can also coordinate with the facility's discharge planner."
+        },
+        {
+          "question": "My parent has been in the nursing facility for only a few weeks. Are they eligible yet?",
+          "answer": "There is a minimum length-of-stay requirement for each qualifying facility type, but the specific minimum was not published in the reviewed official sources. Call the program office at 801-538-6155 (option 6) and give them the facility name and admission date. They will confirm whether your parent has met the requirement."
+        },
+        {
+          "question": "How long is the waitlist really?",
+          "answer": "The program office did not publish specific wait times by region or priority tier in the reviewed official materials. Most available slots are reserved for people in nursing facilities, so nursing facility residents typically have higher priority than people in other settings. Ask the program office directly for the current wait estimate for your parent's specific situation."
+        },
+        {
+          "question": "What are the income and asset limits for this waiver?",
+          "answer": "No separate New Choices Waiver income or asset table was identified in the reviewed official sources. Eligibility follows Utah Medicaid long-term care financial rules, which are more complex than standard Medicaid and may involve a spousal protection calculation if your parent has a spouse at home. The program office will refer you to the Medicaid financial review process as part of the application. Call 801-538-6155 (option 6) to start."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot make calls themselves?",
+          "answer": "Yes. Family members and authorized representatives can contact the program office and participate in the application process. Bring or have available contact information for any legal representative, power of attorney, or authorized agent. The program office will tell you what documentation is needed to confirm your authority to act on your parent's behalf."
+        },
+        {
+          "question": "My parent qualifies and gets approved. What happens if their needs change after enrollment?",
+          "answer": "Services under the waiver are based on an individual assessment and can be reassessed if your parent's needs change. Your parent's case manager is the right first contact if their condition improves or declines and their service plan needs to reflect that. Request a reassessment in writing so there is a record of the request."
+        },
+        {
+          "question": "Can my parent be on this waiver and also use regular Medicare or other health insurance?",
+          "answer": "This waiver is a Medicaid program and does not require Medicare. If your parent does have Medicare, it remains in effect and covers the services it normally covers (doctor visits, hospital care, etc.). The New Choices Waiver covers the home and community-based support services that Medicare does not cover. Having Medicare does not disqualify your parent and is not required to apply."
+        },
+        {
+          "question": "What if my parent is in a hospital right now, not a nursing facility? Can they still apply?",
+          "answer": "Hospitals are listed among the qualifying institutional settings in the program materials. Your parent may be eligible to apply while still in the hospital, subject to the minimum length-of-stay requirement. Contact the program office at 801-538-6155 (option 6) and give them the hospital name and admission date. If a hospital discharge is imminent, call as soon as possible."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Hospital",
+      "phone": "(801) 538-6155",
+      "sourceUrl": "https://medicaid.utah.gov/ltc-2/nc/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

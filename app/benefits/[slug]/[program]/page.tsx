@@ -7,6 +7,7 @@ import { ContentViewTracker } from "@/components/analytics/ContentViewTracker";
 import { getRelatedArticles } from "@/lib/content";
 import { getDisplayName } from "@/lib/program-name";
 import { getEnrichedProgram, findCanonicalDraftFor } from "@/lib/program-data";
+import { FEDERAL_PROGRAMS, FEDERAL_PROGRAM_IDS } from "@/data/benefits/federal-programs";
 import { duplicateTarget } from "@/lib/benefits/program-duplicates";
 import {
   benefitsNoindexRobots,
@@ -74,6 +75,14 @@ function resolveProgram(slug: string, programId: string): {
   const stateMetadata = getStateById(slug);
   if (stateMetadata) {
     const drafts = pipelineDrafts[stateMetadata.abbreviation];
+
+    // A federal program (Extra Help, SSI, VA pension) under this state's
+    // address, so every plan, letter and email link to one resolves.
+    const federal = FEDERAL_PROGRAMS.find((d) => d.id === programId);
+    if (federal) {
+      const state: StateData = { ...stateMetadata, programs: (drafts?.programs || []).map(draftToWaiverProgram) };
+      return { state, program: draftToWaiverProgram(federal) };
+    }
 
     // Direct pipeline-draft ID match (existing path)
     if (drafts?.programs) {
@@ -160,7 +169,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = getDisplayName(program, state);
   const title = `${displayName} | Benefits Hub | Olera`;
   const description = `${program.tagline} Learn about eligibility, home care benefits, and how to apply for ${program.shortName} in ${state.name}.`;
-  const isIndexable = shouldIndexBenefitsProgram(program);
+  // The same federal page exists under all 51 state addresses; none is indexed.
+  const isIndexable = !FEDERAL_PROGRAM_IDS.has(program.id) && shouldIndexBenefitsProgram(program);
 
   return {
     title,

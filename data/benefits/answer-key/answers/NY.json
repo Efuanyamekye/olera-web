@@ -1,0 +1,973 @@
+{
+  "state": "NY",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "NY-A",
+      "programs": [
+        {
+          "name": "Medicaid (aged, blind and disabled / non-MAGI)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "Community Medicaid"
+          ],
+          "agency": "NYS DOH via NYC Human Resources Administration (HRA)",
+          "verdict": "likely",
+          "reason": "Already on Medicaid; $1,050 income and $1,200 savings are far under the limits.",
+          "keyRule": "2026 non-MAGI: income at or below $1,836/mo (138% FPL) individual; resources at or below $33,038.",
+          "source": "https://nyhealthaccess.org/entry/15/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Managed Long Term Care (personal care / home care through an MLTC plan)",
+          "alsoKnownAs": [
+            "MLTC",
+            "MLTCP",
+            "Medicaid home care",
+            "personal care services",
+            "PCS"
+          ],
+          "agency": "NYS DOH; assessed by the NY Independent Assessor Program",
+          "verdict": "likely",
+          "reason": "She is a dual eligible needing home care for more than 120 days, and with dementia she needs only supervision with 2+ ADLs; she needs hands-on help with bathing and dressing, so she clears the September 2025 minimum-needs rule. A DOH-5821 dementia form from her doctor is needed.",
+          "keyRule": "MLTC Policy 25.04 (eff. 1 Sep 2025): limited assistance with 3+ ADLs, or for Alzheimer's/dementia supervision with 2+ ADLs; need for community-based LTSS over 120 days.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/redesign/mrt90/mltc_policy/2025/25-04.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Consumer Directed Personal Assistance Program",
+          "alsoKnownAs": [
+            "CDPAP",
+            "CDPAS",
+            "paid family caregiver"
+          ],
+          "agency": "NYS DOH; statewide fiscal intermediary Public Partnerships LLC (PPL)",
+          "verdict": "possible",
+          "reason": "Once home care is authorized, hours can be consumer-directed. With dementia she needs a designated representative; the daughter can be either her paid personal assistant or her representative, not both, and she works full time.",
+          "keyRule": "PA cannot be the consumer's spouse or designated representative; adult children may be PAs.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income with NY State Supplement",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "State Supplement Program"
+          ],
+          "agency": "Social Security Administration / NYS OTDA",
+          "verdict": "likely",
+          "reason": "Countable income $1,030 ($1,050 - $20) is under the $1,081 living-alone standard and savings are under $2,000, so a small check (~$51/mo) if not already receiving SSI.",
+          "keyRule": "2026 SSI + NY supplement, individual living alone: $1,081/mo ($994 + $87); SSI resource limit $2,000.",
+          "source": "https://www.otda.ny.gov/programs/ssp/2026-Maximum-Monthly-Benefit-Amounts.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - Qualified Medicare Beneficiary",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "NYS DOH via NYC HRA",
+          "verdict": "likely",
+          "reason": "Income $1,050 is under the QMB limit; pays Part B premium and Medicare cost-sharing; may already be active with her Medicaid.",
+          "keyRule": "2026 NY QMB: at or below $1,856/mo individual (138% FPL + $20); no resource test.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with Medicaid, MSP or SSI.",
+          "keyRule": "Deemed eligibility for Medicaid/MSP/SSI recipients.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "likely",
+          "reason": "Gross income far under the limit; elderly/disabled households get medical and uncapped shelter deductions.",
+          "keyRule": "Households with an elderly/disabled member: gross at or below 200% FPL ($2,608/mo for 1, Oct 2025-Sep 2026).",
+          "source": "https://www.snapscreener.com/guides/new-york",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "likely",
+          "reason": "Income far under the limit; regular benefit depends on how she pays for heat (heat included in rent gives a small benefit).",
+          "keyRule": "2025-26 HEAP: gross at or below $3,473/mo for 1.",
+          "source": "https://grantshubusa.com/states/new-york/utilities",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Alzheimer's Disease Caregiver Support Initiative (CaringKind)",
+          "alsoKnownAs": [
+            "CaringKind",
+            "NYSOFA Alzheimer's caregiver support",
+            "Wanderer's Safety Program"
+          ],
+          "agency": "CaringKind (NYC regional grantee of NYS Office for the Aging initiative)",
+          "verdict": "likely",
+          "reason": "Free dementia helpline, care consultation for the daughter, and a Wanderer's Safety Program directly relevant to night wandering.",
+          "keyRule": "Open to NYC families affected by dementia; no income test.",
+          "source": "https://caringkindnyc.org/",
+          "evidence": "official"
+        },
+        {
+          "name": "NYC Aging Caregiver Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "National Family Caregiver Support Program",
+            "Area Agency on Aging",
+            "NYC Department for the Aging",
+            "DFTA"
+          ],
+          "agency": "NYC Aging (the NYC Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "The daughter is an unpaid caregiver of someone 60+; counseling, respite support, benefits help.",
+          "keyRule": "OAA Title III-E caregivers of adults 60+.",
+          "source": "https://www.nyc.gov/site/dfta/about/contact-aging-connect.page",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (e.g. CenterLight serves Kings County) under Medicare/Medicaid",
+          "verdict": "possible",
+          "reason": "PACE serves Kings County and she is a dual eligible; depends on nursing-home level of care and on choosing PACE instead of an MLTC plan.",
+          "keyRule": "55+, service area, nursing home level of care, can live safely in the community.",
+          "source": "https://www.health.ny.gov/health_care/managed_care/mltc/pace.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "Dementia plus unpaid caregiver; depends on Original Medicare (not Medicare Advantage, MAP or PACE) and a participating practice.",
+          "keyRule": "Dementia, Medicare A and B, not in MA/PACE.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Senior Citizen Rent Increase Exemption",
+          "alsoKnownAs": [
+            "SCRIE",
+            "NYC Rent Freeze Program"
+          ],
+          "agency": "NYC Department of Finance",
+          "verdict": "possible",
+          "reason": "Only if she rents a rent-regulated apartment and her rent is more than one-third of her income (over $350/mo).",
+          "keyRule": "Age 62+, rent-regulated unit, rent over 1/3 of income, household income at or below $75,000 (from 1 Jul 2026; was $50,000).",
+          "source": "https://111things.com/law/nyc-scrie-drie-income-ceiling-set-at-75000-starting-july-1-2026/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Expanded In-home Services for the Elderly Program",
+          "alsoKnownAs": [
+            "EISEP"
+          ],
+          "agency": "NYS Office for the Aging via NYC Aging case management agencies",
+          "verdict": "unlikely",
+          "reason": "EISEP is for older adults who are not eligible for Medicaid; she already has Medicaid, which covers home care.",
+          "keyRule": "EISEP serves people 60+ who need help with daily activities and are not Medicaid-eligible.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/expand.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Elderly Pharmaceutical Insurance Coverage",
+          "alsoKnownAs": [
+            "EPIC"
+          ],
+          "agency": "NYS Department of Health",
+          "verdict": "unlikely",
+          "reason": "People with full Medicaid are not eligible for EPIC; Medicaid/Extra Help cover her drugs.",
+          "keyRule": "EPIC excludes full Medicaid recipients.",
+          "source": "https://www.health.ny.gov/health_care/epic/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "VA Pension / Aid and Attendance",
+          "alsoKnownAs": [
+            "A&A"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "Not a veteran or survivor.",
+          "keyRule": "Requires wartime veteran or surviving spouse.",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Managed Long Term Care / Medicaid home care assessment",
+        "phoneOrWhere": "New York Independent Assessor Program 1-855-222-8350 (have her doctor complete form DOH-5821 for dementia)",
+        "why": "She already has Medicaid, so the gap is paid in-home help and supervision; the independent assessment is the required first step into MLTC/CDPAP, and night wandering makes it urgent."
+      },
+      "notes": "NY 2026 Medicaid dollar limits come from NY Health Access (legal services, secondary) citing GIS 26 MA/03; MSP limits confirmed on health.ny.gov. EPIC-Medicaid exclusion stated from general knowledge, not a fetched page. If she needs 24-hour supervision because of wandering, MLTC plans often resist split-shift/24-hour care; may need advocacy. Consider SSI: may already be receiving it."
+    },
+    {
+      "familyId": "NY-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "A&A",
+            "Aid & Attendance"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Served 1962-1965 including days after 5 Aug 1964 (Vietnam era), over 90 days, honorable, 65+. Net worth ~$75,000 incl. income is under $163,699. $37,200 income minus medical costs above $1,141 (two Part B premiums ~$4,870/yr) is about $33,470, under the $34,488 cap; paid home care raises the benefit. Caveat: once QI starts paying Part B, they need about $3,850/yr of other unreimbursed medical/care costs to stay under the cap.",
+          "keyRule": "MAPR veteran with spouse + A&A $34,488/yr (from 1 Dec 2025); net worth limit $163,699; medical expenses deductible above 5% of MAPR.",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment (respite, home health aide, adult day health care, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "VA health care",
+            "VHA"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "Eligible to apply as a wartime honorable veteran; priority group depends on income, and a granted pension places him in Priority Group 5.",
+          "keyRule": "Enrollment by priority group.",
+          "source": "https://www.va.gov/health-care/eligibility/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "Wife becomes a General Caregiver once he is enrolled in VA health care; training, support and respite.",
+          "keyRule": "Veteran enrolled in VA health care; no rating needed.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "No service-connected rating.",
+          "keyRule": "Requires VA disability rating of 70% or higher.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Savings Program - Qualifying Individual",
+          "alsoKnownAs": [
+            "QI",
+            "MSP"
+          ],
+          "agency": "NYS DOH via NYC HRA",
+          "verdict": "likely",
+          "reason": "Countable income $3,080 is under the couple QI limit and NY has no MSP asset test, so their $38,000 savings do not matter; pays each spouse's Part B premium ($202.90/mo each).",
+          "keyRule": "2026 NY QI: at or below $3,375/mo couple (186% FPL + $20); no resource test.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "MSP (QI) enrollees are automatically deemed eligible for Extra Help, even though their own savings ($38,000) exceed the normal $36,100 couple resource limit.",
+          "keyRule": "Deemed eligibility for MSP recipients.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "Elderly Pharmaceutical Insurance Coverage",
+          "alsoKnownAs": [
+            "EPIC"
+          ],
+          "agency": "NYS Department of Health",
+          "verdict": "likely",
+          "reason": "Income $37,200 is far under EPIC's $100,000 married limit; EPIC wraps around Part D and Extra Help.",
+          "keyRule": "Annual income at or below $75,000 single / $100,000 married; must be enrolled in Part D.",
+          "source": "https://www.health.ny.gov/health_care/epic/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid (aged, blind and disabled / non-MAGI)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "Community Medicaid"
+          ],
+          "agency": "NYS DOH via NYC Human Resources Administration (HRA)",
+          "verdict": "possible",
+          "reason": "Couple income $3,100 is over $2,489, but for MLTC home care NY uses spousal budgeting (only his income counted, with an allocation to his wife), and any excess can be handled by a spend-down or a pooled supplemental needs trust. Savings $38,000 are under the $44,796 couple limit. Depends on whose name the income is in.",
+          "keyRule": "2026 non-MAGI couple: $2,489/mo, resources $44,796; spousal budgeting available for MLTC; pooled trusts allowed for disabled 65+. 30-month community lookback still not in effect.",
+          "source": "https://nyhealthaccess.org/entry/15/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Managed Long Term Care (personal care / home care through an MLTC plan)",
+          "alsoKnownAs": [
+            "MLTC",
+            "MLTCP",
+            "Medicaid home care",
+            "personal care services",
+            "PCS"
+          ],
+          "agency": "NYS DOH; assessed by the NY Independent Assessor Program",
+          "verdict": "possible",
+          "reason": "With a dementia diagnosis he needs supervision with 2+ ADLs; he needs help bathing plus daytime supervision, so likely but not certain at assessment. Requires Medicaid first.",
+          "keyRule": "MLTC Policy 25.04: dementia threshold supervision with 2+ ADLs; >120 days need.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/redesign/mrt90/mltc_policy/2025/25-04.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Consumer Directed Personal Assistance Program",
+          "alsoKnownAs": [
+            "CDPAP",
+            "CDPAS",
+            "paid family caregiver"
+          ],
+          "agency": "NYS DOH; statewide fiscal intermediary Public Partnerships LLC (PPL)",
+          "verdict": "possible",
+          "reason": "Possible as a way to self-direct authorized hours, but his wife cannot be paid as his PA; another relative or friend would have to be hired.",
+          "keyRule": "Spouse cannot be the PA.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+          "evidence": "official"
+        },
+        {
+          "name": "Expanded In-home Services for the Elderly Program",
+          "alsoKnownAs": [
+            "EISEP"
+          ],
+          "agency": "NYS Office for the Aging via NYC Aging case management agencies",
+          "verdict": "likely",
+          "reason": "He is 60+, needs help with bathing, and is not on Medicaid; EISEP gives free case management and in-home help on a sliding-fee cost share. Waitlists vary.",
+          "keyRule": "60+, needs help with daily activities, not Medicaid-eligible; cost share by income.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/expand.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "possible",
+          "reason": "Gross $3,100 is under the $3,525 two-person limit; benefit may be small and depends on rent and medical deductions.",
+          "keyRule": "Elderly/disabled household gross at or below 200% FPL ($3,525/mo for 2).",
+          "source": "https://www.snapscreener.com/guides/new-york",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "likely",
+          "reason": "$3,100 is under the two-person limit.",
+          "keyRule": "2025-26 HEAP: $4,542/mo for 2.",
+          "source": "https://grantshubusa.com/states/new-york/utilities",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Alzheimer's Disease Caregiver Support Initiative (CaringKind)",
+          "alsoKnownAs": [
+            "CaringKind",
+            "NYSOFA Alzheimer's caregiver support",
+            "Wanderer's Safety Program"
+          ],
+          "agency": "CaringKind (NYC regional grantee of NYS Office for the Aging initiative)",
+          "verdict": "likely",
+          "reason": "Exhausted spouse caregiver of someone with dementia; free consultation, support groups, respite guidance.",
+          "keyRule": "NYC dementia caregivers, no income test.",
+          "source": "https://caringkindnyc.org/",
+          "evidence": "official"
+        },
+        {
+          "name": "NYC Aging Caregiver Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "National Family Caregiver Support Program",
+            "Area Agency on Aging",
+            "NYC Department for the Aging",
+            "DFTA"
+          ],
+          "agency": "NYC Aging (the NYC Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Wife is an unpaid caregiver of someone 60+; respite support and counseling.",
+          "keyRule": "OAA Title III-E.",
+          "source": "https://www.nyc.gov/site/dfta/about/contact-aging-connect.page",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "Dementia plus unpaid caregiver; depends on Original Medicare and a participating practice.",
+          "keyRule": "Dementia, Medicare A and B, not in MA/PACE.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Senior Citizen Rent Increase Exemption",
+          "alsoKnownAs": [
+            "SCRIE",
+            "NYC Rent Freeze Program"
+          ],
+          "agency": "NYC Department of Finance",
+          "verdict": "possible",
+          "reason": "Only if they rent a rent-regulated apartment with rent over 1/3 of income (~$1,033/mo); income $37,200 is under the limit. If they own, the Senior Citizen Homeowners' Exemption (SCHE) is the equivalent.",
+          "keyRule": "62+, rent-regulated, rent over 1/3 income, income at or below $75,000 (from 1 Jul 2026).",
+          "source": "https://111things.com/law/nyc-scrie-drie-income-ceiling-set-at-75000-starting-july-1-2026/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (e.g. CenterLight serves Kings County) under Medicare/Medicaid",
+          "verdict": "possible",
+          "reason": "Available in Kings County; without Medicaid they would pay the Medicaid portion privately. Depends on nursing-home level of care.",
+          "keyRule": "55+, service area, nursing home level of care.",
+          "source": "https://www.health.ny.gov/health_care/managed_care/mltc/pace.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income with NY State Supplement",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "State Supplement Program"
+          ],
+          "agency": "Social Security Administration / NYS OTDA",
+          "verdict": "unlikely",
+          "reason": "Couple income far above the SSI couple standard.",
+          "keyRule": "2026 SSI federal couple rate $1,491/mo (plus small NY supplement).",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Veterans Pension with Aid and Attendance (and VA health care enrollment)",
+        "phoneOrWhere": "NYC Department of Veterans' Services claims help 212-416-5250 (or VetConnectNYC.org, 'Benefit Navigation')",
+        "why": "It is the largest cash benefit they clearly qualify for and pays for help that relieves the exhausted wife; the Intent to File date sets back pay. Ask HRA for the QI application the same week, since it is quick and also triggers Extra Help."
+      },
+      "notes": "QI is a striking NY-specific win: in most states this couple would be over the MSP limit. VA pension estimate assumes they pay both Part B premiums themselves; once QI pays those premiums, that deduction disappears, so the VA pension then depends on other medical costs (e.g. paid home care). Sequence matters: a counselor would document paid-care costs. HEAP and SNAP 2025-26 figures are from secondary sources. SCRIE $75,000 limit (eff. 1 Jul 2026) from secondary source."
+    },
+    {
+      "familyId": "NY-C",
+      "programs": [
+        {
+          "name": "Medicaid (aged, blind and disabled / non-MAGI)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "Community Medicaid"
+          ],
+          "agency": "NYS DOH via NYC Human Resources Administration (HRA)",
+          "verdict": "likely",
+          "reason": "Couple countable income (his $1,330 after $20, plus half her wages after $65, ~$167.50) is about $1,498, under $2,489; savings $4,500 are under $44,796.",
+          "keyRule": "2026 non-MAGI couple income at or below $2,489/mo (138% FPL); resources at or below $44,796.",
+          "source": "https://nyhealthaccess.org/entry/15/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicaid (MAGI) for the spouse",
+          "alsoKnownAs": [
+            "Medicaid",
+            "Essential Plan alternative"
+          ],
+          "agency": "NY State of Health / HRA",
+          "verdict": "likely",
+          "reason": "His 63-year-old wife is not on Medicare; household MAGI $1,750 is under 138% FPL for two ($2,489/mo).",
+          "keyRule": "MAGI Medicaid adults at or below 138% FPL; no asset test.",
+          "source": "https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Medicare Savings Program - Qualified Medicare Beneficiary",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "NYS DOH via NYC HRA",
+          "verdict": "likely",
+          "reason": "Countable income is under the couple QMB limit; no asset test.",
+          "keyRule": "2026 NY QMB couple at or below $2,509/mo (138% FPL + $20); no resource test.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with Medicaid or QMB.",
+          "keyRule": "Deemed eligibility for Medicaid/MSP recipients.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "likely",
+          "reason": "Gross $1,750 is well under the limit and he counts as an elderly/disabled member.",
+          "keyRule": "Elderly/disabled household gross at or below 200% FPL ($3,525/mo for 2).",
+          "source": "https://www.snapscreener.com/guides/new-york",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "likely",
+          "reason": "$1,750 is well under the two-person limit.",
+          "keyRule": "2025-26 HEAP $4,542/mo for 2.",
+          "source": "https://grantshubusa.com/states/new-york/utilities",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Social Security Disability Insurance conversion (Compassionate Allowance)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowances"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-onset Alzheimer's is a Compassionate Allowance condition, and he was diagnosed at 64, before full retirement age. If he took reduced early retirement, SSDI could replace it with his unreduced benefit. Depends on work credits and claim history.",
+          "keyRule": "SSDI requires disability before full retirement age and insured status; early-onset Alzheimer's is on the Compassionate Allowances list.",
+          "source": "https://www.ssa.gov/compassionateallowances/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Alzheimer's Disease Caregiver Support Initiative (CaringKind)",
+          "alsoKnownAs": [
+            "CaringKind",
+            "NYSOFA Alzheimer's caregiver support",
+            "Wanderer's Safety Program"
+          ],
+          "agency": "CaringKind (NYC regional grantee of NYS Office for the Aging initiative)",
+          "verdict": "likely",
+          "reason": "CaringKind runs early-stage services for people with younger-onset dementia and their partners.",
+          "keyRule": "NYC dementia families, no income test.",
+          "source": "https://caringkindnyc.org/",
+          "evidence": "official"
+        },
+        {
+          "name": "NYC Aging Caregiver Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "National Family Caregiver Support Program",
+            "Area Agency on Aging",
+            "NYC Department for the Aging",
+            "DFTA"
+          ],
+          "agency": "NYC Aging (the NYC Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "He is over 60 and his wife is his unpaid caregiver.",
+          "keyRule": "OAA Title III-E: caregivers of adults 60+ or of people with Alzheimer's at any age.",
+          "source": "https://www.nyc.gov/site/dfta/about/contact-aging-connect.page",
+          "evidence": "official"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "possible",
+          "reason": "Dementia diagnosis; respite only in higher-complexity tiers. Depends on Original Medicare and a participating practice.",
+          "keyRule": "Dementia, Medicare A and B, not in MA/PACE.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Senior Citizen Rent Increase Exemption",
+          "alsoKnownAs": [
+            "SCRIE",
+            "NYC Rent Freeze Program"
+          ],
+          "agency": "NYC Department of Finance",
+          "verdict": "possible",
+          "reason": "He is 62+ and income is low; only if they rent a rent-regulated unit with rent over 1/3 of income (~$583/mo).",
+          "keyRule": "62+, rent-regulated, rent over 1/3 income, income at or below $75,000.",
+          "source": "https://111things.com/law/nyc-scrie-drie-income-ceiling-set-at-75000-starting-july-1-2026/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Managed Long Term Care (personal care / home care through an MLTC plan)",
+          "alsoKnownAs": [
+            "MLTC",
+            "MLTCP",
+            "Medicaid home care",
+            "personal care services",
+            "PCS"
+          ],
+          "agency": "NYS DOH; assessed by the NY Independent Assessor Program",
+          "verdict": "unlikely",
+          "reason": "He bathes and dresses himself; medication, money and driving are not ADLs, so he likely does not meet the dementia threshold of supervision with 2+ ADLs yet.",
+          "keyRule": "MLTC Policy 25.04: dementia threshold supervision with 2+ ADLs (eff. 1 Sep 2025).",
+          "source": "https://www.health.ny.gov/health_care/medicaid/redesign/mrt90/mltc_policy/2025/25-04.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Consumer Directed Personal Assistance Program",
+          "alsoKnownAs": [
+            "CDPAP",
+            "CDPAS",
+            "paid family caregiver"
+          ],
+          "agency": "NYS DOH; statewide fiscal intermediary Public Partnerships LLC (PPL)",
+          "verdict": "unlikely",
+          "reason": "Needs an authorized Medicaid personal care need first, which he is unlikely to meet now; and his wife could not be his paid PA.",
+          "keyRule": "Requires PCS/home care authorization; spouse cannot be PA.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+          "evidence": "official"
+        },
+        {
+          "name": "Expanded In-home Services for the Elderly Program",
+          "alsoKnownAs": [
+            "EISEP"
+          ],
+          "agency": "NYS Office for the Aging via NYC Aging case management agencies",
+          "verdict": "unlikely",
+          "reason": "He appears Medicaid-eligible, and EISEP is for people who are not.",
+          "keyRule": "EISEP for 60+ not eligible for Medicaid.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/expand.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Elderly Pharmaceutical Insurance Coverage",
+          "alsoKnownAs": [
+            "EPIC"
+          ],
+          "agency": "NYS Department of Health",
+          "verdict": "unlikely",
+          "reason": "Once on full Medicaid he is excluded from EPIC; Medicaid and Extra Help cover drugs.",
+          "keyRule": "EPIC excludes full Medicaid recipients.",
+          "source": "https://www.health.ny.gov/health_care/epic/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (e.g. CenterLight serves Kings County) under Medicare/Medicaid",
+          "verdict": "unlikely",
+          "reason": "Unlikely to meet nursing-home level of care while he still bathes and dresses himself.",
+          "keyRule": "Nursing home level of care required.",
+          "source": "https://www.health.ny.gov/health_care/managed_care/mltc/pace.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income with NY State Supplement",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "State Supplement Program"
+          ],
+          "agency": "Social Security Administration / NYS OTDA",
+          "verdict": "unlikely",
+          "reason": "His own $1,350 Social Security is above the SSI + NY supplement standard.",
+          "keyRule": "2026 SSI + NY supplement living alone $1,081/mo (couple rates also exceeded after deeming).",
+          "source": "https://www.otda.ny.gov/programs/ssp/2026-Maximum-Monthly-Benefit-Amounts.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "VA benefits",
+          "alsoKnownAs": [
+            "VA Pension"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "Not a veteran.",
+          "keyRule": "Requires veteran or survivor status.",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicaid plus Medicare Savings Program (QMB)",
+        "phoneOrWhere": "NYC HRA Medicaid Helpline 1-888-692-6116, or ACCESS HRA online",
+        "why": "Medicaid and QMB together remove his Part B premium and Medicare cost-sharing, cover his wife, and trigger Extra Help; SNAP and HEAP can be filed through ACCESS HRA the same way."
+      },
+      "notes": "Worth a call to SSA (800-772-1213) about SSDI conversion if he claimed retirement early after onset. MLTC verdict may change quickly as dementia progresses; re-assess when he needs supervision with bathing/dressing. Whether NY counts her wages for his non-MAGI budget the way assumed (couple budget, $65 + half disregard) not verified from a primary page."
+    },
+    {
+      "familyId": "NY-D",
+      "programs": [
+        {
+          "name": "Medicaid (aged, blind and disabled / non-MAGI)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "Community Medicaid"
+          ],
+          "agency": "NYS DOH via NYC Human Resources Administration (HRA)",
+          "verdict": "likely",
+          "reason": "Only her income counts (non-MAGI household of 1): $1,400 is under $1,836 and $9,000 is under $33,038.",
+          "keyRule": "2026 non-MAGI individual: income at or below $1,836/mo; resources at or below $33,038; non-MAGI household size is 1 or 2 only.",
+          "source": "https://nyhealthaccess.org/entry/15/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Managed Long Term Care (personal care / home care through an MLTC plan)",
+          "alsoKnownAs": [
+            "MLTC",
+            "MLTCP",
+            "Medicaid home care",
+            "personal care services",
+            "PCS"
+          ],
+          "agency": "NYS DOH; assessed by the NY Independent Assessor Program",
+          "verdict": "likely",
+          "reason": "Needs hands-on help with bathing, dressing, toileting and mobility, which meets the 3+ ADL limited-assistance rule; dual eligible needing more than 120 days of care.",
+          "keyRule": "MLTC Policy 25.04: limited assistance with physical maneuvering for 3+ ADLs; >120 days.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/redesign/mrt90/mltc_policy/2025/25-04.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Consumer Directed Personal Assistance Program",
+          "alsoKnownAs": [
+            "CDPAP",
+            "CDPAS",
+            "paid family caregiver"
+          ],
+          "agency": "NYS DOH; statewide fiscal intermediary Public Partnerships LLC (PPL)",
+          "verdict": "likely",
+          "reason": "Adult children can be paid personal assistants, so the daughter can be paid for the care she now gives, as long as she is not also her mother's designated representative.",
+          "keyRule": "PA cannot be spouse or designated representative; adult child allowed; paid through PPL.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - Qualified Medicare Beneficiary",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "NYS DOH via NYC HRA",
+          "verdict": "likely",
+          "reason": "Income $1,400 is under the individual QMB limit; no asset test.",
+          "keyRule": "2026 NY QMB at or below $1,856/mo individual; no resource test.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Part D Extra Help",
+          "alsoKnownAs": [
+            "Extra Help",
+            "Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with Medicaid/QMB; independently income under 150% FPL and $9,000 under the $18,090 resource limit.",
+          "keyRule": "Deemed eligibility; 2026 individual resource limit $18,090.",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "official"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Survivors Pension",
+            "Widow's pension",
+            "A&A"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Husband served 1951-1954 (Korean conflict), honorable; she has not remarried. $16,800 income minus medical costs above $935 (Part B ~$2,435/yr) is about $15,300, under the $18,697 A&A cap, about $3,400/yr before counting paid care. Net worth far under $163,699.",
+          "keyRule": "Surviving spouse + A&A MAPR $18,697/yr (from 1 Dec 2025); Korean conflict 27 Jun 1950-31 Jan 1955; net worth limit $163,699.",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "NYC Aging Caregiver Program (Older Americans Act Title III-E)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "National Family Caregiver Support Program",
+            "Area Agency on Aging",
+            "NYC Department for the Aging",
+            "DFTA"
+          ],
+          "agency": "NYC Aging (the NYC Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Daughter is an unpaid caregiver of a parent over 60.",
+          "keyRule": "OAA Title III-E.",
+          "source": "https://www.nyc.gov/site/dfta/about/contact-aging-connect.page",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "PACE organizations (e.g. CenterLight serves Kings County) under Medicare/Medicaid",
+          "verdict": "possible",
+          "reason": "Kings County PACE likely fits her nursing-home level need; depends on certification and her choosing PACE over MLTC.",
+          "keyRule": "55+, service area, nursing home level of care.",
+          "source": "https://www.health.ny.gov/health_care/managed_care/mltc/pace.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "unlikely",
+          "reason": "She cannot buy and cook separately, so she is part of the daughter's household; the elderly-disabled separate-household exception fails because the others' $5,500 exceeds 165% FPL for 2 (~$2,976/mo), and $6,900 for 3 is over the $4,442 gross limit.",
+          "keyRule": "7 CFR 273.1(a)(2)(ii): separate household only if others' income at or below 165% FPL; gross limit 200% FPL $4,442/mo for 3.",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/subpart-A",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP"
+          ],
+          "agency": "NYS OTDA via NYC HRA",
+          "verdict": "unlikely",
+          "reason": "HEAP counts everyone sharing the home's energy: about $6,900/mo for 3 is over the limit.",
+          "keyRule": "2025-26 HEAP $5,611/mo for 3.",
+          "source": "https://grantshubusa.com/states/new-york/utilities",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income with NY State Supplement",
+          "alsoKnownAs": [
+            "SSI",
+            "SSP",
+            "State Supplement Program"
+          ],
+          "agency": "Social Security Administration / NYS OTDA",
+          "verdict": "unlikely",
+          "reason": "$1,380 countable income is above even the living-alone standard, and the living-with-others standard is lower.",
+          "keyRule": "2026 SSI + NY supplement living alone $1,081/mo.",
+          "source": "https://www.otda.ny.gov/programs/ssp/2026-Maximum-Monthly-Benefit-Amounts.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Expanded In-home Services for the Elderly Program",
+          "alsoKnownAs": [
+            "EISEP"
+          ],
+          "agency": "NYS Office for the Aging via NYC Aging case management agencies",
+          "verdict": "unlikely",
+          "reason": "She is Medicaid-eligible, so Medicaid home care (MLTC) is the route, not EISEP.",
+          "keyRule": "EISEP for 60+ not eligible for Medicaid.",
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/expand.htm",
+          "evidence": "official"
+        },
+        {
+          "name": "Elderly Pharmaceutical Insurance Coverage",
+          "alsoKnownAs": [
+            "EPIC"
+          ],
+          "agency": "NYS Department of Health",
+          "verdict": "unlikely",
+          "reason": "Once on full Medicaid she is excluded from EPIC.",
+          "keyRule": "EPIC excludes full Medicaid recipients.",
+          "source": "https://www.health.ny.gov/health_care/epic/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "VA Caregiver programs (PCAFC / PGCSS)",
+          "alsoKnownAs": [
+            "VA caregiver stipend"
+          ],
+          "agency": "US Dept of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "Those serve caregivers of veterans; she is a surviving spouse.",
+          "keyRule": "Care recipient must be an enrolled veteran.",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Guiding an Improved Dementia Experience (GUIDE) Model",
+          "alsoKnownAs": [
+            "GUIDE",
+            "Medicare dementia respite"
+          ],
+          "agency": "CMS Innovation Center via participating GUIDE practices",
+          "verdict": "unlikely",
+          "reason": "Requires a dementia diagnosis, which is not in her facts.",
+          "keyRule": "Dementia diagnosis required.",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "Senior Citizen Rent Increase Exemption",
+          "alsoKnownAs": [
+            "SCRIE",
+            "NYC Rent Freeze Program"
+          ],
+          "agency": "NYC Department of Finance",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home and is not the tenant of record.",
+          "keyRule": "Applicant must be head of household/tenant of record in the rent-regulated unit.",
+          "source": "https://111things.com/law/nyc-scrie-drie-income-ceiling-set-at-75000-starting-july-1-2026/",
+          "evidence": "inferred"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicaid (with request for home care / CDPAP)",
+        "phoneOrWhere": "NYC HRA Medicaid Helpline 1-888-692-6116 (ACCESS HRA); then NY Independent Assessor 1-855-222-8350",
+        "why": "She is not yet on Medicaid, and Medicaid is the gate to MLTC and CDPAP, which can pay the daughter for the hours she cut from work, the biggest dollar value for this family."
+      },
+      "notes": "NY has an 'immediate need' fast-track for personal care/CDPAP for applicants not yet on Medicaid; not verified from a primary page here. File the VA Survivors Pension in parallel via NYC DVS 212-416-5250. The A&A/medical-expense portion of VA pension is generally excluded for Medicaid income, but confirm. SNAP/HEAP verdicts assume shared food and utilities with the daughter's household."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "state": "MA",
+    "id": "ma-masshealth-standard-aged-blind-disabled",
+    "name": "MassHealth Standard (Aged, Blind, and Disabled Medicaid)",
+    "legacyId": "masshealth-standard-aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "MA",
+    "id": "ma-liheap-home-energy-assistance",
+    "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+    "legacyId": "liheap-low-income-home-energy-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "MA",
+    "id": "ma-senior-circuit-breaker-tax-credit",
+    "name": "Clause 41C Senior Circuit Breaker Tax Credit",
+    "legacyId": "clause-41c-senior-circuit-breaker-tax-credit",
+    "programType": "benefit"
+  },
+  {
+    "state": "MA",
+    "id": "ma-state-supplement-ssi",
+    "name": "State Supplement to SSI",
+    "legacyId": "state-supplement-to-ssi",
+    "programType": "benefit"
+  },
+  {
+    "state": "MA",
+    "id": "ma-family-caregiver-support-program",
+    "name": "Family Caregiver Support Program",
+    "legacyId": "family-caregiver-support-program",
+    "programType": "benefit"
+  }
+]

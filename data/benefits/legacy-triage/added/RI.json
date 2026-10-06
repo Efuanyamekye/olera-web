@@ -1,0 +1,23 @@
+[
+  {
+    "state": "RI",
+    "id": "ri-medicaid-ead-elders-adults-disabilities",
+    "name": "Medicaid for Elders and Adults with Disabilities (EAD)",
+    "legacyId": "medicaid-for-elders-and-adults-with-disabilities-ead",
+    "programType": "benefit"
+  },
+  {
+    "state": "RI",
+    "id": "ri-ssi-state-supplement",
+    "name": "Rhode Island State SSI Supplement",
+    "legacyId": "rhode-island-state-ssi-supplement",
+    "programType": "benefit"
+  },
+  {
+    "state": "RI",
+    "id": "ri-property-tax-relief-seniors",
+    "name": "Rhode Island Property Tax Relief for Seniors",
+    "legacyId": "rhode-island-property-tax-relief-for-seniors",
+    "programType": "benefit"
+  }
+]

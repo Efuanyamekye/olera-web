@@ -1,0 +1,281 @@
+{
+  "AK": {
+    "medicaid-for-aged-disabled": "medicaid-seniors-disabled",
+    "home-delivered-meals-seniorcare": "meals-on-wheels",
+    "alaskans-living-independently-waiver-ali": "ak-alaskans-living-independently-waiver",
+    "senior-property-tax-exemption": "ak-senior-property-tax-exemption"
+  },
+  "AL": {
+    "alabama-medicaid-for-aged-disabled": "al-medicaid-aged-disabled"
+  },
+  "AR": {
+    "ark-choices-program-waiver": "choices-homecare",
+    "home-delivered-meals": "meals-on-wheels",
+    "regular-medicaid-aged-blind-and-disabled-aabd": "ar-medicaid-aabd"
+  },
+  "AZ": {
+    "nutrition-assistance-program": "snap-food-benefits",
+    "home-delivered-meals": "congregate-home-delivered-meals",
+    "aged-blind-and-disabled-abd-medicaid": "az-abd-medicaid",
+    "senior-property-valuation-protection-option": "az-senior-property-valuation-freeze"
+  },
+  "CA": {
+    "california-home-delivered-meals": "meals-on-wheels-aaa",
+    "medi-cal-for-aged-and-disabled": "ca-medi-cal-aged-disabled",
+    "california-assisted-living-waiver-alw": "ca-assisted-living-waiver-alw",
+    "california-pace-programs": "ca-pace-programs"
+  },
+  "CO": {
+    "elderly-blind-and-disabled-ebd-waiver": "hcbs-waivers",
+    "health-first-colorado-medicaid-for-aged-blind-and-disabled": "co-medicaid-aged-blind-disabled",
+    "colorado-energy-assistance-program-leap": "co-leap-energy-assistance",
+    "senior-property-tax-exemption-ptex": "co-senior-property-tax-exemption",
+    "home-delivered-meals": "co-home-delivered-meals",
+    "family-caregiver-support-program": "co-family-caregiver-support-program"
+  },
+  "CT": {
+    "husky-c-aged-blind-and-disabled-medicaid": "husky-health-medicaid-seniors",
+    "medicare-savings-program-qmb-slmb-qi": "ct-medicare-savings-program",
+    "connecticut-state-ssi-supplement": "ct-state-ssi-supplement",
+    "connecticut-property-tax-relief-for-seniors": "ct-property-tax-relief-seniors",
+    "connpace-connecticut-pharmaceutical-assistance": "ct-connpace-prescription-assistance",
+    "national-family-caregiver-support-program-connecticut": "ct-national-family-caregiver-support-program",
+    "connecticut-home-delivered-meals-program": "ct-home-delivered-meals"
+  },
+  "DE": {
+    "regular-medicaid-aged-blind-and-disabled": "de-medicaid-aged-blind-disabled"
+  },
+  "FL": {
+    "statewide-medicaid-managed-care-long-term-care-smmc-ltc": "smmc-ltc-hcbs-waivers",
+    "home-delivered-meals": "home-delivered-meals-on-wheels"
+  },
+  "GA": {
+    "home-delivered-meals-georgia-elderly-nutrition-program": "home-delivered-meals",
+    "georgia-family-caregiver-support-program": "ga-family-caregiver-support-program"
+  },
+  "HI": {
+    "aged-blind-and-disabled-abd-medicaid": "medquest-medicaid-seniors-disabled",
+    "assistance-to-the-aged-blind-and-disabled-aabd": "hi-aabd-cash-assistance"
+  },
+  "IA": {
+    "aged-blind-and-disabled-abd-medicaid": "ia-abd-medicaid"
+  },
+  "ID": {
+    "medicaid-for-aged-disabled": "medicaid-abd-program"
+  },
+  "IL": {
+    "aid-to-the-aged-blind-and-disabled-aabd-medicaid": "medical-assistance-medicaid-seniors-disabled",
+    "hcbs-medicaid-waiver-programs": "il-community-care-program",
+    "aid-to-the-aged-blind-and-disabled-aabd-cash-assistance": "il-aabd-cash-assistance",
+    "liheap-low-income-home-energy-assistance-program": "il-liheap-energy-assistance",
+    "senior-citizens-property-tax-freeze": "il-senior-property-tax-freeze"
+  },
+  "IN": {
+    "home-delivered-meals": "meals-on-wheels",
+    "indiana-energy-assistance-program-ieap": "in-energy-assistance-program-ieap",
+    "national-family-caregiver-support-program-nfcsp": "in-nfcsp-caregiver-support"
+  },
+  "KS": {
+    "home-and-community-based-services-for-the-frail-elderly-waiv": "kancare-frail-elderly-waiver",
+    "kansas-food-assistance-program": "snap-food-assistance",
+    "home-delivered-meals": "senior-nutrition-program",
+    "aged-blind-and-disabled-medicaid": "ks-aged-blind-disabled-medicaid",
+    "kancare-medicare-buy-in-programs": "ks-kancare-medicare-buy-in"
+  },
+  "KY": {
+    "aged-blind-and-disabled-abd-medicaid": "medicaid-long-term-care",
+    "home-delivered-meals-dail": "meals-on-wheels",
+    "ky-property-tax-homestead-exemption": "ky-property-tax-homestead-exemption-current"
+  },
+  "LA": {
+    "aged-blind-and-disabled-medicaid": "la-aged-blind-disabled-medicaid",
+    "liheap-low-income-home-energy-assistance-program": "la-liheap-energy-assistance",
+    "home-delivered-meals-nutrition-program": "la-home-delivered-meals",
+    "national-family-caregiver-support-program": "la-national-family-caregiver-support-program"
+  },
+  "MA": {
+    "masshealth-senior-pharmacy-program-spap": "prescription-advantage",
+    "home-delivered-meals-via-elder-affairs-nutrition-program": "meals-on-wheels",
+    "masshealth-standard-aged-blind-and-disabled-medicaid": "ma-masshealth-standard-aged-blind-disabled",
+    "liheap-low-income-home-energy-assistance-program": "ma-liheap-home-energy-assistance",
+    "clause-41c-senior-circuit-breaker-tax-credit": "ma-senior-circuit-breaker-tax-credit",
+    "state-supplement-to-ssi": "ma-state-supplement-ssi",
+    "family-caregiver-support-program": "ma-family-caregiver-support-program"
+  },
+  "MD": {
+    "maryland-medical-assistance-regular-medicaid-abd": "md-medicaid-abd-regular",
+    "maryland-medical-assistance-medically-needy-pathway": "md-medical-assistance-medically-needy",
+    "maryland-hcbs-waivers-medicaid-waiver-programs": "md-hcbs-community-options-waiver"
+  },
+  "ME": {
+    "mainecare-aged-blind-and-disabled": "me-mainecare-aged-blind-disabled",
+    "mainecare-elderly-and-adults-with-disabilities-waiver": "me-mainecare-ead-waiver",
+    "mainecare-medicare-savings-programs": "me-mainecare-medicare-savings-programs",
+    "maine-state-ssi-supplement": "me-state-ssi-supplement",
+    "maine-property-tax-stabilization-for-seniors": "me-property-tax-stabilization-seniors"
+  },
+  "MI": {
+    "medicaid-for-aged-and-disabled": "mi-medicaid-aged-disabled",
+    "medicare-savings-program": "mi-medicare-savings-program",
+    "food-assistance-program": "mi-food-assistance-program-snap",
+    "michigan-pace": "mi-pace-all-inclusive-care",
+    "state-emergency-relief": "mi-state-emergency-relief",
+    "family-caregiver-support-program": "mi-family-caregiver-support-program",
+    "property-tax-credit-for-seniors": "mi-property-tax-credit-seniors",
+    "home-delivered-meals": "mi-home-delivered-meals",
+    "state-ssi-supplement": "mi-state-ssi-supplement"
+  },
+  "MN": {
+    "senior-nutrition-home-delivered-meals": "senior-nutrition-meals-on-wheels",
+    "minnesota-supplemental-aid-msa": "mn-supplemental-aid-msa",
+    "low-income-home-energy-assistance-program-liheap": "mn-liheap-energy-assistance",
+    "minnesota-property-tax-refund-ptf-for-seniors": "mn-property-tax-refund-seniors"
+  },
+  "MO": {
+    "senior-home-delivered-meals": "mo-senior-home-delivered-meals",
+    "family-caregiver-support-program": "mo-family-caregiver-support-program"
+  },
+  "MS": {
+    "aged-blind-and-disabled-medicaid": "medicaid-elderly-disabled"
+  },
+  "NC": {
+    "community-alternatives-program-for-disabled-adults-cap-da": "medicaid-hcbs-waivers",
+    "regular-medicaid-aged-blind-and-disabled": "nc-medicaid-aged-blind-disabled",
+    "special-assistance-state-ssi-supplement": "nc-special-assistance-ssi-supplement",
+    "circuit-breaker-property-tax-deferral": "nc-circuit-breaker-property-tax-deferral"
+  },
+  "ND": {
+    "aged-blind-and-disabled-abd-medicaid": "nd-abd-medicaid",
+    "home-and-community-based-services-hcbs-waiver": "nd-hcbs-waiver",
+    "medicare-savings-programs": "nd-medicare-savings-programs",
+    "snap-supplemental-nutrition-assistance-program": "nd-snap-food-benefits",
+    "liheap-low-income-home-energy-assistance-program": "nd-liheap-energy-assistance",
+    "senior-dining-services-home-delivered-meals": "nd-senior-dining-home-delivered-meals"
+  },
+  "NE": {
+    "nebraska-medicaid-aged-and-disabled-waiver": "aged-disabled-hcbs-waiver",
+    "nebraska-aged-and-disabled-waiver-hcbs": "aged-disabled-hcbs-waiver",
+    "nebraska-family-caregiver-support-program": "ne-family-caregiver-support-program"
+  },
+  "NH": {
+    "home-delivered-meals": "meals-on-wheels"
+  },
+  "NJ": {
+    "nj-familycare-aged-blind-disabled-abd-programs": "nj-familycare-aged-blind-disabled-abd",
+    "nj-familycare-managed-long-term-services-and-supports-mltss-": "nj-familycare-mltss-waiver",
+    "nj-familycare-medicare-savings-programs": "nj-familycare-medicare-savings-programs-current",
+    "nj-snap-supplemental-nutrition-assistance-program": "nj-snap-food-benefits",
+    "nj-liheap-low-income-home-energy-assistance-program": "nj-liheap-home-energy-assistance",
+    "new-jersey-pace-program-of-all-inclusive-care-for-the-elderl": "nj-pace-program-all-inclusive-care-elderly",
+    "new-jersey-family-caregiver-support-program": "nj-family-caregiver-support-program",
+    "new-jersey-home-delivered-meals": "nj-home-delivered-meals",
+    "new-jersey-ssi-state-supplement": "nj-ssi-state-supplement"
+  },
+  "NM": {
+    "centennial-care-aged-blind-and-disabled": "nm-centennial-care-aged-blind-disabled",
+    "qualified-medicare-beneficiary-qmb": "nm-qmb-medicare-savings",
+    "centennial-care-home-and-community-based-services-waiver": "nm-turquoise-care-community-benefit-hcbs",
+    "snap-supplemental-nutrition-assistance-program": "nm-snap-food-benefits",
+    "low-income-home-energy-assistance-program-liheap": "nm-liheap-energy-assistance",
+    "new-mexico-home-delivered-meals": "nm-home-delivered-meals"
+  },
+  "NV": {
+    "medical-assistance-to-the-aged-blind-and-disabled-maabd": "nv-maabd-medicaid",
+    "family-caregiver-support-program": "nv-family-caregiver-support-program"
+  },
+  "NY": {
+    "medicaid-for-aged-blind-and-disabled": "community-medicaid",
+    "caregiver-resource-center": "nyfsc-respite-care",
+    "elderly-pharmaceutical-insurance-coverage-epic": "ny-epic-prescription-assistance",
+    "property-tax-relief-for-seniors": "ny-property-tax-relief-seniors"
+  },
+  "OH": {
+    "medicare-premium-assistance-programs": "oh-medicare-premium-assistance",
+    "homestead-exemption": "oh-homestead-exemption"
+  },
+  "OK": {
+    "commodity-supplemental-food-program-csfp-and-home-delivered-": "home-delivered-meals",
+    "national-family-caregiver-support-program": "ok-national-family-caregiver-support-program"
+  },
+  "OR": {
+    "oregon-medicaid-aged-and-physically-disabled-apd-waiver": "or-medicaid-apd-waiver"
+  },
+  "PA": {
+    "aged-blind-and-disabled-medicaid": "pa-aged-blind-disabled-medicaid",
+    "liheap": "pa-liheap-heating-assistance",
+    "property-tax-rent-rebate-program": "pa-property-tax-rent-rebate",
+    "state-ssi-supplement": "pa-state-ssi-supplement"
+  },
+  "RI": {
+    "long-term-services-and-supports-ltss-waiver": "medicaid-ltss-elderly",
+    "rhode-island-family-caregiver-support-program": "caregiver-respite-support",
+    "medicaid-for-elders-and-adults-with-disabilities-ead": "ri-medicaid-ead-elders-adults-disabilities",
+    "rhode-island-state-ssi-supplement": "ri-ssi-state-supplement",
+    "rhode-island-property-tax-relief-for-seniors": "ri-property-tax-relief-seniors"
+  },
+  "SC": {
+    "healthy-connections-aged-blind-or-disabled-abd": "medicaid-aged-blind-disabled",
+    "home-delivered-meals-sc-department-on-aging": "congregate-home-delivered-meals",
+    "program-of-all-inclusive-care-for-the-elderly-pace": "sc-pace-all-inclusive-elder-care"
+  },
+  "SD": {
+    "regular-medicaid-aged-blind-and-disabled": "medicaid-seniors-disabled",
+    "home-delivered-meals": "meals-on-wheels"
+  },
+  "TN": {
+    "tennessee-home-delivered-meals": "meals-on-wheels",
+    "tenncare-choices-in-long-term-services-and-supports": "tn-tenncare-choices-ltss"
+  },
+  "TX": {
+    "texas-medicaid-for-the-elderly-and-people-with-disabilities": "tx-medicaid-elderly-disabilities",
+    "primary-home-care-community-care": "tx-primary-home-care-community-care",
+    "texas-respite-care-services": "tx-respite-care-services"
+  },
+  "UT": {
+    "medicaid-for-aged-blind-or-disabled": "medicaid-program",
+    "new-choices-waiver": "ut-new-choices-waiver"
+  },
+  "VA": {
+    "medicaid-for-aged-blind-or-disabled-abd": "va-medicaid-abd",
+    "medicare-savings-programs-qmb-slmb-qi": "va-medicare-savings-programs",
+    "supplemental-nutrition-assistance-program-snap": "va-snap-food-benefits",
+    "program-of-all-inclusive-care-for-the-elderly-pace": "va-pace-all-inclusive-care",
+    "low-income-home-energy-assistance-program-liheap": "va-liheap-energy-assistance",
+    "virginia-home-delivered-meals-program": "va-home-delivered-meals",
+    "virginia-property-tax-exemption-for-elderly-disabled": "va-property-tax-exemption-elderly-disabled"
+  },
+  "VT": {
+    "medicaid-for-the-aged-blind-and-disabled-mabd": "medicaid-abd",
+    "choices-for-care-hcbs-waiver": "choices-for-care-waiver",
+    "home-delivered-meals": "meals-on-wheels",
+    "3squares-vermont-snap": "vt-3squares-snap",
+    "state-ssi-supplement-essential-person-benefit": "vt-ssi-supplement-essential-person",
+    "general-assistance-fuel": "vt-fuel-assistance",
+    "property-tax-adjustment-renter-property-tax-credit": "vt-property-tax-adjustment-renter-credit"
+  },
+  "WA": {
+    "aged-blind-and-disabled-medicaid": "wa-abd-medicaid",
+    "tailored-supports-for-older-adults": "wa-tailored-supports-older-adults"
+  },
+  "WI": {
+    "medicaid-for-the-elderly-blind-or-disabled": "wi-medicaid-elderly-blind-disabled",
+    "medicare-savings-programs": "wi-medicare-savings-programs",
+    "foodshare": "wi-foodshare-snap",
+    "wisconsin-pace-program": "wi-pace-program",
+    "wisconsin-home-energy-assistance-program-wheap": "wi-wheap-home-energy-assistance",
+    "wisconsin-property-tax-relief-circuit-breaker-credit": "wi-property-tax-relief-circuit-breaker-credit",
+    "wisconsin-home-delivered-meals": "wi-home-delivered-meals",
+    "wisconsin-state-ssi-supplement": "wi-state-ssi-supplement"
+  },
+  "WV": {
+    "home-delivered-meals": "meals-on-wheels-home-delivered",
+    "aged-blind-and-disabled-medicaid": "wv-aged-blind-disabled-medicaid"
+  },
+  "WY": {
+    "aged-blind-and-disabled-medicaid": "wy-aged-blind-disabled-medicaid",
+    "community-choice-waiver-ccw": "wy-community-choice-waiver",
+    "medicare-savings-programs": "wy-medicare-savings-programs",
+    "supplemental-nutrition-assistance-program-snap": "wy-snap-food-benefits",
+    "home-delivered-meals": "wy-home-delivered-meals"
+  }
+}

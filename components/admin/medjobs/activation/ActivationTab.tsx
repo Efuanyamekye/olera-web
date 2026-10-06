@@ -30,6 +30,9 @@ export default function ActivationTab({ onOpenTask }: { onOpenTask: (taskId: str
   // A provider opened from inside a university. Layered over the
   // university drawer so closing it returns to the campus.
   const [openProvider, setOpenProvider] = useState<string | null>(null);
+  // Incremented when a provider action is taken, forcing UniversityDrawer
+  // to remount and refetch its data.
+  const [drawerKey, setDrawerKey] = useState(0);
 
   const load = useCallback(async () => {
     try {
@@ -136,18 +139,22 @@ export default function ActivationTab({ onOpenTask }: { onOpenTask: (taskId: str
 
       {open ? (
         <UniversityDrawer
+          key={`${open}-${drawerKey}`}
           slug={open}
           onClose={() => setOpen(null)}
           onOpenTask={onOpenTask}
           onChanged={() => void load()}
-                  onOpenProvider={(id) => setOpenProvider(id)}
+          onOpenProvider={(id) => setOpenProvider(id)}
         />
       ) : null}
-          {openProvider && (
+      {openProvider && (
         <Drawer
           outreachId={openProvider}
           onClose={() => setOpenProvider(null)}
-          onAction={() => { void load(); }}
+          onAction={() => {
+            void load();
+            setDrawerKey((k) => k + 1);
+          }}
           activeTab="tasks"
         />
       )}

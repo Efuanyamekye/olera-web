@@ -1,0 +1,1083 @@
+{
+  "state": "WI",
+  "addedAt": "2026-10-06T05:29:07.012Z",
+  "dive": {
+    "state": "WI",
+    "stateName": "Wisconsin",
+    "diveAt": "2026-10-06T05:18:35.054Z",
+    "total": 8,
+    "parsed": 8,
+    "programs": [
+      {
+        "name": "Medicaid for the Elderly, Blind, or Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "program_context": "Wisconsin EBD Medicaid has multiple eligibility pathways. The core SSI-related pathway is for people age 65+, blind, or disabled, with both a categorically needy track and a medically needy track.",
+            "single_person": {
+              "categorically_needy_monthly_income_limit": "$1,086.16",
+              "medically_needy_monthly_income_limit": "100% of the federal poverty level; if income is above this, a deductible may still allow eligibility"
+            },
+            "couple": {
+              "categorically_needy_monthly_income_limit": "$1,636.26",
+              "medically_needy_monthly_income_limit": "100% of the federal poverty level; if income is above this, a deductible may still allow eligibility"
+            },
+            "notes": [
+              "Income is counted after certain credits and deductions are applied.",
+              "Some people who are above the categorically needy limit may still qualify under the medically needy path if they meet a deductible.",
+              "There are also Medicare Savings Program-related EBD categories in the same handbook table, including SLMB and SLMB+ income bands tied to FPL."
+            ]
+          },
+          "asset_limits": {
+            "single_person": "$2,000",
+            "couple": "$3,000",
+            "what_counts": [
+              "Countable cash and bank accounts",
+              "Most non-exempt investments and other countable resources",
+              "Assets owned by the fiscal group are tested together for Medicaid eligibility"
+            ],
+            "what_is_exempt": [
+              "The home, if it is the primary residence and otherwise exempt under Medicaid rules",
+              "One vehicle, generally exempt under Medicaid rules",
+              "Certain burial spaces and burial arrangements",
+              "Certain household goods and personal effects",
+              "Other assets specifically excluded by Wisconsin Medicaid rules"
+            ],
+            "notes": [
+              "Wisconsin EBD fiscal groups must be within the applicable asset limit before any member can qualify.",
+              "The handbook indicates separate asset treatment for some Medicare Savings Program categories, such as SLMB+ with higher resource limits."
+            ]
+          },
+          "other_requirements": [
+            "Must be a Wisconsin resident",
+            "Must be a U.S. citizen or qualifying immigrant",
+            "Must be age 65 or older, blind, or disabled under Medicaid rules",
+            "Must meet nonfinancial Medicaid requirements",
+            "If using the disability pathway, disability must be determined by the Disability Determination Bureau",
+            "Must meet the applicable Medicaid citizenship/immigration and state residency requirements"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Health care coverage for adults 65+ and people who are blind or disabled, including medical care and, for those who medically qualify, long-term care and support services such as in-home personal care, adult day care, meal delivery, home modifications, and personal emergency response systems. Copays, when applicable, cannot exceed 5% of total income before taxes or other deductions.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online via Wisconsin ACCESS: https://access.wi.gov/",
+            "Phone: apply by calling your local agency or member services; state guidance also allows scheduling a telephone interview",
+            "Mail: Wisconsin Medicaid for the Elderly, Blind, or Disabled Application Packet, F-10101",
+            "In person: schedule a face-to-face interview with the local agency"
+          ],
+          "processing_time": "30 calendar days from the date the application is received, extended as needed to allow at least 20 days from the mailing date of any verification request",
+          "waitlist": null,
+          "forms": [
+            "F-10101 Wisconsin Medicaid for the Elderly, Blind, or Disabled Application Packet"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of age, blindness, or disability if needed",
+            "Social Security numbers for household members applying",
+            "Proof of Wisconsin residency",
+            "Proof of citizenship or qualified immigrant status",
+            "Proof of income such as Social Security, pensions, wages, or other income",
+            "Proof of assets such as bank statements, life insurance cash value, and vehicle information",
+            "Medical or disability information if applying based on disability",
+            "Any Medicare information if the person has Medicare"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Wisconsin; eligibility is not county-restricted, though administration and interviews are handled through local agencies.",
+          "regional_variations": "Eligibility rules are statewide and do not vary by region, but local agency administration, interview availability, and appointment scheduling can affect how quickly an application is completed. Some related long-term care supports may depend on local managed care or waiver arrangements.",
+          "offices_or_providers": [
+            "Local county/tribal human services agencies",
+            "Wisconsin ACCESS online application system",
+            "Wisconsin Department of Health Services Medicaid program"
+          ]
+        },
+        "official_source": "https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm",
+        "gotchas": [
+          "People often assume EBD is only a health coverage program, but it can also connect to long-term care supports if medical criteria are met.",
+          "Income over the basic limit does not always mean denial; some applicants qualify through the medically needy deductible path.",
+          "Asset rules are strict and the fiscal group’s resources matter, not just the individual applicant’s own bank balance.",
+          "The disability pathway is not self-certified; it requires an official disability determination.",
+          "Applications can be delayed if verification is incomplete, even though the normal decision window is 30 days.",
+          "Medicare Savings Program categories are related but distinct from full EBD Medicaid, and their income/asset limits differ."
+        ],
+        "data_shape_notes": "This program is not one fixed benefit tier: it has categorical and medically needy eligibility tracks, separate SSI-related and Medicare Savings Program-style limits, and possible deductible-based eligibility above the basic income threshold.",
+        "_raw": "{\n  \"name\": \"Medicaid for the Elderly, Blind, or Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"program_context\": \"Wisconsin EBD Medicaid has multiple eligibility pathways. The core SSI-related pathway is for people age 65+, blind, or disabled, with both a categorically needy track and a medically needy track.\",\n      \"single_person\": {\n        \"categorically_needy_monthly_income_limit\": \"$1,086.16\",\n        \"medically_needy_monthly_income_limit\": \"100% of the federal poverty level; if income is above this, a deductible may still allow eligibility\"\n      },\n      \"couple\": {\n        \"categorically_needy_monthly_income_limit\": \"$1,636.26\",\n        \"medically_needy_monthly_income_limit\": \"100% of the federal poverty level; if income is above this, a deductible may still allow eligibility\"\n      },\n      \"notes\": [\n        \"Income is counted after certain credits and deductions are applied.\",\n        \"Some people who are above the categorically needy limit may still qualify under the medically needy path if they meet a deductible.\",\n        \"There are also Medicare Savings Program-related EBD categories in the same handbook table, including SLMB and SLMB+ income bands tied to FPL.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"single_person\": \"$2,000\",\n      \"couple\": \"$3,000\",\n      \"what_counts\": [\n        \"Countable cash and bank accounts\",\n        \"Most non-exempt investments and other countable resources\",\n        \"Assets owned by the fiscal group are tested together for Medicaid eligibility\"\n      ],\n      \"what_is_exempt\": [\n        \"The home, if it is the primary residence and otherwise exempt under Medicaid rules\",\n        \"One vehicle, generally exempt under Medicaid rules\",\n        \"Certain burial spaces and burial arrangements\",\n        \"Certain household goods and personal effects\",\n        \"Other assets specifically excluded by Wisconsin Medicaid rules\"\n      ],\n      \"notes\": [\n        \"Wisconsin EBD fiscal groups must be within the applicable asset limit before any member can qualify.\",\n        \"The handbook indicates separate asset treatment for some Medicare Savings Program categories, such as SLMB+ with higher resource limits.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a Wisconsin resident\",\n      \"Must be a U.S. citizen or qualifying immigrant\",\n      \"Must be age 65 or older, blind, or disabled under Medicaid rules\",\n      \"Must meet nonfinancial Medicaid requirements\",\n      \"If using the disability pathway, disability must be determined by the Disability Determination Bureau\",\n      \"Must meet the applicable Medicaid citizenship/immigration and state residency requirements\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Health care coverage for adults 65+ and people who are blind or disabled, including medical care and, for those who medically qualify, long-term care and support services such as in-home personal care, adult day care, meal delivery, home modifications, and personal emergency response systems. Copays, when applicable, cannot exceed 5% of total income before taxes or other deductions.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online via Wisconsin ACCESS: https://access.wi.gov/\",\n      \"Phone: apply by calling your local agency or member services; state guidance also allows scheduling a telephone interview\",\n      \"Mail: Wisconsin Medicaid for the Elderly, Blind, or Disabled Application Packet, F-10101\",\n      \"In person: schedule a face-to-face interview with the local agency\"\n    ],\n    \"processing_time\": \"30 calendar days from the date the application is received, extended as needed to allow at least 20 days from the mailing date of any verification request\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"F-10101 Wisconsin Medicaid for the Elderly, Blind, or Disabled Application Packet\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of age, blindness, or disability if needed\",\n      \"Social Security numbers for household members applying\",\n      \"Proof of Wisconsin residency\",\n      \"Proof of citizenship or qualified immigrant status\",\n      \"Proof of income such as Social Security, pensions, wages, or other income\",\n      \"Proof of assets such as bank statements, life insurance cash value, and vehicle information\",\n      \"Medical or disability information if applying based on disability\",\n      \"Any Medicare information if the person has Medicare\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Wisconsin; eligibility is not county-restricted, though administration and interviews are handled through local agencies.\",\n    \"regional_variations\": \"Eligibility rules are statewide and do not vary by region, but local agency administration, interview availability, and appointment scheduling can affect how quickly an application is completed. Some related long-term care supports may depend on local managed care or waiver arrangements.\",\n    \"offices_or_providers\": [\n      \"Local county/tribal human services agencies\",\n      \"Wisconsin ACCESS online application system\",\n      \"Wisconsin Department of Health Services Medicaid program\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm\",\n  \"gotchas\": [\n    \"People often assume EBD is only a health coverage program, but it can also connect to long-term care supports if medical criteria are met.\",\n    \"Income over the basic limit does not always mean denial; some applicants qualify through the medically needy deductible path.\",\n    \"Asset rules are strict and the fiscal group’s resources matter, not just the individual applicant’s own bank balance.\",\n    \"The disability pathway is not self-certified; it requires an official disability determination.\",\n    \"Applications can be delayed if verification is incomplete, even though the normal decision window is 30 days.\",\n    \"Medicare Savings Program categories are related but distinct from full EBD Medicaid, and their income/asset limits differ.\"\n  ],\n  \"data_shape_notes\": \"This program is not one fixed benefit tier: it has categorical and medically needy eligibility tracks, separate SSI-related and Medicare Savings Program-style limits, and possible deductible-based eligibility above the basic income threshold.\"\n}"
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "Must be enrolled in Medicare and have countable monthly income within the program limit. Wisconsin uses four MSP-related income tiers: 100% FPL, 120% FPL, 135% FPL, and 200% FPL, depending on the MSP category. The state publication says countable monthly income must be at or below the applicable FPL tier after certain credits are applied.[1]",
+            "full_table": [
+              {
+                "household_size": 1,
+                "100%_fpl": "$1,304",
+                "120%_fpl": "$1,565.00",
+                "135%_fpl": "$1,760.63",
+                "200%_fpl": "$2,608.34"
+              },
+              {
+                "household_size": 2,
+                "100%_fpl": "$1,762",
+                "120%_fpl": "$2,114.50",
+                "135%_fpl": "$2,378.70",
+                "200%_fpl": "$3,524.63"
+              },
+              {
+                "household_size": 3,
+                "100%_fpl": "$2,220",
+                "120%_fpl": "$2,664.00",
+                "135%_fpl": "$2,996.75",
+                "200%_fpl": "$4,440.84"
+              },
+              {
+                "household_size": 4,
+                "100%_fpl": "$2,678",
+                "120%_fpl": "$3,213.50",
+                "135%_fpl": "$3,614.80",
+                "200%_fpl": "$5,357.04"
+              },
+              {
+                "household_size": 5,
+                "100%_fpl": "$3,136",
+                "120%_fpl": "$3,763.00",
+                "135%_fpl": "$4,232.85",
+                "200%_fpl": "$6,273.25"
+              },
+              {
+                "household_size": 6,
+                "100%_fpl": "$3,594",
+                "120%_fpl": "$4,312.50",
+                "135%_fpl": "$4,850.90",
+                "200%_fpl": "$7,189.45"
+              }
+            ],
+            "note": "The source publication shows the table and indicates limits may change each year; Wisconsin also applies certain income credits before comparing income to the limit.[1]"
+          },
+          "asset_limits": {
+            "summary": "Wisconsin uses countable asset limits for most MSP categories. The published 2025/2026-era limits shown in DHS materials are $9,660 for one person and $14,470 for two people for QMB, SLMB, and SLMB+; QDWI uses a lower asset limit of $4,000 for one person and $6,000 for two people.[1][3]",
+            "what_counts": "The state says only countable assets matter, but the publication provided here does not list every included or excluded asset in detail.[1]",
+            "exempt": "The source snippet does not enumerate exempt assets. It only states that not all income and assets are counted when determining eligibility.[1][5]",
+            "tier_specific": "Asset limits apply to QMB, SLMB, SLMB+, and QDWI, with QDWI having its own lower limit.[3]"
+          },
+          "other_requirements": [
+            "Must receive Medicare benefits.[1]",
+            "Must meet the program’s income and asset limits for the specific MSP category.[1][3]",
+            "For QDWI, the person must be disabled and working, and must be entitled to Medicare Part A.[10]",
+            "For some MSP categories, enrollment may be automatic if the person already receives SSI or certain Medicaid programs.[2]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Wisconsin Medicare Savings Programs can pay Medicare premiums and, depending on the category, Medicare cost sharing. Specifically: QMB can pay Medicare Part A and Part B premiums, deductibles, and coinsurance; SLMB can pay Medicare Part B premiums; SLMB+ can also pay Medicare Part B premiums; QDWI can pay Medicare Part B premiums.[10]",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: access.wi.gov[1][2]",
+            "By phone: 800-362-3002[4]",
+            "By mail: apply through the local agency / local county agency[1][4]",
+            "In person: local agency / local county agency[1][4]"
+          ],
+          "processing_time": "Not stated in the source materials provided.",
+          "waitlist": null,
+          "forms": [
+            "No single MSP-specific form number is identified in the source materials provided; the program is applied for through Wisconsin Access or the local agency.[1][4]"
+          ],
+          "documents": [
+            "Proof of Medicare enrollment",
+            "Proof of income",
+            "Proof of assets or bank accounts",
+            "Information about household size",
+            "Any documents showing current Medicaid or SSI enrollment, if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Wisconsin program; no county restriction was identified in the source materials.[1][2]",
+          "regional_variations": "No benefit variation by region was identified. Application handling may differ by local agency or county office, but the program rules and eligibility limits are statewide.[1][4]",
+          "offices_or_providers": [
+            "Wisconsin Department of Health Services local agency / county agency",
+            "Wisconsin Access online application system"
+          ]
+        },
+        "official_source": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+        "gotchas": [
+          "People often assume MSP is only for people with very low income, but Wisconsin has multiple MSP categories with different income tiers, including 120%, 135%, and 200% FPL for some categories.[1]",
+          "Not all income and assets count the same way; Wisconsin specifically says certain credits are applied before comparing income to the limit, and not all income/assets are counted.[1][5]",
+          "QMB is the broadest help because it can cover Part A and Part B premiums plus deductibles and coinsurance; SLMB and SLMB+ generally cover only Part B premiums.[10]",
+          "Some people may be enrolled automatically if they already get SSI or certain Medicaid coverage.[2]",
+          "QDWI is different from the other MSPs because it is for disabled, working people entitled to Medicare Part A and has its own lower asset limit.[10][3]"
+        ],
+        "data_shape_notes": "This program is tiered by MSP category, with benefits and income/asset rules varying by category; it is statewide, not county-restricted, and the biggest practical issue is matching the applicant to the correct MSP tier.[1][3][10]",
+        "_raw": "{\n  \"name\": \"Medicare Savings Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"Must be enrolled in Medicare and have countable monthly income within the program limit. Wisconsin uses four MSP-related income tiers: 100% FPL, 120% FPL, 135% FPL, and 200% FPL, depending on the MSP category. The state publication says countable monthly income must be at or below the applicable FPL tier after certain credits are applied.[1]\",\n      \"full_table\": [\n        {\n          \"household_size\": 1,\n          \"100%_fpl\": \"$1,304\",\n          \"120%_fpl\": \"$1,565.00\",\n          \"135%_fpl\": \"$1,760.63\",\n          \"200%_fpl\": \"$2,608.34\"\n        },\n        {\n          \"household_size\": 2,\n          \"100%_fpl\": \"$1,762\",\n          \"120%_fpl\": \"$2,114.50\",\n          \"135%_fpl\": \"$2,378.70\",\n          \"200%_fpl\": \"$3,524.63\"\n        },\n        {\n          \"household_size\": 3,\n          \"100%_fpl\": \"$2,220\",\n          \"120%_fpl\": \"$2,664.00\",\n          \"135%_fpl\": \"$2,996.75\",\n          \"200%_fpl\": \"$4,440.84\"\n        },\n        {\n          \"household_size\": 4,\n          \"100%_fpl\": \"$2,678\",\n          \"120%_fpl\": \"$3,213.50\",\n          \"135%_fpl\": \"$3,614.80\",\n          \"200%_fpl\": \"$5,357.04\"\n        },\n        {\n          \"household_size\": 5,\n          \"100%_fpl\": \"$3,136\",\n          \"120%_fpl\": \"$3,763.00\",\n          \"135%_fpl\": \"$4,232.85\",\n          \"200%_fpl\": \"$6,273.25\"\n        },\n        {\n          \"household_size\": 6,\n          \"100%_fpl\": \"$3,594\",\n          \"120%_fpl\": \"$4,312.50\",\n          \"135%_fpl\": \"$4,850.90\",\n          \"200%_fpl\": \"$7,189.45\"\n        }\n      ],\n      \"note\": \"The source publication shows the table and indicates limits may change each year; Wisconsin also applies certain income credits before comparing income to the limit.[1]\"\n    },\n    \"asset_limits\": {\n      \"summary\": \"Wisconsin uses countable asset limits for most MSP categories. The published 2025/2026-era limits shown in DHS materials are $9,660 for one person and $14,470 for two people for QMB, SLMB, and SLMB+; QDWI uses a lower asset limit of $4,000 for one person and $6,000 for two people.[1][3]\",\n      \"what_counts\": \"The state says only countable assets matter, but the publication provided here does not list every included or excluded asset in detail.[1]\",\n      \"exempt\": \"The source snippet does not enumerate exempt assets. It only states that not all income and assets are counted when determining eligibility.[1][5]\",\n      \"tier_specific\": \"Asset limits apply to QMB, SLMB, SLMB+, and QDWI, with QDWI having its own lower limit.[3]\"\n    },\n    \"other_requirements\": [\n      \"Must receive Medicare benefits.[1]\",\n      \"Must meet the program’s income and asset limits for the specific MSP category.[1][3]\",\n      \"For QDWI, the person must be disabled and working, and must be entitled to Medicare Part A.[10]\",\n      \"For some MSP categories, enrollment may be automatic if the person already receives SSI or certain Medicaid programs.[2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Wisconsin Medicare Savings Programs can pay Medicare premiums and, depending on the category, Medicare cost sharing. Specifically: QMB can pay Medicare Part A and Part B premiums, deductibles, and coinsurance; SLMB can pay Medicare Part B premiums; SLMB+ can also pay Medicare Part B premiums; QDWI can pay Medicare Part B premiums.[10]\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: access.wi.gov[1][2]\",\n      \"By phone: 800-362-3002[4]\",\n      \"By mail: apply through the local agency / local county agency[1][4]\",\n      \"In person: local agency / local county agency[1][4]\"\n    ],\n    \"processing_time\": \"Not stated in the source materials provided.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No single MSP-specific form number is identified in the source materials provided; the program is applied for through Wisconsin Access or the local agency.[1][4]\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare enrollment\",\n      \"Proof of income\",\n      \"Proof of assets or bank accounts\",\n      \"Information about household size\",\n      \"Any documents showing current Medicaid or SSI enrollment, if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Wisconsin program; no county restriction was identified in the source materials.[1][2]\",\n    \"regional_variations\": \"No benefit variation by region was identified. Application handling may differ by local agency or county office, but the program rules and eligibility limits are statewide.[1][4]\",\n    \"offices_or_providers\": [\n      \"Wisconsin Department of Health Services local agency / county agency\",\n      \"Wisconsin Access online application system\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf\",\n  \"gotchas\": [\n    \"People often assume MSP is only for people with very low income, but Wisconsin has multiple MSP categories with different income tiers, including 120%, 135%, and 200% FPL for some categories.[1]\",\n    \"Not all income and assets count the same way; Wisconsin specifically says certain credits are applied before comparing income to the limit, and not all income/assets are counted.[1][5]\",\n    \"QMB is the broadest help because it can cover Part A and Part B premiums plus deductibles and coinsurance; SLMB and SLMB+ generally cover only Part B premiums.[10]\",\n    \"Some people may be enrolled automatically if they already get SSI or certain Medicaid coverage.[2]\",\n    \"QDWI is different from the other MSPs because it is for disabled, working people entitled to Medicare Part A and has its own lower asset limit.[10][3]\"\n  ],\n  \"data_shape_notes\": \"This program is tiered by MSP category, with benefits and income/asset rules varying by category; it is statewide, not county-restricted, and the biggest practical issue is matching the applicant to the correct MSP tier.[1][3][10]\"\n}"
+      },
+      {
+        "name": "FoodShare",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Wisconsin FoodShare uses different income tests depending on the household. For FFY 2027, the 200% FPL gross monthly income limits are: 1=$2,660; 2=$3,608; 3=$4,554; 4=$5,500; 5=$6,448; 6=$7,394; 7=$8,340; 8=$9,288; add $948 for each additional person. The 130% FPL reporting/gross income limits are: 1=$1,729; 2=$2,345; 3=$2,960; 4=$3,575; 5=$4,191; 6=$4,806; 7=$5,421; 8=$6,037; add $616 for each additional person. For regular SNAP-style eligibility, the 100% FPL net income limits for FFY 2026 were: 1=$1,305; 2=$1,763; 3=$2,221; 4=$2,680; 5=$3,138; 6=$3,596; 7=$4,055; 8=$4,513; add $458 for each additional person. The posted maximum monthly allotment for FFY 2027 is: 1=$306; 2=$562; 3=$808; 4=$1,023; 5=$1,217; 6=$1,463; 7=$1,616; 8=$1,841; add $225 for each additional person. Household members who are elderly or disabled may be treated under a separate assistance-group rule, with a 165% FPL income test shown in the handbook for some cases. ",
+          "asset_limits": "For most Wisconsin FoodShare households, the program operates with broad-based categorical eligibility and does not use the traditional SNAP asset test. For households subject to a resource test under regular rules, countable resources generally include things like cash, money in checking/savings, stocks, and certain non-exempt assets, while common exemptions include the home, most retirement accounts, and one vehicle in many cases; however, the exact resource rules can depend on household composition and eligibility category. For an elderly applicant, the key practical point is that many Wisconsin households have no asset limit at all under current FoodShare rules, but some elderly/disabled cases can be reviewed under different rules if income is above the broad-based threshold.",
+          "other_requirements": [
+            "Must be a Wisconsin resident",
+            "Must apply through the local agency/ACCESS system and provide required verification",
+            "Must meet federal citizenship/immigration rules for SNAP/FoodShare",
+            "Household must fit a FoodShare assistance group as defined by Wisconsin policy",
+            "Able-bodied adults without dependents may face work requirements unless exempt",
+            "Elderly/disabled households can have different deduction and eligibility treatment"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly FoodShare benefits loaded onto an Electronic Benefit Transfer (EBT) card, usable to buy eligible food items at authorized retailers. Maximum monthly allotments posted for FFY 2027 range from $306 for a one-person household to $1,841 for an eight-person household, with $225 added for each additional person. Benefits cannot be used for alcohol, tobacco, hot prepared foods, or nonfood items.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online through ACCESS / access.wi.gov",
+            "By phone through the local agency or county economic support office",
+            "By mail using the FoodShare Application, Form F-16019",
+            "In person at the local agency"
+          ],
+          "processing_time": "Not stated in the source material gathered here; families should expect the standard FoodShare eligibility determination process after submitting an application and any required verifications.",
+          "waitlist": null,
+          "forms": [
+            "FoodShare Application, F-16019"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Social Security numbers, if available/required",
+            "Proof of Wisconsin residency",
+            "Proof of household income such as pay stubs, award letters, or benefit statements",
+            "Proof of shelter costs, utilities, and dependent care if claiming deductions",
+            "Proof of immigration status if applicable",
+            "Bank statements or other resource documents if the case is reviewed for assets",
+            "Medical expense documentation for an elderly or disabled household member if seeking the medical expense deduction"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Wisconsin through local agencies administering FoodShare; no county-only restriction was identified.",
+          "regional_variations": "The statewide program rules are the same, but application handling, interview scheduling, and service hours can vary by county agency. Local phone numbers and office procedures differ by region.",
+          "offices_or_providers": [
+            "Wisconsin Department of Health Services ACCESS system",
+            "Local county human services or economic support agency",
+            "County-specific offices such as Dane County Human Services or Racine County economic support offices"
+          ]
+        },
+        "official_source": "https://www.dhs.wisconsin.gov/foodshare/eligibility.htm",
+        "gotchas": [
+          "FoodShare is SNAP in Wisconsin, so benefits are food-only and go onto an EBT card, not cash.",
+          "Older adults often qualify even when their income is above the standard household threshold because medical and shelter deductions can matter a lot.",
+          "Households should not assume assets disqualify them; many Wisconsin FoodShare cases do not use a traditional asset test.",
+          "The monthly allotment depends on household size, so adding or removing a household member can change the benefit amount.",
+          "A household can be eligible even if one member is elderly or disabled and another is not; the household composition affects how the case is tested.",
+          "County offices can differ in how fast they process applications and in how they conduct interviews, even though the rules are statewide."
+        ],
+        "data_shape_notes": "FoodShare is a statewide, household-based benefit with income-tested eligibility, size-based monthly allotments, and no simple one-size-fits-all age rule. The most important complexity is that elderly or disabled households may be evaluated under different income/deduction rules than other households.",
+        "_raw": "{\n  \"name\": \"FoodShare\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Wisconsin FoodShare uses different income tests depending on the household. For FFY 2027, the 200% FPL gross monthly income limits are: 1=$2,660; 2=$3,608; 3=$4,554; 4=$5,500; 5=$6,448; 6=$7,394; 7=$8,340; 8=$9,288; add $948 for each additional person. The 130% FPL reporting/gross income limits are: 1=$1,729; 2=$2,345; 3=$2,960; 4=$3,575; 5=$4,191; 6=$4,806; 7=$5,421; 8=$6,037; add $616 for each additional person. For regular SNAP-style eligibility, the 100% FPL net income limits for FFY 2026 were: 1=$1,305; 2=$1,763; 3=$2,221; 4=$2,680; 5=$3,138; 6=$3,596; 7=$4,055; 8=$4,513; add $458 for each additional person. The posted maximum monthly allotment for FFY 2027 is: 1=$306; 2=$562; 3=$808; 4=$1,023; 5=$1,217; 6=$1,463; 7=$1,616; 8=$1,841; add $225 for each additional person. Household members who are elderly or disabled may be treated under a separate assistance-group rule, with a 165% FPL income test shown in the handbook for some cases. \",\n    \"asset_limits\": \"For most Wisconsin FoodShare households, the program operates with broad-based categorical eligibility and does not use the traditional SNAP asset test. For households subject to a resource test under regular rules, countable resources generally include things like cash, money in checking/savings, stocks, and certain non-exempt assets, while common exemptions include the home, most retirement accounts, and one vehicle in many cases; however, the exact resource rules can depend on household composition and eligibility category. For an elderly applicant, the key practical point is that many Wisconsin households have no asset limit at all under current FoodShare rules, but some elderly/disabled cases can be reviewed under different rules if income is above the broad-based threshold.\",\n    \"other_requirements\": [\n      \"Must be a Wisconsin resident\",\n      \"Must apply through the local agency/ACCESS system and provide required verification\",\n      \"Must meet federal citizenship/immigration rules for SNAP/FoodShare\",\n      \"Household must fit a FoodShare assistance group as defined by Wisconsin policy\",\n      \"Able-bodied adults without dependents may face work requirements unless exempt\",\n      \"Elderly/disabled households can have different deduction and eligibility treatment\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly FoodShare benefits loaded onto an Electronic Benefit Transfer (EBT) card, usable to buy eligible food items at authorized retailers. Maximum monthly allotments posted for FFY 2027 range from $306 for a one-person household to $1,841 for an eight-person household, with $225 added for each additional person. Benefits cannot be used for alcohol, tobacco, hot prepared foods, or nonfood items.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through ACCESS / access.wi.gov\",\n      \"By phone through the local agency or county economic support office\",\n      \"By mail using the FoodShare Application, Form F-16019\",\n      \"In person at the local agency\"\n    ],\n    \"processing_time\": \"Not stated in the source material gathered here; families should expect the standard FoodShare eligibility determination process after submitting an application and any required verifications.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"FoodShare Application, F-16019\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Social Security numbers, if available/required\",\n      \"Proof of Wisconsin residency\",\n      \"Proof of household income such as pay stubs, award letters, or benefit statements\",\n      \"Proof of shelter costs, utilities, and dependent care if claiming deductions\",\n      \"Proof of immigration status if applicable\",\n      \"Bank statements or other resource documents if the case is reviewed for assets\",\n      \"Medical expense documentation for an elderly or disabled household member if seeking the medical expense deduction\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Wisconsin through local agencies administering FoodShare; no county-only restriction was identified.\",\n    \"regional_variations\": \"The statewide program rules are the same, but application handling, interview scheduling, and service hours can vary by county agency. Local phone numbers and office procedures differ by region.\",\n    \"offices_or_providers\": [\n      \"Wisconsin Department of Health Services ACCESS system\",\n      \"Local county human services or economic support agency\",\n      \"County-specific offices such as Dane County Human Services or Racine County economic support offices\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.wisconsin.gov/foodshare/eligibility.htm\",\n  \"gotchas\": [\n    \"FoodShare is SNAP in Wisconsin, so benefits are food-only and go onto an EBT card, not cash.\",\n    \"Older adults often qualify even when their income is above the standard household threshold because medical and shelter deductions can matter a lot.\",\n    \"Households should not assume assets disqualify them; many Wisconsin FoodShare cases do not use a traditional asset test.\",\n    \"The monthly allotment depends on household size, so adding or removing a household member can change the benefit amount.\",\n    \"A household can be eligible even if one member is elderly or disabled and another is not; the household composition affects how the case is tested.\",\n    \"County offices can differ in how fast they process applications and in how they conduct interviews, even though the rules are statewide.\"\n  ],\n  \"data_shape_notes\": \"FoodShare is a statewide, household-based benefit with income-tested eligibility, size-based monthly allotments, and no simple one-size-fits-all age rule. The most important complexity is that elderly or disabled households may be evaluated under different income/deduction rules than other households.\"\n}"
+      },
+      {
+        "name": "Wisconsin PACE Program",
+        "eligibility": {
+          "age": 55,
+          "income_limits": {
+            "summary": "No separate PACE-specific dollar income limit was found in the official materials reviewed. Wisconsin says applicants must be financially eligible, and if someone already qualifies for Medicaid or meets Medicaid income limits, they also meet the financial requirement for Family Care, Partnership, and PACE.",
+            "table": null,
+            "notes": [
+              "The official application page says applicants must be financially eligible and have certain income limits.",
+              "The PACE enrollment form says a person may be, but does not have to be, entitled to Medicare Part A, enrolled in Medicare Part B, or eligible for Medicaid.",
+              "A Medicaid applicant’s income limit is not stated on the PACE page itself; the official materials point applicants to the Medicaid application and financial review."
+            ]
+          },
+          "asset_limits": {
+            "summary": "The official materials reviewed indicate a Medicaid long-term care asset test applies, but the PACE page does not publish a separate PACE-only asset amount. One DHS handbook says the applicant asset limit is $2,000 plus any community spouse asset share.",
+            "what_counts": [
+              "Countable assets subject to Medicaid long-term care rules",
+              "Assets may be affected by spousal impoverishment rules if a spouse remains in the community"
+            ],
+            "what_is_exempt": [
+              "The reviewed sources did not provide a complete Wisconsin PACE-specific exempt-assets list"
+            ],
+            "notes": [
+              "If one spouse is in a Medicaid long-term care program, Wisconsin’s spousal impoverishment rules may allow the community spouse to keep certain assets.",
+              "The reviewed spousal impoverishment page says that when total combined assets are $100,000 or less, the community spouse can keep $50,000 and the institutionalized spouse can keep $2,000."
+            ]
+          },
+          "other_requirements": [
+            "Must need nursing home level of care",
+            "Must be able to live safely in the community with some help at enrollment",
+            "Must live in the PACE service area",
+            "In Wisconsin, that service area is Kenosha, Milwaukee, Racine, or Waukesha County",
+            "Must complete a Long Term Care Functional Screen through an ADRC or Tribal ADRS",
+            "Must complete a Medicaid application for the financial eligibility review"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE is an all-inclusive Medicare and Medicaid managed care model that provides the full package of long-term care and medical services needed to keep an eligible older adult safe in the community. The reviewed official sources do not give a dollar cap, hour limit, or tiered benefit amount; instead, benefits are based on an interdisciplinary care plan and can include nursing home-level care delivered in the community. The official sources reviewed did not list a fixed benefit dollar amount.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Start with your local Aging and Disability Resource Center (ADRC)",
+            "If the person is Native American/tribal member, contact the Tribal Aging and Disability Resource Specialist (ADRS)",
+            "Medicaid application online or by paper form",
+            "By phone through Medicaid Member Services: 800-362-3002"
+          ],
+          "processing_time": "The reviewed official sources do not give a firm statewide processing-time guarantee. Enrollment depends on completing the functional screen, Medicaid financial review, and confirmation by the ADRC/Tribal ADRS; timing can vary case by case.",
+          "waitlist": "The official Wisconsin PACE pages reviewed do not describe a formal statewide waitlist. Availability is limited by county/service area, so the practical constraint is geographic access rather than a published queue.",
+          "forms": [
+            "Long Term Care Functional Screen",
+            "Medicaid application",
+            "PACE enrollment form (DHS form f02483 / f02483r)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of age",
+            "Proof of Wisconsin residency and county address",
+            "Medicaid financial information",
+            "Income records",
+            "Bank statements and other asset records",
+            "Medicare card if applicable",
+            "Any current insurance information",
+            "Medical or care-needs information for the functional screen"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Wisconsin PACE is limited to Kenosha, Milwaukee, Racine, and Waukesha County.",
+          "regional_variations": "The main variation is service-area access: eligibility and enrollment are handled locally through the relevant ADRC, and PACE is only available in four counties. The reviewed materials did not show different benefit levels by county, but access and provider choice are region-specific.",
+          "offices_or_providers": [
+            "Local ADRC serving Kenosha County",
+            "Local ADRC serving Milwaukee County",
+            "Local ADRC serving Racine County",
+            "Local ADRC serving Waukesha County"
+          ]
+        },
+        "official_source": "https://www.dhs.wisconsin.gov/familycare/pace.htm",
+        "gotchas": [
+          "PACE in Wisconsin is not statewide; only four counties are included.",
+          "Families often miss that both functional eligibility and financial eligibility are required.",
+          "The person must be able to live safely in the community at enrollment, not just meet age and county rules.",
+          "People sometimes assume Medicare alone is enough; it is not.",
+          "The Medicaid application is part of the PACE process even though PACE is a Medicare/Medicaid managed care program.",
+          "The reviewed official sources did not publish a simple income chart for PACE, so families often need an ADRC or Medicaid worker to determine the exact financial result."
+        ],
+        "data_shape_notes": "This program is county-limited, requires both functional and financial screening, and does not present benefits as a fixed cash amount; instead it provides coordinated all-inclusive care through a local PACE organization.",
+        "_raw": "{\n  \"name\": \"Wisconsin PACE Program\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": {\n      \"summary\": \"No separate PACE-specific dollar income limit was found in the official materials reviewed. Wisconsin says applicants must be financially eligible, and if someone already qualifies for Medicaid or meets Medicaid income limits, they also meet the financial requirement for Family Care, Partnership, and PACE.\",\n      \"table\": null,\n      \"notes\": [\n        \"The official application page says applicants must be financially eligible and have certain income limits.\",\n        \"The PACE enrollment form says a person may be, but does not have to be, entitled to Medicare Part A, enrolled in Medicare Part B, or eligible for Medicaid.\",\n        \"A Medicaid applicant’s income limit is not stated on the PACE page itself; the official materials point applicants to the Medicaid application and financial review.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"summary\": \"The official materials reviewed indicate a Medicaid long-term care asset test applies, but the PACE page does not publish a separate PACE-only asset amount. One DHS handbook says the applicant asset limit is $2,000 plus any community spouse asset share.\",\n      \"what_counts\": [\n        \"Countable assets subject to Medicaid long-term care rules\",\n        \"Assets may be affected by spousal impoverishment rules if a spouse remains in the community\"\n      ],\n      \"what_is_exempt\": [\n        \"The reviewed sources did not provide a complete Wisconsin PACE-specific exempt-assets list\"\n      ],\n      \"notes\": [\n        \"If one spouse is in a Medicaid long-term care program, Wisconsin’s spousal impoverishment rules may allow the community spouse to keep certain assets.\",\n        \"The reviewed spousal impoverishment page says that when total combined assets are $100,000 or less, the community spouse can keep $50,000 and the institutionalized spouse can keep $2,000.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must need nursing home level of care\",\n      \"Must be able to live safely in the community with some help at enrollment\",\n      \"Must live in the PACE service area\",\n      \"In Wisconsin, that service area is Kenosha, Milwaukee, Racine, or Waukesha County\",\n      \"Must complete a Long Term Care Functional Screen through an ADRC or Tribal ADRS\",\n      \"Must complete a Medicaid application for the financial eligibility review\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE is an all-inclusive Medicare and Medicaid managed care model that provides the full package of long-term care and medical services needed to keep an eligible older adult safe in the community. The reviewed official sources do not give a dollar cap, hour limit, or tiered benefit amount; instead, benefits are based on an interdisciplinary care plan and can include nursing home-level care delivered in the community. The official sources reviewed did not list a fixed benefit dollar amount.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Start with your local Aging and Disability Resource Center (ADRC)\",\n      \"If the person is Native American/tribal member, contact the Tribal Aging and Disability Resource Specialist (ADRS)\",\n      \"Medicaid application online or by paper form\",\n      \"By phone through Medicaid Member Services: 800-362-3002\"\n    ],\n    \"processing_time\": \"The reviewed official sources do not give a firm statewide processing-time guarantee. Enrollment depends on completing the functional screen, Medicaid financial review, and confirmation by the ADRC/Tribal ADRS; timing can vary case by case.\",\n    \"waitlist\": \"The official Wisconsin PACE pages reviewed do not describe a formal statewide waitlist. Availability is limited by county/service area, so the practical constraint is geographic access rather than a published queue.\",\n    \"forms\": [\n      \"Long Term Care Functional Screen\",\n      \"Medicaid application\",\n      \"PACE enrollment form (DHS form f02483 / f02483r)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of age\",\n      \"Proof of Wisconsin residency and county address\",\n      \"Medicaid financial information\",\n      \"Income records\",\n      \"Bank statements and other asset records\",\n      \"Medicare card if applicable\",\n      \"Any current insurance information\",\n      \"Medical or care-needs information for the functional screen\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Wisconsin PACE is limited to Kenosha, Milwaukee, Racine, and Waukesha County.\",\n    \"regional_variations\": \"The main variation is service-area access: eligibility and enrollment are handled locally through the relevant ADRC, and PACE is only available in four counties. The reviewed materials did not show different benefit levels by county, but access and provider choice are region-specific.\",\n    \"offices_or_providers\": [\n      \"Local ADRC serving Kenosha County\",\n      \"Local ADRC serving Milwaukee County\",\n      \"Local ADRC serving Racine County\",\n      \"Local ADRC serving Waukesha County\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.wisconsin.gov/familycare/pace.htm\",\n  \"gotchas\": [\n    \"PACE in Wisconsin is not statewide; only four counties are included.\",\n    \"Families often miss that both functional eligibility and financial eligibility are required.\",\n    \"The person must be able to live safely in the community at enrollment, not just meet age and county rules.\",\n    \"People sometimes assume Medicare alone is enough; it is not.\",\n    \"The Medicaid application is part of the PACE process even though PACE is a Medicare/Medicaid managed care program.\",\n    \"The reviewed official sources did not publish a simple income chart for PACE, so families often need an ADRC or Medicaid worker to determine the exact financial result.\"\n  ],\n  \"data_shape_notes\": \"This program is county-limited, requires both functional and financial screening, and does not present benefits as a fixed cash amount; instead it provides coordinated all-inclusive care through a local PACE organization.\"\n}"
+      },
+      {
+        "name": "Wisconsin Home Energy Assistance Program (WHEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Household gross income must be at or below 60% of Wisconsin state median income for the program year. For the 2026–2027 program year (October 1, 2026–September 30, 2027), the published limits are: 1 person: $3,322.00/month or $39,864/year; 2: $4,344.08/month or $52,129/year; 3: $5,366.25/month or $64,395/year; 4: $6,388.42/month or $76,661/year; 5: $7,410.58/month or $88,927/year; 6: $8,432.75/month or $101,193/year; 7: $8,624.33/month or $103,492/year; 8: $8,816.00/month or $105,792/year. Households larger than 8 are typically addressed by adding the increment used by the program’s income table or by checking the official intake tool/manual. Eligibility is based on gross income and the prior month’s income is annualized for the test.",
+          "asset_limits": "No asset limit was identified in the official materials reviewed. WHEAP eligibility is described as income-based, with some categorical eligibility exceptions if income is above the limit. No asset test, countable asset list, or asset exemption schedule was located in the official sources gathered.",
+          "other_requirements": [
+            "Applicant must apply through an approved WHEAP agency for the county or tribe where they reside, or via the online application portal.",
+            "Household must be a Wisconsin resident in the service area of the local agency.",
+            "The program is for household energy assistance; applicants generally need heating/electric account information and proof of household income.",
+            "If income exceeds the standard limit, categorical eligibility may still apply under program rules.",
+            "Applications may be submitted online, by phone, by mail, or in person depending on the local agency."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "WHEAP provides a one-time annual heating benefit paid toward home energy costs. The official sources reviewed did not provide a single statewide dollar amount because the benefit can vary by household circumstances and local administration. The program may also connect eligible households to other Home Energy Plus services such as crisis assistance and weatherization-related referrals, but the core WHEAP benefit is a heating assistance payment.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application: https://energybenefit.wi.gov/",
+            "Online application portal page: https://energybenefit.wi.gov/OnlineApps",
+            "By phone through the local approved WHEAP agency for the applicant’s county/tribe",
+            "By mail through the local agency",
+            "In person through the local agency"
+          ],
+          "processing_time": "No single statewide processing-time standard was located in the official materials. Timing depends on local agency workload and the method used to apply; some agencies begin taking appointments in early fall and process regular seasonal applications after the program opens.",
+          "waitlist": "No formal statewide waitlist was identified in the official materials. Local agencies may use appointments or queue applications during busy periods, and crisis cases may be handled differently from regular benefits.",
+          "forms": [
+            "Home Energy Plus Application",
+            "Self-generated Income Report Form (S-GIRF) for certain income situations"
+          ],
+          "documents": [
+            "Proof of household income for all relevant household members",
+            "Heating account number and/or electric account number, if available",
+            "Identification and household information for everyone in the home",
+            "Current address and proof of Wisconsin residency if requested",
+            "Benefit/utility information for the home, especially if the household rents or shares utilities",
+            "Any additional documents requested by the local agency during intake"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applications must generally be filed through the approved agency serving the applicant’s county or tribal area, or through the statewide online portal. Some local offices set appointment systems, intake rules, and seasonal start dates.",
+          "regional_variations": "Yes. The core eligibility rules are statewide, but application logistics vary by county/tribe. Local agencies differ on appointment scheduling, phone intake, office hours, and how quickly applications are processed. Some counties begin scheduling earlier and rely mostly on phone interviews, while others offer in-person or mail options.",
+          "offices_or_providers": [
+            "Approved county human services agencies",
+            "Approved tribal agencies",
+            "Local Home Energy Plus/WHEAP contractors such as community action agencies in some regions"
+          ]
+        },
+        "official_source": "https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx",
+        "gotchas": [
+          "There is no uniform statewide benefit dollar amount; the payment is not a flat grant for every household.",
+          "Income is measured gross and based on a prior-month test annualized for eligibility, which can matter for seniors with changing pensions, Social Security, or one-time income.",
+          "If a household is over the income limit, it may still qualify under categorical eligibility rules.",
+          "Applicants generally must apply through the agency for the county or tribe where they live, not just any office in Wisconsin.",
+          "Local agencies may require an appointment and may not process regular applications immediately on first contact.",
+          "WHEAP is separate from weatherization; qualifying for WHEAP does not automatically mean immediate weatherization work, though it may connect the household to that network.",
+          "Households should have heating and utility account information ready because missing account numbers can delay intake."
+        ],
+        "data_shape_notes": "This program is statewide but administered locally, with income-based eligibility tied to household size and a seasonal program year. Benefits are financial and can vary rather than being a fixed statewide dollar amount, and access depends on county/tribal agency intake rules.",
+        "_raw": "{\n  \"name\": \"Wisconsin Home Energy Assistance Program (WHEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Household gross income must be at or below 60% of Wisconsin state median income for the program year. For the 2026–2027 program year (October 1, 2026–September 30, 2027), the published limits are: 1 person: $3,322.00/month or $39,864/year; 2: $4,344.08/month or $52,129/year; 3: $5,366.25/month or $64,395/year; 4: $6,388.42/month or $76,661/year; 5: $7,410.58/month or $88,927/year; 6: $8,432.75/month or $101,193/year; 7: $8,624.33/month or $103,492/year; 8: $8,816.00/month or $105,792/year. Households larger than 8 are typically addressed by adding the increment used by the program’s income table or by checking the official intake tool/manual. Eligibility is based on gross income and the prior month’s income is annualized for the test.\",\n    \"asset_limits\": \"No asset limit was identified in the official materials reviewed. WHEAP eligibility is described as income-based, with some categorical eligibility exceptions if income is above the limit. No asset test, countable asset list, or asset exemption schedule was located in the official sources gathered.\",\n    \"other_requirements\": [\n      \"Applicant must apply through an approved WHEAP agency for the county or tribe where they reside, or via the online application portal.\",\n      \"Household must be a Wisconsin resident in the service area of the local agency.\",\n      \"The program is for household energy assistance; applicants generally need heating/electric account information and proof of household income.\",\n      \"If income exceeds the standard limit, categorical eligibility may still apply under program rules.\",\n      \"Applications may be submitted online, by phone, by mail, or in person depending on the local agency.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"WHEAP provides a one-time annual heating benefit paid toward home energy costs. The official sources reviewed did not provide a single statewide dollar amount because the benefit can vary by household circumstances and local administration. The program may also connect eligible households to other Home Energy Plus services such as crisis assistance and weatherization-related referrals, but the core WHEAP benefit is a heating assistance payment.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application: https://energybenefit.wi.gov/\",\n      \"Online application portal page: https://energybenefit.wi.gov/OnlineApps\",\n      \"By phone through the local approved WHEAP agency for the applicant’s county/tribe\",\n      \"By mail through the local agency\",\n      \"In person through the local agency\"\n    ],\n    \"processing_time\": \"No single statewide processing-time standard was located in the official materials. Timing depends on local agency workload and the method used to apply; some agencies begin taking appointments in early fall and process regular seasonal applications after the program opens.\",\n    \"waitlist\": \"No formal statewide waitlist was identified in the official materials. Local agencies may use appointments or queue applications during busy periods, and crisis cases may be handled differently from regular benefits.\",\n    \"forms\": [\n      \"Home Energy Plus Application\",\n      \"Self-generated Income Report Form (S-GIRF) for certain income situations\"\n    ],\n    \"documents\": [\n      \"Proof of household income for all relevant household members\",\n      \"Heating account number and/or electric account number, if available\",\n      \"Identification and household information for everyone in the home\",\n      \"Current address and proof of Wisconsin residency if requested\",\n      \"Benefit/utility information for the home, especially if the household rents or shares utilities\",\n      \"Any additional documents requested by the local agency during intake\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applications must generally be filed through the approved agency serving the applicant’s county or tribal area, or through the statewide online portal. Some local offices set appointment systems, intake rules, and seasonal start dates.\",\n    \"regional_variations\": \"Yes. The core eligibility rules are statewide, but application logistics vary by county/tribe. Local agencies differ on appointment scheduling, phone intake, office hours, and how quickly applications are processed. Some counties begin scheduling earlier and rely mostly on phone interviews, while others offer in-person or mail options.\",\n    \"offices_or_providers\": [\n      \"Approved county human services agencies\",\n      \"Approved tribal agencies\",\n      \"Local Home Energy Plus/WHEAP contractors such as community action agencies in some regions\"\n    ]\n  },\n  \"official_source\": \"https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx\",\n  \"gotchas\": [\n    \"There is no uniform statewide benefit dollar amount; the payment is not a flat grant for every household.\",\n    \"Income is measured gross and based on a prior-month test annualized for eligibility, which can matter for seniors with changing pensions, Social Security, or one-time income.\",\n    \"If a household is over the income limit, it may still qualify under categorical eligibility rules.\",\n    \"Applicants generally must apply through the agency for the county or tribe where they live, not just any office in Wisconsin.\",\n    \"Local agencies may require an appointment and may not process regular applications immediately on first contact.\",\n    \"WHEAP is separate from weatherization; qualifying for WHEAP does not automatically mean immediate weatherization work, though it may connect the household to that network.\",\n    \"Households should have heating and utility account information ready because missing account numbers can delay intake.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but administered locally, with income-based eligibility tied to household size and a seasonal program year. Benefits are financial and can vary rather than being a fixed statewide dollar amount, and access depends on county/tribal agency intake rules.\"\n}"
+      },
+      {
+        "name": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "For tax year 2025, household income must be less than $24,680 to qualify. The program is household-based, not size-tiered in the same way as many benefit programs. Household income includes Wisconsin-taxable income plus certain other items listed on Schedule H/H-EZ, minus a $500 deduction for each qualifying dependent who lived in the homestead more than six months during the year. If household income is $24,680 or more, no credit is available. The credit is aimed at low-income homeowners and renters, and the benefit is based on the relationship between household income and property taxes/rent treated as property taxes.",
+          "asset_limits": "No asset limit is described for the homestead credit. The official rules focus on age, residency, home ownership or rent, and household income. What counts toward household income includes taxable income and specific nontaxable income items; there is no separate asset test in the cited program materials.",
+          "other_requirements": [
+            "Must be a Wisconsin resident for the relevant tax year",
+            "Must be age 18 or older by December 31 of the claim year",
+            "Must own or rent a Wisconsin homestead",
+            "Must file Schedule H or Schedule H-EZ to claim the credit",
+            "Only one member of a household existing at the end of the calendar year may claim the credit for that year",
+            "If filing electronically, property tax bill information and/or rent certificate information must be submitted as required",
+            "If the claimant received certain public assistance payments in a way that disqualifies them under the filing-year rules, eligibility can be affected"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A refundable income tax credit or direct refund that reduces Wisconsin income tax liability or produces a cash refund. For tax year 2025, the maximum credit is $1,168. The credit is generally 80% of qualifying property taxes or rent treated as property taxes, subject to program limits: only the first $1,460 of property taxes or rent constituting property taxes is counted, and the benefit phases out as household income rises. If an approved claim is more than zero but less than $10, the amount paid or credited is $10.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Wisconsin DOR e-filing/WisTax when the claimant’s income items fit the electronic filing rules",
+            "Paper filing with Schedule H or Schedule H-EZ attached to the Wisconsin income tax return, or filed by itself if no income tax return is otherwise required",
+            "Mail paper forms to Wisconsin Department of Revenue, P.O. Box 8903, Madison, WI 53708-8903",
+            "In-person access to blank forms and instructions at Wisconsin Department of Revenue offices throughout the state"
+          ],
+          "processing_time": "No official fixed processing time was found in the provided sources; timing depends on filing method, completeness, and normal tax-return processing. No waitlist is described.",
+          "waitlist": null,
+          "forms": [
+            "Schedule H - Wisconsin Homestead Credit Claim",
+            "Schedule H-EZ - Wisconsin Homestead Credit Claim (Easy Form)",
+            "Rent Certificate (when renting and claiming rent as property taxes)",
+            "Property tax bill information, as required for electronic filing"
+          ],
+          "documents": [
+            "Proof of Wisconsin residency and homestead ownership or rent",
+            "Property tax bill(s) for the claim year, if owning",
+            "Rent certificate(s) from landlord, if renting",
+            "Social Security numbers for household members as required by the form",
+            "Income records needed to complete household income lines on Schedule H or H-EZ",
+            "Records for deductible dependents, if applicable",
+            "Any paperwork needed to document nontaxable income items included in household income"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available only for Wisconsin residents claiming a Wisconsin homestead; not limited to specific counties.",
+          "regional_variations": "The program is statewide and uniform in rules. The only practical variation is access to DOR offices or assistance locations, not eligibility or benefit formulas.",
+          "offices_or_providers": [
+            "Wisconsin Department of Revenue statewide offices"
+          ]
+        },
+        "official_source": "https://www.revenue.wi.gov/Pages/Individuals/homestead.aspx",
+        "gotchas": [
+          "This is not a service program; it is a tax credit or refund, so families should look at tax filing records rather than benefit enrollment.",
+          "The credit has a hard income cutoff; once household income reaches the limit, the credit is unavailable.",
+          "Renters can qualify, but only part of rent counts as property taxes under the formula.",
+          "Only one household member may claim the credit for the year.",
+          "A claimant can file for the credit even without owing income tax, because the benefit is refundable.",
+          "The amount is capped by a formula and a maximum credit, so higher property taxes do not automatically mean a larger refund.",
+          "For electronic filing, extra property tax or rent documentation must still be submitted."
+        ],
+        "data_shape_notes": "This program is a statewide refundable tax credit with a single age threshold, a household-income cutoff, a formula-based benefit, and no asset test. The key structure is that the benefit depends on household income and a capped share of property taxes or rent, rather than on household size tiers or regional provider differences.",
+        "_raw": "{\n  \"name\": \"Wisconsin Property Tax Relief (Circuit Breaker Credit)\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"For tax year 2025, household income must be less than $24,680 to qualify. The program is household-based, not size-tiered in the same way as many benefit programs. Household income includes Wisconsin-taxable income plus certain other items listed on Schedule H/H-EZ, minus a $500 deduction for each qualifying dependent who lived in the homestead more than six months during the year. If household income is $24,680 or more, no credit is available. The credit is aimed at low-income homeowners and renters, and the benefit is based on the relationship between household income and property taxes/rent treated as property taxes.\",\n    \"asset_limits\": \"No asset limit is described for the homestead credit. The official rules focus on age, residency, home ownership or rent, and household income. What counts toward household income includes taxable income and specific nontaxable income items; there is no separate asset test in the cited program materials.\",\n    \"other_requirements\": [\n      \"Must be a Wisconsin resident for the relevant tax year\",\n      \"Must be age 18 or older by December 31 of the claim year\",\n      \"Must own or rent a Wisconsin homestead\",\n      \"Must file Schedule H or Schedule H-EZ to claim the credit\",\n      \"Only one member of a household existing at the end of the calendar year may claim the credit for that year\",\n      \"If filing electronically, property tax bill information and/or rent certificate information must be submitted as required\",\n      \"If the claimant received certain public assistance payments in a way that disqualifies them under the filing-year rules, eligibility can be affected\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A refundable income tax credit or direct refund that reduces Wisconsin income tax liability or produces a cash refund. For tax year 2025, the maximum credit is $1,168. The credit is generally 80% of qualifying property taxes or rent treated as property taxes, subject to program limits: only the first $1,460 of property taxes or rent constituting property taxes is counted, and the benefit phases out as household income rises. If an approved claim is more than zero but less than $10, the amount paid or credited is $10.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Wisconsin DOR e-filing/WisTax when the claimant’s income items fit the electronic filing rules\",\n      \"Paper filing with Schedule H or Schedule H-EZ attached to the Wisconsin income tax return, or filed by itself if no income tax return is otherwise required\",\n      \"Mail paper forms to Wisconsin Department of Revenue, P.O. Box 8903, Madison, WI 53708-8903\",\n      \"In-person access to blank forms and instructions at Wisconsin Department of Revenue offices throughout the state\"\n    ],\n    \"processing_time\": \"No official fixed processing time was found in the provided sources; timing depends on filing method, completeness, and normal tax-return processing. No waitlist is described.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Schedule H - Wisconsin Homestead Credit Claim\",\n      \"Schedule H-EZ - Wisconsin Homestead Credit Claim (Easy Form)\",\n      \"Rent Certificate (when renting and claiming rent as property taxes)\",\n      \"Property tax bill information, as required for electronic filing\"\n    ],\n    \"documents\": [\n      \"Proof of Wisconsin residency and homestead ownership or rent\",\n      \"Property tax bill(s) for the claim year, if owning\",\n      \"Rent certificate(s) from landlord, if renting\",\n      \"Social Security numbers for household members as required by the form\",\n      \"Income records needed to complete household income lines on Schedule H or H-EZ\",\n      \"Records for deductible dependents, if applicable\",\n      \"Any paperwork needed to document nontaxable income items included in household income\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available only for Wisconsin residents claiming a Wisconsin homestead; not limited to specific counties.\",\n    \"regional_variations\": \"The program is statewide and uniform in rules. The only practical variation is access to DOR offices or assistance locations, not eligibility or benefit formulas.\",\n    \"offices_or_providers\": [\n      \"Wisconsin Department of Revenue statewide offices\"\n    ]\n  },\n  \"official_source\": \"https://www.revenue.wi.gov/Pages/Individuals/homestead.aspx\",\n  \"gotchas\": [\n    \"This is not a service program; it is a tax credit or refund, so families should look at tax filing records rather than benefit enrollment.\",\n    \"The credit has a hard income cutoff; once household income reaches the limit, the credit is unavailable.\",\n    \"Renters can qualify, but only part of rent counts as property taxes under the formula.\",\n    \"Only one household member may claim the credit for the year.\",\n    \"A claimant can file for the credit even without owing income tax, because the benefit is refundable.\",\n    \"The amount is capped by a formula and a maximum credit, so higher property taxes do not automatically mean a larger refund.\",\n    \"For electronic filing, extra property tax or rent documentation must still be submitted.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide refundable tax credit with a single age threshold, a household-income cutoff, a formula-based benefit, and no asset test. The key structure is that the benefit depends on household income and a capped share of property taxes or rent, rather than on household size tiers or regional provider differences.\"\n}"
+      },
+      {
+        "name": "Wisconsin Home Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit was identified in the gathered official Wisconsin county program pages. The programs found repeatedly state that eligibility is based on age, homebound status, and ability to prepare meals, not income. Some counties explicitly say everyone is welcome regardless of income, and others request a voluntary or suggested contribution rather than charging a required fee.",
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be age 60 or older in the programs reviewed[1][5][8][10].",
+            "Must be substantially homebound, frail, or otherwise unable to leave home easily[1][5][6][8][11].",
+            "Must be unable to prepare meals for oneself or lack help with meal preparation[5][6][11].",
+            "Some counties extend eligibility to a spouse of the participant or an adult with a disability living with the older adult receiving meals[5][10][11].",
+            "An eligibility assessment is commonly required before service begins[8]."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Home-delivered meals, usually a hot lunch delivered to the home on weekdays; some areas may provide frozen meals delivered once a week instead of a daily hot meal. Deliveries are commonly Monday through Friday, often between about 11:00 a.m. and 1:00 p.m., and some counties also include a well-check or welfare check with delivery. A suggested or voluntary contribution is often about $5 to $6 per meal, but eligible participants are not denied service for inability to contribute[1][3][4][5][6][8].",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Phone: 715-369-6170 or 800-379-7499",
+            "Phone: 920-386-3580 or 800-924-6407",
+            "Phone: 608-326-0235",
+            "Phone: 262-284-8120",
+            "Phone: 920-683-4180 or 1-877-416-7083",
+            "Phone: 715-743-5166",
+            "Phone: 262-548-7848",
+            "Phone: 888-486-9545",
+            "Phone: 608-723-6113"
+          ],
+          "processing_time": "No statewide processing timeline was identified. County pages indicate that an assessment is done before service starts, so timing depends on local ADRC staffing and local availability.",
+          "waitlist": "No statewide waitlist description was identified in the gathered sources. Some counties appear to have route-based service limits, so availability may depend on local capacity.",
+          "forms": [
+            "No statewide form name or number was identified in the gathered sources."
+          ],
+          "documents": [
+            "Proof of age may be needed during eligibility screening.",
+            "Basic contact information and home address.",
+            "Information about mobility, ability to prepare meals, and whether the person is mostly homebound.",
+            "Information about any spouse or disabled household member who may also qualify.",
+            "Medical or functional details if requested during the assessment."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Program availability is county- and ADRC-based across Wisconsin, so exact service rules, routes, contribution amounts, and delivery schedules vary by county.",
+          "regional_variations": "Counties differ in how they define eligibility, whether they deliver hot meals daily or frozen meals weekly, the suggested contribution amount, delivery days and times, and whether they include a well-check. Some counties explicitly mention weekday lunch delivery, while others provide one weekly frozen delivery depending on location.",
+          "offices_or_providers": [
+            "ADRC of Oneida County",
+            "Dodge County ADRC",
+            "Crawford County ADRC",
+            "Ozaukee County Nutrition Manager",
+            "Manitowoc County ADRC",
+            "Clark County Nutrition Team",
+            "Waukesha County ADRC",
+            "ADRC of Central Wisconsin",
+            "Washington County ADRC",
+            "Iron County ADRC",
+            "Taylor County ADRC",
+            "Polk County ADRC",
+            "Grant County ADRC"
+          ]
+        },
+        "official_source": "https://dhs.wisconsin.gov/aging/resources.htm",
+        "gotchas": [
+          "This is not a cash benefit; it is a local nutrition service delivered through county ADRCs.",
+          "There is generally no income test in the county pages reviewed, so families should not assume a parent is ineligible because of income.",
+          "A voluntary or suggested contribution is not a bill and usually cannot be used to deny service.",
+          "Meal format can differ a lot by county: some places deliver hot meals every weekday, while others deliver frozen meals once a week.",
+          "Eligibility often depends on being homebound or unable to prepare meals, not just being age 60+.",
+          "Some counties require the participant to be present to accept the meal at delivery.",
+          "Because service is county-run, the local ADRC is the real starting point; there is no single statewide application form identified in the sources reviewed."
+        ],
+        "data_shape_notes": "This program is county-administered and service-based rather than a uniform statewide cash or entitlement program. The key variables are age, homebound status, local route capacity, and county-specific delivery model.",
+        "_raw": "{\n  \"name\": \"Wisconsin Home Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit was identified in the gathered official Wisconsin county program pages. The programs found repeatedly state that eligibility is based on age, homebound status, and ability to prepare meals, not income. Some counties explicitly say everyone is welcome regardless of income, and others request a voluntary or suggested contribution rather than charging a required fee.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be age 60 or older in the programs reviewed[1][5][8][10].\",\n      \"Must be substantially homebound, frail, or otherwise unable to leave home easily[1][5][6][8][11].\",\n      \"Must be unable to prepare meals for oneself or lack help with meal preparation[5][6][11].\",\n      \"Some counties extend eligibility to a spouse of the participant or an adult with a disability living with the older adult receiving meals[5][10][11].\",\n      \"An eligibility assessment is commonly required before service begins[8].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Home-delivered meals, usually a hot lunch delivered to the home on weekdays; some areas may provide frozen meals delivered once a week instead of a daily hot meal. Deliveries are commonly Monday through Friday, often between about 11:00 a.m. and 1:00 p.m., and some counties also include a well-check or welfare check with delivery. A suggested or voluntary contribution is often about $5 to $6 per meal, but eligible participants are not denied service for inability to contribute[1][3][4][5][6][8].\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Phone: 715-369-6170 or 800-379-7499\",\n      \"Phone: 920-386-3580 or 800-924-6407\",\n      \"Phone: 608-326-0235\",\n      \"Phone: 262-284-8120\",\n      \"Phone: 920-683-4180 or 1-877-416-7083\",\n      \"Phone: 715-743-5166\",\n      \"Phone: 262-548-7848\",\n      \"Phone: 888-486-9545\",\n      \"Phone: 608-723-6113\"\n    ],\n    \"processing_time\": \"No statewide processing timeline was identified. County pages indicate that an assessment is done before service starts, so timing depends on local ADRC staffing and local availability.\",\n    \"waitlist\": \"No statewide waitlist description was identified in the gathered sources. Some counties appear to have route-based service limits, so availability may depend on local capacity.\",\n    \"forms\": [\n      \"No statewide form name or number was identified in the gathered sources.\"\n    ],\n    \"documents\": [\n      \"Proof of age may be needed during eligibility screening.\",\n      \"Basic contact information and home address.\",\n      \"Information about mobility, ability to prepare meals, and whether the person is mostly homebound.\",\n      \"Information about any spouse or disabled household member who may also qualify.\",\n      \"Medical or functional details if requested during the assessment.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Program availability is county- and ADRC-based across Wisconsin, so exact service rules, routes, contribution amounts, and delivery schedules vary by county.\",\n    \"regional_variations\": \"Counties differ in how they define eligibility, whether they deliver hot meals daily or frozen meals weekly, the suggested contribution amount, delivery days and times, and whether they include a well-check. Some counties explicitly mention weekday lunch delivery, while others provide one weekly frozen delivery depending on location.\",\n    \"offices_or_providers\": [\n      \"ADRC of Oneida County\",\n      \"Dodge County ADRC\",\n      \"Crawford County ADRC\",\n      \"Ozaukee County Nutrition Manager\",\n      \"Manitowoc County ADRC\",\n      \"Clark County Nutrition Team\",\n      \"Waukesha County ADRC\",\n      \"ADRC of Central Wisconsin\",\n      \"Washington County ADRC\",\n      \"Iron County ADRC\",\n      \"Taylor County ADRC\",\n      \"Polk County ADRC\",\n      \"Grant County ADRC\"\n    ]\n  },\n  \"official_source\": \"https://dhs.wisconsin.gov/aging/resources.htm\",\n  \"gotchas\": [\n    \"This is not a cash benefit; it is a local nutrition service delivered through county ADRCs.\",\n    \"There is generally no income test in the county pages reviewed, so families should not assume a parent is ineligible because of income.\",\n    \"A voluntary or suggested contribution is not a bill and usually cannot be used to deny service.\",\n    \"Meal format can differ a lot by county: some places deliver hot meals every weekday, while others deliver frozen meals once a week.\",\n    \"Eligibility often depends on being homebound or unable to prepare meals, not just being age 60+.\",\n    \"Some counties require the participant to be present to accept the meal at delivery.\",\n    \"Because service is county-run, the local ADRC is the real starting point; there is no single statewide application form identified in the sources reviewed.\"\n  ],\n  \"data_shape_notes\": \"This program is county-administered and service-based rather than a uniform statewide cash or entitlement program. The key variables are age, homebound status, local route capacity, and county-specific delivery model.\"\n}"
+      },
+      {
+        "name": "Wisconsin State SSI Supplement",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "No separate Wisconsin income test for the basic state SSI supplement. A person must qualify for federal SSI first; the state supplement is then paid automatically. Wisconsin also has state-only SSI categories for certain grandfathered recipients and SSI-E recipients, but for a typical family checking an elderly loved one, the key requirement is federal SSI eligibility first.",
+            "single": "Not separately income-tested by Wisconsin for the basic supplement; eligibility follows federal SSI eligibility.",
+            "couple": "Not separately income-tested by Wisconsin for the basic supplement; eligibility follows federal SSI eligibility.",
+            "household_table": null,
+            "notes": [
+              "Wisconsin says you must qualify for a federal SSI payment to get the state SSI payment.",
+              "The state supplement is added to the federal SSI benefit and is paid only while federal SSI continues."
+            ]
+          },
+          "asset_limits": {
+            "summary": "No separate Wisconsin asset limit was identified for the state supplement itself; the relevant resource rules are the federal SSI rules because state supplement eligibility depends on federal SSI eligibility.",
+            "what_counts": "Determined under federal SSI rules, not a separate Wisconsin supplement standard.",
+            "what_is_exempt": "Determined under federal SSI rules, not a separate Wisconsin supplement standard."
+          },
+          "other_requirements": [
+            "Must qualify for federal SSI.",
+            "Must be a Wisconsin resident.",
+            "The state supplement is paid only while federal SSI eligibility continues.",
+            "For the basic supplement, no separate Wisconsin application is required.",
+            "For state-only SSI categories, Wisconsin uses special criteria such as grandfathered status and allowable living arrangement rules."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A monthly cash supplement is added to the federal SSI payment. Wisconsin DHS states the basic state SSI payment is $105.59 per month. Older official materials and a legislative paper show several living-arrangement-based amounts in Wisconsin SSI categories, including $83.78 for individuals and $132.05 for couples in some basic arrangements, and $179.77 for certain SSI-E recipients in private nonmedical group homes or natural residential settings. The exact amount depends on the SSI category and living arrangement used by the state program.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online/SSI application through the Social Security Administration for federal SSI; Wisconsin state supplement is automatic once federal SSI is approved",
+            "Phone: Social Security Administration for federal SSI application; Wisconsin state SSI information line 1-800-362-3002",
+            "Mail: DHS/State SSI, P.O. Box 6680, Madison, WI 53716-0680",
+            "In-person: Social Security office for federal SSI application"
+          ],
+          "processing_time": "No specific Wisconsin processing time was identified in the source material. The state supplement is issued once federal SSI eligibility is established and the county agency certifies the person for the benefit.",
+          "waitlist": null,
+          "forms": [],
+          "documents": [
+            "Documents required for the federal SSI application through Social Security, since Wisconsin’s state supplement is automatic after federal SSI approval",
+            "Proof of Wisconsin residency",
+            "Income and resource information for federal SSI",
+            "Medical/functional records if applying based on disability"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Wisconsin program, but certain state-only categories depend on allowable living arrangements and special status rules.",
+          "regional_variations": "The basic state supplement is statewide and uniform. Administration involves county agencies certifying eligibility, so local county administration may affect case handling, but the benefit amount itself is state-set. No region-specific waitlist was identified.",
+          "offices_or_providers": [
+            "Wisconsin Department of Health Services",
+            "Local county agencies",
+            "Social Security Administration offices for the federal SSI application"
+          ]
+        },
+        "official_source": "https://www.dhs.wisconsin.gov/ssi/index.htm",
+        "gotchas": [
+          "Families often think there is a separate Wisconsin application, but there is not for the basic state supplement.",
+          "You must qualify for federal SSI first; Wisconsin does not pay the state supplement independently for the basic program.",
+          "The amount is not always a single flat figure across every SSI-related category; some older state SSI categories vary by living arrangement and special status.",
+          "The Wisconsin state payment arrives with SSI, typically in the first week of the month.",
+          "State-only SSI and SSI-E rules can differ from the basic supplement, so people in group homes, institutions, or special living arrangements should be checked carefully.",
+          "The county agency’s certification role matters for certain state SSI categories even though the basic supplement is automatic."
+        ],
+        "data_shape_notes": "This program is unusual because the basic state supplement is automatic once federal SSI is granted, but the payment amount and some eligibility rules can vary by SSI category and living arrangement rather than by household size alone.",
+        "_raw": "{\n  \"name\": \"Wisconsin State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"No separate Wisconsin income test for the basic state SSI supplement. A person must qualify for federal SSI first; the state supplement is then paid automatically. Wisconsin also has state-only SSI categories for certain grandfathered recipients and SSI-E recipients, but for a typical family checking an elderly loved one, the key requirement is federal SSI eligibility first.\",\n      \"single\": \"Not separately income-tested by Wisconsin for the basic supplement; eligibility follows federal SSI eligibility.\",\n      \"couple\": \"Not separately income-tested by Wisconsin for the basic supplement; eligibility follows federal SSI eligibility.\",\n      \"household_table\": null,\n      \"notes\": [\n        \"Wisconsin says you must qualify for a federal SSI payment to get the state SSI payment.\",\n        \"The state supplement is added to the federal SSI benefit and is paid only while federal SSI continues.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"summary\": \"No separate Wisconsin asset limit was identified for the state supplement itself; the relevant resource rules are the federal SSI rules because state supplement eligibility depends on federal SSI eligibility.\",\n      \"what_counts\": \"Determined under federal SSI rules, not a separate Wisconsin supplement standard.\",\n      \"what_is_exempt\": \"Determined under federal SSI rules, not a separate Wisconsin supplement standard.\"\n    },\n    \"other_requirements\": [\n      \"Must qualify for federal SSI.\",\n      \"Must be a Wisconsin resident.\",\n      \"The state supplement is paid only while federal SSI eligibility continues.\",\n      \"For the basic supplement, no separate Wisconsin application is required.\",\n      \"For state-only SSI categories, Wisconsin uses special criteria such as grandfathered status and allowable living arrangement rules.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A monthly cash supplement is added to the federal SSI payment. Wisconsin DHS states the basic state SSI payment is $105.59 per month. Older official materials and a legislative paper show several living-arrangement-based amounts in Wisconsin SSI categories, including $83.78 for individuals and $132.05 for couples in some basic arrangements, and $179.77 for certain SSI-E recipients in private nonmedical group homes or natural residential settings. The exact amount depends on the SSI category and living arrangement used by the state program.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online/SSI application through the Social Security Administration for federal SSI; Wisconsin state supplement is automatic once federal SSI is approved\",\n      \"Phone: Social Security Administration for federal SSI application; Wisconsin state SSI information line 1-800-362-3002\",\n      \"Mail: DHS/State SSI, P.O. Box 6680, Madison, WI 53716-0680\",\n      \"In-person: Social Security office for federal SSI application\"\n    ],\n    \"processing_time\": \"No specific Wisconsin processing time was identified in the source material. The state supplement is issued once federal SSI eligibility is established and the county agency certifies the person for the benefit.\",\n    \"waitlist\": null,\n    \"forms\": [],\n    \"documents\": [\n      \"Documents required for the federal SSI application through Social Security, since Wisconsin’s state supplement is automatic after federal SSI approval\",\n      \"Proof of Wisconsin residency\",\n      \"Income and resource information for federal SSI\",\n      \"Medical/functional records if applying based on disability\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Wisconsin program, but certain state-only categories depend on allowable living arrangements and special status rules.\",\n    \"regional_variations\": \"The basic state supplement is statewide and uniform. Administration involves county agencies certifying eligibility, so local county administration may affect case handling, but the benefit amount itself is state-set. No region-specific waitlist was identified.\",\n    \"offices_or_providers\": [\n      \"Wisconsin Department of Health Services\",\n      \"Local county agencies\",\n      \"Social Security Administration offices for the federal SSI application\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.wisconsin.gov/ssi/index.htm\",\n  \"gotchas\": [\n    \"Families often think there is a separate Wisconsin application, but there is not for the basic state supplement.\",\n    \"You must qualify for federal SSI first; Wisconsin does not pay the state supplement independently for the basic program.\",\n    \"The amount is not always a single flat figure across every SSI-related category; some older state SSI categories vary by living arrangement and special status.\",\n    \"The Wisconsin state payment arrives with SSI, typically in the first week of the month.\",\n    \"State-only SSI and SSI-E rules can differ from the basic supplement, so people in group homes, institutions, or special living arrangements should be checked carefully.\",\n    \"The county agency’s certification role matters for certain state SSI categories even though the basic supplement is automatic.\"\n  ],\n  \"data_shape_notes\": \"This program is unusual because the basic state supplement is automatic once federal SSI is granted, but the payment amount and some eligibility rules can vary by SSI category and living arrangement rather than by household size alone.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "WI",
+    "stateName": "Wisconsin",
+    "classifiedAt": "2026-10-06T05:18:35.066Z",
+    "total": 8,
+    "typeSummary": {
+      "benefit": 8
+    },
+    "scopeSummary": {
+      "state": 6,
+      "federal": 1,
+      "local": 1
+    },
+    "complexitySummary": {
+      "deep": 7,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Medicaid for the Elderly, Blind, or Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county/tribal human services agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Wisconsin ACCESS online application system",
+              "type": "service-area"
+            },
+            {
+              "name": "Wisconsin Department of Health Services Medicaid program",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Wisconsin Department of Health Services local agency / county agency",
+              "type": "service-area"
+            },
+            {
+              "name": "Wisconsin Access online application system",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "FoodShare",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wisconsin Department of Health Services ACCESS system",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county human services or economic support agency",
+              "type": "service-area"
+            },
+            {
+              "name": "County-specific offices such as Dane County Human Services or Racine County economic support offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Wisconsin PACE Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local ADRC serving Kenosha County",
+              "type": "service-area"
+            },
+            {
+              "name": "Local ADRC serving Milwaukee County",
+              "type": "service-area"
+            },
+            {
+              "name": "Local ADRC serving Racine County",
+              "type": "service-area"
+            },
+            {
+              "name": "Local ADRC serving Waukesha County",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "Wisconsin Home Energy Assistance Program (WHEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Approved county human services agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Approved tribal agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Home Energy Plus/WHEAP contractors such as community action agencies in some regions",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wisconsin Department of Revenue statewide offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Wisconsin Home Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "ADRC of Oneida County",
+              "type": "service-area"
+            },
+            {
+              "name": "Dodge County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Crawford County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Ozaukee County Nutrition Manager",
+              "type": "service-area"
+            },
+            {
+              "name": "Manitowoc County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Clark County Nutrition Team",
+              "type": "service-area"
+            },
+            {
+              "name": "Waukesha County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "ADRC of Central Wisconsin",
+              "type": "service-area"
+            },
+            {
+              "name": "Washington County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Iron County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Taylor County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Polk County ADRC",
+              "type": "service-area"
+            },
+            {
+              "name": "Grant County ADRC",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Wisconsin State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wisconsin Department of Health Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Social Security Administration offices for the federal SSI application",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "WI",
+      "id": "wi-medicaid-elderly-blind-disabled",
+      "name": "Medicaid for the Elderly, Blind, or Disabled",
+      "legacyId": "medicaid-for-the-elderly-blind-or-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "legacyId": "medicare-savings-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-foodshare-snap",
+      "name": "FoodShare",
+      "legacyId": "foodshare",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-pace-program",
+      "name": "Wisconsin PACE Program",
+      "legacyId": "wisconsin-pace-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-wheap-home-energy-assistance",
+      "name": "Wisconsin Home Energy Assistance Program (WHEAP)",
+      "legacyId": "wisconsin-home-energy-assistance-program-wheap",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-property-tax-relief-circuit-breaker-credit",
+      "name": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+      "legacyId": "wisconsin-property-tax-relief-circuit-breaker-credit",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-home-delivered-meals",
+      "name": "Wisconsin Home Delivered Meals",
+      "legacyId": "wisconsin-home-delivered-meals",
+      "programType": "benefit"
+    },
+    {
+      "state": "WI",
+      "id": "wi-state-ssi-supplement",
+      "name": "Wisconsin State SSI Supplement",
+      "legacyId": "wisconsin-state-ssi-supplement",
+      "programType": "benefit"
+    }
+  ]
+}

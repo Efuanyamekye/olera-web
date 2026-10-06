@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { rulesOf, explain, nextQuestion, questionsLeft, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine, type ConversationTurn } from "@/lib/benefits/conversation";
 import { isWaiverPath } from "@/lib/benefits/eligibility.server";
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     (Array.isArray(body.asked) ? body.asked : []).filter((x): x is FactKey => typeof x === "string" && x in ANSWERS),
   );
 
-  const drafts = getCanonicalProgramIds(slug)
+  const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
   const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));

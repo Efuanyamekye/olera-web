@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.825Z
+ * Last updated: 2026-10-06T06:44:48.402Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2873,6 +2873,220 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "sc-pace-all-inclusive-elder-care",
+      "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "shortName": "PACE Senior Care",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, PACE wraps all of their medical care, therapy, and daily support into one coordinated program, at little to no cost for those on Medicaid.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "BoldAge PACE - serving Berkeley, Charleston, and Dorchester counties",
+            "type": "service-area"
+          },
+          {
+            "name": "Prisma Health SeniorCare PACE-Midlands - serving Richland and Lexington counties",
+            "type": "service-area"
+          },
+          {
+            "name": "Prisma Health SeniorCare PACE-Upstate - serving Greenville, Pickens, and Anderson counties",
+            "type": "service-area"
+          },
+          {
+            "name": "The Orangeburg Senior Helping Center - serving Orangeburg, Calhoun, and Bamberg counties",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs the level of daily medical supervision typically provided in a nursing home, but you want them to stay at home or in the community, PACE may be the most comprehensive option available in South Carolina. One care team handles everything: primary care visits, specialist referrals, prescription drugs, physical and occupational therapy, personal care help, transportation to the PACE center, and more. Because all of that is coordinated under one program, your parent will not need to juggle separate doctors, separate authorizations, or separate bills for each service.\n\nPACE is available to people 55 and older who meet a nursing-facility level of care standard and who live in a county served by a local PACE organization. In South Carolina, participating counties include Anderson, Bamberg, Berkeley, Calhoun, Charleston, Dorchester, Greenville, Lexington, Orangeburg, Pickens, and Richland. If your parent lives outside these counties, they cannot currently enroll, regardless of their medical need.\n\nFor participants enrolled through Medicaid, there is typically no out-of-pocket cost for PACE services. Participants with Medicare only, or those who pay privately, follow different cost structures determined by the local PACE organization. The program is not a monthly cash benefit; it is a bundled package of care services. The first question to answer is whether your parent's county is covered. Start there before anything else.",
+      "savingsRange": "",
+      "savingsSource": "Free service for Medicaid participants. Cost structure for Medicare-only or private-pay enrollees is set by the local PACE organization and is not published as a statewide figure by SC DHHS.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Lives in a covered SC county (11 counties currently served)",
+          "Needs nursing-facility level of care (clinical assessment required)",
+          "Can live safely in the community with PACE support",
+          "Has Medicaid, Medicare, or another qualifying payment pathway"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be certified by SC DHHS as needing nursing-facility level of care. This is a clinical assessment, not just a general evaluation of aging needs. The assessor looks at whether your parent needs daily help with tasks like bathing, dressing, medication management, mobility, or continence. It is a stricter standard than simply needing some home assistance. Even if your parent clearly needs significant help, they still must be able to live safely in the community with PACE support. Someone who requires full-time institutional supervision may not meet this second part of the standard.",
+        "otherRequirements": [
+          "Must live in the service area of a participating SC PACE organization",
+          "Must be able to live safely in the community with PACE support in place",
+          "Must have Medicaid, Medicare, both, or qualify through another pathway such as private pay or the VA-PACE partnership"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the SC PACE information line at 855-801-2653 or contact your local PACE organization directly; enrollment is handled by the local provider and involves a clinical assessment before a slot is confirmed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent's county is covered",
+            "description": "PACE is only available in Anderson, Bamberg, Berkeley, Calhoun, Charleston, Dorchester, Greenville, Lexington, Orangeburg, Pickens, and Richland counties. If your parent's county is not on this list, PACE is not currently an option in South Carolina. Check the SC DHHS PACE page at scdhhs.gov before calling."
+          },
+          {
+            "step": 2,
+            "title": "Contact the local PACE organization for your county",
+            "description": "Each county is served by a specific provider: BoldAge PACE for Berkeley, Charleston, and Dorchester; Prisma Health SeniorCare PACE-Midlands for Richland and Lexington; Prisma Health SeniorCare PACE-Upstate for Greenville, Pickens, and Anderson; The Orangeburg Senior Helping Center for Orangeburg, Calhoun, and Bamberg. Call the provider directly or call the statewide PACE information line at 855-801-2653 if you are unsure who to reach."
+          },
+          {
+            "step": 3,
+            "title": "Complete the intake screening",
+            "description": "The local PACE organization will ask about your parent's age, county of residence, current health conditions, and insurance or payment situation. Have your parent's Medicare card (if they have one), Medicaid card (if they have one), current medication list, and a brief summary of recent medical history ready for this call."
+          },
+          {
+            "step": 4,
+            "title": "Schedule the nursing-facility level of care assessment",
+            "description": "SC DHHS must certify that your parent meets the nursing-facility level of care standard. The PACE organization or DHHS will schedule this clinical assessment. It typically takes place in person and evaluates your parent's ability to manage daily activities independently."
+          },
+          {
+            "step": 5,
+            "title": "Complete enrollment if a slot is available",
+            "description": "If your parent is approved and a slot is open at the local PACE organization, the provider will walk you through the enrollment paperwork. There is no single statewide form; the local provider manages this process. Ask about availability when you first call, since access depends on capacity at the specific organization."
+          }
+        ],
+        "processingTime": "No single statewide timeline is published. Timing depends on how quickly the nursing-facility level of care assessment is scheduled, the provider's intake process, and whether a slot is currently available at the local PACE organization.",
+        "waitlist": "South Carolina does not publish a statewide waitlist. Access depends entirely on capacity at the local PACE organization serving your parent's county. Ask directly when you call.",
+        "tip": "If your parent is currently in the hospital or in a short-term rehab facility, ask the hospital discharge planner whether they can help initiate PACE enrollment. Discharge planners often know the local PACE contacts and can speed up the first steps.",
+        "urls": [
+          {
+            "label": "SC DHHS PACE Program Page",
+            "url": "https://www.scdhhs.gov/members/managed-care-plan-information/program-all-inclusive-care-elderly-pace"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card, if your parent has Medicare (not required, but bring it if they have it)",
+        "Medicaid card or proof of Medicaid enrollment, if applicable",
+        "Proof of age, such as a birth certificate, passport, or driver's license",
+        "Proof of residence in a covered county, such as a utility bill, lease agreement, or piece of official mail showing the current address",
+        "Current medication list, including dosages and prescribing providers",
+        "Names and contact information for your parent's current doctors and specialists",
+        "Medical records summarizing recent diagnoses, hospitalizations, or functional limitations (if available)",
+        "Veterans benefits documentation, if your parent receives VA benefits and you are exploring the VA-PACE partnership pathway",
+        "Any private insurance information, if your parent does not have Medicaid or Medicare",
+        "Legal documents such as a power of attorney or guardianship order, if a family member will be acting on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "SC PACE Information Line",
+          "phone": "855-801-2653",
+          "description": "Statewide PACE information line operated through SC DHHS. Call here if you are unsure which local PACE organization serves your parent's county, or to get directed to the right provider.",
+          "hours": "Contact SC DHHS for current hours"
+        },
+        {
+          "label": "BoldAge PACE (Berkeley, Charleston, Dorchester counties)",
+          "phone": null,
+          "description": "Contact BoldAge PACE directly for enrollment and intake in Berkeley, Charleston, and Dorchester counties. Find current contact details on their provider page or through the SC DHHS PACE directory.",
+          "hours": null
+        },
+        {
+          "label": "Prisma Health SeniorCare PACE-Midlands (Richland, Lexington counties)",
+          "phone": null,
+          "description": "Contact Prisma Health SeniorCare PACE-Midlands for enrollment in Richland and Lexington counties. Find current contact details through the SC DHHS PACE directory.",
+          "hours": null
+        },
+        {
+          "label": "Prisma Health SeniorCare PACE-Upstate (Greenville, Pickens, Anderson counties)",
+          "phone": null,
+          "description": "Contact Prisma Health SeniorCare PACE-Upstate for enrollment in Greenville, Pickens, and Anderson counties. Find current contact details through the SC DHHS PACE directory.",
+          "hours": null
+        },
+        {
+          "label": "The Orangeburg Senior Helping Center (Orangeburg, Calhoun, Bamberg counties)",
+          "phone": null,
+          "description": "Contact The Orangeburg Senior Helping Center for enrollment in Orangeburg, Calhoun, and Bamberg counties. Find current contact details through the SC DHHS PACE directory.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "County eligibility is the first gate, not income or assets. If your parent's county is not currently covered, no other factor matters yet. Check the county list before investing time in the application process.",
+        "The nursing-facility level of care standard is stricter than simply needing help at home. Your parent must demonstrate a clinical need for the type of daily supervision typically provided in a nursing facility. If a previous assessment denied eligibility, ask whether anything has changed in your parent's condition before reapplying.",
+        "PACE has multiple payment pathways: Medicaid, Medicare, Medicaid with a premium for Medicare-only participants, private pay, and the VA-PACE partnership for veterans. If you are unsure which applies, tell the intake coordinator your parent's full insurance picture and let them identify the right category.",
+        "Because enrollment is capacity-dependent at each local organization, ask about current availability on your first call. If there is a waitlist, get on it as early as possible, since functional needs often escalate faster than waitlists move."
+      ],
+      "relatedPrograms": [
+        "SC Medicaid Home and Community-Based Services (HCBS) Waiver",
+        "SC Medicaid Community Choices Waiver",
+        "SC Lt. Governor's Office on Aging: Aging and Disability Resource Center",
+        "Veterans Directed Care (VDC) through the SC VA"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "PACE is not available in every South Carolina county",
+          "body": "As of the most recent SC DHHS listing, PACE is only offered in 11 counties: Anderson, Bamberg, Berkeley, Calhoun, Charleston, Dorchester, Greenville, Lexington, Orangeburg, Pickens, and Richland. If your parent lives in a different county, ask the SC Aging and Disability Resource Center at 855-626-7388 about HCBS waiver alternatives that may provide similar in-home support."
+        },
+        {
+          "type": "tier-comparison",
+          "title": "How PACE payment works depends on your parent's coverage",
+          "body": "SC DHHS describes five main payment pathways for PACE participants. The cost your family pays depends entirely on which pathway applies.\n\nMedicaid only: PACE is covered at no cost to the participant. Medicaid pays the PACE organization a monthly capitated rate.\n\nMedicare and Medicaid (dual eligible): Both programs pay the PACE organization. No premiums or cost-sharing for the participant.\n\nMedicare only (no Medicaid): The participant or their family may pay a Medicaid premium to the PACE organization. The specific amount is set by the local provider and SC DHHS and is not published as a statewide figure.\n\nPrivate pay only: Participants without Medicare or Medicaid can enroll by paying the local PACE organization directly. Rates are set by the provider.\n\nVeterans through VA-PACE partnership: Veterans who qualify may access PACE through a partnership with the VA. Ask the local PACE organization and your parent's VA care team whether this applies.",
+          "note": "Specific premium and private-pay amounts are not published statewide. Ask the local PACE organization for the current rate that applies to your parent's situation."
+        },
+        {
+          "type": "prose",
+          "title": "What PACE actually provides day to day",
+          "body": "PACE is not a single service; it is the full package of care your parent needs to remain safely in the community. The local PACE organization becomes the single point of coordination for everything. That typically includes: primary care and specialist visits, prescription medications, physical and occupational therapy, speech therapy, personal care assistance, adult day health services at the PACE center, transportation to and from the center and medical appointments, dental care, vision care, hearing services, nutritional counseling, and social work support.\n\nBecause one interdisciplinary care team manages all of this, your parent does not need to coordinate between separate providers or navigate separate prior-authorization processes for each service. When something changes, the team adjusts the plan. When a hospitalization happens, PACE coordinates the transition back home.\n\nThe specific services your parent receives are determined by the care team's assessment of their individual needs. There is no published cap on hours per week or dollar limit per service; the care team authorizes what is clinically appropriate under the PACE model."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's county is not on the covered list. Is there any way to enroll anyway?",
+          "answer": "No. PACE enrollment requires that your parent live within the service area of a participating South Carolina PACE organization. If their county is not currently covered, they cannot enroll regardless of their medical need or financial situation. Contact the SC Aging and Disability Resource Center at 855-626-7388 to ask about Medicaid Home and Community-Based Services waivers, which may provide some overlapping in-home support in counties without PACE."
+        },
+        {
+          "question": "My parent clearly needs a lot of help, but I'm worried they won't pass the nursing-facility level of care assessment. What does that actually measure?",
+          "answer": "The assessment looks at whether your parent needs the kind of daily supervision typically provided in a nursing home, based on their ability to manage activities like bathing, dressing, medication administration, mobility, and continence. It is conducted by SC DHHS or an authorized assessor, not just a doctor's note. If you believe the assessment underrepresents your parent's actual needs, you can ask the PACE organization whether records from hospitalizations, specialists, or home health agencies can be submitted to support the determination."
+        },
+        {
+          "question": "Can my parent stay on their current doctors if they enroll in PACE?",
+          "answer": "Generally, no. When your parent enrolls in PACE, the PACE organization's interdisciplinary team becomes their primary source of care. PACE is designed as an all-inclusive model, which means outside providers are typically not separately reimbursed. Some participants find this to be a significant transition. Ask the local PACE organization specifically whether and how they handle situations where your parent has a long-standing specialist relationship."
+        },
+        {
+          "question": "My parent has no Medicaid and no Medicare. Can they still apply?",
+          "answer": "Yes, in principle. South Carolina PACE materials describe a private-pay pathway for people who do not have Medicaid or Medicare. The participant or their family pays the PACE organization directly. The specific monthly rate is set by the local PACE organization and is not published statewide. Call 855-801-2653 to ask about private-pay rates for the provider serving your parent's county."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they have memory loss or cannot speak for themselves?",
+          "answer": "Yes. If you have a durable power of attorney or legal guardianship, you can initiate and complete the PACE enrollment process on your parent's behalf. Bring your legal documentation to the intake process. If you do not yet have formal legal authority, the PACE organization's social work staff can often help you understand what steps to take."
+        },
+        {
+          "question": "What happens if my parent's needs get worse after they enroll in PACE?",
+          "answer": "The PACE care team reassesses participants regularly and adjusts the care plan as needs change. Because PACE is structured as an all-inclusive model rather than a fixed set of hours, the team can authorize additional services without requiring a new application. If your parent eventually needs a level of care that cannot be safely managed in the community even with PACE support, the team will discuss transition options including nursing facility placement, which PACE can also coordinate and cover."
+        },
+        {
+          "question": "Is there a waitlist, and how long is it?",
+          "answer": "South Carolina does not publish a statewide waitlist figure. Whether a waitlist exists and how long it is depends entirely on the capacity of the specific PACE organization serving your parent's county. Some organizations may have immediate openings; others may not. Ask about current availability on your first call to the local provider or to the statewide line at 855-801-2653."
+        },
+        {
+          "question": "Can my parent be on PACE and also receive other SC Medicaid services at the same time?",
+          "answer": "No. PACE is designed as the single, all-inclusive program for participants. When your parent enrolls, PACE replaces other Medicaid managed care plans and most separately billed Medicaid services. The PACE organization takes on full responsibility for covering the services your parent needs. If your parent is currently enrolled in another SC Medicaid managed care plan, that enrollment ends when PACE begins. Ask the PACE intake coordinator to walk you through what transitions are required."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "855-801-2653",
+      "sourceUrl": "https://www.scdhhs.gov/members/managed-care-plan-information/program-all-inclusive-care-elderly-pace",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

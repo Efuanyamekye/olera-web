@@ -1,0 +1,622 @@
+{
+  "state": "MA",
+  "addedAt": "2026-10-06T05:48:56.129Z",
+  "dive": {
+    "state": "MA",
+    "stateName": "Massachusetts",
+    "diveAt": "2026-10-06T05:42:40.589Z",
+    "total": 5,
+    "parsed": 5,
+    "programs": [
+      {
+        "name": "MassHealth Standard (Aged, Blind, and Disabled Medicaid)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For older adults and people who are blind or disabled, MassHealth uses household income rules and financial standards that vary by situation. The official 2026 MassHealth financial guidelines show a monthly income standard of $1,143.74 for Blind applicants and $1,108.39 for Disabled applicants, and a long-term-care income standard of $72.80 per month for residents in long-term care settings. Eligibility also depends on countable income after MassHealth deductions, not just gross income, and different coverage pathways may use different standards.",
+          "asset_limits": "The MassHealth asset limit for Standard coverage is $2,000 for an individual and $3,000 for a couple living together in the community. Countable assets are the assets MassHealth looks at when deciding eligibility. The official rules say the total value of countable assets owned by or available to the applicant may not exceed those limits. The materials gathered do not provide a full item-by-item exempt asset list, so the safest program-specific summary is that MassHealth applies a countable-assets test and certain assets are excluded under MassHealth rules, but applicants should verify exemptions before applying.",
+          "other_requirements": [
+            "Must be a Massachusetts resident",
+            "Must meet the program’s age/disability/blindness category requirements",
+            "Must meet citizenship or immigration-status rules that apply to MassHealth",
+            "Must meet income and asset rules",
+            "For some applicants, disability must be verified through MassHealth disability rules and documentation",
+            "For long-term-care applicants, different financial rules may apply than for community-based applicants"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "MassHealth Standard provides a full range of health care benefits. Covered services specifically listed by MassHealth include inpatient hospital care; outpatient care such as hospitals, clinics, doctors, dentists, family planning, and vision care; medical services such as lab tests, X-rays, therapies, pharmacy services, eyeglasses, hearing aids, medical equipment and supplies; adult day health and adult foster care; mental health and addiction services, both inpatient and outpatient; long-term services and supports at home or in a long-term-care facility, including home health services; transportation services; and smoking-cessation services. For children under 21, it also includes well-child screenings, shots, and related medical, vision, dental, hearing, and developmental services.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: MassHealth application for seniors and people needing long-term care services through Mass.gov",
+            "Phone: MassHealth Customer Service Center at (800) 841-2900",
+            "TTY/TTY-TDD: 711",
+            "Alternate enrollment line: (877) MA ENROLL / (877) 623-6765",
+            "In-person support: MassHealth Enrollment Centers"
+          ],
+          "processing_time": "No exact statewide processing timeline was provided in the gathered sources. Applying online is described as a faster route than mailing a paper application.",
+          "waitlist": null,
+          "forms": [
+            "Application for Health Coverage for Seniors and People Needing Long-Term Care Services",
+            "Massachusetts Application for Health and Dental Coverage and Help Paying Costs"
+          ],
+          "documents": [
+            "Proof of income",
+            "Proof of assets",
+            "Employer and income information for everyone in the household, such as paystubs or wage statements",
+            "Documentation that verifies household income and assets",
+            "Any disability-related documentation if applying under disability rules",
+            "Identification and residency documents as needed for eligibility review"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Massachusetts; applicants must be Massachusetts residents.",
+          "regional_variations": "No county-based eligibility differences were identified. The main variation is administrative: applicants may use MassHealth Enrollment Centers or customer service support, and some people may experience different local service experiences, but the program rules themselves are statewide.",
+          "offices_or_providers": [
+            "MassHealth Customer Service Center",
+            "MassHealth Enrollment Centers"
+          ]
+        },
+        "official_source": "https://www.mass.gov/info-details/masshealth-coverage-types-for-individuals-and-families-including-people-with-disabilities",
+        "gotchas": [
+          "MassHealth Standard is not the same as ConnectorCare or Medicare. It is Medicaid coverage and can work as secondary coverage for some Medicare members, but it is not a Medicare replacement.",
+          "Income is not judged only on gross monthly pay; MassHealth uses countable income after deductions.",
+          "The asset test matters a lot for seniors and disabled adults, and the limits are low: $2,000 for one person and $3,000 for a couple.",
+          "A family member’s assumption that a house or car counts as an asset can be wrong; some assets are exempt under MassHealth rules, so applicants should not assume everything owned counts the same way.",
+          "Applying through the senior/long-term-care application is the correct route for many elderly applicants, not the general under-65 application.",
+          "Online submission is supported and may be faster than mailing, but the application still requires income and asset documentation."
+        ],
+        "data_shape_notes": "This program is not a simple one-size-fits-all benefit. Eligibility depends on category (aged, blind, disabled), countable income, and countable assets, with separate standards for long-term-care situations. Benefits are broad and service-based rather than a cash payment, and the application path differs from the standard under-65 MassHealth application.",
+        "_raw": "{\n  \"name\": \"MassHealth Standard (Aged, Blind, and Disabled Medicaid)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For older adults and people who are blind or disabled, MassHealth uses household income rules and financial standards that vary by situation. The official 2026 MassHealth financial guidelines show a monthly income standard of $1,143.74 for Blind applicants and $1,108.39 for Disabled applicants, and a long-term-care income standard of $72.80 per month for residents in long-term care settings. Eligibility also depends on countable income after MassHealth deductions, not just gross income, and different coverage pathways may use different standards.\",\n    \"asset_limits\": \"The MassHealth asset limit for Standard coverage is $2,000 for an individual and $3,000 for a couple living together in the community. Countable assets are the assets MassHealth looks at when deciding eligibility. The official rules say the total value of countable assets owned by or available to the applicant may not exceed those limits. The materials gathered do not provide a full item-by-item exempt asset list, so the safest program-specific summary is that MassHealth applies a countable-assets test and certain assets are excluded under MassHealth rules, but applicants should verify exemptions before applying.\",\n    \"other_requirements\": [\n      \"Must be a Massachusetts resident\",\n      \"Must meet the program’s age/disability/blindness category requirements\",\n      \"Must meet citizenship or immigration-status rules that apply to MassHealth\",\n      \"Must meet income and asset rules\",\n      \"For some applicants, disability must be verified through MassHealth disability rules and documentation\",\n      \"For long-term-care applicants, different financial rules may apply than for community-based applicants\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"MassHealth Standard provides a full range of health care benefits. Covered services specifically listed by MassHealth include inpatient hospital care; outpatient care such as hospitals, clinics, doctors, dentists, family planning, and vision care; medical services such as lab tests, X-rays, therapies, pharmacy services, eyeglasses, hearing aids, medical equipment and supplies; adult day health and adult foster care; mental health and addiction services, both inpatient and outpatient; long-term services and supports at home or in a long-term-care facility, including home health services; transportation services; and smoking-cessation services. For children under 21, it also includes well-child screenings, shots, and related medical, vision, dental, hearing, and developmental services.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: MassHealth application for seniors and people needing long-term care services through Mass.gov\",\n      \"Phone: MassHealth Customer Service Center at (800) 841-2900\",\n      \"TTY/TTY-TDD: 711\",\n      \"Alternate enrollment line: (877) MA ENROLL / (877) 623-6765\",\n      \"In-person support: MassHealth Enrollment Centers\"\n    ],\n    \"processing_time\": \"No exact statewide processing timeline was provided in the gathered sources. Applying online is described as a faster route than mailing a paper application.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Health Coverage for Seniors and People Needing Long-Term Care Services\",\n      \"Massachusetts Application for Health and Dental Coverage and Help Paying Costs\"\n    ],\n    \"documents\": [\n      \"Proof of income\",\n      \"Proof of assets\",\n      \"Employer and income information for everyone in the household, such as paystubs or wage statements\",\n      \"Documentation that verifies household income and assets\",\n      \"Any disability-related documentation if applying under disability rules\",\n      \"Identification and residency documents as needed for eligibility review\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Massachusetts; applicants must be Massachusetts residents.\",\n    \"regional_variations\": \"No county-based eligibility differences were identified. The main variation is administrative: applicants may use MassHealth Enrollment Centers or customer service support, and some people may experience different local service experiences, but the program rules themselves are statewide.\",\n    \"offices_or_providers\": [\n      \"MassHealth Customer Service Center\",\n      \"MassHealth Enrollment Centers\"\n    ]\n  },\n  \"official_source\": \"https://www.mass.gov/info-details/masshealth-coverage-types-for-individuals-and-families-including-people-with-disabilities\",\n  \"gotchas\": [\n    \"MassHealth Standard is not the same as ConnectorCare or Medicare. It is Medicaid coverage and can work as secondary coverage for some Medicare members, but it is not a Medicare replacement.\",\n    \"Income is not judged only on gross monthly pay; MassHealth uses countable income after deductions.\",\n    \"The asset test matters a lot for seniors and disabled adults, and the limits are low: $2,000 for one person and $3,000 for a couple.\",\n    \"A family member’s assumption that a house or car counts as an asset can be wrong; some assets are exempt under MassHealth rules, so applicants should not assume everything owned counts the same way.\",\n    \"Applying through the senior/long-term-care application is the correct route for many elderly applicants, not the general under-65 application.\",\n    \"Online submission is supported and may be faster than mailing, but the application still requires income and asset documentation.\"\n  ],\n  \"data_shape_notes\": \"This program is not a simple one-size-fits-all benefit. Eligibility depends on category (aged, blind, disabled), countable income, and countable assets, with separate standards for long-term-care situations. Benefits are broad and service-based rather than a cash payment, and the application path differs from the standard under-65 MassHealth application.\"\n}"
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "rule": "Household gross annual income must be at or below 60% of Massachusetts estimated State Median Income.",
+            "table": [
+              {
+                "household_size": 1,
+                "annual_income_limit": 53585,
+                "4_week_gross_if_paid_fixed": 4465,
+                "4_week_gross_if_paid_weekly_or_biweekly": 4121
+              },
+              {
+                "household_size": 2,
+                "annual_income_limit": 70073,
+                "4_week_gross_if_paid_fixed": 5839,
+                "4_week_gross_if_paid_weekly_or_biweekly": 5390
+              },
+              {
+                "household_size": 3,
+                "annual_income_limit": 86561,
+                "4_week_gross_if_paid_fixed": 7213,
+                "4_week_gross_if_paid_weekly_or_biweekly": 6658
+              },
+              {
+                "household_size": 4,
+                "annual_income_limit": 103049,
+                "4_week_gross_if_paid_fixed": 8587,
+                "4_week_gross_if_paid_weekly_or_biweekly": 7926
+              },
+              {
+                "household_size": 5,
+                "annual_income_limit": 119536,
+                "4_week_gross_if_paid_fixed": 9961,
+                "4_week_gross_if_paid_weekly_or_biweekly": 9195
+              },
+              {
+                "household_size": 6,
+                "annual_income_limit": 136024,
+                "4_week_gross_if_paid_fixed": 11335,
+                "4_week_gross_if_paid_weekly_or_biweekly": 10463
+              },
+              {
+                "household_size": 7,
+                "annual_income_limit": 139116
+              },
+              {
+                "household_size": 8,
+                "annual_income_limit": 142207
+              },
+              {
+                "household_size": 9,
+                "annual_income_limit": 145299
+              },
+              {
+                "household_size": 10,
+                "annual_income_limit": 148390
+              }
+            ],
+            "notes": "Eligibility is based on gross income of all household members; some local pages also note gross income of every household member age 18 and older."
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a Massachusetts household applying through the local fuel assistance agency serving the city or town where the household lives.",
+            "Program is intended to help pay heating costs during the heating season.",
+            "If applying through a local agency, applicants may need to complete an interview or appointment.",
+            "Some local agencies may auto-qualify households receiving means-tested benefits, but income rules still govern eligibility."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Pays a portion of winter heating costs. For FY 2026, reported statewide benefit levels were: Heating $200 minimum and $600 maximum; Crisis benefit $600 in winter; Weatherization maximum $18,500. Some 2026-2027 local and utility pages indicate benefits may rise for oil-heated and utility-heated households, but the standard LIHEAP/HEAP amounts above are the clearest statewide figures found.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://toapply.org/MassHEAP",
+            "State information page: https://www.mass.gov/info-details/home-energy-assistance",
+            "By phone: DTA Assistance Line at (877) 382-2363",
+            "By phone for questions about HEAP: Massachusetts Heat Line at 1-800-632-8175",
+            "In person: local fuel assistance agency serving the household's city/town",
+            "By mail: instructions are available through the state HEAP page and local agencies"
+          ],
+          "processing_time": "Not stated as a fixed statewide number in the sources found; households generally apply for the November 1 to April 30 heating season, and local agencies handle status checks and processing.",
+          "waitlist": null,
+          "forms": [
+            "MassHEAP online application / pre-application portal",
+            "Local agency application intake forms"
+          ],
+          "documents": [
+            "Proof of identity for household members",
+            "Proof of Massachusetts residence",
+            "Proof of income for all household members",
+            "Recent heating bill or account information",
+            "Utility account information if heat is included in rent or paid separately",
+            "Documentation for benefits already received, if applicable",
+            "Social Security numbers or other household identifiers if requested by the local agency"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "No county restriction statewide; households apply through the fuel assistance agency for their city or town.",
+          "regional_variations": "Program rules are statewide, but application handling, appointment availability, intake method, and wait times vary by local Community Action Agency or municipal partner. Some regions offer online portals, phone appointments, and in-person appointments; status-check lines are often local.",
+          "offices_or_providers": [
+            "Massachusetts local fuel assistance agencies",
+            "Community Action agencies serving individual cities/towns",
+            "MASSCAP network agencies"
+          ]
+        },
+        "official_source": "https://www.mass.gov/info-details/home-energy-assistance",
+        "gotchas": [
+          "There is no single statewide in-person office; applicants must go through the local agency serving their town.",
+          "Income is based on gross household income, not after-tax income.",
+          "Household size matters a lot; the limit rises with each additional person.",
+          "The heating season is seasonal, so timing matters.",
+          "Some local sites say applicants can qualify through participation in programs such as SNAP, SSI, MassHealth, subsidized housing, WIC, EAEDC, or TAFDC, but those indicators do not replace the income test.",
+          "Weatherization and crisis help are separate components from regular heating assistance.",
+          "Local agencies may have their own portals, voice-retrieval systems, and appointment rules, so the application experience is not identical across Massachusetts."
+        ],
+        "data_shape_notes": "This is a statewide, income-tested, household-size-based energy assistance program with local administration. Benefits vary by program component (heating, crisis, weatherization) and local agency operations.",
+        "_raw": "{\n  \"name\": \"LIHEAP (Low Income Home Energy Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"rule\": \"Household gross annual income must be at or below 60% of Massachusetts estimated State Median Income.\",\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"annual_income_limit\": 53585,\n          \"4_week_gross_if_paid_fixed\": 4465,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 4121\n        },\n        {\n          \"household_size\": 2,\n          \"annual_income_limit\": 70073,\n          \"4_week_gross_if_paid_fixed\": 5839,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 5390\n        },\n        {\n          \"household_size\": 3,\n          \"annual_income_limit\": 86561,\n          \"4_week_gross_if_paid_fixed\": 7213,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 6658\n        },\n        {\n          \"household_size\": 4,\n          \"annual_income_limit\": 103049,\n          \"4_week_gross_if_paid_fixed\": 8587,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 7926\n        },\n        {\n          \"household_size\": 5,\n          \"annual_income_limit\": 119536,\n          \"4_week_gross_if_paid_fixed\": 9961,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 9195\n        },\n        {\n          \"household_size\": 6,\n          \"annual_income_limit\": 136024,\n          \"4_week_gross_if_paid_fixed\": 11335,\n          \"4_week_gross_if_paid_weekly_or_biweekly\": 10463\n        },\n        {\n          \"household_size\": 7,\n          \"annual_income_limit\": 139116\n        },\n        {\n          \"household_size\": 8,\n          \"annual_income_limit\": 142207\n        },\n        {\n          \"household_size\": 9,\n          \"annual_income_limit\": 145299\n        },\n        {\n          \"household_size\": 10,\n          \"annual_income_limit\": 148390\n        }\n      ],\n      \"notes\": \"Eligibility is based on gross income of all household members; some local pages also note gross income of every household member age 18 and older.\"\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a Massachusetts household applying through the local fuel assistance agency serving the city or town where the household lives.\",\n      \"Program is intended to help pay heating costs during the heating season.\",\n      \"If applying through a local agency, applicants may need to complete an interview or appointment.\",\n      \"Some local agencies may auto-qualify households receiving means-tested benefits, but income rules still govern eligibility.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Pays a portion of winter heating costs. For FY 2026, reported statewide benefit levels were: Heating $200 minimum and $600 maximum; Crisis benefit $600 in winter; Weatherization maximum $18,500. Some 2026-2027 local and utility pages indicate benefits may rise for oil-heated and utility-heated households, but the standard LIHEAP/HEAP amounts above are the clearest statewide figures found.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://toapply.org/MassHEAP\",\n      \"State information page: https://www.mass.gov/info-details/home-energy-assistance\",\n      \"By phone: DTA Assistance Line at (877) 382-2363\",\n      \"By phone for questions about HEAP: Massachusetts Heat Line at 1-800-632-8175\",\n      \"In person: local fuel assistance agency serving the household's city/town\",\n      \"By mail: instructions are available through the state HEAP page and local agencies\"\n    ],\n    \"processing_time\": \"Not stated as a fixed statewide number in the sources found; households generally apply for the November 1 to April 30 heating season, and local agencies handle status checks and processing.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"MassHEAP online application / pre-application portal\",\n      \"Local agency application intake forms\"\n    ],\n    \"documents\": [\n      \"Proof of identity for household members\",\n      \"Proof of Massachusetts residence\",\n      \"Proof of income for all household members\",\n      \"Recent heating bill or account information\",\n      \"Utility account information if heat is included in rent or paid separately\",\n      \"Documentation for benefits already received, if applicable\",\n      \"Social Security numbers or other household identifiers if requested by the local agency\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"No county restriction statewide; households apply through the fuel assistance agency for their city or town.\",\n    \"regional_variations\": \"Program rules are statewide, but application handling, appointment availability, intake method, and wait times vary by local Community Action Agency or municipal partner. Some regions offer online portals, phone appointments, and in-person appointments; status-check lines are often local.\",\n    \"offices_or_providers\": [\n      \"Massachusetts local fuel assistance agencies\",\n      \"Community Action agencies serving individual cities/towns\",\n      \"MASSCAP network agencies\"\n    ]\n  },\n  \"official_source\": \"https://www.mass.gov/info-details/home-energy-assistance\",\n  \"gotchas\": [\n    \"There is no single statewide in-person office; applicants must go through the local agency serving their town.\",\n    \"Income is based on gross household income, not after-tax income.\",\n    \"Household size matters a lot; the limit rises with each additional person.\",\n    \"The heating season is seasonal, so timing matters.\",\n    \"Some local sites say applicants can qualify through participation in programs such as SNAP, SSI, MassHealth, subsidized housing, WIC, EAEDC, or TAFDC, but those indicators do not replace the income test.\",\n    \"Weatherization and crisis help are separate components from regular heating assistance.\",\n    \"Local agencies may have their own portals, voice-retrieval systems, and appointment rules, so the application experience is not identical across Massachusetts.\"\n  ],\n  \"data_shape_notes\": \"This is a statewide, income-tested, household-size-based energy assistance program with local administration. Benefits vary by program component (heating, crisis, weatherization) and local agency operations.\"\n}"
+      },
+      {
+        "name": "Clause 41C Senior Circuit Breaker Tax Credit",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "tax_year_2025": {
+              "single_not_head_of_household": 75000,
+              "head_of_household": 94000,
+              "married_filing_jointly": 112000
+            },
+            "notes": [
+              "The program is a Massachusetts refundable property tax credit for a taxpayer age 65 or older.",
+              "For married filing jointly, either the taxpayer or spouse must be 65 or older by the end of the tax year.",
+              "The income limit is the taxpayer's 'total income' as defined for the credit."
+            ]
+          },
+          "asset_limits": {
+            "applies": false,
+            "details": "No separate asset limit applies to the Massachusetts Senior Circuit Breaker Tax Credit."
+          },
+          "other_requirements": [
+            "Must be a Massachusetts resident who owns or rents a principal residence in Massachusetts.",
+            "Must occupy the property as a principal residence.",
+            "Must file a Massachusetts state income tax return.",
+            "Must include Schedule CB (Circuit Breaker Credit) with the return.",
+            "For homeowners, the assessed valuation of the principal residence cannot exceed the annually set maximum amount for the tax year."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Refundable Massachusetts income tax credit of up to $2,820 for tax year 2025.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: File your Massachusetts state income tax return through MassTaxConnect and include Schedule CB",
+            "Mail: Submit Form 1 or Form 1-NR/PY with Schedule CB by mail"
+          ],
+          "processing_time": "Processed with the Massachusetts income tax return; no separate standalone approval timeline is published.",
+          "waitlist": null,
+          "forms": [
+            "Schedule CB (2025 Massachusetts Senior Circuit Breaker Credit)",
+            "Massachusetts Form 1",
+            "Massachusetts Form 1-NR/PY"
+          ],
+          "documents": [
+            "Completed Massachusetts tax return",
+            "Schedule CB",
+            "Proof of age if needed to substantiate eligibility",
+            "Income records needed to calculate total income",
+            "Property tax records or rent records if applicable",
+            "Home value/assessment information for homeowners"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide to eligible Massachusetts residents; no county restriction.",
+          "regional_variations": "The credit itself is statewide and uniform. Only local assistance or tax-prep support may vary by city or town.",
+          "offices_or_providers": []
+        },
+        "official_source": "https://www.mass.gov/info-details/senior-circuit-breaker-tax-credit",
+        "gotchas": [
+          "This is not a separate welfare or service program; it is a refundable tax credit claimed on a Massachusetts tax return.",
+          "You must file a Massachusetts return even if you normally do not file.",
+          "The credit is only available if the taxpayer or spouse meets the age requirement by the end of the tax year.",
+          "Homeowners also have an assessed-value cap in addition to the income cap.",
+          "The credit amount changes by tax year, so families should use the current-year Schedule CB and instructions.",
+          "Using the wrong filing status can disqualify a claim.",
+          "Renters can qualify, not just homeowners."
+        ],
+        "data_shape_notes": "This program is a statewide refundable tax credit with annual inflation-adjusted income thresholds and annual maximum credit updates; it does not use waitlists, service tiers, or regional provider networks.",
+        "_raw": "{\n  \"name\": \"Clause 41C Senior Circuit Breaker Tax Credit\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"tax_year_2025\": {\n        \"single_not_head_of_household\": 75000,\n        \"head_of_household\": 94000,\n        \"married_filing_jointly\": 112000\n      },\n      \"notes\": [\n        \"The program is a Massachusetts refundable property tax credit for a taxpayer age 65 or older.\",\n        \"For married filing jointly, either the taxpayer or spouse must be 65 or older by the end of the tax year.\",\n        \"The income limit is the taxpayer's 'total income' as defined for the credit.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"applies\": false,\n      \"details\": \"No separate asset limit applies to the Massachusetts Senior Circuit Breaker Tax Credit.\"\n    },\n    \"other_requirements\": [\n      \"Must be a Massachusetts resident who owns or rents a principal residence in Massachusetts.\",\n      \"Must occupy the property as a principal residence.\",\n      \"Must file a Massachusetts state income tax return.\",\n      \"Must include Schedule CB (Circuit Breaker Credit) with the return.\",\n      \"For homeowners, the assessed valuation of the principal residence cannot exceed the annually set maximum amount for the tax year.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Refundable Massachusetts income tax credit of up to $2,820 for tax year 2025.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: File your Massachusetts state income tax return through MassTaxConnect and include Schedule CB\",\n      \"Mail: Submit Form 1 or Form 1-NR/PY with Schedule CB by mail\"\n    ],\n    \"processing_time\": \"Processed with the Massachusetts income tax return; no separate standalone approval timeline is published.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Schedule CB (2025 Massachusetts Senior Circuit Breaker Credit)\",\n      \"Massachusetts Form 1\",\n      \"Massachusetts Form 1-NR/PY\"\n    ],\n    \"documents\": [\n      \"Completed Massachusetts tax return\",\n      \"Schedule CB\",\n      \"Proof of age if needed to substantiate eligibility\",\n      \"Income records needed to calculate total income\",\n      \"Property tax records or rent records if applicable\",\n      \"Home value/assessment information for homeowners\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide to eligible Massachusetts residents; no county restriction.\",\n    \"regional_variations\": \"The credit itself is statewide and uniform. Only local assistance or tax-prep support may vary by city or town.\",\n    \"offices_or_providers\": []\n  },\n  \"official_source\": \"https://www.mass.gov/info-details/senior-circuit-breaker-tax-credit\",\n  \"gotchas\": [\n    \"This is not a separate welfare or service program; it is a refundable tax credit claimed on a Massachusetts tax return.\",\n    \"You must file a Massachusetts return even if you normally do not file.\",\n    \"The credit is only available if the taxpayer or spouse meets the age requirement by the end of the tax year.\",\n    \"Homeowners also have an assessed-value cap in addition to the income cap.\",\n    \"The credit amount changes by tax year, so families should use the current-year Schedule CB and instructions.\",\n    \"Using the wrong filing status can disqualify a claim.\",\n    \"Renters can qualify, not just homeowners.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide refundable tax credit with annual inflation-adjusted income thresholds and annual maximum credit updates; it does not use waitlists, service tiers, or regional provider networks.\"\n}"
+      },
+      {
+        "name": "State Supplement to SSI",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No separate Massachusetts income limit table applies the way a standalone state program would. SSP is tied to SSI: a person must first apply for SSI, and Massachusetts SSP can also cover some people who are found ineligible for SSI solely because of income if their countable income is still below the combined federal benefit rate plus the applicable Massachusetts SSP payment. Payment amounts are then reduced by countable income after SSI rules are applied.",
+          "asset_limits": "No separate Massachusetts asset test is described in the available state guidance; SSI resource rules control the underlying eligibility. Countable types and resources are determined by SSA, and SSP follows the SSI determination. Exempt resources would therefore generally track SSI exclusions rather than a Massachusetts-specific rule set.",
+          "other_requirements": [
+            "Must be a Massachusetts resident",
+            "Must be aged 65 or older, or disabled, or blind",
+            "Must first apply for Supplemental Security Income (SSI)",
+            "Eligibility is determined after SSA makes the SSI decision",
+            "People in some private medical facilities may be covered under older federal/state supplement categories",
+            "State payment level depends on eligibility category, living arrangement, individual vs. couple status, and countable income"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A monthly state cash supplement added to federal SSI. Massachusetts publishes payment levels by eligibility category and living arrangement. The state supplement is not a service program. The exact payment is reduced by countable income after the federal SSI portion is considered. Payment levels vary for aged, blind, and disabled people, and by living arrangement such as living independently, shared living expenses, or living in the household of another.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Apply for SSI through the Social Security Administration; that SSI application also serves as the SSP application",
+            "Social Security Administration phone: (800) 772-1213",
+            "Massachusetts SSP Assistance Line: (877) 863-1128",
+            "Mass.gov SSP information: https://www.mass.gov/massachusetts-state-supplement-program-ssp"
+          ],
+          "processing_time": "No separate SSP application process is used. SSP is determined after SSA decides the SSI case, so timing generally follows the SSI determination timeline. No Massachusetts-specific SSP processing-time guarantee was identified.",
+          "waitlist": null,
+          "forms": [
+            "No separate SSP form",
+            "SSI application through SSA serves as the SSP application"
+          ],
+          "documents": [
+            "Proof of Massachusetts residency",
+            "Proof of age, disability, or blindness as applicable",
+            "Income information",
+            "Resource/asset information for SSI review",
+            "Living arrangement information",
+            "Marriage/spouse information if applying as a couple",
+            "Any SSA-requested identity and citizenship/immigration documents"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to Massachusetts residents who meet SSP/SSI-related rules; eligibility and payment amount depend on living arrangement and category, not county.",
+          "regional_variations": "No county-by-county or regional variation was identified in the available official guidance. The main variation is by living arrangement and eligibility category, not geography.",
+          "offices_or_providers": [
+            "Massachusetts State Supplement Program (state admin contact through Mass.gov)",
+            "Social Security Administration offices and phone system for SSI filing"
+          ]
+        },
+        "official_source": "https://www.mass.gov/massachusetts-state-supplement-program-ssp",
+        "gotchas": [
+          "There is no separate Massachusetts SSP application; filing for SSI is the application for SSP.",
+          "People can sometimes qualify for SSP even if they do not qualify for SSI solely because of income, if countable income is still below the combined SSI plus SSP payment level.",
+          "Benefit amounts are not flat; they depend on category and living arrangement.",
+          "The Massachusetts program is a cash supplement, not a home-care, nursing, or service entitlement.",
+          "SSA, not the state, makes the initial SSI decision that SSP relies on.",
+          "If the question is about federal SSI rather than the state supplement, the correct contact is Social Security, not the state SSP line."
+        ],
+        "data_shape_notes": "This program is a state cash supplement layered onto SSI, with payment levels that vary by eligibility category, living arrangement, and countable income. There is no separate SSP application or separate statewide service network.",
+        "_raw": "{\n  \"name\": \"State Supplement to SSI\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No separate Massachusetts income limit table applies the way a standalone state program would. SSP is tied to SSI: a person must first apply for SSI, and Massachusetts SSP can also cover some people who are found ineligible for SSI solely because of income if their countable income is still below the combined federal benefit rate plus the applicable Massachusetts SSP payment. Payment amounts are then reduced by countable income after SSI rules are applied.\",\n    \"asset_limits\": \"No separate Massachusetts asset test is described in the available state guidance; SSI resource rules control the underlying eligibility. Countable types and resources are determined by SSA, and SSP follows the SSI determination. Exempt resources would therefore generally track SSI exclusions rather than a Massachusetts-specific rule set.\",\n    \"other_requirements\": [\n      \"Must be a Massachusetts resident\",\n      \"Must be aged 65 or older, or disabled, or blind\",\n      \"Must first apply for Supplemental Security Income (SSI)\",\n      \"Eligibility is determined after SSA makes the SSI decision\",\n      \"People in some private medical facilities may be covered under older federal/state supplement categories\",\n      \"State payment level depends on eligibility category, living arrangement, individual vs. couple status, and countable income\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A monthly state cash supplement added to federal SSI. Massachusetts publishes payment levels by eligibility category and living arrangement. The state supplement is not a service program. The exact payment is reduced by countable income after the federal SSI portion is considered. Payment levels vary for aged, blind, and disabled people, and by living arrangement such as living independently, shared living expenses, or living in the household of another.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply for SSI through the Social Security Administration; that SSI application also serves as the SSP application\",\n      \"Social Security Administration phone: (800) 772-1213\",\n      \"Massachusetts SSP Assistance Line: (877) 863-1128\",\n      \"Mass.gov SSP information: https://www.mass.gov/massachusetts-state-supplement-program-ssp\"\n    ],\n    \"processing_time\": \"No separate SSP application process is used. SSP is determined after SSA decides the SSI case, so timing generally follows the SSI determination timeline. No Massachusetts-specific SSP processing-time guarantee was identified.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No separate SSP form\",\n      \"SSI application through SSA serves as the SSP application\"\n    ],\n    \"documents\": [\n      \"Proof of Massachusetts residency\",\n      \"Proof of age, disability, or blindness as applicable\",\n      \"Income information\",\n      \"Resource/asset information for SSI review\",\n      \"Living arrangement information\",\n      \"Marriage/spouse information if applying as a couple\",\n      \"Any SSA-requested identity and citizenship/immigration documents\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to Massachusetts residents who meet SSP/SSI-related rules; eligibility and payment amount depend on living arrangement and category, not county.\",\n    \"regional_variations\": \"No county-by-county or regional variation was identified in the available official guidance. The main variation is by living arrangement and eligibility category, not geography.\",\n    \"offices_or_providers\": [\n      \"Massachusetts State Supplement Program (state admin contact through Mass.gov)\",\n      \"Social Security Administration offices and phone system for SSI filing\"\n    ]\n  },\n  \"official_source\": \"https://www.mass.gov/massachusetts-state-supplement-program-ssp\",\n  \"gotchas\": [\n    \"There is no separate Massachusetts SSP application; filing for SSI is the application for SSP.\",\n    \"People can sometimes qualify for SSP even if they do not qualify for SSI solely because of income, if countable income is still below the combined SSI plus SSP payment level.\",\n    \"Benefit amounts are not flat; they depend on category and living arrangement.\",\n    \"The Massachusetts program is a cash supplement, not a home-care, nursing, or service entitlement.\",\n    \"SSA, not the state, makes the initial SSI decision that SSP relies on.\",\n    \"If the question is about federal SSI rather than the state supplement, the correct contact is Social Security, not the state SSP line.\"\n  ],\n  \"data_shape_notes\": \"This program is a state cash supplement layered onto SSI, with payment levels that vary by eligibility category, living arrangement, and countable income. There is no separate SSP application or separate statewide service network.\"\n}"
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No income limit is listed for this program. It is free for qualifying caregivers. Eligibility is based on the caregiver/care-recipient relationship and age/disability/dementia criteria, not household income.",
+          "asset_limits": null,
+          "other_requirements": [
+            "Caregiver must be unpaid/non-paid.",
+            "Caregiver must be age 18 or older if caring for an older adult or a person with dementia.",
+            "Caregiver must be age 55 or older if a grandparent or other relative caring for a child under 18.",
+            "Caregiver must be age 55 or older if a grandparent or other relative caring for an adult with a disability ages 18 through 59.",
+            "The care recipient must be age 60 or older, or any age with Alzheimer’s disease or related dementia, or a child under 18, or an adult age 18 through 59 with a disability.",
+            "For the grandparent/relative categories, the program materials specify 'not parents' for the child-under-18 category, while parents are included in the adult-disability category."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Free caregiver support services. The program provides a caregiver specialist who helps create a care plan and offers tips, support, education, training, and access to support groups and resources. Some local providers describe one-on-one support and group-based services. No dollar cap or hourly service limit is stated in the official program description.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call MassOptions toll-free at (800) 243-4636 to speak with a Caregiver Specialist.",
+            "Visit the Massachusetts Family Caregiver Support Program page on Mass.gov: https://www.mass.gov/info-details/family-caregiver-support-program",
+            "Contact the local Aging Services Access Point (ASAP) / caregiver provider in your area through the MassOptions referral."
+          ],
+          "processing_time": "No official processing-time standard is published in the sources gathered. Enrollment appears to be handled through a caregiver specialist after referral, but no statewide timeline is stated.",
+          "waitlist": "No statewide waitlist is described in the official information reviewed. Availability can depend on local Aging Services Access Point capacity and regional provider operations.",
+          "forms": [],
+          "documents": [
+            "No formal application form is named in the official materials reviewed.",
+            "Be ready to describe the caregiver relationship.",
+            "Be ready to state the age of the caregiver and the care recipient.",
+            "Be ready to explain whether the care recipient has dementia or a disability.",
+            "Be ready to describe what caregiving help is needed and what support is being sought."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Massachusetts, but services are delivered through regional Aging Services Access Points and local caregiver support providers.",
+          "regional_variations": "Yes. The program is statewide, but the specific provider, intake path, support-group availability, and local staffing can vary by region. MassOptions routes families to the caregiver specialist or ASAP serving their area.",
+          "offices_or_providers": [
+            "MassOptions at (800) 243-4636",
+            "Local Aging Services Access Points (ASAPs)",
+            "Regional caregiver support providers in the Massachusetts aging services network"
+          ]
+        },
+        "official_source": "https://www.mass.gov/info-details/family-caregiver-support-program",
+        "gotchas": [
+          "There is no income test in the official program description, so families should not assume financial eligibility rules apply.",
+          "The program is for unpaid caregivers; paid caregiving arrangements do not fit the core eligibility language.",
+          "Eligibility depends on both who the caregiver is and who is being cared for, and the age/disability rules differ by category.",
+          "MassOptions is the main statewide starting point; families often miss that they do not need to find the correct local office first.",
+          "Because delivery is regional, actual services and availability can differ by ASAP even though the program is statewide.",
+          "The official materials describe support and planning services, not direct cash payments."
+        ],
+        "data_shape_notes": "This program has no income or asset test; eligibility is relationship-based and age/disability-based, while benefits are service-based and delivered through regional providers rather than a single statewide office.",
+        "_raw": "{\n  \"name\": \"Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No income limit is listed for this program. It is free for qualifying caregivers. Eligibility is based on the caregiver/care-recipient relationship and age/disability/dementia criteria, not household income.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Caregiver must be unpaid/non-paid.\",\n      \"Caregiver must be age 18 or older if caring for an older adult or a person with dementia.\",\n      \"Caregiver must be age 55 or older if a grandparent or other relative caring for a child under 18.\",\n      \"Caregiver must be age 55 or older if a grandparent or other relative caring for an adult with a disability ages 18 through 59.\",\n      \"The care recipient must be age 60 or older, or any age with Alzheimer’s disease or related dementia, or a child under 18, or an adult age 18 through 59 with a disability.\",\n      \"For the grandparent/relative categories, the program materials specify 'not parents' for the child-under-18 category, while parents are included in the adult-disability category.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Free caregiver support services. The program provides a caregiver specialist who helps create a care plan and offers tips, support, education, training, and access to support groups and resources. Some local providers describe one-on-one support and group-based services. No dollar cap or hourly service limit is stated in the official program description.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call MassOptions toll-free at (800) 243-4636 to speak with a Caregiver Specialist.\",\n      \"Visit the Massachusetts Family Caregiver Support Program page on Mass.gov: https://www.mass.gov/info-details/family-caregiver-support-program\",\n      \"Contact the local Aging Services Access Point (ASAP) / caregiver provider in your area through the MassOptions referral.\"\n    ],\n    \"processing_time\": \"No official processing-time standard is published in the sources gathered. Enrollment appears to be handled through a caregiver specialist after referral, but no statewide timeline is stated.\",\n    \"waitlist\": \"No statewide waitlist is described in the official information reviewed. Availability can depend on local Aging Services Access Point capacity and regional provider operations.\",\n    \"forms\": [],\n    \"documents\": [\n      \"No formal application form is named in the official materials reviewed.\",\n      \"Be ready to describe the caregiver relationship.\",\n      \"Be ready to state the age of the caregiver and the care recipient.\",\n      \"Be ready to explain whether the care recipient has dementia or a disability.\",\n      \"Be ready to describe what caregiving help is needed and what support is being sought.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Massachusetts, but services are delivered through regional Aging Services Access Points and local caregiver support providers.\",\n    \"regional_variations\": \"Yes. The program is statewide, but the specific provider, intake path, support-group availability, and local staffing can vary by region. MassOptions routes families to the caregiver specialist or ASAP serving their area.\",\n    \"offices_or_providers\": [\n      \"MassOptions at (800) 243-4636\",\n      \"Local Aging Services Access Points (ASAPs)\",\n      \"Regional caregiver support providers in the Massachusetts aging services network\"\n    ]\n  },\n  \"official_source\": \"https://www.mass.gov/info-details/family-caregiver-support-program\",\n  \"gotchas\": [\n    \"There is no income test in the official program description, so families should not assume financial eligibility rules apply.\",\n    \"The program is for unpaid caregivers; paid caregiving arrangements do not fit the core eligibility language.\",\n    \"Eligibility depends on both who the caregiver is and who is being cared for, and the age/disability rules differ by category.\",\n    \"MassOptions is the main statewide starting point; families often miss that they do not need to find the correct local office first.\",\n    \"Because delivery is regional, actual services and availability can differ by ASAP even though the program is statewide.\",\n    \"The official materials describe support and planning services, not direct cash payments.\"\n  ],\n  \"data_shape_notes\": \"This program has no income or asset test; eligibility is relationship-based and age/disability-based, while benefits are service-based and delivered through regional providers rather than a single statewide office.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MA",
+    "stateName": "Massachusetts",
+    "classifiedAt": "2026-10-06T05:42:40.594Z",
+    "total": 5,
+    "typeSummary": {
+      "benefit": 4,
+      "resource": 1
+    },
+    "scopeSummary": {
+      "state": 4,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 4,
+      "simple": 1
+    },
+    "programs": [
+      {
+        "name": "MassHealth Standard (Aged, Blind, and Disabled Medicaid)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "MassHealth Customer Service Center",
+              "type": "service-area"
+            },
+            {
+              "name": "MassHealth Enrollment Centers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Massachusetts local fuel assistance agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Community Action agencies serving individual cities/towns",
+              "type": "service-area"
+            },
+            {
+              "name": "MASSCAP network agencies",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Clause 41C Senior Circuit Breaker Tax Credit",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "State Supplement to SSI",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Massachusetts State Supplement Program (state admin contact through Mass.gov)",
+              "type": "service-area"
+            },
+            {
+              "name": "Social Security Administration offices and phone system for SSI filing",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "MassOptions at (800) 243-4636",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Aging Services Access Points (ASAPs)",
+              "type": "service-area"
+            },
+            {
+              "name": "Regional caregiver support providers in the Massachusetts aging services network",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MA",
+      "id": "ma-masshealth-standard-aged-blind-disabled",
+      "name": "MassHealth Standard (Aged, Blind, and Disabled Medicaid)",
+      "legacyId": "masshealth-standard-aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "MA",
+      "id": "ma-liheap-home-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "legacyId": "liheap-low-income-home-energy-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "MA",
+      "id": "ma-senior-circuit-breaker-tax-credit",
+      "name": "Clause 41C Senior Circuit Breaker Tax Credit",
+      "legacyId": "clause-41c-senior-circuit-breaker-tax-credit",
+      "programType": "benefit"
+    },
+    {
+      "state": "MA",
+      "id": "ma-state-supplement-ssi",
+      "name": "State Supplement to SSI",
+      "legacyId": "state-supplement-to-ssi",
+      "programType": "benefit"
+    },
+    {
+      "state": "MA",
+      "id": "ma-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "legacyId": "family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

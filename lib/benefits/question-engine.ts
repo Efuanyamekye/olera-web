@@ -15,7 +15,7 @@
  * Conservative like the finder engine: only a fact the family gave can rule a
  * program out, and "not sure" is always an answer that settles nothing.
  */
-import { draftMinAge, incomeLimitFromTable, medicaidGatedName, isWaiverPath } from "@/lib/benefits/eligibility.server";
+import { draftMinAge, incomeLimitFromTable, requiresMedicaid, isWaiverPath } from "@/lib/benefits/eligibility.server";
 
 export type DailyHelp = "none" | "some" | "lots";
 export type Savings = "under2000" | "under10000" | "over10000";
@@ -31,11 +31,15 @@ export interface KnownFacts {
   dailyHelp: DailyHelp | null;
   savings: Savings | null;
   disability: "yes" | "no" | null;
-  /** "couple" when a spouse lives with them. Income and savings limits here
-   *  are one-person figures, so they rule a program out only for someone we
-   *  know lives alone (stricter than the finder, which also uses them when
-   *  household is unknown; the finder always asks it). */
-  household: "alone" | "couple" | null;
+  /** Who they live with. "couple": a spouse, and income and savings are the
+   *  two of them together, judged against a program's couple limit.
+   *  "family": with family other than a spouse (a parent living with their
+   *  daughter). Individual programs (Medicaid, SSI, waivers) count only the
+   *  person's own income, so they read as "alone"; programs that count the
+   *  whole home's income (SNAP, energy help) can't be judged from it, so they
+   *  stay "worth checking" (answer key, 6 Oct 2026: they read "likely" for
+   *  parents in a household whose income disqualifies them). */
+  household: "alone" | "couple" | "family" | null;
 }
 
 export type FactKey = keyof KnownFacts;
@@ -51,7 +55,7 @@ export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
   dailyHelp: ["none", "some", "lots"],
   savings: ["under2000", "under10000", "over10000"],
   disability: ["yes", "no"],
-  household: ["alone", "couple"],
+  household: ["alone", "couple", "family"],
 };
 
 const AGE_RANGE: Record<AgeBucket, [number, number]> = { under_60: [0, 59], "60_64": [60, 64], "65_74": [65, 74], "75_84": [75, 84], "85_plus": [85, 120] };
@@ -70,7 +74,25 @@ export interface ProgramRules {
   disabilityPathway: boolean;
   incomeLimit: number | null;
   assetLimit: number | null;
+  /** Limits for a couple, from the household-of-two row and the couple asset limit. */
+  incomeLimitCouple: number | null;
+  assetLimitCouple: number | null;
+  /** Counts everyone in the home's income (SNAP, energy help), not the person's own. */
+  countsHousehold: boolean;
+  /** SNAP: an older household has no gross-income test (only a net test
+   *  after medical and housing costs), and most states waive the savings
+   *  test under 200% of the poverty line. Its limits can confirm a fit but
+   *  never rule one out (answer key, 6 Oct 2026: Illinois' $4,500 asset
+   *  figure ruled out a couple who qualifies). */
+  limitsConfirmOnly: boolean;
   medicaidGated: boolean;
+  /** Says it has an income or savings limit we couldn't read as a number
+   *  (Texas MEPD: "must meet income and resource limits"). It can't be
+   *  "likely" on age alone; it stays worth checking. */
+  unreadMeansTest: boolean;
+  /** For people WITHOUT Medicaid (New York's EISEP, Pennsylvania's PACE drug
+   *  program): having Medicaid rules it out. */
+  notForMedicaid: boolean;
   veteranOnly: boolean;
   /** "lots" = nursing-facility level of care; "some" = help with daily activities. */
   dailyHelp: "some" | "lots" | null;
@@ -83,10 +105,16 @@ export interface DraftLike {
     summary?: string[] | null;
     ageRequirement?: string | null;
     incomeTable?: { householdSize: number; monthlyLimit: number }[] | null;
-    assetLimits?: { individual?: number | null } | null;
+    assetLimits?: { individual?: number | null; couple?: number | null } | null;
     functionalRequirement?: string | null;
   } | null;
 }
+
+/** Programs whose income test counts the whole home, not the person's own. */
+const HOUSEHOLD_PROGRAM = /\bsnap\b|food stamp|food (and nutrition|assistance)|nutrition assistance|calfresh|foodshare|3squares|basic food|liheap|\bheap\b|energy assistance|heating|fuel assistance|weatheriz|\bleap\b|\bceap\b|\bieap\b|\bwheap\b|crisis intervention/i;
+
+const NOT_FOR_MEDICAID = /^\s*(not (eligible for|enrolled in|on)|ineligible for|does not qualify for) (full )?medicaid\b/i;
+const SNAP_PROGRAM = /\bsnap\b|food stamp|food (and nutrition|assistance)|nutrition assistance|calfresh|foodshare|3squares|basic food/i;
 
 export function rulesOf(d: DraftLike): ProgramRules {
   const se = d.structuredEligibility || {};
@@ -95,6 +123,8 @@ export function rulesOf(d: DraftLike): ProgramRules {
   const lots = /nursing (facility|home)[- ]level|level of care|\bNF ?LOC\b|nursing facility|institutional/i;
   const some = /daily (activities|living|tasks)|\bADLs?\b|bathing|dressing|toileting|eating|transferring|mobility|prepare meals|homebound|personal care/i;
   const assets = se.assetLimits?.individual;
+  const coupleAssets = se.assetLimits?.couple;
+  const coupleRows = (se.incomeTable || []).filter((r) => r.householdSize === 2 && r.monthlyLimit > 0);
   return {
     id: d.id,
     name: d.name,
@@ -106,9 +136,25 @@ export function rulesOf(d: DraftLike): ProgramRules {
     disabilityPathway: /disab|blind|18\s*[-–]\s*(59|64)/i.test(text),
     incomeLimit: incomeLimitFromTable(se.incomeTable),
     assetLimit: typeof assets === "number" && assets > 0 ? assets : null,
+    incomeLimitCouple: coupleRows.length ? Math.max(...coupleRows.map((r) => r.monthlyLimit)) : null,
+    assetLimitCouple: typeof coupleAssets === "number" && coupleAssets > 0 ? coupleAssets : null,
+    countsHousehold: HOUSEHOLD_PROGRAM.test(d.name),
+    limitsConfirmOnly: SNAP_PROGRAM.test(d.name),
+    // Regular Medicaid and SSI-type cash only: a care waiver or the VA
+    // pension is "likely" on its other rules by design (their limits net out
+    // care costs, so a number would rule out families who qualify).
+    unreadMeansTest:
+      /medicaid|medical assistance|medi-cal|mainecare|husky|\bssi\b|supplemental security|state supplement/i.test(d.name) &&
+      !isWaiverPath(d.name) &&
+      incomeLimitFromTable(se.incomeTable) == null &&
+      !(typeof assets === "number" && assets > 0) &&
+      (se.summary || []).some((x) => /\b(income|resource|asset)s?\b[^.]*\blimit|\blimits?\b[^.]*\b(income|resource|asset)/i.test(x) && !/\bno (income|asset|resource)/i.test(x)),
+    // Not Medicare Savings Programs, whose summaries say "not eligible for
+    // full Medicaid" although most people on full Medicaid also hold one.
+    notForMedicaid: !/medicare savings|\bqmb\b|\bslmb\b|healthy horizons/i.test(d.name) && (se.summary || []).some((x) => NOT_FOR_MEDICAID.test(x)),
     // A care waiver is a way into Medicaid (isWaiverPath), so not having
     // Medicaid yet never rules it out; income and savings do.
-    medicaidGated: medicaidGatedName(d.name) && !isWaiverPath(d.name),
+    medicaidGated: requiresMedicaid(d.name, se.summary) && !isWaiverPath(d.name),
     veteranOnly: /\bveteran|\bVA\b/.test(d.name),
     dailyHelp: /no functional (requirement|criteria|assessment)|no (daily[- ]help|functional) (is )?required/i.test(fn)
       ? null
@@ -120,6 +166,26 @@ export function rulesOf(d: DraftLike): ProgramRules {
 
 export type Status = "likely" | "check" | "out";
 type Tri = "pass" | "fail" | "unknown";
+
+/**
+ * An income or savings band against a program's limits. A couple answers for
+ * the two of them and is judged against the couple limit; anyone else against
+ * the one-person limit. Under the one-person limit is under a couple's too,
+ * so that passes whatever the household. A program that counts the whole
+ * home can't be judged for someone living with family. `atLimit` makes the
+ * band's floor fail when it equals the limit (savings bands start at it).
+ */
+function within([lo, hi]: [number, number], single: number | null, couple: number | null, r: ProgramRules, f: KnownFacts, atLimit: boolean): Tri {
+  // The home's income counts, so the person's own says nothing until we know
+  // they live alone or with only a spouse.
+  if (r.countsHousehold && (f.household === "family" || f.household == null)) return "unknown";
+  if (single != null && hi <= single) return "pass";
+  const limit = f.household === "couple" ? couple : f.household === "alone" || f.household === "family" ? single : null;
+  if (limit == null) return "unknown";
+  if (hi <= limit) return "pass";
+  if (r.limitsConfirmOnly) return "unknown";
+  return lo > limit || (atLimit && lo >= limit) ? "fail" : "unknown";
+}
 
 /** Each rule against the facts: pass, fail, or unknown. */
 function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[] {
@@ -133,18 +199,18 @@ function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[]
     }
     out.push({ rule: "age", result: res });
   }
-  if (r.incomeLimit != null) {
-    let res: Tri = "unknown";
-    // Under the one-person limit is under a couple's too, so it passes either
-    // way; over it rules out only someone we know lives alone.
-    if (f.income) { const [lo, hi] = INCOME_RANGE[f.income]; if (hi <= r.incomeLimit) res = "pass"; else if (lo > r.incomeLimit && f.household === "alone") res = "fail"; }
-    out.push({ rule: "income", result: res });
+  if (r.incomeLimit != null || r.incomeLimitCouple != null) {
+    out.push({ rule: "income", result: f.income ? within(INCOME_RANGE[f.income], r.incomeLimit, r.incomeLimitCouple, r, f, false) : "unknown" });
   }
-  if (r.assetLimit != null) {
-    let res: Tri = "unknown";
-    if (f.savings) { const [lo, hi] = SAVINGS_RANGE[f.savings]; if (hi <= r.assetLimit) res = "pass"; else if (lo >= r.assetLimit && f.household === "alone") res = "fail"; }
-    out.push({ rule: "savings", result: res });
+  if (r.assetLimit != null || r.assetLimitCouple != null) {
+    out.push({ rule: "savings", result: f.savings ? within(SAVINGS_RANGE[f.savings], r.assetLimit, r.assetLimitCouple, r, f, true) : "unknown" });
   }
+  // A whole-home program is only "likely" once we know the home is just them
+  // (or them and a spouse); Ohio's SNAP holds only an age rule and read
+  // likely for a parent living with her daughter's family.
+  if (r.countsHousehold) out.push({ rule: "household", result: f.household === "alone" || f.household === "couple" ? "pass" : "unknown" });
+  if (r.unreadMeansTest) out.push({ rule: "income", result: "unknown" });
+  if (r.notForMedicaid) out.push({ rule: "notMedicaid", result: f.medicaid === "has" ? "fail" : "unknown" });
   if (r.medicaidGated) out.push({ rule: "medicaid", result: f.medicaid === "has" ? "pass" : f.medicaid === "no" ? "fail" : "unknown" });
   if (r.veteranOnly) out.push({ rule: "veteran", result: f.veteran === "yes" ? "pass" : f.veteran === "no" ? "fail" : "unknown" });
   if (r.dailyHelp) {
@@ -236,7 +302,7 @@ export const DEFAULT_PRIORS: AnswerPriors = {
     dailyHelp: { none: 25, some: 40, lots: 35 },
     savings: { under2000: 40, under10000: 30, over10000: 30 },
     disability: { yes: 30, no: 70 },
-    household: { alone: 60, couple: 40 },
+    household: { alone: 45, couple: 35, family: 20 },
   },
   notSure: { age: 0.02, income: 0.15, medicaid: 0.18, veteran: 0.02, dailyHelp: 0.05, savings: 0.3, disability: 0.1, household: 0.01 },
 };

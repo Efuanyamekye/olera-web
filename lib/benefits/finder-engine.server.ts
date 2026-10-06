@@ -21,18 +21,19 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { rulesOf, explain, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine } from "@/lib/benefits/conversation";
 import type { WaiverProgram } from "@/data/waiver-library";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
 import { ageMeetsMin } from "@/lib/benefits/age";
 import { pickCallContact, stripParen } from "@/lib/benefits/call-script";
 import { findLocalAAA } from "@/lib/benefits/local-aaa";
+import { zipToCounty } from "@/lib/benefits/zip-lookup";
 import { programCategory } from "@/lib/benefits/program-category";
 import {
   loadSbfEligibility,
   rankProgramsForFamily,
   incomeLimitFromTable,
   draftMinAge,
-  medicaidGatedName,
+  requiresMedicaid,
   isWaiverPath,
   isMedicaidDoor,
 } from "@/lib/benefits/eligibility.server";
@@ -63,7 +64,7 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
   health: ["healthcare"],
 };
 
-const PAYS_FOR_CARE = /waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
+const PAYS_FOR_CARE = /aid (and|&) attendance|home help|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -207,7 +208,7 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
     else income = "unknown";
   }
 
-  const gated = medicaidGatedName(p.name);
+  const gated = requiresMedicaid(p.name, p.structuredEligibility?.summary);
   const hasMedicaid = a.medicaid === "alreadyHas";
   const also = otherRequirement(p);
   const withAlso = (text: string) => (also ? `${text} ${also}` : text);
@@ -297,14 +298,24 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     dailyHelp,
     savings,
     disability: null,
-    household: a.household === "1" ? "alone" : a.household ? "couple" : null,
+    household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
   };
+}
+
+/** A program the person must already have Medicaid for (Michigan's Home
+ *  Help, state-plan personal care). A waiver is itself a way into Medicaid. */
+function needsMedicaidFirst(p: WaiverProgram): boolean {
+  return !isWaiverPath(p.name) && requiresMedicaid(p.name, p.structuredEligibility?.summary);
 }
 
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   const helping = isHelpingSomeone(a);
+  // "PACE (Pharmaceutical Assistance ...)" is Pennsylvania's drug program,
+  // not the all-inclusive care program; it led every Pennsylvania plan
+  // (answer key, 6 Oct 2026).
+  const drugProgram = (s: Screened) => /pharmac/i.test(s.raw.name);
   const wants = (re: RegExp | null, category?: BenefitCategory[]) => (s: Screened) =>
-    (re ? re.test(s.raw.name) || re.test(s.raw.shortName || "") : true) && (!category || category.includes(s.category));
+    (re ? (re.test(s.raw.name) || re.test(s.raw.shortName || "")) && !(re === PAYS_FOR_CARE && drugProgram(s)) : true) && (!category || category.includes(s.category));
 
   const preferences: ((s: Screened) => boolean)[] = [];
   if (helping && a.caregiverNeeds.some((n) => n === "break" || n === "learn" || n === "talk")) {
@@ -361,11 +372,18 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
 
   const [sbfRows, aaa] = await Promise.all([
     loadSbfEligibility(db, stateCode),
-    findLocalAAA(db, stateCode, a.zip.length === 5 ? a.zip : null, a.county),
+    // The county routes the family to their own agency. Callers that skip
+    // the lookup (the conversation did until 6 Oct 2026) would otherwise get
+    // the state's first agency alphabetically.
+    (async () => {
+      const zip = a.zip.length === 5 ? a.zip : null;
+      return findLocalAAA(db, stateCode, zip, a.county || (zip ? await zipToCounty(zip) : null));
+    })(),
   ]);
 
-  // Same program set as the /m plan: canonical ids, benefits only.
-  const programs = getCanonicalProgramIds(stateSlug)
+  // The state's canonical programs plus the federal ones it doesn't hold
+  // (Extra Help, SSI, VA pension); benefits only.
+  const programs = getPlanProgramIds(stateSlug)
     .map((id) => getEnrichedProgram(stateSlug, id))
     .filter((p): p is WaiverProgram => !!p && p.programType === "benefit");
 
@@ -405,6 +423,13 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
     const contact = pickCallContact(item.contacts);
     let { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
     const c = convOf(item);
+    // Someone living with family: a program that counts the whole home's
+    // income can't be "likely" from their own (answer key, 6 Oct 2026:
+    // SNAP read likely for a parent in her daughter's household).
+    if (c && c.rules.countsHousehold && conv?.household === "family" && tier === "likely") {
+      tier = "check";
+      reason = "It counts the income of everyone in the home, so it depends on the whole household.";
+    }
     if (c && c.e.status === "likely" && tier === "check") {
       tier = "likely";
       reason = whyLine("likely", c.e.failed, c.e.met) ?? reason;
@@ -432,6 +457,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       hours: contact?.hours || null,
       docs: (item.documentsNeeded || []).slice(0, 4),
       url: `/benefits/${stateSlug}/${item.id}`,
+      needsMedicaid: a.medicaid !== "alreadyHas" && needsMedicaidFirst(item),
     };
     return { program, category, score, raw: item, fitsButAssess };
   });
@@ -465,10 +491,14 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
     }),
   ];
 
-  const agency: FinderAgency | null = aaa?.agency?.phone
+  // A bare state fallback names some other region's agency (Philadelphia got
+  // Berks County, answer key 6 Oct 2026; about 3 in 10 ZIP areas have no
+  // county match, and six states, IL among them, have no agency on file).
+  // The national Eldercare Locator connects them to the right one.
+  const agency: FinderAgency = aaa?.agency?.phone && aaa.matchedBy !== "state"
     ? { name: aaa.agency.name, phone: aaa.agency.phone, website: aaa.agency.website ?? null }
-    : null;
-  const firstStep = first?.program ?? (agency ? agencyStep(agency, a) : screened[0]?.program ?? null);
+    : { name: "Eldercare Locator", phone: "1-800-677-1116", website: "https://eldercare.acl.gov" };
+  const firstStep = first?.program ?? agencyStep(agency, a);
 
   return {
     stateCode,

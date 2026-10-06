@@ -1,0 +1,404 @@
+{
+  "state": "NY",
+  "addedAt": "2026-10-06T05:46:36.155Z",
+  "dive": {
+    "state": "NY",
+    "stateName": "New York",
+    "diveAt": "2026-10-06T05:43:13.164Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "single": {
+              "fee_plan_max": 20000,
+              "deductible_plan_min": 20001,
+              "deductible_plan_max": 75000
+            },
+            "married_living_together": {
+              "fee_plan_max": 26000,
+              "deductible_plan_min": 26001,
+              "deductible_plan_max": 100000
+            },
+            "notes": [
+              "Must be a New York State resident.",
+              "Must be enrolled in or eligible to enroll in a Medicare Part D plan.",
+              "The program page says EPIC has two plans based on income: Fee Plan and Deductible Plan.",
+              "Eligibility is based on annual income; EPIC FAQs indicate adjusted gross income is used, including Social Security income less Medicare Part B premiums."
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a New York State resident.",
+            "Must be age 65 or older.",
+            "Must be enrolled in or eligible for Medicare Part D.",
+            "Cannot be receiving full Medicaid benefits."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": [
+            "EPIC helps pay Medicare Part D drug plan premiums for members with income up to $23,000 if single or $29,000 if married.",
+            "Fee Plan members pay reduced EPIC fees for drug coverage; the program does not provide unlimited free prescriptions.",
+            "Deductible Plan members pay a yearly deductible before EPIC help begins, and the deductible amount depends on the member’s income and drug costs.",
+            "EPIC is a wraparound drug benefit that works with Medicare Part D."
+          ],
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application: https://www.health.ny.gov/health_care/epic/application_contact.htm",
+            "Mail application to EPIC, P.O. Box 15018, Albany, NY 12212-5018",
+            "Fax application to (518) 452-3576",
+            "Download and print the paper application from the New York State EPIC forms page"
+          ],
+          "processing_time": null,
+          "waitlist": null,
+          "forms": [
+            "EPIC Application (English)",
+            "EPIC Fill-in Application (English)",
+            "DOH-3409",
+            "DOH-5080"
+          ],
+          "documents": [
+            "Completed application signed by the applicant",
+            "If married and living together, both spouses must sign and report combined income",
+            "Income information for the previous calendar year",
+            "Social Security income information if applicable",
+            "Medicare Part D plan information if already enrolled"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available only to eligible New York State residents; not available to people receiving full Medicaid benefits.",
+          "regional_variations": "No county-by-county variation appears in the program rules; application and benefits are statewide. The main variation is based on income tier and household status, not geography.",
+          "offices_or_providers": []
+        },
+        "official_source": "https://www.health.ny.gov/health_care/epic/",
+        "gotchas": [
+          "EPIC is not for people on full Medicaid; that excludes many applicants who assume all low-income drug programs stack together.",
+          "You must already be enrolled in, or at least eligible for, Medicare Part D.",
+          "Income is based on annual income, and the FAQ says adjusted gross income is used, including Social Security income minus Medicare Part B premiums.",
+          "Married couples living together must count combined income, even if only one spouse is applying.",
+          "The benefit structure is not a cash grant; it is a state pharmacy assistance program that coordinates with Medicare Part D.",
+          "People often miss that EPIC has two income-based plans, and the higher-income Deductible Plan still requires the member to pay a deductible before help starts."
+        ],
+        "data_shape_notes": "Income-based statewide pharmacy assistance program with two tiers (Fee Plan and Deductible Plan), no asset test shown in the official materials surfaced, and mandatory coordination with Medicare Part D.",
+        "_raw": "{\n  \"name\": \"Elderly Pharmaceutical Insurance Coverage (EPIC)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"single\": {\n        \"fee_plan_max\": 20000,\n        \"deductible_plan_min\": 20001,\n        \"deductible_plan_max\": 75000\n      },\n      \"married_living_together\": {\n        \"fee_plan_max\": 26000,\n        \"deductible_plan_min\": 26001,\n        \"deductible_plan_max\": 100000\n      },\n      \"notes\": [\n        \"Must be a New York State resident.\",\n        \"Must be enrolled in or eligible to enroll in a Medicare Part D plan.\",\n        \"The program page says EPIC has two plans based on income: Fee Plan and Deductible Plan.\",\n        \"Eligibility is based on annual income; EPIC FAQs indicate adjusted gross income is used, including Social Security income less Medicare Part B premiums.\"\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a New York State resident.\",\n      \"Must be age 65 or older.\",\n      \"Must be enrolled in or eligible for Medicare Part D.\",\n      \"Cannot be receiving full Medicaid benefits.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": [\n      \"EPIC helps pay Medicare Part D drug plan premiums for members with income up to $23,000 if single or $29,000 if married.\",\n      \"Fee Plan members pay reduced EPIC fees for drug coverage; the program does not provide unlimited free prescriptions.\",\n      \"Deductible Plan members pay a yearly deductible before EPIC help begins, and the deductible amount depends on the member’s income and drug costs.\",\n      \"EPIC is a wraparound drug benefit that works with Medicare Part D.\"\n    ],\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application: https://www.health.ny.gov/health_care/epic/application_contact.htm\",\n      \"Mail application to EPIC, P.O. Box 15018, Albany, NY 12212-5018\",\n      \"Fax application to (518) 452-3576\",\n      \"Download and print the paper application from the New York State EPIC forms page\"\n    ],\n    \"processing_time\": null,\n    \"waitlist\": null,\n    \"forms\": [\n      \"EPIC Application (English)\",\n      \"EPIC Fill-in Application (English)\",\n      \"DOH-3409\",\n      \"DOH-5080\"\n    ],\n    \"documents\": [\n      \"Completed application signed by the applicant\",\n      \"If married and living together, both spouses must sign and report combined income\",\n      \"Income information for the previous calendar year\",\n      \"Social Security income information if applicable\",\n      \"Medicare Part D plan information if already enrolled\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available only to eligible New York State residents; not available to people receiving full Medicaid benefits.\",\n    \"regional_variations\": \"No county-by-county variation appears in the program rules; application and benefits are statewide. The main variation is based on income tier and household status, not geography.\",\n    \"offices_or_providers\": []\n  },\n  \"official_source\": \"https://www.health.ny.gov/health_care/epic/\",\n  \"gotchas\": [\n    \"EPIC is not for people on full Medicaid; that excludes many applicants who assume all low-income drug programs stack together.\",\n    \"You must already be enrolled in, or at least eligible for, Medicare Part D.\",\n    \"Income is based on annual income, and the FAQ says adjusted gross income is used, including Social Security income minus Medicare Part B premiums.\",\n    \"Married couples living together must count combined income, even if only one spouse is applying.\",\n    \"The benefit structure is not a cash grant; it is a state pharmacy assistance program that coordinates with Medicare Part D.\",\n    \"People often miss that EPIC has two income-based plans, and the higher-income Deductible Plan still requires the member to pay a deductible before help starts.\"\n  ],\n  \"data_shape_notes\": \"Income-based statewide pharmacy assistance program with two tiers (Fee Plan and Deductible Plan), no asset test shown in the official materials surfaced, and mandatory coordination with Medicare Part D.\"\n}"
+      },
+      {
+        "name": "Property Tax Relief for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "statewide_programs": [
+              {
+                "program": "Enhanced STAR (New York State)",
+                "limit": "$110,750 or less for the 2026-2027 school year; $113,550 or less for the 2027-2028 school year",
+                "how_income_is_counted": "For STAR, income means federal adjusted gross income minus the taxable amount of total IRA distributions.",
+                "household_rule": "The income limit applies to the combined incomes of the owners and their spouses who primarily reside on the property beginning with the 2026 benefit year."
+              }
+            ],
+            "new_york_city_programs": [
+              {
+                "program": "SCHE (Senior Citizen Homeowners' Exemption)",
+                "limit": "$58,399 or less for the last calendar year"
+              },
+              {
+                "program": "NYC Enhanced STAR",
+                "limit": "$98,700 or less",
+                "note": "Available to owners 65 and older; NYC may administer some STAR relief differently than the rest of the state."
+              }
+            ],
+            "senior_citizens_exemption_local_option": {
+              "program": "Senior citizens exemption (outside NYC)",
+              "limit": "Each county, city, town, village, or school district may set the maximum income limit anywhere from $3,000 to $50,000 for the 50% exemption.",
+              "table": [
+                {
+                  "income_limit_option": "$3,000 to $50,000",
+                  "benefit": "Up to 50% exemption"
+                },
+                {
+                  "income_limit_option": "If locality adopts the $50,000 limit and allows increased exemptions",
+                  "benefit": "50% if income is less than $50,000 but more than $49,000; 55% if less than $49,000 but more than $48,000; 60% if less than $48,000 but more than $47,000; 65% if less than $47,000"
+                }
+              ]
+            }
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Property must be the applicant's primary residence for SCHE and STAR-based relief.",
+            "For Enhanced STAR, one owner must be 65 or older by December 31 of the year of exemption; for jointly owned property, only one spouse or sibling must meet the age rule.",
+            "For SCHE in NYC, the property must be owned for at least 12 consecutive months before filing unless the exemption was received on a previously owned residence.",
+            "For STAR, the benefit applies only to school district taxes, except in New York City, Buffalo, Rochester, Yonkers, and Syracuse where local administration differs."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": [
+            "Enhanced STAR: increased property tax relief on the primary residence; the public-facing amount is not fixed statewide because it depends on the local school tax bill and whether it is delivered as a credit or exemption.",
+            "STAR credits for most eligible seniors have been publicly described as checks between $700 and $1,500.",
+            "SCHE in NYC: reduces New York City real property tax by 5% to 50%."
+          ],
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.tax.ny.gov (STAR and statewide property tax relief information and registration)",
+            "Phone (NY State STAR): (518) 457-2036",
+            "Online (NYC SCHE/STAR): NYC Department of Finance property tax benefits pages and NYC 311 SCHE page",
+            "In person / mail: NYC Department of Finance for SCHE-related filings"
+          ],
+          "processing_time": "Not stated as a single statewide timeline in the source material; STAR and SCHE timing can vary by program and locality. NYC SCHE is handled through the Department of Finance, while STAR is administered through New York State and may be received as a credit or exemption.",
+          "waitlist": null,
+          "forms": [
+            "RP-425-MBE (Enhanced STAR exemption application)",
+            "SCHE application forms used by the NYC Department of Finance"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of ownership",
+            "Proof that the home is the primary residence",
+            "Income documentation for the last calendar year",
+            "For STAR/Enhanced STAR: information for all owners and any spouse who primarily resides on the property",
+            "For NYC SCHE: documents showing ownership for at least 12 consecutive months if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "The senior citizens exemption is a local-option exemption outside NYC, so income rules and benefits can vary by county, city, town, village, or school district. STAR is statewide, but it applies only to school district taxes except in certain cities.",
+          "regional_variations": "Yes. Outside NYC, the senior citizens exemption depends on whether the local government adopts it and what income cap it sets. In NYC, SCHE is a city program, and STAR can be administered as a credit or exemption depending on the case.",
+          "offices_or_providers": [
+            "New York State Department of Taxation and Finance",
+            "New York City Department of Finance",
+            "NYC 311"
+          ]
+        },
+        "official_source": "https://www.tax.ny.gov/pit/property/exemption/seniorexempt.htm",
+        "gotchas": [
+          "There are multiple senior property tax relief programs in New York, and they are not interchangeable.",
+          "Enhanced STAR has an age and income test, but the exact benefit is not a fixed dollar amount statewide.",
+          "STAR relief generally applies only to school taxes, not county, town, or city taxes, except in the listed cities.",
+          "For 2026 and later, the Enhanced STAR income calculation changed to focus on owners and spouses who primarily reside on the property.",
+          "NYC SCHE has its own income limit and ownership rule, which is different from STAR."
+        ],
+        "data_shape_notes": "This is not one uniform benefit. It is a family of senior property-tax programs with different rules by program, and one of them is local-option rather than truly statewide.",
+        "_raw": "{\n  \"name\": \"Property Tax Relief for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"statewide_programs\": [\n        {\n          \"program\": \"Enhanced STAR (New York State)\",\n          \"limit\": \"$110,750 or less for the 2026-2027 school year; $113,550 or less for the 2027-2028 school year\",\n          \"how_income_is_counted\": \"For STAR, income means federal adjusted gross income minus the taxable amount of total IRA distributions.\",\n          \"household_rule\": \"The income limit applies to the combined incomes of the owners and their spouses who primarily reside on the property beginning with the 2026 benefit year.\"\n        }\n      ],\n      \"new_york_city_programs\": [\n        {\n          \"program\": \"SCHE (Senior Citizen Homeowners' Exemption)\",\n          \"limit\": \"$58,399 or less for the last calendar year\"\n        },\n        {\n          \"program\": \"NYC Enhanced STAR\",\n          \"limit\": \"$98,700 or less\",\n          \"note\": \"Available to owners 65 and older; NYC may administer some STAR relief differently than the rest of the state.\"\n        }\n      ],\n      \"senior_citizens_exemption_local_option\": {\n        \"program\": \"Senior citizens exemption (outside NYC)\",\n        \"limit\": \"Each county, city, town, village, or school district may set the maximum income limit anywhere from $3,000 to $50,000 for the 50% exemption.\",\n        \"table\": [\n          {\n            \"income_limit_option\": \"$3,000 to $50,000\",\n            \"benefit\": \"Up to 50% exemption\"\n          },\n          {\n            \"income_limit_option\": \"If locality adopts the $50,000 limit and allows increased exemptions\",\n            \"benefit\": \"50% if income is less than $50,000 but more than $49,000; 55% if less than $49,000 but more than $48,000; 60% if less than $48,000 but more than $47,000; 65% if less than $47,000\"\n          }\n        ]\n      }\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Property must be the applicant's primary residence for SCHE and STAR-based relief.\",\n      \"For Enhanced STAR, one owner must be 65 or older by December 31 of the year of exemption; for jointly owned property, only one spouse or sibling must meet the age rule.\",\n      \"For SCHE in NYC, the property must be owned for at least 12 consecutive months before filing unless the exemption was received on a previously owned residence.\",\n      \"For STAR, the benefit applies only to school district taxes, except in New York City, Buffalo, Rochester, Yonkers, and Syracuse where local administration differs.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": [\n      \"Enhanced STAR: increased property tax relief on the primary residence; the public-facing amount is not fixed statewide because it depends on the local school tax bill and whether it is delivered as a credit or exemption.\",\n      \"STAR credits for most eligible seniors have been publicly described as checks between $700 and $1,500.\",\n      \"SCHE in NYC: reduces New York City real property tax by 5% to 50%.\"\n    ],\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.tax.ny.gov (STAR and statewide property tax relief information and registration)\",\n      \"Phone (NY State STAR): (518) 457-2036\",\n      \"Online (NYC SCHE/STAR): NYC Department of Finance property tax benefits pages and NYC 311 SCHE page\",\n      \"In person / mail: NYC Department of Finance for SCHE-related filings\"\n    ],\n    \"processing_time\": \"Not stated as a single statewide timeline in the source material; STAR and SCHE timing can vary by program and locality. NYC SCHE is handled through the Department of Finance, while STAR is administered through New York State and may be received as a credit or exemption.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"RP-425-MBE (Enhanced STAR exemption application)\",\n      \"SCHE application forms used by the NYC Department of Finance\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of ownership\",\n      \"Proof that the home is the primary residence\",\n      \"Income documentation for the last calendar year\",\n      \"For STAR/Enhanced STAR: information for all owners and any spouse who primarily resides on the property\",\n      \"For NYC SCHE: documents showing ownership for at least 12 consecutive months if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"The senior citizens exemption is a local-option exemption outside NYC, so income rules and benefits can vary by county, city, town, village, or school district. STAR is statewide, but it applies only to school district taxes except in certain cities.\",\n    \"regional_variations\": \"Yes. Outside NYC, the senior citizens exemption depends on whether the local government adopts it and what income cap it sets. In NYC, SCHE is a city program, and STAR can be administered as a credit or exemption depending on the case.\",\n    \"offices_or_providers\": [\n      \"New York State Department of Taxation and Finance\",\n      \"New York City Department of Finance\",\n      \"NYC 311\"\n    ]\n  },\n  \"official_source\": \"https://www.tax.ny.gov/pit/property/exemption/seniorexempt.htm\",\n  \"gotchas\": [\n    \"There are multiple senior property tax relief programs in New York, and they are not interchangeable.\",\n    \"Enhanced STAR has an age and income test, but the exact benefit is not a fixed dollar amount statewide.\",\n    \"STAR relief generally applies only to school taxes, not county, town, or city taxes, except in the listed cities.\",\n    \"For 2026 and later, the Enhanced STAR income calculation changed to focus on owners and spouses who primarily reside on the property.\",\n    \"NYC SCHE has its own income limit and ownership rule, which is different from STAR.\"\n  ],\n  \"data_shape_notes\": \"This is not one uniform benefit. It is a family of senior property-tax programs with different rules by program, and one of them is local-option rather than truly statewide.\"\n}"
+      },
+      {
+        "name": "Consumer Directed Personal Assistance Program (CDPAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No separate CDPAP income limit was identified. CDPAP is a New York State Medicaid service, so the person must first qualify for NYS Medicaid; income rules are those of Medicaid, not CDPAP itself[1][11].",
+          "asset_limits": "No separate CDPAP asset limit was identified. Any asset limits come from Medicaid eligibility rules, not CDPAP-specific rules[1][11].",
+          "other_requirements": [
+            "Must be a New York State Medicaid member[1][5].",
+            "Must have a stable medical condition[1][6].",
+            "Must have a determined need for home-care services; for adults age 18 and over, a UAS-NY Community Health Assessment is required[1].",
+            "Must be capable of self-directing care or have a designated representative who can make decisions on the person’s behalf[1][6].",
+            "Must need help with daily activities and/or skilled nursing tasks[1][6].",
+            "For adults, CDPAP is tied to the Medicaid managed care or assessment pathway used by the state; the person must be authorized for home care and then approved for CDPAP[2][6]."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "CDPAP lets the member choose, recruit, hire, train, supervise, and fire their own personal assistant for in-home care[1][5]. Covered help can include personal care services, home health aide services, and skilled nursing tasks, with the number of hours or frequency set by assessment and plan of care[2][6]. No fixed dollar benefit applies to the member; payment is to the assistant through the program’s fiscal intermediary structure[10].",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Online via New York State Medicaid / managed care or NY State of Health pathways for Medicaid enrollment[3][11]",
+            "By phone through the Medicaid Helpline at (800) 541-2831[4]",
+            "Through a Managed Care Organization (MCO)[4]",
+            "Through the local Department of Social Services / local district office[4]",
+            "Through the statewide fiscal intermediary registration process once approved, using PPL’s New York CDPAP program materials[10]"
+          ],
+          "processing_time": "No single statewide processing time was identified. Authorization depends on Medicaid eligibility, medical order/request, nursing assessment, social assessment, and plan-of-care approval[2][6].",
+          "waitlist": null,
+          "forms": [
+            "LDSS-3139 (nursing assessment form)[2]",
+            "DMS-1 or another DOH-approved assessment form[2]",
+            "Physician’s Order / Medical Request form for services[2][6]"
+          ],
+          "documents": [
+            "Medicaid information and proof of Medicaid eligibility[1][5]",
+            "Physician’s order or medical request for services[2][6]",
+            "Information needed for the nursing assessment and community health assessment[1][2]",
+            "Information for a designated representative, if the member cannot self-direct[1][6]",
+            "Personal identification and contact information for the consumer and chosen assistant during registration with the fiscal intermediary[10]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New York, but the exact enrollment/administration pathway can differ by Medicaid managed care plan, local social services district, and fiscal intermediary arrangements[1][2][10].",
+          "regional_variations": "Rates can vary by region; DOH publishes CDPAP rates, including separate NYC rates[7]. Some county-level consumer-directed agencies also serve specific county groupings, but CDPAP itself is a statewide Medicaid benefit[1][9].",
+          "offices_or_providers": [
+            "New York State Department of Health Medicaid resources[1][11]",
+            "Local Department of Social Services / social services district[2][4]",
+            "Managed Care Organization (MCO)[4][6]",
+            "PPL as the statewide fiscal intermediary[10]"
+          ]
+        },
+        "official_source": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+        "gotchas": [
+          "CDPAP is not a cash benefit; it is a Medicaid home-care service model that pays the assistant, not the family member or consumer directly[1][10].",
+          "A person must first qualify for Medicaid and then qualify for home-care services before CDPAP authorization is possible[1][2].",
+          "Self-direction is central to the program; if the person cannot direct care, a designated representative must be able and willing to do so[1][6].",
+          "Adults 18 and over need a UAS-NY Community Health Assessment as part of eligibility determination[1].",
+          "The number of hours is not fixed statewide; it is based on assessment and the plan of care[2][6].",
+          "The fiscal intermediary registration step matters; consumers and personal assistants must register with PPL for New York CDPAP[10].",
+          "Rates and administrative details can vary by region, especially in NYC versus other parts of the state[7]."
+        ],
+        "data_shape_notes": "This program has no separate CDPAP income or asset schedule; eligibility is Medicaid-based, and benefits are service-hours determined by assessment rather than a fixed dollar amount[1][2][11].",
+        "_raw": "{\n  \"name\": \"Consumer Directed Personal Assistance Program (CDPAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No separate CDPAP income limit was identified. CDPAP is a New York State Medicaid service, so the person must first qualify for NYS Medicaid; income rules are those of Medicaid, not CDPAP itself[1][11].\",\n    \"asset_limits\": \"No separate CDPAP asset limit was identified. Any asset limits come from Medicaid eligibility rules, not CDPAP-specific rules[1][11].\",\n    \"other_requirements\": [\n      \"Must be a New York State Medicaid member[1][5].\",\n      \"Must have a stable medical condition[1][6].\",\n      \"Must have a determined need for home-care services; for adults age 18 and over, a UAS-NY Community Health Assessment is required[1].\",\n      \"Must be capable of self-directing care or have a designated representative who can make decisions on the person’s behalf[1][6].\",\n      \"Must need help with daily activities and/or skilled nursing tasks[1][6].\",\n      \"For adults, CDPAP is tied to the Medicaid managed care or assessment pathway used by the state; the person must be authorized for home care and then approved for CDPAP[2][6].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"CDPAP lets the member choose, recruit, hire, train, supervise, and fire their own personal assistant for in-home care[1][5]. Covered help can include personal care services, home health aide services, and skilled nursing tasks, with the number of hours or frequency set by assessment and plan of care[2][6]. No fixed dollar benefit applies to the member; payment is to the assistant through the program’s fiscal intermediary structure[10].\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online via New York State Medicaid / managed care or NY State of Health pathways for Medicaid enrollment[3][11]\",\n      \"By phone through the Medicaid Helpline at (800) 541-2831[4]\",\n      \"Through a Managed Care Organization (MCO)[4]\",\n      \"Through the local Department of Social Services / local district office[4]\",\n      \"Through the statewide fiscal intermediary registration process once approved, using PPL’s New York CDPAP program materials[10]\"\n    ],\n    \"processing_time\": \"No single statewide processing time was identified. Authorization depends on Medicaid eligibility, medical order/request, nursing assessment, social assessment, and plan-of-care approval[2][6].\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"LDSS-3139 (nursing assessment form)[2]\",\n      \"DMS-1 or another DOH-approved assessment form[2]\",\n      \"Physician’s Order / Medical Request form for services[2][6]\"\n    ],\n    \"documents\": [\n      \"Medicaid information and proof of Medicaid eligibility[1][5]\",\n      \"Physician’s order or medical request for services[2][6]\",\n      \"Information needed for the nursing assessment and community health assessment[1][2]\",\n      \"Information for a designated representative, if the member cannot self-direct[1][6]\",\n      \"Personal identification and contact information for the consumer and chosen assistant during registration with the fiscal intermediary[10]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New York, but the exact enrollment/administration pathway can differ by Medicaid managed care plan, local social services district, and fiscal intermediary arrangements[1][2][10].\",\n    \"regional_variations\": \"Rates can vary by region; DOH publishes CDPAP rates, including separate NYC rates[7]. Some county-level consumer-directed agencies also serve specific county groupings, but CDPAP itself is a statewide Medicaid benefit[1][9].\",\n    \"offices_or_providers\": [\n      \"New York State Department of Health Medicaid resources[1][11]\",\n      \"Local Department of Social Services / social services district[2][4]\",\n      \"Managed Care Organization (MCO)[4][6]\",\n      \"PPL as the statewide fiscal intermediary[10]\"\n    ]\n  },\n  \"official_source\": \"https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/\",\n  \"gotchas\": [\n    \"CDPAP is not a cash benefit; it is a Medicaid home-care service model that pays the assistant, not the family member or consumer directly[1][10].\",\n    \"A person must first qualify for Medicaid and then qualify for home-care services before CDPAP authorization is possible[1][2].\",\n    \"Self-direction is central to the program; if the person cannot direct care, a designated representative must be able and willing to do so[1][6].\",\n    \"Adults 18 and over need a UAS-NY Community Health Assessment as part of eligibility determination[1].\",\n    \"The number of hours is not fixed statewide; it is based on assessment and the plan of care[2][6].\",\n    \"The fiscal intermediary registration step matters; consumers and personal assistants must register with PPL for New York CDPAP[10].\",\n    \"Rates and administrative details can vary by region, especially in NYC versus other parts of the state[7].\"\n  ],\n  \"data_shape_notes\": \"This program has no separate CDPAP income or asset schedule; eligibility is Medicaid-based, and benefits are service-hours determined by assessment rather than a fixed dollar amount[1][2][11].\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NY",
+    "stateName": "New York",
+    "classifiedAt": "2026-10-06T05:43:13.171Z",
+    "total": 3,
+    "typeSummary": {
+      "resource": 1,
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "simple": 1,
+      "medium": 1,
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Property Tax Relief for Seniors",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "New York State Department of Taxation and Finance",
+              "type": "service-area"
+            },
+            {
+              "name": "New York City Department of Finance",
+              "type": "service-area"
+            },
+            {
+              "name": "NYC 311",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Consumer Directed Personal Assistance Program (CDPAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "New York State Department of Health Medicaid resources[1][11]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Department of Social Services / social services district[2][4]",
+              "type": "service-area"
+            },
+            {
+              "name": "Managed Care Organization (MCO)[4][6]",
+              "type": "service-area"
+            },
+            {
+              "name": "PPL as the statewide fiscal intermediary[10]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NY",
+      "id": "ny-epic-prescription-assistance",
+      "name": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+      "legacyId": "elderly-pharmaceutical-insurance-coverage-epic",
+      "programType": "resource"
+    },
+    {
+      "state": "NY",
+      "id": "ny-property-tax-relief-seniors",
+      "name": "Property Tax Relief for Seniors",
+      "legacyId": "property-tax-relief-for-seniors",
+      "programType": "benefit"
+    },
+    {
+      "state": "NY",
+      "id": "ny-cdpap-consumer-directed-personal-assistance",
+      "name": "Consumer Directed Personal Assistance Program (CDPAP)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

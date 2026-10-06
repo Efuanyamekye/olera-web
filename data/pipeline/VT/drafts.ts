@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.291Z
+ * Last updated: 2026-10-06T06:44:48.407Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2790,6 +2790,810 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "vt-3squares-snap",
+      "name": "3Squares Vermont (SNAP)",
+      "shortName": "3Squares Vermont",
+      "tagline": "If your parent is on a fixed income in Vermont, they may qualify for monthly grocery benefits loaded onto an EBT card — up to hundreds of dollars depending on their household size and expenses.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Vermont Department for Children and Families district offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Vermont Economic Services Division district offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "3Squares Vermont is Vermont's name for the federal SNAP program. It puts monthly grocery money on an EBT card (works like a debit card at most grocery stores) that your parent can use to buy food. The benefit amount is not fixed: it depends on household size, monthly income, and certain deductions your parent may qualify for.\n\nIf your parent is 60 or older, the income rules work differently than for the general population. Most applicants must have gross monthly income at or below 185% of the Federal Poverty Level. But if your parent is 60+ or has a disability and their income is over that limit, they can still qualify if their countable assets are under $4,500. Common deductions like rent, heating costs, and medical expenses can also reduce their countable income, which often raises the benefit amount.\n\nMany families miss this program because they assume the income limits are too strict or that only people in poverty qualify. Deductions frequently close that gap. A parent paying $900 a month in rent and $200 in out-of-pocket medical costs may qualify even if their Social Security check looks too high at first glance.",
+      "savingsRange": "Up to $1,074/month for a household of 8 (FY2026 maximum Thrifty Food Plan benefit); the actual amount for most single older adults is lower and based on net income after deductions.",
+      "savingsSource": "USDA FNS publishes the Thrifty Food Plan maximum allotments by household size each fiscal year. The figure cited here reflects the FY2026 maximum for an 8-person household. Individual benefit amounts depend on net income and are calculated as: maximum allotment minus 30% of net monthly income.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Live in Vermont",
+          "Gross monthly income at or below 185% FPL (e.g., $2,413/month for a single person)",
+          "Households with someone 60+ or disabled: asset test applies if income is over the gross limit (countable assets under $4,500)",
+          "Certain deductions (shelter, medical, dependent care) can lower countable income and raise your benefit",
+          "Categorically eligible if already receiving Reach Up, SSI, or Vermont EITC"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2413
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3262
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4109
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4958
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5805
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6653
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 7501
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 8349
+          }
+        ],
+        "assetLimits": {
+          "individual": 4500,
+          "couple": 4500,
+          "countedAssets": [
+            "Cash and bank balances",
+            "Other assets that can be converted to money"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "Certain retirement accounts"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Vermont and apply as a household for food assistance.",
+          "Work requirements apply to some adults but not to people under 18, over 64, pregnant individuals, people with disabilities, or caregivers of children under 14.",
+          "Households already receiving Reach Up, SSI, or the Vermont Earned Income Tax Credit may be categorically eligible and skip the standard income test."
+        ],
+        "povertyLevelReference": "185% FPL (gross income test); 100% FPL (net income test after deductions)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online through Vermont's myBenefits portal at dcf.vermont.gov; you can also call 1-800-479-6151 to request a paper application by mail.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need proof of identity, proof of Vermont residency, proof of all household income, and shelter costs. If your parent is 60+ or has a disability, also have bank account information ready. If they have out-of-pocket medical expenses, gather those records too: medical deductions can meaningfully raise the benefit amount."
+          },
+          {
+            "step": 2,
+            "title": "Apply online, by phone, or by mail",
+            "description": "Online: go to dcf.vermont.gov/benefits/3SquaresVT and apply through Vermont's myBenefits portal. By phone: call 1-800-479-6151 to request Form 202 or Form 202-3SNP mailed to you. In person: drop off a completed form at a Vermont Department for Children and Families district office."
+          },
+          {
+            "step": 3,
+            "title": "Submit supporting documents",
+            "description": "After completing the application, upload documents through Vermont's document uploader portal, mail them to the address on the form, or bring them to a district office. Submitting everything at once avoids delays."
+          },
+          {
+            "step": 4,
+            "title": "Complete an interview if requested",
+            "description": "Vermont may require a phone or in-person interview as part of the review. The district office will contact your parent or their authorized representative to schedule it."
+          },
+          {
+            "step": 5,
+            "title": "Receive your EBT card",
+            "description": "If approved, benefits are loaded monthly onto an EBT card. Your parent can use it at most grocery stores, farmers markets that accept EBT, and some online retailers. Benefits cannot be used for alcohol, tobacco, vitamins, or hot prepared foods."
+          }
+        ],
+        "processingTime": "Not stated in official Vermont materials. Ask the district office for current processing timelines when you call.",
+        "waitlist": null,
+        "tip": "Medical expenses are a commonly missed deduction. If your parent pays out of pocket for prescriptions, doctor visits, dental care, or health insurance premiums not already covered, those costs can reduce their countable income and increase their monthly benefit. Ask specifically about the medical expense deduction when you apply.",
+        "urls": [
+          {
+            "label": "Apply online through Vermont myBenefits",
+            "url": "https://dcf.vermont.gov/benefits/3SquaresVT"
+          },
+          {
+            "label": "Vermont DCF 3SquaresVT program page",
+            "url": "https://dcf.vermont.gov/benefits/3SquaresVT"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of identity (driver's license, state ID, passport, or other government-issued document)",
+        "Proof of Vermont residency (utility bill, lease agreement, or other document showing current Vermont address)",
+        "Proof of all household income (Social Security award letter, pension statements, pay stubs, or other income documents)",
+        "Proof of household size and living situation (who lives in the home and their relationship to your parent)",
+        "Shelter cost documentation if claiming a shelter deduction (current rent or mortgage statement, utility bills)",
+        "Out-of-pocket medical expense records if your parent is 60+ or has a disability (receipts, billing statements, or insurance explanation-of-benefits showing amounts not reimbursed)",
+        "Bank account information if the household includes someone 60+ or with a disability and an asset test applies (current balances for checking, savings, or other countable accounts)",
+        "Completed and signed Form 202 or Form 202-3SNP (if applying by mail or in person)"
+      ],
+      "contacts": [
+        {
+          "label": "Vermont DCF Benefits Service Center",
+          "phone": "1-800-479-6151",
+          "description": "Call to request a paper application by mail, ask eligibility questions, or get connected to your local district office to start an application.",
+          "hours": "Contact the office directly for current hours; hours vary by district."
+        },
+        {
+          "label": "Vermont 2-1-1",
+          "phone": "2-1-1",
+          "description": "General statewide helpline that can refer you to the nearest Vermont DCF district office or other food assistance resources. Does not process 3SquaresVT applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is 60+ or has a disability and their gross income is above the standard limit ($2,413/month for a single person), do not assume they are ineligible. The asset test ($4,500 in countable resources) may still allow them to qualify.",
+        "Deductions for shelter costs and medical expenses can significantly lower net income and raise the monthly benefit. Families who skip these fields often receive smaller benefits than they are entitled to.",
+        "Your parent can name an authorized representative on the application who can apply, communicate with DCF, and manage the EBT card on their behalf. This is useful if your parent cannot travel to an office or manage paperwork independently.",
+        "If your parent already receives SSI or Reach Up benefits, they may be categorically eligible and can apply without going through the standard income calculation. Mention this when you contact the district office."
+      ],
+      "relatedPrograms": [
+        "Vermont LIHEAP (Low Income Home Energy Assistance Program)",
+        "Vermont Medicaid / Dr. Dynasaur",
+        "Senior Farmers Market Nutrition Program (SFMNP)",
+        "Commodity Supplemental Food Program (CSFP)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The gross income limit is not the final word for older adults",
+          "body": "Most households are disqualified if gross monthly income exceeds 185% of the Federal Poverty Level ($2,413/month for one person in 2026). But if your parent is 60 or older or has a disability, Vermont evaluates them under an asset test instead. As long as countable assets (cash, bank balances, and similar resources) stay under $4,500, they may still qualify even if their income is over the standard threshold. Their home and certain retirement accounts do not count toward that $4,500 limit."
+        },
+        {
+          "type": "prose",
+          "title": "How the benefit amount is calculated",
+          "body": "The monthly benefit is not a flat amount. Vermont uses this formula: take the maximum Thrifty Food Plan allotment for your parent's household size, then subtract 30% of their net monthly income. Net income is gross income minus allowable deductions. Deductions can include shelter costs (rent, mortgage, utilities), out-of-pocket medical expenses for household members who are 60+ or disabled, and dependent care costs. The more deductions your parent qualifies for, the lower their net income and the higher their monthly benefit."
+        },
+        {
+          "type": "prose",
+          "title": "What the EBT card can and cannot buy",
+          "body": "Benefits load monthly onto an EBT card that works like a debit card at most Vermont grocery stores, many farmers markets, and some online retailers. Your parent can buy fruits, vegetables, meat, dairy, bread, cereals, and non-alcoholic beverages. They cannot use EBT for alcohol, tobacco, vitamins or supplements, pet food, or hot prepared foods meant to be eaten immediately."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security income is over $2,413 a month. Can they still qualify?",
+          "answer": "Possibly, yes. If your parent is 60 or older, Vermont applies an asset test rather than automatically disqualifying them for exceeding the gross income limit. If their countable assets (cash and bank balances, for example) are under $4,500, they may still qualify. Their home and certain retirement accounts do not count. Call 1-800-479-6151 and describe the situation before assuming they are ineligible."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot do it themselves?",
+          "answer": "Yes. Vermont allows your parent to designate an authorized representative on the application (Form 202 or Form 202-3SNP). That person can apply, communicate with the Vermont Department for Children and Families, and manage the EBT card. The representative's name and contact information will be recorded on the case."
+        },
+        {
+          "question": "My parent pays $200 a month out of pocket for prescriptions. Does that affect their benefit?",
+          "answer": "It can. For households that include someone 60 or older or a person with a disability, Vermont allows a deduction for out-of-pocket medical expenses. That deduction lowers their net income, and a lower net income means a higher monthly benefit. Bring prescription receipts, billing statements, or insurance explanation-of-benefits forms to document those costs when you apply."
+        },
+        {
+          "question": "My parent already gets SSI. Do they need to apply separately for 3SquaresVT?",
+          "answer": "SSI recipients may be categorically eligible, meaning the standard income calculation does not apply to them. They still need to submit an application. When you contact the district office at 1-800-479-6151, tell them your parent receives SSI so the caseworker can route the application correctly."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they are enrolled?",
+          "answer": "Changes in income, household size, or address must be reported to the Vermont Department for Children and Families. Reporting a decrease in income or an increase in shelter costs can raise the monthly benefit. Unreported increases in income can result in an overpayment that Vermont will recover. The district office number for reporting changes is 1-800-479-6151."
+        },
+        {
+          "question": "Can my parent use the EBT card at a farmers market?",
+          "answer": "Yes, at participating farmers markets that have EBT equipment. Vermont has expanded EBT access to many markets, and some also participate in the Senior Farmers Market Nutrition Program, which provides additional coupons for fresh produce. Not every market participates; ask at the market or check with Vermont DCF."
+        },
+        {
+          "question": "How long does it take to get a decision, and when would my parent receive the first EBT card?",
+          "answer": "Vermont's official materials do not state a specific processing timeline. Standard federal SNAP rules require a decision within 30 days of a complete application, and expedited processing within 7 days for households with very low income or resources. Call 1-800-479-6151 to ask about current district processing times and whether your parent's situation qualifies for expedited review."
+        },
+        {
+          "question": "My parent owns their home. Does that disqualify them?",
+          "answer": "No. The primary home is an exempt asset and does not count toward the $4,500 countable asset limit. Only liquid assets like cash and bank balances are counted in the asset test that applies to households with someone 60 or older or with a disability."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "1-800-479-6151",
+      "sourceUrl": "https://dcf.vermont.gov/benefits/3SquaresVT",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "vt-ssi-supplement-essential-person",
+      "name": "State SSI Supplement (Essential Person Benefit)",
+      "shortName": "Essential Person Benefit",
+      "tagline": "If your parent lives with someone who helps them stay at home and they receive or have applied for SSI or SSDI, Vermont may pay them additional monthly cash on top of their federal benefit.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "DCF Economic Services Division Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Vermont district offices (12 offices statewide)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Vermont's Essential Person Benefit is a state cash supplement for older or disabled adults who rely on someone living in their home to help them stay out of a facility. If your parent is 65 or older, blind, or disabled, receives or has applied for SSI or SSDI, and has a family member or other person living with them full-time to provide daily assistance, they may qualify for additional monthly cash paid directly to them.\n\nThe benefit arrives by direct deposit or on an EBT card each month. It is not a home-care service: Vermont does not send a worker. Instead, the state pays your parent extra cash in recognition that they have a qualifying essential person in the home keeping them independent. The exact monthly dollar amount is not published on the program page; it is set by Vermont's AABD (Aid to the Aged, Blind, and Disabled) rules and confirmed during the application process.\n\nOne important detail: the person helping your parent cannot already be paid by the Vermont Department of Disabilities, Aging and Independent Living (DAIL) to provide personal care services. And they cannot themselves be eligible for SSI, AABD, or the state's Reach Up program. If those conditions are met, your parent can apply using the same Form 202 that covers 3SquaresVT, Reach Up, and Fuel Assistance, which means one application can open the door to multiple benefits at once.",
+      "savingsRange": "",
+      "savingsSource": "The official program page at dcf.vermont.gov does not publish a current dollar amount for the Essential Person payment. Vermont's AABD supplement tables govern the payment level, but no specific figure appeared in available official sources. Call 1-800-479-6151 to ask the current rate before applying.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+, blind, or disabled",
+          "Currently receiving or has applied for SSI or SSDI",
+          "Has a qualifying essential person living in the home full-time",
+          "Meets Vermont income guidelines (confirmed during application)",
+          "Vermont resident"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must receive or have applied for SSI and/or SSDI.",
+          "Must have an essential person living with them full-time who provides daily assistance needed to remain at home.",
+          "The essential person cannot be paid by DAIL to provide personal care services to your parent.",
+          "The essential person cannot themselves be eligible for SSI, AABD, or Vermont's Reach Up program.",
+          "Must meet Vermont income guidelines, which are confirmed through the application and not published as a simple chart on the program page. Call 1-800-479-6151 to discuss your parent's income before applying.",
+          "Must be a Vermont resident."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at myBenefits.vt.gov using Form 202, or call 1-800-479-6151 to request a paper application; processing time is not officially published.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm the essential person qualifies",
+            "description": "Before applying, verify that the person living with your parent meets Vermont's rules. They must live with your parent full-time, provide daily assistance, and cannot be paid by DAIL for personal care services to your parent. They also cannot be eligible for SSI, AABD, or Reach Up themselves. If you are unsure, call the DCF Benefits Service Center at 1-800-479-6151 before you start the application."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents",
+            "description": "Collect your parent's Social Security award letter or SSDI documentation, proof of Vermont residency, proof of age or disability status, and information about household income. Vermont may request additional documents during processing, but these are the core items to have ready."
+          },
+          {
+            "step": 3,
+            "title": "Apply using Form 202",
+            "description": "Form 202 covers the Essential Person Benefit and also opens applications for 3SquaresVT (food benefits), Reach Up, and Fuel Assistance at the same time. Apply online at myBenefits.vt.gov, or call 1-800-479-6151 to request a paper copy by mail. If you prefer in person, bring or mail the completed form to a Vermont district office or to the DCF Application and Document Processing Center at 280 State Drive, Waterbury, VT 05671-1500."
+          },
+          {
+            "step": 4,
+            "title": "Participate in an interview if requested",
+            "description": "Vermont may ask your parent or their representative to complete an interview as part of eligibility determination. This can often be done by phone. The Benefits Service Center at 1-800-479-6151 can tell you whether an interview is required for your parent's application."
+          },
+          {
+            "step": 5,
+            "title": "Receive your determination and set up payment",
+            "description": "If approved, the monthly benefit will be paid by direct deposit or loaded onto an EBT card. Confirm with the caseworker which payment method your parent prefers."
+          }
+        ],
+        "processingTime": "No official processing time is published by Vermont for this program. Call 1-800-479-6151 after submitting to ask about expected timelines.",
+        "waitlist": null,
+        "tip": "Form 202 is a multi-program application. Submitting it can also enroll your parent in 3SquaresVT food benefits, Reach Up, and Fuel Assistance at the same time. Do not file separate applications for each program if your parent may need more than one.",
+        "urls": [
+          {
+            "label": "Apply online at myBenefits Vermont",
+            "url": "https://mybenefits.vt.gov"
+          },
+          {
+            "label": "Official Essential Person program page",
+            "url": "https://dcf.vermont.gov/benefits/essential-person"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSDI determination letter showing current benefit amount",
+        "Proof of Vermont residency (utility bill, lease agreement, or state-issued document with your parent's address)",
+        "Proof of age (birth certificate, passport, or state-issued ID) or proof of disability status",
+        "Proof of income for all household members (Social Security letter, pension statement, or other income source documentation)",
+        "Information about the essential person: their full name, relationship to your parent, and confirmation they live in the home full-time",
+        "Completed and signed Form 202 (covers Essential Person Benefit, 3SquaresVT, Reach Up, and Fuel Assistance)"
+      ],
+      "contacts": [
+        {
+          "label": "DCF Benefits Service Center",
+          "phone": "1-800-479-6151",
+          "description": "Call to apply, request Form 202 by mail, ask about income eligibility, or check application status. This is the primary application door for the Essential Person Benefit.",
+          "hours": "Contact the office to confirm current hours."
+        },
+        {
+          "label": "DCF Application and Document Processing Center (mail or in-person drop-off)",
+          "phone": null,
+          "description": "Send completed Form 202 and supporting documents to: DCF Economic Services Division, Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500. You can also apply at any of Vermont's 12 local district offices.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The income limit for this program is not published as a simple chart. Vermont determines eligibility based on its AABD rules during the application review. Call 1-800-479-6151 first to discuss your parent's income before spending time on paperwork, so you are not surprised by an income-based denial.",
+        "If the person helping your parent is currently being paid by DAIL for personal care services to your parent, they do not qualify as an essential person under this program. This is a common reason families are found ineligible after applying.",
+        "Submitting Form 202 also triggers a review for 3SquaresVT (grocery benefits), Reach Up, and Fuel Assistance. Even if your parent is only interested in the Essential Person Benefit, filing Form 202 ensures they are screened for all four programs at once.",
+        "Vermont may request an interview during processing. Having the essential person's information ready (full name, address, relationship, and confirmation they are not paid by DAIL) will reduce back-and-forth and speed up the review."
+      ],
+      "relatedPrograms": [
+        "3SquaresVT (Vermont SNAP food benefits, same Form 202 application)",
+        "Vermont Fuel Assistance Program (LIHEAP, same Form 202 application)",
+        "Vermont Medicaid and Green Mountain Care",
+        "Vermont Choices for Care (home-based Medicaid waiver for long-term care)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What 'essential person' means in Vermont's rules",
+          "body": "An essential person is someone who lives with your parent full-time and provides daily assistance that makes it possible for your parent to remain at home rather than enter a facility. Vermont's rules are specific about who does not qualify: the essential person cannot be paid by the Vermont Department of Disabilities, Aging and Independent Living (DAIL) to provide personal care services to your parent, and they cannot be eligible for SSI, AABD, or Reach Up themselves. A family member, friend, or partner who helps voluntarily and lives in the home can qualify. A professional home health aide paid through Medicaid or DAIL cannot."
+        },
+        {
+          "type": "callout",
+          "title": "The dollar amount is not listed online",
+          "body": "Vermont's official program page does not publish a specific monthly dollar figure for the Essential Person payment. The payment is governed by Vermont's AABD supplement rules, which vary by living arrangement. Because no verified figure was available from official sources at the time this page was written, we are not listing an amount. Call 1-800-479-6151 and ask: 'What is the current monthly Essential Person supplement amount?' before you apply, so you know what to expect."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's adult child lives with them and helps every day. Do they count as an essential person?",
+          "answer": "Probably yes, if they meet Vermont's conditions. The adult child must live with your parent full-time, provide daily assistance, and cannot be eligible for SSI, AABD, or Reach Up themselves. They also cannot be a DAIL-paid personal care worker for your parent. If those conditions are met, an adult child living in the home is exactly the kind of person this benefit is designed to recognize. Call 1-800-479-6151 to confirm before applying."
+        },
+        {
+          "question": "My parent has not been approved for SSI yet. Can they still apply for the Essential Person Benefit?",
+          "answer": "Yes. Vermont's rules say your parent must receive SSI or SSDI or have applied for it, not that they must already be approved. If your parent has submitted an SSI or SSDI application that is still pending, they can apply for the Essential Person Benefit at the same time using Form 202. The state will coordinate eligibility once the SSI or SSDI determination is made."
+        },
+        {
+          "question": "We hire a home health aide through Medicaid to help my parent. Does that person count as the essential person?",
+          "answer": "No. Vermont is explicit that the essential person cannot be someone paid by DAIL to provide personal services to your parent. A Medicaid-funded home health aide falls into that category. The essential person must be providing help voluntarily and living in the home, not as a paid caregiver through a state program."
+        },
+        {
+          "question": "Can I apply for the Essential Person Benefit and 3SquaresVT at the same time?",
+          "answer": "Yes, and you should. Form 202 covers the Essential Person Benefit, 3SquaresVT (Vermont's food assistance program), Reach Up, and Fuel Assistance in a single application. Submit one Form 202 and Vermont will screen your parent for all four programs. You do not need to file separate paperwork for each one."
+        },
+        {
+          "question": "How much will my parent actually receive each month?",
+          "answer": "Vermont does not publish a specific dollar figure for the Essential Person payment on its program page. The amount is set by Vermont's AABD supplement rules and varies by living arrangement. Because no verified number was available from official sources, we cannot state an amount here. Call 1-800-479-6151 and ask specifically: 'What is the current monthly Essential Person supplement?' That is the only way to get an accurate, current figure before applying."
+        },
+        {
+          "question": "What happens if the essential person moves out?",
+          "answer": "The benefit is tied to having a qualifying essential person living in the home. If the essential person moves out, your parent is required to report that change to Vermont's DCF Economic Services Division. The benefit may stop or be adjusted. Report changes promptly to avoid overpayments that Vermont may seek to recover later. Call 1-800-479-6151 to report a change in living situation."
+        },
+        {
+          "question": "Can someone apply on behalf of my parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. Vermont allows an authorized representative to apply on a recipient's behalf. This can be a family member, friend, or legal representative. The representative will need to be identified on Form 202 and may need to participate in any required interview. Call 1-800-479-6151 to ask what documentation is needed to establish representative status for your parent's application."
+        },
+        {
+          "question": "My parent already receives SSI. Will this benefit reduce their SSI payment?",
+          "answer": "That is a real concern worth discussing with Social Security before applying. State SSI supplements can interact with federal SSI in ways that affect the total payment depending on how Social Security counts the state supplement in your parent's living arrangement category. Call the Social Security Administration at 1-800-772-1213 and ask how a Vermont Essential Person state supplement would affect your parent's current federal SSI benefit before submitting Form 202."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-800-479-6151",
+      "sourceUrl": "https://dcf.vermont.gov/benefits/essential-person",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "vt-fuel-assistance",
+      "name": "General Assistance Fuel",
+      "shortName": "Vermont Fuel Assistance",
+      "tagline": "If your parent rents or owns a home in Vermont and heats it on a fixed income, they may qualify for a once-a-year payment toward their heating bill, regardless of whether heat is included in rent.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Vermont Department for Children and Families, Economic Services Division",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Community Action Agencies for crisis fuel applications",
+            "type": "service-area"
+          },
+          {
+            "name": "Vermont Benefits Call Center: 1-800-479-6151",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Vermont's Fuel Assistance program makes a once-a-year payment toward home heating costs for households with income at or below 185% of the federal poverty level. The payment goes toward the cost of heating fuel, whether your parent pays it directly, it is built into their rent, or they rent a room in someone else's home.\n\nThis is a statewide program run by the Vermont Department for Children and Families. The benefit amount is not a fixed number: it varies by household size, income, and heating situation. Because the payment amount is not published as a standard figure, we cannot give you a typical dollar range; the honest answer is that it depends on your parent's specific circumstances.\n\nIf your parent is in a heating emergency right now, such as running out of fuel or facing a shutoff, local Community Action Agencies handle crisis fuel separately from the regular annual application. The rules and timing for crisis fuel differ depending on whether your parent uses bulk fuel (like oil or propane) or metered fuel (like natural gas or electricity). Call the Vermont Benefits Call Center at 1-800-479-6151 first to find out which agency covers your parent's area.",
+      "savingsRange": "",
+      "savingsSource": "Benefit amounts vary by household size, income, and heating arrangement and are not published as a fixed figure by the Vermont Department for Children and Families. No verified dollar amount is available from the official source.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Vermont resident",
+          "Gross household income at or below 185% of the federal poverty level",
+          "Home heating costs, whether paid directly or through rent",
+          "U.S. citizen, national, or qualified immigrant for seasonal fuel benefits",
+          "No asset limit stated in program rules"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2236
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3014
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 3793
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4571
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5349
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6127
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Vermont resident",
+          "Must use the home as primary residence where heating costs are incurred",
+          "All household members must be listed on the application, even those who are not counted in the fuel household (such as a caretaker or roomer whose income is excluded)",
+          "Household members must be U.S. citizens, nationals, or qualified immigrants to receive seasonal fuel benefits",
+          "Applies to renters, homeowners, and people renting a room in someone else's home"
+        ],
+        "povertyLevelReference": "185% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the Vermont DCF Fuel Assistance page, by phone at 1-800-479-6151, or in person at a local Community Action Agency, especially for crisis situations.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the income limit for your parent's household size",
+            "description": "Gross monthly household income must be at or below 185% of the federal poverty level. Use the income table on this page. Only count people in the fuel household; caretakers or roomers may be excluded from the income calculation even though they must be listed on the application."
+          },
+          {
+            "step": 2,
+            "title": "Gather the documents you will need",
+            "description": "You will need: proof of gross household income for everyone in the fuel household, information about everyone living in the home (including caretakers or roomers who are excluded from the income calculation), Vermont residency documentation, and details about how heat is paid (directly by your parent, included in rent, or as part of renting a room)."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: go to dcf.vermont.gov/benefits/fuel and complete the Fuel Assistance application. By phone: call the Vermont Benefits Call Center at 1-800-479-6151. In person: contact your local Community Action Agency, which is especially important for crisis fuel situations. The Vermont Foodbank references a shorter paper application; the full online application is on the DCF site."
+          },
+          {
+            "step": 4,
+            "title": "Apply before the end of November if possible",
+            "description": "The program is open year-round, but applying before the end of November may result in a higher benefit amount. If your parent is in a heating emergency, do not wait: contact your local Community Action Agency directly, as crisis fuel has its own intake process and timing rules."
+          }
+        ],
+        "processingTime": "No specific statewide processing time is published. The benefit is annual. Applying before the end of November may maximize the benefit amount.",
+        "waitlist": null,
+        "tip": "If your parent's heat is included in rent, they can still apply. Make sure to note this on the application so the heating arrangement is correctly recorded.",
+        "urls": [
+          {
+            "label": "Vermont DCF Fuel Assistance Application",
+            "url": "https://dcf.vermont.gov/benefits/fuel"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of gross income for all fuel household members (Social Security award letter, pension statement, or most recent pay stubs)",
+        "Names and dates of birth for everyone living in the home, including caretakers or roomers even if their income is not counted",
+        "Proof of Vermont residency (utility bill, lease agreement, or state-issued document showing current address)",
+        "Information about how heat is paid: direct fuel bills, lease or rental agreement showing heat is included in rent, or documentation of room rental arrangement",
+        "Most recent heating fuel bill or account information if heat is paid directly",
+        "Citizenship or immigration status documentation for all fuel household members receiving benefits"
+      ],
+      "contacts": [
+        {
+          "label": "Vermont Benefits Call Center",
+          "phone": "1-800-479-6151",
+          "description": "Apply for Fuel Assistance, ask eligibility questions, and get help finding your local Community Action Agency for crisis fuel situations.",
+          "hours": "Contact DCF for current hours"
+        },
+        {
+          "label": "Vermont DCF Fuel Assistance Online",
+          "phone": null,
+          "description": "Apply online and find additional program information at dcf.vermont.gov/benefits/fuel.",
+          "hours": "Available online at any time"
+        },
+        {
+          "label": "Local Community Action Agencies",
+          "phone": null,
+          "description": "For crisis fuel emergencies, contact your local Community Action Agency directly. Crisis fuel intake is handled regionally, and timing rules differ depending on whether your parent uses bulk fuel (oil, propane) or metered fuel (natural gas, electricity). The Benefits Call Center at 1-800-479-6151 can direct you to your local agency.",
+          "hours": "Varies by agency"
+        }
+      ],
+      "applicationNotes": [
+        "Applying before the end of November may increase the benefit amount. The program is open year-round, but early applications tend to yield higher payments.",
+        "If your parent is out of fuel or facing a heating shutoff right now, do not use the standard online application. Contact your local Community Action Agency directly for crisis fuel; the process and timing rules are different from the regular annual benefit.",
+        "Caretakers or roomers living in the home must be listed on the application but may not be counted as part of the fuel household for income purposes. Misunderstanding this distinction is a common reason applications are flagged for follow-up.",
+        "The benefit is one-time per year, not monthly. It is applied to the heating account or credited through the landlord arrangement, not paid directly to your parent as a recurring check."
+      ],
+      "relatedPrograms": [
+        "Vermont Weatherization Assistance Program",
+        "Vermont LIHEAP (Low Income Home Energy Assistance Program)",
+        "Vermont Emergency/General Assistance (for non-fuel emergency basic needs)",
+        "Vermont Rental Assistance"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is not the same as Vermont General Assistance",
+          "body": "Vermont's General Assistance program covers emergency basic needs such as food, shelter, and clothing. Fuel Assistance is a separate, dedicated heating benefit with its own income rules and application. If your parent needs emergency help with non-heating costs, General Assistance is the right program to explore."
+        },
+        {
+          "type": "callout",
+          "title": "Heat included in rent still counts",
+          "body": "Many families assume their parent does not qualify because a landlord pays the heating bill directly. That assumption is wrong. Fuel Assistance covers households where heat is included in rent, where your parent pays heat separately, or where your parent rents a room in someone else's home. The application captures all three arrangements."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's landlord pays the heating bill. Can my parent still apply?",
+          "answer": "Yes. Fuel Assistance covers households where heat is included in rent. Your parent will need to provide the lease or rental agreement showing the heating arrangement. The benefit is applied based on that arrangement, not limited to households with a direct fuel account."
+        },
+        {
+          "question": "Can I apply on behalf of my parent?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of an aging parent. You will need to list everyone living in the home and provide income documentation for all fuel household members. Call 1-800-479-6151 to ask what documentation is needed to act as a representative."
+        },
+        {
+          "question": "A caretaker lives in my parent's home. Does that person's income count against the limit?",
+          "answer": "No. Caretakers and roomers living in the home are generally excluded from the fuel household income calculation. However, they must still be listed on the application. Make sure you note the caretaker's role clearly when you apply so the caseworker can make the correct determination."
+        },
+        {
+          "question": "My parent's heating emergency cannot wait. What do we do?",
+          "answer": "Do not use the standard online application for a crisis. Contact your local Community Action Agency directly. Crisis fuel has separate intake rules, and the timing depends on whether your parent uses bulk fuel (oil, propane) or metered fuel (natural gas, electricity). Call the Vermont Benefits Call Center at 1-800-479-6151 and they will direct you to the right agency for your parent's area."
+        },
+        {
+          "question": "How much will my parent actually receive?",
+          "answer": "The Vermont DCF does not publish a fixed benefit amount. The payment depends on your parent's household size, income, and heating situation for the program year. We cannot give you a reliable dollar figure because no official standard amount is published. The caseworker who processes the application will determine the specific benefit."
+        },
+        {
+          "question": "Can my parent apply for Fuel Assistance and Weatherization at the same time?",
+          "answer": "Yes. Vermont's Weatherization Assistance Program is a separate program that pays for insulation, air sealing, and heating system upgrades to reduce long-term energy costs. The two programs serve different purposes and your parent can apply for both. Contact the Vermont Benefits Call Center at 1-800-479-6151 or visit dcf.vermont.gov/benefits/fuel to get started on Fuel Assistance, and ask about Weatherization referrals at the same time."
+        },
+        {
+          "question": "Does my parent need to reapply every year?",
+          "answer": "Yes. The benefit is once per year. Your parent must reapply each program year. Applying before the end of November may result in a higher benefit amount, so mark the calendar and start gathering documents in early fall."
+        },
+        {
+          "question": "What if my parent's income just barely exceeds the 185% FPL limit?",
+          "answer": "If gross monthly income is above the limit for your parent's household size, the household does not qualify for this program under the income test. There is no stated exception or sliding-scale tier above 185% FPL in the program rules. If your parent is close to the line, it is worth calling 1-800-479-6151 to confirm the calculation, since some people living in the home may not count toward the household income figure."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Thermometer",
+      "phone": "1-800-479-6151",
+      "sourceUrl": "https://dcf.vermont.gov/benefits/fuel",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "vt-property-tax-adjustment-renter-credit",
+      "name": "Property Tax Adjustment (Renter/Property Tax Credit)",
+      "shortName": "VT Property Tax Credit",
+      "tagline": "Vermont renters and homeowners on modest incomes may qualify for up to $2,500 back on rent costs or a meaningful reduction in their property tax bill, filed once a year with their state taxes.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Vermont Department of Taxes",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent rents in Vermont or owns their home, the state has two separate credits that can put real money back in their pocket each year. They are not the same program, but they are filed together and managed by the Vermont Department of Taxes.\n\nFor renters: if your parent has lived in Vermont all year and rented for at least six months, they may qualify for a refundable state tax credit of up to $2,500. The income limit depends on your parent's county and household size, because Vermont ties the limit to HUD county median income. This means the cutoff in Chittenden County is different from the cutoff in Essex County. If your parent's income is below the lowest threshold for their county and family size, they get the full credit. If it falls between the two thresholds, the credit is prorated.\n\nFor homeowners: if your parent owns their home and it is their principal residence, the Property Tax Credit can reduce what they owe on their property tax bill. The household income cap is $115,000 for tax year 2024. The exact reduction depends on their income and their home's tax situation. Both credits are claimed by filing Form HS-122 and Schedule HI-144, either with a Vermont income tax return or as a standalone filing.",
+      "savingsRange": "Up to $2,500/year for eligible renters (Vermont Department of Taxes maximum); Property Tax Credit amount varies by household income and homestead tax situation",
+      "savingsSource": "Vermont Department of Taxes, Form HS-122 instructions: maximum Renter Credit of $2,500; Property Tax Credit reduction amount varies by household.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Vermont resident for the full calendar year (Renter Credit)",
+          "Rented in Vermont for at least 6 months (Renter Credit)",
+          "Household income below county-specific limit based on HUD median (Renter Credit)",
+          "Household income below $115,000 for tax year 2024 (Property Tax Credit)",
+          "Home must be principal residence and have a Homestead Declaration on file (Property Tax Credit)"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Renter Credit: claimant must be domiciled in Vermont for the entire calendar year",
+          "Renter Credit: claimant cannot be claimed as a dependent on another person's tax return",
+          "Renter Credit: claimant must have rented in Vermont for at least six months; the six months do not need to be consecutive",
+          "Renter Credit: income limit is set by county and household size using HUD county median income tables; check the current-year instructions for your parent's county",
+          "Property Tax Credit: claimant must file both a Homestead Declaration and a Property Tax Credit Claim (Form HS-122) for a qualifying homestead",
+          "Property Tax Credit: the homestead must be the taxpayer's principal residence; if it is rented out, the rental period must not exceed 182 days in the claim year",
+          "Property Tax Credit: must also file Schedule HI-144 (Household Income); missing either required form will prevent the claim from being approved",
+          "Both credits: use the current tax year's forms and instructions, because income limits and tables change annually"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Form HS-122 and Schedule HI-144 online through myVTax (myvtax.vermont.gov) or by mail with your Vermont income tax return, once per year before the filing deadline.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Determine which credit applies",
+            "description": "Decide whether your parent is claiming the Renter Credit, the Property Tax Credit, or both. Renters file for the Renter Credit. Homeowners file for the Property Tax Credit. Some situations may involve both."
+          },
+          {
+            "step": 2,
+            "title": "Check income eligibility",
+            "description": "For the Renter Credit, look up your parent's county and household size in the current-year income tables in the Form HS-122 instructions at tax.vermont.gov/ptc. For the Property Tax Credit, household income must be below $115,000 (tax year 2024 cap; use the current year's form for the active limit)."
+          },
+          {
+            "step": 3,
+            "title": "Gather your documents",
+            "description": "You will need household income information for all required household members, your parent's rental details or property tax bill, and any supporting income records. See the documents list below."
+          },
+          {
+            "step": 4,
+            "title": "Complete Form HS-122 and Schedule HI-144",
+            "description": "Form HS-122 is the Homestead Declaration and Property Tax Credit Claim. Schedule HI-144 is the Household Income schedule. Both are required. Download them at tax.vermont.gov/ptc or complete them through myVTax."
+          },
+          {
+            "step": 5,
+            "title": "File online or by mail",
+            "description": "File online at myvtax.vermont.gov. Or mail the completed forms with your Vermont income tax return, or as a standalone filing if your parent is not otherwise required to file a Vermont return. Filing online is the fastest option."
+          },
+          {
+            "step": 6,
+            "title": "Track your submission",
+            "description": "After filing, you can check the status of a return or credit through myVTax at myvtax.vermont.gov. If you have questions, call the Vermont Department of Taxes at (802) 828-2865."
+          }
+        ],
+        "processingTime": "No fixed processing timeline is published by the Vermont Department of Taxes for this program.",
+        "waitlist": null,
+        "tip": "Your parent can file for the Renter Credit even if they are not otherwise required to file a Vermont income tax return. Do not skip it just because they have no filing obligation.",
+        "urls": [
+          {
+            "label": "myVTax online filing portal",
+            "url": "https://myvtax.vermont.gov"
+          },
+          {
+            "label": "Vermont Department of Taxes: Property Tax Credit program page",
+            "url": "https://tax.vermont.gov/ptc"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed Form HS-122 (Homestead Declaration and Property Tax Credit Claim)",
+        "Completed Schedule HI-144 (Household Income) with income information for all required household members",
+        "Rental details: landlord name, address, and rent paid during the year (for Renter Credit claimants)",
+        "Property tax bill or homestead property details (for Property Tax Credit claimants)",
+        "Social Security or pension income statements for all household members whose income is counted",
+        "Any other income documentation needed to complete the Household Income schedule (wages, retirement distributions, investment income)",
+        "Login credentials or account setup for myVTax if filing online at myvtax.vermont.gov"
+      ],
+      "contacts": [
+        {
+          "label": "Vermont Department of Taxes",
+          "phone": "(802) 828-2865",
+          "description": "Call to ask questions about Form HS-122, Schedule HI-144, the Renter Credit income tables for your parent's county, or the Property Tax Credit. This is the office that administers both credits.",
+          "hours": "Mon-Fri, standard state business hours; check tax.vermont.gov for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "The Renter Credit income limit is not a single statewide number. It depends on your parent's county and household size. Pull the current-year Table 2 and Table 3 from the Form HS-122 instructions at tax.vermont.gov/ptc before assuming your parent does or does not qualify.",
+        "Missing either Form HS-122 or Schedule HI-144 will prevent the claim from being approved. Submit both together.",
+        "Income limits and form details change each tax year. Always use the current year's instructions and tables, not a prior year's version.",
+        "If your parent's home was rented out at any point during the year, it can still qualify for the Property Tax Credit as long as the rental period did not exceed 182 days. If it did exceed 182 days, file Form HS-122W to withdraw the homestead declaration."
+      ],
+      "relatedPrograms": [
+        "Vermont Medicaid (Dr. Dynasaur and Green Mountain Care)",
+        "Vermont 3SquaresVT (SNAP food benefits)",
+        "Vermont LIHEAP Fuel Assistance (help with heating costs)",
+        "Vermont Weatherization Assistance Program"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two credits, one filing",
+          "body": "The Renter Credit and the Property Tax Credit are related but separate. Renters claim the Renter Credit. Homeowners claim the Property Tax Credit. Both are filed on Form HS-122 with Schedule HI-144. A person cannot claim both unless they had qualifying rental and homestead situations in the same year, which is rare. Make sure you are using the right credit for your parent's situation before filing."
+        },
+        {
+          "type": "callout",
+          "title": "No Vermont tax return required to claim the Renter Credit",
+          "body": "If your parent does not earn enough to be required to file a Vermont income tax return, they can still file a standalone claim for the Renter Credit. This is one of the most commonly missed filing situations. Because the credit is refundable, your parent can receive money back even if they owe no Vermont tax."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent rents but only lived in Vermont for part of the year. Do they still qualify?",
+          "answer": "For the Renter Credit, your parent must have been domiciled in Vermont for the entire calendar year. Part-year residency disqualifies them from the Renter Credit, even if they rented for six months. There is no partial-year version of this credit."
+        },
+        {
+          "question": "How do I find the income limit for my parent's county?",
+          "answer": "The Renter Credit income limit is not a single statewide figure. Vermont uses HUD county median income tables, and the limit changes by county and by household size. Download the current-year Form HS-122 instructions from tax.vermont.gov/ptc and look up Table 2 and Table 3 for your parent's county. If your parent's income falls below Table 2, they get the full credit. Between Table 2 and Table 3, the credit is prorated. Above Table 3, they are not eligible."
+        },
+        {
+          "question": "My parent owns their home but rents part of it out. Can they still claim the Property Tax Credit?",
+          "answer": "Possibly. The homestead can still qualify for the Property Tax Credit if the rental period did not exceed 182 days in the claim year. If the property was rented for more than 182 days, your parent must file Form HS-122W to withdraw the homestead declaration and the credit will not apply for that year. Report the rental use accurately on the filing."
+        },
+        {
+          "question": "Can I file this on my parent's behalf?",
+          "answer": "Yes, you can help prepare and submit the forms on your parent's behalf. If your parent uses myVTax online, you may need to set up or access their account. For questions about authorized representative situations, call the Vermont Department of Taxes at (802) 828-2865."
+        },
+        {
+          "question": "My parent does not file a Vermont income tax return. Can they still get the Renter Credit?",
+          "answer": "Yes. The Renter Credit can be filed as a standalone claim even if your parent has no Vermont income tax filing obligation. Because the credit is refundable, they can receive the full credit amount as a payment even if they owe no Vermont tax. File Form HS-122 and Schedule HI-144 as a standalone submission, either through myVTax or by mail."
+        },
+        {
+          "question": "We used last year's form. Does that matter?",
+          "answer": "Yes, it matters. The Vermont Department of Taxes updates the income limit tables and form instructions each tax year. Using a prior year's form or income tables could result in an incorrect credit amount or a rejected claim. Always download the current-year version from tax.vermont.gov/ptc before filing."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(802) 828-2865",
+      "sourceUrl": "https://tax.vermont.gov/ptc",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -1298,7 +1298,7 @@
       "name": "Montana Low Income Home Energy Assistance Program (LIHEAP)",
       "shortName": "Montana LIHEAP",
       "tagline": "Help your loved one get one-time payments to cover heating bills and emergency energy costs during Montana winters.",
-      "programType": "navigator",
+      "programType": "benefit",
       "complexity": "simple",
       "geographicScope": {
         "type": "federal",

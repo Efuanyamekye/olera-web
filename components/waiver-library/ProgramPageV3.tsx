@@ -514,17 +514,22 @@ function RenderContentSection({ section }: { section: ContentSection }) {
   }
 
   if (section.type === "tier-comparison" && "tiers" in section) {
-    const tiers = section.tiers as { name: string; description: string; incomeLimit?: string; coverage?: string }[];
+    const tiers = section.tiers as { name: unknown; description: unknown; incomeLimit?: unknown; coverage?: unknown }[];
+    // Drafts are model-written: a tier field can arrive as {single, couple}
+    // or a list, which React can't render and which failed the whole build
+    // (CT Medicare Savings, 6 Oct 2026). Render any shape as text.
+    const text = (v: unknown): string =>
+      v == null ? "" : typeof v === "object" ? (Array.isArray(v) ? v.map(text).join(", ") : Object.entries(v as Record<string, unknown>).map(([k, x]) => `${k}: ${text(x)}`).join(", ")) : String(v);
     return (
       <div>
-        {section.heading && <p className="text-sm font-medium text-gray-900 mb-3">{section.heading}</p>}
+        {section.heading && <p className="text-sm font-medium text-gray-900 mb-3">{text(section.heading)}</p>}
         <div className="space-y-3">
           {tiers.map((tier, i) => (
             <div key={i} className="p-4 rounded-xl border border-gray-200 bg-white">
-              <p className="font-medium text-gray-900">{tier.name}</p>
-              <p className="text-sm text-gray-600 mt-1">{tier.description}</p>
-              {tier.incomeLimit && <p className="text-xs text-gray-400 mt-1">Income limit: {tier.incomeLimit}</p>}
-              {tier.coverage && <p className="text-xs text-gray-400">Coverage: {tier.coverage}</p>}
+              <p className="font-medium text-gray-900">{text(tier.name)}</p>
+              <p className="text-sm text-gray-600 mt-1">{text(tier.description)}</p>
+              {tier.incomeLimit ? <p className="text-xs text-gray-400 mt-1">Income limit: {text(tier.incomeLimit)}</p> : null}
+              {tier.coverage ? <p className="text-xs text-gray-400">Coverage: {text(tier.coverage)}</p> : null}
             </div>
           ))}
         </div>

@@ -1,0 +1,853 @@
+{
+  "state": "MI",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "MI-A",
+      "programs": [
+        {
+          "name": "Home Help Program",
+          "alsoKnownAs": [
+            "Home Help",
+            "Medicaid personal care",
+            "paid family caregiver"
+          ],
+          "agency": "Michigan DHHS Adult Services",
+          "verdict": "likely",
+          "reason": "She has active Medicaid and needs hands-on help with bathing and dressing (level 3+ ADLs). Home Help is a state-plan entitlement with no waitlist; it can pay a chosen provider, including an adult child, though her daughter works full time.",
+          "keyRule": "Active Medicaid + functional limitation of level 3 or greater in at least one ADL + medical need certification",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/AS/Public/ASM/105.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "MI Choice Waiver Program",
+          "alsoKnownAs": [
+            "MI Choice",
+            "Medicaid waiver for elderly and disabled",
+            "HCBS waiver"
+          ],
+          "agency": "MDHHS via waiver agencies (Detroit: Detroit Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Already on Medicaid with $1,050 income (under $2,982) and $1,200 assets (under $9,950); bathing, dressing, medication help and wandering should meet nursing-facility level of care. Slots are capped, so she may be placed on DAAA's waiting list.",
+          "keyRule": "NF level of care (LOCD); income <= 300% of SSI ($2,982/mo, 2026); assets <= $9,950; subject to regional slot availability",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver/mi-choice-waiver-program-use",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE Southeast Michigan",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "MDHHS / CMS; PACE Southeast Michigan",
+          "verdict": "likely",
+          "reason": "48205 is inside PACE Southeast Michigan's Wayne County area; she is 55+ and likely meets NF level of care; Medicaid covers the premium. An alternative to MI Choice, and usually without a waitlist.",
+          "keyRule": "Age 55+, service area, NF level of care (LOCD)",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid for the aged, blind and disabled (AD-Care / Group 2)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AD-Care",
+            "SSI-related Medicaid"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "Already enrolled; $1,050 is under the $1,350 AD-Care limit and $1,200 under $9,950, so she should remain eligible.",
+          "keyRule": "AD-Care: 100% FPL + $20 ($1,350/mo for 1, eff. 4/1/2026); assets $9,950",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, ALMB)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "ALMB",
+            "QI"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "$1,050 is under the full-coverage QMB limit of $1,350; confirm QMB is active alongside her Medicaid.",
+          "keyRule": "QMB: $1,350/mo (1); assets $9,950",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with full Medicaid/MSP.",
+          "keyRule": "Deemed eligible with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "FAP",
+            "SNAP",
+            "food stamps",
+            "Bridge card"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "One-person senior household at $1,050 gross, far under the 200% FPL categorical limit; benefit depends on housing costs.",
+          "keyRule": "Gross income <= 200% FPL (categorical eligibility); senior groups get medical and uncapped shelter deductions",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/food/eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver support and in-home services (Older Americans Act / National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "respite",
+            "caregiver support",
+            "Title III"
+          ],
+          "agency": "Detroit Area Agency on Aging (Region 1-A)",
+          "verdict": "likely",
+          "reason": "Her daughter is an adult caregiver of a person 60+ with dementia; DAAA offers caregiver support, respite and care management.",
+          "keyRule": "Caregivers of people 60+ or of any age with dementia (OAA Title III-E)",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Heating Credit",
+          "alsoKnownAs": [
+            "HHC",
+            "MI-1040CR-7"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "likely",
+          "reason": "$12,600 is under the one-exemption ceiling of $17,243 if she owns or rents and pays for heat (or heat is in her rent, via the standard allowance). Tax year 2025 claims closed Sept 30, 2026; she can claim tax year 2026 from early 2027.",
+          "keyRule": "Total household resources <= $17,243 (0-1 exemptions, TY2025 Table A)",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/home-heating-credit/table-a-home-heating-credit-mi-1040cr-7-standard-allowance",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Property Tax Credit",
+          "alsoKnownAs": [
+            "MI-1040CR",
+            "property tax credit"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "likely",
+          "reason": "If she owns or rents her home in Michigan, $12,600 is far under the $71,500 household resource cap; seniors get a larger share of taxes/rent credited.",
+          "keyRule": "Total household resources <= $71,500; max credit $1,900 (TY2025)",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc/tax-year-credit-information/2025",
+          "evidence": "official"
+        },
+        {
+          "name": "MI Coordinated Health (HIDE SNP; replaced MI Health Link)",
+          "alsoKnownAs": [
+            "MICH",
+            "MI Health Link",
+            "dual special needs plan"
+          ],
+          "agency": "Michigan DHHS / CMS",
+          "verdict": "possible",
+          "reason": "As a full dual in Wayne County (Region 12) she can enroll in a MI Coordinated Health plan, which combines Medicare, Medicaid and long-term supports; voluntary.",
+          "keyRule": "Full Medicare + Medicaid, age 21+, live in a MICH region (Wayne is Region 12)",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/BP/Public/BEM/168.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "State Emergency Relief (energy) and Michigan Energy Assistance Program",
+          "alsoKnownAs": [
+            "SER",
+            "MEAP",
+            "LIHEAP",
+            "utility shutoff help"
+          ],
+          "agency": "Michigan DHHS (SER) and MEAP grantees via 2-1-1",
+          "verdict": "possible",
+          "reason": "Income qualifies, but SER requires a shutoff/past-due or other emergency; MEAP help is through grantees via 2-1-1.",
+          "keyRule": "SER: emergency need + income/asset tests; MEAP FY2026 income up to 60% state median income",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/cash/energy",
+          "evidence": "official"
+        },
+        {
+          "name": "Detroit Homeowners Property Exemption",
+          "alsoKnownAs": [
+            "HOPE",
+            "poverty tax exemption"
+          ],
+          "agency": "City of Detroit Assessor / Board of Review",
+          "verdict": "possible",
+          "reason": "Only if she owns and lives in a Detroit home; her income and $1,200 assets fit. 2026 deadline is Nov 6, 2026.",
+          "keyRule": "Owner-occupant, household income under HOPE guidelines, assets <= $12,000",
+          "source": "https://detroitmi.gov/government/mayors-office/chief-financial-officer/homeowners-property-exemption-hope",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "No eligibility test; wandering safety planning and caregiver support.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$1,050 less $20 = $1,030, above the $994 federal benefit rate.",
+          "keyRule": "Countable income must be below the FBR ($994/mo, 2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "MI Choice / long-term care options screening (DAAA), with a Home Help request to MDHHS",
+        "phoneOrWhere": "Detroit Area Agency on Aging 313-446-4444 (ask for Information & Assistance)",
+        "why": "She already has Medicaid, so functional screening is the only gate. DAAA screens for MI Choice and also points to PACE and Home Help; Home Help has no waitlist and can cover bathing and dressing while she waits for a MI Choice slot."
+      },
+      "notes": "MI Choice waitlists vary; Home Help and MI Choice personal care can't pay for the same tasks. Living alone with night wandering may exceed what in-home hours can cover; PACE or a more supervised setting is worth raising. michigan.gov PDFs (RFT 242, BEM 400) returned 403 to direct fetch; figures come from search-engine extracts of those official documents."
+    },
+    {
+      "familyId": "MI-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA pension",
+            "Aid and Attendance",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Army 1962-1965 overlaps the Vietnam era (Aug 5, 1964 onward for service outside Vietnam), honorable, 65+. Net worth $75,200 is under $163,699. Deducting Part B premiums alone ($4,869.60 less $1,141) gives countable income of about $33,471, under the $34,488 A&A rate with a spouse, so a pension is payable before care costs; paid care raises it.",
+          "keyRule": "Wartime service; MAPR veteran + 1 dependent with A&A $34,488; net worth limit $163,699 (12/1/2025-11/30/2026); medical expenses over $1,141 deducted",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment with Geriatrics and Extended Care (homemaker/home health aide, respite, adult day health) and General Caregiver Support",
+          "alsoKnownAs": [
+            "VA respite",
+            "VA home health aide",
+            "PGCSS"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Household income near $37,000 should allow enrollment (pension receipt also gives priority group 5); respite, home health aide and adult day health then depend on clinical need. His wife can use General Caregiver Support.",
+          "keyRule": "All enrolled veterans eligible for respite/HHA on clinical need; income threshold ~ $52,000 veteran + 1 dependent (secondary figure)",
+          "source": "https://www.va.gov/geriatrics/pages/Respite_Care.asp",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "Requires a 70%+ service-connected rating; he has none.",
+          "keyRule": "VA disability rating >= 70%",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "MI Choice Waiver Program",
+          "alsoKnownAs": [
+            "MI Choice",
+            "Medicaid waiver for elderly and disabled",
+            "HCBS waiver"
+          ],
+          "agency": "MDHHS via waiver agencies (Detroit: Detroit Area Agency on Aging)",
+          "verdict": "possible",
+          "reason": "His own share of income (roughly $2,100-$2,200 if his SS plus the pension are his) is under $2,982. With spousal impoverishment rules his wife keeps at least the $32,532 minimum resource allowance, leaving about $5,500, under his $9,950 limit. Turns on the level-of-care screen (Door 2: memory problem plus moderately impaired decision-making could qualify) and on the waitlist.",
+          "keyRule": "Income <= $2,982 (applicant's own); assets $9,950 after community-spouse allowance (2026 min $32,532); NF level of care; slot availability",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver/mi-choice-waiver-program-use",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver support and in-home services (Older Americans Act / National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "respite",
+            "caregiver support",
+            "Title III"
+          ],
+          "agency": "Detroit Area Agency on Aging (Region 1-A)",
+          "verdict": "likely",
+          "reason": "His wife, 80, is the sole caregiver of a person 60+ with dementia; no income test for caregiver support or respite.",
+          "keyRule": "Caregivers of people 60+ or with dementia",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "FAP",
+            "SNAP",
+            "food stamps",
+            "Bridge card"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "Gross $3,100 is under 200% FPL for two (~$3,607), so they are categorically eligible with no asset test; expect only a small benefit (near the minimum) unless medical/shelter costs are high.",
+          "keyRule": "Gross <= 200% FPL; the $4,500 asset test applies only to senior groups over 200%",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/food/eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Property Tax Credit",
+          "alsoKnownAs": [
+            "MI-1040CR",
+            "property tax credit"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "likely",
+          "reason": "If they own or rent, $37,200 is under the $71,500 cap (full credit below $62,500).",
+          "keyRule": "Total household resources <= $71,500; max $1,900 (TY2025)",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc/tax-year-credit-information/2025",
+          "evidence": "official"
+        },
+        {
+          "name": "State Emergency Relief (energy) and Michigan Energy Assistance Program",
+          "alsoKnownAs": [
+            "SER",
+            "MEAP",
+            "LIHEAP",
+            "utility shutoff help"
+          ],
+          "agency": "Michigan DHHS (SER) and MEAP grantees via 2-1-1",
+          "verdict": "possible",
+          "reason": "MEAP's FY2026 income limit (60% of state median income) likely covers $37,200 for two, but help depends on a current bill/need and FY2027 grantee rules; SER needs an emergency and a lower income test.",
+          "keyRule": "MEAP: up to 60% SMI (FY2026); SER: emergency need + income test",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/cash/energy",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE Southeast Michigan",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "MDHHS / CMS; PACE Southeast Michigan",
+          "verdict": "possible",
+          "reason": "In PACE Southeast Michigan's area; requires NF level of care, and without Medicaid they would pay a monthly premium.",
+          "keyRule": "Age 55+, NF level of care; non-Medicaid enrollees pay premium",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "No eligibility test; caregiver stress support.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicaid for the aged, blind and disabled (AD-Care / Group 2)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AD-Care",
+            "SSI-related Medicaid"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "unlikely",
+          "reason": "$3,100 exceeds the $1,824 two-person limit and $38,000 exceeds $14,910.",
+          "keyRule": "AD-Care $1,824/mo (2); assets $14,910 (2)",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, ALMB)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "ALMB",
+            "QI"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "unlikely",
+          "reason": "Above the highest tier: ALMB stops at $2,455/month for two, and assets exceed $14,910.",
+          "keyRule": "ALMB: <= $2,455/mo (2); assets $14,910",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Income $37,200 > $32,460 and resources $38,000 > $36,100 for a couple.",
+          "keyRule": "Income < 150% FPL; resources <= $36,100 couple (2026)",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Help Program",
+          "alsoKnownAs": [
+            "Home Help",
+            "Medicaid personal care",
+            "paid family caregiver"
+          ],
+          "agency": "Michigan DHHS Adult Services",
+          "verdict": "unlikely",
+          "reason": "Requires active Medicaid, which he does not have.",
+          "keyRule": "Active Medicaid required",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/AS/Public/ASM/105.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Heating Credit",
+          "alsoKnownAs": [
+            "HHC",
+            "MI-1040CR-7"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "unlikely",
+          "reason": "$37,200 exceeds both the $23,271 standard and $25,018 alternate ceilings for two exemptions.",
+          "keyRule": "TY2025 Table A $23,271 / Table B $25,018 (2 exemptions)",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/home-heating-credit/table-b-home-heating-credit-mi-1040cr-7-alternate-credit-computation",
+          "evidence": "official"
+        },
+        {
+          "name": "Detroit Homeowners Property Exemption",
+          "alsoKnownAs": [
+            "HOPE",
+            "poverty tax exemption"
+          ],
+          "agency": "City of Detroit Assessor / Board of Review",
+          "verdict": "unlikely",
+          "reason": "Savings of $38,000 exceed HOPE's $12,000 asset cap.",
+          "keyRule": "Household assets <= $12,000",
+          "source": "https://detroitmi.gov/government/mayors-office/chief-financial-officer/homeowners-property-exemption-hope",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Veterans Pension with Aid and Attendance (and VA health care enrollment)",
+        "phoneOrWhere": "Michigan Veterans Affairs Agency 800-MICH-VET (800-642-4838) to reach a free accredited Veteran Service Officer",
+        "why": "An Intent to File locks the effective date, and VA health enrollment unlocks VA respite and home health aide for his exhausted wife; the pension helps pay for any care they buy."
+      },
+      "notes": "Pension math assumes only Part B premiums ($202.90 x 2). Michigan's community spouse allowance is assumed to follow the federal minimum ($32,532, 2026; secondary source) — confirm with DAAA. VA health income threshold from secondary source."
+    },
+    {
+      "familyId": "MI-C",
+      "programs": [
+        {
+          "name": "Medicaid for the aged, blind and disabled (AD-Care / Group 2)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AD-Care",
+            "SSI-related Medicaid"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "He is 66; household gross $1,750 is under the $1,824 two-person AD-Care limit even before earned-income disregards on her wages; $4,500 is under $14,910.",
+          "keyRule": "AD-Care: $1,824/mo (fiscal group 2, eff. 4/1/2026); assets $14,910 (2)",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, ALMB)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "ALMB",
+            "QI"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "Fits full-coverage QMB ($1,824 for two), which pays his $202.90 Part B premium and cost-sharing.",
+          "keyRule": "QMB: $1,824/mo (2); assets $14,910",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Income and $4,500 resources well under limits; automatic with Medicaid/MSP.",
+          "keyRule": "Income < 150% FPL; resources <= $36,100 couple",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "FAP",
+            "SNAP",
+            "food stamps",
+            "Bridge card"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "Two-person household with a senior, $1,750 gross, under 200% FPL.",
+          "keyRule": "Gross <= 200% FPL",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/food/eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Heating Credit",
+          "alsoKnownAs": [
+            "HHC",
+            "MI-1040CR-7"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "likely",
+          "reason": "$21,000 is under the $23,271 two-exemption ceiling if they pay heat or rent with heat; TY2025 window closed Sept 30, 2026, so claim TY2026 in 2027.",
+          "keyRule": "TY2025 Table A: $23,271 (2 exemptions)",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/home-heating-credit/table-a-home-heating-credit-mi-1040cr-7-standard-allowance",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Property Tax Credit",
+          "alsoKnownAs": [
+            "MI-1040CR",
+            "property tax credit"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "likely",
+          "reason": "If they own or rent, $21,000 is far under $71,500.",
+          "keyRule": "Total household resources <= $71,500",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc/tax-year-credit-information/2025",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver support and in-home services (Older Americans Act / National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "respite",
+            "caregiver support",
+            "Title III"
+          ],
+          "agency": "Detroit Area Agency on Aging (Region 1-A)",
+          "verdict": "likely",
+          "reason": "His wife cares for a person 60+ with Alzheimer's.",
+          "keyRule": "Caregivers of people 60+ or with Alzheimer's",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "State Emergency Relief (energy) and Michigan Energy Assistance Program",
+          "alsoKnownAs": [
+            "SER",
+            "MEAP",
+            "LIHEAP",
+            "utility shutoff help"
+          ],
+          "agency": "Michigan DHHS (SER) and MEAP grantees via 2-1-1",
+          "verdict": "possible",
+          "reason": "Income qualifies; SER requires an emergency, MEAP requires an energy need through a grantee.",
+          "keyRule": "SER emergency + income test; MEAP 60% SMI",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/cash/energy",
+          "evidence": "official"
+        },
+        {
+          "name": "MI Choice Waiver Program",
+          "alsoKnownAs": [
+            "MI Choice",
+            "Medicaid waiver for elderly and disabled",
+            "HCBS waiver"
+          ],
+          "agency": "MDHHS via waiver agencies (Detroit: Detroit Area Agency on Aging)",
+          "verdict": "possible",
+          "reason": "Financially eligible, but needs the nursing-facility level of care; he bathes and dresses himself, so it would have to come through Door 2 (memory problem plus moderately impaired decision-making).",
+          "keyRule": "NF LOC via LOCD Door 1 (ADLs) or Door 2 (cognition); income <= $2,982; assets $9,950",
+          "source": "https://www.michigan.gov/mdhhs/-/media/Project/Websites/mdhhs/Medicaid-Provider-Assets/Provider-Training-Assets/LOCD-201-Presentation.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Detroit Homeowners Property Exemption",
+          "alsoKnownAs": [
+            "HOPE",
+            "poverty tax exemption"
+          ],
+          "agency": "City of Detroit Assessor / Board of Review",
+          "verdict": "possible",
+          "reason": "Only if they own their Detroit home; assets $4,500 are under $12,000.",
+          "keyRule": "Owner-occupant, income guidelines, assets <= $12,000",
+          "source": "https://detroitmi.gov/government/mayors-office/chief-financial-officer/homeowners-property-exemption-hope",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE Southeast Michigan",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "MDHHS / CMS; PACE Southeast Michigan",
+          "verdict": "possible",
+          "reason": "In the service area, but NF level of care is unlikely to be met yet.",
+          "keyRule": "NF level of care",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "Early-onset support; no eligibility test.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Help Program",
+          "alsoKnownAs": [
+            "Home Help",
+            "Medicaid personal care",
+            "paid family caregiver"
+          ],
+          "agency": "Michigan DHHS Adult Services",
+          "verdict": "unlikely",
+          "reason": "Even with Medicaid, Home Help pays only for hands-on help with at least one ADL at level 3+; his needs are medication, money and driving (IADLs), and spouses cannot be the paid provider.",
+          "keyRule": "Functional limitation level 3+ in at least one ADL required",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/AS/Public/ASM/105.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His $1,350 Social Security less $20 exceeds the $994 rate.",
+          "keyRule": "FBR $994 (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicaid (AD-Care) + Medicare Savings Program + Food Assistance (one MI Bridges application)",
+        "phoneOrWhere": "Apply at michigan.gov/mibridges or a local MDHHS office; free help from MMAP 800-803-7174",
+        "why": "One application covers Medicaid, QMB and FAP; QMB saves $202.90/month and makes Extra Help automatic, and Medicaid is the gateway to later Home Help or MI Choice."
+      },
+      "notes": "Wife (63) is not Medicare-eligible; her own coverage is outside this key (she may fit Healthy Michigan Plan at this income, not researched). Earned income disregards make AD-Care even more certain."
+    },
+    {
+      "familyId": "MI-D",
+      "programs": [
+        {
+          "name": "MI Choice Waiver Program",
+          "alsoKnownAs": [
+            "MI Choice",
+            "Medicaid waiver for elderly and disabled",
+            "HCBS waiver"
+          ],
+          "agency": "MDHHS via waiver agencies (Detroit: Detroit Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Income $1,400 is under the $2,982 special income limit and $9,000 is under the $9,950 asset limit; help with bathing, dressing, toileting and mobility and not being safe alone should meet NF level of care. Approval opens full Medicaid; slots may be waitlisted.",
+          "keyRule": "Income <= 300% SSI ($2,982/mo); assets <= $9,950 (BPB 2025-007 raised waiver asset limit to MSP level); NF LOC; slot availability",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver/mi-choice-waiver-program-use",
+          "evidence": "official"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA survivors pension",
+            "widow's pension",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Late husband's Navy service 1951-1954 is Korean-conflict wartime; she has not remarried. After Part B premiums her countable income is about $14,949 vs. the $18,697 A&A rate, so ~$3,700/yr is payable before care costs.",
+          "keyRule": "Korean conflict 6/27/1950-1/31/1955; MAPR surviving spouse A&A $18,697; deductible $584; net worth $163,699",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, ALMB)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "ALMB",
+            "QI"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "likely",
+          "reason": "$1,400 is in the SLMB band ($1,350.01-$1,616) and $9,000 is under $9,950.",
+          "keyRule": "SLMB: $1,350.01-$1,616/mo (1); assets $9,950 (2026)",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "$16,800 < $23,940 and $9,000 < $18,090; automatic with SLMB.",
+          "keyRule": "Income < 150% FPL; resources <= $18,090",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE Southeast Michigan",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "MDHHS / CMS; PACE Southeast Michigan",
+          "verdict": "likely",
+          "reason": "48205 is in PACE Southeast Michigan's area; she meets NF level of care, and the PACE Medicaid category uses the same raised asset limit and special income rules, so Medicaid should cover the premium. Alternative to MI Choice, usually without a waitlist.",
+          "keyRule": "Age 55+, service area, NF level of care; Medicaid PACE category (BEM 167) asset limit $9,950",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/BP/Public/BPB/2025-007.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver support and in-home services (Older Americans Act / National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "respite",
+            "caregiver support",
+            "Title III"
+          ],
+          "agency": "Detroit Area Agency on Aging (Region 1-A)",
+          "verdict": "likely",
+          "reason": "Her daughter is the caregiver of a person 60+; respite and caregiver support through DAAA.",
+          "keyRule": "Caregivers of people 60+",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Help Program",
+          "alsoKnownAs": [
+            "Home Help",
+            "Medicaid personal care",
+            "paid family caregiver"
+          ],
+          "agency": "Michigan DHHS Adult Services",
+          "verdict": "possible",
+          "reason": "She clearly has level 3+ ADL needs and her daughter could be the paid provider, but Home Help needs active Medicaid, which she lacks today ($1,400 is over AD-Care); it opens if she gets Medicaid another way, and it can't duplicate MI Choice tasks.",
+          "keyRule": "Active Medicaid + level 3+ ADL",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/ex/AS/Public/ASM/105.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid for the aged, blind and disabled (AD-Care / Group 2)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AD-Care",
+            "SSI-related Medicaid"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "unlikely",
+          "reason": "$1,400 exceeds the $1,350 AD-Care limit (100% FPL + $20); Group 2 deductible Medicaid exists but the deductible would be large.",
+          "keyRule": "AD-Care: $1,350/mo (1)",
+          "source": "https://mdhhs-pres-prod.michigan.gov/olmweb/EX/RF/Public/RFT/242.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "FAP",
+            "SNAP",
+            "food stamps",
+            "Bridge card"
+          ],
+          "agency": "Michigan DHHS",
+          "verdict": "unlikely",
+          "reason": "She eats with her daughter's family and can't prepare meals separately, so she is in their food group; the elderly separate-group exception requires the others' income to be <= 165% FPL (about $2,976/month for two), and the daughter's $5,500 exceeds it. Combined $6,900 is over 200% FPL for three.",
+          "keyRule": "7 CFR 273.1(b)(2)(ii); 200% FPL categorical limit",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Heating Credit",
+          "alsoKnownAs": [
+            "HHC",
+            "MI-1040CR-7"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "unlikely",
+          "reason": "Lives in her daughter's home and is not the one owning/renting or paying heat; shared-housing rules generally route the credit to the household that pays.",
+          "keyRule": "Must own or be contracted to pay rent for a homestead",
+          "source": "https://www.michigan.gov/taxes/iit/credits/home-heating-credit-and-shared-housing-situations",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Property Tax Credit",
+          "alsoKnownAs": [
+            "MI-1040CR",
+            "property tax credit"
+          ],
+          "agency": "Michigan Department of Treasury",
+          "verdict": "possible",
+          "reason": "Only if she pays rent to her daughter under an arrangement that counts; otherwise no.",
+          "keyRule": "Must own or rent the homestead",
+          "source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc/tax-year-credit-information/2025",
+          "evidence": "inferred"
+        },
+        {
+          "name": "State Emergency Relief (energy) and Michigan Energy Assistance Program",
+          "alsoKnownAs": [
+            "SER",
+            "MEAP",
+            "LIHEAP",
+            "utility shutoff help"
+          ],
+          "agency": "Michigan DHHS (SER) and MEAP grantees via 2-1-1",
+          "verdict": "unlikely",
+          "reason": "Energy help is household-based and the household's $6,900/month exceeds the limits.",
+          "keyRule": "Household income tests",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/cash/energy",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$1,400 less $20 exceeds $994; living in another's household would also reduce SSI.",
+          "keyRule": "FBR $994 (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "MI Choice Waiver screening (with PACE as the parallel option)",
+        "phoneOrWhere": "Detroit Area Agency on Aging 313-446-4444; PACE Southeast Michigan 855-445-4554",
+        "why": "MI Choice is the only route that gives her full Medicaid at $1,400/month, and getting screened now starts her place on any waitlist; PACE is the same-eligibility alternative if the wait is long. File the VA survivors pension Intent to File through MVAA (800-642-4838) the same week."
+      },
+      "notes": "Watch the asset limit: $9,000 is only $950 under $9,950, and a retroactive VA lump sum could push her over; a prepaid funeral (exempt) is a common fix. The Pace SE Michigan phone number came from a secondary source. Survivors pension counts as income for SLMB (could move her to ALMB at $1,816)."
+    }
+  ]
+}

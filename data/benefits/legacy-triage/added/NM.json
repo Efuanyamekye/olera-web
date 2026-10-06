@@ -1,0 +1,44 @@
+[
+  {
+    "state": "NM",
+    "id": "nm-centennial-care-aged-blind-disabled",
+    "name": "Centennial Care Aged, Blind, and Disabled",
+    "legacyId": "centennial-care-aged-blind-and-disabled",
+    "programType": "navigator"
+  },
+  {
+    "state": "NM",
+    "id": "nm-qmb-medicare-savings",
+    "name": "Qualified Medicare Beneficiary (QMB)",
+    "legacyId": "qualified-medicare-beneficiary-qmb",
+    "programType": "benefit"
+  },
+  {
+    "state": "NM",
+    "id": "nm-turquoise-care-community-benefit-hcbs",
+    "name": "New Mexico Turquoise Care Community Benefit (home and community-based services)",
+    "legacyId": "centennial-care-home-and-community-based-services-waiver",
+    "programType": "benefit"
+  },
+  {
+    "state": "NM",
+    "id": "nm-snap-food-benefits",
+    "name": "SNAP (Supplemental Nutrition Assistance Program)",
+    "legacyId": "snap-supplemental-nutrition-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "NM",
+    "id": "nm-liheap-energy-assistance",
+    "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+    "legacyId": "low-income-home-energy-assistance-program-liheap",
+    "programType": "benefit"
+  },
+  {
+    "state": "NM",
+    "id": "nm-home-delivered-meals",
+    "name": "New Mexico Home-Delivered Meals",
+    "legacyId": "new-mexico-home-delivered-meals",
+    "programType": "benefit"
+  }
+]

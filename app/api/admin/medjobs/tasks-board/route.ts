@@ -218,7 +218,7 @@ export async function GET() {
       db
         .from("student_outreach")
         .select(
-          "id, campus_id, kind, stakeholder_type, organization_name, status, cadence_day, notes, research_data",
+          "id, campus_id, kind, stakeholder_type, organization_name, status, cadence_day, notes, research_data, provider_business_profile_id",
         )
         // Alphabetical, and load-bearing. Without an ORDER BY the rows come
         // back in whatever order the scan finds them, and Postgres rewrites
@@ -299,6 +299,27 @@ export async function GET() {
         .filter(Boolean)
         .join(" · ");
       if (line) dirAddr.set(row.provider_id, line);
+    }
+  }
+
+  // ── directory slugs ─────────────────────────────────────────────────
+  // Providers link to the admin directory via their business_profile. Only
+  // those that have one can be clicked through.
+  const bpIds = Array.from(
+    new Set(
+      (outreachRes.data ?? [])
+        .map((r) => r.provider_business_profile_id as string | null)
+        .filter((id): id is string => id != null),
+    ),
+  );
+  const directorySlugOf = new Map<string, string>();
+  for (let i = 0; i < bpIds.length; i += 500) {
+    const { data } = await db
+      .from("business_profiles")
+      .select("id, slug")
+      .in("id", bpIds.slice(i, i + 500));
+    for (const row of data ?? []) {
+      if (row.slug) directorySlugOf.set(row.id, row.slug);
     }
   }
 
@@ -607,6 +628,7 @@ export async function GET() {
 
       const research = (row.research_data ?? {}) as {
         olera_provider_id?: string;
+        olera_provider_slug?: string;
         website?: string;
         address?: string;
         date?: string;
@@ -666,6 +688,16 @@ export async function GET() {
         round: tasks.filter((t) => !t.done)[0]?.round ?? 0,
         state: closed ? row.status.replace(/_/g, " ") : null,
         tasks,
+        // Providers only: the slug for linking to the admin directory.
+        // Try provider_business_profile_id first (linked to business_profiles),
+        // then fall back to olera_provider_slug OR olera_provider_id from research_data.
+        // The directory accepts both slug and provider_id as valid identifiers.
+        directorySlug:
+          row.kind === "provider"
+            ? (row.provider_business_profile_id
+                ? directorySlugOf.get(row.provider_business_profile_id as string)
+                : null) ?? research.olera_provider_slug ?? research.olera_provider_id ?? null
+            : null,
       });
     }
 

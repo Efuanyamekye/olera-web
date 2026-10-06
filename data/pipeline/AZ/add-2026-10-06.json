@@ -1,0 +1,283 @@
+{
+  "state": "AZ",
+  "addedAt": "2026-10-06T06:23:17.151Z",
+  "dive": {
+    "state": "AZ",
+    "stateName": "Arizona",
+    "diveAt": "2026-10-06T06:21:12.812Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Arizona uses SSI-related financial methodology for ABD Medicaid; one source indicates Arizona applies income/resource rules more restrictive than SSI for people age 65+, blind, or disabled[1]. Publicly available secondary sources consistently describe an ABD income limit around 100% of the Federal Poverty Level for non-long-term-care ABD coverage, with one source giving 2026 estimates of about $1,304/month for one person and noting annual updates[2][7][13].",
+            "table": [
+              {
+                "household_size": "1",
+                "monthly_income_limit": "$1,304 (approximate 2026 figure)[7][13]"
+              },
+              {
+                "household_size": "2",
+                "monthly_income_limit": "$1,764 (approximate 2026 figure implied by FPL-based ABD estimates; verify with AHCCCS at application time)[7]"
+              }
+            ],
+            "notes": [
+              "Arizona ABD Medicaid is not presented as a broad household-size program like MAGI Medicaid; eligibility is based on the applicant’s own aged/blind/disabled category and SSI-related financial rules[1][8].",
+              "SSI recipients are generally treated as automatically eligible for the Medicaid category and still must file a separate Medicaid application in Arizona under this state plan approach[1]."
+            ]
+          },
+          "asset_limits": {
+            "summary": "Arizona ABD Medicaid is unusual because most seniors and people with disabilities in the non-long-term-care category have no asset/resource limit, according to a secondary state summary[10][14]. However, state-plan documents show Arizona uses SSI resource methodology for aged/blind/disabled Medicaid and a separate application process[1].",
+            "what_counts": [
+              "If resource testing applies in a specific subprogram or long-term-care pathway, countable resources typically include cash, bank accounts, investments, and some non-exempt real and personal property[1][9]."
+            ],
+            "what_is_exempt": [
+              "Primary residence is typically exempt in Medicaid resource rules while the applicant lives there or intends to return, subject to program rules[1].",
+              "One vehicle is commonly excluded in SSI-style Medicaid methodology, along with certain burial arrangements and personal effects[1]."
+            ],
+            "important_caveat": "Because Arizona’s ABD rules are often summarized as having no asset limit for non-LTC ABD, families should not assume a $2,000 SSI-style cap unless they are applying for a different Medicaid pathway such as long-term care[10][13]."
+          },
+          "other_requirements": [
+            "Must be an Arizona resident[3].",
+            "Must be a U.S. citizen or eligible non-citizen[3].",
+            "Must be age 65+, blind, or disabled[1][8].",
+            "For disability-based eligibility, the disability must meet SSA/SSI-style standards used by AHCCCS[1][15].",
+            "Separate Medicaid application is required even for SSI beneficiaries[1]."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "ABD Medicaid covers medical services for elderly, blind, and disabled members; secondary Arizona sources say it can pay for physician visits, hospital care, prescription drugs, and ancillary services, and may cover some benefits not paid by Original Medicare[5][7][13]. A state-specific example cited by secondary sources says Arizona ABD covers up to $1,000 per year in preventive, diagnostic, and therapeutic dental services plus another $1,000 for emergency dental care[5].",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: Health-e-Arizona Plus at https://www.healthearizonaplus.gov[2][13]",
+            "Phone help: 1-855-432-7587 (1-855-HEA-PLUS)[2][13]",
+            "Mail: Application for Benefits sent to AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034[2]",
+            "In person: local eligibility offices / in-person submission options are referenced by secondary Arizona guidance[2]"
+          ],
+          "processing_time": "Not clearly stated in the sources gathered; if approved through standard AHCCCS processing, timing can vary by case complexity and whether disability verification is needed[1][2].",
+          "waitlist": null,
+          "forms": [
+            "Application for AHCCCS Health Insurance and Medicare Savings Programs (DE-103 / DE103)[3][6]",
+            "Application for Benefits (for mail-in submission referenced by Arizona guidance)[2]"
+          ],
+          "documents": [
+            "Proof of Arizona residency[3]",
+            "Proof of U.S. citizenship or eligible immigration status[3]",
+            "Social Security number(s)[3]",
+            "Proof of income such as Social Security award letters, pension statements, or recent pay stubs[7]",
+            "Medical/disability evidence if disability status is not already established through SSA/SSI[1][15]",
+            "Identification and any Medicare information if the applicant has Medicare[5][6]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Arizona program administered by AHCCCS; not county-restricted in the sources gathered[1][2].",
+          "regional_variations": "The core ABD Medicaid eligibility rules are statewide. The practical experience can differ by local office, managed care plan, and provider network, but no formal region-specific eligibility variation was identified in the gathered sources[1][2].",
+          "offices_or_providers": [
+            "AHCCCS / Arizona Health Care Cost Containment System",
+            "AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034[2]"
+          ]
+        },
+        "official_source": "https://www.azahcccs.gov/",
+        "gotchas": [
+          "Arizona requires a separate Medicaid application for aged, blind, and disabled coverage even when SSA handles SSI eligibility[1].",
+          "ABD Medicaid in Arizona is often confused with ALTCS; ALTCS is the long-term-care pathway and has very different rules, including a nursing-facility-level-of-care test and stricter asset rules[9].",
+          "Families often miss that Medicare and ABD Medicaid can work together, with ABD sometimes helping pay Medicare cost sharing and filling coverage gaps[5].",
+          "Income limits and program details can change yearly, so current AHCCCS figures should be checked before submitting an application[2][13].",
+          "Do not assume every disabled older adult has an asset limit; secondary Arizona summaries indicate no asset limit for many non-LTC ABD applicants[10][14]."
+        ],
+        "data_shape_notes": "This program is age/disability-category based, not a standard household-MAGI program; Arizona also uses separate application handling for aged/blind/disabled cases and may have no asset test for non-long-term-care ABD applicants, which is the main data-shape difference families miss[1][10][14].",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled (ABD) Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Arizona uses SSI-related financial methodology for ABD Medicaid; one source indicates Arizona applies income/resource rules more restrictive than SSI for people age 65+, blind, or disabled[1]. Publicly available secondary sources consistently describe an ABD income limit around 100% of the Federal Poverty Level for non-long-term-care ABD coverage, with one source giving 2026 estimates of about $1,304/month for one person and noting annual updates[2][7][13].\",\n      \"table\": [\n        {\n          \"household_size\": \"1\",\n          \"monthly_income_limit\": \"$1,304 (approximate 2026 figure)[7][13]\"\n        },\n        {\n          \"household_size\": \"2\",\n          \"monthly_income_limit\": \"$1,764 (approximate 2026 figure implied by FPL-based ABD estimates; verify with AHCCCS at application time)[7]\"\n        }\n      ],\n      \"notes\": [\n        \"Arizona ABD Medicaid is not presented as a broad household-size program like MAGI Medicaid; eligibility is based on the applicant’s own aged/blind/disabled category and SSI-related financial rules[1][8].\",\n        \"SSI recipients are generally treated as automatically eligible for the Medicaid category and still must file a separate Medicaid application in Arizona under this state plan approach[1].\"\n      ]\n    },\n    \"asset_limits\": {\n      \"summary\": \"Arizona ABD Medicaid is unusual because most seniors and people with disabilities in the non-long-term-care category have no asset/resource limit, according to a secondary state summary[10][14]. However, state-plan documents show Arizona uses SSI resource methodology for aged/blind/disabled Medicaid and a separate application process[1].\",\n      \"what_counts\": [\n        \"If resource testing applies in a specific subprogram or long-term-care pathway, countable resources typically include cash, bank accounts, investments, and some non-exempt real and personal property[1][9].\"\n      ],\n      \"what_is_exempt\": [\n        \"Primary residence is typically exempt in Medicaid resource rules while the applicant lives there or intends to return, subject to program rules[1].\",\n        \"One vehicle is commonly excluded in SSI-style Medicaid methodology, along with certain burial arrangements and personal effects[1].\"\n      ],\n      \"important_caveat\": \"Because Arizona’s ABD rules are often summarized as having no asset limit for non-LTC ABD, families should not assume a $2,000 SSI-style cap unless they are applying for a different Medicaid pathway such as long-term care[10][13].\"\n    },\n    \"other_requirements\": [\n      \"Must be an Arizona resident[3].\",\n      \"Must be a U.S. citizen or eligible non-citizen[3].\",\n      \"Must be age 65+, blind, or disabled[1][8].\",\n      \"For disability-based eligibility, the disability must meet SSA/SSI-style standards used by AHCCCS[1][15].\",\n      \"Separate Medicaid application is required even for SSI beneficiaries[1].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"ABD Medicaid covers medical services for elderly, blind, and disabled members; secondary Arizona sources say it can pay for physician visits, hospital care, prescription drugs, and ancillary services, and may cover some benefits not paid by Original Medicare[5][7][13]. A state-specific example cited by secondary sources says Arizona ABD covers up to $1,000 per year in preventive, diagnostic, and therapeutic dental services plus another $1,000 for emergency dental care[5].\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Health-e-Arizona Plus at https://www.healthearizonaplus.gov[2][13]\",\n      \"Phone help: 1-855-432-7587 (1-855-HEA-PLUS)[2][13]\",\n      \"Mail: Application for Benefits sent to AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034[2]\",\n      \"In person: local eligibility offices / in-person submission options are referenced by secondary Arizona guidance[2]\"\n    ],\n    \"processing_time\": \"Not clearly stated in the sources gathered; if approved through standard AHCCCS processing, timing can vary by case complexity and whether disability verification is needed[1][2].\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for AHCCCS Health Insurance and Medicare Savings Programs (DE-103 / DE103)[3][6]\",\n      \"Application for Benefits (for mail-in submission referenced by Arizona guidance)[2]\"\n    ],\n    \"documents\": [\n      \"Proof of Arizona residency[3]\",\n      \"Proof of U.S. citizenship or eligible immigration status[3]\",\n      \"Social Security number(s)[3]\",\n      \"Proof of income such as Social Security award letters, pension statements, or recent pay stubs[7]\",\n      \"Medical/disability evidence if disability status is not already established through SSA/SSI[1][15]\",\n      \"Identification and any Medicare information if the applicant has Medicare[5][6]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Arizona program administered by AHCCCS; not county-restricted in the sources gathered[1][2].\",\n    \"regional_variations\": \"The core ABD Medicaid eligibility rules are statewide. The practical experience can differ by local office, managed care plan, and provider network, but no formal region-specific eligibility variation was identified in the gathered sources[1][2].\",\n    \"offices_or_providers\": [\n      \"AHCCCS / Arizona Health Care Cost Containment System\",\n      \"AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034[2]\"\n    ]\n  },\n  \"official_source\": \"https://www.azahcccs.gov/\",\n  \"gotchas\": [\n    \"Arizona requires a separate Medicaid application for aged, blind, and disabled coverage even when SSA handles SSI eligibility[1].\",\n    \"ABD Medicaid in Arizona is often confused with ALTCS; ALTCS is the long-term-care pathway and has very different rules, including a nursing-facility-level-of-care test and stricter asset rules[9].\",\n    \"Families often miss that Medicare and ABD Medicaid can work together, with ABD sometimes helping pay Medicare cost sharing and filling coverage gaps[5].\",\n    \"Income limits and program details can change yearly, so current AHCCCS figures should be checked before submitting an application[2][13].\",\n    \"Do not assume every disabled older adult has an asset limit; secondary Arizona summaries indicate no asset limit for many non-LTC ABD applicants[10][14].\"\n  ],\n  \"data_shape_notes\": \"This program is age/disability-category based, not a standard household-MAGI program; Arizona also uses separate application handling for aged/blind/disabled cases and may have no asset test for non-long-term-care ABD applicants, which is the main data-shape difference families miss[1][10][14].\"\n}"
+      },
+      {
+        "name": "Senior Property Valuation Protection Option",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "one_owner": 47712,
+            "two_or_more_owners": 59640,
+            "basis": "Three-year average of total annual household income from all sources, including taxable and non-taxable income.",
+            "household_size_table": [
+              {
+                "owners_or_income_contributors": 1,
+                "limit": 47712
+              },
+              {
+                "owners_or_income_contributors": 2,
+                "limit": 59640
+              }
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "At least one owner must be 65 or older at the time of application.",
+            "The property must be the applicant's primary residence.",
+            "The applicant must have lived in the primary residence for at least 2 years before applying.",
+            "The property must be occupied as a primary residence for an aggregate of 9 months of the calendar year.",
+            "Only one primary residence can qualify.",
+            "The application is filed with the county assessor where the property is located.",
+            "The owner must remain eligible to keep the valuation freeze active.",
+            "The valuation freeze is for 3 years and may be renewed."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Freezes the property's limited property value / valuation used to calculate property taxes for 3 years. This is a valuation freeze, not a tax freeze; taxes can still change if tax rates change.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online / download from Arizona Department of Revenue: https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
+            "County assessor office where the property is located",
+            "By email or office pickup in some counties (county-specific)",
+            "Mail to the county assessor (county-specific mailing address)"
+          ],
+          "processing_time": "No single statewide processing time was found; counties process applications locally. The benefit period is 3 years once approved.",
+          "waitlist": null,
+          "forms": [
+            "ADOR Form 82104",
+            "County-specific senior freeze application worksheets or instruction sheets may also be used"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of ownership",
+            "Proof that the property is the primary residence",
+            "Income documentation for the previous 3 years",
+            "Any additional county-required supporting documentation",
+            "Completed application signed by all required owners"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available in Arizona, administered by the county assessor in the county where the property is located.",
+          "regional_variations": "The underlying rules are statewide, but counties may differ in office contacts, mailing addresses, local instructions, deadlines presentation, and submission methods. Processing is handled locally by each county assessor, so turnaround and customer service can vary by county.",
+          "offices_or_providers": [
+            "County assessor offices in each Arizona county",
+            "Arizona Department of Revenue"
+          ]
+        },
+        "official_source": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
+        "gotchas": [
+          "This freezes valuation, not the tax bill; tax rates can still rise.",
+          "Income includes taxable and non-taxable income, so Social Security and similar benefits may count.",
+          "The limit is based on a 3-year average, not just current-year income.",
+          "The property must be the primary residence and cannot be a rental or second home.",
+          "The applicant must have lived there at least 2 years before applying.",
+          "Applications are filed with the county assessor, not directly with a state office.",
+          "The freeze lasts 3 years and must be renewed.",
+          "County deadlines and required supporting paperwork can vary in practice."
+        ],
+        "data_shape_notes": "This program is a county-administered statewide property tax valuation freeze with age, residency, and 3-year averaged income tests; the key outputs are a frozen limited property value for 3 years and county-specific application handling.",
+        "_raw": "{\n  \"name\": \"Senior Property Valuation Protection Option\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"one_owner\": 47712,\n      \"two_or_more_owners\": 59640,\n      \"basis\": \"Three-year average of total annual household income from all sources, including taxable and non-taxable income.\",\n      \"household_size_table\": [\n        {\n          \"owners_or_income_contributors\": 1,\n          \"limit\": 47712\n        },\n        {\n          \"owners_or_income_contributors\": 2,\n          \"limit\": 59640\n        }\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"At least one owner must be 65 or older at the time of application.\",\n      \"The property must be the applicant's primary residence.\",\n      \"The applicant must have lived in the primary residence for at least 2 years before applying.\",\n      \"The property must be occupied as a primary residence for an aggregate of 9 months of the calendar year.\",\n      \"Only one primary residence can qualify.\",\n      \"The application is filed with the county assessor where the property is located.\",\n      \"The owner must remain eligible to keep the valuation freeze active.\",\n      \"The valuation freeze is for 3 years and may be renewed.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Freezes the property's limited property value / valuation used to calculate property taxes for 3 years. This is a valuation freeze, not a tax freeze; taxes can still change if tax rates change.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online / download from Arizona Department of Revenue: https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option\",\n      \"County assessor office where the property is located\",\n      \"By email or office pickup in some counties (county-specific)\",\n      \"Mail to the county assessor (county-specific mailing address)\"\n    ],\n    \"processing_time\": \"No single statewide processing time was found; counties process applications locally. The benefit period is 3 years once approved.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"ADOR Form 82104\",\n      \"County-specific senior freeze application worksheets or instruction sheets may also be used\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of ownership\",\n      \"Proof that the property is the primary residence\",\n      \"Income documentation for the previous 3 years\",\n      \"Any additional county-required supporting documentation\",\n      \"Completed application signed by all required owners\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available in Arizona, administered by the county assessor in the county where the property is located.\",\n    \"regional_variations\": \"The underlying rules are statewide, but counties may differ in office contacts, mailing addresses, local instructions, deadlines presentation, and submission methods. Processing is handled locally by each county assessor, so turnaround and customer service can vary by county.\",\n    \"offices_or_providers\": [\n      \"County assessor offices in each Arizona county\",\n      \"Arizona Department of Revenue\"\n    ]\n  },\n  \"official_source\": \"https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option\",\n  \"gotchas\": [\n    \"This freezes valuation, not the tax bill; tax rates can still rise.\",\n    \"Income includes taxable and non-taxable income, so Social Security and similar benefits may count.\",\n    \"The limit is based on a 3-year average, not just current-year income.\",\n    \"The property must be the primary residence and cannot be a rental or second home.\",\n    \"The applicant must have lived there at least 2 years before applying.\",\n    \"Applications are filed with the county assessor, not directly with a state office.\",\n    \"The freeze lasts 3 years and must be renewed.\",\n    \"County deadlines and required supporting paperwork can vary in practice.\"\n  ],\n  \"data_shape_notes\": \"This program is a county-administered statewide property tax valuation freeze with age, residency, and 3-year averaged income tests; the key outputs are a frozen limited property value for 3 years and county-specific application handling.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "AZ",
+    "stateName": "Arizona",
+    "classifiedAt": "2026-10-06T06:21:12.817Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 1,
+      "resource": 1
+    },
+    "scopeSummary": {
+      "state": 2
+    },
+    "complexitySummary": {
+      "deep": 1,
+      "simple": 1
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "AHCCCS / Arizona Health Care Cost Containment System",
+              "type": "service-area"
+            },
+            {
+              "name": "AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034[2]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Senior Property Valuation Protection Option",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County assessor offices in each Arizona county",
+              "type": "service-area"
+            },
+            {
+              "name": "Arizona Department of Revenue",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "AZ",
+      "id": "az-abd-medicaid",
+      "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "legacyId": "aged-blind-and-disabled-abd-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "AZ",
+      "id": "az-senior-property-valuation-freeze",
+      "name": "Senior Property Valuation Protection Option",
+      "legacyId": "senior-property-valuation-protection-option",
+      "programType": "resource"
+    }
+  ]
+}

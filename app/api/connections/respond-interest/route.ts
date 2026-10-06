@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { canActForProfile } from "@/lib/auth/profile-access.server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
@@ -82,7 +83,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (connection.to_profile_id !== account.active_profile_id) {
+    if (
+      connection.to_profile_id !== account.active_profile_id ||
+      !(await canActForProfile(admin, user, account.active_profile_id))
+    ) {
       return NextResponse.json(
         { error: "Not authorized" },
         { status: 403 }

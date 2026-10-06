@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, reserveEmailLogId } from "@/lib/email";
@@ -80,12 +81,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
 
-    const { data: profiles } = await admin
-      .from("business_profiles")
-      .select("id")
-      .eq("account_id", account.id);
-
-    const profileIds = (profiles || []).map((p: { id: string }) => p.id);
+    // Owned profiles plus agencies this email is a team member of (migration 272).
+    const profileIds = await actingProfileIds(admin, user);
 
     // Fetch the connection (include type to handle inquiry vs request flows)
     const { data: connection, error: fetchError } = await admin

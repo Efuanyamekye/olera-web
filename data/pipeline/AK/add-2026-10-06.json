@@ -1,0 +1,275 @@
+{
+  "state": "AK",
+  "addedAt": "2026-10-06T06:17:44.749Z",
+  "dive": {
+    "state": "AK",
+    "stateName": "Alaska",
+    "diveAt": "2026-10-06T06:15:08.953Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Alaskans Living Independently Waiver (ALI)",
+        "eligibility": {
+          "age": 21,
+          "income_limits": "Income must be within Alaska Medicaid limits and, for this waiver, generally cannot exceed 300% of the Federal Benefit Rate. A 2026 source states the monthly income cap is $2,982 per month, regardless of marital status. Another Alaska source also notes Medicaid income/resource limits are determined through the Division of Public Assistance application process.",
+          "asset_limits": "A commonly cited ALI resource limit is $2,000 for a single applicant. Alaska Medicaid waivers use Medicaid resource rules, so countable resources generally include cash, bank accounts, stocks, bonds, and many other liquid assets; commonly exempt items include one primary residence in many cases, one vehicle, and basic personal belongings. However, exact countable/exempt treatment can depend on Medicaid rules applied by DPA during eligibility review.",
+          "other_requirements": [
+            "Must be an Alaska resident",
+            "Must be Medicaid-eligible or able to become Medicaid-eligible through the application process",
+            "Must be assessed as meeting nursing facility level of care",
+            "Must have physical disabilities or functional needs associated with aging",
+            "Program is intended for people who would otherwise need nursing home care and want to remain in the community",
+            "Applicants age 65+ are a core group served; adults ages 21-64 may also qualify if they meet the disability and level-of-care requirements"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Provides home- and community-based services rather than cash. Covered services specifically include adult day services, care coordination/case management, respite, host home care, environmental modification, meals, nursing oversight, residential supported living services, specialized medical equipment, specialized private duty nursing, and transportation. Alaska’s waiver filing states the program serves up to 3,054 people per year statewide.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Contact the Aging and Disability Resource Center (ADRC) in your area",
+            "Call the statewide ADRC number: 855-565-2017",
+            "Work with a care coordinator who helps complete the waiver application",
+            "Use the Alaska Department of Health HCBS Waivers information page: https://health.alaska.gov/en/services/hcbs-waivers/",
+            "Submit the required SDS application form: NFLOC-04 Application for ALI/APDD/CCMC"
+          ],
+          "processing_time": "Medicaid eligibility decisions generally follow federal timing rules, with up to 45 days for standard eligibility determinations and up to 90 days for disability-related determinations. Waiver approval also depends on the nursing-facility-level-of-care assessment and availability of waiver slots.",
+          "waitlist": "A waitlist can occur when waiver slots are unavailable. Alaska’s filing indicates the waiver has a fixed annual capacity of up to 3,054 participants, so applicants may wait for an opening even if otherwise eligible.",
+          "forms": [
+            "NFLOC-04 Application for ALI/APDD/CCMC",
+            "NFLOC-04 Instructions"
+          ],
+          "documents": [
+            "Proof of Alaska residency",
+            "Proof of age",
+            "Proof of citizenship or immigration status, if needed for Medicaid",
+            "Proof of income",
+            "Proof of assets/resources",
+            "Health insurance information",
+            "Medical records or doctor statements supporting need for nursing facility level of care",
+            "Current medication list",
+            "Contact information for doctors, hospitals, caregivers, and case managers",
+            "Any prior Medicaid notices or disability-related paperwork"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "No county restriction; the waiver is statewide in Alaska.",
+          "regional_variations": "The program is statewide, but access can differ by local ADRC coverage, care coordinator availability, provider supply, and assessment scheduling. Rural and remote areas may have fewer service providers and longer coordination times even though the waiver itself is statewide.",
+          "offices_or_providers": [
+            "Local Aging and Disability Resource Center (ADRC)",
+            "Division of Senior and Disabilities Services (SDS)",
+            "Division of Public Assistance (DPA) for Medicaid financial eligibility"
+          ]
+        },
+        "official_source": "https://health.alaska.gov/en/services/hcbs-waivers/",
+        "gotchas": [
+          "Being medically frail is not enough; the applicant must also meet Medicaid financial rules and be found to need nursing-facility-level care.",
+          "The waiver is not a cash benefit to the family; it pays for approved services through Medicaid.",
+          "A care coordinator is usually the practical first step, not a direct self-service online enrollment.",
+          "Slot availability matters; approval can be delayed even if all eligibility rules are met.",
+          "Income and resource limits are Medicaid-based and can change over time, so the exact current financial thresholds should be verified during application.",
+          "Adults under 65 can qualify, but only if they have qualifying physical disabilities and meet the same level-of-care standard."
+        ],
+        "data_shape_notes": "This program is a statewide Medicaid home-and-community-based waiver with three moving parts: financial Medicaid eligibility, nursing-facility level-of-care eligibility, and waiver-slot availability. Benefits are service-based, not a fixed dollar grant, and the main structural gotcha is that there can be a capacity limit rather than an open-ended entitlement.",
+        "_raw": "{\n  \"name\": \"Alaskans Living Independently Waiver (ALI)\",\n  \"eligibility\": {\n    \"age\": 21,\n    \"income_limits\": \"Income must be within Alaska Medicaid limits and, for this waiver, generally cannot exceed 300% of the Federal Benefit Rate. A 2026 source states the monthly income cap is $2,982 per month, regardless of marital status. Another Alaska source also notes Medicaid income/resource limits are determined through the Division of Public Assistance application process.\",\n    \"asset_limits\": \"A commonly cited ALI resource limit is $2,000 for a single applicant. Alaska Medicaid waivers use Medicaid resource rules, so countable resources generally include cash, bank accounts, stocks, bonds, and many other liquid assets; commonly exempt items include one primary residence in many cases, one vehicle, and basic personal belongings. However, exact countable/exempt treatment can depend on Medicaid rules applied by DPA during eligibility review.\",\n    \"other_requirements\": [\n      \"Must be an Alaska resident\",\n      \"Must be Medicaid-eligible or able to become Medicaid-eligible through the application process\",\n      \"Must be assessed as meeting nursing facility level of care\",\n      \"Must have physical disabilities or functional needs associated with aging\",\n      \"Program is intended for people who would otherwise need nursing home care and want to remain in the community\",\n      \"Applicants age 65+ are a core group served; adults ages 21-64 may also qualify if they meet the disability and level-of-care requirements\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Provides home- and community-based services rather than cash. Covered services specifically include adult day services, care coordination/case management, respite, host home care, environmental modification, meals, nursing oversight, residential supported living services, specialized medical equipment, specialized private duty nursing, and transportation. Alaska’s waiver filing states the program serves up to 3,054 people per year statewide.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the Aging and Disability Resource Center (ADRC) in your area\",\n      \"Call the statewide ADRC number: 855-565-2017\",\n      \"Work with a care coordinator who helps complete the waiver application\",\n      \"Use the Alaska Department of Health HCBS Waivers information page: https://health.alaska.gov/en/services/hcbs-waivers/\",\n      \"Submit the required SDS application form: NFLOC-04 Application for ALI/APDD/CCMC\"\n    ],\n    \"processing_time\": \"Medicaid eligibility decisions generally follow federal timing rules, with up to 45 days for standard eligibility determinations and up to 90 days for disability-related determinations. Waiver approval also depends on the nursing-facility-level-of-care assessment and availability of waiver slots.\",\n    \"waitlist\": \"A waitlist can occur when waiver slots are unavailable. Alaska’s filing indicates the waiver has a fixed annual capacity of up to 3,054 participants, so applicants may wait for an opening even if otherwise eligible.\",\n    \"forms\": [\n      \"NFLOC-04 Application for ALI/APDD/CCMC\",\n      \"NFLOC-04 Instructions\"\n    ],\n    \"documents\": [\n      \"Proof of Alaska residency\",\n      \"Proof of age\",\n      \"Proof of citizenship or immigration status, if needed for Medicaid\",\n      \"Proof of income\",\n      \"Proof of assets/resources\",\n      \"Health insurance information\",\n      \"Medical records or doctor statements supporting need for nursing facility level of care\",\n      \"Current medication list\",\n      \"Contact information for doctors, hospitals, caregivers, and case managers\",\n      \"Any prior Medicaid notices or disability-related paperwork\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"No county restriction; the waiver is statewide in Alaska.\",\n    \"regional_variations\": \"The program is statewide, but access can differ by local ADRC coverage, care coordinator availability, provider supply, and assessment scheduling. Rural and remote areas may have fewer service providers and longer coordination times even though the waiver itself is statewide.\",\n    \"offices_or_providers\": [\n      \"Local Aging and Disability Resource Center (ADRC)\",\n      \"Division of Senior and Disabilities Services (SDS)\",\n      \"Division of Public Assistance (DPA) for Medicaid financial eligibility\"\n    ]\n  },\n  \"official_source\": \"https://health.alaska.gov/en/services/hcbs-waivers/\",\n  \"gotchas\": [\n    \"Being medically frail is not enough; the applicant must also meet Medicaid financial rules and be found to need nursing-facility-level care.\",\n    \"The waiver is not a cash benefit to the family; it pays for approved services through Medicaid.\",\n    \"A care coordinator is usually the practical first step, not a direct self-service online enrollment.\",\n    \"Slot availability matters; approval can be delayed even if all eligibility rules are met.\",\n    \"Income and resource limits are Medicaid-based and can change over time, so the exact current financial thresholds should be verified during application.\",\n    \"Adults under 65 can qualify, but only if they have qualifying physical disabilities and meet the same level-of-care standard.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Medicaid home-and-community-based waiver with three moving parts: financial Medicaid eligibility, nursing-facility level-of-care eligibility, and waiver-slot availability. Benefits are service-based, not a fixed dollar grant, and the main structural gotcha is that there can be a capacity limit rather than an open-ended entitlement.\"\n}"
+      },
+      {
+        "name": "Senior Property Tax Exemption",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No income limit applies to Alaska’s mandatory senior property tax exemption. The core eligibility test is age plus ownership/occupancy/residency rules, not income.",
+          "asset_limits": "No asset limit applies. The program exempts property value, not based on household assets. What matters is that the property is the applicant’s qualifying permanent residence and not a business property.",
+          "other_requirements": [
+            "Applicant must own the property and occupy it as a primary residence/permanent place of abode.",
+            "Applicant must have reached age 65 before January 1 of the exemption year in many municipalities; some local rules use the prior December 31 test.",
+            "The property is limited to the first $150,000 of assessed value exempt from taxation.",
+            "The application deadline is set locally and can vary by municipality.",
+            "Spouse eligibility may continue in some situations, such as a qualifying widow/widower in certain local ordinances.",
+            "Some municipalities require first-time proof of age.",
+            "Some municipalities require the property to be in Alaska residency use for a minimum number of days each year."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Mandatory exemption of up to the first $150,000 of the assessed value of the applicant’s primary residence from municipal property taxes.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Local municipal assessor or clerk office",
+            "In-person filing at the local assessing department",
+            "Mail to the local assessor/clerk office where allowed",
+            "Download and submit the local senior exemption form if the municipality provides one online"
+          ],
+          "processing_time": "Varies by municipality; some local offices describe the in-person filing process as taking about 10–15 minutes, but approval timing depends on local assessment cycles and deadlines.",
+          "waitlist": null,
+          "forms": [
+            "State-adopted senior citizen property tax exemption application form (municipal forms vary by locality)",
+            "Some municipalities use supplemental forms for first-time applicants or spouse/occupancy verification"
+          ],
+          "documents": [
+            "Proof of age for first-time applicants",
+            "Proof of ownership",
+            "Proof of primary residence/occupancy",
+            "Completed exemption application",
+            "Any spouse or residency documentation required by the local assessor",
+            "Any supplemental forms required by the municipality"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applies statewide to Alaska municipalities, but deadlines, filing methods, and supporting documents are set by local ordinance and assessor procedures.",
+          "regional_variations": "Yes. The exemption amount is statewide, but filing deadlines differ by city/borough, and some places require in-person filing while others accept mail or downloadable forms. Local offices also differ on whether they use March 15, March 31, February 14, or another deadline.",
+          "offices_or_providers": [
+            "Local municipal assessor or clerk office",
+            "Anchorage Property Appraisal Office",
+            "Fairbanks North Star Borough Assessing Department",
+            "Ketchikan Gateway Borough assessment office",
+            "Sitka Assessing Department",
+            "Other Alaska municipal assessor offices"
+          ]
+        },
+        "official_source": "https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx",
+        "gotchas": [
+          "This is a property tax exemption, not a cash benefit or healthcare program.",
+          "The $150,000 exemption is from assessed value, so the dollar savings depend on the local tax rate.",
+          "Deadlines are local, not uniform statewide, and missing the deadline can mean losing the exemption for that year.",
+          "Age qualification can hinge on whether the person turned 65 before January 1 or before December 31, depending on local rules.",
+          "Some municipalities require the property to be owned on January 1 and occupied as the permanent home on or before January 1.",
+          "Application forms are often only available from the local assessor or clerk, even though some cities post them online.",
+          "Some places require a separate form for hardship relief beyond the standard senior exemption.",
+          "A surviving spouse may qualify in some municipalities, but the rule is not identical everywhere."
+        ],
+        "data_shape_notes": "The benefit is fixed statewide at up to $150,000 of assessed value, but the operational details are locally administered and vary by municipality, especially filing deadline, application method, and required documentation.",
+        "_raw": "{\n  \"name\": \"Senior Property Tax Exemption\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No income limit applies to Alaska’s mandatory senior property tax exemption. The core eligibility test is age plus ownership/occupancy/residency rules, not income.\",\n    \"asset_limits\": \"No asset limit applies. The program exempts property value, not based on household assets. What matters is that the property is the applicant’s qualifying permanent residence and not a business property.\",\n    \"other_requirements\": [\n      \"Applicant must own the property and occupy it as a primary residence/permanent place of abode.\",\n      \"Applicant must have reached age 65 before January 1 of the exemption year in many municipalities; some local rules use the prior December 31 test.\",\n      \"The property is limited to the first $150,000 of assessed value exempt from taxation.\",\n      \"The application deadline is set locally and can vary by municipality.\",\n      \"Spouse eligibility may continue in some situations, such as a qualifying widow/widower in certain local ordinances.\",\n      \"Some municipalities require first-time proof of age.\",\n      \"Some municipalities require the property to be in Alaska residency use for a minimum number of days each year.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Mandatory exemption of up to the first $150,000 of the assessed value of the applicant’s primary residence from municipal property taxes.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Local municipal assessor or clerk office\",\n      \"In-person filing at the local assessing department\",\n      \"Mail to the local assessor/clerk office where allowed\",\n      \"Download and submit the local senior exemption form if the municipality provides one online\"\n    ],\n    \"processing_time\": \"Varies by municipality; some local offices describe the in-person filing process as taking about 10–15 minutes, but approval timing depends on local assessment cycles and deadlines.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"State-adopted senior citizen property tax exemption application form (municipal forms vary by locality)\",\n      \"Some municipalities use supplemental forms for first-time applicants or spouse/occupancy verification\"\n    ],\n    \"documents\": [\n      \"Proof of age for first-time applicants\",\n      \"Proof of ownership\",\n      \"Proof of primary residence/occupancy\",\n      \"Completed exemption application\",\n      \"Any spouse or residency documentation required by the local assessor\",\n      \"Any supplemental forms required by the municipality\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applies statewide to Alaska municipalities, but deadlines, filing methods, and supporting documents are set by local ordinance and assessor procedures.\",\n    \"regional_variations\": \"Yes. The exemption amount is statewide, but filing deadlines differ by city/borough, and some places require in-person filing while others accept mail or downloadable forms. Local offices also differ on whether they use March 15, March 31, February 14, or another deadline.\",\n    \"offices_or_providers\": [\n      \"Local municipal assessor or clerk office\",\n      \"Anchorage Property Appraisal Office\",\n      \"Fairbanks North Star Borough Assessing Department\",\n      \"Ketchikan Gateway Borough assessment office\",\n      \"Sitka Assessing Department\",\n      \"Other Alaska municipal assessor offices\"\n    ]\n  },\n  \"official_source\": \"https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx\",\n  \"gotchas\": [\n    \"This is a property tax exemption, not a cash benefit or healthcare program.\",\n    \"The $150,000 exemption is from assessed value, so the dollar savings depend on the local tax rate.\",\n    \"Deadlines are local, not uniform statewide, and missing the deadline can mean losing the exemption for that year.\",\n    \"Age qualification can hinge on whether the person turned 65 before January 1 or before December 31, depending on local rules.\",\n    \"Some municipalities require the property to be owned on January 1 and occupied as the permanent home on or before January 1.\",\n    \"Application forms are often only available from the local assessor or clerk, even though some cities post them online.\",\n    \"Some places require a separate form for hardship relief beyond the standard senior exemption.\",\n    \"A surviving spouse may qualify in some municipalities, but the rule is not identical everywhere.\"\n  ],\n  \"data_shape_notes\": \"The benefit is fixed statewide at up to $150,000 of assessed value, but the operational details are locally administered and vary by municipality, especially filing deadline, application method, and required documentation.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "AK",
+    "stateName": "Alaska",
+    "classifiedAt": "2026-10-06T06:15:08.959Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 2
+    },
+    "complexitySummary": {
+      "deep": 1,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Alaskans Living Independently Waiver (ALI)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Aging and Disability Resource Center (ADRC)",
+              "type": "service-area"
+            },
+            {
+              "name": "Division of Senior and Disabilities Services (SDS)",
+              "type": "service-area"
+            },
+            {
+              "name": "Division of Public Assistance (DPA) for Medicaid financial eligibility",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Senior Property Tax Exemption",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local municipal assessor or clerk office",
+              "type": "service-area"
+            },
+            {
+              "name": "Anchorage Property Appraisal Office",
+              "type": "service-area"
+            },
+            {
+              "name": "Fairbanks North Star Borough Assessing Department",
+              "type": "service-area"
+            },
+            {
+              "name": "Ketchikan Gateway Borough assessment office",
+              "type": "service-area"
+            },
+            {
+              "name": "Sitka Assessing Department",
+              "type": "service-area"
+            },
+            {
+              "name": "Other Alaska municipal assessor offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "AK",
+      "id": "ak-alaskans-living-independently-waiver",
+      "name": "Alaskans Living Independently Waiver (ALI)",
+      "legacyId": "alaskans-living-independently-waiver-ali",
+      "programType": "benefit"
+    },
+    {
+      "state": "AK",
+      "id": "ak-senior-property-tax-exemption",
+      "name": "Senior Property Tax Exemption",
+      "legacyId": "senior-property-tax-exemption",
+      "programType": "benefit"
+    }
+  ]
+}

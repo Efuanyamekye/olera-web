@@ -1,0 +1,465 @@
+{
+  "state": "MI",
+  "addedAt": "2026-10-06T05:50:26.129Z",
+  "dive": {
+    "state": "MI",
+    "stateName": "Michigan",
+    "diveAt": "2026-10-06T05:46:49.019Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Home Help Program",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No separate income table was identified for the Home Help Program itself. The key eligibility gate is active Michigan Medicaid Fee for Service / Michigan Medicaid coverage, not Medicare.[1][3] Some third-party summaries describe it as a low-income Medicaid benefit, but the official program pages found here do not publish a standalone income or household-size chart for Home Help.[1][7][15]",
+          "asset_limits": null,
+          "other_requirements": [
+            "Must have active Michigan Medicaid (not Medicare) and be receiving Medicaid Fee for Service for the Home Help benefit to be available.[1][3]",
+            "Must need hands-on physical assistance with at least one activity of daily living (ADL) such as bathing, dressing, eating, grooming, mobility, or toileting.[1][3][8]",
+            "Must be assessed by MDHHS, including a home visit/assessment by an Adult Services Worker.[1][2]",
+            "A Medicaid-approved medical provider must complete the medical certification form verifying the need for help.[1][3]",
+            "The person must live in the community/home setting; program materials indicate it is for people in their home or apartment, not a nursing facility.[9]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Personal care and support services can include bathing, personal hygiene, dressing, grooming, mobility assistance within the home, transferring, toileting, feeding/eating help, medication setup or administration, laundry, light housekeeping, meal preparation, and cleanup.[2][7][8] Approved hours are individualized through the MDHHS assessment and care plan; no fixed statewide dollar amount or weekly hour cap was identified in the sources reviewed.[1][2][3]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact the local county MDHHS office where the person receiving care lives by phone, mail, fax, or in person.[1][3]",
+            "Use the statewide MDHHS Home Help page: https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent[1]"
+          ],
+          "processing_time": "No official statewide processing-time standard was identified in the sources reviewed. Approval appears to depend on completion of the referral, forms, and the Adult Services Worker assessment.[1][2][3]",
+          "waitlist": "A formal statewide waitlist was not identified in the official sources reviewed. Service start appears to depend on local MDHHS processing and available authorization after assessment.[1][2][3]",
+          "forms": [
+            "DHS-390, Adult Services Application[1][3]",
+            "MDHHS-6200, Adult Services Medical Needs Certification form[1][3]",
+            "Some secondary sources refer to a DHS-54A medical needs form, but the official MDHHS page found here names the MDHHS-6200 form.[1][9]"
+          ],
+          "documents": [
+            "Completed and signed DHS-390 Adult Services Application signed by the client or guardian.[1][3]",
+            "Completed medical certification from a Medicaid-approved provider on the MDHHS-6200 form.[1][3]",
+            "Proof of active Michigan Medicaid coverage.[2][5]",
+            "Any information that helps document the need for hands-on assistance with ADLs.[1][3][5]",
+            "Identification and residency information for the person receiving services and, if relevant, the legal guardian or representative.[5][9]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through MDHHS across Michigan counties; referrals are directed to the local county MDHHS office where the client resides.[1] The benefit is for people living in the community, not nursing facilities.[9]",
+          "regional_variations": "The program is statewide, but administration runs through local county MDHHS offices, so timing, assessor availability, and service authorization can vary by county.[1][3] The sources reviewed did not provide a county-by-county wait-time chart.",
+          "offices_or_providers": [
+            "Local county MDHHS office where the client resides.[1]",
+            "MDHHS statewide Home Help page.[1]",
+            "Michigan Department of Health and Human Services provider/program page for Home Help.[7]"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent",
+        "gotchas": [
+          "This is not a cash benefit for the family; it authorizes services, usually through Medicaid, after assessment.[1][2][3]",
+          "The person receiving help must have active Medicaid; having Medicare alone is not enough.[1][3]",
+          "The need must involve hands-on help with at least one ADL, not just general housekeeping needs.[1][3][8]",
+          "The application is local even though the program is statewide: families must work with the county MDHHS office where the person lives.[1]",
+          "A provider must complete the medical certification; a family member cannot substitute for that form.[1][3]",
+          "Some non-official sites use different form numbers or describe the services broadly; the official MDHHS page identified DHS-390 and MDHHS-6200 as the core forms.[1][3][9]"
+        ],
+        "data_shape_notes": "Statewide Medicaid service program with local county administration, individualized assessment, and benefits that vary by assessed need rather than by a fixed income table or standard cash amount.[1][3][7]",
+        "last_updated": "2026-10-06",
+        "_raw": "{\n  \"name\": \"Home Help Program\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No separate income table was identified for the Home Help Program itself. The key eligibility gate is active Michigan Medicaid Fee for Service / Michigan Medicaid coverage, not Medicare.[1][3] Some third-party summaries describe it as a low-income Medicaid benefit, but the official program pages found here do not publish a standalone income or household-size chart for Home Help.[1][7][15]\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must have active Michigan Medicaid (not Medicare) and be receiving Medicaid Fee for Service for the Home Help benefit to be available.[1][3]\",\n      \"Must need hands-on physical assistance with at least one activity of daily living (ADL) such as bathing, dressing, eating, grooming, mobility, or toileting.[1][3][8]\",\n      \"Must be assessed by MDHHS, including a home visit/assessment by an Adult Services Worker.[1][2]\",\n      \"A Medicaid-approved medical provider must complete the medical certification form verifying the need for help.[1][3]\",\n      \"The person must live in the community/home setting; program materials indicate it is for people in their home or apartment, not a nursing facility.[9]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Personal care and support services can include bathing, personal hygiene, dressing, grooming, mobility assistance within the home, transferring, toileting, feeding/eating help, medication setup or administration, laundry, light housekeeping, meal preparation, and cleanup.[2][7][8] Approved hours are individualized through the MDHHS assessment and care plan; no fixed statewide dollar amount or weekly hour cap was identified in the sources reviewed.[1][2][3]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the local county MDHHS office where the person receiving care lives by phone, mail, fax, or in person.[1][3]\",\n      \"Use the statewide MDHHS Home Help page: https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent[1]\"\n    ],\n    \"processing_time\": \"No official statewide processing-time standard was identified in the sources reviewed. Approval appears to depend on completion of the referral, forms, and the Adult Services Worker assessment.[1][2][3]\",\n    \"waitlist\": \"A formal statewide waitlist was not identified in the official sources reviewed. Service start appears to depend on local MDHHS processing and available authorization after assessment.[1][2][3]\",\n    \"forms\": [\n      \"DHS-390, Adult Services Application[1][3]\",\n      \"MDHHS-6200, Adult Services Medical Needs Certification form[1][3]\",\n      \"Some secondary sources refer to a DHS-54A medical needs form, but the official MDHHS page found here names the MDHHS-6200 form.[1][9]\"\n    ],\n    \"documents\": [\n      \"Completed and signed DHS-390 Adult Services Application signed by the client or guardian.[1][3]\",\n      \"Completed medical certification from a Medicaid-approved provider on the MDHHS-6200 form.[1][3]\",\n      \"Proof of active Michigan Medicaid coverage.[2][5]\",\n      \"Any information that helps document the need for hands-on assistance with ADLs.[1][3][5]\",\n      \"Identification and residency information for the person receiving services and, if relevant, the legal guardian or representative.[5][9]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through MDHHS across Michigan counties; referrals are directed to the local county MDHHS office where the client resides.[1] The benefit is for people living in the community, not nursing facilities.[9]\",\n    \"regional_variations\": \"The program is statewide, but administration runs through local county MDHHS offices, so timing, assessor availability, and service authorization can vary by county.[1][3] The sources reviewed did not provide a county-by-county wait-time chart.\",\n    \"offices_or_providers\": [\n      \"Local county MDHHS office where the client resides.[1]\",\n      \"MDHHS statewide Home Help page.[1]\",\n      \"Michigan Department of Health and Human Services provider/program page for Home Help.[7]\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent\",\n  \"gotchas\": [\n    \"This is not a cash benefit for the family; it authorizes services, usually through Medicaid, after assessment.[1][2][3]\",\n    \"The person receiving help must have active Medicaid; having Medicare alone is not enough.[1][3]\",\n    \"The need must involve hands-on help with at least one ADL, not just general housekeeping needs.[1][3][8]\",\n    \"The application is local even though the program is statewide: families must work with the county MDHHS office where the person lives.[1]\",\n    \"A provider must complete the medical certification; a family member cannot substitute for that form.[1][3]\",\n    \"Some non-official sites use different form numbers or describe the services broadly; the official MDHHS page identified DHS-390 and MDHHS-6200 as the core forms.[1][3][9]\"\n  ],\n  \"data_shape_notes\": \"Statewide Medicaid service program with local county administration, individualized assessment, and benefits that vary by assessed need rather than by a fixed income table or standard cash amount.[1][3][7]\",\n  \"last_updated\": \"2026-10-06\"\n}"
+      },
+      {
+        "name": "Michigan Home Heating Credit",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "There is no age requirement. Eligibility is based on Michigan homestead status, occupancy/tenancy status, and household income/resources being within the annual limits in Table A and Table B. The program applies to homeowners and renters, including some shared-housing situations.",
+            "table_a_income_limits_2025_claim_2026": [
+              {
+                "household_exemptions": 1,
+                "standard_allowance": 500,
+                "income_ceiling": 17243
+              },
+              {
+                "household_exemptions": 2,
+                "standard_allowance": 725,
+                "income_ceiling": 23185
+              },
+              {
+                "household_exemptions": 3,
+                "standard_allowance": 950,
+                "income_ceiling": 29127
+              },
+              {
+                "household_exemptions": 4,
+                "standard_allowance": 1175,
+                "income_ceiling": 35069
+              },
+              {
+                "household_exemptions": 5,
+                "standard_allowance": 1400,
+                "income_ceiling": 41011
+              },
+              {
+                "household_exemptions": 6,
+                "standard_allowance": 1625,
+                "income_ceiling": 46953
+              },
+              {
+                "household_exemptions": 7,
+                "standard_allowance": 1850,
+                "income_ceiling": 52895
+              },
+              {
+                "household_exemptions": 8,
+                "standard_allowance": 2075,
+                "income_ceiling": 58837
+              },
+              {
+                "household_exemptions": "Each additional exemption",
+                "standard_allowance": 225,
+                "income_ceiling": 5942
+              }
+            ],
+            "notes": "The income ceiling is the key cutoff; if household resources exceed the ceiling for the exemption count, the claim is not allowed. Shared-housing claims are prorated. If someone is a homeowner/renter only part of the year, the standard allowance and credit are prorated."
+          },
+          "asset_limits": "No separate asset test was identified in the official materials reviewed. The program focuses on household income/resources and homestead/occupancy rules rather than bank balances or property holdings.",
+          "other_requirements": [
+            "Must own or be contracted to pay rent and occupy a Michigan homestead.",
+            "Must not be a full-time student claimed as a dependent on another person's return.",
+            "Must not live in college or university-operated housing for the entire year.",
+            "Must not live in a licensed care facility for the entire year.",
+            "Must file Form MI-1040CR-7 by the deadline.",
+            "If required to file a Michigan income tax return, the credit claim is submitted with that return; otherwise it can be filed on its own.",
+            "Claim must be received/postmarked by September 30."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A state home heating credit that reduces the household's heating costs; the actual dollar amount varies based on household size/exemptions, income/resources, rent or ownership status, and days occupied. The official materials reviewed do not present it as a fixed statewide dollar amount for everyone.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online/e-file through Michigan Treasury e-filing options for the MI-1040CR-7 claim",
+            "Mail the completed MI-1040CR-7 to the Michigan Department of Treasury",
+            "Attach the completed MI-1040CR-7 to a Michigan Individual Income Tax Return (MI-1040) if one is being filed",
+            "Obtain the form from Michigan.gov/Taxes, a local library, MDHHS office, community agency, or the Michigan Department of Treasury"
+          ],
+          "processing_time": "No official processing-time estimate was identified in the materials reviewed. Treasury indicates claims are prioritized when filed early, and the filing deadline is September 30.",
+          "waitlist": null,
+          "forms": [
+            "MI-1040CR-7 Home Heating Credit Claim",
+            "MI-1040CR-7 Home Heating Credit Claim Instruction Book"
+          ],
+          "documents": [
+            "Social Security numbers and dates of birth for household members as required by the form",
+            "Total household resources/income information",
+            "Rent and lease information if renting",
+            "Property tax and ownership information if owning",
+            "Number of household members/exemptions",
+            "Days occupied in Michigan if lived there only part of the year",
+            "Michigan Individual Income Tax Return MI-1040 if one is required"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to Michigan homesteads statewide; not limited by county.",
+          "regional_variations": "No formal regional benefit differences were identified. Access can differ only in practical terms, such as where people pick up forms or get local filing help through libraries, MDHHS offices, or community agencies.",
+          "offices_or_providers": [
+            "Michigan Department of Treasury",
+            "Local libraries",
+            "MDHHS offices",
+            "Community agencies"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/taxes/questions/iit/accordion/heating/home-heating-credit-information-1",
+        "gotchas": [
+          "The deadline is strict: September 30, and an income tax extension does not extend it.",
+          "People can apply for the heating credit even if they do not file a Michigan income tax return.",
+          "The claim can be filed with the return or separately, but it still must use Form MI-1040CR-7.",
+          "Students claimed as dependents, people in dorms/university housing for the whole year, and people in licensed care facilities for the whole year do not qualify.",
+          "Shared housing and part-year occupancy require proration, which can reduce the credit.",
+          "The credit is not automatically granted; families must submit the form.",
+          "Priority processing is associated with filing early.",
+          "Income ceilings change by exemption count, so the household-size table matters."
+        ],
+        "data_shape_notes": "This program is a statewide, income-tested financial credit with a household-exemption table, not a service program. Eligibility depends on homestead/occupancy status plus Table A income ceilings, and the claim is filed on Form MI-1040CR-7 by a fixed annual deadline.",
+        "_raw": "{\n  \"name\": \"Michigan Home Heating Credit\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"There is no age requirement. Eligibility is based on Michigan homestead status, occupancy/tenancy status, and household income/resources being within the annual limits in Table A and Table B. The program applies to homeowners and renters, including some shared-housing situations.\",\n      \"table_a_income_limits_2025_claim_2026\": [\n        {\n          \"household_exemptions\": 1,\n          \"standard_allowance\": 500,\n          \"income_ceiling\": 17243\n        },\n        {\n          \"household_exemptions\": 2,\n          \"standard_allowance\": 725,\n          \"income_ceiling\": 23185\n        },\n        {\n          \"household_exemptions\": 3,\n          \"standard_allowance\": 950,\n          \"income_ceiling\": 29127\n        },\n        {\n          \"household_exemptions\": 4,\n          \"standard_allowance\": 1175,\n          \"income_ceiling\": 35069\n        },\n        {\n          \"household_exemptions\": 5,\n          \"standard_allowance\": 1400,\n          \"income_ceiling\": 41011\n        },\n        {\n          \"household_exemptions\": 6,\n          \"standard_allowance\": 1625,\n          \"income_ceiling\": 46953\n        },\n        {\n          \"household_exemptions\": 7,\n          \"standard_allowance\": 1850,\n          \"income_ceiling\": 52895\n        },\n        {\n          \"household_exemptions\": 8,\n          \"standard_allowance\": 2075,\n          \"income_ceiling\": 58837\n        },\n        {\n          \"household_exemptions\": \"Each additional exemption\",\n          \"standard_allowance\": 225,\n          \"income_ceiling\": 5942\n        }\n      ],\n      \"notes\": \"The income ceiling is the key cutoff; if household resources exceed the ceiling for the exemption count, the claim is not allowed. Shared-housing claims are prorated. If someone is a homeowner/renter only part of the year, the standard allowance and credit are prorated.\"\n    },\n    \"asset_limits\": \"No separate asset test was identified in the official materials reviewed. The program focuses on household income/resources and homestead/occupancy rules rather than bank balances or property holdings.\",\n    \"other_requirements\": [\n      \"Must own or be contracted to pay rent and occupy a Michigan homestead.\",\n      \"Must not be a full-time student claimed as a dependent on another person's return.\",\n      \"Must not live in college or university-operated housing for the entire year.\",\n      \"Must not live in a licensed care facility for the entire year.\",\n      \"Must file Form MI-1040CR-7 by the deadline.\",\n      \"If required to file a Michigan income tax return, the credit claim is submitted with that return; otherwise it can be filed on its own.\",\n      \"Claim must be received/postmarked by September 30.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A state home heating credit that reduces the household's heating costs; the actual dollar amount varies based on household size/exemptions, income/resources, rent or ownership status, and days occupied. The official materials reviewed do not present it as a fixed statewide dollar amount for everyone.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online/e-file through Michigan Treasury e-filing options for the MI-1040CR-7 claim\",\n      \"Mail the completed MI-1040CR-7 to the Michigan Department of Treasury\",\n      \"Attach the completed MI-1040CR-7 to a Michigan Individual Income Tax Return (MI-1040) if one is being filed\",\n      \"Obtain the form from Michigan.gov/Taxes, a local library, MDHHS office, community agency, or the Michigan Department of Treasury\"\n    ],\n    \"processing_time\": \"No official processing-time estimate was identified in the materials reviewed. Treasury indicates claims are prioritized when filed early, and the filing deadline is September 30.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"MI-1040CR-7 Home Heating Credit Claim\",\n      \"MI-1040CR-7 Home Heating Credit Claim Instruction Book\"\n    ],\n    \"documents\": [\n      \"Social Security numbers and dates of birth for household members as required by the form\",\n      \"Total household resources/income information\",\n      \"Rent and lease information if renting\",\n      \"Property tax and ownership information if owning\",\n      \"Number of household members/exemptions\",\n      \"Days occupied in Michigan if lived there only part of the year\",\n      \"Michigan Individual Income Tax Return MI-1040 if one is required\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to Michigan homesteads statewide; not limited by county.\",\n    \"regional_variations\": \"No formal regional benefit differences were identified. Access can differ only in practical terms, such as where people pick up forms or get local filing help through libraries, MDHHS offices, or community agencies.\",\n    \"offices_or_providers\": [\n      \"Michigan Department of Treasury\",\n      \"Local libraries\",\n      \"MDHHS offices\",\n      \"Community agencies\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/taxes/questions/iit/accordion/heating/home-heating-credit-information-1\",\n  \"gotchas\": [\n    \"The deadline is strict: September 30, and an income tax extension does not extend it.\",\n    \"People can apply for the heating credit even if they do not file a Michigan income tax return.\",\n    \"The claim can be filed with the return or separately, but it still must use Form MI-1040CR-7.\",\n    \"Students claimed as dependents, people in dorms/university housing for the whole year, and people in licensed care facilities for the whole year do not qualify.\",\n    \"Shared housing and part-year occupancy require proration, which can reduce the credit.\",\n    \"The credit is not automatically granted; families must submit the form.\",\n    \"Priority processing is associated with filing early.\",\n    \"Income ceilings change by exemption count, so the household-size table matters.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide, income-tested financial credit with a household-exemption table, not a service program. Eligibility depends on homestead/occupancy status plus Table A income ceilings, and the claim is filed on Form MI-1040CR-7 by a fixed annual deadline.\"\n}"
+      },
+      {
+        "name": "Michigan Energy Assistance Program (MEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "standard": "Household income must be at or below 60% of the State Median Income (SMI). Michigan’s utility guidance shows the current MEAP income ceilings as follows:",
+            "table": [
+              {
+                "household_size": 1,
+                "annual_income_limit": 36043
+              },
+              {
+                "household_size": 2,
+                "annual_income_limit": 47279
+              },
+              {
+                "household_size": 3,
+                "annual_income_limit": 58515
+              },
+              {
+                "household_size": 4,
+                "annual_income_limit": 70225
+              },
+              {
+                "household_size": 5,
+                "annual_income_limit": 81461
+              },
+              {
+                "household_size": 6,
+                "annual_income_limit": 92697
+              },
+              {
+                "household_size": 7,
+                "annual_income_limit": 100597
+              },
+              {
+                "household_size": 8,
+                "annual_income_limit": 112833
+              },
+              {
+                "additional_person": 11236,
+                "notes": "Add this amount for each additional household member."
+              }
+            ],
+            "notes": [
+              "Michigan sources also display a single-person MEAP threshold of $3,043 monthly, with 8-person household monthly income at $8,076, and $176 for each additional person monthly on utility provider charts.",
+              "A separate provider chart may present slightly different rounded figures depending on whether it is annual or monthly income, but the controlling rule is 60% SMI."
+            ]
+          },
+          "asset_limits": "No asset limit was identified in the official MEAP materials reviewed. The program’s published eligibility focuses on income and utility participation rather than countable assets.",
+          "other_requirements": [
+            "The household must be served by an electric utility that has opted in to collecting the Low Income Energy Assistance Fund surcharge.",
+            "The household must either meet the income test or participate in one of these programs: State Emergency Relief (SER), Home Heating Credit (HHC), SNAP/FAP, TANF/FIP, WIC, Head Start, SSI, or State Disability Assistance (SDA).",
+            "MEAP is for a primary residence.",
+            "Families generally need a current/past-due energy issue through a participating utility or MEAP provider intake channel."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "MEAP is a statewide energy-assistance program that can provide payment assistance, arrearage assistance, and energy efficiency services for eligible households. The official state page describes it as assistance for electricity, natural gas, propane, heating oil, or other deliverable fuels used for heat. The amount of direct financial help can vary by MEAP provider; the program does not publish one fixed statewide dollar grant for every household.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call 2-1-1 to be connected with a local MEAP provider",
+            "Apply online through a local provider when available, such as Wayne Metro’s MEAP application portal",
+            "Call a local MEAP provider directly",
+            "Use the provider’s in-person or local intake process if offered"
+          ],
+          "processing_time": "No single statewide processing time was published in the sources reviewed. Timing appears to depend on the local MEAP provider and local intake volume.",
+          "waitlist": "No statewide waitlist was identified. Availability and intake timing may depend on provider funding and local demand.",
+          "forms": [
+            "No single statewide form number was identified in the reviewed official sources"
+          ],
+          "documents": [
+            "Proof of household income",
+            "Proof of identity for adult household members",
+            "Recent utility bill or shutoff/past-due notice if available",
+            "Proof of participation in a qualifying assistance program, if using categorical eligibility",
+            "Household member information and contact information",
+            "Any lease or residency documentation the provider requests"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide, but only through participating electric utilities and local MEAP providers.",
+          "regional_variations": "Yes. MEAP is administered through local providers, so application routes, intake procedures, funding, service emphasis, and processing speed can vary by region and provider. The benefit amount can also vary from one provider to another.",
+          "offices_or_providers": [
+            "Wayne Metro Community Action Agency",
+            "Barry County United Way",
+            "Bureau of Community Action and Economic Opportunity",
+            "Local MEAP providers connected through 2-1-1"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mpsc/consumer/energy-assistance",
+        "gotchas": [
+          "MEAP is not a single fixed benefit amount statewide; the provider decides the actual assistance package within program rules.",
+          "Households often confuse MEAP with other Michigan energy programs such as SER, Home Heating Credit, or Weatherization; MEAP is specifically the statewide energy-assistance program tied to low-income households and participating utilities.",
+          "Eligibility is not just income-based; the utility must participate in the Low Income Energy Assistance Fund surcharge collection system.",
+          "If a household already receives certain public benefits, it may qualify categorically even if income documentation is harder to assemble.",
+          "People often miss that the best first step is 2-1-1, because that is the official referral path to the correct local provider."
+        ],
+        "data_shape_notes": "This program is statewide but locally administered, so the data shape is: statewide eligibility framework + provider-specific intake and assistance amounts. Benefits vary by provider, not by a single fixed state schedule.",
+        "_raw": "{\n  \"name\": \"Michigan Energy Assistance Program (MEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"standard\": \"Household income must be at or below 60% of the State Median Income (SMI). Michigan’s utility guidance shows the current MEAP income ceilings as follows:\",\n      \"table\": [\n        { \"household_size\": 1, \"annual_income_limit\": 36043 },\n        { \"household_size\": 2, \"annual_income_limit\": 47279 },\n        { \"household_size\": 3, \"annual_income_limit\": 58515 },\n        { \"household_size\": 4, \"annual_income_limit\": 70225 },\n        { \"household_size\": 5, \"annual_income_limit\": 81461 },\n        { \"household_size\": 6, \"annual_income_limit\": 92697 },\n        { \"household_size\": 7, \"annual_income_limit\": 100597 },\n        { \"household_size\": 8, \"annual_income_limit\": 112833 },\n        { \"additional_person\": 11236, \"notes\": \"Add this amount for each additional household member.\" }\n      ],\n      \"notes\": [\n        \"Michigan sources also display a single-person MEAP threshold of $3,043 monthly, with 8-person household monthly income at $8,076, and $176 for each additional person monthly on utility provider charts.\",\n        \"A separate provider chart may present slightly different rounded figures depending on whether it is annual or monthly income, but the controlling rule is 60% SMI.\"\n      ]\n    },\n    \"asset_limits\": \"No asset limit was identified in the official MEAP materials reviewed. The program’s published eligibility focuses on income and utility participation rather than countable assets.\",\n    \"other_requirements\": [\n      \"The household must be served by an electric utility that has opted in to collecting the Low Income Energy Assistance Fund surcharge.\",\n      \"The household must either meet the income test or participate in one of these programs: State Emergency Relief (SER), Home Heating Credit (HHC), SNAP/FAP, TANF/FIP, WIC, Head Start, SSI, or State Disability Assistance (SDA).\",\n      \"MEAP is for a primary residence.\",\n      \"Families generally need a current/past-due energy issue through a participating utility or MEAP provider intake channel.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"MEAP is a statewide energy-assistance program that can provide payment assistance, arrearage assistance, and energy efficiency services for eligible households. The official state page describes it as assistance for electricity, natural gas, propane, heating oil, or other deliverable fuels used for heat. The amount of direct financial help can vary by MEAP provider; the program does not publish one fixed statewide dollar grant for every household.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call 2-1-1 to be connected with a local MEAP provider\",\n      \"Apply online through a local provider when available, such as Wayne Metro’s MEAP application portal\",\n      \"Call a local MEAP provider directly\",\n      \"Use the provider’s in-person or local intake process if offered\"\n    ],\n    \"processing_time\": \"No single statewide processing time was published in the sources reviewed. Timing appears to depend on the local MEAP provider and local intake volume.\",\n    \"waitlist\": \"No statewide waitlist was identified. Availability and intake timing may depend on provider funding and local demand.\",\n    \"forms\": [\n      \"No single statewide form number was identified in the reviewed official sources\"\n    ],\n    \"documents\": [\n      \"Proof of household income\",\n      \"Proof of identity for adult household members\",\n      \"Recent utility bill or shutoff/past-due notice if available\",\n      \"Proof of participation in a qualifying assistance program, if using categorical eligibility\",\n      \"Household member information and contact information\",\n      \"Any lease or residency documentation the provider requests\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide, but only through participating electric utilities and local MEAP providers.\",\n    \"regional_variations\": \"Yes. MEAP is administered through local providers, so application routes, intake procedures, funding, service emphasis, and processing speed can vary by region and provider. The benefit amount can also vary from one provider to another.\",\n    \"offices_or_providers\": [\n      \"Wayne Metro Community Action Agency\",\n      \"Barry County United Way\",\n      \"Bureau of Community Action and Economic Opportunity\",\n      \"Local MEAP providers connected through 2-1-1\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mpsc/consumer/energy-assistance\",\n  \"gotchas\": [\n    \"MEAP is not a single fixed benefit amount statewide; the provider decides the actual assistance package within program rules.\",\n    \"Households often confuse MEAP with other Michigan energy programs such as SER, Home Heating Credit, or Weatherization; MEAP is specifically the statewide energy-assistance program tied to low-income households and participating utilities.\",\n    \"Eligibility is not just income-based; the utility must participate in the Low Income Energy Assistance Fund surcharge collection system.\",\n    \"If a household already receives certain public benefits, it may qualify categorically even if income documentation is harder to assemble.\",\n    \"People often miss that the best first step is 2-1-1, because that is the official referral path to the correct local provider.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but locally administered, so the data shape is: statewide eligibility framework + provider-specific intake and assistance amounts. Benefits vary by provider, not by a single fixed state schedule.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MI",
+    "stateName": "Michigan",
+    "classifiedAt": "2026-10-06T05:46:49.023Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 3
+    },
+    "programs": [
+      {
+        "name": "Home Help Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county MDHHS office where the client resides.[1]",
+              "type": "service-area"
+            },
+            {
+              "name": "MDHHS statewide Home Help page.[1]",
+              "type": "service-area"
+            },
+            {
+              "name": "Michigan Department of Health and Human Services provider/program page for Home Help.[7]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Michigan Home Heating Credit",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Michigan Department of Treasury",
+              "type": "service-area"
+            },
+            {
+              "name": "Local libraries",
+              "type": "service-area"
+            },
+            {
+              "name": "MDHHS offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Community agencies",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Michigan Energy Assistance Program (MEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Wayne Metro Community Action Agency",
+              "type": "service-area"
+            },
+            {
+              "name": "Barry County United Way",
+              "type": "service-area"
+            },
+            {
+              "name": "Bureau of Community Action and Economic Opportunity",
+              "type": "service-area"
+            },
+            {
+              "name": "Local MEAP providers connected through 2-1-1",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MI",
+      "id": "mi-home-help-program",
+      "name": "Home Help Program",
+      "legacyId": null,
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-home-heating-credit",
+      "name": "Michigan Home Heating Credit",
+      "legacyId": null,
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-meap-energy-assistance",
+      "name": "Michigan Energy Assistance Program (MEAP)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

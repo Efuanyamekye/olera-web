@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { zipToState } from "@/lib/benefits/zip-lookup";
+import { zipToCounty, zipToState } from "@/lib/benefits/zip-lookup";
 import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
@@ -80,6 +80,9 @@ export default function BenefitsConversationPage() {
   const [need, setNeed] = useState<FinderNeed | null>(null);
   const [zip, setZip] = useState("");
   const [stateCode, setStateCode] = useState<string | null>(null);
+  // The county picks the family's own Area Agency on Aging; without it the
+  // plan falls back to the state's first agency alphabetically.
+  const [county, setCounty] = useState<string | null>(null);
   const [facts, setFacts] = useState<KnownFacts>(EMPTY);
   const [asked, setAsked] = useState<FactKey[]>([]);
   const [turn, setTurn] = useState<ConversationTurn | null>(null);
@@ -219,13 +222,16 @@ export default function BenefitsConversationPage() {
     who,
     zip,
     stateCode,
+    county,
     place: stateName,
     age: facts.age,
     needs: need ? [need] : ["care"],
-    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
+    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : facts.household === "family" ? "3" : null,
     income: facts.income ?? (asked.includes("income") ? "unsure" : null),
-    medicaid: null,
-    veteran: facts.veteran ?? "no",
+    // Carry what the conversation learned; a fact it never asked stays unknown
+    // rather than "no", which would rule programs out unasked.
+    medicaid: facts.medicaid === "has" ? "alreadyHas" : facts.medicaid === "no" ? "doesNotHave" : asked.includes("medicaid") ? "notSure" : null,
+    veteran: facts.veteran ?? (asked.includes("veteran") ? "unsure" : null),
     dailyHelp: facts.dailyHelp,
     savings: facts.savings,
   });
@@ -340,6 +346,12 @@ export default function BenefitsConversationPage() {
               completed("zip");
               remember();
               setStateCode(st);
+              setCounty(null);
+              void zipToCounty(zip).then(setCounty);
+              // Someone filling it in for their spouse has answered the
+              // household question already; don't ask "Does your spouse live
+              // with a spouse or partner?"
+              if (who === "spouse") setFacts((f) => (f.household ? f : { ...f, household: "couple" }));
               setTurn(null);
               setStep("engine");
             }}
@@ -480,15 +492,19 @@ function Thinking({ text }: { text: string }) {
 }
 
 function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void; onCall: () => void }) {
-  const [open, setOpen] = useState<"say" | "ready" | "more" | null>(null);
+  const [open, setOpen] = useState<"say" | "ready" | "more" | "moreLikely" | null>(null);
   const first: FinderProgram | null = plan.firstStep;
-  const likelyRest = plan.programs.filter((p) => p.tier === "likely");
+  // Four is a list someone can take in; the rest fold away (a Michigan plan
+  // listed thirteen once the catalog filled in, 6 Oct 2026).
+  const likelyAll = plan.programs.filter((p) => p.tier === "likely");
+  const likelyRest = likelyAll.slice(0, 4);
+  const likelyMore = likelyAll.slice(4);
   const checkRest = plan.programs.filter((p) => p.tier === "check");
   if (!first) return <p className="text-gray-600">We couldn&apos;t find a first call for this state yet.</p>;
   const isAgency = first.id === "local-agency";
   const script = isAgency
     ? `Hi, I'm looking for help finding benefits ${callFor}. Could you tell me what we might qualify for?`
-    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?`;
+    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?${first.needsMedicaid ? " It needs Medicaid. If they don't have it yet, can we start that application on this call too?" : ""}`;
 
   return (
     <div className="conv-rise flex flex-col gap-5">
@@ -522,6 +538,14 @@ function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderR
         <section className="flex flex-col">
           <h2 className="text-[15px] font-semibold text-gray-900 m-0 mb-1">Also likely</h2>
           {likelyRest.map((p) => <Row key={p.id} p={p} />)}
+          {likelyMore.length ? (
+            <>
+              <button type="button" onClick={() => setOpen(open === "moreLikely" ? null : "moreLikely")} aria-expanded={open === "moreLikely"} className="text-left bg-transparent border-none p-0 py-3 text-[15px] text-gray-500 cursor-pointer">
+                {likelyMore.length} more that look likely {open === "moreLikely" ? "▴" : "▾"}
+              </button>
+              {open === "moreLikely" ? likelyMore.map((p) => <Row key={p.id} p={p} />) : null}
+            </>
+          ) : null}
         </section>
       ) : null}
 

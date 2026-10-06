@@ -1,0 +1,314 @@
+{
+  "state": "OH",
+  "addedAt": "2026-10-06T06:28:56.880Z",
+  "dive": {
+    "state": "OH",
+    "stateName": "Ohio",
+    "diveAt": "2026-10-06T06:26:23.806Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Medicare Premium Assistance Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "programs": [
+              {
+                "name": "QMB (Qualified Medicare Beneficiary)",
+                "single": "$1,330/month",
+                "couple": "$1,804/month",
+                "basis": "About 100% of the Federal Poverty Level plus a $20 income disregard"
+              },
+              {
+                "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+                "single": "$1,596/month",
+                "couple": "$2,164/month",
+                "basis": "About 100% to 120% of the Federal Poverty Level plus a $20 income disregard"
+              },
+              {
+                "name": "QI (Qualifying Individual)",
+                "single": "$1,796/month",
+                "couple": "$2,435/month",
+                "basis": "About 120% to 135% of the Federal Poverty Level plus a $20 income disregard"
+              },
+              {
+                "name": "QDWI (Qualified Disabled and Working Individuals)",
+                "single": "$2,660/month",
+                "couple": "$3,607/month",
+                "basis": "For disabled working people under 65; different eligibility structure than QMB/SLMB/QI"
+              }
+            ],
+            "notes": [
+              "Income standards are measured monthly.",
+              "The application is handled through Ohio Medicaid, and eligibility is determined using the Medicaid application."
+            ]
+          },
+          "asset_limits": {
+            "qmb_slmb_qi": {
+              "single": "$9,950",
+              "couple": "$14,910"
+            },
+            "qdwi": {
+              "single": "$4,000",
+              "couple": "$6,000"
+            },
+            "what_counts": [
+              "Bank accounts",
+              "Cash",
+              "Retirement accounts",
+              "Other countable resources used in Medicaid-style resource tests"
+            ],
+            "what_is_exempt": [
+              "The home you live in is generally not counted",
+              "Personal belongings are generally not counted",
+              "One vehicle is generally not counted",
+              "Some burial and life-insurance arrangements may be excluded under Medicaid-style rules"
+            ],
+            "notes": [
+              "The source material indicates asset limits apply, but the exact countable/exempt treatment can follow Medicaid resource rules and may vary by program category."
+            ]
+          },
+          "other_requirements": [
+            "Must be entitled to Medicare Part A for most MSP categories",
+            "Must live in Ohio",
+            "Must meet the relevant income and resource limits",
+            "QDWI is for certain disabled working individuals under age 65",
+            "Eligibility is determined through a Medicaid application"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": [
+            "QMB: pays Medicare Part A premiums, Part B premiums, deductibles, coinsurance, and copayments",
+            "SLMB: pays Medicare Part B premium only",
+            "QI: pays Medicare Part B premium only",
+            "QDWI: pays Medicare Part A premium for qualifying working disabled individuals"
+          ],
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online at benefits.ohio.gov",
+            "By phone at 1-800-324-8680",
+            "By mail through the county Department of Job and Family Services",
+            "In person at the county Department of Job and Family Services"
+          ],
+          "processing_time": "Not clearly stated in the source results; an interview may be required.",
+          "waitlist": "No waitlist was identified in the source results.",
+          "forms": [
+            "Medicaid application used to determine eligibility for Medicare Savings Programs"
+          ],
+          "documents": [
+            "Proof of income",
+            "Proof of assets/resources such as bank statements and account records",
+            "Medicare card",
+            "Proof of Ohio residency",
+            "Any information requested by the county Department of Job and Family Services"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Ohio; administered through county Departments of Job and Family Services and Ohio Medicaid rules.",
+          "regional_variations": "The core program standards are statewide, but local county offices handle applications and interviews, so processing experience can vary by county.",
+          "offices_or_providers": [
+            "County Department of Job and Family Services",
+            "Ohio Medicaid Consumer Hotline",
+            "Ohio SHIP / OSHIIP counseling network"
+          ]
+        },
+        "official_source": "https://medicaid.ohio.gov",
+        "gotchas": [
+          "People often think this is a separate benefit application, but Ohio uses the Medicaid application to screen for these Medicare Savings Programs.",
+          "QMB is the broadest help: it can cover Medicare cost-sharing, not just the premium.",
+          "SLMB and QI only pay the Part B premium; they do not generally cover deductibles and copays.",
+          "QI is usually subject to limited federal funding and annual renewal rules can matter.",
+          "Asset limits still matter, even if income is low enough.",
+          "Families should not assume the same numbers from another state apply in Ohio."
+        ],
+        "data_shape_notes": "This program is actually a bundle of different Medicare Savings Programs, with benefits and income/resource rules that vary by tier rather than a single uniform program.",
+        "_raw": "{\n  \"name\": \"Medicare Premium Assistance Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"programs\": [\n        {\n          \"name\": \"QMB (Qualified Medicare Beneficiary)\",\n          \"single\": \"$1,330/month\",\n          \"couple\": \"$1,804/month\",\n          \"basis\": \"About 100% of the Federal Poverty Level plus a $20 income disregard\"\n        },\n        {\n          \"name\": \"SLMB (Specified Low-Income Medicare Beneficiary)\",\n          \"single\": \"$1,596/month\",\n          \"couple\": \"$2,164/month\",\n          \"basis\": \"About 100% to 120% of the Federal Poverty Level plus a $20 income disregard\"\n        },\n        {\n          \"name\": \"QI (Qualifying Individual)\",\n          \"single\": \"$1,796/month\",\n          \"couple\": \"$2,435/month\",\n          \"basis\": \"About 120% to 135% of the Federal Poverty Level plus a $20 income disregard\"\n        },\n        {\n          \"name\": \"QDWI (Qualified Disabled and Working Individuals)\",\n          \"single\": \"$2,660/month\",\n          \"couple\": \"$3,607/month\",\n          \"basis\": \"For disabled working people under 65; different eligibility structure than QMB/SLMB/QI\"\n        }\n      ],\n      \"notes\": [\n        \"Income standards are measured monthly.\",\n        \"The application is handled through Ohio Medicaid, and eligibility is determined using the Medicaid application.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"qmb_slmb_qi\": {\n        \"single\": \"$9,950\",\n        \"couple\": \"$14,910\"\n      },\n      \"qdwi\": {\n        \"single\": \"$4,000\",\n        \"couple\": \"$6,000\"\n      },\n      \"what_counts\": [\n        \"Bank accounts\",\n        \"Cash\",\n        \"Retirement accounts\",\n        \"Other countable resources used in Medicaid-style resource tests\"\n      ],\n      \"what_is_exempt\": [\n        \"The home you live in is generally not counted\",\n        \"Personal belongings are generally not counted\",\n        \"One vehicle is generally not counted\",\n        \"Some burial and life-insurance arrangements may be excluded under Medicaid-style rules\"\n      ],\n      \"notes\": [\n        \"The source material indicates asset limits apply, but the exact countable/exempt treatment can follow Medicaid resource rules and may vary by program category.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be entitled to Medicare Part A for most MSP categories\",\n      \"Must live in Ohio\",\n      \"Must meet the relevant income and resource limits\",\n      \"QDWI is for certain disabled working individuals under age 65\",\n      \"Eligibility is determined through a Medicaid application\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": [\n      \"QMB: pays Medicare Part A premiums, Part B premiums, deductibles, coinsurance, and copayments\",\n      \"SLMB: pays Medicare Part B premium only\",\n      \"QI: pays Medicare Part B premium only\",\n      \"QDWI: pays Medicare Part A premium for qualifying working disabled individuals\"\n    ],\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at benefits.ohio.gov\",\n      \"By phone at 1-800-324-8680\",\n      \"By mail through the county Department of Job and Family Services\",\n      \"In person at the county Department of Job and Family Services\"\n    ],\n    \"processing_time\": \"Not clearly stated in the source results; an interview may be required.\",\n    \"waitlist\": \"No waitlist was identified in the source results.\",\n    \"forms\": [\n      \"Medicaid application used to determine eligibility for Medicare Savings Programs\"\n    ],\n    \"documents\": [\n      \"Proof of income\",\n      \"Proof of assets/resources such as bank statements and account records\",\n      \"Medicare card\",\n      \"Proof of Ohio residency\",\n      \"Any information requested by the county Department of Job and Family Services\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Ohio; administered through county Departments of Job and Family Services and Ohio Medicaid rules.\",\n    \"regional_variations\": \"The core program standards are statewide, but local county offices handle applications and interviews, so processing experience can vary by county.\",\n    \"offices_or_providers\": [\n      \"County Department of Job and Family Services\",\n      \"Ohio Medicaid Consumer Hotline\",\n      \"Ohio SHIP / OSHIIP counseling network\"\n    ]\n  },\n  \"official_source\": \"https://medicaid.ohio.gov\",\n  \"gotchas\": [\n    \"People often think this is a separate benefit application, but Ohio uses the Medicaid application to screen for these Medicare Savings Programs.\",\n    \"QMB is the broadest help: it can cover Medicare cost-sharing, not just the premium.\",\n    \"SLMB and QI only pay the Part B premium; they do not generally cover deductibles and copays.\",\n    \"QI is usually subject to limited federal funding and annual renewal rules can matter.\",\n    \"Asset limits still matter, even if income is low enough.\",\n    \"Families should not assume the same numbers from another state apply in Ohio.\"\n  ],\n  \"data_shape_notes\": \"This program is actually a bundle of different Medicare Savings Programs, with benefits and income/resource rules that vary by tier rather than a single uniform program.\"\n}"
+      },
+      {
+        "name": "Homestead Exemption",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "standard_new_applicant_income_cap": {
+              "2025_application_period": "$40,000 maximum Ohio Adjusted Gross Income / Ohio Modified Adjusted Gross Income as stated by county guidance for 2025 applications",
+              "2026_application_period": "$41,000 maximum Ohio Adjusted Gross Income / Ohio Modified Adjusted Gross Income as stated by county guidance for 2026 applications"
+            },
+            "household_size_table": "No household-size table was identified in the official county guidance reviewed. The limit is described as a cap on combined income for the applicant and spouse, not as a sliding scale by household size.",
+            "income_definition": "Counties describe the test as the applicant’s and spouse’s Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income from the prior tax year, depending on county language. Some county pages explicitly note that Social Security income does not count toward the threshold, while spousal taxable income does.",
+            "notes": "The income limit appears to be an annually inflation-adjusted statewide threshold, but counties may describe it using slightly different tax-line terminology."
+          },
+          "asset_limits": "No asset limit was identified in the sources reviewed. The program described is an income-based property tax exemption, not a means-tested asset program. The main property requirement is that the home is the applicant’s principal residence and, in the form language, up to one acre of land associated with the home.",
+          "other_requirements": [
+            "Must own and occupy the home as the principal place of residence",
+            "Must be at least age 65 by December 31 of the year for which the exemption is sought, or turn 65 during that year",
+            "Can also qualify if permanently and totally disabled or as a surviving spouse, but your question was about elderly qualification",
+            "Must file with the county auditor where the property is located",
+            "Only the current application year and eligibility rules used by the county auditor apply; late/current-year filing rules may differ by county"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A property tax reduction that exempts part of the home’s taxable value. The statewide form says the reduction equals the taxes otherwise charged on up to $25,000 of the market value of the homestead. Some county auditor pages describe the senior/disabled exemption as exempting the first $29,000 of the home’s appraised value, reflecting current county explanations. The practical benefit is a reduction in property taxes, not cash assistance.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online application through some county auditor websites, where available",
+            "Paper form filed with the county auditor",
+            "Mail to the county auditor office",
+            "In person at the county auditor office"
+          ],
+          "processing_time": "No single statewide processing time was identified. County pages indicate that applications submitted before completion of the Ohio income tax return are decided after the Department of Taxation processes the return and the auditor verifies income, so timing depends on tax-filing and county processing. County offices generally do not publish a fixed statewide turnaround time.",
+          "waitlist": null,
+          "forms": [
+            "DTE 105A - Homestead Exemption Application for Senior Citizens, Disabled Persons, and Surviving Spouses",
+            "DTE 105I - Homestead Exemption Application for Disabled Veterans and Surviving Spouses of Disabled Veterans, where applicable"
+          ],
+          "documents": [
+            "Completed DTE 105A application",
+            "Proof of age if requested by the county",
+            "Income information for the applicant and spouse",
+            "Ohio income tax return information for the prior year if requested or needed to verify eligibility",
+            "Proof of permanent and total disability only if qualifying under the disability category rather than age",
+            "Any county-specific supporting documents requested by the auditor"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Ohio property tax program, but applications are handled by the county auditor in the county where the property is located.",
+          "regional_variations": "Yes. The core law is statewide, but counties vary in how they present income terminology, whether they offer online filing, office hours, contact methods, local forms pages, and the speed of processing. Some counties have smart-file or fillable PDF options; others primarily accept paper forms or in-person filing.",
+          "offices_or_providers": [
+            "County auditor offices in each Ohio county",
+            "County-specific online filing portals where available"
+          ]
+        },
+        "official_source": "https://tax.ohio.gov/individual/resources/homestead-exemption",
+        "gotchas": [
+          "This is a property tax exemption, not a healthcare, cash, food, or caregiving benefit.",
+          "The income test is for the applicant and spouse, not all household members, and counties may describe the tax measure using slightly different terms such as OAGI or MAGI.",
+          "Social Security income may be excluded in at least some county explanations, but families should verify the county’s current worksheet instructions before applying.",
+          "The benefit is tied to the home being the primary residence; vacation homes or rental properties do not qualify.",
+          "Different counties use different filing options and may have different local office practices, even though the underlying state program is the same.",
+          "If a family is comparing this with Medicaid or senior assistance programs, this one lowers property taxes on a home and does not provide services."
+        ],
+        "data_shape_notes": "This is a statewide property tax exemption administered locally by county auditors; it has an age/disability/surviving-spouse eligibility path, an annually adjusted income cap, and no waitlist structure like a service program.",
+        "_raw": "{\n  \"name\": \"Homestead Exemption\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"standard_new_applicant_income_cap\": {\n        \"2025_application_period\": \"$40,000 maximum Ohio Adjusted Gross Income / Ohio Modified Adjusted Gross Income as stated by county guidance for 2025 applications\",\n        \"2026_application_period\": \"$41,000 maximum Ohio Adjusted Gross Income / Ohio Modified Adjusted Gross Income as stated by county guidance for 2026 applications\"\n      },\n      \"household_size_table\": \"No household-size table was identified in the official county guidance reviewed. The limit is described as a cap on combined income for the applicant and spouse, not as a sliding scale by household size.\",\n      \"income_definition\": \"Counties describe the test as the applicant’s and spouse’s Ohio Adjusted Gross Income or Ohio Modified Adjusted Gross Income from the prior tax year, depending on county language. Some county pages explicitly note that Social Security income does not count toward the threshold, while spousal taxable income does.\",\n      \"notes\": \"The income limit appears to be an annually inflation-adjusted statewide threshold, but counties may describe it using slightly different tax-line terminology.\"\n    },\n    \"asset_limits\": \"No asset limit was identified in the sources reviewed. The program described is an income-based property tax exemption, not a means-tested asset program. The main property requirement is that the home is the applicant’s principal residence and, in the form language, up to one acre of land associated with the home.\",\n    \"other_requirements\": [\n      \"Must own and occupy the home as the principal place of residence\",\n      \"Must be at least age 65 by December 31 of the year for which the exemption is sought, or turn 65 during that year\",\n      \"Can also qualify if permanently and totally disabled or as a surviving spouse, but your question was about elderly qualification\",\n      \"Must file with the county auditor where the property is located\",\n      \"Only the current application year and eligibility rules used by the county auditor apply; late/current-year filing rules may differ by county\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A property tax reduction that exempts part of the home’s taxable value. The statewide form says the reduction equals the taxes otherwise charged on up to $25,000 of the market value of the homestead. Some county auditor pages describe the senior/disabled exemption as exempting the first $29,000 of the home’s appraised value, reflecting current county explanations. The practical benefit is a reduction in property taxes, not cash assistance.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application through some county auditor websites, where available\",\n      \"Paper form filed with the county auditor\",\n      \"Mail to the county auditor office\",\n      \"In person at the county auditor office\"\n    ],\n    \"processing_time\": \"No single statewide processing time was identified. County pages indicate that applications submitted before completion of the Ohio income tax return are decided after the Department of Taxation processes the return and the auditor verifies income, so timing depends on tax-filing and county processing. County offices generally do not publish a fixed statewide turnaround time.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"DTE 105A - Homestead Exemption Application for Senior Citizens, Disabled Persons, and Surviving Spouses\",\n      \"DTE 105I - Homestead Exemption Application for Disabled Veterans and Surviving Spouses of Disabled Veterans, where applicable\"\n    ],\n    \"documents\": [\n      \"Completed DTE 105A application\",\n      \"Proof of age if requested by the county\",\n      \"Income information for the applicant and spouse\",\n      \"Ohio income tax return information for the prior year if requested or needed to verify eligibility\",\n      \"Proof of permanent and total disability only if qualifying under the disability category rather than age\",\n      \"Any county-specific supporting documents requested by the auditor\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Ohio property tax program, but applications are handled by the county auditor in the county where the property is located.\",\n    \"regional_variations\": \"Yes. The core law is statewide, but counties vary in how they present income terminology, whether they offer online filing, office hours, contact methods, local forms pages, and the speed of processing. Some counties have smart-file or fillable PDF options; others primarily accept paper forms or in-person filing.\",\n    \"offices_or_providers\": [\n      \"County auditor offices in each Ohio county\",\n      \"County-specific online filing portals where available\"\n    ]\n  },\n  \"official_source\": \"https://tax.ohio.gov/individual/resources/homestead-exemption\",\n  \"gotchas\": [\n    \"This is a property tax exemption, not a healthcare, cash, food, or caregiving benefit.\",\n    \"The income test is for the applicant and spouse, not all household members, and counties may describe the tax measure using slightly different terms such as OAGI or MAGI.\",\n    \"Social Security income may be excluded in at least some county explanations, but families should verify the county’s current worksheet instructions before applying.\",\n    \"The benefit is tied to the home being the primary residence; vacation homes or rental properties do not qualify.\",\n    \"Different counties use different filing options and may have different local office practices, even though the underlying state program is the same.\",\n    \"If a family is comparing this with Medicaid or senior assistance programs, this one lowers property taxes on a home and does not provide services.\"\n  ],\n  \"data_shape_notes\": \"This is a statewide property tax exemption administered locally by county auditors; it has an age/disability/surviving-spouse eligibility path, an annually adjusted income cap, and no waitlist structure like a service program.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "OH",
+    "stateName": "Ohio",
+    "classifiedAt": "2026-10-06T06:26:23.810Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "federal": 1,
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 2
+    },
+    "programs": [
+      {
+        "name": "Medicare Premium Assistance Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County Department of Job and Family Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Ohio Medicaid Consumer Hotline",
+              "type": "service-area"
+            },
+            {
+              "name": "Ohio SHIP / OSHIIP counseling network",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Homestead Exemption",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County auditor offices in each Ohio county",
+              "type": "service-area"
+            },
+            {
+              "name": "County-specific online filing portals where available",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "OH",
+      "id": "oh-medicare-premium-assistance",
+      "name": "Medicare Premium Assistance Programs",
+      "legacyId": "medicare-premium-assistance-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "OH",
+      "id": "oh-homestead-exemption",
+      "name": "Homestead Exemption",
+      "legacyId": "homestead-exemption",
+      "programType": "benefit"
+    }
+  ]
+}

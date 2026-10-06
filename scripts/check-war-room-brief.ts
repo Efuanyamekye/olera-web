@@ -147,10 +147,54 @@ const priorityLines = buildPriorityLines({
 });
 assert.deepEqual(priorityLines, [
   "*CRP (Jan):* 1 of 12 paying providers, 14 weeks to the Jan 5 target.",
-  "*Benefits Finder:* No change since Sep 26.",
+  "*Benefits Finder:* No measured number moved since Sep 26.",
   "*Providers subscribing:* Hoop Cares renews Oct 15 ($75), in 17 days. 18 campaigns open, 1 paying.",
   "*Operations:* Support backlog 1,747 → 1,222. 3 inbox items waiting on your approval.",
 ]);
+// A priority nothing measures still says what shipped (TJ, 5 Oct: "Benefits Finder: No change since Oct 3" was wrong).
+{
+  const { groupShipped, shippedLine } = require("../lib/war-room/shipped.server") as typeof import("../lib/war-room/shipped.server");
+  const floor = Date.parse("2026-10-02T12:00:00Z");
+  const grouped = groupShipped([
+    { number: 2330, title: "Benefits knowledge base, Phase 1: judge, provenance, versions", mergedAt: "2026-10-02T08:42:47Z", base: "staging", head: "knowledge-base-phase1" },
+    { number: 2336, title: "Benefits fact-check: DC", mergedAt: "2026-10-03T00:37:22Z", base: "staging", head: "benefits-factcheck/1" },
+    { number: 2346, title: "Move both phone fields when the judge applies a phone", body: "The judge's --phones path in scripts/benefits-apply-factcheck.js updated one field.", mergedAt: "2026-10-03T00:37:32Z", base: "staging", head: "judge-phone-both" },
+    { number: 2348, title: "Promote staging → main: Google reviews refresh, DC fact-check (2026-10-03)", mergedAt: "2026-10-03T09:00:00Z", base: "main", head: "staging" },
+    { number: 2360, title: "Scratchpad: Robbie's first pilot family (4 Oct)", mergedAt: "2026-10-04T03:00:00Z", base: "staging", head: "claude/scratchpad" },
+    { number: 2366, title: "Own-ad family emails open the provider's inbox, signed in", mergedAt: "2026-10-05T08:00:00Z", base: "staging", head: "lead-email-inbox-link" },
+    { number: 2322, title: "Daily inbox synopsis on Telegram, full detail as a handoff", mergedAt: "2026-10-01T22:00:00Z", base: "staging", head: "x" },
+  ], floor);
+  assert.deepEqual(grouped.benefits?.map((i) => i.number), [2336, 2346], "benefits PRs merged after the floor; the judge fix is filed by its description");
+  assert.ok(!Object.values(grouped).flat().some((i) => i.number === 2348 || i.number === 2360 || i.number === 2322), "promotions, scratchpad logs and older merges are left out");
+  assert.ok(!grouped.benefits?.some((i) => i.number === 2330), "a PR merged before the last brief is not news again");
+  assert.equal(shippedLine(grouped.benefits, "Oct 3"), "Shipped since Oct 3: Benefits fact-check: DC (#2336), Move both phone fields when the judge applies a phone (#2346).");
+  assert.equal(shippedLine(undefined, "Oct 3"), null);
+  const lines = buildPriorityLines({
+    payingProviders: 1, openCampaigns: 20, movers: [], renewal: null, providerEmailsWaiting: 0, inboxItemsWaiting: 0, since: "Oct 3",
+    shipped: { benefits: shippedLine(grouped.benefits, "Oct 3") }, now: new Date("2026-10-05T01:00:00Z"),
+  });
+  assert.equal(lines[1], "*Benefits Finder:* Shipped since Oct 3: Benefits fact-check: DC (#2336), Move both phone fields when the judge applies a phone (#2346).");
+  assert.equal(lines[3], "*Operations:* No measured number moved since Oct 3.");
+  console.log("shipped checks passed");
+}
+
+// The standing Benefits probe gives the Benefits line a measured number. Its
+// label is the priority's own, so the line opens with the headline's first
+// sentence, not "Benefits Finder Benefits Finder 90 → 79"; the rest is under
+// "What moved".
+{
+  assert.equal(priorityFor("Benefits Finder"), "benefits");
+  const headline = "79 families finished the Benefits Finder in the last 7 days, 90 the week before. 61 first-step letters and 113 check-ins went out.";
+  const lines = buildPriorityLines({
+    payingProviders: 1, openCampaigns: 20, renewal: null, providerEmailsWaiting: 0, inboxItemsWaiting: 0, since: "Oct 5",
+    movers: [{ label: "Benefits Finder", headline, previousHeadline: "90 families finished the Benefits Finder in the last 7 days, 84 the week before. 155 first-step letters and 68 check-ins went out." }],
+    shipped: { benefits: "Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372)." },
+    now: new Date("2026-10-06T01:00:00Z"),
+  });
+  assert.equal(lines[1], "*Benefits Finder:* 79 families finished the Benefits Finder in the last 7 days, 90 the week before. Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372).");
+  console.log("benefits probe line check passed");
+}
+
 const withPriorities = buildWarRoomBriefText({ ...base, renewal, priorityLines, readings: [
   { probeId: "traffic_by_page_family", label: "Organic traffic", question: "", headline: "Direct up 4%", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "Direct flat" } as never,
   { probeId: "support_backlog_composition", label: "Support backlog", question: "", headline: "1,222 unhandled", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "1,747 unhandled" } as never,

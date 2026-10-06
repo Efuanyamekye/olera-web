@@ -1,0 +1,23 @@
+[
+  {
+    "state": "NC",
+    "id": "nc-medicaid-aged-blind-disabled",
+    "name": "Regular Medicaid / Aged Blind and Disabled",
+    "legacyId": "regular-medicaid-aged-blind-and-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "NC",
+    "id": "nc-special-assistance-ssi-supplement",
+    "name": "Special Assistance (State SSI Supplement)",
+    "legacyId": "special-assistance-state-ssi-supplement",
+    "programType": "benefit"
+  },
+  {
+    "state": "NC",
+    "id": "nc-circuit-breaker-property-tax-deferral",
+    "name": "Circuit Breaker Property Tax Deferral",
+    "legacyId": "circuit-breaker-property-tax-deferral",
+    "programType": "benefit"
+  }
+]

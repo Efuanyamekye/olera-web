@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { getServiceClient } from "@/lib/admin";
 import { postProviderMessage } from "@/lib/city-ads/thread.server";
 import { acceptOffer, declineOffer, type CityOfferRow } from "@/lib/city-ads/offers.server";
@@ -52,13 +53,10 @@ async function caller(): Promise<Caller> {
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, res: NextResponse.json({ error: "Sign in first." }, { status: 401 }) };
   const db = getServiceClient();
-  const { data: account } = await db.from("accounts").select("id").eq("user_id", user.id).maybeSingle();
-  if (!account) return { ok: true, profileIds: [], names: new Map() };
-  const { data: profiles } = await db
-    .from("business_profiles")
-    .select("id, display_name")
-    .eq("account_id", account.id)
-    .in("type", ["organization", "caregiver"]);
+  // Owned agencies and agencies this email is a team member of (migration 272).
+  const ids = await actingProfileIds(db, user, { types: ["organization", "caregiver"] });
+  if (ids.length === 0) return { ok: true, profileIds: [], names: new Map() };
+  const { data: profiles } = await db.from("business_profiles").select("id, display_name").in("id", ids);
   const names = new Map((profiles ?? []).map((p) => [String(p.id), (p.display_name as string | null) ?? "Your care provider"]));
   return { ok: true, profileIds: [...names.keys()], names };
 }

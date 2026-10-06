@@ -1,0 +1,23 @@
+[
+  {
+    "state": "CA",
+    "id": "ca-medi-cal-aged-disabled",
+    "name": "Medi-Cal for Aged and Disabled",
+    "legacyId": "medi-cal-for-aged-and-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "CA",
+    "id": "ca-assisted-living-waiver-alw",
+    "name": "California Assisted Living Waiver (ALW)",
+    "legacyId": "california-assisted-living-waiver-alw",
+    "programType": "benefit"
+  },
+  {
+    "state": "CA",
+    "id": "ca-pace-programs",
+    "name": "California PACE Programs",
+    "legacyId": "california-pace-programs",
+    "programType": "benefit"
+  }
+]
