@@ -1640,7 +1640,8 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
     if (ra !== rb) return ra - rb;
     // Calls go newest first: a family who asked yesterday is still near the
     // phone, and the call list's own clock drops the oldest after two weeks.
-    if (ra === 1) return (a.days_quiet ?? 999) - (b.days_quiet ?? 999);
+    // Sorted on the episode's age, the "day N" the row shows.
+    if (ra === 1) return (a.episode.age_days ?? 999) - (b.episode.age_days ?? 999);
     return (b.days_quiet ?? -1) - (a.days_quiet ?? -1);
   });
 
