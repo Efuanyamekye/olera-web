@@ -27,7 +27,7 @@ import { resolve } from "path";
 import { buildFinderResult } from "@/lib/benefits/finder-engine.server";
 import { zipToCounty } from "@/lib/benefits/zip-lookup";
 import { emptyFinderAnswers, type FinderAnswers, type FinderIncome } from "@/lib/benefits/finder-answers";
-import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { rulesOf, nextQuestion, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 
 for (const p of [resolve(process.cwd(), ".env.local"), resolve(process.env.HOME || "", "Desktop/olera-web/.env.local")]) {
@@ -89,7 +89,7 @@ function formAnswers(f: Family, county: string | null): FinderAnswers {
  *  finderAnswers() builds it. Facts it never asks stay unknown. */
 function conversationAnswers(f: Family, county: string | null): FinderAnswers {
   const slug = getStateSlug(f.state)!;
-  const rules = getCanonicalProgramIds(slug)
+  const rules = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit")
     .map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
@@ -135,7 +135,7 @@ const acronym = (s: string) => (s.match(/\(([A-Z][A-Za-z/&+ -]{1,15})\)/g) || []
 interface Catalog { id: string; names: string[] }
 function catalogFor(state: string): Catalog[] {
   const slug = getStateSlug(state)!;
-  return getCanonicalProgramIds(slug)
+  return getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((p): p is NonNullable<typeof p> => !!p && p.programType === "benefit")
     .map((p) => ({ id: p.id, names: [p.name, p.shortName || "", ...acronym(p.name)].filter(Boolean) }));

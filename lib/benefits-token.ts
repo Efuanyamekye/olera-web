@@ -21,10 +21,11 @@
 
 import crypto from "crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getEnrichedProgram, getCanonicalProgramIds, getStateSlug, getStateAbbrev } from "./program-data";
+import { getEnrichedProgram, getPlanProgramIds, getStateSlug, getStateAbbrev } from "./program-data";
 import { US_STATES } from "./us-states";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { matchesCareNeed, type CareNeed } from "./benefits/match-care-need";
+import { FEDERAL_PROGRAM_IDS } from "@/data/benefits/federal-programs";
 import { duplicateTarget } from "@/lib/benefits/program-duplicates";
 
 /**
@@ -99,8 +100,10 @@ export async function lookupResultByToken(
   // Recompute matched programs from current pipeline data. Canonical ids
   // only: a legacy waiver-library entry that duplicates a current program
   // (TX "Texas SNAP Food Benefits" vs "SNAP") is dropped, so each program
-  // appears once, with the current page's numbers.
-  const allIds = getCanonicalProgramIds(stateId);
+  // appears once, with the current page's numbers. The plan's set, so a
+  // federal program the finder showed (the VA pension, Extra Help) is still
+  // here when the family opens their saved plan.
+  const allIds = getPlanProgramIds(stateId);
   const allPrograms = allIds
     .map((id) => getEnrichedProgram(stateId, id))
     .filter((p): p is WaiverProgram => !!p)
@@ -128,7 +131,9 @@ export async function lookupResultByToken(
     : [];
   const matched = finderList.length
     ? finderList
-    : allPrograms.filter((p) => matchesCareNeed(p, tokenRow.care_need as CareNeed));
+    : // The care-need list checks no eligibility, so it keeps to the state's
+      // own programs: a VA pension for a family never asked about service is noise.
+      allPrograms.filter((p) => !FEDERAL_PROGRAM_IDS.has(p.id) && matchesCareNeed(p, tokenRow.care_need as CareNeed));
 
   // Bump last_viewed_at — fire-and-forget, don't block render. Supabase
   // resolves the promise with {data, error} rather than rejecting, so we

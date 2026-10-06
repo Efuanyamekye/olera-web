@@ -9,6 +9,7 @@ import type { WaiverProgram, StateData } from "@/data/waiver-library";
 import { getStateById, getProgramById } from "@/data/waiver-library";
 import { pipelineDrafts, type PipelineDraft } from "@/data/pipeline-drafts";
 import { withoutDuplicates } from "@/lib/benefits/program-duplicates";
+import { FEDERAL_PROGRAMS, federalProgramsFor } from "@/data/benefits/federal-programs";
 
 // State name → abbreviation lookup
 const STATE_ABBREVS: Record<string, string> = {
@@ -237,6 +238,55 @@ export function getCanonicalProgramIds(stateId: string): string[] {
   return withoutDuplicates(stateAbbrev, ids.map((id) => ({ id }))).map((p) => p.id);
 }
 
+/** A draft as a WaiverProgram, for a program the waiver library doesn't hold. */
+function draftToProgram(draft: PipelineDraft): WaiverProgram {
+  return {
+    id: draft.id,
+    name: draft.name,
+    shortName: draft.shortName,
+    tagline: draft.tagline,
+    savingsRange: draft.savingsRange,
+    description: draft.intro || draft.tagline,
+    eligibilityHighlights: draft.structuredEligibility?.summary || [],
+    applicationSteps: draft.applicationGuide?.steps || [],
+    forms: [],
+    // Pipeline fields
+    programType: draft.programType as WaiverProgram["programType"],
+    complexity: draft.complexity as WaiverProgram["complexity"],
+    geographicScope: draft.geographicScope as WaiverProgram["geographicScope"],
+    intro: draft.intro,
+    structuredEligibility: draft.structuredEligibility as WaiverProgram["structuredEligibility"],
+    applicationGuide: draft.applicationGuide as WaiverProgram["applicationGuide"],
+    contentSections: draft.contentSections as WaiverProgram["contentSections"],
+    faqs: draft.faqs,
+    savingsSource: draft.savingsSource,
+    savingsVerified: draft.savingsVerified,
+    phone: draft.phone || undefined,
+    sourceUrl: draft.sourceUrl || undefined,
+    contentStatus: draft.contentStatus as WaiverProgram["contentStatus"],
+    draftedAt: draft.draftedAt,
+    documentsNeeded: draft.documentsNeeded,
+    contacts: draft.contacts,
+    applicationNotes: draft.applicationNotes,
+    relatedPrograms: draft.relatedPrograms,
+    regionalApplications: draft.regionalApplications,
+    layoutIntent: draft.layoutIntent as WaiverProgram["layoutIntent"],
+    icon: draft.icon,
+  };
+}
+
+/**
+ * The programs a family's plan considers: the state's canonical list plus the
+ * federal programs it doesn't already hold (Extra Help, SSI, VA pension).
+ * The finder and the conversation read this; state pages and sitemaps keep
+ * getCanonicalProgramIds, so federal programs get no per-state pages listed.
+ */
+export function getPlanProgramIds(stateId: string): string[] {
+  const ids = getCanonicalProgramIds(stateId);
+  const names = ids.map((id) => getEnrichedProgram(stateId, id)?.name ?? "");
+  return [...ids, ...federalProgramsFor(names).map((p) => p.id)];
+}
+
 /**
  * Get an enriched program by merging waiver-library base data with pipeline draft.
  * Hand-curated fields from waiver-library always win over pipeline-generated.
@@ -246,6 +296,12 @@ export function getEnrichedProgram(
   stateId: string,
   programId: string
 ): WaiverProgram | undefined {
+  // A federal program (data/benefits/federal-programs.ts) under any state's
+  // address. Checked first so the fuzzy draft match below can't turn
+  // "federal-ssi" into the state's own SSI page.
+  const federal = FEDERAL_PROGRAMS.find((p) => p.id === programId);
+  if (federal) return draftToProgram(federal);
+
   const baseProgram = getProgramById(stateId, programId);
 
   // Find matching pipeline draft
@@ -253,41 +309,7 @@ export function getEnrichedProgram(
   const draft = findDraftMatch(stateAbbrev, programId);
 
   // Pipeline-only program — create synthetic WaiverProgram from draft
-  if (!baseProgram && draft) {
-    return {
-      id: draft.id,
-      name: draft.name,
-      shortName: draft.shortName,
-      tagline: draft.tagline,
-      savingsRange: draft.savingsRange,
-      description: draft.intro || draft.tagline,
-      eligibilityHighlights: draft.structuredEligibility?.summary || [],
-      applicationSteps: draft.applicationGuide?.steps || [],
-      forms: [],
-      // Pipeline fields
-      programType: draft.programType as WaiverProgram["programType"],
-      complexity: draft.complexity as WaiverProgram["complexity"],
-      geographicScope: draft.geographicScope as WaiverProgram["geographicScope"],
-      intro: draft.intro,
-      structuredEligibility: draft.structuredEligibility as WaiverProgram["structuredEligibility"],
-      applicationGuide: draft.applicationGuide as WaiverProgram["applicationGuide"],
-      contentSections: draft.contentSections as WaiverProgram["contentSections"],
-      faqs: draft.faqs,
-      savingsSource: draft.savingsSource,
-      savingsVerified: draft.savingsVerified,
-      phone: draft.phone || undefined,
-      sourceUrl: draft.sourceUrl || undefined,
-      contentStatus: draft.contentStatus as WaiverProgram["contentStatus"],
-      draftedAt: draft.draftedAt,
-      documentsNeeded: draft.documentsNeeded,
-      contacts: draft.contacts,
-      applicationNotes: draft.applicationNotes,
-      relatedPrograms: draft.relatedPrograms,
-      regionalApplications: draft.regionalApplications,
-      layoutIntent: draft.layoutIntent as WaiverProgram["layoutIntent"],
-      icon: draft.icon,
-    };
-  }
+  if (!baseProgram && draft) return draftToProgram(draft);
 
   if (!baseProgram) return undefined;
   if (!draft) return baseProgram;
