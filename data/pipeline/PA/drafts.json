@@ -2358,28 +2358,9 @@
       ],
       "contentSections": [
         {
-          "type": "income-table",
-          "title": "How much could your parent get back?",
-          "description": "The rebate amount depends on your parent's total annual income from the prior year. Use this table to estimate their rebate before applying.",
-          "rows": [
-            {
-              "incomeRange": "$0 to $8,550",
-              "maxRebate": "$1,000"
-            },
-            {
-              "incomeRange": "$8,551 to $16,040",
-              "maxRebate": "$770"
-            },
-            {
-              "incomeRange": "$16,041 to $19,240",
-              "maxRebate": "$460"
-            },
-            {
-              "incomeRange": "$19,241 to $48,110",
-              "maxRebate": "$380"
-            }
-          ],
-          "note": "These are standard maximum rebates. Homeowners with income at or below $32,070 whose property taxes exceed 15% of total income may qualify for a higher amount under an enhanced formula applied automatically when you file. Source: pa.gov/agencies/revenue/ptrr."
+          "type": "prose",
+          "heading": null,
+          "body": "incomeRange: $0 to $8,550; maxRebate: $1,000\n\nincomeRange: $8,551 to $16,040; maxRebate: $770\n\nincomeRange: $16,041 to $19,240; maxRebate: $460\n\nincomeRange: $19,241 to $48,110; maxRebate: $380"
         },
         {
           "type": "stat-callout",
@@ -2568,48 +2549,9 @@
       ],
       "contentSections": [
         {
-          "type": "income-table",
-          "title": "Monthly payment amounts by living arrangement (2026)",
-          "description": "The supplement amount and combined federal-plus-state maximum depend on where your parent lives. These are the figures SSA publishes for Pennsylvania.",
-          "rows": [
-            {
-              "livingArrangement": "Living alone",
-              "individualCombinedMax": "$572.40",
-              "coupleCombinedMax": "$860.70",
-              "stateSupplement": "$27.40 individual / $43.70 couple"
-            },
-            {
-              "livingArrangement": "Living in someone else's household",
-              "individualCombinedMax": "$390.74",
-              "coupleCombinedMax": "$588.37",
-              "stateSupplement": "$27.40 individual / $43.70 couple"
-            },
-            {
-              "livingArrangement": "Living with an essential person",
-              "individualCombinedMax": "$861.70",
-              "coupleCombinedMax": "$1,158.05",
-              "stateSupplement": "$43.70 individual / $68.05 couple"
-            },
-            {
-              "livingArrangement": "Living with an essential person in someone else's household",
-              "individualCombinedMax": "$588.37",
-              "coupleCombinedMax": "$794.72",
-              "stateSupplement": "$43.70 individual / $68.05 couple"
-            },
-            {
-              "livingArrangement": "Living in a domiciliary care facility for adults",
-              "individualCombinedMax": "$934.30",
-              "coupleCombinedMax": "$1,674.40",
-              "stateSupplement": "$389.30 individual / $857.40 couple"
-            },
-            {
-              "livingArrangement": "Living in a personal care boarding home",
-              "individualCombinedMax": "$939.30",
-              "coupleCombinedMax": "$1,684.40",
-              "stateSupplement": "$394.30 individual / $867.40 couple"
-            }
-          ],
-          "source": "SSA publication EN-05-11150, https://www.ssa.gov/pubs/EN-05-11150.pdf"
+          "type": "prose",
+          "heading": null,
+          "body": "livingArrangement: Living alone; individualCombinedMax: $572.40; coupleCombinedMax: $860.70; stateSupplement: $27.40 individual / $43.70 couple\n\nlivingArrangement: Living in someone else's household; individualCombinedMax: $390.74; coupleCombinedMax: $588.37; stateSupplement: $27.40 individual / $43.70 couple\n\nlivingArrangement: Living with an essential person; individualCombinedMax: $861.70; coupleCombinedMax: $1,158.05; stateSupplement: $43.70 individual / $68.05 couple\n\nlivingArrangement: Living with an essential person in someone else's household; individualCombinedMax: $588.37; coupleCombinedMax: $794.72; stateSupplement: $43.70 individual / $68.05 couple\n\nlivingArrangement: Living in a domiciliary care facility for adults; individualCombinedMax: $934.30; coupleCombinedMax: $1,674.40; stateSupplement: $389.30 individual / $857.40 couple\n\nlivingArrangement: Living in a personal care boarding home; individualCombinedMax: $939.30; coupleCombinedMax: $1,684.40; stateSupplement: $394.30 individual / $867.40 couple"
         }
       ],
       "faqs": [

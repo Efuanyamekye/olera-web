@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.369Z
+ * Last updated: 2026-10-06T07:14:41.484Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1844,39 +1844,20 @@ export const drafts: PipelineStateDrafts = {
           "tiers": [
             {
               "name": "QMB (Qualified Medicare Beneficiary)",
-              "incomeLimit": {
-                "single": "$2,807/month",
-                "couple": "$3,806/month"
-              },
-              "covers": [
-                "Medicare Part A premium (if applicable)",
-                "Medicare Part B premium ($185/month in 2026)",
-                "Medicare Part A deductible ($1,676 per benefit period in 2026)",
-                "Medicare Part B deductible ($257/year in 2026)",
-                "Medicare coinsurance and copayments for covered services"
-              ],
+              "incomeLimit": "$2,807/month single, $3,806/month couple",
+              "covers": "Medicare Part A premium (if applicable), Medicare Part B premium ($185/month in 2026), Medicare Part A deductible ($1,676 per benefit period in 2026), Medicare Part B deductible ($257/year in 2026), Medicare coinsurance and copayments for covered services",
               "note": "QMB enrollees cannot be billed by Medicare providers for cost-sharing amounts. This is the most financially protective tier."
             },
             {
               "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
-              "incomeLimit": {
-                "single": "$3,073/month",
-                "couple": "$4,166/month"
-              },
-              "covers": [
-                "Medicare Part B premium ($185/month in 2026)"
-              ],
+              "incomeLimit": "$3,073/month single, $4,166/month couple",
+              "covers": "Medicare Part B premium ($185/month in 2026)",
               "note": "Deductibles and coinsurance are not covered. Your parent still pays those costs out of pocket."
             },
             {
               "name": "QI (Qualifying Individual)",
-              "incomeLimit": {
-                "single": "$3,272/month",
-                "couple": "$4,437/month"
-              },
-              "covers": [
-                "Medicare Part B premium ($185/month in 2026)"
-              ],
+              "incomeLimit": "$3,272/month single, $4,437/month couple",
+              "covers": "Medicare Part B premium ($185/month in 2026)",
               "note": "Same premium benefit as SLMB. QI is funded separately and is subject to annual Congressional reauthorization, which has historically been renewed consistently."
             }
           ]
