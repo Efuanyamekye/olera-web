@@ -1,0 +1,924 @@
+{
+  "state": "NC",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "NC-A",
+      "programs": [
+        {
+          "name": "NC Medicaid for the Aged (MAABD / MAA)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "full Medicaid",
+            "dual eligible"
+          ],
+          "agency": "NC Medicaid via Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "She already has Medicaid, and her $1,050 Social Security (countable $1,030) is under the limit with $1,200 savings, so it should continue.",
+          "keyRule": "Aged: 100% FPL $1,330/month individual (effective 4/2026), resources $2,000",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Alternatives Program for Disabled Adults (CAP/DA) waiver",
+          "alsoKnownAs": [
+            "CAP/DA",
+            "CAP",
+            "Medicaid HCBS waiver",
+            "consumer-directed CAP (CAP/Choice)"
+          ],
+          "agency": "NC Medicaid; referrals and assessments by NC LIFTSS",
+          "verdict": "possible",
+          "reason": "She is already on Medicaid and her needs (bathing, dressing, medication, night wandering) strongly suggest nursing-facility level of care, but she must pass the assessment and there is a statewide waitlist.",
+          "keyRule": "Medicaid beneficiary age 18+ requiring institutional level of care; income limit of one (100% FPL $1,330), resources $2,000; statewide waitlist since 2/16/2024 (11,648 slots)",
+          "source": "https://medicaid.ncdhhs.gov/blog/2024/03/05/waitlist-nc-medicaid-community-alternatives-program-disabled-adults-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid State Plan Personal Care Services (PCS)",
+          "alsoKnownAs": [
+            "PCS",
+            "in-home aide",
+            "personal care"
+          ],
+          "agency": "NC Medicaid; independent assessment by NC LIFTSS",
+          "verdict": "possible",
+          "reason": "She has Medicaid and needs hands-on help with bathing and dressing; PCS requires two ADLs with one at extensive assistance (or three ADLs), which depends on the assessment. No waitlist.",
+          "keyRule": "Clinical Coverage Policy 3L: unmet need in 3 of 5 ADLs at limited assistance, or 2 ADLs with one at extensive assistance or full dependence",
+          "source": "https://medicaid.ncdhhs.gov/media/14407/download?attachment=",
+          "evidence": "official"
+        },
+        {
+          "name": "State/County Special Assistance In-Home (SAIH)",
+          "alsoKnownAs": [
+            "Special Assistance",
+            "SA In-Home",
+            "SAIH",
+            "NC state supplement"
+          ],
+          "agency": "Mecklenburg County DSS (NCDHHS Division of Social Services)",
+          "verdict": "likely",
+          "reason": "Her countable income ($1,030) is far below the dementia (Enhanced) maintenance amount and savings are under $2,000, so with a dementia diagnosis on an FL-2 she would get roughly $1,862 - $1,030 = about $832/month cash to stay at home.",
+          "keyRule": "2026 SAIH: TCMI must be below $1,861.51 (Enhanced, dementia on FL-2) or $1,466.51 (Basic); resource limit $2,000; must need adult care home level of care (FL-2) and pass a safety assessment",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Special-Assistance-In-Home-Program-Manual-Rev-June-2026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - QMB (MQB-Q)",
+          "alsoKnownAs": [
+            "QMB",
+            "Medicare-Aid",
+            "MSP"
+          ],
+          "agency": "NC Medicaid (NCDHHS Division of Health Benefits), applied for at Mecklenburg County DSS or ePASS",
+          "verdict": "likely",
+          "reason": "Income $1,050 is under the 100% FPL limit and savings $1,200 under $9,950; as a full Medicaid member she should already be dual-eligible with Part B paid.",
+          "keyRule": "MQB-Q: 100% FPL $1,330/month individual; resources $9,950 (2026)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Full Medicaid members are deemed eligible automatically.",
+          "keyRule": "Deemed eligible when on Medicaid/MSP; otherwise 2026 income ~$1,995/month (150% FPL) and resources $18,090 individual",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Food and Nutrition Services (FNS / SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "FNS"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "Elderly one-person household with $1,050 income; after the standard deduction her net income is well under the 100% FPL net limit, and NC has no resource test for most households.",
+          "keyRule": "Elderly/disabled households: net income at or below 100% FPL ($1,330/month for 1 under FY2027 figures, $1,305 under FY2026); no resource test for most NC households",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/DSS-8552-COLA_10.2024.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Energy Assistance Program (LIEAP)",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "LIEAP",
+            "energy assistance"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "Income is under 130% FPL and savings are under the resource limit; age 60+ gets the December priority window. Requires that she pays her own heating bill.",
+          "keyRule": "Income at or below 130% FPL (about $1,729/month for 1 with 2026 FPL); resources $2,250 per EP-300 manual; age 60+ priority in December",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ep-300-lieap-policy.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Crisis Intervention Program (CIP)",
+          "alsoKnownAs": [
+            "CIP",
+            "energy crisis"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "possible",
+          "reason": "Only applies if she has a heating or cooling emergency (shutoff notice, health risk).",
+          "keyRule": "Income at or below 150% FPL plus a documented heating/cooling crisis",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ep-300-lieap-policy.pdf",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Her countable income ($1,050 - $20 = $1,030) is above the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994/month individual, $1,491 couple; countable income = unearned income minus $20",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Centralina Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "caregiver respite"
+          ],
+          "agency": "Centralina Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "Her daughter is an unpaid caregiver of a 79-year-old with dementia, so she can get respite, counseling and supplies.",
+          "keyRule": "Serves unpaid caregivers of adults 60+ or of any age with Alzheimer's/related dementia; respite, counseling, supplemental services; no income test, subject to funding",
+          "source": "https://centralinaaging.org/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Project C.A.R.E. (Caregiver Alternatives to Running on Empty)",
+          "alsoKnownAs": [
+            "Project CARE",
+            "dementia caregiver respite"
+          ],
+          "agency": "NC Division of Aging; South Central Office at Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "Her daughter cares for a parent with advancing dementia; respite funds depend on availability.",
+          "keyRule": "Serves family caregivers of a person with Alzheimer's disease or related dementia; care consultation plus self-directed respite funds subject to eligibility and availability",
+          "source": "https://www.ncdhhs.gov/divisions/aging/project-care-caregiver-alternatives-running-empty",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community Care Block Grant services",
+          "alsoKnownAs": [
+            "HCCBG",
+            "in-home aide",
+            "adult day care",
+            "home-delivered meals"
+          ],
+          "agency": "NC Division of Aging (via Centralina AAA and Mecklenburg County providers)",
+          "verdict": "possible",
+          "reason": "She is 60+ and needs in-home help, but HCCBG has waiting lists and agencies usually route Medicaid members to PCS/CAP first.",
+          "keyRule": "Age 60+; need-based, not income-based; statewide waiting lists (10,000+ older adults) mainly for in-home aide and meals",
+          "source": "https://www.ncdhhs.gov/priority-fact-sheet-3/open",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE of the Southern Piedmont",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "PACE of the Southern Piedmont (NC Medicaid / Medicare)",
+          "verdict": "possible",
+          "reason": "28205 is in the service area and she is on Medicaid, so the premium would be covered; depends on nursing-facility level-of-care certification and being safe in the community while living alone.",
+          "keyRule": "Age 55+, live in service area (ZIP 28205 is listed), certified nursing-facility level of care, able to live safely in the community; Medicaid pays the premium, Medicare-only enrollees pay the Medicaid portion privately",
+          "source": "https://medicaid.ncdhhs.gov/ncpace-service-area/download?attachment=",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (Centralina AAA partners in the Charlotte region)",
+          "verdict": "possible",
+          "reason": "She has dementia and Medicare; depends on whether she is in Original Medicare (not Medicare Advantage) and enrolls with a local GUIDE program.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers with an unpaid caregiver",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Elderly or Disabled Property Tax Homestead Exclusion / Homestead Circuit Breaker",
+          "alsoKnownAs": [
+            "AV-9",
+            "homestead exclusion",
+            "circuit breaker"
+          ],
+          "agency": "Mecklenburg County Assessor (NCDOR form AV-9)",
+          "verdict": "possible",
+          "reason": "Her income is well under $38,800, but only if she owns and occupies her home (not stated).",
+          "keyRule": "Age 65+ (or totally and permanently disabled) owner-occupant; 2026 income limit $38,800 (exclusion: greater of $25,000 or 50% of value); circuit breaker up to $58,200 and requires 5 years ownership",
+          "source": "https://www.ncdor.gov/2026-av-9-securedpdf/open",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "CAP/DA waiver referral (and ask about Personal Care Services)",
+        "phoneOrWhere": "NC LIFTSS 833-522-5429 (CAP/DA referral); PCS needs her doctor's referral to NC LIFTSS",
+        "why": "She already has Medicaid, so in-home aide hours are the biggest gap, and CAP/DA has a statewide waitlist, so the clock should start now. Next, Mecklenburg DSS (704-432-1111) for Special Assistance In-Home, which needs a doctor's FL-2."
+      },
+      "notes": "Living alone with night wandering may lead an assessor to say home is not safe, which can affect SAIH and CAP/DA. SAIH Enhanced rate needs dementia documented on an FL-2. SAIH payments are excluded income for SSI. The LIEAP resource limit ($2,250) comes from a 2021 manual and some county pages cite $3,000; confirm with DSS. FY2027 SNAP figures (Oct 2026) were inferred from the 2026 poverty guidelines."
+    },
+    {
+      "familyId": "NC-B",
+      "programs": [
+        {
+          "name": "VA Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Aid and Attendance",
+            "A&A",
+            "VA pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (help free from a county Veterans Service Officer)",
+          "verdict": "likely",
+          "reason": "He served in the Vietnam era (wartime begins 8/5/1964 for service outside Vietnam), is 65+, and needs help bathing and supervision for dementia. After subtracting both Medicare Part B premiums ($4,870/yr) above the $1,141 deductible, countable income is about $33,471, under the $34,488 A&A rate with a spouse. That pays about $85/month now and much more if they pay for in-home care. Net worth ($38,000 plus income) is far below $163,699.",
+          "keyRule": "MAPR with one dependent spouse, A&A: $34,488/yr (12/1/2025); medical expenses over 5% of basic MAPR ($1,141) are deducted; net worth limit $163,699; 90 days active duty with 1 day wartime",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment (with Homemaker/Home Health Aide, Respite, Adult Day Health)",
+          "alsoKnownAs": [
+            "VA health care",
+            "VHA",
+            "H/HHA",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (Salisbury VA Health Care System / Charlotte clinics)",
+          "verdict": "possible",
+          "reason": "An honorably discharged wartime veteran can enroll, and with income near VA thresholds he likely lands in Priority Group 5 or 7/8. VA in-home aide and up to 30 days of respite per year depend on a clinical need determination and possible copays.",
+          "keyRule": "Enrollment priority group depends on income versus VA means-test thresholds; receiving VA pension puts him in Priority Group 5",
+          "source": "https://www.va.gov/pension/eligibility/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program"
+          ],
+          "agency": "VA Caregiver Support Program (local Caregiver Support Coordinator)",
+          "verdict": "likely",
+          "reason": "Open to the caregiver of any veteran enrolled in VA health care who needs help with ADLs or supervision; his wife qualifies once he is enrolled.",
+          "keyRule": "Veteran enrolled in VA health care who needs personal care services; no disability rating required",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating, so his wife cannot get the PCAFC stipend.",
+          "keyRule": "Requires a single or combined service-connected disability rating of 70% or higher",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "NC Medicaid for the Aged (MAABD)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "full Medicaid"
+          ],
+          "agency": "NC Medicaid via Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Couple income ($3,080 countable) is above the 2-person limit and savings ($38,000) are far above $3,000.",
+          "keyRule": "100% FPL $1,804/month for 2; resources $3,000 couple",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Alternatives Program for Disabled Adults (CAP/DA) waiver",
+          "alsoKnownAs": [
+            "CAP/DA",
+            "Medicaid HCBS waiver"
+          ],
+          "agency": "NC Medicaid; NC LIFTSS",
+          "verdict": "unlikely",
+          "reason": "Even with spousal protection (wife keeps about $32,532), he would still hold about $5,468, above $2,000. His own income (pension plus his share of Social Security) is very likely above $1,330, which means a monthly deductible. Spending down could change this later.",
+          "keyRule": "CAP: income limit of one (100% FPL $1,330), resource limit $2,000 after spousal resource protection (2026 CSRA minimum $32,532, max $162,660); monthly deductible if over income",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ma-2280-CAP.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "State/County Special Assistance In-Home (SAIH)",
+          "alsoKnownAs": [
+            "Special Assistance"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Savings of $38,000 far exceed the $2,000 resource limit.",
+          "keyRule": "Resource limit $2,000; TCMI below $1,861.51 (Enhanced)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Special-Assistance-In-Home-Program-Manual-Rev-June-2026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB / SLMB / QI)",
+          "alsoKnownAs": [
+            "MQB-Q",
+            "MQB-B",
+            "MQB-E",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "NC Medicaid (NCDHHS Division of Health Benefits), applied for at Mecklenburg County DSS or ePASS",
+          "verdict": "unlikely",
+          "reason": "Couple countable income ($3,080) is over even the QI limit and savings exceed $14,910.",
+          "keyRule": "QI (MQB-E) 135% FPL $2,435/month for 2; resources $14,910 couple",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Couple income (~$3,080) is over 150% FPL (~$2,705) and savings ($38,000) exceed $36,100.",
+          "keyRule": "2026: income ~$32,460/yr couple; resources $36,100 couple",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Food and Nutrition Services (FNS / SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "possible",
+          "reason": "As an elderly household they skip the gross test and face no resource test, but net income must be at or below about $1,804. After the standard deduction and Medicare premiums they are around $2,520, so they would need very high shelter or out-of-pocket care costs to qualify.",
+          "keyRule": "Elderly households: net income at or below 100% FPL; uncapped excess shelter deduction and medical expenses over $35/month",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/DSS-8552-COLA_10.2024.pdf",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Low Income Energy Assistance Program (LIEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Couple income $3,100 is above 130% FPL for 2 (about $2,345/month).",
+          "keyRule": "Income at or below 130% FPL",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ep-300-lieap-policy.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Centralina Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "caregiver respite"
+          ],
+          "agency": "Centralina Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "His 80-year-old wife is the only, exhausted caregiver of a veteran with dementia; respite is the core service.",
+          "keyRule": "Serves unpaid caregivers of adults 60+ or of any age with Alzheimer's/related dementia; respite, counseling, supplemental services; no income test, subject to funding",
+          "source": "https://centralinaaging.org/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Project C.A.R.E. (Caregiver Alternatives to Running on Empty)",
+          "alsoKnownAs": [
+            "Project CARE",
+            "dementia caregiver respite"
+          ],
+          "agency": "NC Division of Aging; South Central Office at Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "Wife is caring for a spouse with dementia; respite funds depend on availability.",
+          "keyRule": "Serves family caregivers of a person with Alzheimer's disease or related dementia; care consultation plus self-directed respite funds subject to eligibility and availability",
+          "source": "https://www.ncdhhs.gov/divisions/aging/project-care-caregiver-alternatives-running-empty",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community Care Block Grant services",
+          "alsoKnownAs": [
+            "HCCBG",
+            "in-home aide",
+            "adult day care",
+            "home-delivered meals"
+          ],
+          "agency": "NC Division of Aging (via Centralina AAA and Mecklenburg County providers)",
+          "verdict": "possible",
+          "reason": "He is 60+ and needs in-home help; subject to waiting lists and agency cost-share policies.",
+          "keyRule": "Age 60+; need-based, not income-based; statewide waiting lists (10,000+ older adults) mainly for in-home aide and meals",
+          "source": "https://www.ncdhhs.gov/priority-fact-sheet-3/open",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE of the Southern Piedmont",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "PACE of the Southern Piedmont (NC Medicaid / Medicare)",
+          "verdict": "possible",
+          "reason": "28205 is in the service area; depends on NF level of care, and without Medicaid they would pay the Medicaid share of the premium privately.",
+          "keyRule": "Age 55+, live in service area (ZIP 28205 is listed), certified nursing-facility level of care, able to live safely in the community; Medicaid pays the premium, Medicare-only enrollees pay the Medicaid portion privately",
+          "source": "https://medicaid.ncdhhs.gov/ncpace-service-area/download?attachment=",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (Centralina AAA partners in the Charlotte region)",
+          "verdict": "possible",
+          "reason": "He has dementia and an unpaid caregiver; depends on Original Medicare enrollment and a local GUIDE program. Respite up to $2,500/yr for qualifying tiers.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers with an unpaid caregiver",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Elderly or Disabled Property Tax Homestead Exclusion / Homestead Circuit Breaker",
+          "alsoKnownAs": [
+            "AV-9",
+            "homestead exclusion",
+            "circuit breaker"
+          ],
+          "agency": "Mecklenburg County Assessor (NCDOR form AV-9)",
+          "verdict": "possible",
+          "reason": "Household income $37,200 is under the $38,800 exclusion limit; only if they own and occupy their home.",
+          "keyRule": "Age 65+ (or totally and permanently disabled) owner-occupant; 2026 income limit $38,800 (exclusion: greater of $25,000 or 50% of value); circuit breaker up to $58,200 and requires 5 years ownership",
+          "source": "https://www.ncdor.gov/2026-av-9-securedpdf/open",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Pension with Aid and Attendance (plus VA health care enrollment)",
+        "phoneOrWhere": "Mecklenburg County Veterans Service Officer (free) or VA 1-800-827-1000; forms 21P-527EZ and 21-2680",
+        "why": "He qualifies on today's facts, and A&A grows a lot if they pay for in-home help, which his exhausted wife needs. Enrolling in VA health care also opens VA respite and caregiver support."
+      },
+      "notes": "The split of the $2,300 Social Security between spouses is not given, which affects CAP/DA and SAIH (both count only his income). The A&A estimate assumes standard 2026 Part B premiums ($202.90 each) and no Medicare Advantage giveback. If they hire paid care, that cost counts as a medical expense for VA and could raise the payment toward the $2,874/month maximum. The VA health care priority group was not verified against the 2026 means-test table."
+    },
+    {
+      "familyId": "NC-C",
+      "programs": [
+        {
+          "name": "Medicare Savings Program - QMB (MQB-Q)",
+          "alsoKnownAs": [
+            "QMB",
+            "Medicare-Aid",
+            "MSP"
+          ],
+          "agency": "NC Medicaid (NCDHHS Division of Health Benefits), applied for at Mecklenburg County DSS or ePASS",
+          "verdict": "likely",
+          "reason": "Countable couple income is about $1,497 ($1,350 - $20 + half of $400 after $65), under $1,804, and savings $4,500 are under $14,910. QMB pays his Part B premium ($202.90/month) and Medicare cost-sharing.",
+          "keyRule": "MQB-Q 100% FPL $1,804/month for 2 (spouse's income counts); resources $14,910 couple (2026)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic once he is on QMB; on its own facts income and savings are also under the limits.",
+          "keyRule": "Deemed eligible with MSP; 2026 resources $36,100 couple",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Food and Nutrition Services (FNS / SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "Household has an elderly member (66), so no gross test; $1,750 minus 20% of wages and the standard deduction leaves about $1,460, under the 2-person net limit before any shelter deduction.",
+          "keyRule": "Net income at or below 100% FPL ($1,804 for 2 under FY2027 figures; $1,763 FY2026); no resource test for most NC households",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/DSS-8552-COLA_10.2024.pdf",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Low Income Energy Assistance Program (LIEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "possible",
+          "reason": "Income ($1,750) is under 130% FPL for 2, but their $4,500 savings may exceed the program's resource limit.",
+          "keyRule": "Income at or below 130% FPL (~$2,345/month for 2); resources $2,250 per EP-300 (some counties cite $3,000)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ep-300-lieap-policy.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Medicaid for the Aged (MAABD)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "full Medicaid"
+          ],
+          "agency": "NC Medicaid via Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Income passes (about $1,497 vs $1,804), but couple savings of $4,500 are above the $3,000 limit. Designating $1,500 as an excluded burial fund or spending down $1,500 would bring them to the limit.",
+          "keyRule": "Aged: 100% FPL $1,804/month for 2; resources $3,000 couple (spouse's resources count)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Medicaid Expansion (MXP)",
+          "alsoKnownAs": [
+            "Medicaid expansion",
+            "NC Medicaid for adults"
+          ],
+          "agency": "NC Medicaid",
+          "verdict": "unlikely",
+          "reason": "Expansion covers adults 19-64 only. He is 66 and on Medicare.",
+          "keyRule": "Age 19 or over and under 65; 138% FPL",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Alternatives Program for Disabled Adults (CAP/DA) waiver",
+          "alsoKnownAs": [
+            "CAP/DA"
+          ],
+          "agency": "NC Medicaid; NC LIFTSS",
+          "verdict": "unlikely",
+          "reason": "He can bathe and dress and needs help mainly with medication, money and driving, which is unlikely to meet nursing-facility level of care.",
+          "keyRule": "Requires institutional (nursing facility) level of care",
+          "source": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care/community-alternatives-program-disabled-adults-capda",
+          "evidence": "official"
+        },
+        {
+          "name": "State/County Special Assistance In-Home (SAIH)",
+          "alsoKnownAs": [
+            "Special Assistance"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "He does not need adult-care-home level of care yet, and savings exceed the resource limit.",
+          "keyRule": "Must need adult care home level of care (FL-2); resource limit $2,000",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Special-Assistance-In-Home-Program-Manual-Rev-June-2026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance (conversion from early retirement)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowance"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-onset Alzheimer's is a Compassionate Allowances condition. If he is under full retirement age (67 if born 1960) and was insured when it began 2 years ago, SSDI can remove the early-retirement reduction. Depends on his birth date, work record and onset date.",
+          "keyRule": "Must be under full retirement age and insured for disability (generally 20 of last 40 quarters) at onset",
+          "source": "https://www.ssa.gov/compassionateallowances/conditions.htm",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His own Social Security alone ($1,330 countable) exceeds the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994/month individual, $1,491 couple; countable income = unearned income minus $20",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "Project C.A.R.E. (Caregiver Alternatives to Running on Empty)",
+          "alsoKnownAs": [
+            "Project CARE",
+            "dementia caregiver respite"
+          ],
+          "agency": "NC Division of Aging; South Central Office at Mecklenburg County DSS",
+          "verdict": "likely",
+          "reason": "His wife is the family caregiver of a person with Alzheimer's; respite funds depend on availability.",
+          "keyRule": "Serves family caregivers of a person with Alzheimer's disease or related dementia; care consultation plus self-directed respite funds subject to eligibility and availability",
+          "source": "https://www.ncdhhs.gov/divisions/aging/project-care-caregiver-alternatives-running-empty",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Centralina Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "caregiver respite"
+          ],
+          "agency": "Centralina Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "Wife is an unpaid caregiver of a 66-year-old with Alzheimer's (eligible at any age with dementia).",
+          "keyRule": "Serves unpaid caregivers of adults 60+ or of any age with Alzheimer's/related dementia; respite, counseling, supplemental services; no income test, subject to funding",
+          "source": "https://centralinaaging.org/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community Care Block Grant services",
+          "alsoKnownAs": [
+            "HCCBG",
+            "in-home aide",
+            "adult day care",
+            "home-delivered meals"
+          ],
+          "agency": "NC Division of Aging (via Centralina AAA and Mecklenburg County providers)",
+          "verdict": "possible",
+          "reason": "He is 60+, but his needs are mostly supervision and IADLs; services like adult day care depend on waitlists.",
+          "keyRule": "Age 60+; need-based, not income-based; statewide waiting lists (10,000+ older adults) mainly for in-home aide and meals",
+          "source": "https://www.ncdhhs.gov/priority-fact-sheet-3/open",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (Centralina AAA partners in the Charlotte region)",
+          "verdict": "possible",
+          "reason": "He has dementia and a caregiver; depends on Original Medicare and a local GUIDE program.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers with an unpaid caregiver",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Elderly or Disabled Property Tax Homestead Exclusion / Homestead Circuit Breaker",
+          "alsoKnownAs": [
+            "AV-9",
+            "homestead exclusion",
+            "circuit breaker"
+          ],
+          "agency": "Mecklenburg County Assessor (NCDOR form AV-9)",
+          "verdict": "possible",
+          "reason": "He is 65+ and income ($21,000) is under $38,800; only if they own and occupy their home.",
+          "keyRule": "Age 65+ (or totally and permanently disabled) owner-occupant; 2026 income limit $38,800 (exclusion: greater of $25,000 or 50% of value); circuit breaker up to $58,200 and requires 5 years ownership",
+          "source": "https://www.ncdor.gov/2026-av-9-securedpdf/open",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicare Savings Program (QMB) plus FNS application",
+        "phoneOrWhere": "Mecklenburg County DSS 704-432-1111 or apply online at epass.nc.gov; free help from NC SHIIP 1-855-408-1212",
+        "why": "QMB is the surest win: it saves $202.90/month in Part B premiums, removes Medicare cost-sharing and brings Extra Help automatically. One DSS visit can cover FNS too."
+      },
+      "notes": "Full Medicaid misses only on resources ($4,500 vs $3,000); a counselor would check burial-fund designation, which would make him fully dual-eligible. The SSDI conversion needs his birth date and work history. The LIEAP resource limit is uncertain ($2,250 vs $3,000)."
+    },
+    {
+      "familyId": "NC-D",
+      "programs": [
+        {
+          "name": "VA Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Survivors Pension",
+            "widow's pension",
+            "A&A",
+            "death pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (help free from a county Veterans Service Officer)",
+          "verdict": "likely",
+          "reason": "Her late husband served in the Korean War period with an honorable discharge, and she has not remarried. Her $16,800/yr income less Medicare Part B over the 5% deductible is about $14,950, under the $18,697 A&A rate, which pays about $312/month. That rises if she pays for care, including paying her daughter. Net worth is well under $163,699.",
+          "keyRule": "Surviving spouse, no dependents, A&A MAPR $18,697/yr (12/1/2025); net worth limit $163,699; Korean conflict 6/27/1950-1/31/1955; she needs help with ADLs",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Program - SLMB (MQB-B)",
+          "alsoKnownAs": [
+            "SLMB",
+            "Medicare-Aid",
+            "MSP"
+          ],
+          "agency": "NC Medicaid (NCDHHS Division of Health Benefits), applied for at Mecklenburg County DSS or ePASS",
+          "verdict": "likely",
+          "reason": "Only her own income counts: $1,380 countable is over the QMB limit ($1,330) but under SLMB ($1,596), and $9,000 savings are under $9,950. Pays her $202.90/month Part B premium.",
+          "keyRule": "MQB-B 120% FPL $1,596/month individual; resources $9,950 (2026)",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with SLMB; also within 2026 limits on its own (income ~$1,400, savings $9,000 vs $18,090).",
+          "keyRule": "Deemed eligible with MSP; 2026 income ~$1,995/month, resources $18,090 individual",
+          "source": "https://www.ssa.gov/medicare/part-d-extra-help",
+          "evidence": "secondary"
+        },
+        {
+          "name": "NC Medicaid for the Aged (MAABD) including Medically Needy deductible",
+          "alsoKnownAs": [
+            "Medicaid",
+            "full Medicaid"
+          ],
+          "agency": "NC Medicaid via Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Her countable income ($1,380) is $50 over the limit and her $9,000 savings exceed $2,000.",
+          "keyRule": "Aged: 100% FPL $1,330/month individual; resources $2,000",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Basic-Medicaid-Eligibility-9.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Alternatives Program for Disabled Adults (CAP/DA) waiver",
+          "alsoKnownAs": [
+            "CAP/DA"
+          ],
+          "agency": "NC Medicaid; NC LIFTSS",
+          "verdict": "unlikely",
+          "reason": "She clearly needs nursing-facility-level help (bathing, dressing, toileting, mobility), but she is not Medicaid-eligible as stated: savings $9,000 vs $2,000, and income over $1,330 creates a monthly deductible. Statewide waitlist also applies.",
+          "keyRule": "CAP: income limit of one $1,330, resources $2,000; monthly deductible if over income",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ma-2280-CAP.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "State/County Special Assistance In-Home (SAIH)",
+          "alsoKnownAs": [
+            "Special Assistance",
+            "SA In-Home"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "Her income ($1,380) is under the Basic maximum and SAIH would give automatic Medicaid, but her $9,000 savings exceed the $2,000 limit. Spending down (for example an irrevocable funeral contract) would open SAIH and Medicaid.",
+          "keyRule": "Resource limit $2,000; TCMI below $1,466.51 (Basic) or $1,861.51 (Enhanced, dementia); SAIH beneficiaries are automatically Medicaid-eligible",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/Special-Assistance-In-Home-Program-Manual-Rev-June-2026.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid State Plan Personal Care Services (PCS)",
+          "alsoKnownAs": [
+            "PCS"
+          ],
+          "agency": "NC Medicaid; NC LIFTSS",
+          "verdict": "unlikely",
+          "reason": "She meets the functional test (4 ADLs) but is not on Medicaid.",
+          "keyRule": "Must be a Medicaid beneficiary; 3 ADLs limited or 2 ADLs with one extensive",
+          "source": "https://medicaid.ncdhhs.gov/media/14407/download?attachment=",
+          "evidence": "official"
+        },
+        {
+          "name": "Food and Nutrition Services (FNS / SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "She lives and eats with her daughter's family, so they are one SNAP household and the daughter's ~$5,500/month counts. The elderly-separate-household exception fails because the others' income exceeds 165% FPL (about $2,975 for 2).",
+          "keyRule": "7 CFR 273.1(a)(2)(ii): elderly/disabled member unable to prepare meals may be a separate household only if others' income is at or below 165% FPL",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Energy Assistance Program (LIEAP)",
+          "alsoKnownAs": [
+            "LIHEAP"
+          ],
+          "agency": "Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "LIEAP counts the whole household's income, and she lives in her daughter's home; combined income far exceeds 130% FPL.",
+          "keyRule": "Household income at or below 130% FPL",
+          "source": "https://policies.ncdhhs.gov/wp-content/uploads/ep-300-lieap-policy.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income (SSI)",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,380 exceeds the $994 federal benefit rate.",
+          "keyRule": "2026 SSI federal benefit rate $994/month individual, $1,491 couple; countable income = unearned income minus $20",
+          "source": "https://pamms.dhs.ga.gov/dfcs/medicaid/appendix-a1/2026-abd-limits/",
+          "evidence": "official"
+        },
+        {
+          "name": "National Family Caregiver Support Program (Centralina Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "caregiver respite"
+          ],
+          "agency": "Centralina Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "Her daughter is an unpaid caregiver of an 88-year-old who cannot be left alone; respite and supplies fit.",
+          "keyRule": "Serves unpaid caregivers of adults 60+ or of any age with Alzheimer's/related dementia; respite, counseling, supplemental services; no income test, subject to funding",
+          "source": "https://centralinaaging.org/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Home and Community Care Block Grant services",
+          "alsoKnownAs": [
+            "HCCBG",
+            "in-home aide",
+            "adult day care",
+            "home-delivered meals"
+          ],
+          "agency": "NC Division of Aging (via Centralina AAA and Mecklenburg County providers)",
+          "verdict": "possible",
+          "reason": "She is 60+ with heavy needs; in-home aide or adult day care depend on local waiting lists.",
+          "keyRule": "Age 60+; need-based, not income-based; statewide waiting lists (10,000+ older adults) mainly for in-home aide and meals",
+          "source": "https://www.ncdhhs.gov/priority-fact-sheet-3/open",
+          "evidence": "official"
+        },
+        {
+          "name": "PACE of the Southern Piedmont",
+          "alsoKnownAs": [
+            "PACE",
+            "Program of All-Inclusive Care for the Elderly"
+          ],
+          "agency": "PACE of the Southern Piedmont (NC Medicaid / Medicare)",
+          "verdict": "possible",
+          "reason": "28205 is in the service area and she likely meets NF level of care, but without Medicaid she would pay the Medicaid share of the premium privately unless she spends down.",
+          "keyRule": "Age 55+, live in service area (ZIP 28205 is listed), certified nursing-facility level of care, able to live safely in the community; Medicaid pays the premium, Medicare-only enrollees pay the Medicaid portion privately",
+          "source": "https://medicaid.ncdhhs.gov/ncpace-service-area/download?attachment=",
+          "evidence": "official"
+        },
+        {
+          "name": "Project C.A.R.E. (Caregiver Alternatives to Running on Empty)",
+          "alsoKnownAs": [
+            "Project CARE",
+            "dementia caregiver respite"
+          ],
+          "agency": "NC Division of Aging; South Central Office at Mecklenburg County DSS",
+          "verdict": "unlikely",
+          "reason": "No dementia diagnosis is given, and Project C.A.R.E. is dementia-specific.",
+          "keyRule": "Serves family caregivers of a person with Alzheimer's disease or related dementia; care consultation plus self-directed respite funds subject to eligibility and availability",
+          "source": "https://www.ncdhhs.gov/divisions/aging/project-care-caregiver-alternatives-running-empty",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Caregiver Support Program",
+          "alsoKnownAs": [
+            "PGCSS",
+            "PCAFC"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "These programs support caregivers of enrolled veterans. She is a veteran's surviving spouse, not a veteran.",
+          "keyRule": "Care recipient must be a veteran enrolled in VA health care",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare GUIDE Model (Guiding an Improved Dementia Experience)",
+          "alsoKnownAs": [
+            "GUIDE",
+            "dementia care navigation",
+            "GUIDE respite"
+          ],
+          "agency": "CMS Innovation Center via local GUIDE participants (Centralina AAA partners in the Charlotte region)",
+          "verdict": "unlikely",
+          "reason": "No dementia diagnosis is given.",
+          "keyRule": "Must have dementia, be in Original Medicare Parts A and B (not Medicare Advantage), not in hospice, PACE or long-term nursing home; respite up to $2,500/yr for eligible tiers with an unpaid caregiver",
+          "source": "https://www.cms.gov/priorities/innovation/innovation-models/guide",
+          "evidence": "official"
+        },
+        {
+          "name": "NC Elderly or Disabled Property Tax Homestead Exclusion / Homestead Circuit Breaker",
+          "alsoKnownAs": [
+            "AV-9",
+            "homestead exclusion",
+            "circuit breaker"
+          ],
+          "agency": "Mecklenburg County Assessor (NCDOR form AV-9)",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home, so she is not the owner-occupant.",
+          "keyRule": "Age 65+ (or totally and permanently disabled) owner-occupant; 2026 income limit $38,800 (exclusion: greater of $25,000 or 50% of value); circuit breaker up to $58,200 and requires 5 years ownership",
+          "source": "https://www.ncdor.gov/2026-av-9-securedpdf/open",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Survivors Pension with Aid and Attendance",
+        "phoneOrWhere": "Mecklenburg County Veterans Service Officer (free) or VA 1-800-827-1000; forms 21P-534EZ and 21-2680",
+        "why": "She qualifies on today's facts, and if she pays her daughter for care under a written agreement, that cost can be deducted and the payment rises toward $1,558/month. SLMB (through DSS or ePASS) is the next quick win."
+      },
+      "notes": "The biggest long-term lever is spending savings down to $2,000 (excluded burial contract, home modifications): that unlocks SAIH Basic plus automatic Medicaid, then PCS and CAP/DA (CAP/DA consumer direction can pay an adult child). VA pension income interacts with SAIH/Medicaid: the base pension counts but A&A/medical-expense portions are generally excluded under SSI rules; a counselor should sequence these. Assumes the daughter owns the home and they share meals."
+    }
+  ]
+}

@@ -1,0 +1,812 @@
+{
+  "state": "IL",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "IL-A",
+      "programs": [
+        {
+          "name": "Community Care Program (Persons who are Elderly HCBS waiver for Medicaid participants)",
+          "alsoKnownAs": [
+            "CCP",
+            "Elderly Waiver",
+            "Persons who are Elderly waiver",
+            "IDoA in-home services",
+            "adult day service"
+          ],
+          "agency": "Illinois Department on Aging, via local Care Coordination Units (Chicago: DFSS Senior Services)",
+          "verdict": "likely",
+          "reason": "She is 79, has Medicaid, $1,200 in savings and needs hands-on help with bathing, dressing and medication plus night wandering, which should score well above the DON threshold. As a Medicaid enrollee CCP services run through the Persons who are Elderly waiver (and her managed care plan).",
+          "keyRule": "Age 60+, non-exempt assets <= $17,500, Determination of Need score >= 29; must apply for/enroll in Medicaid if eligible",
+          "source": "https://ilaging.illinois.gov/programs/ccp.html",
+          "evidence": "official"
+        },
+        {
+          "name": "AABD Medical Assistance (Medicaid for aged, blind and disabled)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AABD Medical",
+            "HealthChoice Illinois"
+          ],
+          "agency": "Illinois HFS (eligibility via IDHS)",
+          "verdict": "likely",
+          "reason": "Already enrolled. $1,050/month is under the 2026 AABD limit of $1,330 for one, and $1,200 is under the $17,500 asset limit, so she should stay eligible.",
+          "keyRule": "100% FPL ($1,330/mo for 1 in 2026); assets $17,500",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLIB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "SLIB",
+            "QI",
+            "Medicare premium help"
+          ],
+          "agency": "Illinois HFS / IDHS",
+          "verdict": "likely",
+          "reason": "$1,050 minus the $25 disregard is well under the QMB limit and $1,200 is under the asset limit. She may already have QMB with her Medicaid; confirm it is on file so Medicare cost-sharing is covered.",
+          "keyRule": "QMB: 100% FPL ($1,330/mo for 1); assets $9,950 (1) in 2026",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Full Medicaid and MSP enrollees are deemed eligible for Extra Help automatically.",
+          "keyRule": "Deemed eligible with Medicaid/MSP; otherwise income < 150% FPL and resources <= $18,090 (2026)",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Link card"
+          ],
+          "agency": "Illinois Department of Human Services",
+          "verdict": "likely",
+          "reason": "A one-person household age 60+ at $1,050/month is far under Illinois's 200% FPL gross test ($2,660), so she is categorically eligible; benefit size depends on rent and medical costs.",
+          "keyRule": "Households with an elderly/disabled member: gross income <= 200% FPL ($2,660/mo for 1, FY2027); assets not counted",
+          "source": "https://www.dhs.state.il.us/?item=43242",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (PACE at Lawndale Christian Health Center)",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Illinois HFS / CMS; provider Lawndale Christian Health Center",
+          "verdict": "likely",
+          "reason": "ZIP 60623 is in the West Chicago PACE area served by Lawndale Christian Health Center; she is 55+ and her care needs point to nursing-facility level of care. With Medicaid there is no premium. An alternative to CCP, not in addition to it.",
+          "keyRule": "Age 55+, live in PACE service area, meet nursing-facility level of care",
+          "source": "https://hfs.illinois.gov/medicalproviders/pace/zipsearch.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program (National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "respite",
+            "caregiver support"
+          ],
+          "agency": "Chicago Department of Family and Support Services, Senior Services (Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Her daughter is an adult family caregiver of a person 60+ with dementia, so she qualifies for counseling, training and respite through the Chicago AAA.",
+          "keyRule": "Caregivers of people 60+ or of any age with Alzheimer's/dementia (OAA Title III-E)",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Benefit Access Program",
+          "alsoKnownAs": [
+            "Seniors Ride Free",
+            "license plate discount",
+            "Benefit Access"
+          ],
+          "agency": "Illinois Department on Aging",
+          "verdict": "likely",
+          "reason": "Age 65+ with $12,600 a year, far under the $33,562 one-person limit; gives free rides on CTA/Pace and a license plate discount if a car is registered to her.",
+          "keyRule": "Age 65+ (or disabled 16+); income <= $33,562 (1 person)",
+          "source": "https://ilaging.illinois.gov/benefitsaccess/eligibility-20and-20frequently-asked-questions.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "utility bill assistance",
+            "PIPP"
+          ],
+          "agency": "Illinois DCEO; administered in Chicago by CEDA",
+          "verdict": "likely",
+          "reason": "Her $1,050 is far under the 2027 program-year limit for a Peoples Gas/ComEd customer, and seniors can apply from Oct 1, 2026. Only applies if she pays a utility bill (not if heat is included and she has no bill).",
+          "keyRule": "Utility customers: 30-day income <= 300% FPL ($3,990 for 1); priority intake for 60+ from Oct 1, 2026",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Integrated dual-eligible plan (FIDE SNP) or HealthChoice Illinois MLTSS",
+          "alsoKnownAs": [
+            "FIDE SNP",
+            "MLTSS",
+            "former MMAI"
+          ],
+          "agency": "Illinois HFS",
+          "verdict": "possible",
+          "reason": "As a full-benefit dual receiving waiver services she must get them through either a FIDE SNP or a HealthChoice Illinois MLTSS plan; she may already be enrolled. Worth checking that the plan's care coordinator knows about the wandering.",
+          "keyRule": "MMAI ended 12/31/2025; duals in HCBS waivers are served through FIDE SNPs or HealthChoice Illinois MLTSS",
+          "source": "https://hfs.illinois.gov/medicalproviders/cc/mmai.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Senior Exemption",
+          "alsoKnownAs": [
+            "Senior Homestead Exemption"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Depends on whether she owns and lives in her home; if so she is 65+ and qualifies.",
+          "keyRule": "Owner-occupant age 65+ on Jan 1 of the tax year",
+          "source": "https://www.cookcountyassessoril.gov/exemptions",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Low-Income Senior Freeze Exemption",
+          "alsoKnownAs": [
+            "Senior Assessment Freeze",
+            "Senior Freeze"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Only if she owns her home; her income is far under the household income limit.",
+          "keyRule": "Age 65+, owner/liable for taxes, household income <= $65,000 (rising to $75,000 for tax year 2026)",
+          "source": "https://www.cookcountyassessoril.gov/senior-freeze-exemption",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "No eligibility test; useful for the wandering (safety planning, MedicAlert-style enrollment) and for the daughter.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$1,050 Social Security minus the $20 general exclusion leaves $1,030 countable, which is above the 2026 federal benefit rate of $994, so no SSI payment.",
+          "keyRule": "Countable income must be below the FBR ($994/mo individual, 2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Community Care Program (Care Coordination Unit referral)",
+        "phoneOrWhere": "Chicago DFSS Senior Services / Aging and Disability Resource Center 312-744-4016 (or 311); statewide Senior HelpLine 800-252-8966",
+        "why": "She already has Medicaid, so the only missing piece is the DON assessment; CCP has no waiting list and can start in-home help, adult day and emergency home response (relevant to the night wandering) quickly. The CCU can also lay out PACE as the alternative."
+      },
+      "notes": "ilaging.illinois.gov and dceo.illinois.gov could not be fetched directly from this machine (DNS); their figures were confirmed through search-engine extracts of those exact official pages. Because she is a dual on a waiver, her managed care plan (FIDE SNP or MLTSS) may route the CCP referral; a counselor should check plan enrollment first. Night wandering while living alone may mean CCP hours are not enough and supportive living or a higher level of care should be discussed."
+    },
+    {
+      "familyId": "IL-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA pension",
+            "Aid and Attendance",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Army 1962-1965 overlaps the Vietnam era (outside-Vietnam period starts Aug 5, 1964), he is 65+, honorable. Net worth $38,000 + $37,200 income = $75,200, far under $163,699. Deducting just the two Part B premiums ($4,869.60/yr, less the $1,141 deductible) brings countable income to about $33,471, under the $34,488 A&A rate for a veteran with a spouse, so a small pension is payable before any paid care is counted; paid in-home or adult day care would raise it substantially. A&A needs medical evidence of needing help with bathing/supervision.",
+          "keyRule": "Wartime service (90 days, 1 day in wartime, pre-9/8/1980 entry); MAPR veteran + 1 dependent with A&A $34,488; net worth limit $163,699 (12/1/2025-11/30/2026); unreimbursed medical expenses above 5% of MAPR ($1,141) deducted",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment with Geriatrics and Extended Care (homemaker/home health aide, respite, adult day health) and General Caregiver Support",
+          "alsoKnownAs": [
+            "VA respite",
+            "VA home health aide",
+            "PGCSS",
+            "Program of General Caregiver Support Services"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "A wartime veteran with household income around $37,000 should be enrollable (and pension receipt itself places him in priority group 5). Once enrolled, respite, homemaker/home health aide and adult day health care are available on clinical need, and his wife can use General Caregiver Support Services.",
+          "keyRule": "All enrolled veterans eligible for respite/HHA if clinical need and availability; income-based enrollment threshold for a veteran + 1 dependent is roughly $52,000 nationally in 2026 (figure from secondary source)",
+          "source": "https://www.va.gov/geriatrics/pages/Respite_Care.asp",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating, and the comprehensive caregiver stipend program requires a 70% or higher rating.",
+          "keyRule": "Veteran must have a VA disability rating of 70% or higher",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care Program (Persons who are Elderly HCBS waiver for Medicaid participants)",
+          "alsoKnownAs": [
+            "CCP",
+            "Elderly Waiver",
+            "Persons who are Elderly waiver",
+            "IDoA in-home services",
+            "adult day service"
+          ],
+          "agency": "Illinois Department on Aging, via local Care Coordination Units (Chicago: DFSS Senior Services)",
+          "verdict": "possible",
+          "reason": "Age and income are not barriers (CCP has no income cap, only a cost share). Under the CCP spousal rule he may keep $17,500 and the rest of the $38,000 is protected for his wife up to the Community Spouse Asset Allowance, so assets should pass. Turns on the DON score: bathing help plus daytime supervision for moderate dementia may or may not reach 29.",
+          "keyRule": "DON >= 29; participant's non-exempt assets <= $17,500, with excess transferable to community spouse up to the allowance (89 Ill. Adm. Code 240.810)",
+          "source": "https://www.ilga.gov/agencies/JCAR/EntirePart?titlepart=08900240",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program (National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "respite",
+            "caregiver support"
+          ],
+          "agency": "Chicago Department of Family and Support Services, Senior Services (Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "His 80-year-old wife is the sole, exhausted caregiver of a person 60+ with dementia; she qualifies for respite, counseling and support groups with no income test.",
+          "keyRule": "Caregivers of people 60+ or of any age with dementia",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Benefit Access Program",
+          "alsoKnownAs": [
+            "Seniors Ride Free",
+            "license plate discount",
+            "Benefit Access"
+          ],
+          "agency": "Illinois Department on Aging",
+          "verdict": "likely",
+          "reason": "Both 65+; $37,200 a year is under the $44,533 two-person limit.",
+          "keyRule": "Age 65+; income <= $44,533 (2 people)",
+          "source": "https://ilaging.illinois.gov/benefitsaccess/eligibility-20and-20frequently-asked-questions.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "utility bill assistance",
+            "PIPP"
+          ],
+          "agency": "Illinois DCEO; administered in Chicago by CEDA",
+          "verdict": "likely",
+          "reason": "$3,100 a month is under the 300% FPL limit of $5,410 for two for Peoples Gas/ComEd customers; seniors can apply from Oct 1, 2026.",
+          "keyRule": "Utility customers: 30-day income <= 300% FPL ($5,410 for 2)",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Link card"
+          ],
+          "agency": "Illinois Department of Human Services",
+          "verdict": "likely",
+          "reason": "Gross $3,100 is under Illinois's 200% FPL test for elderly households ($3,607 for two), so they are categorically eligible with no asset test; after deductions the benefit will probably be only the minimum (about $25/month) unless medical and shelter costs are high.",
+          "keyRule": "Elderly household gross income <= 200% FPL ($3,607/mo for 2, FY2027); 1-2 person eligible households receive at least the minimum allotment",
+          "source": "https://www.dhs.state.il.us/?item=43242",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Senior Exemption",
+          "alsoKnownAs": [
+            "Senior Homestead Exemption"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Only if they own and occupy their home; both are 65+.",
+          "keyRule": "Owner-occupant age 65+",
+          "source": "https://www.cookcountyassessoril.gov/exemptions",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Low-Income Senior Freeze Exemption",
+          "alsoKnownAs": [
+            "Senior Assessment Freeze",
+            "Senior Freeze"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Only if they own; $37,200 household income is under the limit.",
+          "keyRule": "Age 65+, household income <= $65,000 (rising to $75,000 for tax year 2026)",
+          "source": "https://www.cookcountyassessoril.gov/senior-freeze-exemption",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (PACE at Lawndale Christian Health Center)",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Illinois HFS / CMS; provider Lawndale Christian Health Center",
+          "verdict": "possible",
+          "reason": "60623 is in the Lawndale Christian Health Center PACE area and he is 55+, but he would need to meet nursing-facility level of care, and without Medicaid he would pay the Medicaid portion of the premium privately.",
+          "keyRule": "Age 55+, service area, nursing-facility level of care; non-Medicaid enrollees pay a monthly premium",
+          "source": "https://hfs.illinois.gov/medicalproviders/pace/zipsearch.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "No eligibility test; caregiver stress support for his wife.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "AABD Medical Assistance (Medicaid for aged, blind and disabled)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AABD Medical",
+            "HealthChoice Illinois"
+          ],
+          "agency": "Illinois HFS (eligibility via IDHS)",
+          "verdict": "unlikely",
+          "reason": "$3,100 a month is above the $1,803 two-person limit and $38,000 is above the $17,500 asset limit; only a spenddown or waiver route would apply.",
+          "keyRule": "100% FPL ($1,803/mo for 2); assets $17,500",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLIB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "SLIB",
+            "QI",
+            "Medicare premium help"
+          ],
+          "agency": "Illinois HFS / IDHS",
+          "verdict": "unlikely",
+          "reason": "Even the highest tier (QI-1) stops at $2,435/month for a couple; they have $3,100, and savings exceed the $14,910 couple limit.",
+          "keyRule": "QI-1: 135% FPL ($2,435/mo couple); assets $14,910 couple",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Income $37,200 is over the $32,460 couple limit and savings $38,000 exceed the $36,100 couple resource limit.",
+          "keyRule": "Income < 150% FPL ($32,460 couple); resources <= $36,100 couple (2026)",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Veterans Pension with Aid and Attendance (and VA health care enrollment)",
+        "phoneOrWhere": "Illinois Department of Veterans' Affairs Veteran Service Officer, 800-437-9824 (Chicago office at 69 W. Washington St.)",
+        "why": "A VSO can file an Intent to File today, which locks the pension effective date, and at the same visit start VA health care enrollment, which is what unlocks VA respite and home health aide for his exhausted wife. The pension also helps pay for any care they buy."
+      },
+      "notes": "Pension math assumes only Part B premiums ($202.90 x 2, 2026) as medical expenses; any Medigap/Part D premiums or paid care increase the award. VA pension counts as income for SNAP. Whether CCP counts his wife's assets depends on the 240.810 spousal transfer; a CCU worker should confirm. The VA health-care income threshold (~$52,000) came from a secondary source; Chicago's geographic threshold is higher."
+    },
+    {
+      "familyId": "IL-C",
+      "programs": [
+        {
+          "name": "AABD Medical Assistance (Medicaid for aged, blind and disabled)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AABD Medical",
+            "HealthChoice Illinois"
+          ],
+          "agency": "Illinois HFS (eligibility via IDHS)",
+          "verdict": "likely",
+          "reason": "He is 66 (aged). Household gross $1,750 is under the $1,803 two-person limit even before the $25 disregard and earned-income exclusions on his wife's wages; $4,500 savings is under $17,500.",
+          "keyRule": "100% FPL ($1,803/mo for 2, 2026); assets $17,500 for 1 or 2",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLIB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "SLIB",
+            "QI",
+            "Medicare premium help"
+          ],
+          "agency": "Illinois HFS / IDHS",
+          "verdict": "likely",
+          "reason": "Income at about 97% FPL and $4,500 in savings fit QMB, which pays his Part B premium ($202.90/month in 2026) and Medicare cost-sharing.",
+          "keyRule": "QMB: 100% FPL ($1,803/mo couple); assets $14,910 couple",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Income $21,000/yr is under the $32,460 couple limit and $4,500 is under $36,100; automatic once he has Medicaid or QMB.",
+          "keyRule": "Income < 150% FPL; resources <= $36,100 couple (2026)",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Link card"
+          ],
+          "agency": "Illinois Department of Human Services",
+          "verdict": "likely",
+          "reason": "Two-person household with a member 60+ at $1,750 gross, under the $3,607 limit; categorically eligible, benefit depends on housing costs.",
+          "keyRule": "Elderly household gross <= 200% FPL ($3,607/mo for 2, FY2027)",
+          "source": "https://www.dhs.state.il.us/?item=43242",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "utility bill assistance",
+            "PIPP"
+          ],
+          "agency": "Illinois DCEO; administered in Chicago by CEDA",
+          "verdict": "likely",
+          "reason": "$1,750 is far under the $5,410 two-person limit.",
+          "keyRule": "Utility customers: 30-day income <= 300% FPL ($5,410 for 2)",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Benefit Access Program",
+          "alsoKnownAs": [
+            "Seniors Ride Free",
+            "license plate discount",
+            "Benefit Access"
+          ],
+          "agency": "Illinois Department on Aging",
+          "verdict": "likely",
+          "reason": "He is 65+ and the couple's $21,000 is under the $44,533 limit.",
+          "keyRule": "Age 65+ or disabled; income <= $44,533 (2)",
+          "source": "https://ilaging.illinois.gov/benefitsaccess/eligibility-20and-20frequently-asked-questions.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program (National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "respite",
+            "caregiver support"
+          ],
+          "agency": "Chicago Department of Family and Support Services, Senior Services (Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "His wife cares for a person 60+ with Alzheimer's (and the program also covers dementia at any age).",
+          "keyRule": "Caregivers of people 60+ or of any age with Alzheimer's",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care Program (Persons who are Elderly HCBS waiver for Medicaid participants)",
+          "alsoKnownAs": [
+            "CCP",
+            "Elderly Waiver",
+            "Persons who are Elderly waiver",
+            "IDoA in-home services",
+            "adult day service"
+          ],
+          "agency": "Illinois Department on Aging, via local Care Coordination Units (Chicago: DFSS Senior Services)",
+          "verdict": "possible",
+          "reason": "Age, assets and Medicaid status work, but his needs are mostly cognitive and instrumental (medication, money, driving); whether that plus the cognitive section reaches a DON score of 29 needs the assessment.",
+          "keyRule": "Age 60+, DON >= 29, assets <= $17,500",
+          "source": "https://ilaging.illinois.gov/programs/ccp.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Senior Exemption",
+          "alsoKnownAs": [
+            "Senior Homestead Exemption"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Only if they own their home; he is 65+.",
+          "keyRule": "Owner-occupant age 65+",
+          "source": "https://www.cookcountyassessoril.gov/exemptions",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Low-Income Senior Freeze Exemption",
+          "alsoKnownAs": [
+            "Senior Assessment Freeze",
+            "Senior Freeze"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "possible",
+          "reason": "Only if they own; income far under the limit.",
+          "keyRule": "Age 65+, household income <= $65,000",
+          "source": "https://www.cookcountyassessoril.gov/senior-freeze-exemption",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (PACE at Lawndale Christian Health Center)",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Illinois HFS / CMS; provider Lawndale Christian Health Center",
+          "verdict": "possible",
+          "reason": "In the PACE area and 55+, but at this stage he probably does not meet nursing-facility level of care.",
+          "keyRule": "Nursing-facility level of care required",
+          "source": "https://hfs.illinois.gov/medicalproviders/pace/zipsearch.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "Early-onset support groups and care consultation; no eligibility test.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His own $1,350 Social Security, less $20, is above the $994 individual rate; his wife is neither aged nor disabled.",
+          "keyRule": "Countable income must be below the FBR ($994 individual, 2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "AABD Medicaid + Medicare Savings Program + SNAP (one ABE application)",
+        "phoneOrWhere": "Apply at abe.illinois.gov or call the IDHS/ABE Help Line 800-843-6154; local IDHS Family Community Resource Center",
+        "why": "One application covers Medicaid, QMB and SNAP; QMB alone saves $202.90/month in Part B premiums and makes Extra Help automatic, and Medicaid is a prerequisite that smooths CCP later."
+      },
+      "notes": "Facts say Medicare at 66; wife (63) is not on Medicare and is not covered by these programs. AABD budgeting may deem part of the wife's earnings; even counting them in full the couple is under 100% FPL. If he still drives, a counselor would also flag a driving evaluation."
+    },
+    {
+      "familyId": "IL-D",
+      "programs": [
+        {
+          "name": "Community Care Program (Persons who are Elderly HCBS waiver for Medicaid participants)",
+          "alsoKnownAs": [
+            "CCP",
+            "Elderly Waiver",
+            "Persons who are Elderly waiver",
+            "IDoA in-home services",
+            "adult day service"
+          ],
+          "agency": "Illinois Department on Aging, via local Care Coordination Units (Chicago: DFSS Senior Services)",
+          "verdict": "likely",
+          "reason": "She is 88, needs help with bathing, dressing, toileting and mobility and cannot be left alone (a high DON score), and her $9,000 savings is under the $17,500 asset limit. CCP has no income cap; she will be asked to apply for Medicaid.",
+          "keyRule": "Age 60+, assets <= $17,500, DON >= 29; must apply for Medicaid if potentially eligible",
+          "source": "https://ilaging.illinois.gov/programs/ccp.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA survivors pension",
+            "widow's pension",
+            "death pension",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Her late husband's Navy service 1951-1954 is Korean-conflict wartime, honorable; she has not remarried. Countable income is about $14,949 after Part B premiums (vs. the $18,697 surviving-spouse A&A rate), so roughly $3,700/yr is payable before care costs; net worth ~$25,800 is far under $163,699. Needs medical evidence of A&A need, and proof of the marriage/continuous cohabitation.",
+          "keyRule": "Korean conflict June 27, 1950-Jan 31, 1955; MAPR surviving spouse with A&A $18,697; deductible $584; net worth limit $163,699",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLIB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "SLIB",
+            "QI",
+            "Medicare premium help"
+          ],
+          "agency": "Illinois HFS / IDHS",
+          "verdict": "likely",
+          "reason": "Her $1,400 less the $25 disregard ($1,375) is over QMB but under the SLIB limit of $1,596, and $9,000 is under the $9,950 asset limit; SLIB pays the Part B premium.",
+          "keyRule": "SLIB: 120% FPL ($1,596/mo for 1); assets $9,950 (2026)",
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Part D Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Income $16,800/yr is under $23,940 and $9,000 is under $18,090; automatic once she has an MSP.",
+          "keyRule": "Income < 150% FPL; resources <= $18,090 (2026)",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "AABD Medical Assistance (Medicaid for aged, blind and disabled)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "AABD Medical",
+            "HealthChoice Illinois"
+          ],
+          "agency": "Illinois HFS (eligibility via IDHS)",
+          "verdict": "possible",
+          "reason": "Assets pass, but $1,375 countable is about $45 over the $1,330 limit, so she would be on spenddown (meet about $45/month in medical bills); a VA pension award would raise the spenddown.",
+          "keyRule": "100% FPL ($1,330/mo for 1); income over the standard is a spenddown obligation",
+          "source": "https://www.dhs.state.il.us/page.aspx?item=16536",
+          "evidence": "official"
+        },
+        {
+          "name": "Caregiver Support Program (National Family Caregiver Support Program)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Older Americans Act Title III-E",
+            "respite",
+            "caregiver support"
+          ],
+          "agency": "Chicago Department of Family and Support Services, Senior Services (Area Agency on Aging)",
+          "verdict": "likely",
+          "reason": "Her daughter cut work hours to care for an 88-year-old; eligible for respite and caregiver support.",
+          "keyRule": "Caregivers of people 60+",
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Benefit Access Program",
+          "alsoKnownAs": [
+            "Seniors Ride Free",
+            "license plate discount",
+            "Benefit Access"
+          ],
+          "agency": "Illinois Department on Aging",
+          "verdict": "likely",
+          "reason": "Age 65+; her own $16,800 is under the one-person limit (the daughter is not a spouse or qualifying dependent in her household for this program).",
+          "keyRule": "Age 65+; income <= $33,562 (1 person)",
+          "source": "https://ilaging.illinois.gov/benefitsaccess/eligibility-20and-20frequently-asked-questions.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (PACE at Lawndale Christian Health Center)",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Illinois HFS / CMS; provider Lawndale Christian Health Center",
+          "verdict": "possible",
+          "reason": "In the Lawndale PACE area and clearly at nursing-facility level of care, but without full Medicaid she would owe a monthly premium for the Medicaid share; becomes likely if Medicaid is approved.",
+          "keyRule": "Age 55+, service area, nursing-facility level of care",
+          "source": "https://hfs.illinois.gov/medicalproviders/pace/zipsearch.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Link card"
+          ],
+          "agency": "Illinois Department of Human Services",
+          "verdict": "unlikely",
+          "reason": "She lives with and cannot buy or cook food separately from her daughter's family, so she is in their SNAP household. The exception for an elderly person who can't prepare meals only applies if the others' income is at or below 165% FPL (about $2,976/month for two); the daughter's $5,500 exceeds it, and the combined $6,900 is over the $4,554 three-person limit.",
+          "keyRule": "7 CFR 273.1(b)(2)(ii) separate-household rule (others' income <= 165% FPL); elderly household gross <= 200% FPL ($4,554 for 3)",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "utility bill assistance",
+            "PIPP"
+          ],
+          "agency": "Illinois DCEO; administered in Chicago by CEDA",
+          "verdict": "unlikely",
+          "reason": "LIHEAP counts everyone at the address; $1,400 + $5,500 = $6,900 is just over the $6,830 three-person limit.",
+          "keyRule": "30-day household income <= 300% FPL ($6,830 for 3)",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$1,400 less $20 exceeds the $994 federal benefit rate.",
+          "keyRule": "Countable income below FBR ($994, 2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Cook County Senior Exemption",
+          "alsoKnownAs": [
+            "Senior Homestead Exemption"
+          ],
+          "agency": "Cook County Assessor",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home and does not own it.",
+          "keyRule": "Owner-occupant age 65+",
+          "source": "https://www.cookcountyassessoril.gov/exemptions",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Alzheimer's Association 24/7 Helpline and care consultation",
+          "alsoKnownAs": [
+            "Alzheimer's Association",
+            "dementia helpline"
+          ],
+          "agency": "Alzheimer's Association (nonprofit)",
+          "verdict": "likely",
+          "reason": "General dementia/caregiving support if she has cognitive decline; no eligibility test.",
+          "keyRule": "Open to anyone",
+          "source": "https://www.alz.org/help-support/resources/helpline",
+          "evidence": "secondary"
+        }
+      ],
+      "firstCall": {
+        "program": "Community Care Program (Care Coordination Unit)",
+        "phoneOrWhere": "Chicago DFSS Senior Services 312-744-4016 (or 311); Senior HelpLine 800-252-8966",
+        "why": "It is the fastest route to paid in-home help with no waiting list, her assets already qualify, and the CCU will start the Medicaid/MSP application she must file. File the VA survivors pension Intent to File (IDVA 800-437-9824) the same week."
+      },
+      "notes": "Facts do not state whether she has dementia; ALZ resource included only as general support. Survivors pension counts as income for MSP and Medicaid spenddown (SLIB could shift to QI-1 at $1,796), though VA amounts attributable to A&A/unreimbursed medical expenses are excluded under SSI-related rules. Confirm she was married to the veteran at least one year or had a child with him."
+    }
+  ]
+}
