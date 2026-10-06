@@ -56,6 +56,7 @@ const PROBE_PRIORITY: Record<string, PriorityKey | null> = {
   "Provider reachability": "providers",
   "Revenue": "providers",
   "Support backlog": "operations",
+  "Benefits Finder": "benefits",
   "Organic traffic": null,
 };
 
@@ -124,14 +125,19 @@ export function buildPriorityLines(input: {
   shipped?: Partial<Record<PriorityKey, string | null>>;
   now?: Date;
 }): string[] {
+  // A reading named after its priority ("Benefits Finder") says its headline
+  // whole: "*Benefits Finder:* Benefits Finder 90 → 79." reads twice.
   const moved = (key: PriorityKey) => input.movers
     .filter((reading) => priorityFor(reading.label) === key)
     .slice(0, 1)
-    .map(compactMove);
-  // "No measured number moved", not "no change": only readings are measured,
-  // and no reading covers the Benefits Finder, so a week of shipped Benefits
-  // work read as "No change since Oct 3" (TJ, 2026-10-05: "This is wrong").
-  // A priority with nothing measured says what shipped, when anything did.
+    .map((reading) => reading.label === OLERA_PRIORITIES.find((priority) => priority.key === key)!.label
+      ? reading.headline.trim()
+      : compactMove(reading));
+  // "No measured number moved", not "no change": only readings are measured.
+  // Until the standing Benefits probe (probes.server.ts), no reading covered
+  // the Benefits Finder, so a week of shipped Benefits work read as "No change
+  // since Oct 3" (TJ, 2026-10-05: "This is wrong"). A priority with nothing
+  // measured says what shipped, when anything did.
   const quiet = input.since ? `No measured number moved since ${input.since}.` : "Nothing new measured.";
   const line = (key: PriorityKey, parts: Array<string | null | false>) => {
     const label = OLERA_PRIORITIES.find((priority) => priority.key === key)!.label;
