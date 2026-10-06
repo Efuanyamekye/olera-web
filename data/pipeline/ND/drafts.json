@@ -621,7 +621,7 @@
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1623
+            "monthlyLimit": 1533
           },
           {
             "householdSize": 3,
@@ -798,7 +798,30 @@
       "phone": "(866) 614-6005",
       "sourceUrl": "https://www.hhs.nd.gov/healthcare/medicaid",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_2",
+          "from": 1623,
+          "to": 1533,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1197,
+          "to": 1130,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "severity": "medium",
+          "why": "draft fits a federal formula (100% FPL 2023); verified value fits none",
+          "flaggedAt": "2026-10-06T12:24:49.595Z"
+        }
+      ]
     },
     {
       "id": "nd-hcbs-waiver",
@@ -1398,6 +1421,12 @@
           "phone": "(701) 232-6219",
           "description": "Great Plains Food Bank offers help completing SNAP applications at no cost. Staff can walk your parent or your family through the process and help gather documents.",
           "hours": "Call for current hours and locations"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 614-6005",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1470,7 +1499,22 @@
       "phone": null,
       "sourceUrl": "https://www.hhs.nd.gov/applyforhelp/snap",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "7012326219"
+          ],
+          "to": "(866) 614-6005",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nd-liheap-energy-assistance",
@@ -1829,6 +1873,12 @@
           "phone": "(701) 328-4601",
           "description": "State-level office overseeing the Senior Dining program. Use this number if you cannot locate your county's local provider through 2-1-1 or need to escalate a concern.",
           "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 462-5465",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1911,7 +1961,24 @@
       "phone": "211",
       "sourceUrl": "https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "7012556922",
+            "7013284601"
+          ],
+          "to": "(855) 462-5465",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -1963,5 +2030,5 @@
     ],
     "resourcesVsBenefits": "North Dakota offers both types of help: qualification-based benefits like BCAP that require income and asset screening to help pay for care, and free resources like the Assistive Senior Safety Program that any North Dakota senior can access regardless of income. The AIC Project falls in between, it's free but specifically serves rural communities where volunteer networks are available."
   },
-  "factcheckedAt": "2026-10-02T07:41:13.679Z"
+  "factcheckedAt": "2026-10-06T12:24:49.595Z"
 }

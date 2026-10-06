@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ND/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.391Z
+ * Last updated: 2026-10-06T12:32:14.621Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -626,7 +626,7 @@ export const drafts: PipelineStateDrafts = {
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1623
+            "monthlyLimit": 1533
           },
           {
             "householdSize": 3,
@@ -803,7 +803,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(866) 614-6005",
       "sourceUrl": "https://www.hhs.nd.gov/healthcare/medicaid",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_2",
+          "from": 1623,
+          "to": 1533,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1197,
+          "to": 1130,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "severity": "medium",
+          "why": "draft fits a federal formula (100% FPL 2023); verified value fits none",
+          "flaggedAt": "2026-10-06T12:24:49.595Z"
+        }
+      ]
     },
     {
       "id": "nd-hcbs-waiver",
@@ -1403,6 +1426,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(701) 232-6219",
           "description": "Great Plains Food Bank offers help completing SNAP applications at no cost. Staff can walk your parent or your family through the process and help gather documents.",
           "hours": "Call for current hours and locations"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 614-6005",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1475,7 +1504,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.hhs.nd.gov/applyforhelp/snap",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "7012326219"
+          ],
+          "to": "(866) 614-6005",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nd-liheap-energy-assistance",
@@ -1834,6 +1878,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(701) 328-4601",
           "description": "State-level office overseeing the Senior Dining program. Use this number if you cannot locate your county's local provider through 2-1-1 or need to escalate a concern.",
           "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 462-5465",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1916,7 +1966,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "211",
       "sourceUrl": "https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "7012556922",
+            "7013284601"
+          ],
+          "to": "(855) 462-5465",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

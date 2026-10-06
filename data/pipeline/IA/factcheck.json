@@ -1,14 +1,14 @@
 {
   "state": "IA",
   "stateName": "Iowa",
-  "checkedAt": "2026-10-02T07:36:32.766Z",
-  "total": 11,
+  "checkedAt": "2026-10-06T12:20:34.044Z",
+  "total": 13,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 7,
-  "totalFlags": 9,
-  "highSeverityFlags": 2,
+  "programsWithFlags": 9,
+  "totalFlags": 13,
+  "highSeverityFlags": 6,
   "programs": [
     {
       "programId": "medicaid-hcbs-elderly-waiver",
@@ -27,18 +27,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 35788,
+        "income_1": 2982,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": null,
-        "phone": "8003388366",
+        "phone": "18003388366",
         "sources": {
           "age": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
           "income": "https://hhs.iowa.gov/media/17850/download?inline",
           "assets": "https://hhs.iowa.gov/media/17850/download?inline",
-          "phone": "https://hhs.iowa.gov/medicaid/about-medicaid/medicaid-projects/home-project/waiver-redesign-faq"
+          "phone": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services"
         },
-        "notes": "Current Iowa Elderly Waiver is for age 65+; official materials cite 2026 income and asset limits for a single applicant, but no official couple asset limit was found in the retrieved sources."
+        "notes": "Current Iowa Elderly Waiver appears to be for adults age 65+; no separate couple asset figure found in the retrieved official sources. Income figure is the 2026 monthly limit shown in the Iowa HHS quick guide."
       },
       "flags": [
         {
@@ -48,10 +48,10 @@
             "8558897985",
             "8009722017"
           ],
-          "verifiedValue": "8003388366"
+          "verifiedValue": "18003388366"
         }
       ],
-      "notes": "Current Iowa Elderly Waiver is for age 65+; official materials cite 2026 income and asset limits for a single applicant, but no official couple asset limit was found in the retrieved sources."
+      "notes": "Current Iowa Elderly Waiver appears to be for adults age 65+; no separate couple asset figure found in the retrieved official sources. Income figure is the 2026 monthly limit shown in the Iowa HHS quick guide."
     },
     {
       "programId": "hcbs-waiver-services",
@@ -70,21 +70,31 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
+        "income_1": 35788,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 2000,
         "assets_couple": null,
-        "phone": "8003388366",
+        "phone": "8009722017",
         "sources": {
           "age": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
-          "income": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
-          "assets": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
+          "income": "https://hhs.iowa.gov/media/17850/download?inline",
+          "assets": "https://hhs.iowa.gov/media/17850/download?inline",
           "phone": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services"
         },
-        "notes": "Current Iowa HCBS Elderly Waiver applies to seniors age 65+; no income or asset figures found on the official HCBS page for this program."
+        "notes": "Elderly Waiver is the senior pathway within Iowa HCBS; current official materials show age 65+ and provide the main DHHS phone number. Income/asset limits are from the 2026 Elderly Waiver quick guide."
       },
-      "flags": [],
-      "notes": "Current Iowa HCBS Elderly Waiver applies to seniors age 65+; no income or asset figures found on the official HCBS page for this program."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18003388366",
+            "211"
+          ],
+          "verifiedValue": "8009722017"
+        }
+      ],
+      "notes": "Elderly Waiver is the senior pathway within Iowa HCBS; current official materials show age 65+ and provide the main DHHS phone number. Income/asset limits are from the 2026 Elderly Waiver quick guide."
     },
     {
       "programId": "pace-elderly-care",
@@ -107,27 +117,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5152705000",
+        "phone": "8009722017",
         "sources": {
           "age": "https://hhs.iowa.gov/medicaid/plans-programs/program-all-inclusive-care-elderly-pace",
           "income": null,
           "assets": null,
-          "phone": "https://hhs.iowa.gov/medicaid/plans-programs/program-all-inclusive-care-elderly-pace"
+          "phone": "https://hhs.iowa.gov/medicaid/plans-programs"
         },
-        "notes": "PACE in Iowa appears current and active in 2026; no distinct senior income or countable asset limit was found in the retrieved official sources. Phone listed is the Iowa HHS contact shown on the official page for a PACE center."
+        "notes": "PACE is current in Iowa; official state sources show age 55+ and do not present a separate income or countable asset test for the senior pathway in the retrievable materials."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8009722017",
-            "211"
-          ],
-          "verifiedValue": "5152705000"
-        }
-      ],
-      "notes": "PACE in Iowa appears current and active in 2026; no distinct senior income or countable asset limit was found in the retrieved official sources. Phone listed is the Iowa HHS contact shown on the official page for a PACE center."
+      "flags": [],
+      "notes": "PACE is current in Iowa; official state sources show age 55+ and do not present a separate income or countable asset test for the senior pathway in the retrievable materials."
     },
     {
       "programId": "snap-food-benefits",
@@ -140,37 +140,43 @@
         "assets_couple": null,
         "phones": [
           "8558897985",
-          "211"
+          "211",
+          "8009722017"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 60,
-        "income_1": 2008,
-        "income_2": 2727,
-        "assets_individual": null,
-        "assets_couple": null,
+        "income_1": 1696,
+        "income_2": 2292,
+        "assets_individual": 3000,
+        "assets_couple": 4500,
         "phone": "8009722017",
         "sources": {
-          "age": "https://www.legis.iowa.gov/docs/publications/FTNO/1544195.pdf",
-          "income": "https://hhs.iowa.gov/media/6409/download",
-          "assets": null,
+          "age": "https://hhs.iowa.gov/assistance-programs/food-assistance/snap",
+          "income": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
+          "assets": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
           "phone": "https://hhs.iowa.gov/assistance-programs/food-assistance"
         },
-        "notes": "SNAP is current in Iowa. For the senior pathway, Iowa’s SNAP facts sheet says households with an elderly person age 60+ have an exemption from gross income limits; the program itself is not senior-only."
+        "notes": "SNAP is active in Iowa; senior pathway uses age 60+ and the resource limits apply to households with an elderly member."
       },
       "flags": [
         {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8558897985",
-            "211"
-          ],
-          "verifiedValue": "8009722017"
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2086,
+          "verifiedValue": 1696,
+          "pctDiff": 18.7
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2820,
+          "verifiedValue": 2292,
+          "pctDiff": 18.7
         }
       ],
-      "notes": "SNAP is current in Iowa. For the senior pathway, Iowa’s SNAP facts sheet says households with an elderly person age 60+ have an exemption from gross income limits; the program itself is not senior-only."
+      "notes": "SNAP is active in Iowa; senior pathway uses age 60+ and the resource limits apply to households with an elderly member."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -183,32 +189,33 @@
         "assets_couple": null,
         "phones": [
           "211",
-          "5633828436"
+          "5633828436",
+          "8009722017"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 60,
-        "income_1": 2611,
+        "income_1": 2617,
         "income_2": 3525,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8009722017",
+        "phone": "5157768871",
         "sources": {
-          "age": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "age": "https://iuc.iowa.gov/news/2026-09-29/liheap-applications-accepted-oct-1",
           "income": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
           "assets": null,
           "phone": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance"
         },
-        "notes": "Iowa LIHEAP uses an income test based on 200% of 2025 federal poverty guidelines for Oct. 1, 2025-Sep. 30, 2026; senior/disabled households may apply starting Oct. 1. No asset test located in the official source."
+        "notes": "Current Iowa LIHEAP uses a senior pathway for households with a resident age 60+; income limit is 200% of 2025 federal poverty guidelines for Oct. 1, 2025-Sep. 30, 2026."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1822,
-          "verifiedValue": 2611,
-          "pctDiff": 30.2
+          "verifiedValue": 2617,
+          "pctDiff": 30.4
         },
         {
           "field": "income_2",
@@ -222,12 +229,13 @@
           "severity": "medium",
           "draftValue": [
             "211",
-            "5633828436"
+            "5633828436",
+            "8009722017"
           ],
-          "verifiedValue": "8009722017"
+          "verifiedValue": "5157768871"
         }
       ],
-      "notes": "Iowa LIHEAP uses an income test based on 200% of 2025 federal poverty guidelines for Oct. 1, 2025-Sep. 30, 2026; senior/disabled households may apply starting Oct. 1. No asset test located in the official source."
+      "notes": "Current Iowa LIHEAP uses a senior pathway for households with a resident age 60+; income limit is 200% of 2025 federal poverty guidelines for Oct. 1, 2025-Sep. 30, 2026."
     },
     {
       "programId": "shiip-medicare-counseling",
@@ -258,10 +266,10 @@
           "assets": null,
           "phone": "https://shiip.iowa.gov/contact"
         },
-        "notes": "SHIIP is a counseling/assistance program for Medicare beneficiaries and caregivers, not a benefits program with age/income/assets tests; no authoritative eligibility thresholds found. Official main phone number verified from Iowa SHIIP contact page."
+        "notes": "SHIIP is a Medicare counseling/assistance program and does not appear to have age, income, or asset eligibility tests for the senior pathway; official contact phone confirmed."
       },
       "flags": [],
-      "notes": "SHIIP is a counseling/assistance program for Medicare beneficiaries and caregivers, not a benefits program with age/income/assets tests; no authoritative eligibility thresholds found. Official main phone number verified from Iowa SHIIP contact page."
+      "notes": "SHIIP is a Medicare counseling/assistance program and does not appear to have age, income, or asset eligibility tests for the senior pathway; official contact phone confirmed."
     },
     {
       "programId": "meals-on-wheels",
@@ -276,7 +284,8 @@
           "8554106222",
           "3193380515",
           "5156993243",
-          "5157253333"
+          "5157253333",
+          "8007792001"
         ],
         "hasVerifiableFacts": true
       },
@@ -286,14 +295,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8007792001",
+        "phone": "3193983574",
         "sources": {
-          "age": "https://hhs.iowa.gov/family-community/aging-services/nutrition-wellness",
+          "age": "https://gis.linncountyiowa.gov/web-data/lccs/community-resources/Food-Assistance.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://hhs.iowa.gov/family-community/aging-services/iowa-area-agencies-aging"
+          "phone": "https://gis.linncountyiowa.gov/web-data/lccs/community-resources/Food-Assistance.pdf"
         },
-        "notes": "Iowa’s senior nutrition/home-delivered meals pathway is generally age 60+; local Meals on Wheels providers may have county-specific rules, but the state senior threshold is 60. No official income or asset test found for the statewide senior Meals on Wheels pathway."
+        "notes": "Current Iowa Meals on Wheels senior pathway found in local county resource guide; no income or asset test located. "
       },
       "flags": [
         {
@@ -303,12 +312,13 @@
             "8554106222",
             "3193380515",
             "5156993243",
-            "5157253333"
+            "5157253333",
+            "8007792001"
           ],
-          "verifiedValue": "8007792001"
+          "verifiedValue": "3193983574"
         }
       ],
-      "notes": "Iowa’s senior nutrition/home-delivered meals pathway is generally age 60+; local Meals on Wheels providers may have county-specific rules, but the state senior threshold is 60. No official income or asset test found for the statewide senior Meals on Wheels pathway."
+      "notes": "Current Iowa Meals on Wheels senior pathway found in local county resource guide; no income or asset test located. "
     },
     {
       "programId": "legal-aid-seniors",
@@ -334,14 +344,14 @@
         "phone": "8009928161",
         "sources": {
           "age": "https://iowalegalaid.org/contact/",
-          "income": null,
-          "assets": null,
+          "income": "https://iowalegalaid.org/get-help/faq/",
+          "assets": "https://iowalegalaid.org/get-help/faq/",
           "phone": "https://iowalegalaid.org/contact/"
         },
-        "notes": "Current official Iowa Legal Aid senior pathway is the Legal Hotline for Older Iowans, serving Iowans age 60 and over; no official income or asset test located for this senior-specific pathway."
+        "notes": "Current Iowa Legal Aid senior pathway is the Legal Hotline for Older Iowans; current age threshold is 60+, and I found no separate official income or asset test for the senior hotline."
       },
       "flags": [],
-      "notes": "Current official Iowa Legal Aid senior pathway is the Legal Hotline for Older Iowans, serving Iowans age 60 and over; no official income or asset test located for this senior-specific pathway."
+      "notes": "Current Iowa Legal Aid senior pathway is the Legal Hotline for Older Iowans; current age threshold is 60+, and I found no separate official income or asset test for the senior hotline."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -353,7 +363,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8005323213"
+          "8005323213",
+          "8662361430"
         ],
         "hasVerifiableFacts": true
       },
@@ -370,19 +381,10 @@
           "assets": null,
           "phone": "https://hhs.iowa.gov/family-community/aging-services/ltc-ombudsman"
         },
-        "notes": "Official Iowa long-term care ombudsman services are free advocacy services for long-term care residents; no age, income, or asset test was found for the senior pathway."
+        "notes": "No age, income, or asset eligibility test found; program serves residents/families in long-term care settings. Phone verified from official Iowa HHS source."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8005323213"
-          ],
-          "verifiedValue": "8662361430"
-        }
-      ],
-      "notes": "Official Iowa long-term care ombudsman services are free advocacy services for long-term care residents; no age, income, or asset test was found for the senior pathway."
+      "flags": [],
+      "notes": "No age, income, or asset eligibility test found; program serves residents/families in long-term care settings. Phone verified from official Iowa HHS source."
     },
     {
       "programId": "state-supplementary-assistance",
@@ -406,14 +408,14 @@
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "5153283640",
+        "phone": "8009722017",
         "sources": {
-          "age": "https://hhs.iowa.gov/media/3987/download",
+          "age": "https://www.legis.iowa.gov/docs/ico/chapter/249.pdf",
           "income": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance",
           "assets": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance",
           "phone": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance"
         },
-        "notes": "Program is current and still called State Supplementary Assistance; current HHS page confirms aged/disabled eligibility and resource limits. No separate senior income limit value was retrievable from the available official source, so income fields are null."
+        "notes": "Current Iowa SSA is an aged/blind/disabled state supplement; senior pathway age is 65+. Income limit is referenced by the official HHS page but no numeric value was captured in the retrieved snippet."
       },
       "flags": [
         {
@@ -424,10 +426,10 @@
             "18007792001",
             "18007721213"
           ],
-          "verifiedValue": "5153283640"
+          "verifiedValue": "8009722017"
         }
       ],
-      "notes": "Program is current and still called State Supplementary Assistance; current HHS page confirms aged/disabled eligibility and resource limits. No separate senior income limit value was retrievable from the available official source, so income fields are null."
+      "notes": "Current Iowa SSA is an aged/blind/disabled state supplement; senior pathway age is 65+. Income limit is referenced by the official HHS page but no numeric value was captured in the retrieved snippet."
     },
     {
       "programId": "family-caregiver-support",
@@ -449,17 +451,117 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8007792001",
+        "phone": "8009722017",
         "sources": {
-          "age": "https://hhs.iowa.gov/media/13675/download?inline",
-          "income": "https://hhs.iowa.gov/media/13675/download?inline",
-          "assets": "https://hhs.iowa.gov/media/13675/download?inline",
-          "phone": "https://hhs.iowa.gov/family-community/aging-disability-resource-center"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://hhs.iowa.gov/family-community/aging-services/caregiver-resources"
         },
-        "notes": "Current Iowa Family Caregiver Support Program appears active under Older Americans Act caregiver services; no age, income, or asset test applies, and the statewide ADRC number is 1-800-779-2001."
+        "notes": "Iowa Family Caregiver Support Program appears current; no income, asset, or age test was found for the senior caregiver pathway in the available official source. The main help line listed by Iowa HHS is 800-972-2017."
       },
-      "flags": [],
-      "notes": "Current Iowa Family Caregiver Support Program appears active under Older Americans Act caregiver services; no age, income, or asset test applies, and the statewide ADRC number is 1-800-779-2001."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8007792001"
+          ],
+          "verifiedValue": "8009722017"
+        }
+      ],
+      "notes": "Iowa Family Caregiver Support Program appears current; no income, asset, or age test was found for the senior caregiver pathway in the available official source. The main help line listed by Iowa HHS is 800-972-2017."
+    },
+    {
+      "programId": "ia-abd-medicaid",
+      "programName": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": 483,
+        "income_2": 483,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8003388366",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8003388366",
+        "sources": {
+          "age": "https://www.medicaid.gov/medicaid/spa/downloads/IA-25-0031.pdf",
+          "income": "https://www.medicaidlongtermcare.org/eligibility/iowa/",
+          "assets": "https://www.legis.iowa.gov/docs/iac/chapter/08-19-2026.441.75.pdf",
+          "phone": "https://hhs.iowa.gov/medicaid/apply-medicaid"
+        },
+        "notes": "ABD Medicaid for seniors in Iowa uses SSI-related aged/blind/disabled rules; the age threshold is 65+. Current asset limits were not clearly published in the retrieved official sources, so asset values are null."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 483,
+          "verifiedValue": 994,
+          "pctDiff": 51.4
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 483,
+          "verifiedValue": 1491,
+          "pctDiff": 67.6
+        }
+      ],
+      "notes": "ABD Medicaid for seniors in Iowa uses SSI-related aged/blind/disabled rules; the age threshold is 65+. Current asset limits were not clearly published in the retrieved official sources, so asset values are null."
+    },
+    {
+      "programId": "ia-medicare-savings-programs-qmb-slmb-qi",
+      "programName": "Iowa Medicare Savings Programs (QMB, SLMB, QI)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phones": [
+          "18003514664",
+          "18007352942"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8009722017",
+        "sources": {
+          "age": null,
+          "income": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program/qualified-medicare-beneficiary-qmb",
+          "assets": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program/qualified-medicare-beneficiary-qmb",
+          "phone": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program"
+        },
+        "notes": "Iowa Medicare Savings Program (QMB/SLMB/QI) is current; QMB and SLMB pages show 2026 resource limits, and the main Iowa HHS MSP page lists the official help number."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18003514664",
+            "18007352942"
+          ],
+          "verifiedValue": "8009722017"
+        }
+      ],
+      "notes": "Iowa Medicare Savings Program (QMB/SLMB/QI) is current; QMB and SLMB pages show 2026 resource limits, and the main Iowa HHS MSP page lists the official help number."
     }
   ]
 }

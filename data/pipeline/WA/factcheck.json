@@ -1,14 +1,14 @@
 {
   "state": "WA",
   "stateName": "Washington",
-  "checkedAt": "2026-10-02T07:48:08.854Z",
-  "total": 21,
+  "checkedAt": "2026-10-06T12:30:54.407Z",
+  "total": 23,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 8,
-  "totalFlags": 11,
-  "highSeverityFlags": 5,
+  "programsWithFlags": 5,
+  "totalFlags": 6,
+  "highSeverityFlags": 2,
   "programs": [
     {
       "programId": "apple-health-medicaid",
@@ -27,36 +27,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 994,
-        "income_2": 1491,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8775012233",
         "sources": {
-          "age": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-care/aged-blind-or-disabled",
-          "income": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
-          "assets": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
-          "phone": "https://www.dshs.wa.gov/health-care-coverage-aged-blind-or-disabled"
+          "age": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled"
         },
-        "notes": "Senior pathway is Apple Health aged, blind, or disabled / SSI-related coverage; official pages confirm age 65+ and annual income/resource limits, with monthly limits converted and rounded from 2026 figures. No official current state-source page with the exact 2026 monthly amounts was retrievable here; resource limits were taken from a current clearinghouse citing official standards."
+        "notes": "Senior pathway for Apple Health aged/blind/disabled coverage applies at age 65+; current source retrieved does not expose specific monthly income or resource limits, only that they exist and change annually."
       },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1835,
-          "verifiedValue": 994,
-          "pctDiff": 45.8
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2490,
-          "verifiedValue": 1491,
-          "pctDiff": 40.1
-        }
-      ],
-      "notes": "Senior pathway is Apple Health aged, blind, or disabled / SSI-related coverage; official pages confirm age 65+ and annual income/resource limits, with monthly limits converted and rounded from 2026 figures. No official current state-source page with the exact 2026 monthly amounts was retrievable here; resource limits were taken from a current clearinghouse citing official standards."
+      "flags": [],
+      "notes": "Senior pathway for Apple Health aged/blind/disabled coverage applies at age 65+; current source retrieved does not expose specific monthly income or resource limits, only that they exist and change annually."
     },
     {
       "programId": "medicaid-personal-care-mpc",
@@ -86,10 +71,10 @@
         "sources": {
           "age": "https://www.dshs.wa.gov/media/15242/download?inline",
           "income": "https://www.dshs.wa.gov/media/15242/download?inline",
-          "assets": "https://www.dshs.wa.gov/media/15242/download?inline",
-          "phone": "https://www.dshs.wa.gov/who-can-help"
+          "assets": "https://www.dshs.wa.gov/media/24333/download?inline",
+          "phone": "https://www.dshs.wa.gov/care-options"
         },
-        "notes": "Washington Medicaid Personal Care is a Medicaid long-term care service; the senior pathway is age 18+ rather than a 55+/60+/65+ senior threshold. No separate countable-asset limit was found in the retrieved official sources; the program appears tied to Medicaid financial eligibility instead."
+        "notes": "Washington Medicaid Personal Care is now described within Medicaid/Community First Choice materials; senior clients served through HCS/AAA must be 18+ and financial eligibility follows non-institutional CN/ABP Medicaid rules, which use Medicaid resource standards rather than a separate MPC-specific asset cap."
       },
       "flags": [
         {
@@ -100,7 +85,7 @@
           "note": "likely compound program — drafted senior threshold, verified returned floor age for other population"
         }
       ],
-      "notes": "Washington Medicaid Personal Care is a Medicaid long-term care service; the senior pathway is age 18+ rather than a 55+/60+/65+ senior threshold. No separate countable-asset limit was found in the retrieved official sources; the program appears tied to Medicaid financial eligibility instead."
+      "notes": "Washington Medicaid Personal Care is now described within Medicaid/Community First Choice materials; senior clients served through HCS/AAA must be 18+ and financial eligibility follows non-institutional CN/ABP Medicaid rules, which use Medicaid resource standards rather than a separate MPC-specific asset cap."
     },
     {
       "programId": "mac-waiver",
@@ -120,19 +105,19 @@
         "age": 55,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8555670252",
         "sources": {
           "age": "https://app.leg.wa.gov/wac/default.aspx?cite=182-513-1605",
-          "income": "https://www.medicaid.gov/Medicaid-CHIP-Program-Information/By-Topics/Waivers/1115/downloads/wa/wa-stc-mp-04142022.pdf",
-          "assets": "https://app.leg.wa.gov/wac/default.aspx?cite=182-513-1605",
-          "phone": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/medicaid-alternative-care-mac"
+          "income": "https://www.dshs.wa.gov/sites/default/files/2026-10/Chapter%2030b.pdf",
+          "assets": "https://www.dshs.wa.gov/sites/default/files/2026-09/Chapter%207a.pdf",
+          "phone": "https://www.payingforseniorcare.com/washington/medicaid-waivers/alternative-care-program"
         },
-        "notes": "MAC is a current Washington Apple Health waiver program for adults age 55+; the cited rule does not list a countable asset test and instead states transfer-of-asset penalties and excess-home-equity rules do not apply to MAC. No current authoritative source for a MAC asset limit was found, so assets are null."
+        "notes": "MAC is an age-55+ program for seniors; the current financial eligibility appears tied to Medicaid/CN or ABP rather than a separate income cap, and the cited non-government phone source should be verified against WA DSHS/HCA if possible."
       },
       "flags": [],
-      "notes": "MAC is a current Washington Apple Health waiver program for adults age 55+; the cited rule does not list a countable asset test and instead states transfer-of-asset penalties and excess-home-equity rules do not apply to MAC. No current authoritative source for a MAC asset limit was found, so assets are null."
+      "notes": "MAC is an age-55+ program for seniors; the current financial eligibility appears tied to Medicaid/CN or ABP rather than a separate income cap, and the cited non-government phone source should be verified against WA DSHS/HCA if possible."
     },
     {
       "programId": "pace-elderly-care",
@@ -160,14 +145,14 @@
         "phone": "2063205325",
         "sources": {
           "age": "https://www.dshs.wa.gov/adult-and-aging-services/getting-started-long-term-care/program-all-inclusive-care-elderly",
-          "income": "https://app.leg.wa.gov/wac/default.aspx?cite=182-513-1230",
-          "assets": "https://app.leg.wa.gov/wac/default.aspx?cite=182-513-1230",
+          "income": null,
+          "assets": "https://www.dshs.wa.gov/adult-and-aging-services/getting-started-long-term-care/program-all-inclusive-care-elderly",
           "phone": "https://www.dshs.wa.gov/adult-and-aging-services/getting-started-long-term-care/program-all-inclusive-care-elderly"
         },
-        "notes": "PACE in Washington requires age 55+ for the senior pathway; the program is also tied to Medicaid financial eligibility rules, but I could not confirm a specific countable asset cap from the retrieved official source."
+        "notes": "PACE is active in Washington and current state guidance shows a senior eligibility threshold of age 55+; the state source identifies financial eligibility by reference to Medicaid/HCB waiver rules but does not provide a simple countable-assets dollar cap on the PACE page."
       },
       "flags": [],
-      "notes": "PACE in Washington requires age 55+ for the senior pathway; the program is also tied to Medicaid financial eligibility rules, but I could not confirm a specific countable asset cap from the retrieved official source."
+      "notes": "PACE is active in Washington and current state guidance shows a senior eligibility threshold of age 55+; the state source identifies financial eligibility by reference to Medicaid/HCB waiver rules but does not provide a simple countable-assets dollar cap on the PACE page."
     },
     {
       "programId": "medicare-savings-programs-qmb-slmb-qi",
@@ -188,21 +173,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1463,
-        "income_2": 1984,
-        "assets_individual": 9950,
-        "assets_couple": 14910,
+        "income_1": 1454,
+        "income_2": 1959,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8775012233",
         "sources": {
-          "age": "https://www.hca.wa.gov/assets/free-or-low-cost/22-500.pdf",
+          "age": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-care/medicare-savings-program",
           "income": "https://www.hca.wa.gov/assets/free-or-low-cost/22-500.pdf",
-          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "phone": "https://dshs.wa.gov/family-food-and-housing-services/medicare-savings-program"
+          "assets": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-care/medicare-savings-program",
+          "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/medicare-savings-program"
         },
-        "notes": "No senior age minimum applies for Medicare Savings Programs; eligibility is based on Medicare entitlement, not age. Washington MSP income limits are adjusted annually."
+        "notes": "Washington MSP (QMB/SLMB/QI) has no senior age test; eligibility is Medicare-based and income-only with no asset test."
       },
       "flags": [],
-      "notes": "No senior age minimum applies for Medicare Savings Programs; eligibility is based on Medicare entitlement, not age. Washington MSP income limits are adjusted annually."
+      "notes": "Washington MSP (QMB/SLMB/QI) has no senior age test; eligibility is Medicare-based and income-only with no asset test."
     },
     {
       "programId": "basic-food-program",
@@ -220,22 +205,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 2660,
         "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8775012233",
         "sources": {
-          "age": "https://www.dshs.wa.gov/income-effect-income-and-deductions-eligibility-and-benefit-level",
+          "age": null,
           "income": "https://www.dshs.wa.gov/categorical-eligibility-basic-food",
-          "assets": "https://www.dshs.wa.gov/basic-food",
-          "phone": "https://www.fna.usda.gov/snap/snap-state-popup/Washington"
+          "assets": null,
+          "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/food-assistance/basic-food-benefits"
         },
-        "notes": "Washington Basic Food uses a senior/disabled pathway with no gross income limit for households with all members age 60+ or disabled; age 60 is the relevant senior threshold. Income limits shown are 200% FPL categorical-eligibility gross limits for April 1, 2026–March 31, 2027."
+        "notes": "Basic Food (Washington SNAP) uses a 200% FPL gross-income test for most households; no separate senior age limit or asset limit was found in the current official sources retrieved. Phone number is the DSHS Basic Food contact line."
       },
       "flags": [],
-      "notes": "Washington Basic Food uses a senior/disabled pathway with no gross income limit for households with all members age 60+ or disabled; age 60 is the relevant senior threshold. Income limits shown are 200% FPL categorical-eligibility gross limits for April 1, 2026–March 31, 2027."
+      "notes": "Basic Food (Washington SNAP) uses a 200% FPL gross-income test for most households; no separate senior age limit or asset limit was found in the current official sources retrieved. Phone number is the DSHS Basic Food contact line."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -261,14 +246,14 @@
         "phone": "3607252857",
         "sources": {
           "age": null,
-          "income": null,
+          "income": "https://www.commerce.wa.gov/community-opportunities/liheap/",
           "assets": null,
-          "phone": "https://liheapch.acf.hhs.gov/profiles/WA.htm"
+          "phone": "https://www.commerce.wa.gov/community-opportunities/liheap/"
         },
-        "notes": "Washington LIHEAP appears active in 2026; no age, income, or asset test values were found in the retrieved official source for the senior-caregiver pathway. Official LIHEAP contact phone found."
+        "notes": "Washington LIHEAP appears active in 2026; the official Commerce page lists the program contact phone as 360-725-2857. No senior-specific age, income, or asset test was found for a distinct senior pathway; the program uses household income guidelines and local provider determination."
       },
       "flags": [],
-      "notes": "Washington LIHEAP appears active in 2026; no age, income, or asset test values were found in the retrieved official source for the senior-caregiver pathway. Official LIHEAP contact phone found."
+      "notes": "Washington LIHEAP appears active in 2026; the official Commerce page lists the program contact phone as 360-725-2857. No senior-specific age, income, or asset test was found for a distinct senior pathway; the program uses household income guidelines and local provider determination."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -280,7 +265,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "5094527145"
+          "5094527145",
+          "3607252857"
         ],
         "hasVerifiableFacts": true
       },
@@ -293,23 +279,14 @@
         "phone": "3607252857",
         "sources": {
           "age": null,
-          "income": null,
+          "income": "https://www.commerce.wa.gov/weatherization/",
           "assets": null,
           "phone": "https://dcyf.wa.gov/services/housing-basic-needs/basic-needs-community-resource-directory"
         },
-        "notes": "No authoritative age, income, or asset test found for Washington WAP senior pathway in the retrieved sources; program appears to use local agencies for intake. State directory lists the main program phone as 360-725-2857."
+        "notes": "Washington WAP is administered through local agencies; no separate age or asset test was found in current official sources. Income eligibility is based on 200% FPL, 60% SMI, or 80% AMI. Phone number from a state resource directory; Commerce directs applicants to local agencies rather than a single statewide application line."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "5094527145"
-          ],
-          "verifiedValue": "3607252857"
-        }
-      ],
-      "notes": "No authoritative age, income, or asset test found for Washington WAP senior pathway in the retrieved sources; program appears to use local agencies for intake. State directory lists the main program phone as 360-725-2857."
+      "flags": [],
+      "notes": "Washington WAP is administered through local agencies; no separate age or asset test was found in current official sources. Income eligibility is based on 200% FPL, 60% SMI, or 80% AMI. Phone number from a state resource directory; Commerce directs applicants to local agencies rather than a single statewide application line."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -337,12 +314,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.insurance.wa.gov/insurance-resources/get-help-medicare/get-free-medicare-help-shiba"
+          "phone": "https://www.cms.gov/contacts/statewide-health-insurance-benefits-advisors-shiba/general-beneficiary-contact/1562241"
         },
-        "notes": "Washington SHIBA/SHIP Medicare counseling is free and does not use age, income, or asset tests for the senior counseling pathway; official statewide contact number is 800-562-6900."
+        "notes": "Washington SHIBA appears current; no age, income, or asset test found for the senior pathway. Official hotline listed by CMS is 800-562-6900."
       },
       "flags": [],
-      "notes": "Washington SHIBA/SHIP Medicare counseling is free and does not use age, income, or asset tests for the senior counseling pathway; official statewide contact number is 800-562-6900."
+      "notes": "Washington SHIBA appears current; no age, income, or asset test found for the senior pathway. Official hotline listed by CMS is 800-562-6900."
     },
     {
       "programId": "home-delivered-meals",
@@ -367,14 +344,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "2537984600",
+        "phone": "2069628467",
         "sources": {
-          "age": "https://www.dshs.wa.gov/sites/default/files/ALTSA/hcs/documents/LTCManual/Chapter%2018.pdf",
+          "age": "https://www.dshs.wa.gov/sites/default/files/ALTSA/hcs/documents/SNPStandards.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://www.piercecountywa.gov/6826/Senior-Nutrition"
+          "phone": "https://www.agingkingcounty.org/what-we-do/healthy-aging/"
         },
-        "notes": "Current Washington senior home-delivered meals pathway appears to use age 60+ and homebound criteria; no income or asset test found in authoritative sources."
+        "notes": "Washington Senior Nutrition Program home-delivered meals are for adults age 60+ who are homebound; no income or asset test was found in the official standards."
       },
       "flags": [
         {
@@ -386,10 +363,10 @@
             "18443485464",
             "211"
           ],
-          "verifiedValue": "2537984600"
+          "verifiedValue": "2069628467"
         }
       ],
-      "notes": "Current Washington senior home-delivered meals pathway appears to use age 60+ and homebound criteria; no income or asset test found in authoritative sources."
+      "notes": "Washington Senior Nutrition Program home-delivered meals are for adults age 60+ who are homebound; no income or asset test was found in the official standards."
     },
     {
       "programId": "family-caregiver-support",
@@ -407,27 +384,21 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18555670252",
         "sources": {
-          "age": "https://www.dshs.wa.gov/adult-and-aging-services/caregiving-resources/information-caregivers",
+          "age": "https://www.dshs.wa.gov/sites/default/files/ALTSA/hcs/documents/LTCManual/Chapter17a_FamilyCGSupport_June2025_Final.docx",
           "income": null,
           "assets": null,
-          "phone": "https://www.dshs.wa.gov/media/578/download?inline"
+          "phone": "https://www.dshs.wa.gov/sites/default/files/publications/documents/22-1331.pdf"
         },
-        "notes": "Washington FCSP serves unpaid caregivers of adults; senior pathway uses age 55+ in state materials. No income or asset test found in the retrieved official sources."
+        "notes": "Washington FCSP has no stated senior age minimum for caregiver eligibility; the program serves unpaid caregivers of adults, with some related pathways using age 55+ for care recipients, not the caregiver. No income or asset test found for the core program."
       },
       "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 18,
-          "verifiedValue": 55
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -438,7 +409,7 @@
           "verifiedValue": "18555670252"
         }
       ],
-      "notes": "Washington FCSP serves unpaid caregivers of adults; senior pathway uses age 55+ in state materials. No income or asset test found in the retrieved official sources."
+      "notes": "Washington FCSP has no stated senior age minimum for caregiver eligibility; the program serves unpaid caregivers of adults, with some related pathways using age 55+ for care recipients, not the caregiver. No income or asset test found for the core program."
     },
     {
       "programId": "scsep-employment-program",
@@ -451,7 +422,8 @@
         "assets_couple": null,
         "phones": [
           "4253664457",
-          "211"
+          "211",
+          "8778725627"
         ],
         "hasVerifiableFacts": true
       },
@@ -466,22 +438,12 @@
           "age": "https://www.dol.gov/agencies/eta/seniors",
           "income": "https://www.dol.gov/agencies/eta/seniors",
           "assets": null,
-          "phone": "https://www.dol.gov/agencies/eta/seniors"
+          "phone": "https://www.dol.gov/agencies/eta/seniors/contact"
         },
-        "notes": "SCSEP in Washington is current and still uses the federal age 55+, unemployment, and income-at-or-below-125%-FPL pathway; no asset test found."
+        "notes": "SCSEP is current; no asset test found in authoritative sources. Income limit is 125% of the federal poverty level."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "4253664457",
-            "211"
-          ],
-          "verifiedValue": "18778725627"
-        }
-      ],
-      "notes": "SCSEP in Washington is current and still uses the federal age 55+, unemployment, and income-at-or-below-125%-FPL pathway; no asset test found."
+      "flags": [],
+      "notes": "SCSEP is current; no asset test found in authoritative sources. Income limit is 125% of the federal poverty level."
     },
     {
       "programId": "legal-aid-seniors",
@@ -504,17 +466,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18883877111",
+        "phone": "8883877111",
         "sources": {
-          "age": "https://www.dshs.wa.gov/find-attorney",
-          "income": null,
-          "assets": "https://www.altcwashington.com/legal-services/",
-          "phone": "https://www.dshs.wa.gov/find-attorney"
+          "age": "https://www.courts.wa.gov/self-help/get-legal-help/",
+          "income": "https://www.dshs.wa.gov/altsa/home-and-community-services/find-attorney",
+          "assets": "https://www.waseniorsupport.org/programs/njp-clear-sr-hotline",
+          "phone": "https://www.dshs.wa.gov/altsa/home-and-community-services/find-attorney"
         },
-        "notes": "Current Washington CLEAR*Sr senior legal help appears to serve people age 60+ regardless of income; some asset limits may apply, but authoritative current asset thresholds were not found."
+        "notes": "CLEAR*Sr senior legal hotline for Washington residents age 60+; no current official income or asset threshold found for the senior pathway, though some non-official sources note possible asset limits."
       },
       "flags": [],
-      "notes": "Current Washington CLEAR*Sr senior legal help appears to serve people age 60+ regardless of income; some asset limits may apply, but authoritative current asset thresholds were not found."
+      "notes": "CLEAR*Sr senior legal hotline for Washington residents age 60+; no current official income or asset threshold found for the senior pathway, though some non-official sources note possible asset limits."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -526,7 +488,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "2537983789"
+          "2537983789",
+          "8005626028"
         ],
         "hasVerifiableFacts": true
       },
@@ -541,21 +504,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.waombudsman.org/about/staff/"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/long-term-care-ombudsman-washington/1554006"
         },
-        "notes": "No age, income, or asset test found; LTCOP is a free ombudsman service for residents in long-term care facilities and their families. Official statewide contact number found as 1-800-562-6028."
+        "notes": "No age, income, or asset eligibility test found; LTC Ombudsman services are complaint/advocacy based for residents of long-term care facilities. Program appears current; official help line is 800-562-6028."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "2537983789"
-          ],
-          "verifiedValue": "8005626028"
-        }
-      ],
-      "notes": "No age, income, or asset test found; LTCOP is a free ombudsman service for residents in long-term care facilities and their families. Official statewide contact number found as 1-800-562-6028."
+      "flags": [],
+      "notes": "No age, income, or asset eligibility test found; LTC Ombudsman services are complaint/advocacy based for residents of long-term care facilities. Program appears current; official help line is 800-562-6028."
     },
     {
       "programId": "state-parks-senior-limited-income-pass",
@@ -577,15 +531,15 @@
         "assets_couple": null,
         "phone": "3609028844",
         "sources": {
-          "age": "https://parks.wa.gov/passes-permits/get-park-pass/senior-citizen-limited-income-pass",
+          "age": "https://app.leg.wa.gov/rcw/default.aspx?cite=79A.05.065",
           "income": "https://parks.wa.gov/passes-permits/get-park-pass/senior-citizen-limited-income-pass",
           "assets": null,
           "phone": "https://parks.wa.gov/passes-permits/get-park-pass/senior-citizen-limited-income-pass"
         },
-        "notes": "Current Washington State Parks source shows the senior limited income pass is for residents 62+ with annual income of $40,000 or less; no asset test found. Contact phone is listed on the state parks pass page."
+        "notes": "Current official Washington State Parks materials show the senior pathway is 62+ with household income of $40,000 or less; no separate asset test found."
       },
       "flags": [],
-      "notes": "Current Washington State Parks source shows the senior limited income pass is for residents 62+ with annual income of $40,000 or less; no asset test found. Contact phone is listed on the state parks pass page."
+      "notes": "Current official Washington State Parks materials show the senior pathway is 62+ with household income of $40,000 or less; no separate asset test found."
     },
     {
       "programId": "lifetime-disabled-veteran-pass",
@@ -615,10 +569,10 @@
           "assets": null,
           "phone": "https://parks.wa.gov/passes-permits/get-park-pass/lifetime-disabled-veteran-pass"
         },
-        "notes": "Program appears current; no age, income, or asset test found for the senior pathway. Official contact number is listed by Washington State Parks."
+        "notes": "Program appears current and active; no age, income, or asset test found for the senior pathway. Washington State Parks lists the main contact number as (360) 902-8844."
       },
       "flags": [],
-      "notes": "Program appears current; no age, income, or asset test found for the senior pathway. Official contact number is listed by Washington State Parks."
+      "notes": "Program appears current and active; no age, income, or asset test found for the senior pathway. Washington State Parks lists the main contact number as (360) 902-8844."
     },
     {
       "programId": "charity-care-program",
@@ -636,21 +590,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 300,
-        "income_2": 400,
-        "assets_individual": 5000,
-        "assets_couple": 8000,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "3602364210",
         "sources": {
-          "age": "https://www.atg.wa.gov/charitycare",
-          "income": "https://app.leg.wa.gov/rcw/default.aspx?cite=70.170.060",
-          "assets": "https://app.leg.wa.gov/rcw/default.aspx?cite=70.170.060",
-          "phone": "https://doh.wa.gov/data-statistical-reports/healthcare-washington/hospital-and-patient-data/hospital-patient-information-and-charity-care"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://doh.wa.gov/about-us/contact-us/programs-and-services-contacts"
         },
-        "notes": "Not age-restricted; Washington charity care is an income-based hospital financial assistance program. Asset rules are conditional and vary by hospital, but the state statute lists excluded asset thresholds."
+        "notes": "No authoritative statewide age, income, or asset thresholds were found for Washington Charity Care; the program is hospital-specific and the state Department of Health contact line for charity care questions is 360-236-4210."
       },
       "flags": [],
-      "notes": "Not age-restricted; Washington charity care is an income-based hospital financial assistance program. Asset rules are conditional and vary by hospital, but the state statute lists excluded asset thresholds."
+      "notes": "No authoritative statewide age, income, or asset thresholds were found for Washington Charity Care; the program is hospital-specific and the state Department of Health contact line for charity care questions is 360-236-4210."
     },
     {
       "programId": "hen-housing-assistance",
@@ -669,7 +623,7 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
@@ -677,14 +631,14 @@
         "phone": "8775012233",
         "sources": {
           "age": "https://www.dshs.wa.gov/family-food-and-housing-services/housing-and-homelessness/housing-and-essential-needs-referral-program",
-          "income": "https://www.dshs.wa.gov/family-food-and-housing-services/housing-and-homelessness/housing-and-essential-needs-referral-program",
-          "assets": "https://www.dshs.wa.gov/family-food-and-housing-services/housing-and-homelessness/housing-and-essential-needs-referral-program",
+          "income": null,
+          "assets": null,
           "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/housing-and-homelessness/housing-and-essential-needs-referral-program"
         },
-        "notes": "No senior-specific age threshold found; HEN Referral uses incapacity and not a senior-age pathway. No authoritative income or asset dollar limits were found on the retrieved source."
+        "notes": "Current official DSHS materials describe HEN Referral as serving adults ages 18-64; no senior-specific 55+ threshold appears, so the minimum age is 18 and senior-specific age is null. No income or asset limits were found in the retrieved official source for this referral page."
       },
       "flags": [],
-      "notes": "No senior-specific age threshold found; HEN Referral uses incapacity and not a senior-age pathway. No authoritative income or asset dollar limits were found on the retrieved source."
+      "notes": "Current official DSHS materials describe HEN Referral as serving adults ages 18-64; no senior-specific 55+ threshold appears, so the minimum age is 18 and senior-specific age is null. No income or asset limits were found in the retrieved official source for this referral page."
     },
     {
       "programId": "abd-cash-assistance",
@@ -705,15 +659,15 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 12000,
-        "assets_couple": 12000,
+        "assets_couple": 18000,
         "phone": "8775012233",
         "sources": {
           "age": "https://www.dshs.wa.gov/family-food-and-housing-services/cash-assistance/aged-blind-or-disabled-program",
-          "income": "https://www.dshs.wa.gov/family-food-and-housing-services/cash-assistance/aged-blind-or-disabled-program",
-          "assets": "https://manuals.dshs.wa.gov/book/export/html/17",
+          "income": "https://app.leg.wa.gov/wac/default.aspx?cite=388-400-0060",
+          "assets": "https://www.dshs.wa.gov/sites/default/files/publications/documents/22-2019.pdf",
           "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/cash-assistance/aged-blind-or-disabled-program"
         },
-        "notes": "Washington ABD is current; senior pathway age is 65+. DSHS materials indicate a liquid-resource limit of $12,000 for individuals and $12,000 for married couples in some ABD contexts, while another DSHS overview shows $2,000/$3,000; authoritative current resource rules appear inconsistent across pages, so the couple asset value is set to 12000 only where cited on the current DSHS manual page."
+        "notes": "ABD cash is current and age 65+ applies on the senior pathway; current DSHS materials show countable resources at $12,000 for a single adult and $18,000 for a married couple."
       },
       "flags": [
         {
@@ -727,11 +681,11 @@
           "field": "assets_couple",
           "severity": "high",
           "draftValue": 6000,
-          "verifiedValue": 12000,
-          "pctDiff": 50
+          "verifiedValue": 18000,
+          "pctDiff": 66.7
         }
       ],
-      "notes": "Washington ABD is current; senior pathway age is 65+. DSHS materials indicate a liquid-resource limit of $12,000 for individuals and $12,000 for married couples in some ABD contexts, while another DSHS overview shows $2,000/$3,000; authoritative current resource rules appear inconsistent across pages, so the couple asset value is set to 12000 only where cited on the current DSHS manual page."
+      "notes": "ABD cash is current and age 65+ applies on the senior pathway; current DSHS materials show countable resources at $12,000 for a single adult and $18,000 for a married couple."
     },
     {
       "programId": "cares-fund",
@@ -746,7 +700,7 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 18,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
@@ -754,14 +708,14 @@
         "phone": "8442273492",
         "sources": {
           "age": "https://wacaresfund.wa.gov/help-support/frequently-asked-questions",
-          "income": "https://wacaresfund.wa.gov/apply",
-          "assets": "https://wacaresfund.wa.gov/apply",
+          "income": null,
+          "assets": null,
           "phone": "https://wacaresfund.wa.gov/help-support"
         },
-        "notes": "WA Cares Fund is active in 2026 and does not use income or asset tests; eligibility is based on age 18+, Washington residence, and contribution/care-need rules. Age value reflects the benefit eligibility threshold, not a senior-only pathway."
+        "notes": "WA Cares Fund is a payroll-contribution long-term care benefit program, not a means-tested senior assistance program; no senior age, income, or asset eligibility test was found in current official sources."
       },
       "flags": [],
-      "notes": "WA Cares Fund is active in 2026 and does not use income or asset tests; eligibility is based on age 18+, Washington residence, and contribution/care-need rules. Age value reflects the benefit eligibility threshold, not a senior-only pathway."
+      "notes": "WA Cares Fund is a payroll-contribution long-term care benefit program, not a means-tested senior assistance program; no senior age, income, or asset eligibility test was found in current official sources."
     },
     {
       "programId": "seattle-gold-card-discounts",
@@ -785,12 +739,12 @@
         "assets_couple": null,
         "phone": "2066840500",
         "sources": {
-          "age": "https://seattle.gov/agefriendly/programs/discounts",
+          "age": "https://www.seattle.gov/age-friendly/discounts/request-your-discount-card",
           "income": null,
           "assets": null,
-          "phone": "https://seattle.gov/agefriendly/programs/discounts"
+          "phone": "https://www.seattle.gov/age-friendly/discounts/request-your-discount-card"
         },
-        "notes": "Current official City of Seattle page says Gold Card is for residents aged 60 or older; no income or asset test found."
+        "notes": "Current Seattle Gold Card (Age Friendly Discount Program) senior pathway is for age 60+; no income or asset test found in the official program materials."
       },
       "flags": [
         {
@@ -802,7 +756,85 @@
           "verifiedValue": "2066840500"
         }
       ],
-      "notes": "Current official City of Seattle page says Gold Card is for residents aged 60 or older; no income or asset test found."
+      "notes": "Current Seattle Gold Card (Age Friendly Discount Program) senior pathway is for age 60+; no income or asset test found in the official program materials."
+    },
+    {
+      "programId": "wa-abd-medicaid",
+      "programName": "Aged, Blind, and Disabled Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8775012233",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8775012233",
+        "sources": {
+          "age": "https://app.leg.wa.gov/wac/default.aspx?cite=388-400-0060&pdf=true",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled"
+        },
+        "notes": "For Washington ABD Medicaid/coverage, the senior pathway uses age 65+; I could not retrieve an authoritative current countable asset limit page for ABD Medicaid from the available sources, so assets are null."
+      },
+      "flags": [],
+      "notes": "For Washington ABD Medicaid/coverage, the senior pathway uses age 65+; I could not retrieve an authoritative current countable asset limit page for ABD Medicaid from the available sources, so assets are null."
+    },
+    {
+      "programId": "wa-tailored-supports-older-adults",
+      "programName": "Tailored Supports for Older Adults",
+      "facts": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18004223263",
+          "18005623022",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8555670252",
+        "sources": {
+          "age": "https://www.dshs.wa.gov/medicaid-eligibility-and-how-apply",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.hca.wa.gov/assets/free-or-low-cost/18-008.pdf"
+        },
+        "notes": "TSOA is currently described by Washington DSHS as not accepting new clients / enrollment paused; no income or asset thresholds were found in the retrieved official sources."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18004223263",
+            "18005623022",
+            "211"
+          ],
+          "verifiedValue": "8555670252"
+        }
+      ],
+      "notes": "TSOA is currently described by Washington DSHS as not accepting new clients / enrollment paused; no income or asset thresholds were found in the retrieved official sources."
     }
   ]
 }

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.374Z
+ * Last updated: 2026-10-06T12:32:14.268Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -210,11 +210,11 @@ export const drafts: PipelineStateDrafts = {
             "8558897985",
             "8009722017"
           ],
-          "to": "8003388366",
-          "source": "https://hhs.iowa.gov/medicaid/about-medicaid/medicaid-projects/home-project/waiver-redesign-faq",
+          "to": "18003388366",
+          "source": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         }
       ]
     },
@@ -336,6 +336,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline connecting to local aging and disability services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -399,7 +405,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services/waiver-programs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003388366",
+            "211"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "pace-elderly-care",
@@ -827,7 +849,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2086,
+          "to": 1696,
+          "source": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2820,
+          "to": 2292,
+          "source": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1055,16 +1096,16 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://iuc.iowa.gov/customer-assistance/how-do-i-apply-energy-assistance-liheap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": [
         {
           "field": "income_1",
           "from": 1822,
-          "to": 2611,
+          "to": 2617,
           "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         },
         {
           "field": "income_2",
@@ -1073,7 +1114,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         }
       ],
       "appliedCorrections": [
@@ -1089,6 +1130,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "5157768871",
+          "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "reason": "page also lists ours ((800) 972-2017)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -1424,7 +1474,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.legis.iowa.gov/docs/iac/rule/02-05-2025.17.7.21.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8554106222",
+            "3193380515",
+            "5156993243",
+            "5157253333",
+            "8007792001"
+          ],
+          "to": "3193983574",
+          "source": "https://gis.linncountyiowa.gov/web-data/lccs/community-resources/Food-Assistance.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1840,6 +1906,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-772-1213",
           "description": "For the SSI side of eligibility.",
           "hours": "Mon-Fri 8am-7pm local time"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1934,19 +2006,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-18",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18773475678",
             "18007792001",
             "18007721213"
           ],
-          "to": "5153283640",
+          "to": "(800) 972-2017",
           "source": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2026,6 +2100,12 @@ export const drafts: PipelineStateDrafts = {
           "label": "Iowa Aging and Disability Resource Center (Iowa Compass)",
           "phone": "(800) 779-2001",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [],
@@ -2044,7 +2124,22 @@ export const drafts: PipelineStateDrafts = {
         "hasLocationFinder": true,
         "hasDocumentChecklist": true,
         "visualTone": "warm"
-      }
+      },
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8007792001"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/family-community/aging-services/caregiver-resources",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "ia-abd-medicaid",
@@ -2301,7 +2396,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 338-8366",
       "sourceUrl": "https://hhs.iowa.gov/medicaid/apply-medicaid/eligibility",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 483,
+          "to": 994,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/iowa/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        },
+        {
+          "field": "income_2",
+          "from": 483,
+          "to": 1491,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/iowa/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ]
     },
     {
       "id": "ia-medicare-savings-programs-qmb-slmb-qi",
@@ -2436,6 +2551,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "If DHS requests additional information or documents, you will correspond with your parent's local DHS office. Find the nearest office at hhs.iowa.gov or by calling SHIIP.",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2534,7 +2655,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-351-4664",
       "sourceUrl": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003514664",
+            "18007352942"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

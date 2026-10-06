@@ -1,14 +1,14 @@
 {
   "state": "GA",
   "stateName": "Georgia",
-  "checkedAt": "2026-10-02T07:35:51.173Z",
-  "total": 12,
+  "checkedAt": "2026-10-06T12:19:55.566Z",
+  "total": 13,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 6,
-  "totalFlags": 9,
-  "highSeverityFlags": 4,
+  "programsWithFlags": 4,
+  "totalFlags": 11,
+  "highSeverityFlags": 8,
   "programs": [
     {
       "programId": "medicaid-aged-blind-disabled",
@@ -28,29 +28,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2094,
+        "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8774234746",
         "sources": {
-          "age": "https://dhs.georgia.gov/medicaid",
-          "income": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
-          "assets": "https://pamms.dhs.ga.gov/dfcs/medicaid/2300/",
-          "phone": "https://dfcs.georgia.gov/services/how-do-i-apply-medicaid"
+          "age": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
+          "income": "https://dfcs.georgia.gov/what-do-i-need-apply-medicaid",
+          "assets": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
+          "phone": "https://dfcs.georgia.gov/what-do-i-need-apply-medicaid"
         },
-        "notes": "Official Georgia sources confirm the senior pathway starts at age 65 and the individual monthly income limit is $2,094. I could not retrieve a current official countable-asset dollar limit for ABD Medicaid from the available sources, so assets_individual and assets_couple are null. The main application/help number is 877-423-4746."
+        "notes": "Official Georgia sources confirm the senior pathway age is 65+ and that ABD has asset limits; current income and couple-resource figures were not retrievable from the available sources, so those values are null where not explicitly stated."
       },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2982,
-          "verifiedValue": 2094,
-          "pctDiff": 29.8
-        }
-      ],
-      "notes": "Official Georgia sources confirm the senior pathway starts at age 65 and the individual monthly income limit is $2,094. I could not retrieve a current official countable-asset dollar limit for ABD Medicaid from the available sources, so assets_individual and assets_couple are null. The main application/help number is 877-423-4746."
+      "flags": [],
+      "notes": "Official Georgia sources confirm the senior pathway age is 65+ and that ABD has asset limits; current income and couple-resource figures were not retrievable from the available sources, so those values are null where not explicitly stated."
     },
     {
       "programId": "ccsp-home-care",
@@ -69,22 +61,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 967,
-        "income_2": 1450,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8665524464",
         "sources": {
-          "age": "https://pamms.dhs.ga.gov/dfcs/medicaid/2131/",
-          "income": "https://medicaid.georgia.gov/document/document/elderly-and-disabled-waiver-program-long-version/download",
+          "age": "https://georgia.gov/apply-elderly-and-disabled-waiver-program",
+          "income": null,
           "assets": "https://medicaid.georgia.gov/document/document/elderly-and-disabled-waiver-program-long-version/download",
           "phone": "https://georgia.gov/apply-elderly-and-disabled-waiver-program"
         },
-        "notes": "Georgia EDWP has no age requirement for participation in the current state policy; senior-specific age threshold not applicable. Financial limits shown are the Medicaid/waiver income and resource limits for EDWP."
+        "notes": "EDWP appears current and not renamed; official Georgia sources describe a 65+ senior pathway and direct applicants to Area Agency on Aging at 866-552-4464. A clear current individual countable asset limit was not found in the retrieved official source snippets."
       },
       "flags": [],
-      "notes": "Georgia EDWP has no age requirement for participation in the current state policy; senior-specific age threshold not applicable. Financial limits shown are the Medicaid/waiver income and resource limits for EDWP."
+      "notes": "EDWP appears current and not renamed; official Georgia sources describe a 65+ senior pathway and direct applicants to Area Agency on Aging at 866-552-4464. A clear current individual countable asset limit was not found in the retrieved official source snippets."
     },
     {
       "programId": "home-community-based-services",
@@ -112,9 +104,9 @@
           "age": "https://aging.georgia.gov/programs-and-services/home-community-based-services",
           "income": null,
           "assets": null,
-          "phone": "https://aging.georgia.gov/contact-us"
+          "phone": "https://aging.georgia.gov/programs-and-services/home-community-based-services"
         },
-        "notes": "Current Georgia Division of Aging Services HCBS page says the program serves people age 60+; no income or asset test was found on the official page."
+        "notes": "Current Georgia DHS Division of Aging Services HCBS page says the program serves individuals age 60 and older; no income or asset test found on the retrieved official pages."
       },
       "flags": [
         {
@@ -124,7 +116,7 @@
           "verifiedValue": 60
         }
       ],
-      "notes": "Current Georgia Division of Aging Services HCBS page says the program serves people age 60+; no income or asset test was found on the official page."
+      "notes": "Current Georgia DHS Division of Aging Services HCBS page says the program serves individuals age 60 and older; no income or asset test found on the retrieved official pages."
     },
     {
       "programId": "medicare-savings-programs",
@@ -143,34 +135,34 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1550,
-        "income_2": 2095,
+        "age": 65,
+        "income_1": 837,
+        "income_2": 1120,
         "assets_individual": 7390,
         "assets_couple": 11090,
         "phone": "8774234746",
         "sources": {
-          "age": null,
-          "income": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "age": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "income": "https://dhs.georgia.gov/document/publication/fsmedicaidabd06apdf/download",
           "assets": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
           "phone": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs"
         },
-        "notes": "Georgia Medicaid lists current MSP resource limits and help line; no separate age minimum applies beyond Medicare eligibility, and no distinct age source was found."
+        "notes": "Current Georgia Medicare Savings Programs (QMB/SLMB/QI) eligibility uses Medicare-aged senior pathway; income limits reflect Georgia’s published QMB figures for 1/2-person households, and assets are liquid resources only."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "medium",
+          "severity": "high",
           "draftValue": 1350,
-          "verifiedValue": 1550,
-          "pctDiff": 12.9
+          "verifiedValue": 837,
+          "pctDiff": 38
         },
         {
           "field": "income_2",
-          "severity": "medium",
+          "severity": "high",
           "draftValue": 1824,
-          "verifiedValue": 2095,
-          "pctDiff": 12.9
+          "verifiedValue": 1120,
+          "pctDiff": 38.6
         },
         {
           "field": "assets_individual",
@@ -187,7 +179,7 @@
           "pctDiff": 25.6
         }
       ],
-      "notes": "Georgia Medicaid lists current MSP resource limits and help line; no separate age minimum applies beyond Medicare eligibility, and no distinct age source was found."
+      "notes": "Current Georgia Medicare Savings Programs (QMB/SLMB/QI) eligibility uses Medicare-aged senior pathway; income limits reflect Georgia’s published QMB figures for 1/2-person households, and assets are liquid resources only."
     },
     {
       "programId": "senior-snap",
@@ -205,22 +197,43 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "age": 65,
+        "income_1": 2152,
+        "income_2": 2909,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8774234746",
         "sources": {
-          "age": "https://dfcs.georgia.gov/services/snap/senior-snap",
-          "income": "https://dfcs.georgia.gov/services/snap/senior-snap",
-          "assets": null,
+          "age": "https://pamms.dhs.ga.gov/dfcs/snap/3725/",
+          "income": "https://pamms.dhs.ga.gov/dfcs/snap/appendix-a-food-stamp-income-limits/",
+          "assets": "https://pamms.dhs.ga.gov/dfcs/snap/3725/",
           "phone": "https://dfcs.georgia.gov/services/snap/senior-snap"
         },
-        "notes": "Georgia Senior SNAP is the Senior SNAP/ESAP pathway; official current source confirms the senior age threshold as 60+ and provides a main contact number. I could not find a current official source in the retrieved material that publishes specific monthly income limits or asset limits for this senior pathway."
+        "notes": "Georgia Senior SNAP appears active in 2026; official policy page shows age 65 effective May 1, 2026. No separate asset limit was found on the official Senior SNAP page; current SNAP asset policy may not be separately published for this pathway."
       },
-      "flags": [],
-      "notes": "Georgia Senior SNAP is the Senior SNAP/ESAP pathway; official current source confirms the senior age threshold as 60+ and provides a main contact number. I could not find a current official source in the retrieved material that publishes specific monthly income limits or asset limits for this senior pathway."
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
+        },
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1729,
+          "verifiedValue": 2152,
+          "pctDiff": 19.7
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2345,
+          "verifiedValue": 2909,
+          "pctDiff": 19.4
+        }
+      ],
+      "notes": "Georgia Senior SNAP appears active in 2026; official policy page shows age 65 effective May 1, 2026. No separate asset limit was found on the official Senior SNAP page; current SNAP asset policy may not be separately published for this pathway."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -239,31 +252,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
+        "income_1": 60,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4046573426",
+        "phone": "8774234746",
         "sources": {
-          "age": "https://dhs.georgia.gov/low-income-home-energy-assistance-program",
+          "age": "https://dfcs.georgia.gov/services/low-income-home-energy-assistance-program-liheap",
           "income": "https://dfcs.georgia.gov/services/low-income-home-energy-assistance-program-liheap",
           "assets": null,
-          "phone": "https://dhs.georgia.gov/low-income-home-energy-assistance-program"
+          "phone": "https://dfcs.georgia.gov/services/low-income-home-energy-assistance-program-liheap"
         },
-        "notes": "Current Georgia LIHEAP guidance gives priority to age 65+ and medically homebound applicants; no asset test found in authoritative sources."
+        "notes": "Georgia LIHEAP is active in 2026; senior pathway applies at age 65+ and the program uses a 60% State Median Income test. No asset test found in authoritative sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8774234746",
-            "211"
-          ],
-          "verifiedValue": "4046573426"
-        }
-      ],
-      "notes": "Current Georgia LIHEAP guidance gives priority to age 65+ and medically homebound applicants; no asset test found in authoritative sources."
+      "flags": [],
+      "notes": "Georgia LIHEAP is active in 2026; senior pathway applies at age 65+ and the program uses a 60% State Median Income test. No asset test found in authoritative sources."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -281,32 +284,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2614,
-        "income_2": 3544,
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4046563826",
+        "phone": "4045841000",
         "sources": {
-          "age": "https://gefa.georgia.gov/weatherization-assistance-program",
+          "age": "https://gefa.georgia.gov/document/document/2023-weatherization-state-plan/download",
           "income": "https://gefa.georgia.gov/weatherization-assistance-program",
           "assets": null,
-          "phone": "https://psc.ga.gov/about-the-psc/consumer-corner/consumer-advisories/utility-assistance-programs/"
+          "phone": "https://gefa.georgia.gov/weatherization-assistance-program"
         },
-        "notes": "Georgia WAP uses an income test of up to 200% of the federal poverty level and gives priority to elderly households; no asset test was found in the current official materials. Monthly income values were derived from the 2026 federal poverty guideline annual figures by dividing by 12."
+        "notes": "Georgia WAP uses 200% of poverty level for eligibility; current official source located does not provide household-size monthly dollar amounts directly, so no non-estimated value is returned."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "4045841000",
-            "211"
-          ],
-          "verifiedValue": "4046563826"
-        }
-      ],
-      "notes": "Georgia WAP uses an income test of up to 200% of the federal poverty level and gives priority to elderly households; no asset test was found in the current official materials. Monthly income values were derived from the 2026 federal poverty guideline annual figures by dividing by 12."
+      "flags": [],
+      "notes": "Georgia WAP uses 200% of poverty level for eligibility; current official source located does not provide household-size monthly dollar amounts directly, so no non-estimated value is returned."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -336,10 +329,10 @@
           "assets": null,
           "phone": "https://aging.georgia.gov/georgia-ship"
         },
-        "notes": "Georgia SHIP is a Medicare counseling program for beneficiaries; no age, income, or asset eligibility limits were found in the retrieved official sources. Main statewide contact is 1-866-552-4464, option 4."
+        "notes": "Georgia SHIP is a Medicare counseling program for seniors/Medicare beneficiaries; no age, income, or asset test was found for the senior pathway. Official current phone is 1-866-552-4464, option 4."
       },
       "flags": [],
-      "notes": "Georgia SHIP is a Medicare counseling program for beneficiaries; no age, income, or asset eligibility limits were found in the retrieved official sources. Main statewide contact is 1-866-552-4464, option 4."
+      "notes": "Georgia SHIP is a Medicare counseling program for seniors/Medicare beneficiaries; no age, income, or asset test was found for the senior pathway. Official current phone is 1-866-552-4464, option 4."
     },
     {
       "programId": "home-delivered-meals",
@@ -363,17 +356,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8665524464",
+        "phone": "18665524464",
         "sources": {
-          "age": "https://cherokeecountyga.gov/senior-services/meals-on-wheels/",
+          "age": "https://aging.georgia.gov/todays-seniors",
           "income": null,
           "assets": null,
-          "phone": "https://dhs.georgia.gov/spotlight/2026-04-29/learn-ways-address-senior-hunger-your-community"
+          "phone": "https://aging.georgia.gov/federal-and-state-programs-addressing-senior-hunger"
         },
-        "notes": "Georgia home-delivered meals are administered through local Area Agencies on Aging; the clearest senior-specific age found was 60+ for Cherokee County's Meals on Wheels. No official statewide income or asset test was found for the senior pathway."
+        "notes": "Georgia’s senior home-delivered meals path appears to use age 60+; no current official income or asset test was found in the retrieved sources."
       },
       "flags": [],
-      "notes": "Georgia home-delivered meals are administered through local Area Agencies on Aging; the clearest senior-specific age found was 60+ for Cherokee County's Meals on Wheels. No official statewide income or asset test was found for the senior pathway."
+      "notes": "Georgia’s senior home-delivered meals path appears to use age 60+; no current official income or asset test was found in the retrieved sources."
     },
     {
       "programId": "respite-care-out-of-home",
@@ -396,17 +389,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18665524464",
+        "phone": "8665524464",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://aging.georgia.gov/tools-resources/caregiving"
+          "phone": "https://aging.georgia.gov/programs-and-services/home-community-based-services/caregiver-programs"
         },
-        "notes": "Current Georgia caregiver respite care for seniors is administered through Area Agencies on Aging; no separate age, income, or asset test was found for this caregiver pathway. Main help line found: 1-866-552-4464."
+        "notes": "No official age, income, or asset test found for Georgia caregiver respite care; current official contact number is 866-552-4464."
       },
       "flags": [],
-      "notes": "Current Georgia caregiver respite care for seniors is administered through Area Agencies on Aging; no separate age, income, or asset test was found for this caregiver pathway. Main help line found: 1-866-552-4464."
+      "notes": "No official age, income, or asset test found for Georgia caregiver respite care; current official contact number is 866-552-4464."
     },
     {
       "programId": "scsep-employment-program",
@@ -426,20 +419,34 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1572,
+        "income_2": 2129,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8665524464",
+        "phone": "18004367442",
         "sources": {
           "age": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
           "income": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
           "assets": null,
-          "phone": "https://dhs.georgia.gov/document/document/guidehealthsocialservicesv8pdf-0/download"
+          "phone": "https://georgia.gov/aging-services"
         },
-        "notes": "Georgia DHS states SCSEP no longer offered by the state as of July 1, 2025; current Georgia providers include Legacy Link and AARP. No separate asset test found in the retrieved official sources."
+        "notes": "SCSEP is current in Georgia; official sources show age 55+ and income at or below 125% of poverty. No assets test found in authoritative Georgia SCSEP sources. Income values are monthly equivalents based on 125% of the federal poverty guideline; exact values may vary by current HHS poverty guideline updates."
       },
       "flags": [
+        {
+          "field": "income_1",
+          "severity": "medium",
+          "draftValue": 1663,
+          "verifiedValue": 1572,
+          "pctDiff": 5.5
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 2254,
+          "verifiedValue": 2129,
+          "pctDiff": 5.5
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -448,10 +455,10 @@
             "7705382657",
             "211"
           ],
-          "verifiedValue": "8665524464"
+          "verifiedValue": "18004367442"
         }
       ],
-      "notes": "Georgia DHS states SCSEP no longer offered by the state as of July 1, 2025; current Georgia providers include Legacy Link and AARP. No separate asset test found in the retrieved official sources."
+      "notes": "SCSEP is current in Georgia; official sources show age 55+ and income at or below 125% of poverty. No assets test found in authoritative Georgia SCSEP sources. Income values are monthly equivalents based on 125% of the federal poverty guideline; exact values may vary by current HHS poverty guideline updates."
     },
     {
       "programId": "elderly-legal-assistance-elap",
@@ -480,12 +487,45 @@
           "age": "https://aging.georgia.gov/tools-resources/elderly-legal-assistance-program",
           "income": null,
           "assets": null,
-          "phone": "https://aging.georgia.gov/programs-and-services/adrc/adrc-faqs"
+          "phone": "https://aging.georgia.gov/tools-resources/elderly-legal-assistance-program"
         },
-        "notes": "ELAP is current and serves seniors age 60+; no income or asset test found in authoritative current sources. Main statewide contact is 1-866-552-4464, which routes to the Aging and Disability Resource Connection for ELAP help."
+        "notes": "ELAP is current in Georgia; official sources state the senior eligibility threshold is age 60+ and provide the Division of Aging Services toll-free number 866-552-4464."
       },
       "flags": [],
-      "notes": "ELAP is current and serves seniors age 60+; no income or asset test found in authoritative current sources. Main statewide contact is 1-866-552-4464, which routes to the Aging and Disability Resource Connection for ELAP help."
+      "notes": "ELAP is current in Georgia; official sources state the senior eligibility threshold is age 60+ and provide the Division of Aging Services toll-free number 866-552-4464."
+    },
+    {
+      "programId": "ga-family-caregiver-support-program",
+      "programName": "Georgia Family Caregiver Support Program",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18665524464",
+          "4046575258"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8665524464",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://aging.georgia.gov/contact-us"
+        },
+        "notes": "Official Georgia sources describe the National Family Caregiver Support Program/Caregiver Programs as serving caregivers of older adults and do not state a senior minimum age threshold for eligibility; no income or asset test found. Main statewide contact number is 1-866-552-4464."
+      },
+      "flags": [],
+      "notes": "Official Georgia sources describe the National Family Caregiver Support Program/Caregiver Programs as serving caregivers of older adults and do not state a senior minimum age threshold for eligibility; no income or asset test found. Main statewide contact number is 1-866-552-4464."
     }
   ]
 }

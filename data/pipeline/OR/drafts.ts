@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.570Z
+ * Last updated: 2026-10-06T12:32:14.829Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -208,25 +208,16 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "assets_individual",
-          "from": 103645,
-          "to": 94523,
-          "source": "https://secure.sos.state.or.us/oard/displayDivisionRules.action;JSESSIONID_OARD=mMpAzQ_R-aJ_S92k7w48-DFgSDbV7OgUqGqFSu8iAqvGoXRYOeEg!99228750?selectedDivision=7202",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
-        },
-        {
           "field": "phone",
           "from": [
             "8556732372",
             "211"
           ],
-          "to": "5039455600",
-          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-scm-checklist.docx",
+          "to": "5039455811",
+          "source": "https://www.oregon.gov/odhs/home-care-consumers/pages/default.aspx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -394,10 +385,10 @@ export const drafts: PipelineStateDrafts = {
             "18556732372"
           ],
           "to": "8442247223",
-          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
+          "source": "https://sharedsystems.dhsoha.state.or.us/DHSForms/Served/de2658.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -625,21 +616,8 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18002828096",
-            "8556732372"
-          ],
-          "to": "18554470155",
-          "source": "https://www.oregon.gov/odhs/providers-partners/community-services-supports/Documents/mippa-training-pp.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
-        }
-      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -661,6 +639,13 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
           "reason": "page also lists ours ((855) 673-2372)",
           "dismissedAt": "2026-10-04"
+        },
+        {
+          "field": "phone",
+          "proposed": "8006999075",
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
+          "reason": "page also lists ours ((855) 673-2372)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -1084,26 +1069,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 3198,
-          "to": 2786,
-          "source": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
-          "severity": "medium",
-          "why": "draft fits a federal formula (250% FPL 2025); verified value fits none",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
-        },
-        {
-          "field": "income_2",
-          "from": 4183,
-          "to": 3643,
-          "source": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
-          "severity": "medium",
-          "why": "value fits more than one tier (250% FPL 2024 or 250% FPL 2023 or 300% SSI 2024 or 300% SSI 2023)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-wap",
@@ -2102,6 +2068,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(503) 224-4094",
           "description": "Number listed on lasoregon.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(503) 581-5265",
+          "description": "Number listed on lasoregon.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2169,6 +2141,24 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://lasoregon.org/about/",
           "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "5032242640",
+            "5032445204",
+            "5419268678",
+            "5413856944",
+            "18006786944",
+            "5032244086",
+            "5032244094"
+          ],
+          "to": "(503) 581-5265",
+          "source": "https://lasoregon.org/locations/salem-regional-office/",
+          "flaggedAt": "2026-10-06T12:27:37.787Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -2458,7 +2448,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:19:59.332Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -2591,6 +2581,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(541) 737-4331",
           "description": "Number listed on registrar.oregonstate.edu",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(541) 346-2935",
+          "description": "Number listed on registrar.uoregon.edu",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2669,6 +2665,21 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://registrar.oregonstate.edu/how-register/audit-registration",
           "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "9717226111",
+            "5033250910",
+            "8005478887",
+            "5417374331"
+          ],
+          "to": "(541) 346-2935",
+          "source": "https://registrar.uoregon.edu/registration/register-classes/auditing-courses",
+          "flaggedAt": "2026-10-06T12:27:37.787Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -3102,7 +3113,36 @@ export const drafts: PipelineStateDrafts = {
       "phone": "800-699-9075",
       "sourceUrl": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/pages/waivers-kplan.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2523,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
+        },
+        {
+          "field": "income_2",
+          "from": 5046,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4000,
+          "to": 2000,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

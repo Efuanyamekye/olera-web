@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.379Z
+ * Last updated: 2026-10-06T12:32:13.508Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -181,17 +181,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/medicaid/members/member-programs/hoosier-care-connect/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 59,
-          "to": 60,
-          "source": "https://www.in.gov/fssa/resource-guide/",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "pathways-aging-waiver",
@@ -345,6 +335,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Locator only. Can give you the address and phone of your nearest Area Agency on Aging.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 284-9294",
+          "description": "Number listed on in.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -409,18 +405,10 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "income_1",
-          "from": 2982,
-          "to": 1330,
-          "source": "https://www.medicaidplanningassistance.org/indiana-pathways-for-aging/",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        },
-        {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8007139023",
             "8335972777",
@@ -428,11 +416,12 @@ export const drafts: PipelineStateDrafts = {
             "8009863505",
             "211"
           ],
-          "to": "8772849294",
-          "source": "https://www.in.gov/pathways/resources",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "to": "(877) 284-9294",
+          "source": "https://www.in.gov/pathways/frequently-asked-questions/",
+          "flaggedAt": "2026-10-06T12:21:13.388Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -786,6 +775,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "County-based offices for in-person help - find yours at in.gov/fssa/da/locations/",
           "hours": "Varies by county"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 452-4800",
+          "description": "Number listed on in.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -849,17 +844,19 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8004030864"
           ],
-          "to": "8004524800",
+          "to": "(800) 452-4800",
           "source": "https://www.in.gov/ship/help-paying-for-your-medicare-costs/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "flaggedAt": "2026-10-06T12:21:13.388Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1085,26 +1082,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 4500,
-          "to": 4750,
-          "source": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 4500,
-          "to": 4750,
-          "source": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-program",
@@ -1247,6 +1225,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Serves Crawford, Perry, and Spencer Counties - contact via mail at P.O. Box 336, Tell City, IN 47586",
           "hours": "Contact for hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 467-1435",
+          "description": "Number listed on in.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1311,22 +1295,13 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
-          "field": "age",
-          "from": 18,
-          "to": 60,
-          "source": "https://www.in.gov/ihcda/files/Indiana-LIHEAP-Intake-and-Operations-Program-Manual-PY2026.pdf",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        },
-        {
           "field": "income_1",
           "from": 2388,
           "to": 2660,
           "source": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 185% FPL 2024 or 200% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "flaggedAt": "2026-10-06T12:21:13.388Z"
         },
         {
           "field": "income_2",
@@ -1335,18 +1310,21 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 185% FPL 2024 or 200% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
-        },
+          "flaggedAt": "2026-10-06T12:21:13.388Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8007217385"
           ],
-          "to": "8008720371",
-          "source": "https://www.in.gov/oed/resources-and-information-center/customer-assistance-programs/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "to": "(800) 467-1435",
+          "source": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
+          "flaggedAt": "2026-10-06T12:21:13.388Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1480,7 +1458,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.in.gov/ship/",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "flaggedAt": "2026-10-06T12:21:13.388Z"
         }
       ]
     },
@@ -1949,7 +1927,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Eastern Indiana Works",
-          "phone": null,
+          "phone": "(317) 524-4360",
           "description": "SCSEP services for eastern Indiana counties",
           "hours": "Contact via easternindianaworks.org/scsep"
         },
@@ -2022,22 +2000,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": "2-1-1",
+      "phone": "(317) 524-4360",
       "sourceUrl": "https://www.in.gov/dwd/files/INDWD_SCSEP_State_Plan_24-27.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8007433333",
-          "source": "https://www.in.gov/dwd/job-seekers/scsep/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "to": "(317) 524-4360",
+          "source": "https://www.goodwillindy.org/employment-services/",
+          "flaggedAt": "2026-10-06T12:21:13.388Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -2155,6 +2135,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "151 N. Delaware St., Ste. 1800, Indianapolis, IN 46204",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 243-8570",
+          "description": "Number listed on indianalegalservices.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2196,17 +2182,19 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008690212"
           ],
-          "to": "8666446407",
-          "source": "https://www.indianalegalservices.org/senior/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:18.606Z"
+          "to": "(844) 243-8570",
+          "source": "https://www.indianalegalservices.org/what-we-do/",
+          "flaggedAt": "2026-10-06T12:21:13.388Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2570,7 +2558,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.in.gov/ihcda/homeowners-and-renters/low-income-home-energy-assistance-program-liheap/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "18008720371",
+          "source": "https://www.in.gov/ihcda/files/Indiana-LIHEAP-Intake-and-Operations-Program-Manual-PY2026.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:21:13.388Z"
+        }
+      ]
     },
     {
       "id": "in-nfcsp-caregiver-support",

@@ -1,14 +1,14 @@
 {
   "state": "NY",
   "stateName": "New York",
-  "checkedAt": "2026-10-05T18:19:09.800Z",
-  "total": 17,
+  "checkedAt": "2026-10-06T12:26:42.678Z",
+  "total": 20,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 6,
-  "totalFlags": 10,
-  "highSeverityFlags": 5,
+  "programsWithFlags": 5,
+  "totalFlags": 7,
+  "highSeverityFlags": 2,
   "programs": [
     {
       "programId": "community-medicaid",
@@ -27,21 +27,29 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1836,
-        "income_2": 2489,
-        "assets_individual": 33038,
-        "assets_couple": 44796,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 30182,
+        "assets_couple": 40821,
         "phone": "8005412831",
         "sources": {
-          "age": "https://www.medicaidlongtermcare.org/eligibility/new_york/",
-          "income": "https://www.medicaidlongtermcare.org/eligibility/new_york/",
-          "assets": "https://www.health.ny.gov/health_care/medicaid/",
+          "age": "https://www.medicaidplanningassistance.org/medicaid-eligibility-new-york/",
+          "income": "null",
+          "assets": "https://www.medicaidplanningassistance.org/medicaid-eligibility-new-york/",
           "phone": "https://www.health.ny.gov/health_care/medicaid/"
         },
-        "notes": "Community Medicaid is the current long-term-care Medicaid pathway for seniors in New York; age threshold and 2026 income/resource figures were found, but the most authoritative official pages retrieved did not show all figures directly in the snippet."
+        "notes": "Community Medicaid for seniors in NY is generally the age 65+ pathway; current source found for age, asset limits, and main state Medicaid helpline. No separate income figure was reliably retrievable from the gathered sources for the senior pathway."
       },
-      "flags": [],
-      "notes": "Community Medicaid is the current long-term-care Medicaid pathway for seniors in New York; age threshold and 2026 income/resource figures were found, but the most authoritative official pages retrieved did not show all figures directly in the snippet."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 33038,
+          "verifiedValue": 30182,
+          "pctDiff": 8.6
+        }
+      ],
+      "notes": "Community Medicaid for seniors in NY is generally the age 65+ pathway; current source found for age, asset limits, and main state Medicaid helpline. No separate income figure was reliably retrievable from the gathered sources for the senior pathway."
     },
     {
       "programId": "hcbs-developmental-disabilities-waiver",
@@ -65,28 +73,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5184745271",
+        "phone": "8005412831",
         "sources": {
-          "age": "https://www.health.ny.gov/facilities/long_term_care/nhtd/reference/docs/approved_nhtd_waiver_app.pdf",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.health.ny.gov/forms/doh-5729"
+          "age": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/NY",
+          "income": "https://www.health.ny.gov/publications/0548/hcbs_long_term_home_health_care.htm",
+          "assets": "https://www.health.ny.gov/publications/0548/hcbs_long_term_home_health_care.htm",
+          "phone": "https://www.health.ny.gov/health_care/medicaid/"
         },
-        "notes": "Senior pathway identified as the NHTD waiver; official materials show age 65+ for seniors and a main NYSDOH waiver contact number. No authoritative current income or asset limits found in retrievable official sources."
+        "notes": "Senior HCBS pathway found under NY Medicaid long-term care/waiver services; no authoritative income or asset thresholds were located in the gathered sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8669469733",
-            "211",
-            "8005412831"
-          ],
-          "verifiedValue": "5184745271"
-        }
-      ],
-      "notes": "Senior pathway identified as the NHTD waiver; official materials show age 65+ for seniors and a main NYSDOH waiver contact number. No authoritative current income or asset limits found in retrievable official sources."
+      "flags": [],
+      "notes": "Senior HCBS pathway found under NY Medicaid long-term care/waiver services; no authoritative income or asset thresholds were located in the gathered sources."
     },
     {
       "programId": "pace-elderly-care",
@@ -112,17 +109,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18884016582",
+        "phone": "18887287223",
         "sources": {
           "age": "https://www.health.ny.gov/health_care/medicaid/redesign/duals/",
           "income": null,
           "assets": null,
-          "phone": "https://www.nymedicaidchoice.com/en/pace"
+          "phone": "https://pacecny.org/non-discrimination-notice/"
         },
-        "notes": "PACE in New York is a current program for people age 55+; no official income or asset limits were found in the retrieved sources."
+        "notes": "PACE in New York uses a senior-specific minimum age of 55; no income or asset test found in authoritative statewide eligibility guidance."
       },
       "flags": [],
-      "notes": "PACE in New York is a current program for people age 55+; no official income or asset limits were found in the retrieved sources."
+      "notes": "PACE in New York uses a senior-specific minimum age of 55; no income or asset test found in authoritative statewide eligibility guidance."
     },
     {
       "programId": "medicare-savings-program-qmb-slmb-qi",
@@ -136,32 +133,33 @@
         "phones": [
           "8886926116",
           "5857868900",
-          "1800"
+          "1800",
+          "8007010501"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 1846,
+        "income_1": 1856,
         "income_2": 2509,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18007010501",
+        "phone": "8007010501",
         "sources": {
           "age": null,
-          "income": "https://aging.ny.gov/medicare-savings-program",
-          "assets": "https://nyhealthaccess.org/entry/99/",
+          "income": "https://aging.ny.gov/system/files/documents/2026/03/2026-nysofa-hiicap-notebook-module-9-medicare-savings-programs.pdf",
+          "assets": "https://aging.ny.gov/system/files/documents/2026/03/2026-nysofa-hiicap-notebook-module-9-medicare-savings-programs.pdf",
           "phone": "https://aging.ny.gov/medicare-savings-program"
         },
-        "notes": "New York’s MSP now uses QMB and QI; SLMB has been phased out. No asset/resource limit is reported for MSPs in New York."
+        "notes": "In New York, SLMB is no longer available; current MSP pathways are QMB and QI. No asset/resource limit applies."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 2494,
-          "verifiedValue": 1846,
-          "pctDiff": 26
+          "verifiedValue": 1856,
+          "pctDiff": 25.6
         },
         {
           "field": "income_2",
@@ -169,19 +167,9 @@
           "draftValue": 3375,
           "verifiedValue": 2509,
           "pctDiff": 25.7
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8886926116",
-            "5857868900",
-            "1800"
-          ],
-          "verifiedValue": "18007010501"
         }
       ],
-      "notes": "New York’s MSP now uses QMB and QI; SLMB has been phased out. No asset/resource limit is reported for MSPs in New York."
+      "notes": "In New York, SLMB is no longer available; current MSP pathways are QMB and QI. No asset/resource limit applies."
     },
     {
       "programId": "snap-food-benefits",
@@ -200,36 +188,36 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 2660,
-        "income_2": 3607,
+        "income_1": 1496,
+        "income_2": 2028,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18003423009",
+        "phone": "8003423009",
         "sources": {
           "age": "https://otda.ny.gov/policy/gis/2021/21DC079.pdf",
           "income": "https://www.ny.gov/services/apply-snap",
-          "assets": "https://otda.ny.gov/programs/snap/",
-          "phone": "https://otda.ny.gov/programs/snap/"
+          "assets": "https://www.ny.gov/services/apply-snap",
+          "phone": "https://otda.ny.gov/programs/publications/4716.pdf"
         },
-        "notes": "SNAP in New York no longer has a standard countable asset test for most households, including senior households."
+        "notes": "ESAP/NYSCAP are simplified SNAP pathways for older and/or disabled households; current NY SNAP pages say most households no longer have a savings/resource test, so no countable asset limit is published for this senior pathway."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 1663,
-          "verifiedValue": 2660,
-          "pctDiff": 37.5
+          "verifiedValue": 1496,
+          "pctDiff": 10
         },
         {
           "field": "income_2",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 2254,
-          "verifiedValue": 3607,
-          "pctDiff": 37.5
+          "verifiedValue": 2028,
+          "pctDiff": 10
         }
       ],
-      "notes": "SNAP in New York no longer has a standard countable asset test for most households, including senior households."
+      "notes": "ESAP/NYSCAP are simplified SNAP pathways for older and/or disabled households; current NY SNAP pages say most households no longer have a savings/resource test, so no countable asset limit is published for this senior pathway."
     },
     {
       "programId": "heap-energy-assistance",
@@ -250,20 +238,20 @@
       "verified": {
         "age": 60,
         "income_1": 3473,
-        "income_2": 10221,
+        "income_2": 4542,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18003423009",
         "sources": {
-          "age": "https://www.ny.gov/services/apply-heating-equipment-repair-or-replacement",
-          "income": "https://www.osc.ny.gov/reports/budget/fed-funding-ny/low-income-home-energy-assistance-program",
-          "assets": "https://www.ny.gov/services/apply-heating-equipment-repair-or-replacement",
-          "phone": "https://www.ny.gov/services/apply-HEAP"
+          "age": "https://aging.ny.gov/home-energy-assistance-heap",
+          "income": "https://www.ny.gov/services/apply-HEAP",
+          "assets": "https://www.ny.gov/services/apply-HEAP",
+          "phone": "https://otda.ny.gov/programs/apply/"
         },
-        "notes": "HEAP remains active in New York; senior pathway for Heating Equipment Repair and Replacement requires age 60+ and uses HEAP income/resource requirements. No authoritative statewide asset dollar limits found for the senior pathway."
+        "notes": "HEAP is current in 2026; the senior pathway applies to age 60+ and does not publish a separate asset limit for eligibility in the official sources found."
       },
       "flags": [],
-      "notes": "HEAP remains active in New York; senior pathway for Heating Equipment Repair and Replacement requires age 60+ and uses HEAP income/resource requirements. No authoritative statewide asset dollar limits found for the senior pathway."
+      "notes": "HEAP is current in 2026; the senior pathway applies to age 60+ and does not publish a separate asset limit for eligibility in the official sources found."
     },
     {
       "programId": "wrap-weatherization",
@@ -286,14 +274,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8003423009",
+        "phone": "8003429871",
         "sources": {
-          "age": "https://ag.ny.gov/sites/default/files/publications/Senior_Housing_Guide.pdf",
-          "income": "https://ag.ny.gov/sites/default/files/publications/Senior_Housing_Guide.pdf",
+          "age": "https://seniorcitizens.westchestercountyny.gov/?view=category&id=210",
+          "income": "https://seniorcitizens.westchestercountyny.gov/?view=category&id=210",
           "assets": null,
           "phone": "https://ag.ny.gov/sites/default/files/publications/Senior_Housing_Guide.pdf"
         },
-        "notes": "WRAP is a county-level supplement to HEAP; senior pathway age is 60+ and eligibility ties to HEAP. No authoritative asset test found. The most official accessible contact located for WRAP help is the NY HEAP hotline; program-specific county contacts vary by county."
+        "notes": "WRAP still appears active in NY and is described as a senior pathway tied to HEAP eligibility; no authoritative current income or asset test source was found in the retrieved results."
       },
       "flags": [
         {
@@ -303,10 +291,10 @@
             "7166619430",
             "211"
           ],
-          "verifiedValue": "8003423009"
+          "verifiedValue": "8003429871"
         }
       ],
-      "notes": "WRAP is a county-level supplement to HEAP; senior pathway age is 60+ and eligibility ties to HEAP. No authoritative asset test found. The most official accessible contact located for WRAP help is the NY HEAP hotline; program-specific county contacts vary by county."
+      "notes": "WRAP still appears active in NY and is described as a senior pathway tied to HEAP eligibility; no authoritative current income or asset test source was found in the retrieved results."
     },
     {
       "programId": "hiicap-medicare-counseling",
@@ -335,12 +323,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://aging.ny.gov/programs/medicare-and-health-insurance"
+          "phone": "https://aging.ny.gov/health-insurance-information-counseling-and-assistance-program-hiicap"
         },
-        "notes": "No age, income, or asset eligibility test found for New York HIICAP; available to Medicare beneficiaries and those soon becoming Medicare eligible. Official statewide helpline is 1-800-701-0501."
+        "notes": "HIICAP is a Medicare counseling program, not a means-tested benefit; no age, income, or asset eligibility limits were found in authoritative current sources."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility test found for New York HIICAP; available to Medicare beneficiaries and those soon becoming Medicare eligible. Official statewide helpline is 1-800-701-0501."
+      "notes": "HIICAP is a Medicare counseling program, not a means-tested benefit; no age, income, or asset eligibility limits were found in authoritative current sources."
     },
     {
       "programId": "meals-on-wheels-eisep",
@@ -364,17 +352,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18003429871",
+        "phone": "8003429871",
         "sources": {
-          "age": "https://aging.ny.gov/expanded-home-services-elderly-eisep",
+          "age": "https://health.ny.gov/facilities/home_care/consumer.htm",
           "income": null,
           "assets": null,
           "phone": "https://aging.ny.gov/expanded-home-services-elderly-eisep"
         },
-        "notes": "Current NY State Office for the Aging page shows EISEP eligibility at age 60+ and lists NY Connects as the main contact; no official statewide income/assets test found for this program page."
+        "notes": "Official NYS sources show EISEP is for individuals age 60 and over; no statewide income/assets test found in the retrieved official sources. NY Connects is the main statewide help line for EISEP."
       },
       "flags": [],
-      "notes": "Current NY State Office for the Aging page shows EISEP eligibility at age 60+ and lists NY Connects as the main contact; no official statewide income/assets test found for this program page."
+      "notes": "Official NYS sources show EISEP is for individuals age 60 and over; no statewide income/assets test found in the retrieved official sources. NY Connects is the main statewide help line for EISEP."
     },
     {
       "programId": "nyfsc-respite-care",
@@ -405,10 +393,10 @@
           "assets": null,
           "phone": "https://www.nyfsc.org/support-services/respite-care-program/"
         },
-        "notes": "Current NYFSC Respite Care Program page states service for frail NYC residents ages 60+; no income or asset test found in the retrieved authoritative source."
+        "notes": "Current NYFSC Respite Care Program page shows senior eligibility at age 60+ and lists the main phone number; no income or asset test found on the retrieved official source."
       },
       "flags": [],
-      "notes": "Current NYFSC Respite Care Program page states service for frail NYC residents ages 60+; no income or asset test found in the retrieved authoritative source."
+      "notes": "Current NYFSC Respite Care Program page shows senior eligibility at age 60+ and lists the main phone number; no income or asset test found on the retrieved official source."
     },
     {
       "programId": "senior-community-service-employment",
@@ -427,8 +415,8 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 1575,
-        "income_2": 2125,
+        "income_1": 1578,
+        "income_2": 2135,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "2122446469",
@@ -438,18 +426,18 @@
           "assets": null,
           "phone": "https://www.nyc.gov/site/dfta/services/older-adult-workforce.page"
         },
-        "notes": "Current NY SCSEP age threshold is 55+. Income eligibility is 125% of federal poverty level; annual figures on NYC materials were converted to monthly. No asset test found in official current sources."
+        "notes": "SCSEP is active in New York; official NY State source states age 55+, unemployment, and income no more than 125% of the federal poverty level. No asset test found in current official sources. Monthly income limits derived from the official annual 125% FPL amounts shown in NYC SCSEP materials (single $15,075; two-person $20,300), divided by 12."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "medium",
           "draftValue": 1663,
-          "verifiedValue": 1575,
-          "pctDiff": 5.3
+          "verifiedValue": 1578,
+          "pctDiff": 5.1
         }
       ],
-      "notes": "Current NY SCSEP age threshold is 55+. Income eligibility is 125% of federal poverty level; annual figures on NYC materials were converted to monthly. No asset test found in official current sources."
+      "notes": "SCSEP is active in New York; official NY State source states age 55+, unemployment, and income no more than 125% of the federal poverty level. No asset test found in current official sources. Monthly income limits derived from the official annual 125% FPL amounts shown in NYC SCSEP materials (single $15,075; two-person $20,300), divided by 12."
     },
     {
       "programId": "legal-services-seniors",
@@ -463,44 +451,28 @@
         "phones": [
           "2122446469",
           "8454862555",
-          "8003429871"
+          "8003429871",
+          "8444810973"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18444810973",
+        "phone": "8444810973",
         "sources": {
-          "age": "https://www.elderjusticeny.org/",
+          "age": "https://www.onondaga.gov/aging/legal-services/",
           "income": null,
           "assets": null,
-          "phone": "https://www.elderjusticeny.org/"
+          "phone": "https://www.lawhelpny.org/organization/legal-services-for-the-elderly-disabled-or-di"
         },
-        "notes": "Current official program page for Center for Elder Law and Justice older adult legal helpline; no income or asset test found in the retrieved sources."
+        "notes": "Current NY senior legal-services pathways consistently use age 60+; no income or asset test found in authoritative current sources. Official statewide/help line number located from current legal-services listing."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 60,
-          "verifiedValue": 55
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "2122446469",
-            "8454862555",
-            "8003429871"
-          ],
-          "verifiedValue": "18444810973"
-        }
-      ],
-      "notes": "Current official program page for Center for Elder Law and Justice older adult legal helpline; no income or asset test found in the retrieved sources."
+      "flags": [],
+      "notes": "Current NY senior legal-services pathways consistently use age 60+; no income or asset test found in authoritative current sources. Official statewide/help line number located from current legal-services listing."
     },
     {
       "programId": "nyc-senior-homeowners-exemption",
@@ -524,15 +496,15 @@
         "assets_couple": null,
         "phone": "311",
         "sources": {
-          "age": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
-          "income": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
+          "age": "https://portal.311.nyc.gov/article/?kanumber=KA-02523",
+          "income": "https://portal.311.nyc.gov/article/?kanumber=KA-02523",
           "assets": null,
           "phone": "https://www.nyc.gov/site/finance/property/landlords-sche.page"
         },
-        "notes": "Current NYC SCHE appears active in 2026. No asset test found in authoritative sources; official help number is 311."
+        "notes": "Current NYC SCHE appears to be active; no asset test found in authoritative sources. Phone is listed as 311 for general assistance."
       },
       "flags": [],
-      "notes": "Current NYC SCHE appears active in 2026. No asset test found in authoritative sources; official help number is 311."
+      "notes": "Current NYC SCHE appears to be active; no asset test found in authoritative sources. Phone is listed as 311 for general assistance."
     },
     {
       "programId": "scrie-rent-freeze",
@@ -553,21 +525,21 @@
       },
       "verified": {
         "age": 62,
-        "income_1": 50000,
+        "income_1": 75000,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "311",
         "sources": {
-          "age": "https://www.nyc.gov/site/finance/property/landlords-scrie.page",
-          "income": "https://www.nyc.gov/site/finance/property/landlords-scrie.page",
+          "age": "https://access.nyc.gov/programs/senior-citizens-rent-increase-exemption-scrie/",
+          "income": "https://hcr.ny.gov/system/files/documents/2026/06/fact-sheet-21-06-2026_0.pdf",
           "assets": null,
-          "phone": "https://www.nyc.gov/site/finance/property/landlords-scrie.page"
+          "phone": "https://portal.311.nyc.gov/article/?kanumber=KA-02289"
         },
-        "notes": "SCRIE is current and administered in NYC as part of the Rent Freeze Program; no assets test found in current official sources."
+        "notes": "Current NYC SCRIE is age 62+; no asset test found in current official sources. Income cap cited as $75,000 effective July 1, 2026. Main help line is 311; outside NYC/TTY uses 212-639-9675, but 311 is the primary official number."
       },
       "flags": [],
-      "notes": "SCRIE is current and administered in NYC as part of the Rent Freeze Program; no assets test found in current official sources."
+      "notes": "Current NYC SCRIE is age 62+; no asset test found in current official sources. Income cap cited as $75,000 effective July 1, 2026. Main help line is 311; outside NYC/TTY uses 212-639-9675, but 311 is the primary official number."
     },
     {
       "programId": "enhanced-star-property-tax",
@@ -587,20 +559,20 @@
       "verified": {
         "age": 65,
         "income_1": 110750,
-        "income_2": 113550,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "5184572036",
         "sources": {
-          "age": "https://www.tax.ny.gov/pit/property/star/eligibility.htm",
+          "age": "https://www.tax.ny.gov/pit/property/star/types.htm",
           "income": "https://www.tax.ny.gov/pit/property/star/types.htm",
           "assets": null,
-          "phone": "https://www.tax.ny.gov/pit/property/star/changes/"
+          "phone": "https://www.tax.ny.gov/star/changes/"
         },
-        "notes": "Current official Enhanced STAR rules: senior age threshold is 65; no asset test found in official current guidance. Income figures shown are the 2026-2027 and 2027-2028 school-year limits."
+        "notes": "Current official NY Enhanced STAR eligibility is age 65+; no asset test found. 2026 income limit shown on Tax.NY.gov is $110,750."
       },
       "flags": [],
-      "notes": "Current official Enhanced STAR rules: senior age threshold is 65; no asset test found in official current guidance. Income figures shown are the 2026-2027 and 2027-2028 school-year limits."
+      "notes": "Current official NY Enhanced STAR eligibility is age 65+; no asset test found. 2026 income limit shown on Tax.NY.gov is $110,750."
     },
     {
       "programId": "eisep-home-services",
@@ -626,15 +598,15 @@
         "assets_couple": null,
         "phone": "18003429871",
         "sources": {
-          "age": "https://www.health.ny.gov/facilities/home_care/consumer.htm",
-          "income": null,
-          "assets": null,
+          "age": "https://health.ny.gov/facilities/home_care/consumer.htm",
+          "income": "https://www.health.ny.gov/facilities/home_care/consumer.htm",
+          "assets": "https://www.health.ny.gov/facilities/home_care/consumer.htm",
           "phone": "https://aging.ny.gov/expanded-home-services-elderly-eisep"
         },
-        "notes": "Official New York sources show EISEP is for individuals age 60+ and direct applicants to NY Connects at 1-800-342-9871; no current official income or asset thresholds were found."
+        "notes": "Current New York EISEP appears active; official state sources show eligibility for individuals age 60+ and NY Connects as the main contact."
       },
       "flags": [],
-      "notes": "Official New York sources show EISEP is for individuals age 60+ and direct applicants to NY Connects at 1-800-342-9871; no current official income or asset thresholds were found."
+      "notes": "Current New York EISEP appears active; official state sources show eligibility for individuals age 60+ and NY Connects as the main contact."
     },
     {
       "programId": "golden-park-program",
@@ -664,10 +636,108 @@
           "assets": null,
           "phone": "https://parks.ny.gov/visit/passes/golden-pass-program"
         },
-        "notes": "Current NYS Parks page shows the program is for residents 62+; no income or asset test found. Program appears active and not renamed/discontinued."
+        "notes": "Current official NY State Parks page shows the Golden Park Program for New York State residents age 62 or older; no income or asset test found. No application is needed."
       },
       "flags": [],
-      "notes": "Current NYS Parks page shows the program is for residents 62+; no income or asset test found. Program appears active and not renamed/discontinued."
+      "notes": "Current official NY State Parks page shows the Golden Park Program for New York State residents age 62 or older; no income or asset test found. No application is needed."
+    },
+    {
+      "programId": "ny-epic-prescription-assistance",
+      "programName": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8003323742"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 75000,
+        "income_2": 100000,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8003323742",
+        "sources": {
+          "age": "https://www.health.ny.gov/health_care/epic/eligibility.htm",
+          "income": "https://www.health.ny.gov/health_care/epic/eligibility.htm",
+          "assets": null,
+          "phone": "https://www.health.ny.gov/contact/doh800.htm"
+        },
+        "notes": "Current NY State EPIC program for seniors age 65+; no assets test found in official sources."
+      },
+      "flags": [],
+      "notes": "Current NY State EPIC program for seniors age 65+; no assets test found in official sources."
+    },
+    {
+      "programId": "ny-property-tax-relief-seniors",
+      "programName": "Property Tax Relief for Seniors",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "5184572036",
+          "311"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 58399,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "5184572036",
+        "sources": {
+          "age": "https://www.tax.ny.gov/pit/property/exemption/seniorexempt.htm",
+          "income": "https://www.nyc.gov/site/finance/property/residential-properties-exemptions.page",
+          "assets": null,
+          "phone": "https://www.nassaucountyny.gov/3575/Exemption-Applications-Forms-PDF"
+        },
+        "notes": "Current senior property tax relief pathways in NY use a 65+ senior threshold; no statewide asset test found. Income limit varies by locality, and NYC SCHE lists $58,399."
+      },
+      "flags": [],
+      "notes": "Current senior property tax relief pathways in NY use a 65+ senior threshold; no statewide asset test found. Income limit varies by locality, and NYC SCHE lists $58,399."
+    },
+    {
+      "programId": "ny-cdpap-consumer-directed-personal-assistance",
+      "programName": "Consumer Directed Personal Assistance Program (CDPAP)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8005412831",
+          "8332475346"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 21,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18332475346",
+        "sources": {
+          "age": "https://healthweb-back.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/"
+        },
+        "notes": "CDPAP is a Medicaid long-term care program; no separate income or asset limit was found on the official CDPAP page. Eligibility includes a minimum age-related requirement: minimum needs requirements apply to Medicaid recipients age 21 or older."
+      },
+      "flags": [],
+      "notes": "CDPAP is a Medicaid long-term care program; no separate income or asset limit was found on the official CDPAP page. Eligibility includes a minimum age-related requirement: minimum needs requirements apply to Medicaid recipients age 21 or older."
     }
   ]
 }

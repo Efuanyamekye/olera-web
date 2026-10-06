@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.367Z
+ * Last updated: 2026-10-06T12:32:13.399Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -357,6 +357,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-888-452-8609",
           "description": "Help with Medi-Cal coverage concerns and complaints",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 339-4661",
+          "description": "Number listed on sandiegocounty.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -422,18 +428,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-31",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9164197500",
             "18884528609"
           ],
-          "to": "9165529105",
-          "source": "https://www.dhcs.ca.gov/services/medi-cal-resources/multipurpose-senior-services-program-msspmedi-calwaiver/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
+          "to": "(800) 339-4661",
+          "source": "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/ais/Services/Multipurpose-Senior-Services-Program.html",
+          "flaggedAt": "2026-10-06T12:18:38.646Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -850,35 +858,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 60,
-          "to": 55,
-          "source": "https://www.cdss.ca.gov/inforesources/calfresh/eligibility-and-issuance-requirements",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
-        },
-        {
-          "field": "income_1",
-          "from": 2610,
-          "to": 1628,
-          "source": "https://www.cdss.ca.gov/Portals/9/FA/Forms/CF24.pdf?ver=2026-10-01-095941-493",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3526,
-          "to": 2203,
-          "source": "https://www.cdss.ca.gov/Portals/9/FA/Forms/CF24.pdf?ver=2026-10-01-095941-493",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -1659,6 +1639,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(626) 397-3110",
           "description": "Press option 1 for direct MSSP services",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 339-4661",
+          "description": "Number listed on sandiegocounty.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1694,7 +1680,34 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-510-2020",
       "sourceUrl": "https://aging.ca.gov/Programs_and_Services/Multipurpose_Senior_Services_Program/",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://www.dhcs.ca.gov/services/ltc/Pages/MSSP.aspx",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:18:38.646Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18005102020",
+            "8006644664",
+            "6263973110"
+          ],
+          "to": "(800) 339-4661",
+          "source": "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/ais/Services/Multipurpose-Senior-Services-Program.html",
+          "flaggedAt": "2026-10-06T12:18:38.646Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "scsep-employment-program",
@@ -2046,20 +2059,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ca.gov/Programs_and_Services/Legal_Services/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18005102020",
-            "18006758001"
-          ],
-          "to": "8002221753",
-          "source": "https://dfpi.ca.gov/wp-content/uploads/sites/337/2019/07/Consumer_ResourceGuide.pdf",
-          "severity": "medium",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2644,7 +2644,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "California 2-1-1 (start here, locator)",
-          "phone": "2-1-1",
+          "phone": "(866) 376-7066",
           "description": "California has no statewide IHSS application line. Applications are taken by your county IHSS office. 2-1-1 can connect you to the right county office, or you can find it directly at cdss.ca.gov/inforesources/county-ihss-offices.",
           "hours": "24 hours, 7 days a week"
         }
@@ -2706,22 +2706,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": null,
+      "phone": "(866) 376-7066",
       "sourceUrl": "https://www.cdss.ca.gov/in-home-supportive-services",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8663767066",
-          "source": "https://www.cdss.ca.gov/inforesources/county-ihss-offices",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:59.830Z"
+          "to": "(866) 376-7066",
+          "source": "https://www.cdss.ca.gov/inforesources/ihss/ihss-providers/how-to-become-an-ihss-provider",
+          "flaggedAt": "2026-10-06T12:18:38.646Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -2824,6 +2826,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 510-2020",
           "description": "Number listed on aging.ca.gov",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 540-4442",
+          "description": "Number listed on gero.usc.edu",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2889,6 +2897,20 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://aging.ca.gov/Aging_Resources/Caring_for_the_Caregivers/",
           "flaggedAt": "2026-10-02T07:33:59.830Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8006756694",
+            "9095141404",
+            "8005102020"
+          ],
+          "to": "(800) 540-4442",
+          "source": "https://gero.usc.edu/centers/fcsc/",
+          "flaggedAt": "2026-10-06T12:18:38.646Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -3666,6 +3688,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "A general information line that can help identify local PACE organizations and other senior services. It cannot process a PACE application but can point you to the right local contact.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(916) 713-8444",
+          "description": "Number listed on dhcs.ca.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3743,7 +3771,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(916) 552-9105",
       "sourceUrl": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "9165529105",
+            "211"
+          ],
+          "to": "(916) 713-8444",
+          "source": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/contact-information-for-the-pace/",
+          "flaggedAt": "2026-10-06T12:18:38.646Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

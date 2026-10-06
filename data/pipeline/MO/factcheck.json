@@ -1,14 +1,14 @@
 {
   "state": "MO",
   "stateName": "Missouri",
-  "checkedAt": "2026-10-02T07:40:05.397Z",
-  "total": 17,
+  "checkedAt": "2026-10-06T12:24:13.591Z",
+  "total": 19,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 6,
-  "totalFlags": 14,
-  "highSeverityFlags": 8,
+  "programsWithFlags": 7,
+  "totalFlags": 16,
+  "highSeverityFlags": 9,
   "programs": [
     {
       "programId": "healthnet-medicaid",
@@ -30,50 +30,36 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 860,
-        "income_2": 1166,
-        "assets_individual": 3000,
-        "assets_couple": 6000,
+        "income_1": 1130,
+        "income_2": 1533,
+        "assets_individual": 5035,
+        "assets_couple": 10070,
         "phone": "8553739994",
         "sources": {
-          "age": "https://dss.mo.gov/healthcare/apply",
-          "income": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
-          "assets": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "age": "https://health.mo.gov/sites/health/files/media/pdf/2026/07/Eligibility_Requirements_for_MO_HealthNet_Coverage_3-24.pdf",
+          "income": "https://dss.mo.gov/benefit-program-income-limits",
+          "assets": "https://dss.mo.gov/employment-training-provider-portal/docs/MHABD-Program-Overview.pdf",
           "phone": "https://dss.mo.gov/toll"
         },
-        "notes": "MO HealthNet’s senior pathway is the Aged, Blind, and Disabled category; official materials show age 65+ and the cited income/assets chart for elderly/disabled applicants. The income and asset figures in the available official chart appear to be current eligibility thresholds for the senior pathway."
+        "notes": "Current senior pathway is MO HealthNet for the Aged and Disabled; income limits were converted from annual figures to monthly. "
       },
       "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1131,
-          "verifiedValue": 860,
-          "pctDiff": 24
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 1533,
-          "verifiedValue": 1166,
-          "pctDiff": 23.9
-        },
         {
           "field": "assets_individual",
           "severity": "high",
           "draftValue": 6220.5,
-          "verifiedValue": 3000,
-          "pctDiff": 51.8
+          "verifiedValue": 5035,
+          "pctDiff": 19.1
         },
         {
           "field": "assets_couple",
           "severity": "high",
           "draftValue": 12441,
-          "verifiedValue": 6000,
-          "pctDiff": 51.8
+          "verifiedValue": 10070,
+          "pctDiff": 19.1
         }
       ],
-      "notes": "MO HealthNet’s senior pathway is the Aged, Blind, and Disabled category; official materials show age 65+ and the cited income/assets chart for elderly/disabled applicants. The income and asset figures in the available official chart appear to be current eligibility thresholds for the senior pathway."
+      "notes": "Current senior pathway is MO HealthNet for the Aged and Disabled; income limits were converted from annual figures to monthly. "
     },
     {
       "programId": "structured-family-caregiving-waiver",
@@ -92,21 +78,21 @@
       },
       "verified": {
         "age": 21,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1131,
+        "income_2": 4066,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8668353505",
         "sources": {
           "age": "https://health.mo.gov/providers/manuals/home-and-community-based-services-manual/300-available-home-and-community-based-8",
-          "income": null,
+          "income": "https://www.medicaidplanningassistance.org/missouri-structured-family-caregiving/",
           "assets": null,
-          "phone": "https://health.mo.gov/seniors/aaa/pdf/mo-caregiving-resources.pdf"
+          "phone": "https://health.mo.gov/seniors/hcbs/hcbsmanual/pdf/3.60.pdf"
         },
-        "notes": "Program appears current, but it is not a senior-only program; Missouri’s official rule uses age 21+ for initial entry. I could not find an official published countable asset limit or income limit for this waiver in the retrieved sources."
+        "notes": "Structured Family Caregiving Waiver appears current in Missouri and is for adults age 21+ with Alzheimer’s or related dementia; no authoritative asset limit was found in the retrieved sources."
       },
       "flags": [],
-      "notes": "Program appears current, but it is not a senior-only program; Missouri’s official rule uses age 21+ for initial entry. I could not find an official published countable asset limit or income limit for this waiver in the retrieved sources."
+      "notes": "Structured Family Caregiving Waiver appears current in Missouri and is for adults age 21+ with Alzheimer’s or related dementia; no authoritative asset limit was found in the retrieved sources."
     },
     {
       "programId": "pace-elderly-care",
@@ -126,17 +112,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8336722352",
         "sources": {
-          "age": "https://www.sos.mo.gov/CMSImages/AdRules/csr/current/13csr/13c70-8.pdf",
-          "income": "https://dss.mo.gov/mhd/pace",
-          "assets": "https://dss.mo.gov/mhd/pace",
-          "phone": null
+          "age": "https://dss.mo.gov/mhd/PACE-participants",
+          "income": null,
+          "assets": null,
+          "phone": "https://dss.mo.gov/mhd/PACE-participants"
         },
-        "notes": "PACE in Missouri is current and age-based at 55+; no authoritative current income or countable asset limit was found in the retrieved government sources."
+        "notes": "Current Missouri PACE eligibility source confirms age 55+; no income or countable asset test was found in the retrievable official sources reviewed."
       },
       "flags": [],
-      "notes": "PACE in Missouri is current and age-based at 55+; no authoritative current income or countable asset limit was found in the retrieved government sources."
+      "notes": "Current Missouri PACE eligibility source confirms age 55+; no income or countable asset test was found in the retrievable official sources reviewed."
     },
     {
       "programId": "medicare-savings-program",
@@ -155,21 +141,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1330,
-        "income_2": 1803,
+        "income_1": 1350,
+        "income_2": 1824,
         "assets_individual": 9950,
         "assets_couple": 14910,
         "phone": "8553734636",
         "sources": {
           "age": null,
-          "income": "https://mo.db101.org/mo/programs/health_coverage/how_health/program2c.htm",
-          "assets": "https://mo.db101.org/mo/programs/health_coverage/how_health/program2c.htm",
+          "income": "https://benefitscheckup.org/program/health_mo_msp_medicare_savings",
+          "assets": "https://benefitscheckup.org/program/health_mo_msp_medicare_savings",
           "phone": "https://mydss.mo.gov/medicare-cost-savings-programs"
         },
-        "notes": "Missouri MSP is current and administered as QMB/SLMB/QI under the Medicare Savings Plan; no minimum age limit was found beyond Medicare Part A enrollment, so age is null."
+        "notes": "MSP is current in Missouri; no separate age minimum found because this is a Medicare-based senior pathway program. Income and asset limits reflect current 2026 Missouri MSP figures."
       },
       "flags": [],
-      "notes": "Missouri MSP is current and administered as QMB/SLMB/QI under the Medicare Savings Plan; no minimum age limit was found beyond Medicare Part A enrollment, so age is null."
+      "notes": "MSP is current in Missouri; no separate age minimum found because this is a Medicare-based senior pathway program. Income and asset limits reflect current 2026 Missouri MSP figures."
     },
     {
       "programId": "snap-food-benefits",
@@ -189,33 +175,33 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 1632,
-        "income_2": 2215,
+        "income_1": 1696,
+        "income_2": 2296,
         "assets_individual": 4500,
         "assets_couple": 4500,
         "phone": "8553734636",
         "sources": {
-          "age": "https://dss.mo.gov/food-assistance/apply-for-snap",
+          "age": "https://health.mo.gov/partners-providers/area-agencies-aging/snapfood-stamps",
           "income": "https://dss.mo.gov/benefit-program-income-limits",
           "assets": "https://dss.mo.gov/food-assistance/apply-for-snap",
-          "phone": "https://dss.mo.gov/food-assistance/food-stamp-program"
+          "phone": "https://dss.mo.gov/food-assistance/apply-for-snap"
         },
-        "notes": "SNAP in Missouri has no senior-only age test; 60+ matters for the higher resource limit and for elderly household rules."
+        "notes": "Missouri SNAP has an older-adult pathway for households with members age 60+; income limits shown are current FY 2026 gross limits. The official Missouri source lists a higher resource limit of $4,750 for households with at least one member over 60 or disabled; no separate couple asset cap was found, so the same household resource limit is returned for both."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1330,
-          "verifiedValue": 1632,
-          "pctDiff": 18.5
+          "verifiedValue": 1696,
+          "pctDiff": 21.6
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 1804,
-          "verifiedValue": 2215,
-          "pctDiff": 18.6
+          "verifiedValue": 2296,
+          "pctDiff": 21.4
         },
         {
           "field": "assets_individual",
@@ -232,7 +218,7 @@
           "pctDiff": 5.3
         }
       ],
-      "notes": "SNAP in Missouri has no senior-only age test; 60+ matters for the higher resource limit and for elderly household rules."
+      "notes": "Missouri SNAP has an older-adult pathway for households with members age 60+; income limits shown are current FY 2026 gross limits. The official Missouri source lists a higher resource limit of $4,750 for households with at least one member over 60 or disabled; no separate couple asset cap was found, so the same household resource limit is returned for both."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -252,8 +238,8 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2842,
-        "income_2": 3717,
+        "income_1": 2942,
+        "income_2": 3847,
         "assets_individual": 3000,
         "assets_couple": 3000,
         "phone": "8553734636",
@@ -261,12 +247,12 @@
           "age": null,
           "income": "https://dss.mo.gov/benefit-program-income-limits",
           "assets": "https://dss.mo.gov/utility-assistance/liheap",
-          "phone": "https://dss.mo.gov/utility-assistance/liheap"
+          "phone": "https://liheapch.acf.hhs.gov/profiles/Missouri.htm"
         },
-        "notes": "Missouri LIHEAP uses a 60% SMI income test and a $3,000 asset limit; no senior-age pathway-specific age minimum was found in the current official source."
+        "notes": "LIHEAP in Missouri has no age eligibility value for the general program; senior households may qualify through the same LIHEAP pathway. Income figures are current as of 10/01/2026 and assets are capped at $3,000 in bank/retirement/investment accounts."
       },
       "flags": [],
-      "notes": "Missouri LIHEAP uses a 60% SMI income test and a $3,000 asset limit; no senior-age pathway-specific age minimum was found in the current official source."
+      "notes": "LIHEAP in Missouri has no age eligibility value for the general program; senior households may qualify through the same LIHEAP pathway. Income figures are current as of 10/01/2026 and assets are capped at $3,000 in bank/retirement/investment accounts."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -284,30 +270,44 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2109,
-        "income_2": 2860,
+        "income_1": 2640,
+        "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5737512254",
+        "phone": "5737513443",
         "sources": {
-          "age": null,
-          "income": "https://oac.ac/weatherization/",
+          "age": "https://liheapch.acf.hhs.gov/profiles/Missouri.htm",
+          "income": "https://www.daeoc.com/weatherization-dept",
           "assets": null,
           "phone": "https://dnr.mo.gov/energy/weatherization/low-income-assistance"
         },
-        "notes": "Current Missouri weatherization income guidance found via a current nonprofit guide citing 2026 guidelines at 200% of poverty; official DNR page confirms program contact phone. No age or asset test found for the senior pathway."
+        "notes": "Missouri WAP uses income-based eligibility; no asset test found. Current statewide income figures were found via a local weatherization page citing 2026 guidelines; the official state page confirms the program and contact number."
       },
       "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2152,
+          "verifiedValue": 2640,
+          "pctDiff": 18.5
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2913,
+          "verifiedValue": 3607,
+          "pctDiff": 19.2
+        },
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
             "211"
           ],
-          "verifiedValue": "5737512254"
+          "verifiedValue": "5737513443"
         }
       ],
-      "notes": "Current Missouri weatherization income guidance found via a current nonprofit guide citing 2026 guidelines at 200% of poverty; official DNR page confirms program contact phone. No age or asset test found for the senior pathway."
+      "notes": "Missouri WAP uses income-based eligibility; no asset test found. Current statewide income figures were found via a local weatherization page citing 2026 guidelines; the official state page confirms the program and contact number."
     },
     {
       "programId": "missouri-ship",
@@ -330,17 +330,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18003903330",
+        "phone": "8003903330",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.missouriship.org/contact-us/"
         },
-        "notes": "Missouri SHIP is a Medicare counseling program for seniors; no age, income, or asset eligibility test was found for the senior pathway. Official helpline found."
+        "notes": "Missouri SHIP is an information and counseling service for Medicare, not a benefit program with age/income/assets tests; official helpline is 1-800-390-3330."
       },
       "flags": [],
-      "notes": "Missouri SHIP is a Medicare counseling program for seniors; no age, income, or asset eligibility test was found for the senior pathway. Official helpline found."
+      "notes": "Missouri SHIP is an information and counseling service for Medicare, not a benefit program with age/income/assets tests; official helpline is 1-800-390-3330."
     },
     {
       "programId": "csfp-commodity-food",
@@ -368,12 +368,12 @@
           "age": "https://health.mo.gov/food-nutrition/food-programs/commodity-supplemental-food-program",
           "income": "https://health.mo.gov/food-nutrition/food-programs/commodity-supplemental-food-program",
           "assets": null,
-          "phone": "https://health.mo.gov/living/wellness/nutrition/foodprograms/csfp/pdf/senior-flyer.pdf"
+          "phone": "https://health.mo.gov/living/wellness/nutrition/foodprograms/csfp/pdf/appeal-process-information.pdf"
         },
-        "notes": "Current Missouri CSFP senior pathway uses age 60+ and monthly income limits effective Feb. 10, 2026; no asset test found in authoritative Missouri sources."
+        "notes": "Missouri CSFP currently serves seniors age 60+; no asset test was found in the official materials reviewed."
       },
       "flags": [],
-      "notes": "Current Missouri CSFP senior pathway uses age 60+ and monthly income limits effective Feb. 10, 2026; no asset test found in authoritative Missouri sources."
+      "notes": "Missouri CSFP currently serves seniors age 60+; no asset test was found in the official materials reviewed."
     },
     {
       "programId": "alzheimers-caregiver-resource-program",
@@ -396,17 +396,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002723900",
+        "phone": "8002723900",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.alz.org/missouri/about"
         },
-        "notes": "No age, income, or asset test found for this caregiver resource program; current Missouri chapter helpline is 1-800-272-3900."
+        "notes": "No age, income, or asset test found for the Alzheimer’s Association Caregiver Resource Program; the current official Missouri Chapter helpline is 800-272-3900."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for this caregiver resource program; current Missouri chapter helpline is 1-800-272-3900."
+      "notes": "No age, income, or asset test found for the Alzheimer’s Association Caregiver Resource Program; the current official Missouri Chapter helpline is 800-272-3900."
     },
     {
       "programId": "scsep-senior-employment",
@@ -425,21 +425,21 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
+        "income_1": 125,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "5735264542",
         "sources": {
-          "age": "https://health.mo.gov/partners-providers/senior-employment",
-          "income": null,
+          "age": "https://health.mo.gov/sites/health/files/2026-07/scsep-state-plan.pdf",
+          "income": "https://health.mo.gov/sites/health/files/2026-07/scsep-state-plan.pdf",
           "assets": null,
-          "phone": "https://health.mo.gov/senior-disability-services/senior-programs"
+          "phone": "https://health.mo.gov/partners-providers/senior-employment"
         },
-        "notes": "Current Missouri SCSEP eligibility uses a 55+ senior threshold; income test is referenced as 125% of FPL, but no separate income_1/income_2 or asset limits were found in authoritative current Missouri sources."
+        "notes": "Current Missouri SCSEP appears active; program uses an age 55+ threshold and an income limit of 125% of the federal poverty level. No asset test found in authoritative Missouri sources."
       },
       "flags": [],
-      "notes": "Current Missouri SCSEP eligibility uses a 55+ senior threshold; income test is referenced as 125% of FPL, but no separate income_1/income_2 or asset limits were found in authoritative current Missouri sources."
+      "notes": "Current Missouri SCSEP appears active; program uses an age 55+ threshold and an income limit of 125% of the federal poverty level. No asset test found in authoritative Missouri sources."
     },
     {
       "programId": "legal-services-eastern-missouri-older-adults",
@@ -466,14 +466,14 @@
         "phone": "8004440514",
         "sources": {
           "age": "https://lsem.org/advocates-for-older-adults/",
-          "income": null,
-          "assets": null,
+          "income": "https://lsem.org/advocates-for-older-adults/",
+          "assets": "https://lsem.org/advocates-for-older-adults/",
           "phone": "https://lsem.org/advocates-for-older-adults/"
         },
-        "notes": "Current source shows the program serves clients 60+; no income or asset test found in current sources."
+        "notes": "Current program page says Advocates for Older Adults represents clients 60+ and lists 800.444.0514; no income or asset test was found on the program page."
       },
       "flags": [],
-      "notes": "Current source shows the program serves clients 60+; no income or asset test found in current sources."
+      "notes": "Current program page says Advocates for Older Adults represents clients 60+ and lists 800.444.0514; no income or asset test was found on the program page."
     },
     {
       "programId": "ltc-ombudsman",
@@ -503,10 +503,10 @@
           "assets": null,
           "phone": "https://health.mo.gov/senior-disability-services/long-term-care-ombudsman"
         },
-        "notes": "Program appears current and active; no age, income, or asset eligibility criteria found because this ombudsman program serves long-term care residents rather than an income-tested benefit."
+        "notes": "Program appears to have no age, income, or asset eligibility test; current official Missouri DHSS phone is 800-309-3282."
       },
       "flags": [],
-      "notes": "Program appears current and active; no age, income, or asset eligibility criteria found because this ombudsman program serves long-term care residents rather than an income-tested benefit."
+      "notes": "Program appears to have no age, income, or asset eligibility test; current official Missouri DHSS phone is 800-309-3282."
     },
     {
       "programId": "rx-prescription-assistance",
@@ -532,11 +532,11 @@
         "phone": "8003751406",
         "sources": {
           "age": null,
-          "income": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
-          "assets": "https://dss.mo.gov/mhd/morx-general-faqs",
-          "phone": "https://dss.mo.gov/mhd/morx-pharmacist-faqs"
+          "income": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
+          "assets": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_06/im102_06.html",
+          "phone": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf"
         },
-        "notes": "MoRx is for Missouri residents enrolled in Medicare Part D and/or dual-eligible MO HealthNet participants; as a senior pathway program, it uses income-based eligibility for some applicants and no countable financial asset test for eligibility was found in current official sources. The current official MoRx FAQs indicate automatic enrollment for Medicare/MO HealthNet dual eligibles."
+        "notes": "MoRx is current and active as Missouri's State Pharmacy Assistance Program. Current official pages found did not publish a separate age requirement or countable asset limit for the senior pathway; one official memo states no asset or resource limitations apply."
       },
       "flags": [
         {
@@ -563,7 +563,7 @@
           "verifiedValue": "8003751406"
         }
       ],
-      "notes": "MoRx is for Missouri residents enrolled in Medicare Part D and/or dual-eligible MO HealthNet participants; as a senior pathway program, it uses income-based eligibility for some applicants and no countable financial asset test for eligibility was found in current official sources. The current official MoRx FAQs indicate automatic enrollment for Medicare/MO HealthNet dual eligibles."
+      "notes": "MoRx is current and active as Missouri's State Pharmacy Assistance Program. Current official pages found did not publish a separate age requirement or countable asset limit for the senior pathway; one official memo states no asset or resource limitations apply."
     },
     {
       "programId": "property-tax-credit-circuit-breaker",
@@ -588,12 +588,12 @@
         "assets_couple": null,
         "phone": "5737513505",
         "sources": {
-          "age": "https://dor.mo.gov/forms/PTC%20Qualification%20Chart.pdf",
-          "income": "https://dor.mo.gov/forms/MO-PTC%20Instructions_2025.pdf",
+          "age": "https://dor.mo.gov/personal/ptc/",
+          "income": "https://www.stlouis-mo.gov/government/departments/human-services/aging-services/property-tax-credit.cfm",
           "assets": null,
-          "phone": "https://dor.mo.gov/personal/ptc/"
+          "phone": "https://www.stlouis-mo.gov/government/departments/human-services/aging-services/property-tax-credit.cfm"
         },
-        "notes": "Current Missouri Property Tax Credit (Circuit Breaker) appears active for 2026; no asset test found in official guidance."
+        "notes": "Current Missouri Property Tax Credit (Circuit Breaker) is active; no asset test found in authoritative sources. Income figures cited by St. Louis city source for renters; official state page confirms the program but the retrieved snippet did not expose current income thresholds."
       },
       "flags": [
         {
@@ -606,7 +606,7 @@
           "verifiedValue": "5737513505"
         }
       ],
-      "notes": "Current Missouri Property Tax Credit (Circuit Breaker) appears active for 2026; no asset test found in official guidance."
+      "notes": "Current Missouri Property Tax Credit (Circuit Breaker) is active; no asset test found in authoritative sources. Income figures cited by St. Louis city source for renters; official state page confirms the program but the retrieved snippet did not expose current income thresholds."
     },
     {
       "programId": "aged-disabled-waiver",
@@ -631,15 +631,15 @@
         "assets_couple": null,
         "phone": "8668353505",
         "sources": {
-          "age": "https://dss.mo.gov/mhd/waiver/aged-and-disabled",
+          "age": "https://dss.mo.gov/mhd/waivers/1915c-home-and-community-waivers/aged-and-disabled.htm",
           "income": null,
           "assets": null,
           "phone": "https://dss.mo.gov/mhd/waiver/mo-hcbs-waiver-finder"
         },
-        "notes": "Official Missouri sources found for age and phone. No authoritative countable-asset limit specific to ADW was retrievable from the current official pages; ADW appears to use Medicaid financial eligibility rules, but the program page does not state a program-specific countable asset limit."
+        "notes": "Official Missouri sources found age and contact info; no authoritative current source for countable asset limits was retrievable in the gathered results. Program materials indicate the ADW is for age 63+ (or ages 63-64 with disability) and is active."
       },
       "flags": [],
-      "notes": "Official Missouri sources found for age and phone. No authoritative countable-asset limit specific to ADW was retrievable from the current official pages; ADW appears to use Medicaid financial eligibility rules, but the program page does not state a program-specific countable asset limit."
+      "notes": "Official Missouri sources found age and contact info; no authoritative current source for countable asset limits was retrievable in the gathered results. Program materials indicate the ADW is for age 63+ (or ages 63-64 with disability) and is active."
     },
     {
       "programId": "silp-senior-independent-living",
@@ -666,9 +666,9 @@
           "age": "https://health.mo.gov/sites/health/files/media/pdf/2026/02/Programs%20and%20Services%20Directory.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://health.mo.gov/sites/health/files/media/pdf/2026/02/Programs%20and%20Services%20Directory.pdf"
+          "phone": "https://health.mo.gov/seniors/pdf/program-info.pdf"
         },
-        "notes": "Program is current and state-funded; official Missouri sources describe SILP as serving Missourians age 60 or older. No income or asset test was found in authoritative sources."
+        "notes": "Official Missouri sources indicate SILP is for Missourians age 60 or older; no income or asset test found in authoritative sources."
       },
       "flags": [
         {
@@ -680,7 +680,88 @@
           "verifiedValue": "8002355503"
         }
       ],
-      "notes": "Program is current and state-funded; official Missouri sources describe SILP as serving Missourians age 60 or older. No income or asset test was found in authoritative sources."
+      "notes": "Official Missouri sources indicate SILP is for Missourians age 60 or older; no income or asset test found in authoritative sources."
+    },
+    {
+      "programId": "mo-senior-home-delivered-meals",
+      "programName": "Senior Home-Delivered Meals",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18002355503"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8002355503",
+        "sources": {
+          "age": "https://health.mo.gov/partners-providers/area-agencies-aging/nutrition",
+          "income": null,
+          "assets": null,
+          "phone": "https://health.mo.gov/partners-providers/area-agencies-aging/missouri-senior-resource-line"
+        },
+        "notes": "Current Missouri DHSS senior nutrition/home-delivered meals pathway uses age 60+ eligibility; no official income or asset test found for this program."
+      },
+      "flags": [],
+      "notes": "Current Missouri DHSS senior nutrition/home-delivered meals pathway uses age 60+ eligibility; no official income or asset test found for this program."
+    },
+    {
+      "programId": "mo-family-caregiver-support-program",
+      "programName": "Family Caregiver Support Program",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18002355503",
+          "5737516400"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "5735264542",
+        "sources": {
+          "age": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+          "income": null,
+          "assets": null,
+          "phone": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services"
+        },
+        "notes": "Current Missouri Family Caregiver Support Program services are delivered through local AAAs; senior-specific eligibility is 55+ for certain pathways."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 55
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18002355503",
+            "5737516400"
+          ],
+          "verifiedValue": "5735264542"
+        }
+      ],
+      "notes": "Current Missouri Family Caregiver Support Program services are delivered through local AAAs; senior-specific eligibility is 55+ for certain pathways."
     }
   ]
 }

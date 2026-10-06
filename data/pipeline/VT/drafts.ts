@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.407Z
+ * Last updated: 2026-10-06T12:32:15.244Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -125,6 +125,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-250-8427",
           "description": "Financial eligibility determination for Medicaid programs",
           "hours": "Mon-Fri 7:45am-4:30pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 642-5119",
+          "description": "Number listed on agewellvt.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -210,27 +216,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.medicaid.gov/Medicaid-CHIP-Program-Information/By-Topics/Waivers/1115/downloads/vt/vt-choices-for-care-ca.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "assets_individual",
-          "from": 10000,
-          "to": 2000,
-          "source": "https://www.medicaidlongtermcare.org/eligibility/vermont/",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
-        },
-        {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18002508427",
             "211"
           ],
-          "to": "18004255119",
-          "source": "https://dvha.vermont.gov/members/long-term-care",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "to": "(800) 642-5119",
+          "source": "https://www.agewellvt.org/services/home-care-coordination/choices-for-care-vermont/",
+          "flaggedAt": "2026-10-06T12:30:22.856Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -402,19 +401,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mabdapply.vermont.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "8002508427",
-            "211"
-          ],
-          "to": "18558999600",
-          "source": "https://info.healthconnect.vermont.gov/compare-plans/medicaid-and-dr-dynasaur",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "proposed": "18558999600",
+          "source": "https://dvha.vermont.gov/members",
+          "reason": "page also lists ours ((800) 250-8427)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -586,20 +581,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.cms.gov/medicare/medicaid-coordination/about/pace",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8006334227",
-            "211"
-          ],
-          "to": "8022412401",
-          "source": "https://humanservices.vermont.gov/help-and-resources",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-programs",
@@ -815,7 +797,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dvha.vermont.gov/members/medicare-savings-program",
           "severity": "high",
           "why": "tier dispute: draft 100% FPL 2026 vs verified 150% FPL 2026",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
         },
         {
           "field": "income_2",
@@ -824,7 +806,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dvha.vermont.gov/members/medicare-savings-program",
           "severity": "high",
           "why": "tier dispute: draft 100% FPL 2026 vs verified 150% FPL 2026",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
         }
       ]
     },
@@ -1004,13 +986,31 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dcf.vermont.gov/benefits/3SquaresVT/SNAP",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
+        },
+        {
           "field": "assets_individual",
           "from": 4250,
           "to": 4500,
-          "source": "https://dcf.vermont.gov/benefits/3SquaresVT",
+          "source": "https://vermontfoodhelp.com/learn-more/applicants-participants/older-vermonters",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://vermontfoodhelp.com/learn-more/applicants-participants/older-vermonters",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
         }
       ]
     },
@@ -1379,6 +1379,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(802) 722-4575",
           "description": "Serves southeastern Vermont counties",
           "hours": "Mon-Fri 8am-4:30pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(802) 241-0935",
+          "description": "Number listed on energysaver.vermont.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1442,9 +1448,10 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-11",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8028632345",
             "8026651748",
@@ -1453,11 +1460,12 @@ export const drafts: PipelineStateDrafts = {
             "8027486040",
             "8027224575"
           ],
-          "to": "8022410935",
-          "source": "https://energysaver.vermont.gov/programs-incentives",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "to": "(802) 241-0935",
+          "source": "https://energysaver.vermont.gov/contact",
+          "flaggedAt": "2026-10-06T12:30:22.856Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1895,6 +1903,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 250-8427",
           "description": "Medicaid and health coverage questions",
           "hours": "Monday-Friday 8am-5pm"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 642-5119",
+          "description": "Number listed on vkap.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1939,23 +1953,26 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "age",
           "from": 18,
-          "to": 60,
-          "source": "https://ddsd.vermont.gov/services/caregiver-programs",
+          "to": 55,
+          "source": "https://www.vkap.org/respite-care",
           "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
-        },
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8002508427",
             "211"
           ],
-          "to": "8006425119",
-          "source": "https://ddsd.vermont.gov/services/caregiver-programs",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "to": "(800) 642-5119",
+          "source": "https://www.vkap.org/respite-care",
+          "flaggedAt": "2026-10-06T12:30:22.856Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2054,6 +2071,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Primary SCSEP provider in Vermont - contact through website",
           "hours": "See website for office hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 439-3307",
+          "description": "Number listed on labor.vermont.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2108,17 +2131,19 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8778725627"
           ],
-          "to": "8004393307",
+          "to": "(800) 439-3307",
           "source": "https://labor.vermont.gov/vt-retain/individuals/resources",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:39.066Z"
+          "flaggedAt": "2026-10-06T12:30:22.856Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2695,7 +2720,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "800-642-5119",
       "sourceUrl": "https://www.seniorsolutionsvt.org/services/veterans/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8666738376",
+          "source": "https://www.seniorsolutionsvt.org/",
+          "reason": "page also lists ours ((802) 885-2669)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "family-caregiver-support",
@@ -3418,7 +3454,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-479-6151",
       "sourceUrl": "https://dcf.vermont.gov/benefits/fuel",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2236,
+          "to": 2412,
+          "source": "https://dcf.vermont.gov/benefits/fuel",
+          "severity": "medium",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 185% FPL 2023 or 200% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3014,
+          "to": 3262,
+          "source": "https://dcf.vermont.gov/benefits/fuel",
+          "severity": "medium",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 185% FPL 2023 or 200% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:30:22.856Z"
+        }
+      ]
     },
     {
       "id": "vt-property-tax-adjustment-renter-credit",

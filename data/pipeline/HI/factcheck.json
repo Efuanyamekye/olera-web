@@ -1,14 +1,14 @@
 {
   "state": "HI",
   "stateName": "Hawaii",
-  "checkedAt": "2026-10-02T07:36:18.771Z",
-  "total": 21,
+  "checkedAt": "2026-10-06T12:20:19.102Z",
+  "total": 22,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 9,
-  "totalFlags": 13,
-  "highSeverityFlags": 4,
+  "programsWithFlags": 8,
+  "totalFlags": 14,
+  "highSeverityFlags": 7,
   "programs": [
     {
       "programId": "medquest-medicaid-seniors-disabled",
@@ -25,19 +25,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phone": "18003168005",
         "sources": {
-          "age": null,
+          "age": "https://medquest.hawaii.gov/en/faq.html",
           "income": "https://medquest.hawaii.gov/en/faq.html",
           "assets": "https://medquest.hawaii.gov/en/faq.html",
-          "phone": "https://medquest.hawaii.gov/en/contact-us.html"
+          "phone": "https://medquest.hawaii.gov/en/members-applicants/get-started/how-to-apply.html"
         },
-        "notes": "Official Hawaii Med-QUEST FAQ says people age 65+ or blind/disabled may qualify under the senior pathway; no separate minimum age below 65 was found. Income thresholds were not requested in a usable form here, and the FAQ page provides the asset limits for the senior/blind/disabled pathway."
+        "notes": "Med-QUEST is the current Hawaii Medicaid program; for the senior pathway, the FAQ indicates eligibility for people age 65 and over with asset limits of $2,000 single / $3,000 household of two. No separate income value was requested for this output and the cited FAQ references income by FPL rather than a single fixed amount."
       },
       "flags": [
         {
@@ -49,7 +49,7 @@
           "verifiedValue": "18003168005"
         }
       ],
-      "notes": "Official Hawaii Med-QUEST FAQ says people age 65+ or blind/disabled may qualify under the senior pathway; no separate minimum age below 65 was found. Income thresholds were not requested in a usable form here, and the FAQ page provides the asset limits for the senior/blind/disabled pathway."
+      "notes": "Med-QUEST is the current Hawaii Medicaid program; for the senior pathway, the FAQ indicates eligibility for people age 65 and over with asset limits of $2,000 single / $3,000 household of two. No separate income value was requested for this output and the cited FAQ references income by FPL rather than a single fixed amount."
     },
     {
       "programId": "kupuna-care-program",
@@ -77,12 +77,12 @@
           "age": "https://www.mauicounty.gov/DocumentCenter/View/6374/kupunacare?bidId=",
           "income": null,
           "assets": null,
-          "phone": "https://www.alz.org/hawaii/support"
+          "phone": "https://www.hawaiidementia.org/caregiving/we-cant-afford-care-what-do-i-do/"
         },
-        "notes": "Current Hawaiʻi Kūpuna Care program is senior-focused and documented at age 60+; no current authoritative income or asset test was found in the retrieved sources."
+        "notes": "Current Kūpuna Care Program senior eligibility is 60+; no official income or asset test was found in the retrieved sources. Main help line is the Hawaii Aging and Disability Resource Center."
       },
       "flags": [],
-      "notes": "Current Hawaiʻi Kūpuna Care program is senior-focused and documented at age 60+; no current authoritative income or asset test was found in the retrieved sources."
+      "notes": "Current Kūpuna Care Program senior eligibility is 60+; no official income or asset test was found in the retrieved sources. Main help line is the Hawaii Aging and Disability Resource Center."
     },
     {
       "programId": "sage-plus-medicare-counseling",
@@ -108,22 +108,33 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": 1550,
         "income_2": 2095,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "8003168005",
+        "phone": "18776285076",
         "sources": {
-          "age": null,
+          "age": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
           "income": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
-          "assets": "https://medquest.hawaii.gov/en/archive/eligibility/EligPrograms_MSP.html",
-          "phone": "https://medquest.hawaii.gov/content/medquest/en/members-applicants/get-started/programs.html"
+          "assets": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "phone": "https://medquest.hawaii.gov/"
         },
-        "notes": "Hawaii MSP does not use an age minimum for the senior-caregiver pathway; eligibility is based on Medicare status and financial criteria. Current 2026 limits found for QMB income and MSP resource limits; QI income is higher than QMB/SLMB, but the question asked for a single program-level value set, so the standard Hawaii MSP figures are returned."
+        "notes": "Hawaii Medicare Savings Programs (QMB, SLMB, QI) are current as of 2026; income and resource figures come from SSA POMS for Hawaii. The age field reflects the Medicare pathway minimum age of 65 for senior-caregiver context."
       },
-      "flags": [],
-      "notes": "Hawaii MSP does not use an age minimum for the senior-caregiver pathway; eligibility is based on Medicare status and financial criteria. Current 2026 limits found for QMB income and MSP resource limits; QI income is higher than QMB/SLMB, but the question asked for a single program-level value set, so the standard Hawaii MSP figures are returned."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8085877500",
+            "18003168005",
+            "18885369117"
+          ],
+          "verifiedValue": "18776285076"
+        }
+      ],
+      "notes": "Hawaii Medicare Savings Programs (QMB, SLMB, QI) are current as of 2026; income and resource figures come from SSA POMS for Hawaii. The age field reflects the Medicare pathway minimum age of 65 for senior-caregiver context."
     },
     {
       "programId": "snap-food-benefits",
@@ -141,21 +152,41 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2998,
-        "income_2": 4054,
+        "age": 65,
+        "income_1": 1989,
+        "income_2": 2697,
         "assets_individual": 4500,
         "assets_couple": 4500,
-        "phone": "8556431643",
+        "phone": "18556431643",
         "sources": {
-          "age": null,
+          "age": "https://humanservices.hawaii.gov/bessd/snap/snap-rights-and-resp/",
           "income": "https://humanservices.hawaii.gov/bessd/snap/",
           "assets": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-cola-fy26memo.pdf",
-          "phone": "https://humanservices.hawaii.gov/important-phone-numbers/"
+          "phone": "https://humanservices.hawaii.gov/bessd/snap/"
         },
-        "notes": "Hawaii SNAP is primarily income-based; no senior-specific minimum age threshold was found, and BBCE means many households have no asset test, but USDA FY2026 SNAP rules retain a $4,500 asset limit for households with at least one person age 60+ or disabled."
+        "notes": "SNAP in Hawaii has no senior-specific minimum age threshold; 65 is the age relevant to the Aged, Blind or Disabled pathway, while Hawaii SNAP uses standard household income limits and an elderly/disabled resource limit of $4,500 for households with at least one person age 60+ or disabled."
       },
       "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
+        },
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2998,
+          "verifiedValue": 1989,
+          "pctDiff": 33.7
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 4054,
+          "verifiedValue": 2697,
+          "pctDiff": 33.5
+        },
         {
           "field": "assets_individual",
           "severity": "high",
@@ -171,7 +202,7 @@
           "pctDiff": 100
         }
       ],
-      "notes": "Hawaii SNAP is primarily income-based; no senior-specific minimum age threshold was found, and BBCE means many households have no asset test, but USDA FY2026 SNAP rules retain a $4,500 asset limit for households with at least one person age 60+ or disabled."
+      "notes": "SNAP in Hawaii has no senior-specific minimum age threshold; 65 is the age relevant to the Aged, Blind or Disabled pathway, while Hawaii SNAP uses standard household income limits and an elderly/disabled resource limit of $4,500 for households with at least one person age 60+ or disabled."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -203,7 +234,7 @@
           "assets": null,
           "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "Program is currently branded as Hawai`i Home Energy Assistance Program (H-HEAP), formerly LIHEAP; no age, income, or asset test values were retrievable from the gathered authoritative source for the senior pathway. Official public inquiries phone number found from federal LIHEAP contact listing."
+        "notes": "Hawaii LIHEAP is now H-HEAP; no senior-specific age, income, or asset eligibility values were found in the retrieved official source for the senior pathway. Official public inquiries phone is 1-808-586-5740."
       },
       "flags": [
         {
@@ -218,7 +249,7 @@
           "verifiedValue": "8085865740"
         }
       ],
-      "notes": "Program is currently branded as Hawai`i Home Energy Assistance Program (H-HEAP), formerly LIHEAP; no age, income, or asset test values were retrievable from the gathered authoritative source for the senior pathway. Official public inquiries phone number found from federal LIHEAP contact listing."
+      "notes": "Hawaii LIHEAP is now H-HEAP; no senior-specific age, income, or asset eligibility values were found in the retrieved official source for the senior pathway. Official public inquiries phone is 1-808-586-5740."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -236,33 +267,33 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 2998,
-        "income_2": 4053,
+        "income_1": 2940,
+        "income_2": 3983,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8085868675",
+        "phone": "8085214531",
         "sources": {
           "age": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
-          "income": "https://gems.hawaii.gov/save-on-your-energy-bill-programs-for-hawaii-households/",
+          "income": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
           "assets": null,
-          "phone": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/"
+          "phone": "https://www.hcapweb.org/weatherization-assistance-program/"
         },
-        "notes": "Current Hawaii WAP uses the 200% Federal Poverty Guideline and gives priority to elderly age 60+; no asset test found. Monthly income values were derived from the cited annual Hawaii 200% poverty figures by dividing by 12 and rounding to the nearest dollar."
+        "notes": "Current Hawaii WAP uses 200% of the Federal Poverty Guideline and gives priority to elderly households (60+). Monthly income limits were derived from the current annual chart on the official program page / state materials by dividing by 12; no asset test found."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "medium",
           "draftValue": 2600,
-          "verifiedValue": 2998,
-          "pctDiff": 13.3
+          "verifiedValue": 2940,
+          "pctDiff": 11.6
         },
         {
           "field": "income_2",
           "severity": "medium",
           "draftValue": 3520,
-          "verifiedValue": 4053,
-          "pctDiff": 13.2
+          "verifiedValue": 3983,
+          "pctDiff": 11.6
         },
         {
           "field": "phone",
@@ -270,10 +301,10 @@
           "draftValue": [
             "211"
           ],
-          "verifiedValue": "8085868675"
+          "verifiedValue": "8085214531"
         }
       ],
-      "notes": "Current Hawaii WAP uses the 200% Federal Poverty Guideline and gives priority to elderly age 60+; no asset test found. Monthly income values were derived from the cited annual Hawaii 200% poverty figures by dividing by 12 and rounding to the nearest dollar."
+      "notes": "Current Hawaii WAP uses 200% of the Federal Poverty Guideline and gives priority to elderly households (60+). Monthly income limits were derived from the current annual chart on the official program page / state materials by dividing by 12; no asset test found."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -297,17 +328,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18888759229",
+        "phone": "8085867299",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.hawaiiship.org/contact/"
         },
-        "notes": "Hawaii SHIP appears current and active in 2026; no age, income, or asset test found because this program provides Medicare counseling assistance rather than a means-tested benefit."
+        "notes": "Hawaii SHIP is a Medicare counseling program for seniors/caregivers and does not appear to have age, income, or asset eligibility tests; the current main helpline is 808-586-7299."
       },
       "flags": [],
-      "notes": "Hawaii SHIP appears current and active in 2026; no age, income, or asset test found because this program provides Medicare counseling assistance rather than a means-tested benefit."
+      "notes": "Hawaii SHIP is a Medicare counseling program for seniors/caregivers and does not appear to have age, income, or asset eligibility tests; the current main helpline is 808-586-7299."
     },
     {
       "programId": "home-delivered-meals-kupuna",
@@ -322,39 +353,35 @@
           "8083568519",
           "8089886747",
           "8082150073",
-          "211"
+          "211",
+          "8087687700"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8087687700",
         "sources": {
-          "age": "https://keikitokupuna.org/about/",
+          "age": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place",
           "income": null,
           "assets": null,
-          "phone": "https://keikitokupuna.org/about/"
+          "phone": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place"
         },
-        "notes": "Program appears to be administered through Hawaii kupuna care/home-delivered meals referrals; no income or asset test found in the retrieved source."
+        "notes": "Current Kūpuna Aging in Place materials describe the senior pathway as kūpuna age 65 and older; no income or asset test was found in the retrieved source, and the main contact phone listed for Honolulu/Elderly Affairs is 808-768-7700."
       },
       "flags": [
         {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8083568519",
-            "8089886747",
-            "8082150073",
-            "211"
-          ],
-          "verifiedValue": "8087687700"
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
         }
       ],
-      "notes": "Program appears to be administered through Hawaii kupuna care/home-delivered meals referrals; no income or asset test found in the retrieved source."
+      "notes": "Current Kūpuna Aging in Place materials describe the senior pathway as kūpuna age 65 and older; no income or asset test was found in the retrieved source, and the main contact phone listed for Honolulu/Elderly Affairs is 808-768-7700."
     },
     {
       "programId": "caregiver-support-eoa",
@@ -372,27 +399,21 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8085860100",
         "sources": {
-          "age": "https://www.caregiver.org/connecting-caregivers/services-by-state/hawaii/",
+          "age": "https://data.capitol.hawaii.gov/hrscurrent/Vol07_Ch0346-0398/HRS0349/HRS_0349-0017.htm",
           "income": null,
           "assets": null,
           "phone": "https://health.hawaii.gov/eoa/"
         },
-        "notes": "Current official Hawaii EOA caregiver support contact is listed; no income or asset test found for the senior caregiver pathway. Age 55 applies to the senior pathway in Hawaii caregiver services."
+        "notes": "No senior minimum age test found for this statewide caregiver-support program; statute and agency page indicate caregiver support for older adults rather than an age-based eligibility threshold. No income or asset test found in authoritative sources."
       },
       "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 18,
-          "verifiedValue": 55
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -403,7 +424,7 @@
           "verifiedValue": "8085860100"
         }
       ],
-      "notes": "Current official Hawaii EOA caregiver support contact is listed; no income or asset test found for the senior caregiver pathway. Age 55 applies to the senior pathway in Hawaii caregiver services."
+      "notes": "No senior minimum age test found for this statewide caregiver-support program; statute and agency page indicate caregiver support for older adults rather than an age-based eligibility threshold. No income or asset test found in authoritative sources."
     },
     {
       "programId": "scsep-employment-training",
@@ -417,7 +438,8 @@
         "phones": [
           "8089618730",
           "8083234320",
-          "211"
+          "211",
+          "8087687700"
         ],
         "hasVerifiableFacts": true
       },
@@ -429,26 +451,15 @@
         "assets_couple": null,
         "phone": "8087687700",
         "sources": {
-          "age": "https://www.kauai.gov/Government/Departments-Agencies/Agency-on-Elderly-Affairs/RSVP-Volunteer-Program",
+          "age": "https://elderlyaffairs.com/rsvp/",
           "income": null,
           "assets": null,
           "phone": "https://elderlyaffairs.com/about-us/"
         },
-        "notes": "RSVP is active in Hawaii and serves adults 55+; no income or asset test found for the senior pathway."
+        "notes": "RSVP in Honolulu is current and serves adults 55+; no income or asset test found for the senior pathway."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8089618730",
-            "8083234320",
-            "211"
-          ],
-          "verifiedValue": "8087687700"
-        }
-      ],
-      "notes": "RSVP is active in Hawaii and serves adults 55+; no income or asset test found for the senior pathway."
+      "flags": [],
+      "notes": "RSVP in Honolulu is current and serves adults 55+; no income or asset test found for the senior pathway."
     },
     {
       "programId": "senior-legal-helpline",
@@ -472,17 +483,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8085360011",
+        "phone": "8085364302",
         "sources": {
-          "age": "https://www.lawhelp.org/hi/site-help",
+          "age": "https://www.legalaidhawaii.org/elder-law-services.html",
           "income": null,
           "assets": null,
-          "phone": "https://www.lawhelp.org/hi/site-help"
+          "phone": "https://www.legalaidhawaii.org/elder-law-services.html"
         },
-        "notes": "Current source identifies the Senior Legal Hotline as serving seniors age 60+; no income or asset test found in authoritative current sources."
+        "notes": "Official Hawaii senior legal assistance is listed as Elder Law Services for seniors age 60+; no income or asset test was found in the retrieved official source."
       },
       "flags": [],
-      "notes": "Current source identifies the Senior Legal Hotline as serving seniors age 60+; no income or asset test found in authoritative current sources."
+      "notes": "Official Hawaii senior legal assistance is listed as Elder Law Services for seniors age 60+; no income or asset test was found in the retrieved official source."
     },
     {
       "programId": "ltc-ombudsman-program",
@@ -506,17 +517,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18882292231",
+        "phone": "8882292231",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.hi-ltc-ombudsman.org/"
         },
-        "notes": "No age, income, or asset test found for Hawaii LTCOP; statewide toll-free helpline listed as 1-888-229-2231 on the official program site."
+        "notes": "No age, income, or asset test found for the Hawaii Long-Term Care Ombudsman Program; statewide helpline is 1-888-229-2231."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for Hawaii LTCOP; statewide toll-free helpline listed as 1-888-229-2231 on the official program site."
+      "notes": "No age, income, or asset test found for the Hawaii Long-Term Care Ombudsman Program; statewide helpline is 1-888-229-2231."
     },
     {
       "programId": "kahi-malama-care-coordination",
@@ -535,22 +546,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8089618626",
+        "phone": "8086432372",
         "sources": {
-          "age": null,
+          "age": "https://hcoahawaii.org/",
           "income": null,
           "assets": null,
-          "phone": "https://hawaiiadrc.org/"
+          "phone": "https://hcoahawaii.org/"
         },
-        "notes": "Could not find an authoritative current senior-specific age or financial-eligibility threshold for Kahi Malama – A Place of Caring; program appears to function as an ADRC/service navigation point rather than a means-tested benefit."
+        "notes": "Current official county aging resource page lists Kahi Malama – A Place of Caring as the Hawai‘i County ADRC serving residents age 60+; no income or asset test found."
       },
       "flags": [],
-      "notes": "Could not find an authoritative current senior-specific age or financial-eligibility threshold for Kahi Malama – A Place of Caring; program appears to function as an ADRC/service navigation point rather than a means-tested benefit."
+      "notes": "Current official county aging resource page lists Kahi Malama – A Place of Caring as the Hawai‘i County ADRC serving residents age 60+; no income or asset test found."
     },
     {
       "programId": "ead-honolulu-adrc",
@@ -568,22 +579,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8087687700",
         "sources": {
-          "age": "http://elderlyaffairs.com/common-questions/",
+          "age": null,
           "income": null,
           "assets": null,
           "phone": "https://www.honolulu.gov/dcs/ead/"
         },
-        "notes": "Current Honolulu Elderly Affairs Division / ADRC senior pathway uses 60+ for federally funded Title III and Kūpuna Care services; no income or asset test found for the program overview."
+        "notes": "No authoritative senior-specific minimum age or income/assets test found for the Honolulu Elderly Affairs Division / Honolulu ADRC; official sources show the Senior Helpline phone number."
       },
       "flags": [],
-      "notes": "Current Honolulu Elderly Affairs Division / ADRC senior pathway uses 60+ for federally funded Title III and Kūpuna Care services; no income or asset test found for the program overview."
+      "notes": "No authoritative senior-specific minimum age or income/assets test found for the Honolulu Elderly Affairs Division / Honolulu ADRC; official sources show the Senior Helpline phone number."
     },
     {
       "programId": "kauai-agency-elderly-affairs",
@@ -607,15 +618,15 @@
         "assets_couple": null,
         "phone": "8082414470",
         "sources": {
-          "age": "https://www.kauai.gov/Government/Departments-Agencies/Agency-on-Elderly-Affairs",
+          "age": "https://kauaiadrc.org/about-us/",
           "income": null,
           "assets": null,
-          "phone": "https://www.kauai.gov/Government/Departments-Agencies/Agency-on-Elderly-Affairs"
+          "phone": "https://www.kauai.gov/Government/Departments-Agencies"
         },
-        "notes": "County agency serving older adults age 60+; no program-wide income or asset test found in the official county source."
+        "notes": "Current official county/state sources show the program serves older adults age 60+; no income or asset test found for the Agency on Elderly Affairs ADRC services."
       },
       "flags": [],
-      "notes": "County agency serving older adults age 60+; no program-wide income or asset test found in the official county source."
+      "notes": "Current official county/state sources show the program serves older adults age 60+; no income or asset test found for the Agency on Elderly Affairs ADRC services."
     },
     {
       "programId": "home-community-services-eoa",
@@ -627,6 +638,7 @@
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phones": [
+          "8085860100",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -644,19 +656,10 @@
           "assets": null,
           "phone": "https://health.hawaii.gov/eoa/"
         },
-        "notes": "Current official sources identify the program as Home and Community Services through the Executive Office on Aging; the retrieved official pages show age 60+ eligibility and a main statewide phone number, but no countable asset test or income limit was found for the senior pathway."
+        "notes": "This appears to be the statewide EOA/Kupuna Care home and community services pathway; the official pages found do not show a countable financial assets test, so assets are null."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "8085860100"
-        }
-      ],
-      "notes": "Current official sources identify the program as Home and Community Services through the Executive Office on Aging; the retrieved official pages show age 60+ eligibility and a main statewide phone number, but no countable asset test or income limit was found for the senior pathway."
+      "flags": [],
+      "notes": "This appears to be the statewide EOA/Kupuna Care home and community services pathway; the official pages found do not show a countable financial assets test, so assets are null."
     },
     {
       "programId": "transportation-friends-kupuna",
@@ -679,14 +682,14 @@
         "phone": "8085274777",
         "sources": {
           "age": "https://www.catholiccharitieshawaii.org/senior-services/",
-          "income": "https://elderlyaffairs.com/common-questions/",
-          "assets": "https://elderlyaffairs.com/common-questions/",
+          "income": null,
+          "assets": null,
           "phone": "https://www.catholiccharitieshawaii.org/senior-services/"
         },
-        "notes": "Current senior pathway appears to be 60+ for TFK on Oahu; no income or asset test found for this program. "
+        "notes": "Current sources describe TFK as serving seniors 60+ on Oahu; no income or asset test was found in the retrieved sources."
       },
       "flags": [],
-      "notes": "Current senior pathway appears to be 60+ for TFK on Oahu; no income or asset test found for this program. "
+      "notes": "Current sources describe TFK as serving seniors 60+ on Oahu; no income or asset test was found in the retrieved sources."
     },
     {
       "programId": "senior-companion-program",
@@ -715,7 +718,7 @@
           "assets": null,
           "phone": "https://humanservices.hawaii.gov/ssd/home/adult-services/"
         },
-        "notes": "Current Hawaii Senior Companion Program appears active; official state page states age 55+ for volunteers and lists the Oahu office phone."
+        "notes": "Current Hawaii DHS page shows the senior volunteer pathway starts at age 55; no official income or asset test located in the retrieved sources for this program page."
       },
       "flags": [
         {
@@ -725,7 +728,7 @@
           "verifiedValue": 55
         }
       ],
-      "notes": "Current Hawaii Senior Companion Program appears active; official state page states age 55+ for volunteers and lists the Oahu office phone."
+      "notes": "Current Hawaii DHS page shows the senior volunteer pathway starts at age 55; no official income or asset test located in the retrieved sources for this program page."
     },
     {
       "programId": "foster-grandparent-program",
@@ -755,10 +758,10 @@
           "assets": null,
           "phone": "https://humanservices.hawaii.gov/foster-grandparent-program/"
         },
-        "notes": "Current Hawaii DHS Foster Grandparent Program page lists the senior eligibility age as 55+ and the main Oahu office phone number; no current official income/assets thresholds were found on the retrieved page."
+        "notes": "Current Hawaii DHS page says the senior eligibility threshold is 55+; the program has income requirements, but no current official asset thresholds were found."
       },
       "flags": [],
-      "notes": "Current Hawaii DHS Foster Grandparent Program page lists the senior eligibility age as 55+ and the main Oahu office phone number; no current official income/assets thresholds were found on the retrieved page."
+      "notes": "Current Hawaii DHS page says the senior eligibility threshold is 55+; the program has income requirements, but no current official asset thresholds were found."
     },
     {
       "programId": "memory-mentor-program",
@@ -788,10 +791,42 @@
           "assets": null,
           "phone": "https://www.catholiccharitieshawaii.org/senior-services/"
         },
-        "notes": "Current authoritative source found for the senior pathway phone number; no official age, income, or asset tests were found for the Memory Mentor Program, which is described as a free in-home service for seniors with memory loss who are living alone with little or no caregiving support."
+        "notes": "Memory Mentor Program appears current under Catholic Charities Hawai‘i; no official age, income, or asset test found for the senior pathway. Official contact/help line is the Senior Help Line at 808-527-4777."
       },
       "flags": [],
-      "notes": "Current authoritative source found for the senior pathway phone number; no official age, income, or asset tests were found for the Memory Mentor Program, which is described as a free in-home service for seniors with memory loss who are living alone with little or no caregiving support."
+      "notes": "Memory Mentor Program appears current under Catholic Charities Hawai‘i; no official age, income, or asset test found for the senior pathway. Official contact/help line is the Senior Help Line at 808-527-4777."
+    },
+    {
+      "programId": "hi-aabd-cash-assistance",
+      "programName": "Assistance to the Aged, Blind and Disabled (AABD)",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "18556431643"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8556431643",
+        "sources": {
+          "age": "https://humanservices.hawaii.gov/bessd/aabd/",
+          "income": "https://humanservices.hawaii.gov/bessd/aabd/",
+          "assets": "https://humanservices.hawaii.gov/bessd/aabd/",
+          "phone": "https://humanservices.hawaii.gov/bessd/aabd/"
+        },
+        "notes": "Current Hawaii DHS AABD page states the senior pathway is age 65+ and gives resource limits of $2,000 single / $3,000 couple; no separate income cap value was retrieved in a structured form beyond the page's general statement about countable income below 34% of the 2006 FPL."
+      },
+      "flags": [],
+      "notes": "Current Hawaii DHS AABD page states the senior pathway is age 65+ and gives resource limits of $2,000 single / $3,000 couple; no separate income cap value was retrieved in a structured form beyond the page's general statement about countable income below 34% of the 2006 FPL."
     }
   ]
 }

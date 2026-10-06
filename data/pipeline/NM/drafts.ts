@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.566Z
+ * Last updated: 2026-10-06T12:32:14.728Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -297,6 +297,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(505) 924-2650",
           "description": "Number listed on sharenm.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 261-2954",
+          "description": "Number listed on innovage.com",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -373,6 +379,22 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.sharenm.org/innovage-pace-program-of-all-inclusive-care-for-the-elderly",
           "flaggedAt": "2026-10-05T18:18:26.253Z",
           "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8449450467",
+            "5059161932",
+            "711",
+            "18004322080",
+            "5059242650"
+          ],
+          "to": "(866) 261-2954",
+          "source": "https://www.innovage.com/locations/new-mexico",
+          "flaggedAt": "2026-10-06T12:25:55.109Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -588,22 +610,13 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-08-07",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 1000,
-          "to": 2982,
-          "source": "https://www.hca.nm.gov/wp-content/uploads/Section-07-Community-Benefits-MC-Policy-Manual_Eff-07.01.24-Rev.-04.19.24-2.pdf",
-          "severity": "high",
-          "why": "tier dispute: draft 100% SSI 2026 vs verified 300% SSI 2026",
-          "flaggedAt": "2026-10-05T18:18:26.253Z"
-        },
-        {
           "field": "income_2",
           "from": 1262,
-          "to": 4035,
-          "source": "https://www.hca.nm.gov/wp-content/uploads/Section-07-Community-Benefits-MC-Policy-Manual_Eff-07.01.24-Rev.-04.19.24-2.pdf",
+          "to": 1491,
+          "source": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
           "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-05T18:18:26.253Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
         }
       ]
     },
@@ -808,7 +821,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-11",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2739,
+          "to": 1986,
+          "source": "https://www.nmwic.org/fmnp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3706,
+          "to": 2686,
+          "source": "https://www.nmwic.org/fmnp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1507,7 +1539,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-637-6574",
       "sourceUrl": "https://www.hca.nm.gov/lookingforinformation/medical-assistance-division-1/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18556376574",
+            "18007721213"
+          ],
+          "to": "8004324682",
+          "source": "https://www.hca.nm.gov/wp-content/uploads/Eligibility-Pamphlet-7.1.2026.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        }
+      ]
     },
     {
       "id": "nm-turquoise-care-community-benefit-hcbs",
@@ -1712,7 +1758,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-432-2080",
       "sourceUrl": "https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 994,
+          "to": 2982,
+          "source": "https://sclonm.org/uploads/documents/WAIVER%20MEDICAID%20HCBS%20FACT%20SHEET%20SCLO%20-%20January%202026.pdf",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        }
+      ]
     },
     {
       "id": "nm-snap-food-benefits",
@@ -1947,7 +2004,45 @@ export const drafts: PipelineStateDrafts = {
       "phone": "800-283-4465",
       "sourceUrl": "https://www.hca.nm.gov/lookingforassistance/supplemental_nutrition_assistance_program__snap/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1696,
+          "to": 2600,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/ISD-017-FPG-Cards-FY-2026-10.01.25-to-09.30.2026.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2292,
+          "to": 3526,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/ISD-017-FPG-Cards-FY-2026-10.01.25-to-09.30.2026.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 3250,
+          "to": 4750,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/ISD-017-FPG-Form-FY-2027-10.01.26-to-09.30.2027-SNAP-and-Cash.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3250,
+          "to": 4750,
+          "source": "https://www.hca.nm.gov/wp-content/uploads/ISD-017-FPG-Form-FY-2027-10.01.26-to-09.30.2027-SNAP-and-Cash.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:25:55.109Z"
+        }
+      ]
     },
     {
       "id": "nm-liheap-energy-assistance",

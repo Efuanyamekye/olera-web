@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.405Z
+ * Last updated: 2026-10-06T12:32:15.144Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -249,10 +249,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_couple",
           "from": 4000,
           "to": 3000,
-          "source": "https://oepmanuals.dhhs.utah.gov/500/503_Household_Size_and_Asset_Limits.htm",
+          "source": "https://medicaidlongtermcare.org/eligibility/utah/",
           "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:29:35.992Z"
         }
       ]
     },
@@ -1039,34 +1039,16 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 1956,
-          "to": 1550,
-          "source": "https://jobs.utah.gov/housing/scso/seal/heat.html",
-          "severity": "high",
-          "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 150% FPL 2024 or 165% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2644,
-          "to": 2110,
-          "source": "https://jobs.utah.gov/housing/scso/seal/heat.html",
-          "severity": "high",
-          "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 150% FPL 2024 or 165% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
-        {
           "field": "phone",
           "from": [
             "211",
             "4355861112"
           ],
-          "to": "18662054357",
-          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "to": "8662054357",
+          "source": "https://liheapch.acf.hhs.gov/profiles/Utah.htm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-06T12:29:35.992Z"
         }
       ]
     },
@@ -1294,24 +1276,6 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 2510,
-          "to": 380,
-          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3407,
-          "to": 514,
-          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
-        {
           "field": "phone",
           "from": [
             "8012143215",
@@ -1319,11 +1283,11 @@ export const drafts: PipelineStateDrafts = {
             "8012293800",
             "4358650195"
           ],
-          "to": "8015383939",
-          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
+          "to": "8016263320",
+          "source": "https://jobs.utah.gov/housing/scso/wap/iwtc/wapguidelines.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-06T12:29:35.992Z"
         }
       ]
     },
@@ -1605,6 +1569,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "hours": "Mon-Sun 8:30am-4:45pm MT",
           "description": "Also 888-826-9790, or text your zip code to 801-845-2211 Mon-Fri."
+        },
+        {
+          "label": "Program web page",
+          "phone": "(385) 468-3200",
+          "description": "Number listed on saltlakecounty.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1659,7 +1629,29 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://rules.utah.gov/publicat/code_rtf/r510-104.rtf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8015383910",
+            "18774244640",
+            "8015255050",
+            "8012293802",
+            "4356544920",
+            "4357131467",
+            "4357551720",
+            "211"
+          ],
+          "to": "(385) 468-3200",
+          "source": "https://www.saltlakecounty.gov/aging-adult-services/services/meals-on-wheels/",
+          "flaggedAt": "2026-10-06T12:29:35.992Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "caregiver-support-program",
@@ -1861,10 +1853,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 18,
           "to": 60,
-          "source": "https://daas.utah.gov/seniors/",
+          "source": "https://magutah.gov/cgsupport/",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
+          "flaggedAt": "2026-10-06T12:29:35.992Z"
         }
       ],
       "appliedCorrections": [
@@ -2084,26 +2076,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://daas.utah.gov/wp-content/uploads/2024/05/Utah-SCSEP-Four-Year-State-Plan-2024-for-public-comment-1.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1583,
-          "to": 1983,
-          "source": "https://daas.utah.gov/seniors/",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2142,
-          "to": 2689,
-          "source": "https://daas.utah.gov/seniors/",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:47:00.310Z"
-        }
-      ],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -2396,6 +2369,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "State program information and county contact referrals",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(801) 538-3910",
+          "description": "Number listed on daas.utah.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2438,7 +2417,21 @@ export const drafts: PipelineStateDrafts = {
           "dismissedAt": "2026-10-04"
         }
       ],
-      "lastVerifiedDate": "2026-10-04"
+      "lastVerifiedDate": "2026-10-04",
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8012293809"
+          ],
+          "to": "(801) 538-3910",
+          "source": "https://daas.utah.gov/long-term-care-ombudsman/",
+          "flaggedAt": "2026-10-06T12:29:35.992Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "aging-waiver",
@@ -2822,7 +2815,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(801) 538-6155",
       "sourceUrl": "https://medicaid.utah.gov/ltc-2/nc/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 65,
+          "source": "https://medicaid.utah.gov/medicaid-long-term-care-and-waiver-programs/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:29:35.992Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

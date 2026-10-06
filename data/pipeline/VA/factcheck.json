@@ -1,14 +1,14 @@
 {
   "state": "VA",
   "stateName": "Virginia",
-  "checkedAt": "2026-10-02T07:47:11.494Z",
-  "total": 6,
+  "checkedAt": "2026-10-06T12:29:55.214Z",
+  "total": 13,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 2,
-  "totalFlags": 2,
-  "highSeverityFlags": 0,
+  "programsWithFlags": 7,
+  "totalFlags": 10,
+  "highSeverityFlags": 2,
   "programs": [
     {
       "programId": "ccc-plus-waiver",
@@ -34,15 +34,15 @@
         "assets_couple": null,
         "phone": "18335225582",
         "sources": {
-          "age": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/long-term-services-supports/",
+          "age": "https://www.dmas.virginia.gov/for-members/benefits-and-services/waivers/",
           "income": null,
           "assets": null,
           "phone": "https://www.dmas.virginia.gov/for-members/benefits-and-services/waivers/ccc-plus-waiver/"
         },
-        "notes": "Current official Virginia sources describe CCC Plus Waiver as serving all ages; no senior-specific minimum age was found. No income or asset test was found in the retrieved official sources; Medicaid eligibility and level-of-care criteria are referenced instead."
+        "notes": "Current Virginia DMAS sources say the CCC Plus Waiver serves all ages, so there is no senior-specific minimum age threshold; no income or asset test value was found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "Current official Virginia sources describe CCC Plus Waiver as serving all ages; no senior-specific minimum age was found. No income or asset test was found in the retrieved official sources; Medicaid eligibility and level-of-care criteria are referenced instead."
+      "notes": "Current Virginia DMAS sources say the CCC Plus Waiver serves all ages, so there is no senior-specific minimum age threshold; no income or asset test value was found in the retrieved official sources."
     },
     {
       "programId": "adult-services-program",
@@ -64,15 +64,15 @@
         "assets_couple": null,
         "phone": "8888323858",
         "sources": {
-          "age": "https://www.dss.virginia.gov/printer/family/as/aps.cgi",
+          "age": "https://easyaccess.virginia.gov/APS",
           "income": "https://www.dars.virginia.gov/aps/AdultServices.htm",
           "assets": "https://www.dars.virginia.gov/aps/AdultServices.htm",
           "phone": "https://www.dss.virginia.gov/general-info/contact-us/"
         },
-        "notes": "Virginia Adult Services Program is administered through local departments of social services; current official guidance found no fixed income or asset threshold for the senior pathway, only need/eligibility and any applicable financial requirements."
+        "notes": "Virginia Adult Services is a service program, not a single income/asset-tested benefit; age threshold for the senior pathway is 60+, and financial eligibility only applies to some services."
       },
       "flags": [],
-      "notes": "Virginia Adult Services Program is administered through local departments of social services; current official guidance found no fixed income or asset threshold for the senior pathway, only need/eligibility and any applicable financial requirements."
+      "notes": "Virginia Adult Services is a service program, not a single income/asset-tested benefit; age threshold for the senior pathway is 60+, and financial eligibility only applies to some services."
     },
     {
       "programId": "vicap-medicare-counseling",
@@ -97,15 +97,15 @@
         "assets_couple": null,
         "phone": "8005523402",
         "sources": {
-          "age": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
-          "income": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
-          "assets": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
-          "phone": "https://cms.gov/about-cms/contact/directory/virginia-insurance-counseling-assistance-program-vicap/1562236"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://www.cms.gov/about-cms/contact/directory/virginia-insurance-counseling-assistance-program-vicap/1562236"
         },
-        "notes": "VICAP is a Medicare counseling program; no age, income, or asset test was found in current official sources. The official statewide toll-free contact number is 800-552-3402."
+        "notes": "No age, income, or asset eligibility test found for VICAP; official current contact number is toll-free 800-552-3402."
       },
       "flags": [],
-      "notes": "VICAP is a Medicare counseling program; no age, income, or asset test was found in current official sources. The official statewide toll-free contact number is 800-552-3402."
+      "notes": "No age, income, or asset eligibility test found for VICAP; official current contact number is toll-free 800-552-3402."
     },
     {
       "programId": "seniornavigator",
@@ -131,20 +131,34 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 16988,
+        "income_2": 22888,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8046627035",
+        "phone": "18889920959",
         "sources": {
           "age": "https://dars.virginia.gov/aging/senior-employment-program/",
-          "income": "https://www.dars.virginia.gov/olderadults.htm",
+          "income": "https://virtualexpos.accessjca.org/wp-content/uploads/2023/11/SCSEP-Presentation.pdf",
           "assets": null,
-          "phone": "https://dars.virginia.gov/aging/senior-employment-program/"
+          "phone": "https://easyaccess.virginia.gov/employment"
         },
-        "notes": "SCSEP in Virginia uses a 55+ senior age threshold and is described as low-income, but the retrieved official sources did not provide a specific current income table or any asset test for Virginia; the main contact is DARS (804-662-7035)."
+        "notes": "SCSEP is current in Virginia and serves low-income, unemployed adults age 55+; no asset test was found in the retrieved sources."
       },
       "flags": [
+        {
+          "field": "income_1",
+          "severity": "info",
+          "draftValue": 1416,
+          "verifiedValue": 16988,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "income_2",
+          "severity": "info",
+          "draftValue": 1907,
+          "verifiedValue": 22888,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -152,10 +166,10 @@
             "5713637688",
             "8043433000"
           ],
-          "verifiedValue": "8046627035"
+          "verifiedValue": "18889920959"
         }
       ],
-      "notes": "SCSEP in Virginia uses a 55+ senior age threshold and is described as low-income, but the retrieved official sources did not provide a specific current income table or any asset test for Virginia; the main contact is DARS (804-662-7035)."
+      "notes": "SCSEP is current in Virginia and serves low-income, unemployed adults age 55+; no asset test was found in the retrieved sources."
     },
     {
       "programId": "family-caregiver-support",
@@ -168,7 +182,8 @@
         "assets_couple": null,
         "phones": [
           "8005523402",
-          "8046629333"
+          "8046629333",
+          "7037465999"
         ],
         "hasVerifiableFacts": true
       },
@@ -178,14 +193,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7037465999",
+        "phone": "8889920959",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://dars.virginia.gov/aging/home-community/find-local-aaa/"
+          "phone": "https://easyaccess.virginia.gov/caregiver"
         },
-        "notes": "Virginia Area Agencies on Aging caregiver support is a service network, not a single means-tested program; no statewide age, income, or asset limits were found. Main statewide AAA contact number found on the Virginia DARS AAA directory page."
+        "notes": "No age, income, or asset test found for Virginia AAA caregiver support; official statewide caregiver resource line is 888-992-0959."
       },
       "flags": [
         {
@@ -193,12 +208,317 @@
           "severity": "medium",
           "draftValue": [
             "8005523402",
-            "8046629333"
+            "8046629333",
+            "7037465999"
+          ],
+          "verifiedValue": "8889920959"
+        }
+      ],
+      "notes": "No age, income, or asset test found for Virginia AAA caregiver support; official statewide caregiver resource line is 888-992-0959."
+    },
+    {
+      "programId": "va-medicaid-abd",
+      "programName": "Medicaid for Aged, Blind, or Disabled (ABD)",
+      "facts": {
+        "age": 65,
+        "income_1": 1004,
+        "income_2": 1363,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "18335225582"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1084,
+        "income_2": 1463,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18552428282",
+        "sources": {
+          "age": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "income": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "assets": "https://www.dmas.virginia.gov/media/wbhdowjl/m11-abd-resources-7-1-24.pdf",
+          "phone": "https://coverva.dmas.virginia.gov/media/fmjfdqvy/fact-sheet-abd80-060125.pdf"
+        },
+        "notes": "Current Virginia ABD Medicaid limits found on official CoverVA/DMAS pages; age threshold applies to the senior pathway (65+)."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "medium",
+          "draftValue": 1004,
+          "verifiedValue": 1084,
+          "pctDiff": 7.4
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 1363,
+          "verifiedValue": 1463,
+          "pctDiff": 6.8
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18335225582"
+          ],
+          "verifiedValue": "18552428282"
+        }
+      ],
+      "notes": "Current Virginia ABD Medicaid limits found on official CoverVA/DMAS pages; age threshold applies to the senior pathway (65+)."
+    },
+    {
+      "programId": "va-medicare-savings-programs",
+      "programName": "Medicare Savings Programs (QMB, SLMB, QI)",
+      "facts": {
+        "age": null,
+        "income_1": 1325,
+        "income_2": 1783,
+        "assets_individual": 8400,
+        "assets_couple": 12600,
+        "phones": [
+          "18552428282",
+          "18882211590"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "18552428282",
+        "sources": {
+          "age": null,
+          "income": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "assets": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "phone": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicare/"
+        },
+        "notes": "Virginia Medicare Savings Programs (QMB, SLMB, QI) use income and resource limits; no age test found in the retrieved official sources. Income/resource figures shown are the 2026 limits for the senior pathway."
+      },
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 8400,
+          "verifiedValue": 9950,
+          "pctDiff": 15.6
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 12600,
+          "verifiedValue": 14910,
+          "pctDiff": 15.5
+        }
+      ],
+      "notes": "Virginia Medicare Savings Programs (QMB, SLMB, QI) use income and resource limits; no age test found in the retrieved official sources. Income/resource figures shown are the 2026 limits for the senior pathway."
+    },
+    {
+      "programId": "va-snap-food-benefits",
+      "programName": "Supplemental Nutrition Assistance Program (SNAP)",
+      "facts": {
+        "age": null,
+        "income_1": 1305,
+        "income_2": 1763,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phones": [
+          "8335225582",
+          "8556354370"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": 1305,
+        "income_2": 1763,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8556354370",
+        "sources": {
+          "age": "https://www.dss.virginia.gov/relief/food-assistance/snap/",
+          "income": "https://www.dss.virginia.gov/relief/food-assistance/snap/",
+          "assets": null,
+          "phone": "https://www.dss.virginia.gov/files/division/bp/medical_assistance/forms/all_other/b032-01-0002-23-eng.pdf"
+        },
+        "notes": "Virginia SNAP has a senior pathway: households with a member age 60+ only need to meet net income limits. No countable financial asset test was found in the retrieved official Virginia SNAP sources."
+      },
+      "flags": [],
+      "notes": "Virginia SNAP has a senior pathway: households with a member age 60+ only need to meet net income limits. No countable financial asset test was found in the retrieved official Virginia SNAP sources."
+    },
+    {
+      "programId": "va-pace-all-inclusive-care",
+      "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "facts": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "4345291300",
+          "8047866145",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8049775900",
+        "sources": {
+          "age": "https://law.lis.virginia.gov/admincode/title12/agency30/chapter50/section340/",
+          "income": "https://vamedicaid.dmas.virginia.gov/sites/default/files/2024-08/Screening%20Manual%20Chapter%20IV%20(updated%208.28.24)_Final.pdf",
+          "assets": null,
+          "phone": "https://www.dmas.virginia.gov/for-members/benefits-and-services/long-term-care/programs-and-initiatives/program-of-all-inclusive-care/"
+        },
+        "notes": "PACE in Virginia is current and active; no separate asset test found in the authoritative sources reviewed."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "4345291300",
+            "8047866145",
+            "211"
+          ],
+          "verifiedValue": "8049775900"
+        }
+      ],
+      "notes": "PACE in Virginia is current and active; no separate asset test found in the authoritative sources reviewed."
+    },
+    {
+      "programId": "va-liheap-energy-assistance",
+      "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "facts": {
+        "age": 60,
+        "income_1": 1956,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8556354370",
+          "8002306977"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": 1956,
+        "income_2": 2644,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8002306977",
+        "sources": {
+          "age": "https://law.lis.virginia.gov/admincodefull/title22/agency40/chapter680/",
+          "income": "https://liheapch.acf.hhs.gov/profiles/Virginia.htm",
+          "assets": null,
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
+        },
+        "notes": "Virginia LIHEAP/Energy Assistance has no asset test found in the retrieved official sources; senior pathway vulnerability threshold is 60+ for cooling assistance, while general LIHEAP income eligibility is 150% FPL."
+      },
+      "flags": [],
+      "notes": "Virginia LIHEAP/Energy Assistance has no asset test found in the retrieved official sources; senior pathway vulnerability threshold is 60+ for cooling assistance, while general LIHEAP income eligibility is 150% FPL."
+    },
+    {
+      "programId": "va-home-delivered-meals",
+      "programName": "Virginia Home-Delivered Meals Program",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8046629319",
+          "7033245409",
+          "7032281700",
+          "7037715012"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "7037465999",
+        "sources": {
+          "age": "https://www.alexandriava.gov/older-adult-services/program/nutrition-health",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.alexandriava.gov/older-adult-services/program/nutrition-health"
+        },
+        "notes": "Senior pathway commonly uses age 60+ for home-delivered meals in Virginia; no statewide income or asset test was found in the retrieved official sources."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8046629319",
+            "7033245409",
+            "7032281700",
+            "7037715012"
           ],
           "verifiedValue": "7037465999"
         }
       ],
-      "notes": "Virginia Area Agencies on Aging caregiver support is a service network, not a single means-tested program; no statewide age, income, or asset limits were found. Main statewide AAA contact number found on the Virginia DARS AAA directory page."
+      "notes": "Senior pathway commonly uses age 60+ for home-delivered meals in Virginia; no statewide income or asset test was found in the retrieved official sources."
+    },
+    {
+      "programId": "va-property-tax-exemption-elderly-disabled",
+      "programName": "Virginia Property Tax Exemption for Elderly/Disabled",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "7578903382",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8043678031",
+        "sources": {
+          "age": "https://law.lis.virginia.gov/vacode/title58.1/chapter32/section58.1-3210/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.tax.virginia.gov/contact-us"
+        },
+        "notes": "Virginia law sets the senior threshold at 65 for local real property tax exemption/deferral programs; no statewide income or asset limits found because those are set locally, and the official statewide contact number found is Virginia Tax."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7578903382",
+            "211"
+          ],
+          "verifiedValue": "8043678031"
+        }
+      ],
+      "notes": "Virginia law sets the senior threshold at 65 for local real property tax exemption/deferral programs; no statewide income or asset limits found because those are set locally, and the official statewide contact number found is Virginia Tax."
     }
   ]
 }

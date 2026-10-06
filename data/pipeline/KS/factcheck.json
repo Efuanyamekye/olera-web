@@ -1,20 +1,59 @@
 {
   "state": "KS",
   "stateName": "Kansas",
-  "checkedAt": "2026-10-02T07:37:38.319Z",
-  "total": 14,
+  "checkedAt": "2026-10-06T12:21:30.432Z",
+  "total": 16,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 2,
-  "programsWithFlags": 5,
-  "totalFlags": 5,
+  "errors": 0,
+  "programsWithFlags": 6,
+  "totalFlags": 8,
   "highSeverityFlags": 1,
   "programs": [
     {
       "programId": "kancare-frail-elderly-waiver",
       "programName": "KanCare Frail Elderly Waiver (FE Waiver)",
-      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
-      "flags": []
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "7852964986",
+          "8007924884",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 2982,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": null,
+        "phone": "8552002372",
+        "sources": {
+          "age": "https://www.kdads.ks.gov/services-programs/long-term-services-supports/home-and-community-based-services-hcbs-programs/hcbs-programs/frail-elderly-fe",
+          "income": "https://www.brevy.com/caregiver/kansas/how-to-get-paid-family-caregiver",
+          "assets": "https://www.brevy.com/caregiver/kansas/how-to-get-paid-family-caregiver",
+          "phone": "https://www.kdads.ks.gov/services-programs/long-term-services-supports/home-and-community-based-services-hcbs-programs/hcbs-programs/frail-elderly-fe"
+        },
+        "notes": "Official state page says FE Waiver is for age 65+ and directs callers to ADRC. Income and asset limits were not found on the official page; values shown are from a current non-government guide citing Medicaid/KanCare limits."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7852964986",
+            "8007924884",
+            "211"
+          ],
+          "verifiedValue": "8552002372"
+        }
+      ],
+      "notes": "Official state page says FE Waiver is for age 65+ and directs callers to ADRC. Income and asset limits were not found on the official page; values shown are from a current non-government guide citing Medicaid/KanCare limits."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -37,14 +76,14 @@
         "phone": "7852968288",
         "sources": {
           "age": "https://www.kdads.ks.gov/services-programs/aging/program-of-all-inclusive-care-for-the-elderly-pace",
-          "income": null,
+          "income": "https://www.kdads.ks.gov/services-programs/aging/program-of-all-inclusive-care-for-the-elderly-pace",
           "assets": null,
-          "phone": "https://www.kdads.ks.gov/services-programs/aging/caregivers"
+          "phone": "https://www.kdads.ks.gov/services-programs/aging/program-of-all-inclusive-care-for-the-elderly-pace"
         },
-        "notes": "Kansas PACE is current and active; official Kansas sources confirm the 55+ age threshold and provide a state PACE contact number. No authoritative current Kansas source found for a PACE income or countable asset test; PACE eligibility is based on age, service area, nursing-home level of care, and community safety rather than a documented asset limit on the cited state pages."
+        "notes": "Kansas PACE is a current program for adults age 55+ in select counties; no authoritative asset test was found in the retrieved official sources, and the state page does not list a separate income limit for eligibility."
       },
       "flags": [],
-      "notes": "Kansas PACE is current and active; official Kansas sources confirm the 55+ age threshold and provide a state PACE contact number. No authoritative current Kansas source found for a PACE income or countable asset test; PACE eligibility is based on age, service area, nursing-home level of care, and community safety rather than a documented asset limit on the cited state pages."
+      "notes": "Kansas PACE is a current program for adults age 55+ in select counties; no authoritative asset test was found in the retrieved official sources, and the state page does not list a separate income limit for eligibility."
     },
     {
       "programId": "medicare-savings-programs-qmb-slmb-qi",
@@ -61,28 +100,88 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": null,
         "income_1": 1330,
         "income_2": 1804,
-        "assets_individual": 9430,
-        "assets_couple": 14130,
-        "phone": "18007924884",
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8007924884",
         "sources": {
-          "age": "https://khap.kdhe.ks.gov/kfmam/policyDocs/KC2700%20Medicare%20Savings%20Program%20brochure.pdf",
-          "income": "https://medicaidlimits.com/medicaid/kansas/medicare-savings/",
-          "assets": "https://khap.kdhe.ks.gov/kfmam/policyDocs/KC2700%20Medicare%20Savings%20Program%20brochure.pdf",
-          "phone": "https://khap.kdhe.ks.gov/kfmam/policyDocs/KC2700%20Medicare%20Savings%20Program%20brochure.pdf"
+          "age": null,
+          "income": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/medicare-part-d-prescription-drug-coverage/medicare-frequently-asked-questions",
+          "assets": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/medicare-part-d-prescription-drug-coverage/medicare-frequently-asked-questions",
+          "phone": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/medicare-part-d-prescription-drug-coverage/medicare-frequently-asked-questions"
         },
-        "notes": "Kansas Medicare Savings Programs are a senior Medicare-help pathway; the state brochure cites 2026 resource and income limits and the KanCare Clearinghouse phone number. Income figures for the requested household sizes were taken from a current 2026 Kansas MSP summary that cites the program rules; the Kansas brochure source snippet did not expose the full table values in search results."
+        "notes": "Kansas reports 2026 MSP limits for QMB/SLMB/QI; no separate age test applies, and the listed limits are monthly income and countable resource limits for the senior Medicare pathway."
       },
-      "flags": [],
-      "notes": "Kansas Medicare Savings Programs are a senior Medicare-help pathway; the state brochure cites 2026 resource and income limits and the KanCare Clearinghouse phone number. Income figures for the requested household sizes were taken from a current 2026 Kansas MSP summary that cites the program rules; the Kansas brochure source snippet did not expose the full table values in search results."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 9430,
+          "verifiedValue": 9950,
+          "pctDiff": 5.2
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 14130,
+          "verifiedValue": 14910,
+          "pctDiff": 5.2
+        }
+      ],
+      "notes": "Kansas reports 2026 MSP limits for QMB/SLMB/QI; no separate age test applies, and the listed limits are monthly income and countable resource limits for the senior Medicare pathway."
     },
     {
       "programId": "snap-food-assistance",
       "programName": "Food Assistance (SNAP)",
-      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
-      "flags": []
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 4250,
+        "assets_couple": 4250,
+        "phones": [
+          "18883694777",
+          "18337652003",
+          "211",
+          "18002215689",
+          "18663486479"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phone": "18883694777",
+        "sources": {
+          "age": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistanceFAQs.aspx",
+          "income": "null",
+          "assets": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistanceFAQs.aspx",
+          "phone": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistanceFAQs.aspx"
+        },
+        "notes": "Kansas SNAP/Food Assistance uses a senior threshold of age 60+ for the resource limit pathway; no separate senior-specific age minimum was found beyond that program rule. No current official senior-specific age test or distinct income asset values were found in the retrieved source."
+      },
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 4250,
+          "verifiedValue": 4500,
+          "pctDiff": 5.6
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 4250,
+          "verifiedValue": 4500,
+          "pctDiff": 5.6
+        }
+      ],
+      "notes": "Kansas SNAP/Food Assistance uses a senior threshold of age 60+ for the resource limit pathway; no separate senior-specific age minimum was found beyond that program rule. No current official senior-specific age test or distinct income asset values were found in the retrieved source."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -110,12 +209,12 @@
           "age": null,
           "income": "https://www.dcf.ks.gov/Newsroom/pages/LIEAP2026.aspx",
           "assets": null,
-          "phone": "https://www.dcf.ks.gov/Pages/Contacts.aspx"
+          "phone": "https://www.dcf.ks.gov/Pages/contacts.aspx"
         },
-        "notes": "Kansas LIHEAP/LIEAP is current for 2026 and uses monthly gross income limits; no asset test found in the official sources reviewed."
+        "notes": "Kansas LIHEAP/LIEAP has no age threshold for the senior pathway; eligibility is income-based and the household must include an adult responsible for heating costs. Current published 2026 income limits are monthly."
       },
       "flags": [],
-      "notes": "Kansas LIHEAP/LIEAP is current for 2026 and uses monthly gross income limits; no asset test found in the official sources reviewed."
+      "notes": "Kansas LIHEAP/LIEAP has no age threshold for the senior pathway; eligibility is income-based and the household must include an adult responsible for heating costs. Current published 2026 income limits are monthly."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -133,19 +232,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
-        "income_1": 150,
-        "income_2": 60,
+        "age": null,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18007524422",
         "sources": {
           "age": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm",
           "income": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm",
-          "assets": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm",
+          "assets": null,
           "phone": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm"
         },
-        "notes": "Kansas Weatherization Assistance Program is current and not renamed/discontinued in the cited source; no asset test applies, and seniors are a priority group rather than a separate eligibility pathway."
+        "notes": "Kansas WAP is current; seniors are a priority group, but no separate senior-only age, income, or asset test was found in the authoritative source."
       },
       "flags": [
         {
@@ -158,7 +257,7 @@
           "verifiedValue": "18007524422"
         }
       ],
-      "notes": "Kansas Weatherization Assistance Program is current and not renamed/discontinued in the cited source; no asset test applies, and seniors are a priority group rather than a separate eligibility pathway."
+      "notes": "Kansas WAP is current; seniors are a priority group, but no separate senior-only age, income, or asset test was found in the authoritative source."
     },
     {
       "programId": "shick-medicare-counseling",
@@ -190,10 +289,10 @@
           "assets": null,
           "phone": "https://www.cms.gov/about-cms/contact/directory/senior-health-insurance-counseling-kansas-shick/1562076"
         },
-        "notes": "SHICK is a Medicare counseling/SHIP program and does not have age, income, or asset eligibility tests; official hotline found from CMS and KDADS sources."
+        "notes": "SHICK appears current and active; no age, income, or asset eligibility test found for the senior counseling pathway. Official hotline found as 800-860-5260."
       },
       "flags": [],
-      "notes": "SHICK is a Medicare counseling/SHIP program and does not have age, income, or asset eligibility tests; official hotline found from CMS and KDADS sources."
+      "notes": "SHICK appears current and active; no age, income, or asset eligibility test found for the senior counseling pathway. Official hotline found as 800-860-5260."
     },
     {
       "programId": "senior-nutrition-program",
@@ -219,14 +318,14 @@
         "phone": "7852960373",
         "sources": {
           "age": "https://www.kdads.ks.gov/services-programs/aging/kansas-senior-nutrition-program",
-          "income": "https://www.kdads.ks.gov/services-programs/aging/kansas-senior-nutrition-program",
-          "assets": "https://www.kdads.ks.gov/services-programs/aging/kansas-senior-nutrition-program",
+          "income": null,
+          "assets": null,
           "phone": "https://www.kdads.ks.gov/services-programs/aging/kansas-senior-nutrition-program"
         },
-        "notes": "Current KDADS page shows senior eligibility at age 60+ for congregate and home-delivered meals; no income or asset test is listed on the official program page."
+        "notes": "Official KDADS page lists seniors age 60+ and their spouses for nutrition services; no income or asset test found on the official program page."
       },
       "flags": [],
-      "notes": "Current KDADS page shows senior eligibility at age 60+ for congregate and home-delivered meals; no income or asset test is listed on the official program page."
+      "notes": "Official KDADS page lists seniors age 60+ and their spouses for nutrition services; no income or asset test found on the official program page."
     },
     {
       "programId": "caregiver-support-programs",
@@ -251,12 +350,12 @@
         "assets_couple": null,
         "phone": "8552002372",
         "sources": {
-          "age": "https://www.jhawkaaa.org/caregiving",
+          "age": "https://www.kdads.ks.gov/services-programs/aging/older-americans-act",
           "income": null,
           "assets": null,
-          "phone": "https://www.kdads.ks.gov/services-programs/aging/caregivers"
+          "phone": "https://www.kdads.ks.gov/services-programs/aging-and-disability-resource-center-adrc/general-resources-and-information"
         },
-        "notes": "Current Kansas family caregiver support pathway for older adults appears to use age 60+; no income or asset test found in the retrieved official/near-official sources."
+        "notes": "Kansas caregiver support is administered through the aging network/Area Agencies on Aging; the senior pathway shown in official Kansas materials uses 60+ eligibility, and no income or asset test was found in the retrieved authoritative sources."
       },
       "flags": [
         {
@@ -266,7 +365,7 @@
           "verifiedValue": 60
         }
       ],
-      "notes": "Current Kansas family caregiver support pathway for older adults appears to use age 60+; no income or asset test found in the retrieved official/near-official sources."
+      "notes": "Kansas caregiver support is administered through the aging network/Area Agencies on Aging; the senior pathway shown in official Kansas materials uses 60+ eligibility, and no income or asset test was found in the retrieved authoritative sources."
     },
     {
       "programId": "scsep-senior-employment",
@@ -296,10 +395,10 @@
           "assets": null,
           "phone": "https://workforce-ks.com/programs/seniorcommunityserviceemploymentprogram/"
         },
-        "notes": "SCSEP is current in Kansas; official Kansas Workforce page states age 55+ and provides the main contact number. No authoritative Kansas-specific income or asset thresholds were found on the retrieved official page."
+        "notes": "SCSEP in Kansas is current and age-based at 55+ for seniors; no authoritative Kansas source found for income or asset tests in the retrievable results."
       },
       "flags": [],
-      "notes": "SCSEP is current in Kansas; official Kansas Workforce page states age 55+ and provides the main contact number. No authoritative Kansas-specific income or asset thresholds were found on the retrieved official page."
+      "notes": "SCSEP in Kansas is current and age-based at 55+ for seniors; no authoritative Kansas source found for income or asset tests in the retrievable results."
     },
     {
       "programId": "legal-services-seniors",
@@ -314,7 +413,8 @@
           "18883535337",
           "18007236953",
           "9138263160",
-          "9138262830"
+          "9138262830",
+          "3162673975"
         ],
         "hasVerifiableFacts": true
       },
@@ -326,27 +426,15 @@
         "assets_couple": null,
         "phone": "3162673975",
         "sources": {
-          "age": "https://www.kansaslegalservices.org/page/57/programs-seniors",
-          "income": null,
+          "age": "https://www.kansaslegalservices.org/page/1250/all-about-services-seniors",
+          "income": "https://ksbar.org/?pg=probono",
           "assets": null,
-          "phone": "https://www.kansaslegalservices.org/page/57/programs-seniors"
+          "phone": "https://www.kansaslegalservices.org/page/63/get-help"
         },
-        "notes": "Senior pathway appears current; Kansas Legal Services lists seniors age 60+ and the Elder Hotline uses the same main intake number."
+        "notes": "Current KLS senior pathway appears to be the Elder Law Hotline / Senior Citizen Law Project for Kansans age 60+; no income or asset test found for the senior hotline, while general KLS services are income-based."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18883535337",
-            "18007236953",
-            "9138263160",
-            "9138262830"
-          ],
-          "verifiedValue": "3162673975"
-        }
-      ],
-      "notes": "Senior pathway appears current; Kansas Legal Services lists seniors age 60+ and the Elder Hotline uses the same main intake number."
+      "flags": [],
+      "notes": "Current KLS senior pathway appears to be the Elder Law Hotline / Senior Citizen Law Project for Kansans age 60+; no income or asset test found for the senior hotline, while general KLS services are income-based."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -376,10 +464,10 @@
           "assets": null,
           "phone": "https://www.ombudsman.ks.gov/file-a-complaint/file-a-complaint"
         },
-        "notes": "Program does not appear to have age, income, or asset eligibility tests; current state office toll-free phone is listed on official Kansas Ombudsman pages."
+        "notes": "No age, income, or asset test found; Long-Term Care Ombudsman Program is an advocacy/contact program, not a means-tested benefit."
       },
       "flags": [],
-      "notes": "Program does not appear to have age, income, or asset eligibility tests; current state office toll-free phone is listed on official Kansas Ombudsman pages."
+      "notes": "No age, income, or asset test found; Long-Term Care Ombudsman Program is an advocacy/contact program, not a means-tested benefit."
     },
     {
       "programId": "senior-care-act-services",
@@ -402,27 +490,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8006771116",
+        "phone": "8552002372",
         "sources": {
-          "age": "https://www.dcf.ks.gov/Agency/Documents/SSBG%20Proposed%20State%20Plan%20SFY2026.pdf",
-          "income": "https://www.dcf.ks.gov/Agency/Documents/SSBG%20Proposed%20State%20Plan%20SFY2026.pdf",
-          "assets": "https://www.dcf.ks.gov/Agency/Documents/SSBG%20Proposed%20State%20Plan%20SFY2026.pdf",
-          "phone": "https://www.kdads.ks.gov/services-programs/aging"
+          "age": "https://www.kdads.ks.gov/services-programs/aging/senior-care-act-sca",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.kdads.ks.gov/services-programs/aging/senior-care-act-sca"
         },
-        "notes": "Current Kansas Senior Care Act services are for residents age 60+; official income/assets thresholds were not found as fixed amounts because the program uses a sliding fee scale based on income and assets."
+        "notes": "Current Kansas Senior Care Act eligibility is age 60+; official KDADS page lists AAA contact number for help. No authoritative current source found for separate income or asset limits."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8552002372",
-            "7852964986"
-          ],
-          "verifiedValue": "8006771116"
-        }
-      ],
-      "notes": "Current Kansas Senior Care Act services are for residents age 60+; official income/assets thresholds were not found as fixed amounts because the program uses a sliding fee scale based on income and assets."
+      "flags": [],
+      "notes": "Current Kansas Senior Care Act eligibility is age 60+; official KDADS page lists AAA contact number for help. No authoritative current source found for separate income or asset limits."
     },
     {
       "programId": "senior-citizen-law-project",
@@ -444,14 +522,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8883535337",
+        "phone": "3162673975",
         "sources": {
           "age": "https://www.kansaslegalservices.org/page/57/programs-seniors",
           "income": "https://www.kansaslegalservices.org/page/57/programs-seniors",
-          "assets": null,
+          "assets": "https://www.kansaslegalservices.org/page/57/programs-seniors",
           "phone": "https://www.kansaslegalservices.org/page/57/programs-seniors"
         },
-        "notes": "Current official Kansas Legal Services page says SCLP serves persons age 60 and older; no income or asset test was found for the senior pathway."
+        "notes": "Current Kansas Legal Services Senior Citizen Law Project page states age 60+; no income or asset test located in the retrieved official/current source."
       },
       "flags": [
         {
@@ -460,10 +538,76 @@
           "draftValue": [
             "316"
           ],
-          "verifiedValue": "8883535337"
+          "verifiedValue": "3162673975"
         }
       ],
-      "notes": "Current official Kansas Legal Services page says SCLP serves persons age 60 and older; no income or asset test was found for the senior pathway."
+      "notes": "Current Kansas Legal Services Senior Citizen Law Project page states age 60+; no income or asset test located in the retrieved official/current source."
+    },
+    {
+      "programId": "ks-aged-blind-disabled-medicaid",
+      "programName": "Aged, Blind, and Disabled Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "18007924884"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8007924884",
+        "sources": {
+          "age": "https://medicaid.gov/medicaid/spa/downloads/KS-25-0019.pdf",
+          "income": "https://www.medicaidlongtermcare.org/eligibility/kansas/",
+          "assets": "https://www.medicaidlongtermcare.org/eligibility/kansas/",
+          "phone": "https://www.kancare.ks.gov/apply-now/eligibility"
+        },
+        "notes": "ABD Medicaid for seniors in Kansas is the aged/disabled Medicaid pathway; current figures reflect 2026 values from retrievable sources."
+      },
+      "flags": [],
+      "notes": "ABD Medicaid for seniors in Kansas is the aged/disabled Medicaid pathway; current figures reflect 2026 values from retrievable sources."
+    },
+    {
+      "programId": "ks-kancare-medicare-buy-in",
+      "programName": "KanCare Medicare Buy-In Programs",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 9660,
+        "assets_couple": 14470,
+        "phones": [
+          "8007924884",
+          "7852964986",
+          "8008605260"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8007924884",
+        "sources": {
+          "age": "https://khap.kdhe.ks.gov/KEESM/Oct_2023_Output/keesm2911.htm",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/disability-and-medicare"
+        },
+        "notes": "Program is a Medicare buy-in/MQMB-related coverage path for people already entitled to Medicare; official current Kansas source shows age 65+ and under-65 disability/ESRD pathways. No retrievable official source found in the gathered results for a separate senior-specific income or countable asset limit."
+      },
+      "flags": [],
+      "notes": "Program is a Medicare buy-in/MQMB-related coverage path for people already entitled to Medicare; official current Kansas source shows age 65+ and under-65 disability/ESRD pathways. No retrievable official source found in the gathered results for a separate senior-specific income or countable asset limit."
     }
   ]
 }

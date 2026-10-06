@@ -1,14 +1,14 @@
 {
   "state": "AZ",
   "stateName": "Arizona",
-  "checkedAt": "2026-10-02T07:33:36.731Z",
-  "total": 10,
+  "checkedAt": "2026-10-06T12:18:13.391Z",
+  "total": 12,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 3,
-  "totalFlags": 4,
-  "highSeverityFlags": 0,
+  "programsWithFlags": 5,
+  "totalFlags": 9,
+  "highSeverityFlags": 3,
   "programs": [
     {
       "programId": "ahcccs-altcs",
@@ -27,21 +27,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2982,
-        "income_2": 4764,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 4000,
         "phone": "8886216880",
         "sources": {
-          "age": "https://www.azahcccs.gov/Members/GetCovered/Categories/ALTCS.html",
-          "income": "https://www.azahcccs.gov/Members/GetCovered/apply.html",
-          "assets": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
-          "phone": "https://www.azahcccs.gov/members/ALTCSlocations.html"
+          "age": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf",
+          "income": null,
+          "assets": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf",
+          "phone": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf"
         },
-        "notes": "ALTCS is current as Arizona’s Medicaid long-term care program; senior pathway is age 65+ and financial limits are as listed by AHCCCS."
+        "notes": "ALTCS is an AHCCCS Medicaid long-term care program; for the senior pathway, the age threshold is 65+. The retrieved official source clearly supports the $2,000 individual resource limit and ALTCS toll-free contact number, but it did not provide a clearly retrievable couple asset limit on the same page."
       },
       "flags": [],
-      "notes": "ALTCS is current as Arizona’s Medicaid long-term care program; senior pathway is age 65+ and financial limits are as listed by AHCCCS."
+      "notes": "ALTCS is an AHCCCS Medicaid long-term care program; for the senior pathway, the age threshold is 65+. The retrieved official source clearly supports the $2,000 individual resource limit and ALTCS toll-free contact number, but it did not provide a clearly retrievable couple asset limit on the same page."
     },
     {
       "programId": "altcs-home-community-services",
@@ -60,20 +60,27 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2523,
+        "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
+        "assets_couple": 4000,
         "phone": "8886216880",
         "sources": {
-          "age": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
-          "income": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
-          "assets": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-817_english.pdf",
-          "phone": "https://www.azahcccs.gov/members/ALTCSlocations.html"
+          "age": "https://www.medicaidplanningassistance.org/arizona-long-term-care-system/",
+          "income": null,
+          "assets": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf",
+          "phone": "https://www.azahcccs.gov/Members/Downloads/Publications/DE101andDE202.pdf"
         },
-        "notes": "ALTCS is Arizona's Medicaid long-term care program; the senior pathway generally starts at age 65. The program materials found clearly state a $2,000 resource limit for single applicants, but I could not verify a current couple-specific countable asset cap from the retrieved official sources."
+        "notes": "ALTCS is current; senior pathway uses age 65+ and resource limits of $2,000/$4,000. No separate income test value was retrievable from the gathered sources."
       },
       "flags": [
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 2000,
+          "verifiedValue": 4000,
+          "pctDiff": 50
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -84,7 +91,7 @@
           "verifiedValue": "8886216880"
         }
       ],
-      "notes": "ALTCS is Arizona's Medicaid long-term care program; the senior pathway generally starts at age 65. The program materials found clearly state a $2,000 resource limit for single applicants, but I could not verify a current couple-specific countable asset cap from the retrieved official sources."
+      "notes": "ALTCS is current; senior pathway uses age 65+ and resource limits of $2,000/$4,000. No separate income test value was retrievable from the gathered sources."
     },
     {
       "programId": "medicare-savings-programs",
@@ -104,18 +111,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1330,
-        "income_2": 1804,
+        "income_1": 1350,
+        "income_2": 1824,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8004324040",
+        "phone": "6024174000",
         "sources": {
           "age": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "income": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
-          "assets": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
-          "phone": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html"
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.azahcccs.gov/plansproviders/feeforservicehealthplans/medicaresavingsprograms/",
+          "phone": "https://www.azahcccs.gov/plansproviders/feeforservicehealthplans/medicaresavingsprograms/"
         },
-        "notes": "Arizona Medicare Savings Programs are current in 2026; official Arizona page shows monthly income limits and no asset limits were found on the official page. Senior pathway applies to Medicare beneficiaries age 65+."
+        "notes": "Arizona Medicare Savings Programs (QMB, SLMB, QI) have no separate senior age threshold beyond Medicare eligibility; using 65 as the senior pathway threshold. Arizona sources indicate no resource/asset test for these MSP categories."
       },
       "flags": [
         {
@@ -126,10 +133,10 @@
             "1800",
             "8777672382"
           ],
-          "verifiedValue": "8004324040"
+          "verifiedValue": "6024174000"
         }
       ],
-      "notes": "Arizona Medicare Savings Programs are current in 2026; official Arizona page shows monthly income limits and no asset limits were found on the official page. Senior pathway applies to Medicare beneficiaries age 65+."
+      "notes": "Arizona Medicare Savings Programs (QMB, SLMB, QI) have no separate senior age threshold beyond Medicare eligibility; using 65 as the senior pathway threshold. Arizona sources indicate no resource/asset test for these MSP categories."
     },
     {
       "programId": "snap-food-benefits",
@@ -153,17 +160,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8557778590",
+        "phone": "8554327587",
         "sources": {
-          "age": "https://www.fna.usda.gov/snap-directory-entry/arizona",
-          "income": "https://www.fna.usda.gov/snap-directory-entry/arizona",
-          "assets": "https://www.fna.usda.gov/snap-directory-entry/arizona",
-          "phone": "https://www.fna.usda.gov/snap-directory-entry/arizona"
+          "age": "https://des.az.gov/how-to-apply-snap",
+          "income": "https://des.az.gov/how-to-apply-snap",
+          "assets": "https://des.az.gov/how-to-apply-snap",
+          "phone": "https://des.az.gov/about-des/contact-us/des-program-and-services-contact-numbers"
         },
-        "notes": "Arizona SNAP/Nutrition Assistance appears current. The retrieved official directory page confirms the senior pathway applies at age 60+, but the retrieved snippets did not provide authoritative current income or countable-asset thresholds, so those are null."
+        "notes": "Arizona Nutrition Assistance is SNAP; for households with an older adult age 60+, DES says they may use a simplified application process. I could not verify an official current household income limit or countable financial asset limit from the retrievable official sources, so those are null."
       },
       "flags": [],
-      "notes": "Arizona SNAP/Nutrition Assistance appears current. The retrieved official directory page confirms the senior pathway applies at age 60+, but the retrieved snippets did not provide authoritative current income or countable-asset thresholds, so those are null."
+      "notes": "Arizona Nutrition Assistance is SNAP; for households with an older adult age 60+, DES says they may use a simplified application process. I could not verify an official current household income limit or countable financial asset limit from the retrievable official sources, so those are null."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -183,21 +190,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2937,
-        "income_2": 3840,
+        "income_1": 2807,
+        "income_2": 3671,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8664941981",
         "sources": {
           "age": null,
-          "income": "https://adesclientportal.my.site.com/Arizona/s/energy-assistance-learn-more?language=en_US",
+          "income": "https://des.az.gov/liheap",
           "assets": null,
           "phone": "https://des.az.gov/liheap"
         },
-        "notes": "Arizona LIHEAP is current and uses a monthly income test; no age or asset test was found for the senior pathway in the retrieved official sources."
+        "notes": "Arizona LIHEAP is current and uses a monthly gross income test; no age or asset test was found for the senior pathway in the official source."
       },
       "flags": [],
-      "notes": "Arizona LIHEAP is current and uses a monthly income test; no age or asset test was found for the senior pathway in the retrieved official sources."
+      "notes": "Arizona LIHEAP is current and uses a monthly gross income test; no age or asset test was found for the senior pathway in the official source."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -226,9 +233,9 @@
           "age": null,
           "income": "https://housing.az.gov/general-public/weatherization-assistance-program",
           "assets": null,
-          "phone": "https://housing.az.gov/general-public/weatherization-assistance-program"
+          "phone": "https://www.phoenix.gov/nsdsite/MediaAssets/WAP%20Program%20Fact%20Sheet.pdf"
         },
-        "notes": "Arizona WAP appears current and statewide; the official Arizona Department of Housing page points applicants to county/city intake contacts and shows income qualification limits, but does not publish an age or asset test on the retrieved page."
+        "notes": "Arizona WAP uses an income test for the senior pathway; the official state page directs applicants to an income qualification limits document, and current published Arizona/partner WAP tables show 200% FPL annual limits of $31,920 for 1 and $43,280 for 2, converted to monthly. No official age or assets test found in the retrievable sources."
       },
       "flags": [
         {
@@ -249,7 +256,7 @@
           "verifiedValue": "6025344444"
         }
       ],
-      "notes": "Arizona WAP appears current and statewide; the official Arizona Department of Housing page points applicants to county/city intake contacts and shows income qualification limits, but does not publish an age or asset test on the retrieved page."
+      "notes": "Arizona WAP uses an income test for the senior pathway; the official state page directs applicants to an income qualification limits document, and current published Arizona/partner WAP tables show 200% FPL annual limits of $31,920 for 1 and $43,280 for 2, converted to monthly. No official age or assets test found in the retrievable sources."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -277,12 +284,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/about-cms/contact/directory/arizona-state-health-insurance-assistance-program-ship/1562011"
+          "phone": "https://www.cms.gov/contacts/arizona-state-health-insurance-assistance-program-ship/general-beneficiary-contact/1562011"
         },
-        "notes": "Arizona SHIP is a Medicare counseling/benefits assistance program for Medicare beneficiaries; no age, income, or asset eligibility test was found in authoritative current sources. Official phone number confirmed by CMS and Arizona DES."
+        "notes": "Arizona SHIP appears to be a Medicare counseling program, not an age/income/assets-tested benefit; no authoritative eligibility test found for the senior pathway. Official phone verified."
       },
       "flags": [],
-      "notes": "Arizona SHIP is a Medicare counseling/benefits assistance program for Medicare beneficiaries; no age, income, or asset eligibility test was found in authoritative current sources. Official phone number confirmed by CMS and Arizona DES."
+      "notes": "Arizona SHIP appears to be a Medicare counseling program, not an age/income/assets-tested benefit; no authoritative eligibility test found for the senior pathway. Official phone verified."
     },
     {
       "programId": "congregate-home-delivered-meals",
@@ -309,15 +316,15 @@
         "assets_couple": null,
         "phone": "6022644357",
         "sources": {
-          "age": "https://www.phoenix.gov/administration/departments/humanservices/programs-services/seniors-older-adults.html",
+          "age": "https://www.caaging.org/meal-programs/",
           "income": null,
           "assets": null,
-          "phone": "https://www.phoenix.gov/administration/departments/humanservices/programs-services/seniors-older-adults.html"
+          "phone": "https://www.caaging.org/meal-programs/"
         },
-        "notes": "Current Arizona senior meal pathway commonly uses age 60+; no income or asset test found in the retrieved official source. Program is referral-based through the Senior Helpline."
+        "notes": "Current Arizona senior meal pathway appears to use age 60+ for home-delivered/congregate meals; official statewide phone not found, so provided current Area Agency on Aging intake number."
       },
       "flags": [],
-      "notes": "Current Arizona senior meal pathway commonly uses age 60+; no income or asset test found in the retrieved official source. Program is referral-based through the Senior Helpline."
+      "notes": "Current Arizona senior meal pathway appears to use age 60+ for home-delivered/congregate meals; official statewide phone not found, so provided current Area Agency on Aging intake number."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -350,10 +357,10 @@
           "assets": null,
           "phone": "https://des.az.gov/LTCOP"
         },
-        "notes": "Program appears active in 2026; no age, income, or asset eligibility test applies to the ombudsman program. Official main phone number found on Arizona DES LTCOP page."
+        "notes": "No age, income, or asset test found for this ombudsman program; official main phone listed on Arizona DES LTCOP page. Program is active and statewide."
       },
       "flags": [],
-      "notes": "Program appears active in 2026; no age, income, or asset eligibility test applies to the ombudsman program. Official main phone number found on Arizona DES LTCOP page."
+      "notes": "No age, income, or asset test found for this ombudsman program; official main phone listed on Arizona DES LTCOP page. Program is active and statewide."
     },
     {
       "programId": "family-caregiver-support",
@@ -377,15 +384,125 @@
         "assets_couple": null,
         "phone": "8887377494",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
+          "age": "https://des.az.gov/sites/default/files/media/3600-Family-Caregiver-Support-Program.pdf?time=1752019200139",
+          "income": "https://des.az.gov/sites/default/files/media/3600-Family-Caregiver-Support-Program.pdf?time=1752019200139",
+          "assets": "https://des.az.gov/sites/default/files/media/3600-Family-Caregiver-Support-Program.pdf?time=1752019200139",
           "phone": "https://des.az.gov/FamilyCaregiver"
         },
-        "notes": "Current Arizona Family Caregiver Support/Lifespan Respite contact appears to be the Arizona Caregiver Resource Line at 888-737-7494; no age, income, or asset test was found for the senior caregiver pathway."
+        "notes": "Current Arizona Family Caregiver Support Program materials do not show an income or asset test for the senior caregiver pathway; the main state caregiver resource line is 888-737-7494."
       },
       "flags": [],
-      "notes": "Current Arizona Family Caregiver Support/Lifespan Respite contact appears to be the Arizona Caregiver Resource Line at 888-737-7494; no age, income, or asset test was found for the senior caregiver pathway."
+      "notes": "Current Arizona Family Caregiver Support Program materials do not show an income or asset test for the senior caregiver pathway; the main state caregiver resource line is 888-737-7494."
+    },
+    {
+      "programId": "az-abd-medicaid",
+      "programName": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": 1304,
+        "income_2": 1764,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18554327587"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 2982,
+        "income_2": 2982,
+        "assets_individual": 2000,
+        "assets_couple": 2000,
+        "phone": "8886216880",
+        "sources": {
+          "age": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "income": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "assets": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "phone": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf"
+        },
+        "notes": "Arizona’s senior pathway is ALTCS (part of AHCCCS Medicaid), not a separate ABD label; official source shows 2026 gross monthly income limit and resource limits."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1304,
+          "verifiedValue": 2982,
+          "pctDiff": 56.3
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1764,
+          "verifiedValue": 2982,
+          "pctDiff": 40.8
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18554327587"
+          ],
+          "verifiedValue": "8886216880"
+        }
+      ],
+      "notes": "Arizona’s senior pathway is ALTCS (part of AHCCCS Medicaid), not a separate ABD label; official source shows 2026 gross monthly income limit and resource limits."
+    },
+    {
+      "programId": "az-senior-property-valuation-freeze",
+      "programName": "Senior Property Valuation Protection Option",
+      "facts": {
+        "age": 65,
+        "income_1": 3976,
+        "income_2": 4970,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "6027166843"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 47712,
+        "income_2": 59640,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "6022553381",
+        "sources": {
+          "age": "https://azdor.gov/business/property-tax/property-tax-faqs",
+          "income": "https://azdor.gov/business/property-tax/property-tax-faqs",
+          "assets": null,
+          "phone": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option"
+        },
+        "notes": "Program is officially the Senior Property Valuation Protection Option (Senior Freeze); no asset test found in current official sources."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "info",
+          "draftValue": 3976,
+          "verifiedValue": 47712,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "income_2",
+          "severity": "info",
+          "draftValue": 4970,
+          "verifiedValue": 59640,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "6027166843"
+          ],
+          "verifiedValue": "6022553381"
+        }
+      ],
+      "notes": "Program is officially the Senior Property Valuation Protection Option (Senior Freeze); no asset test found in current official sources."
     }
   ]
 }

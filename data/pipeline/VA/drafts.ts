@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.406Z
+ * Last updated: 2026-10-06T12:32:15.194Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -778,6 +778,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "State Department for Aging and Rehabilitative Services - see website for regional contacts",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 992-0959",
+          "description": "Number listed on easyaccess.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -840,18 +846,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dars.virginia.gov/aging/senior-employment-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5713637688",
             "8043433000"
           ],
-          "to": "8046627035",
-          "source": "https://dars.virginia.gov/aging/senior-employment-program/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:11.494Z"
+          "to": "(888) 992-0959",
+          "source": "https://easyaccess.virginia.gov/employment",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -938,6 +946,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(703) 746-5999",
           "description": "Number listed on dars.virginia.gov",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 992-0959",
+          "description": "Number listed on easyaccess.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [],
@@ -969,6 +983,20 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dars.virginia.gov/aging/home-community/find-local-aaa/",
           "flaggedAt": "2026-10-02T07:47:11.494Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8005523402",
+            "8046629333",
+            "7037465999"
+          ],
+          "to": "(888) 992-0959",
+          "source": "https://easyaccess.virginia.gov/caregiver",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -1019,7 +1047,7 @@ export const drafts: PipelineStateDrafts = {
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1363
+            "monthlyLimit": 1463
           }
         ],
         "assetLimits": {
@@ -1191,7 +1219,41 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-833-522-5582",
       "sourceUrl": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_2",
+          "from": 1363,
+          "to": 1463,
+          "source": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1004,
+          "to": 1084,
+          "source": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "severity": "medium",
+          "why": "draft fits a federal formula (100% SSI 2026); verified value fits none",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18335225582"
+          ],
+          "to": "18552428282",
+          "source": "https://coverva.dmas.virginia.gov/media/fmjfdqvy/fact-sheet-abd80-060125.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        }
+      ]
     },
     {
       "id": "va-medicare-savings-programs",
@@ -1425,7 +1487,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-242-8282",
       "sourceUrl": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 8400,
+          "to": 9950,
+          "source": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 12600,
+          "to": 14910,
+          "source": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        }
+      ]
     },
     {
       "id": "va-snap-food-benefits",
@@ -1886,7 +1968,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(434) 529-1300",
       "sourceUrl": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8049775900",
+          "source": "https://www.dmas.virginia.gov/for-members/benefits-and-services/long-term-care/programs-and-initiatives/program-of-all-inclusive-care/",
+          "reason": "page also lists ours ((434) 529-1300)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "va-liheap-energy-assistance",
@@ -2230,6 +2323,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "703-771-5012",
           "description": "Home-Delivered Meals intake for Loudoun County residents. Alternate number: 703-737-8034.",
           "hours": "Contact for current hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(703) 746-5999",
+          "description": "Number listed on alexandriava.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2294,7 +2393,25 @@ export const drafts: PipelineStateDrafts = {
       "phone": "804-662-9319",
       "sourceUrl": "https://dars.virginia.gov/aging/home-community/nutrition-meals/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8046629319",
+            "7033245409",
+            "7032281700",
+            "7037715012"
+          ],
+          "to": "(703) 746-5999",
+          "source": "https://www.alexandriava.gov/older-adult-services/program/nutrition-health",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "va-property-tax-exemption-elderly-disabled",
@@ -2418,6 +2535,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Can help you find the contact information for your parent's local Commissioner of the Revenue if you are not sure which office handles their area. This line provides referrals; it does not process tax relief applications.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(804) 367-8031",
+          "description": "Number listed on tax.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2490,7 +2613,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "757-890-3382",
       "sourceUrl": "https://law.lis.virginia.gov/vacodefull/title58.1/chapter32/article2/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "7578903382",
+            "211"
+          ],
+          "to": "(804) 367-8031",
+          "source": "https://www.tax.virginia.gov/contact-us",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

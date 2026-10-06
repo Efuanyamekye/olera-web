@@ -1,13 +1,13 @@
 {
   "state": "DC",
   "stateName": "District of Columbia",
-  "checkedAt": "2026-10-02T09:35:41.563Z",
-  "total": 5,
+  "checkedAt": "2026-10-06T12:19:24.804Z",
+  "total": 9,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 3,
-  "totalFlags": 4,
+  "totalFlags": 5,
   "highSeverityFlags": 3,
   "programs": [
     {
@@ -27,29 +27,29 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2313,
+        "income_1": null,
         "income_2": null,
         "assets_individual": 4000,
-        "assets_couple": 6000,
+        "assets_couple": null,
         "phone": "2027245626",
         "sources": {
           "age": "https://dacl.dc.gov/service/epd-waiver",
-          "income": "https://www.dc-medicaid.com/dcwebportal/documentInformation/getDocument/17695",
+          "income": "https://dacl.dc.gov/service/epd-waiver",
           "assets": "https://dacl.dc.gov/service/epd-waiver",
           "phone": "https://dacl.dc.gov/service/epd-waiver"
         },
-        "notes": "Current DC EPD Waiver page lists seniors as 65+ and assets at $4,000 individual; income figure is from an older Medicaid eligibility document and should be verified against the current waiver page if needed."
+        "notes": "Current official DC DACL page shows the senior pathway starts at age 65 and lists $4,000 in countable assets for an individual; no separate current couple asset limit was found on the retrieved official page."
       },
       "flags": [],
-      "notes": "Current DC EPD Waiver page lists seniors as 65+ and assets at $4,000 individual; income figure is from an older Medicaid eligibility document and should be verified against the current waiver page if needed."
+      "notes": "Current official DC DACL page shows the senior pathway starts at age 65 and lists $4,000 in countable assets for an individual; no separate current couple asset limit was found on the retrieved official page."
     },
     {
       "programId": "safe-at-home-program",
       "programName": "Safe at Home Program",
       "facts": {
         "age": 60,
-        "income_1": 6046,
-        "income_2": 6879,
+        "income_1": 8300,
+        "income_2": 9488,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
@@ -71,31 +71,31 @@
           "assets": null,
           "phone": "https://dacl.dc.gov/service/safe-home"
         },
-        "notes": "Current D.C. Safe at Home senior threshold is age 60+; income cap is 100% AMI and the official page lists annual amounts that convert to the monthly values shown. No asset test was found in the official source."
+        "notes": "Current official DC Safe at Home senior pathway uses age 60+ and annual income limits of $99,600/$113,850; no asset test found in the retrieved official sources."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "high",
-          "draftValue": 6046,
+          "severity": "info",
+          "draftValue": 8300,
           "verifiedValue": 99600,
-          "pctDiff": 93.9
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
         },
         {
           "field": "income_2",
-          "severity": "high",
-          "draftValue": 6879,
+          "severity": "info",
+          "draftValue": 9488,
           "verifiedValue": 113850,
-          "pctDiff": 94
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
         }
       ],
-      "notes": "Current D.C. Safe at Home senior threshold is age 60+; income cap is 100% AMI and the official page lists annual amounts that convert to the monthly values shown. No asset test was found in the official source."
+      "notes": "Current official DC Safe at Home senior pathway uses age 60+ and annual income limits of $99,600/$113,850; no asset test found in the retrieved official sources."
     },
     {
       "programId": "dacl-benefits-assistance",
       "programName": "DACL Benefits Assistance",
       "facts": {
-        "age": 65,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": 4000,
@@ -115,21 +115,14 @@
         "phone": "2027245626",
         "sources": {
           "age": "https://dacl.dc.gov/service/information-referralassistance",
-          "income": null,
-          "assets": null,
+          "income": "https://dacl.dc.gov/service/benefits-assistance",
+          "assets": "https://dacl.dc.gov/service/benefits-assistance",
           "phone": "https://dacl.dc.gov/service/benefits-assistance"
         },
-        "notes": "DACL Benefits Assistance is an assistance/referral service, not a direct benefits program; the official pages do not show a separate income or countable-asset eligibility test. Age threshold for intake/services is 60+ for seniors."
+        "notes": "DACL Benefits Assistance is an application-help service, not a standalone means-tested benefit; the senior pathway intake age is 60+. No separate official countable-asset limit or income threshold was found for this service itself; those limits apply to the underlying programs (e.g., Medicaid/SNAP), not DACL Benefits Assistance."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 65,
-          "verifiedValue": 60
-        }
-      ],
-      "notes": "DACL Benefits Assistance is an assistance/referral service, not a direct benefits program; the official pages do not show a separate income or countable-asset eligibility test. Age threshold for intake/services is 60+ for seniors."
+      "flags": [],
+      "notes": "DACL Benefits Assistance is an application-help service, not a standalone means-tested benefit; the senior pathway intake age is 60+. No separate official countable-asset limit or income threshold was found for this service itself; those limits apply to the underlying programs (e.g., Medicaid/SNAP), not DACL Benefits Assistance."
     },
     {
       "programId": "senior-centers",
@@ -141,7 +134,7 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "2027247000"
+          "2027245626"
         ],
         "hasVerifiableFacts": true
       },
@@ -156,21 +149,12 @@
           "age": "https://dhs.dc.gov/service/senior-wellness-centers",
           "income": null,
           "assets": null,
-          "phone": "https://dacl.dc.gov/services"
+          "phone": "https://dacl.dc.gov/"
         },
-        "notes": "Senior Wellness Centers/DACL senior centers are for DC residents 60+; no income or asset test found for the senior pathway."
+        "notes": "Current DC senior centers/senior wellness centers serve residents 60+; no income or asset test found for this program."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "2027247000"
-          ],
-          "verifiedValue": "2027245626"
-        }
-      ],
-      "notes": "Senior Wellness Centers/DACL senior centers are for DC residents 60+; no income or asset test found for the senior pathway."
+      "flags": [],
+      "notes": "Current DC senior centers/senior wellness centers serve residents 60+; no income or asset test found for this program."
     },
     {
       "programId": "family-caregiver-support",
@@ -199,10 +183,186 @@
           "assets": null,
           "phone": "https://dacl.dc.gov/service/caregiver-programs"
         },
-        "notes": "No age, income, or asset test found for the DACL Caregiver Programs senior pathway; current official contact number is listed on DC.gov."
+        "notes": "No authoritative age, income, or asset test found for DACL Caregiver Programs; official source shows caregiver support services and the main phone number."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for the DACL Caregiver Programs senior pathway; current official contact number is listed on DC.gov."
+      "notes": "No authoritative age, income, or asset test found for DACL Caregiver Programs; official source shows caregiver support services and the main phone number."
+    },
+    {
+      "programId": "dc-medicaid-aged-blind-disabled",
+      "programName": "DC Medicaid for Aged, Blind and Disabled",
+      "facts": {
+        "age": 65,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 4000,
+        "assets_couple": null,
+        "phones": [
+          "2027275355"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 4000,
+        "assets_couple": 6000,
+        "phone": "2027275355",
+        "sources": {
+          "age": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals",
+          "income": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals",
+          "assets": "https://dhcf.dc.gov/service/aged-blind-and-disabled-abd-individuals",
+          "phone": "https://dhcf.dc.gov/service/medicaid-eligibility-programs"
+        },
+        "notes": "Current DC DHCF guidance says ABD Medicaid is for people 65+ (or blind/disabled), with household income up to 100% FPL and resources below $4,000 for one person/$6,000 for a couple."
+      },
+      "flags": [],
+      "notes": "Current DC DHCF guidance says ABD Medicaid is for people 65+ (or blind/disabled), with household income up to 100% FPL and resources below $4,000 for one person/$6,000 for a couple."
+    },
+    {
+      "programId": "dc-medicare-savings-programs-qmb-slmb-qi",
+      "programName": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+      "facts": {
+        "age": null,
+        "income_1": 4010,
+        "income_2": 5430,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phones": [
+          "2026984220",
+          "2027245506"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 4010,
+        "income_2": 5430,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "2027245626",
+        "sources": {
+          "age": null,
+          "income": "https://dacl.dc.gov/service/qualified-medicare-beneficiaries-qmb-program",
+          "assets": null,
+          "phone": "https://dacl.dc.gov/service/qualified-medicare-beneficiaries-qmb-program"
+        },
+        "notes": "DC’s 2026 Medicare Savings Program page found here appears to use an expanded QMB-only pathway rather than separate SLMB/QI tiers; I could verify income and phone from an official DC source, but I could not find authoritative countable-asset limits or a separate age rule in the retrieved sources."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "2026984220",
+            "2027245506"
+          ],
+          "verifiedValue": "2027245626"
+        }
+      ],
+      "notes": "DC’s 2026 Medicare Savings Program page found here appears to use an expanded QMB-only pathway rather than separate SLMB/QI tiers; I could verify income and phone from an official DC source, but I could not find authoritative countable-asset limits or a separate age rule in the retrieved sources."
+    },
+    {
+      "programId": "dc-snap-food-benefits",
+      "programName": "DC SNAP (Supplemental Nutrition Assistance Program)",
+      "facts": {
+        "age": null,
+        "income_1": 1032,
+        "income_2": 1395,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phones": [
+          "2027275355",
+          "711",
+          "18005377699"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1696,
+        "income_2": 2292,
+        "assets_individual": 3000,
+        "assets_couple": 4500,
+        "phone": "2027275355",
+        "sources": {
+          "age": null,
+          "income": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+          "assets": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+          "phone": "https://dhs.dc.gov/page/dhs-call-center"
+        },
+        "notes": "SNAP in DC is current and not renamed/discontinued; age-specific senior pathway for the resource limit is 60+ or disability, with a $4,500 household resource limit."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1032,
+          "verifiedValue": 1696,
+          "pctDiff": 39.2
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1395,
+          "verifiedValue": 2292,
+          "pctDiff": 39.1
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 4500,
+          "verifiedValue": 3000,
+          "pctDiff": 33.3
+        }
+      ],
+      "notes": "SNAP in DC is current and not renamed/discontinued; age-specific senior pathway for the resource limit is 60+ or disability, with a $4,500 household resource limit."
+    },
+    {
+      "programId": "dc-liheap-energy-assistance",
+      "programName": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+      "facts": {
+        "age": null,
+        "income_1": 5153,
+        "income_2": 6739,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "2022993336",
+          "2027370938",
+          "311"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 5073,
+        "income_2": 6739,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "2025352600",
+        "sources": {
+          "age": null,
+          "income": "https://doee.dc.gov/sites/default/files/dc/sites/doee/service_content/attachments/DC%20DOEE%20-%20FY26%20LIHEAP%20Benefit%20Matrix.docx",
+          "assets": null,
+          "phone": "https://doee.dc.gov/energyassistance"
+        },
+        "notes": "DC LIHEAP uses a 60% State Median Income test in FY26; no separate age or asset test was found in the official sources reviewed. Monthly income limits were derived from the official FY26 annual figures (1 person $60,869; 2 people $80,869) by dividing by 12 and rounding to the nearest integer."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "2022993336",
+            "2027370938",
+            "311"
+          ],
+          "verifiedValue": "2025352600"
+        }
+      ],
+      "notes": "DC LIHEAP uses a 60% State Median Income test in FY26; no separate age or asset test was found in the official sources reviewed. Monthly income limits were derived from the official FY26 annual figures (1 person $60,869; 2 people $80,869) by dividing by 12 and rounding to the nearest integer."
     }
   ]
 }
