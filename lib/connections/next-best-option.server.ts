@@ -225,3 +225,35 @@ export async function findNextBestOption(
     reviewCount: best.p.google_reviews_data?.review_count ?? null,
   };
 }
+
+/**
+ * The offer's funnel, recorded on the family's ORIGINAL inquiry under
+ * metadata.next_best_option (6 Oct, TJ: "would be nice to know when families
+ * tap that"). On the connection, not as an activity event, because a new
+ * event_type needs a database CHECK migration and this needs none:
+ *
+ *   offered_at   the line was shown (the lookup found someone)
+ *   opened_at    they tapped "Show me"
+ *   sent_at      they sent their request to the offered provider
+ *
+ * Count with metadata->next_best_option->>offered_at / opened_at / sent_at.
+ * First write wins for each stamp, so a reload never moves the clock. Never
+ * throws: losing a stamp must not lose the family's request.
+ */
+export async function stampNextBestOption(
+  db: SupabaseClient,
+  connectionId: string,
+  patch: Record<string, unknown>,
+): Promise<void> {
+  try {
+    const { data } = await db.from("connections").select("metadata").eq("id", connectionId).maybeSingle();
+    if (!data) return;
+    const metadata = (data.metadata as Record<string, unknown> | null) ?? {};
+    const current = (metadata.next_best_option as Record<string, unknown> | undefined) ?? {};
+    const merged: Record<string, unknown> = { ...patch, ...current };
+    if (JSON.stringify(merged) === JSON.stringify(current)) return;
+    await db.from("connections").update({ metadata: { ...metadata, next_best_option: merged } }).eq("id", connectionId);
+  } catch (err) {
+    console.error("[next-best-option] stamp failed", err);
+  }
+}

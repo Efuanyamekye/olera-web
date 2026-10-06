@@ -116,7 +116,15 @@ export default function NextBestOption({
           </p>
           <button
             type="button"
-            onClick={() => setPhase("open")}
+            onClick={() => {
+              setPhase("open");
+              // Recorded for the funnel only; the card opens either way.
+              fetch("/api/connections/next-best-option", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ connectionId }),
+              }).catch(() => {});
+            }}
             className="shrink-0 rounded-lg px-3 py-1.5 text-[14px] font-semibold text-primary-700 hover:bg-primary-50 transition-colors"
           >
             Show me

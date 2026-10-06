@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
-import { findNextBestOption } from "@/lib/connections/next-best-option.server";
+import { findNextBestOption, stampNextBestOption } from "@/lib/connections/next-best-option.server";
 
 /**
  * GET /api/connections/next-best-option?connectionId=…
@@ -14,26 +14,26 @@ import { findNextBestOption } from "@/lib/connections/next-best-option.server";
  * existing account holds no session yet (anti-takeover, see the request route),
  * so they get a 401 and the card simply shows nothing.
  */
-export async function GET(request: Request) {
-  const connectionId = new URL(request.url).searchParams.get("connectionId");
-  if (!connectionId) return NextResponse.json({ error: "connectionId is required" }, { status: 400 });
+/** The family's own inquiry, or a response saying why not. */
+async function ownInquiry(connectionId: string | null) {
+  if (!connectionId) return { error: NextResponse.json({ error: "connectionId is required" }, { status: 400 }) };
 
   const supabase = await createServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  if (!user) return { error: NextResponse.json({ error: "Not authenticated" }, { status: 401 }) };
 
   const db = getServiceClient();
   const { data: account } = await db.from("accounts").select("id").eq("user_id", user.id).maybeSingle();
-  if (!account) return NextResponse.json({ option: null });
+  if (!account) return { error: NextResponse.json({ option: null }) };
 
   const { data: connection } = await db
     .from("connections")
     .select("id, from_profile_id, to_profile_id, type")
     .eq("id", connectionId)
     .maybeSingle();
-  if (!connection || connection.type !== "inquiry") return NextResponse.json({ option: null });
+  if (!connection || connection.type !== "inquiry") return { error: NextResponse.json({ option: null }) };
 
   const { data: family } = await db
     .from("business_profiles")
@@ -41,16 +41,43 @@ export async function GET(request: Request) {
     .eq("id", connection.from_profile_id)
     .eq("account_id", account.id)
     .maybeSingle();
-  if (!family) return NextResponse.json({ error: "Not your inquiry" }, { status: 403 });
+  if (!family) return { error: NextResponse.json({ error: "Not your inquiry" }, { status: 403 }) };
+  return { db, connection };
+}
+
+export async function GET(request: Request) {
+  const own = await ownInquiry(new URL(request.url).searchParams.get("connectionId"));
+  if ("error" in own) return own.error;
+  const { db, connection } = own;
 
   try {
     const option = await findNextBestOption(db, {
       anchorProfileId: connection.to_profile_id,
       familyProfileId: connection.from_profile_id,
     });
+    if (option) {
+      await stampNextBestOption(db, connection.id, {
+        offered_at: new Date().toISOString(),
+        offered_provider_id: option.providerId,
+        offered_name: option.name,
+        offered_miles: option.distanceMi,
+      });
+    }
     return NextResponse.json({ option });
   } catch (err) {
     console.error("[next-best-option] lookup failed", err);
     return NextResponse.json({ option: null });
   }
+}
+
+/**
+ * POST { connectionId } — the family tapped "Show me". Recorded only; the send
+ * itself goes through /api/connections/request.
+ */
+export async function POST(request: Request) {
+  const body = (await request.json().catch(() => ({}))) as { connectionId?: string };
+  const own = await ownInquiry(body.connectionId ?? null);
+  if ("error" in own) return own.error;
+  await stampNextBestOption(own.db, own.connection.id, { opened_at: new Date().toISOString() });
+  return NextResponse.json({ ok: true });
 }

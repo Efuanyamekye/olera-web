@@ -16,6 +16,7 @@ import { recordProviderEvent } from "@/lib/analytics/provider-events";
 import { markAdsLeadConversion } from "@/lib/ad-boost/ads-conversion.server";
 import { readManagedUtmFromRequest, managedUtmMetadata, type ManagedUtm } from "@/lib/ad-boost/managed-utm";
 import { holdProviderLeadNotifications, sendProviderLeadNotifications } from "@/lib/leads/provider-notifications.server";
+import { stampNextBestOption } from "@/lib/connections/next-best-option.server";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1017,7 +1018,8 @@ export async function POST(request: Request) {
     // Managed-ads attribution from the provider-page-load cookie (set by
     // ManagedUtmCapture). Cookie rides along on this same-origin fetch, so no
     // client caller needs to thread UTM. See lib/ad-boost/managed-utm.
-    const managedUtm = readManagedUtmFromRequest(request);
+    // let: a next-best-option request clears it below (3b).
+    let managedUtm = readManagedUtmFromRequest(request);
     const {
       providerId,
       providerName,
@@ -1348,15 +1350,22 @@ export async function POST(request: Request) {
     // Only from an inquiry this same family sent; anything else is ignored and
     // the request proceeds as an ordinary one.
     let carriedFrom: string | null = null;
+    let carriedFromProviderId: string | null = null;
     let carried: Record<string, unknown> = {};
+    // The managed-ads cookie names a campaign, not a provider, and it was set
+    // by the page the family is still on: the FIRST provider's page. Kept, it
+    // would credit this second provider's inquiry to that provider's Ad Boost
+    // campaign and fire its ad conversion. This family came from our offer.
+    if (entryPoint === "next_best_option") managedUtm = {};
     if (entryPoint === "next_best_option" && fromConnectionId) {
       const { data: original } = await db
         .from("connections")
-        .select("id, from_profile_id, type, message")
+        .select("id, from_profile_id, to_profile_id, type, message")
         .eq("id", fromConnectionId)
         .maybeSingle();
       if (original && original.from_profile_id === fromProfileId && original.type === "inquiry") {
         carriedFrom = original.id;
+        carriedFromProviderId = original.to_profile_id as string;
         try {
           const parsed = JSON.parse(original.message || "{}");
           if (parsed && typeof parsed === "object") carried = parsed as Record<string, unknown>;
@@ -1670,6 +1679,23 @@ export async function POST(request: Request) {
       await sendProviderLeadNotifications({ connectionId: newConnection.id, releasedBy: "enrichment" }).catch((err) =>
         console.error("[connections/request] next-best-option release failed", err),
       );
+      // The funnel's last step, and a line in #notifications (TJ, 6 Oct): the
+      // offer only matters if families take it, so every take is visible.
+      await stampNextBestOption(db, carriedFrom, {
+        sent_at: new Date().toISOString(),
+        sent_connection_id: newConnection.id,
+      });
+      try {
+        const { data: first } = carriedFromProviderId
+          ? await db.from("business_profiles").select("display_name").eq("id", carriedFromProviderId).maybeSingle()
+          : { data: null };
+        const who = (typeof carried.seeker_first_name === "string" && carried.seeker_first_name) || "A family";
+        await sendSlackAlert(
+          `↪️ Next best option taken: ${who} asked ${first?.display_name ?? "a provider"}, then sent their request to ${providerName} from our offer. Both have their details. ${getSiteUrl()}/admin/relationships/families/${fromProfileId}`,
+        );
+      } catch (err) {
+        console.error("[connections/request] next-best-option alert failed", err);
+      }
     }
 
     // 9d-ii. WhatsApp enrichment conversation to seeker (fire-and-forget)
