@@ -1,0 +1,768 @@
+{
+  "state": "OH",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "OH-A",
+      "programs": [
+        {
+          "name": "PASSPORT Medicaid waiver / MyCare Ohio Waiver (Next Generation MyCare)",
+          "alsoKnownAs": [
+            "PASSPORT",
+            "MyCare Ohio",
+            "MyCare Ohio Waiver",
+            "Medicaid waiver",
+            "home care waiver"
+          ],
+          "agency": "Ohio Department of Medicaid and Ohio Department of Aging (PASSPORT Administrative Agency: Western Reserve Area Agency on Aging; MyCare plans for full duals)",
+          "verdict": "likely",
+          "reason": "As a Medicare and full-Medicaid enrollee in Cuyahoga she is in a Next Generation MyCare plan (since Jan 1, 2026), and waiver services come through the MyCare Ohio Waiver rather than PASSPORT. Help with bathing and dressing (2 ADLs) plus medication meets intermediate level of care. Income $1,050 is under the $2,982 special income level and savings $1,200 are under $2,000.",
+          "keyRule": "Intermediate level of care (OAC 5160-3-08): help with 2+ ADLs, or 1 ADL + medication administration, or 24-hour support for cognitive impairment; special income level 300% SSI ($2,982/mo 2026); resources $2,000",
+          "source": "https://aging.ohio.gov/care-and-living/get-help/home-and-community-care/passport-eligibility-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (McGregor PACE)",
+          "alsoKnownAs": [
+            "PACE",
+            "McGregor PACE"
+          ],
+          "agency": "Ohio Department of Aging / McGregor PACE",
+          "verdict": "likely",
+          "reason": "Alternative to MyCare: she is 79, meets nursing-facility level of care, has Medicaid, and Cuyahoga is served by McGregor PACE; PACE enrollees are excluded from MyCare.",
+          "keyRule": "Age 55+, nursing-facility (intermediate or skilled) level of care, lives in the PACE service area; Medicaid-eligible or private pay. McGregor PACE serves Cuyahoga County ZIPs (service-area detail from secondary source)",
+          "source": "https://aging.ohio.gov/wps/portal/gov/aging/find-services/McGregorPACE-ForestHill",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Qualified Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "Income $1,050 under $1,350 and savings $1,200 under $9,950; as a dual the state should already pay her Part B.",
+          "keyRule": "QMB 2026: $1,350/mo individual, resources $9,950",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic for anyone with Medicaid or an MSP.",
+          "keyRule": "Deemed eligible as a dual",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Caregiver Support Program (National Family Caregiver Support Program via the AAA)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support",
+            "WRAAA caregiver support"
+          ],
+          "agency": "Western Reserve Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "Her daughter is an informal caregiver of a 60+ person with dementia; WRAAA offers caregiver assessment, care planning and respite planning at no cost.",
+          "keyRule": "Older Americans Act Title III-E: caregivers of people 60+ or of any age with Alzheimer's",
+          "source": "https://www.areaagingsolutions.org/programs-services/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Respite Program",
+          "alsoKnownAs": [
+            "Alzheimer's respite",
+            "Ohio Alzheimer's Respite Fund"
+          ],
+          "agency": "Ohio Department of Aging via Western Reserve Area Agency on Aging with the Alzheimer's Association",
+          "verdict": "likely",
+          "reason": "She has advancing dementia and a family caregiver; the program can add respite and adult day on top of waiver services.",
+          "keyRule": "State-funded respite, adult day, homemaker and personal care for caregivers of people with Alzheimer's or related dementia, administered by the area agencies on aging",
+          "source": "https://aging.ohio.gov/care-and-living/caregiver-support/dementia-caregiving-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "Food Assistance",
+            "food stamps"
+          ],
+          "agency": "Ohio Department of Job and Family Services / Cuyahoga County JFS",
+          "verdict": "likely",
+          "reason": "One-person household with $1,050 gross is under 130% FPL, so she is categorically eligible; elderly shelter and medical deductions apply.",
+          "keyRule": "Ohio broad-based categorical eligibility at 130% FPL gross; elderly/disabled households exempt from gross test otherwise",
+          "source": "https://codes.ohio.gov/ohio-administrative-code/chapter-5101:4-4",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP",
+            "PIPP Plus",
+            "Winter Crisis Program"
+          ],
+          "agency": "Ohio Department of Development via local energy assistance provider",
+          "verdict": "likely",
+          "reason": "Annual income $12,600 is far under the one-person limit, if she pays for heat.",
+          "keyRule": "2026-27 HEAP: 175% FPL (published $29,930 for 1; $37,870 for 2)",
+          "source": "https://puco.ohio.gov/utilities/gas/resources/home-energy-assistance-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Exemption",
+          "alsoKnownAs": [
+            "Ohio homestead",
+            "property tax reduction"
+          ],
+          "agency": "County auditor / Ohio Department of Taxation",
+          "verdict": "possible",
+          "reason": "She is 65+ and Social Security is excluded from Ohio AGI, so she passes the income test if she owns her home; ownership is not given.",
+          "keyRule": "Owner-occupied home; age 65+ or permanently disabled; modified Ohio AGI (excludes Social Security) of $41,000 or less for tax year 2026; exempts taxes on up to $29,700 of value",
+          "source": "https://tax.ohio.gov/help-center/faqs/real-property-tax-homestead-means-testing",
+          "evidence": "official"
+        },
+        {
+          "name": "Options for Independent Living",
+          "alsoKnownAs": [
+            "OFIL",
+            "Cuyahoga County Senior and Adult Services in-home care"
+          ],
+          "agency": "Cuyahoga County Division of Senior and Adult Services",
+          "verdict": "unlikely",
+          "reason": "OFIL is only for people not eligible for a Medicaid waiver, and she should be eligible for the MyCare Ohio Waiver.",
+          "keyRule": "Cuyahoga residents 60+ (or 18-59 and disabled) with limited income who are NOT eligible for a Medicaid waiver and need help with daily activities; exact income limit not published on pages reached",
+          "source": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income $1,030 exceeds the $994 SSI rate.",
+          "keyRule": "SSI FBR $994/mo (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "MyCare Ohio Waiver assessment through her MyCare plan care coordinator",
+        "phoneOrWhere": "Number on her MyCare plan card (CareSource 855-475-3163, Molina 866-856-8295, Anthem 833-727-2169, Buckeye 855-445-3562); if unsure of plan, Ohio Medicaid Consumer Hotline 800-324-8680; WRAAA 1-800-626-7277 if she turns out not to have full Medicaid",
+        "why": "She already has Medicaid, so a level-of-care assessment is all that stands between her and paid in-home help; she lives alone with dementia and wanders at night."
+      },
+      "notes": "Check her Medicaid category: Ohio ABD Medicaid's regular income limit is reported as the SSI rate ($994; secondary source), and her $1,050 Social Security is above it with no spend-down since 2016. If her 'Medicaid' is really QMB-only, she is not in MyCare and must apply for PASSPORT through WRAAA using the special income level, which she would meet. Night wandering while alone is a safety flag."
+    },
+    {
+      "familyId": "OH-B",
+      "programs": [
+        {
+          "name": "Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "Aid and Attendance",
+            "A&A",
+            "Improved Pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "He served 1962-1965, overlapping the Vietnam era starting Aug 5, 1964, honorably discharged, 83. Household income $37,200 exceeds the $34,488 MAPR, but the two Part B premiums ($4,870/yr minus the $1,141 threshold) bring countable income to about $33,471, so a pension is payable (about $85/mo from premiums alone, more with paid care). Net worth $75,200 is under $163,699.",
+          "keyRule": "Veteran with spouse, A&A MAPR $34,488 (Dec 2025); net worth limit $163,699; 90 days active duty with 1 day of wartime service (Vietnam era outside Vietnam Aug 5, 1964-May 7, 1975)",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Caregiver Support Program (National Family Caregiver Support Program via the AAA)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support",
+            "WRAAA caregiver support"
+          ],
+          "agency": "Western Reserve Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "His 80-year-old wife is his only caregiver and exhausted; WRAAA caregiver support provides assessment, care planning and respite planning at no cost.",
+          "keyRule": "Older Americans Act Title III-E caregiver support; caregivers of people 60+",
+          "source": "https://www.areaagingsolutions.org/programs-services/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Respite Program",
+          "alsoKnownAs": [
+            "Alzheimer's respite",
+            "Ohio Alzheimer's Respite Fund"
+          ],
+          "agency": "Ohio Department of Aging via Western Reserve Area Agency on Aging with the Alzheimer's Association",
+          "verdict": "likely",
+          "reason": "He has moderate dementia and a family caregiver.",
+          "keyRule": "State-funded respite, adult day, homemaker and personal care for caregivers of people with Alzheimer's or related dementia, administered by the area agencies on aging",
+          "source": "https://aging.ohio.gov/care-and-living/caregiver-support/dementia-caregiving-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP",
+            "PIPP Plus",
+            "Winter Crisis Program"
+          ],
+          "agency": "Ohio Department of Development via local energy assistance provider",
+          "verdict": "likely",
+          "reason": "Household income $37,200/yr is just under the 2026-27 limit for two, if they pay for heat (income is counted over the past 30 days or 12 months).",
+          "keyRule": "2026-27 HEAP: $37,870/yr for 2 (175% FPL)",
+          "source": "https://puco.ohio.gov/utilities/gas/resources/home-energy-assistance-program",
+          "evidence": "official"
+        },
+        {
+          "name": "PASSPORT Medicaid waiver / MyCare Ohio Waiver (Next Generation MyCare)",
+          "alsoKnownAs": [
+            "PASSPORT",
+            "MyCare Ohio",
+            "MyCare Ohio Waiver",
+            "Medicaid waiver",
+            "home care waiver"
+          ],
+          "agency": "Ohio Department of Medicaid and Ohio Department of Aging (PASSPORT Administrative Agency: Western Reserve Area Agency on Aging; MyCare plans for full duals)",
+          "verdict": "possible",
+          "reason": "Level of care is borderline: hands-on help with one ADL (bathing) plus daytime supervision needs either a second ADL, help with medication administration, or 24-hour supervision for cognitive impairment. Financially his wife keeps at least $32,532, leaving about $5,468 against his $2,000 limit, so a spend-down of about $3,468 would be needed; if his own income exceeds $2,982, Ohio allows a Qualified Income Trust. Once on Medicaid he would be a full dual and get services through the MyCare Ohio Waiver.",
+          "keyRule": "Intermediate level of care (OAC 5160-3-08); special income level $2,982 or QIT; resources $2,000; community spouse resource allowance minimum $32,532 (2026)",
+          "source": "https://aging.ohio.gov/care-and-living/get-help/home-and-community-care/passport-eligibility-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (McGregor PACE)",
+          "alsoKnownAs": [
+            "PACE",
+            "McGregor PACE"
+          ],
+          "agency": "Ohio Department of Aging / McGregor PACE",
+          "verdict": "possible",
+          "reason": "He is 55+ in Cuyahoga; depends on meeting nursing-facility level of care, and on Medicaid eligibility or private pay.",
+          "keyRule": "Age 55+, nursing-facility (intermediate or skilled) level of care, lives in the PACE service area; Medicaid-eligible or private pay. McGregor PACE serves Cuyahoga County ZIPs (service-area detail from secondary source)",
+          "source": "https://aging.ohio.gov/wps/portal/gov/aging/find-services/McGregorPACE-ForestHill",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Options for Independent Living",
+          "alsoKnownAs": [
+            "OFIL",
+            "Cuyahoga County Senior and Adult Services in-home care"
+          ],
+          "agency": "Cuyahoga County Division of Senior and Adult Services",
+          "verdict": "possible",
+          "reason": "Possible if he is found not eligible for the waiver; income limit for this county program was not available to check against $3,100.",
+          "keyRule": "Cuyahoga residents 60+ (or 18-59 and disabled) with limited income who are NOT eligible for a Medicaid waiver and need help with daily activities; exact income limit not published on pages reached",
+          "source": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living",
+          "evidence": "secondary"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services (with VA health care home and community-based care: Homemaker/Home Health Aide, respite, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VA health care)",
+          "verdict": "possible",
+          "reason": "Caregiver support and VA in-home or respite care require his enrollment in VA health care, which is not given.",
+          "keyRule": "Caregivers of veterans enrolled in VA health care",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "unlikely",
+          "reason": "He has no service-connected disability rating.",
+          "keyRule": "Requires a service-connected disability rating of 70% or higher",
+          "source": "https://www.caregiver.va.gov/",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Exemption",
+          "alsoKnownAs": [
+            "Ohio homestead",
+            "property tax reduction"
+          ],
+          "agency": "County auditor / Ohio Department of Taxation",
+          "verdict": "possible",
+          "reason": "He is 65+ and Social Security is excluded from Ohio AGI, so countable income is about the $9,600 pension, under $41,000; eligible only if they own their home.",
+          "keyRule": "Owner-occupied home; age 65+ or permanently disabled; modified Ohio AGI (excludes Social Security) of $41,000 or less for tax year 2026; exempts taxes on up to $29,700 of value",
+          "source": "https://tax.ohio.gov/help-center/faqs/real-property-tax-homestead-means-testing",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "Food Assistance",
+            "food stamps"
+          ],
+          "agency": "Ohio Department of Job and Family Services / Cuyahoga County JFS",
+          "verdict": "unlikely",
+          "reason": "Gross $3,100 is over 130% FPL for two, so they fall under regular rules for elderly households: net income at or below 100% FPL and resources at or below the federal elderly limit (about $4,500). Their $38,000 savings fail the resource test.",
+          "keyRule": "Ohio BBCE 130% FPL gross; above that, elderly households must meet the net income test and the elderly resource limit",
+          "source": "https://codes.ohio.gov/ohio-administrative-code/chapter-5101:4-4",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB / SLMB / QI)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "unlikely",
+          "reason": "Couple income $3,100 exceeds the QI limit and $38,000 exceeds the resource limit.",
+          "keyRule": "QI couple $2,455/mo; resources $14,910",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "unlikely",
+          "reason": "Income over 150% FPL for a couple and savings over $33,100.",
+          "keyRule": "150% FPL; couple resources $33,100",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Ohio Medicaid for aged, blind and disabled (ABD)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "ABD Medicaid"
+          ],
+          "agency": "Ohio Department of Medicaid / Cuyahoga County Job and Family Services",
+          "verdict": "unlikely",
+          "reason": "Income and resources far exceed regular ABD limits; Ohio has had no spend-down since 2016.",
+          "keyRule": "Regular ABD income = SSI rate ($994/$1,491); resources $2,000/$3,000",
+          "source": "https://brevy.com/medicaid/ohio/eligibility-income-limits",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Income and resources far exceed SSI limits.",
+          "keyRule": "SSI couple rate $1,491; resources $3,000",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Western Reserve Area Agency on Aging: PASSPORT assessment, caregiver support and Alzheimer's respite",
+        "phoneOrWhere": "WRAAA 1-800-626-7277 (Family Caregiver Support 216-586-3441)",
+        "why": "The exhausted 80-year-old wife needs relief now; the AAA call starts both the waiver level-of-care assessment and respite. VA pension with A&A is the second call (VA 1-800-827-1000 or the county veterans service commission) because it takes months."
+      },
+      "notes": "The split of the $3,100 between spouses is not given, which matters for the special income level (Ohio allows a QIT if he is over). Ohio's use of the federal CSRA minimum is assumed, not confirmed on an Ohio page. The 2026-27 HEAP one-person figure on the PUCO page ($29,930) looks like a typo for 175% FPL ($27,930); the two-person $37,870 matches 175% FPL. Ohio SNAP elderly resource limit not confirmed on an Ohio page."
+    },
+    {
+      "familyId": "OH-C",
+      "programs": [
+        {
+          "name": "Qualified Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "QMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "Couple gross $1,750 is under the $1,824 couple limit (countable about $1,498 after disregards) and $4,500 is under $14,910; QMB pays his Part B premium and cost-sharing.",
+          "keyRule": "QMB 2026 couple income $1,824/mo, resources $14,910",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Automatic with QMB.",
+          "keyRule": "Deemed eligible through MSP",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "Food Assistance",
+            "food stamps"
+          ],
+          "agency": "Ohio Department of Job and Family Services / Cuyahoga County JFS",
+          "verdict": "likely",
+          "reason": "Two-person gross $1,750 is under 130% FPL for two, so they are categorically eligible with no asset test; a monthly benefit is expected.",
+          "keyRule": "Ohio broad-based categorical eligibility 130% FPL gross",
+          "source": "https://codes.ohio.gov/ohio-administrative-code/chapter-5101:4-4",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP",
+            "PIPP Plus",
+            "Winter Crisis Program"
+          ],
+          "agency": "Ohio Department of Development via local energy assistance provider",
+          "verdict": "likely",
+          "reason": "Household income $21,000 is under $37,870 for two, if they pay for heat.",
+          "keyRule": "2026-27 HEAP: $37,870/yr for 2",
+          "source": "https://puco.ohio.gov/utilities/gas/resources/home-energy-assistance-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Respite Program",
+          "alsoKnownAs": [
+            "Alzheimer's respite",
+            "Ohio Alzheimer's Respite Fund"
+          ],
+          "agency": "Ohio Department of Aging via Western Reserve Area Agency on Aging with the Alzheimer's Association",
+          "verdict": "likely",
+          "reason": "He has a diagnosed Alzheimer's disease and his wife is his caregiver; age does not bar the program.",
+          "keyRule": "State-funded respite, adult day, homemaker and personal care for caregivers of people with Alzheimer's or related dementia, administered by the area agencies on aging",
+          "source": "https://aging.ohio.gov/care-and-living/caregiver-support/dementia-caregiving-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Caregiver Support Program (National Family Caregiver Support Program via the AAA)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support",
+            "WRAAA caregiver support"
+          ],
+          "agency": "Western Reserve Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "National Family Caregiver Support covers caregivers of people of any age with Alzheimer's.",
+          "keyRule": "Title III-E: caregivers of people 60+ or of any age with Alzheimer's or related disorders",
+          "source": "https://www.areaagingsolutions.org/programs-services/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Exemption",
+          "alsoKnownAs": [
+            "Ohio homestead",
+            "property tax reduction"
+          ],
+          "agency": "County auditor / Ohio Department of Taxation",
+          "verdict": "possible",
+          "reason": "He is 65+, Social Security is excluded and her $4,800 wages are far under $41,000; eligible only if they own their home.",
+          "keyRule": "Owner-occupied home; age 65+ or permanently disabled; modified Ohio AGI (excludes Social Security) of $41,000 or less for tax year 2026; exempts taxes on up to $29,700 of value",
+          "source": "https://tax.ohio.gov/help-center/faqs/real-property-tax-homestead-means-testing",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowance"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Diagnosed with young-onset Alzheimer's at about 64; if he is still under full retirement age and insured for disability, SSDI could replace a reduced early retirement benefit with his full benefit, with up to 12 months back pay. Birth date and work history are not given.",
+          "keyRule": "SSDI is payable only before full retirement age and requires disability-insured status; Young-Onset Alzheimer's Disease is a Compassionate Allowance condition (POMS DI 23022.385)",
+          "source": "https://secure.ssa.gov/apps10/poms.nsf/lnx/0423022385",
+          "evidence": "official"
+        },
+        {
+          "name": "Options for Independent Living",
+          "alsoKnownAs": [
+            "OFIL",
+            "Cuyahoga County Senior and Adult Services in-home care"
+          ],
+          "agency": "Cuyahoga County Division of Senior and Adult Services",
+          "verdict": "possible",
+          "reason": "He is 60+, needs help with daily tasks and is unlikely to meet waiver level of care, which is who this county program serves; income limit not confirmed.",
+          "keyRule": "Cuyahoga residents 60+ (or 18-59 and disabled) with limited income who are NOT eligible for a Medicaid waiver and need help with daily activities; exact income limit not published on pages reached",
+          "source": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living",
+          "evidence": "secondary"
+        },
+        {
+          "name": "PASSPORT Medicaid waiver / MyCare Ohio Waiver (Next Generation MyCare)",
+          "alsoKnownAs": [
+            "PASSPORT",
+            "MyCare Ohio",
+            "MyCare Ohio Waiver",
+            "Medicaid waiver",
+            "home care waiver"
+          ],
+          "agency": "Ohio Department of Medicaid and Ohio Department of Aging (PASSPORT Administrative Agency: Western Reserve Area Agency on Aging; MyCare plans for full duals)",
+          "verdict": "unlikely",
+          "reason": "As described he needs help only with medication, money and driving and can bathe and dress, which is protective, not intermediate, level of care; he would need 2 ADLs, 1 ADL plus medication administration, or 24-hour support for cognitive impairment. Financially he would pass.",
+          "keyRule": "Intermediate level of care (OAC 5160-3-08)",
+          "source": "https://aging.ohio.gov/care-and-living/get-help/home-and-community-care/passport-eligibility-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (McGregor PACE)",
+          "alsoKnownAs": [
+            "PACE",
+            "McGregor PACE"
+          ],
+          "agency": "Ohio Department of Aging / McGregor PACE",
+          "verdict": "unlikely",
+          "reason": "Requires nursing-facility level of care, which he does not appear to meet yet.",
+          "keyRule": "Age 55+, nursing-facility (intermediate or skilled) level of care, lives in the PACE service area; Medicaid-eligible or private pay. McGregor PACE serves Cuyahoga County ZIPs (service-area detail from secondary source)",
+          "source": "https://aging.ohio.gov/wps/portal/gov/aging/find-services/McGregorPACE-ForestHill",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Ohio Medicaid for aged, blind and disabled (ABD)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "ABD Medicaid"
+          ],
+          "agency": "Ohio Department of Medicaid / Cuyahoga County Job and Family Services",
+          "verdict": "unlikely",
+          "reason": "His own $1,350 Social Security exceeds the regular ABD income standard (SSI rate, $994), and Ohio has no spend-down; their $4,500 also exceeds the $3,000 couple limit.",
+          "keyRule": "Regular ABD: income at SSI rate; resources $2,000/$3,000",
+          "source": "https://brevy.com/medicaid/ohio/eligibility-income-limits",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "$4,500 savings exceed the $3,000 couple resource limit.",
+          "keyRule": "SSI couple resources $3,000",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicare Savings Program (QMB) application, which also triggers Extra Help",
+        "phoneOrWhere": "Apply at benefits.ohio.gov or Ohio Medicaid Consumer Hotline 800-324-8680; free help from OSHIIP 800-686-1578",
+        "why": "QMB is a near-certain approval that removes his $202.90/month Part B premium and Medicare cost-sharing and brings Extra Help automatically; the care programs either have no strong eligibility case yet or are free caregiver services that can follow (WRAAA 1-800-626-7277)."
+      },
+      "notes": "Re-assess waiver/PACE level of care as the disease progresses or if he cannot safely be left alone (24-hour support prong). Check SSDI timing against his exact birth date. The wife (63) is not covered by QMB."
+    },
+    {
+      "familyId": "OH-D",
+      "programs": [
+        {
+          "name": "PASSPORT Medicaid waiver / MyCare Ohio Waiver (Next Generation MyCare)",
+          "alsoKnownAs": [
+            "PASSPORT",
+            "MyCare Ohio",
+            "MyCare Ohio Waiver",
+            "Medicaid waiver",
+            "home care waiver"
+          ],
+          "agency": "Ohio Department of Medicaid and Ohio Department of Aging (PASSPORT Administrative Agency: Western Reserve Area Agency on Aging; MyCare plans for full duals)",
+          "verdict": "possible",
+          "reason": "Level of care is clearly met (bathing, dressing, toileting, mobility; cannot be left alone) and income $1,400 is under $2,982, but her $9,000 savings exceed Ohio's $2,000 limit; she would need to spend down about $7,000 on her own needs (for example an irrevocable prepaid funeral or equipment) before eligibility. Once on Medicaid with Medicare she would get waiver services through MyCare, and under participant direction her daughter (not a spouse or legal representative) can be hired as her paid aide.",
+          "keyRule": "Intermediate level of care (OAC 5160-3-08); special income level $2,982; resources $2,000",
+          "source": "https://aging.ohio.gov/care-and-living/get-help/home-and-community-care/passport-eligibility-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Survivors Pension",
+            "Death Pension",
+            "Widow's pension",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Her husband's 1951-1954 Navy service covers the Korean conflict period, honorable discharge, she has not remarried, and she needs A&A-level help. Her $16,800 income is under the $18,697 surviving-spouse A&A MAPR; after Part B premiums countable income is about $14,949, so about $3,748/yr ($312/mo), more if she pays her daughter under a care agreement. Net worth $25,800 is under $163,699.",
+          "keyRule": "Surviving spouse A&A MAPR $18,697 (Dec 2025); net worth limit $163,699; veteran 90 days with 1 day in a wartime period",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/survivors-pension/rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Specified Low-Income Medicare Beneficiary (Medicare Savings Program)",
+          "alsoKnownAs": [
+            "SLMB",
+            "MSP"
+          ],
+          "agency": "State Medicaid agency",
+          "verdict": "likely",
+          "reason": "Her own income $1,400 is above the $1,350 QMB limit but under the $1,616 SLMB limit, and $9,000 is under $9,950. Only her income counts.",
+          "keyRule": "SLMB 2026: $1,616/mo, resources $9,950",
+          "source": "https://secure.ssa.gov/poms.nsf/lnx/0600815023",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help (Medicare Part D Low-Income Subsidy)",
+          "alsoKnownAs": [
+            "LIS",
+            "Extra Help"
+          ],
+          "agency": "Social Security Administration / CMS",
+          "verdict": "likely",
+          "reason": "Income under 150% FPL and $9,000 under $16,590; automatic with SLMB.",
+          "keyRule": "150% FPL; individual resources $16,590",
+          "source": "https://www.cms.gov/files/document/cy2026-lis-resource-limits-memo.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Caregiver Support Program (National Family Caregiver Support Program via the AAA)",
+          "alsoKnownAs": [
+            "NFCSP",
+            "Family Caregiver Support",
+            "WRAAA caregiver support"
+          ],
+          "agency": "Western Reserve Area Agency on Aging",
+          "verdict": "likely",
+          "reason": "The daughter is the primary caregiver of an 88-year-old needing total care.",
+          "keyRule": "Title III-E: caregivers of people 60+",
+          "source": "https://www.areaagingsolutions.org/programs-services/family-caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (McGregor PACE)",
+          "alsoKnownAs": [
+            "PACE",
+            "McGregor PACE"
+          ],
+          "agency": "Ohio Department of Aging / McGregor PACE",
+          "verdict": "possible",
+          "reason": "Clinically eligible and in the Cuyahoga service area; Medicaid financial eligibility requires the same spend-down, otherwise private pay.",
+          "keyRule": "Age 55+, nursing-facility (intermediate or skilled) level of care, lives in the PACE service area; Medicaid-eligible or private pay. McGregor PACE serves Cuyahoga County ZIPs (service-area detail from secondary source)",
+          "source": "https://aging.ohio.gov/wps/portal/gov/aging/find-services/McGregorPACE-ForestHill",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Options for Independent Living",
+          "alsoKnownAs": [
+            "OFIL",
+            "Cuyahoga County Senior and Adult Services in-home care"
+          ],
+          "agency": "Cuyahoga County Division of Senior and Adult Services",
+          "verdict": "possible",
+          "reason": "A county bridge for in-home care while she is not yet Medicaid-waiver-eligible; the income limit was not confirmed.",
+          "keyRule": "Cuyahoga residents 60+ (or 18-59 and disabled) with limited income who are NOT eligible for a Medicaid waiver and need help with daily activities; exact income limit not published on pages reached",
+          "source": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Alzheimer's Respite Program",
+          "alsoKnownAs": [
+            "Alzheimer's respite",
+            "Ohio Alzheimer's Respite Fund"
+          ],
+          "agency": "Ohio Department of Aging via Western Reserve Area Agency on Aging with the Alzheimer's Association",
+          "verdict": "possible",
+          "reason": "Only if she has a dementia diagnosis, which the facts do not state.",
+          "keyRule": "State-funded respite, adult day, homemaker and personal care for caregivers of people with Alzheimer's or related dementia, administered by the area agencies on aging",
+          "source": "https://aging.ohio.gov/care-and-living/caregiver-support/dementia-caregiving-1",
+          "evidence": "official"
+        },
+        {
+          "name": "Dependency and Indemnity Compensation",
+          "alsoKnownAs": [
+            "DIC"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "Pays much more than survivors pension, but only if her husband's death was service-connected; not stated. Confirm what her 'small widow's pension' is.",
+          "keyRule": "Surviving spouse of a veteran whose death was service-connected",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/survivors-pension/rates/",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps"
+          ],
+          "agency": "State SNAP agency (county assistance office)",
+          "verdict": "unlikely",
+          "reason": "She almost certainly eats with the daughter's family, so the daughter's $5,500/mo counts; separate-household status for an elderly person unable to prepare meals is barred because the others' income exceeds 165% of poverty (about $2,976/mo for two).",
+          "keyRule": "7 CFR 273.1: people who live together and buy/prepare food together are one SNAP household; an elderly (60+) member who cannot purchase/prepare meals can be a separate household only if the others' income is at or below 165% of poverty",
+          "source": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-C/part-273/subpart-A/section-273.1",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "HEAP",
+            "LIHEAP",
+            "PIPP Plus",
+            "Winter Crisis Program"
+          ],
+          "agency": "Ohio Department of Development via local energy assistance provider",
+          "verdict": "unlikely",
+          "reason": "HEAP counts the whole household; with the daughter's income (about $82,800/yr total for three) the household is far over the limit for three.",
+          "keyRule": "2026-27 HEAP: $47,810/yr for 3",
+          "source": "https://puco.ohio.gov/utilities/gas/resources/home-energy-assistance-program",
+          "evidence": "official"
+        },
+        {
+          "name": "Homestead Exemption",
+          "alsoKnownAs": [
+            "Ohio homestead",
+            "property tax reduction"
+          ],
+          "agency": "County auditor / Ohio Department of Taxation",
+          "verdict": "unlikely",
+          "reason": "She moved into her daughter's home; the exemption is for an owner-occupied home of the qualifying person.",
+          "keyRule": "Owner-occupied home; age 65+ or permanently disabled; modified Ohio AGI (excludes Social Security) of $41,000 or less for tax year 2026; exempts taxes on up to $29,700 of value",
+          "source": "https://tax.ohio.gov/help-center/faqs/real-property-tax-homestead-means-testing",
+          "evidence": "official"
+        },
+        {
+          "name": "Ohio Medicaid for aged, blind and disabled (ABD)",
+          "alsoKnownAs": [
+            "Medicaid",
+            "ABD Medicaid"
+          ],
+          "agency": "Ohio Department of Medicaid / Cuyahoga County Job and Family Services",
+          "verdict": "unlikely",
+          "reason": "$1,400 exceeds the regular ABD standard ($994) and $9,000 exceeds $2,000; Ohio has no spend-down.",
+          "keyRule": "Regular ABD income at SSI rate; resources $2,000",
+          "source": "https://brevy.com/medicaid/ohio/eligibility-income-limits",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Income $1,400 exceeds the $994 SSI rate.",
+          "keyRule": "SSI FBR $994/mo",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Western Reserve Area Agency on Aging: PASSPORT level-of-care assessment, Medicaid spend-down guidance and caregiver support",
+        "phoneOrWhere": "WRAAA 1-800-626-7277",
+        "why": "She needs total care and her daughter is losing income; the waiver is the only program that pays for that much care and can pay the daughter herself. WRAAA can start the assessment while the family spends down the $7,000. VA survivors pension with A&A is the second call (VA 1-800-827-1000)."
+      },
+      "notes": "The daughter's income does not count for Medicaid, VA, MSP or Extra Help, but it does for SNAP and HEAP because those use the whole household. Spend-down must be on her own needs at fair value; gifts trigger the 5-year look-back penalty. Ohio does not let spouses or legal representatives be paid participant-directed aides without meeting OAC 5160-44-32; if the daughter holds her POA that needs checking with the case manager."
+    }
+  ]
+}

@@ -1,0 +1,837 @@
+{
+  "state": "TX",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "TX-A",
+      "programs": [
+        {
+          "name": "STAR+PLUS (Medicaid managed care) attendant services and service coordination",
+          "alsoKnownAs": [
+            "STAR+PLUS",
+            "Primary Home Care",
+            "Personal Attendant Services",
+            "PAS",
+            "Day Activity and Health Services",
+            "DAHS"
+          ],
+          "agency": "Texas HHSC through STAR+PLUS health plans (MCOs)",
+          "verdict": "likely",
+          "reason": "She already has Medicaid and Medicare, so as an adult dual-eligible she is a STAR+PLUS member whose plan must assign a service coordinator and can authorize personal attendant services and adult day care for her bathing, dressing and medication needs.",
+          "keyRule": "Full Medicaid; functional need score ≥ 24 and practitioner statement of medical need for attendant services",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
+          "evidence": "official"
+        },
+        {
+          "name": "STAR+PLUS Home and Community Based Services (HCBS) program",
+          "alsoKnownAs": [
+            "STAR+PLUS waiver",
+            "STAR+PLUS HCBS",
+            "formerly Community Based Alternatives (CBA)"
+          ],
+          "agency": "Texas HHSC, delivered by STAR+PLUS managed care organizations",
+          "verdict": "likely",
+          "reason": "Already a Medicaid member with lots of daily-care needs plus night-time wandering, she can ask her STAR+PLUS plan for an HCBS 'upgrade' that bypasses the interest list; income $1,050 and savings $1,200 are under the $2,982 and $2,000 limits. Approval still needs the nursing-facility medical-necessity assessment, which her described needs strongly suggest she meets.",
+          "keyRule": "Countable income ≤ $2,982/mo (300% of 2026 SSI FBR), resources ≤ $2,000 (spousal impoverishment protects the community spouse's share), age 21+, nursing facility medical necessity; non-Medicaid applicants must wait on the HHSC interest list, existing STAR+PLUS members may bypass it through the upgrade process",
+          "source": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/1200-starplus-hcbs-program-eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI",
+            "Medicare buy-in"
+          ],
+          "agency": "Texas Health and Human Services Commission",
+          "verdict": "likely",
+          "reason": "Countable income of $1,030 ($1,050 minus $20) is under the $1,330 QMB limit and $1,200 is under $9,950, so Medicaid should already be paying her Medicare premiums and cost-sharing; worth confirming.",
+          "keyRule": "Countable income (after $20 disregard; earned income $65 + 1/2): QMB ≤ $1,330 single / $1,803 couple (100% FPL), SLMB ≤ $1,596 single, QI-1 < $1,796 single; resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic for people with Medicaid; income $12,600/yr and $1,200 savings are also under the direct limits.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Lone Star Card"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "likely",
+          "reason": "Single elderly/disabled household with $1,050 gross; after the $217 standard deduction plus shelter costs her net income is well under $1,330, and $1,200 is under the resource limit.",
+          "keyRule": "Elderly/disabled household net income ≤ $1,330/mo (100% FPL for 1, FY2027); Texas resource limit $5,000",
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/a-1210-general-policy",
+          "evidence": "official"
+        },
+        {
+          "name": "Comprehensive Energy Assistance Program (Texas LIHEAP)",
+          "alsoKnownAs": [
+            "CEAP",
+            "LIHEAP",
+            "utility assistance"
+          ],
+          "agency": "TDHCA through City of San Antonio Department of Human Services",
+          "verdict": "likely",
+          "reason": "$1,050/mo is under the $1,995 limit for a 1-person household, and she has priority as 60+ and disabled.",
+          "keyRule": "Household income ≤ 150% FPL (2026: $1,995/mo for 1, $2,705/mo for 2, $3,415/mo for 3); priority for 60+ and disabled",
+          "source": "https://www.sa.gov/Directory/Departments/DHS/Financial-Assistance/Utility-Assistance",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via the Area Agency on Aging of Bexar County",
+          "alsoKnownAs": [
+            "Bexar AAA",
+            "AACOG",
+            "Caregiver Support",
+            "Title III-E",
+            "Alamo Service Connection ADRC",
+            "HICAP benefits counseling"
+          ],
+          "agency": "Alamo Area Council of Governments (AACOG)",
+          "verdict": "likely",
+          "reason": "The daughter is a family caregiver of someone 60+ with dementia, so she qualifies for caregiver support, respite and training; the mother can also get OAA services like home-delivered meals.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers of people 60+ or of a person of any age with Alzheimer's or related dementia; respite, training, support groups, limited supplemental services",
+          "source": "https://aacog.gov/resident-services/caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Lifespan Respite Care Program",
+          "alsoKnownAs": [
+            "Take Time Texas",
+            "TLRCP",
+            "respite voucher"
+          ],
+          "agency": "Texas HHSC through participating Area Agencies on Aging / ADRCs",
+          "verdict": "possible",
+          "reason": "The daughter qualifies as a caregiver of someone 60+ with dementia; whether a voucher is available depends on Bexar AAA participation and funding.",
+          "keyRule": "Caregivers of someone 60+ or of a person of any age with Alzheimer's/related dementia; short-term respite vouchers where the local AAA participates and funds remain",
+          "source": "https://www.navigatelifetexas.org/en/services-groups-events/services/the-texas-lifespan-respite-care-program-tlrcp",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income of $1,030 ($1,050 minus the $20 general exclusion) is $36 over the $994 SSI federal benefit rate, and Texas pays no state supplement. A tool comparing gross income loosely to 'about $1,000' might wrongly say yes.",
+          "keyRule": "Countable income < $994/mo individual FBR (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Texas HHSC / CMS",
+          "verdict": "unlikely",
+          "reason": "Texas PACE organizations operate only in El Paso, Amarillo/Canyon and Lubbock; no PACE serves Bexar County ZIP 78207.",
+          "keyRule": "Must live in a PACE organization's service area",
+          "source": "https://www.hhs.texas.gov/providers/long-term-care-providers/program-all-inclusive-care-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas over-65 residence homestead exemption, school tax ceiling and tax deferral",
+          "alsoKnownAs": [
+            "over-65 exemption",
+            "senior freeze",
+            "property tax deferral"
+          ],
+          "agency": "Bexar Appraisal District (rules set by Texas Comptroller / Tax Code 11.13)",
+          "verdict": "possible",
+          "reason": "If she owns her home in San Antonio she qualifies for the age-65 exemption and school tax ceiling; homeownership is not stated.",
+          "keyRule": "Age 65+ with ownership interest in the home as principal residence: additional $60,000 school-district homestead exemption (not income-tested), school tax ceiling, optional deferral",
+          "source": "https://comptroller.texas.gov/taxes/property-tax/exemptions/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "STAR+PLUS service coordination / HCBS upgrade",
+        "phoneOrWhere": "Member services number on her STAR+PLUS health plan ID card (ask for her service coordinator); if unsure which plan, call the Area Agency on Aging of Bexar County / Alamo Service Connection ADRC at 210-477-3275",
+        "why": "She already has Medicaid, so the fastest route to in-home help for bathing, dressing, medication and supervision is through her existing health plan, which can bypass the STAR+PLUS HCBS interest list."
+      },
+      "notes": "Her income ($1,050) is above the SSI rate, so it is not obvious which Medicaid category she is in. If her 'Medicaid' is actually QMB-only (Medicare Savings Program), she is NOT a STAR+PLUS member and would need to apply for full Medicaid under the $2,982 special income limit and join the HCBS interest list; Community Attendant Services (CAS, income ≤ $2,982, resources ≤ $2,000) would then be the faster attendant-care route. Night wandering while living alone may make in-home hours insufficient; a counselor would raise safety and supervised living options. SNAP FY2027 figures ($217 standard deduction, net limits) are from secondary summaries of the USDA FY2027 COLA memo; net limits match 100% of the 2026 HHS poverty guideline."
+    },
+    {
+      "familyId": "TX-B",
+      "programs": [
+        {
+          "name": "VA Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "Aid and Attendance",
+            "A&A",
+            "Improved Pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Army service 1962-1965 includes Vietnam-era wartime days (from Aug 5, 1964), entered before Sept 8, 1980, and he is over 65. Household income of $37,200/yr is above the $34,488 MAPR, but deducting the couple's Medicare Part B premiums ($4,870/yr at $202.90/mo each, above the $1,141 deductible) brings countable income to about $33,471, leaving a small award (~$85/mo) that grows with any paid care costs. Net worth ($38,000 + income) is far under $163,699. Needing help bathing plus dementia supervision fits the A&A standard, which VA decides from a doctor's exam (VA Form 21-2680).",
+          "keyRule": "MAPR $34,488/yr for veteran with 1 dependent + A&A; net worth ≤ $163,699; medical expenses deductible above 5% of MAPR ($1,141) (rates effective Dec 1, 2025); 90 days active duty with 1 day in wartime, Vietnam era Aug 5, 1964 to May 7, 1975 for service outside Vietnam",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program",
+            "Caregiver Support Line 1-855-260-3274"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VHA Caregiver Support Program)",
+          "verdict": "likely",
+          "reason": "Open to family caregivers of veterans enrolled in VA health care, with no disability-rating requirement; gives the exhausted wife training, coaching, peer support and a Caregiver Support Coordinator at the local VA medical center.",
+          "keyRule": "Caregiver of a veteran enrolled in VA health care; no service-connected rating required",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment and home and community-based services (respite, adult day health care, homemaker/home health aide, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "VA Health Care",
+            "VA HCBS",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "As a wartime veteran with an honorable discharge he can apply to enroll; his priority group (and any copays) depends on VA's income thresholds for his area, and HCBS like respite and adult day health care need a VA clinical assessment of need. Pension eligibility, if granted, puts him in a higher priority group.",
+          "keyRule": "Enrollment priority groups depend on service-connected status, pension receipt, and household income vs. VA geographic income limits; HCBS require enrollment plus clinical need",
+          "source": "https://www.va.gov/health-care/eligibility/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VHA Caregiver Support Program)",
+          "verdict": "unlikely",
+          "reason": "The stipend program requires a service-connected disability rating; he has none, so the wife cannot be paid through PCAFC. A naive tool keying on 'veteran + caregiver' would suggest it.",
+          "keyRule": "Veteran must have a VA service-connected disability rating (individual or combined) of 70% or higher",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "STAR+PLUS Home and Community Based Services (HCBS) program",
+          "alsoKnownAs": [
+            "STAR+PLUS waiver",
+            "STAR+PLUS HCBS",
+            "formerly Community Based Alternatives (CBA)"
+          ],
+          "agency": "Texas HHSC, delivered by STAR+PLUS managed care organizations",
+          "verdict": "possible",
+          "reason": "Only his own income counts; his share of the $3,100 is not split out but is almost certainly under $2,982 (a Qualified Income Trust is allowed if not). Texas lets the at-home wife keep the greater of half of countable resources or $32,532, so of the $38,000 about $5,468 would be his and must come down to $2,000 (a ~$3,500 spend-down). He also needs to meet nursing-facility medical necessity, and as a non-Medicaid applicant he must wait on the HHSC interest list.",
+          "keyRule": "Countable income ≤ $2,982/mo (300% of 2026 SSI FBR), resources ≤ $2,000 (spousal impoverishment protects the community spouse's share), age 21+, nursing facility medical necessity; non-Medicaid applicants must wait on the HHSC interest list, existing STAR+PLUS members may bypass it through the upgrade process",
+          "source": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/1200-starplus-hcbs-program-eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Attendant Services",
+          "alsoKnownAs": [
+            "CAS",
+            "Medicaid attendant care (1929(b))"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "unlikely",
+          "reason": "CAS uses the regular $3,000 couple resource limit without spousal-impoverishment protection, and the couple has $38,000.",
+          "keyRule": "Countable income ≤ $2,982/mo, resources ≤ $2,000 individual / $3,000 couple (Jan 1, 2026); functional need score ≥ 24 on Form 2060 with practitioner statement of medical need; gives attendant services only, not full Medicaid",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Care Services (Title XX)",
+          "alsoKnownAs": [
+            "Family Care",
+            "FC",
+            "Title XX attendant care"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "unlikely",
+          "reason": "Couple income $3,100 is under $5,964, but $38,000 in savings is far over the $6,000 couple resource limit.",
+          "keyRule": "Income ≤ $2,982/mo individual / $5,964 couple; resources ≤ $5,000 individual / $6,000 couple (Jan 1, 2026); functional score ≥ 24; regional interest lists",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI",
+            "Medicare buy-in"
+          ],
+          "agency": "Texas Health and Human Services Commission",
+          "verdict": "unlikely",
+          "reason": "Couple countable income of about $3,080 is above even the QI-1 couple limit (~$2,435 countable), and $38,000 is over the $14,910 couple resource limit.",
+          "keyRule": "Countable income (after $20 disregard; earned income $65 + 1/2): QMB ≤ $1,330 single / $1,803 couple (100% FPL), SLMB ≤ $1,596 single, QI-1 < $1,796 single; resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Annual income of $37,200 exceeds the $32,460 couple limit, and $38,000 in savings exceeds $36,100.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Medicaid for the Elderly and People with Disabilities (community, SSI-related)",
+          "alsoKnownAs": [
+            "MEPD",
+            "Medicaid for aged",
+            "full Medicaid"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "unlikely",
+          "reason": "Couple income $3,100 and resources $38,000 are far above the SSI-level standards Texas uses for community Medicaid.",
+          "keyRule": "Texas has no medically needy program for aged adults and no state SSI supplement; community full Medicaid follows the SSI standard: countable income ≤ $994 single / $1,491 couple and resources ≤ $2,000 / $3,000 (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Lone Star Card"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "unlikely",
+          "reason": "Couple has $38,000 in countable savings, over Texas's $5,000 SNAP resource limit; net income would also be far above $1,804 unless housing costs were extreme.",
+          "keyRule": "Texas SNAP resource limit $5,000; elderly/disabled net income ≤ $1,804/mo for 2 (FY2027)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/a-1210-general-policy",
+          "evidence": "official"
+        },
+        {
+          "name": "Comprehensive Energy Assistance Program (Texas LIHEAP)",
+          "alsoKnownAs": [
+            "CEAP",
+            "LIHEAP",
+            "utility assistance"
+          ],
+          "agency": "TDHCA through City of San Antonio Department of Human Services",
+          "verdict": "unlikely",
+          "reason": "Household income of $3,100/mo is above the $2,705/mo 150%-FPL limit for 2 people.",
+          "keyRule": "Household income ≤ 150% FPL (2026: $1,995/mo for 1, $2,705/mo for 2, $3,415/mo for 3); priority for 60+ and disabled",
+          "source": "https://www.sa.gov/Directory/Departments/DHS/Financial-Assistance/Utility-Assistance",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via the Area Agency on Aging of Bexar County",
+          "alsoKnownAs": [
+            "Bexar AAA",
+            "AACOG",
+            "Caregiver Support",
+            "Title III-E",
+            "Alamo Service Connection ADRC",
+            "HICAP benefits counseling"
+          ],
+          "agency": "Alamo Area Council of Governments (AACOG)",
+          "verdict": "likely",
+          "reason": "The wife is the sole caregiver of a person 60+ with dementia, so she qualifies for respite, training and support groups through the Bexar AAA.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers of people 60+ or of a person of any age with Alzheimer's or related dementia; respite, training, support groups, limited supplemental services",
+          "source": "https://aacog.gov/resident-services/caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Lifespan Respite Care Program",
+          "alsoKnownAs": [
+            "Take Time Texas",
+            "TLRCP",
+            "respite voucher"
+          ],
+          "agency": "Texas HHSC through participating Area Agencies on Aging / ADRCs",
+          "verdict": "possible",
+          "reason": "Wife qualifies as caregiver of someone 60+ with dementia; depends on local participation and remaining funds.",
+          "keyRule": "Caregivers of someone 60+ or of a person of any age with Alzheimer's/related dementia; short-term respite vouchers where the local AAA participates and funds remain",
+          "source": "https://www.navigatelifetexas.org/en/services-groups-events/services/the-texas-lifespan-respite-care-program-tlrcp",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Texas HHSC / CMS",
+          "verdict": "unlikely",
+          "reason": "Texas PACE organizations operate only in El Paso, Amarillo/Canyon and Lubbock; no PACE serves Bexar County ZIP 78207.",
+          "keyRule": "Must live in a PACE organization's service area",
+          "source": "https://www.hhs.texas.gov/providers/long-term-care-providers/program-all-inclusive-care-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas over-65 residence homestead exemption, school tax ceiling and tax deferral",
+          "alsoKnownAs": [
+            "over-65 exemption",
+            "senior freeze",
+            "property tax deferral"
+          ],
+          "agency": "Bexar Appraisal District (rules set by Texas Comptroller / Tax Code 11.13)",
+          "verdict": "possible",
+          "reason": "If they own their home, the age-65 exemption and school tax ceiling apply regardless of income; homeownership not stated.",
+          "keyRule": "Age 65+ with ownership interest in the home as principal residence: additional $60,000 school-district homestead exemption (not income-tested), school tax ceiling, optional deferral",
+          "source": "https://comptroller.texas.gov/taxes/property-tax/exemptions/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Veterans Pension with Aid and Attendance (and VA health care enrollment)",
+        "phoneOrWhere": "Bexar County Military and Veterans Services Center, 1422 E. Grayson St., San Antonio, (210) HELP-VET / (210) 435-7838, by appointment",
+        "why": "He is a wartime veteran who appears to meet the pension rules once medical costs are counted, and the same accredited officer can file VA health care enrollment, which unlocks VA respite, adult day health care and home health aide services for the exhausted wife. Medicaid would first require a spend-down and a long interest-list wait."
+      },
+      "notes": "VA pension math assumes the $2,300 Social Security is gross (before Part B deduction) and that no other medical premiums are paid; Medigap/Part D premiums or paid care would raise the award. The A&A rating depends on VA's review of a physician exam. The STAR+PLUS HCBS interest list for non-Medicaid applicants can be long; joining it now costs nothing. Texas uses the 'greater of half or $32,532' spousal rule (unlike Florida's full-maximum rule), which is why Texas shows a spend-down."
+    },
+    {
+      "familyId": "TX-C",
+      "programs": [
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI",
+            "Medicare buy-in"
+          ],
+          "agency": "Texas Health and Human Services Commission",
+          "verdict": "likely",
+          "reason": "Couple countable income is $1,497.50 ($1,350 SS minus $20, plus $400 wages minus $65 then halved = $167.50), under the $1,803 QMB couple limit; $4,500 is under the $14,910 couple resource limit. QMB would pay his Part B premium ($202.90/mo in 2026) and Medicare cost-sharing.",
+          "keyRule": "Countable income (after $20 disregard; earned income $65 + 1/2): QMB ≤ $1,330 single / $1,803 couple (100% FPL), SLMB ≤ $1,596 single, QI-1 < $1,796 single; resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic once on QMB; annual income ~$21,000 is also under the $32,460 couple limit and $4,500 under the resource limit.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Lone Star Card"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "likely",
+          "reason": "Household includes a person 60+/disabled, so only the net test applies: $1,750 minus the 20% earned-income deduction ($80) and $217 standard deduction leaves ~$1,453 before shelter costs, under the $1,804 limit for 2; $4,500 is under Texas's $5,000 resource limit.",
+          "keyRule": "Elderly/disabled households: net income ≤ 100% FPL ($1,330 single / $1,804 for 2, FY2027 from 2026 FPL), no gross test; uncapped shelter and medical deduction over $35; Texas resource limit $5,000",
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/a-1210-general-policy",
+          "evidence": "official"
+        },
+        {
+          "name": "Comprehensive Energy Assistance Program (Texas LIHEAP)",
+          "alsoKnownAs": [
+            "CEAP",
+            "LIHEAP",
+            "utility assistance"
+          ],
+          "agency": "TDHCA through City of San Antonio Department of Human Services",
+          "verdict": "likely",
+          "reason": "Household income of $1,750/mo is under the $2,705/mo limit for 2 people.",
+          "keyRule": "Household income ≤ 150% FPL (2026: $1,995/mo for 1, $2,705/mo for 2, $3,415/mo for 3); priority for 60+ and disabled",
+          "source": "https://www.sa.gov/Directory/Departments/DHS/Financial-Assistance/Utility-Assistance",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via the Area Agency on Aging of Bexar County",
+          "alsoKnownAs": [
+            "Bexar AAA",
+            "AACOG",
+            "Caregiver Support",
+            "Title III-E",
+            "Alamo Service Connection ADRC",
+            "HICAP benefits counseling"
+          ],
+          "agency": "Alamo Area Council of Governments (AACOG)",
+          "verdict": "likely",
+          "reason": "His wife is a family caregiver of a person 60+ with Alzheimer's (Title III-E also covers caregivers of a person of any age with dementia); the AAA's HICAP benefits counselors also file MSP, Extra Help and SNAP.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers of people 60+ or of a person of any age with Alzheimer's or related dementia; respite, training, support groups, limited supplemental services",
+          "source": "https://aacog.gov/resident-services/caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Lifespan Respite Care Program",
+          "alsoKnownAs": [
+            "Take Time Texas",
+            "TLRCP",
+            "respite voucher"
+          ],
+          "agency": "Texas HHSC through participating Area Agencies on Aging / ADRCs",
+          "verdict": "possible",
+          "reason": "Caregiver of a person with Alzheimer's qualifies; depends on local funding.",
+          "keyRule": "Caregivers of someone 60+ or of a person of any age with Alzheimer's/related dementia; short-term respite vouchers where the local AAA participates and funds remain",
+          "source": "https://www.navigatelifetexas.org/en/services-groups-events/services/the-texas-lifespan-respite-care-program-tlrcp",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance conversion (Compassionate Allowance for Early-Onset Alzheimer's)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowances",
+            "CAL"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-Onset Alzheimer's is on SSA's Compassionate Allowances list. If he started retirement benefits early (before full retirement age 67 for someone born in 1960) after his condition began two years ago, SSA may be able to pay disability benefits at his full, unreduced amount up to full retirement age; depends on his claiming history and onset date.",
+          "keyRule": "Disabled before full retirement age with sufficient work credits; Early-Onset Alzheimer's is a listed Compassionate Allowance condition",
+          "source": "https://www.ssa.gov/compassionateallowances/conditions.htm",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Family Care Services (Title XX)",
+          "alsoKnownAs": [
+            "Family Care",
+            "FC",
+            "Title XX attendant care"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "possible",
+          "reason": "Couple income $1,750 is under $5,964 and $4,500 under the $6,000 couple limit, but he needs a functional score of 24+; he can bathe and dress and mainly needs cueing and help with medication and money, so he may not score high enough yet.",
+          "keyRule": "Income ≤ $2,982/mo individual / $5,964 couple; resources ≤ $5,000 individual / $6,000 couple (Jan 1, 2026); functional score ≥ 24; regional interest lists",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Attendant Services",
+          "alsoKnownAs": [
+            "CAS",
+            "Medicaid attendant care (1929(b))"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "unlikely",
+          "reason": "Couple resources of $4,500 exceed CAS's $3,000 couple limit, and his care needs (reminders, medication, money) likely fall short of the functional score of 24.",
+          "keyRule": "Countable income ≤ $2,982/mo, resources ≤ $2,000 individual / $3,000 couple (Jan 1, 2026); functional need score ≥ 24 on Form 2060 with practitioner statement of medical need; gives attendant services only, not full Medicaid",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "STAR+PLUS Home and Community Based Services (HCBS) program",
+          "alsoKnownAs": [
+            "STAR+PLUS waiver",
+            "STAR+PLUS HCBS",
+            "formerly Community Based Alternatives (CBA)"
+          ],
+          "agency": "Texas HHSC, delivered by STAR+PLUS managed care organizations",
+          "verdict": "unlikely",
+          "reason": "He can bathe and dress himself and needs mainly cueing and help with medication and money, which is unlikely to meet nursing-facility medical necessity yet; revisit as the disease progresses.",
+          "keyRule": "Countable income ≤ $2,982/mo (300% of 2026 SSI FBR), resources ≤ $2,000 (spousal impoverishment protects the community spouse's share), age 21+, nursing facility medical necessity; non-Medicaid applicants must wait on the HHSC interest list, existing STAR+PLUS members may bypass it through the upgrade process",
+          "source": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/1200-starplus-hcbs-program-eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Medicaid for the Elderly and People with Disabilities (community, SSI-related)",
+          "alsoKnownAs": [
+            "MEPD",
+            "Medicaid for aged",
+            "full Medicaid"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "unlikely",
+          "reason": "His own countable income ($1,330) exceeds the $994 individual SSI standard (the wife's $400 earnings are below the deeming threshold, so the individual rate applies), and Texas has no medically needy program for aged adults.",
+          "keyRule": "Texas has no medically needy program for aged adults and no state SSI supplement; community full Medicaid follows the SSI standard: countable income ≤ $994 single / $1,491 couple and resources ≤ $2,000 / $3,000 (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His countable Social Security of $1,330 is above the $994 individual FBR; the couple rate does not apply because his wife (63) is not aged, blind or disabled.",
+          "keyRule": "Countable income < $994/mo individual (2026); ineligible-spouse deeming only when spouse income exceeds $497",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Texas HHSC / CMS",
+          "verdict": "unlikely",
+          "reason": "Texas PACE organizations operate only in El Paso, Amarillo/Canyon and Lubbock; no PACE serves Bexar County ZIP 78207.",
+          "keyRule": "Must live in a PACE organization's service area",
+          "source": "https://www.hhs.texas.gov/providers/long-term-care-providers/program-all-inclusive-care-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas over-65 residence homestead exemption, school tax ceiling and tax deferral",
+          "alsoKnownAs": [
+            "over-65 exemption",
+            "senior freeze",
+            "property tax deferral"
+          ],
+          "agency": "Bexar Appraisal District (rules set by Texas Comptroller / Tax Code 11.13)",
+          "verdict": "possible",
+          "reason": "He is 66, so if they own their home the age-65 exemption and school tax ceiling apply; homeownership not stated.",
+          "keyRule": "Age 65+ with ownership interest in the home as principal residence: additional $60,000 school-district homestead exemption (not income-tested), school tax ceiling, optional deferral",
+          "source": "https://comptroller.texas.gov/taxes/property-tax/exemptions/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicare Savings Program (QMB) and Extra Help, through HICAP benefits counseling at the Bexar AAA",
+        "phoneOrWhere": "Area Agency on Aging of Bexar County / Alamo Service Connection ADRC, 210-477-3275 (or apply for MSP at YourTexasBenefits.com)",
+        "why": "QMB is the largest sure-thing benefit (about $2,400/yr in Part B premiums plus cost-sharing, and automatic Extra Help), and the same AAA call connects the wife to caregiver support and helps file SNAP."
+      },
+      "notes": "The SSDI angle depends on his claiming age and onset date, which are not given; it is flagged for a human. SSI and Texas community Medicaid miss by a narrow margin, so a counselor would recheck if income changes. Long-term services (STAR+PLUS HCBS, CAS) are future steps as his needs grow; the couple's $4,500 matters for CAS ($3,000) but not for HCBS, where spousal protections apply."
+    },
+    {
+      "familyId": "TX-D",
+      "programs": [
+        {
+          "name": "VA Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Survivors Pension",
+            "Widow's Pension",
+            "Death Pension",
+            "Aid and Attendance",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Her late husband served in the Navy 1951-1954 (Korean Conflict wartime, June 27, 1950 to Jan 31, 1955), honorable discharge, and she has not remarried. Her income of $16,800/yr is already below the $18,697 surviving-spouse A&A MAPR, and her Medicare Part B premium (~$2,435/yr) is a further deduction, giving roughly $3,700/yr before any paid care costs. Net worth ($9,000 + income) is far under $163,699; her need for help with bathing, dressing, toileting and constant supervision fits the A&A standard.",
+          "keyRule": "Surviving spouse MAPR with A&A $18,697/yr; net worth ≤ $163,699 (Dec 1, 2025 to Nov 30, 2026); veteran served 90 days with 1 day in wartime (Korean Conflict June 27, 1950 to Jan 31, 1955)",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI",
+            "Medicare buy-in"
+          ],
+          "agency": "Texas Health and Human Services Commission",
+          "verdict": "likely",
+          "reason": "Her countable income of $1,380 ($1,400 minus $20) is above QMB ($1,330) but within the SLMB range ($1,330.01 to under $1,596), and $9,000 is under the $9,950 resource limit, so SLMB would pay her Part B premium ($202.90/mo).",
+          "keyRule": "Countable income (after $20 disregard; earned income $65 + 1/2): QMB ≤ $1,330 single / $1,803 couple (100% FPL), SLMB ≤ $1,596 single, QI-1 < $1,796 single; resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic once on SLMB; $16,800/yr is also under $23,940 and $9,000 under $18,090.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "STAR+PLUS Home and Community Based Services (HCBS) program",
+          "alsoKnownAs": [
+            "STAR+PLUS waiver",
+            "STAR+PLUS HCBS",
+            "formerly Community Based Alternatives (CBA)"
+          ],
+          "agency": "Texas HHSC, delivered by STAR+PLUS managed care organizations",
+          "verdict": "possible",
+          "reason": "Her $1,400 income is under the $2,982 special income limit and her needs (bathing, dressing, toileting, mobility, cannot be alone) point to nursing-facility medical necessity, but $9,000 is $7,000 over the $2,000 resource limit (spend-down on care or a prepaid funeral is allowed), and as a non-Medicaid applicant she must wait on the HHSC interest list. Only her own income counts, not the daughter's.",
+          "keyRule": "Countable income ≤ $2,982/mo (300% of 2026 SSI FBR), resources ≤ $2,000 (spousal impoverishment protects the community spouse's share), age 21+, nursing facility medical necessity; non-Medicaid applicants must wait on the HHSC interest list, existing STAR+PLUS members may bypass it through the upgrade process",
+          "source": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/1200-starplus-hcbs-program-eligibility",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Attendant Services",
+          "alsoKnownAs": [
+            "CAS",
+            "Medicaid attendant care (1929(b))"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "possible",
+          "reason": "Income $1,400 is under $2,982 and her care needs should exceed the functional score of 24, but savings of $9,000 must come down to $2,000; CAS is usually reachable faster than the HCBS waiver.",
+          "keyRule": "Countable income ≤ $2,982/mo, resources ≤ $2,000 individual / $3,000 couple (Jan 1, 2026); functional need score ≥ 24 on Form 2060 with practitioner statement of medical need; gives attendant services only, not full Medicaid",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Family Care Services (Title XX)",
+          "alsoKnownAs": [
+            "Family Care",
+            "FC",
+            "Title XX attendant care"
+          ],
+          "agency": "Texas HHSC (Community Care Services)",
+          "verdict": "possible",
+          "reason": "Income is within $2,982 and her needs meet the functional criteria, but $9,000 exceeds the $5,000 individual resource limit, and regional interest lists apply.",
+          "keyRule": "Income ≤ $2,982/mo individual / $5,964 couple; resources ≤ $5,000 individual / $6,000 couple (Jan 1, 2026); functional score ≥ 24; regional interest lists",
+          "source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via the Area Agency on Aging of Bexar County",
+          "alsoKnownAs": [
+            "Bexar AAA",
+            "AACOG",
+            "Caregiver Support",
+            "Title III-E",
+            "Alamo Service Connection ADRC",
+            "HICAP benefits counseling"
+          ],
+          "agency": "Alamo Area Council of Governments (AACOG)",
+          "verdict": "likely",
+          "reason": "The daughter is a family caregiver of a person 60+, eligible for respite, training and support through the Bexar AAA.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers of people 60+ or of a person of any age with Alzheimer's or related dementia; respite, training, support groups, limited supplemental services",
+          "source": "https://aacog.gov/resident-services/caregiver-support/",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Lifespan Respite Care Program",
+          "alsoKnownAs": [
+            "Take Time Texas",
+            "TLRCP",
+            "respite voucher"
+          ],
+          "agency": "Texas HHSC through participating Area Agencies on Aging / ADRCs",
+          "verdict": "possible",
+          "reason": "Caregiver of someone 60+ qualifies; depends on local funding.",
+          "keyRule": "Caregivers of someone 60+ or of a person of any age with Alzheimer's/related dementia; short-term respite vouchers where the local AAA participates and funds remain",
+          "source": "https://www.navigatelifetexas.org/en/services-groups-events/services/the-texas-lifespan-respite-care-program-tlrcp",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas Medicaid for the Elderly and People with Disabilities (community, SSI-related)",
+          "alsoKnownAs": [
+            "MEPD",
+            "Medicaid for aged",
+            "full Medicaid"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "unlikely",
+          "reason": "Her countable income of $1,380 is above the $994 SSI standard and $9,000 exceeds $2,000; Texas has no medically needy program for aged adults.",
+          "keyRule": "Texas has no medically needy program for aged adults and no state SSI supplement; community full Medicaid follows the SSI standard: countable income ≤ $994 single / $1,491 couple and resources ≤ $2,000 / $3,000 (2026)",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income of $1,380 exceeds the $994 FBR.",
+          "keyRule": "Countable income < $994/mo individual (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Nutrition Assistance Program",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "Lone Star Card"
+          ],
+          "agency": "Texas HHSC",
+          "verdict": "unlikely",
+          "reason": "She lives and presumably eats with her daughter's family, so they are one SNAP household and the daughter's ~$5,500/mo counts. An elderly person can only be a separate household if she cannot buy and prepare meals AND the others' income is ≤ 165% FPL (about $2,976/mo for 2), which $5,500 exceeds. A tool that counts only the parent's income would wrongly say yes.",
+          "keyRule": "7 CFR 273.1(a)(2)(ii): separate household for a 60+ person unable to purchase/prepare meals only if others' income ≤ 165% FPL",
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/a-1210-general-policy",
+          "evidence": "official"
+        },
+        {
+          "name": "Comprehensive Energy Assistance Program (Texas LIHEAP)",
+          "alsoKnownAs": [
+            "CEAP",
+            "LIHEAP",
+            "utility assistance"
+          ],
+          "agency": "TDHCA through City of San Antonio Department of Human Services",
+          "verdict": "unlikely",
+          "reason": "CEAP counts the whole household's income; with the daughter's ~$5,500 plus the parent's $1,400 a 3-person household is far above the $3,415/mo limit.",
+          "keyRule": "Household income ≤ 150% FPL (2026: $1,995/mo for 1, $2,705/mo for 2, $3,415/mo for 3); priority for 60+ and disabled",
+          "source": "https://www.sa.gov/Directory/Departments/DHS/Financial-Assistance/Utility-Assistance",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly",
+          "alsoKnownAs": [
+            "PACE"
+          ],
+          "agency": "Texas HHSC / CMS",
+          "verdict": "unlikely",
+          "reason": "Texas PACE organizations operate only in El Paso, Amarillo/Canyon and Lubbock; no PACE serves Bexar County ZIP 78207.",
+          "keyRule": "Must live in a PACE organization's service area",
+          "source": "https://www.hhs.texas.gov/providers/long-term-care-providers/program-all-inclusive-care-elderly",
+          "evidence": "official"
+        },
+        {
+          "name": "Texas over-65 residence homestead exemption, school tax ceiling and tax deferral",
+          "alsoKnownAs": [
+            "over-65 exemption",
+            "senior freeze",
+            "property tax deferral"
+          ],
+          "agency": "Bexar Appraisal District (rules set by Texas Comptroller / Tax Code 11.13)",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home, so she has no residence homestead of her own; the daughter is 58 and not eligible for the over-65 exemption.",
+          "keyRule": "Age 65+ with ownership interest in the home as principal residence: additional $60,000 school-district homestead exemption (not income-tested), school tax ceiling, optional deferral",
+          "source": "https://comptroller.texas.gov/taxes/property-tax/exemptions/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VHA Caregiver Support Program)",
+          "verdict": "unlikely",
+          "reason": "PCAFC serves caregivers of living veterans with a 70%+ service-connected rating; a veteran's surviving spouse is not covered.",
+          "keyRule": "Veteran must have a VA service-connected disability rating (individual or combined) of 70% or higher",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Survivors Pension with Aid and Attendance",
+        "phoneOrWhere": "Bexar County Military and Veterans Services Center, (210) HELP-VET / (210) 435-7838, 1422 E. Grayson St., San Antonio (by appointment)",
+        "why": "It is the one program she clearly qualifies for today with no waitlist or spend-down, and the monthly cash (larger if she pays for care) can fund help that relieves the daughter while Medicaid/CAS is sorted out."
+      },
+      "notes": "Check whether the 'small widow's pension' is already a VA Survivors Pension or DIC; if it is a basic VA pension she should request the A&A increase, and if it is DIC she cannot receive both. If she pays the daughter for care under a written agreement, VA may count those payments as unreimbursed medical expenses, raising the award. VA pension income can affect SLMB/Medicaid budgeting (the A&A and medical-expense portions are generally excluded for Medicaid). Under consumer-directed services, a non-spouse relative such as the daughter can be the paid attendant for CAS/STAR+PLUS. The Medicaid spend-down must avoid gifts (5-year look-back); VA has its own 3-year look-back."
+    }
+  ]
+}

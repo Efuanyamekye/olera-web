@@ -1,0 +1,846 @@
+{
+  "state": "FL",
+  "researchedOn": "2026-10-06",
+  "families": [
+    {
+      "familyId": "FL-A",
+      "programs": [
+        {
+          "name": "Statewide Medicaid Managed Care Long-Term Care Program",
+          "alsoKnownAs": [
+            "SMMC LTC",
+            "LTC waiver",
+            "Medicaid waiver",
+            "HCBS waiver"
+          ],
+          "agency": "Florida AHCA; screening and waitlist by Dept. of Elder Affairs through the ADRC (Alliance for Aging)",
+          "verdict": "possible",
+          "reason": "She already has Medicaid, income $1,050 is under $2,982 and savings $1,200 under $2,000, and her dementia, wandering and help with bathing, dressing and medication point to nursing-home level of care. The only gap is the ADRC screening and the priority-scored waitlist; her frailty should score high.",
+          "keyRule": "Income ≤ $2,982/mo (300% of 2026 SSI FBR; Qualified Income Trust if over), assets ≤ $2,000 (community spouse may keep up to $162,660), nursing-facility level of care by DOEA CARES; enrollment via ADRC screening and a priority-scored waitlist released by frailty, not time",
+          "source": "https://ahca.myflorida.com/medicaid/statewide-medicaid-managed-care/long-term-care-program/smmc-ltc-program-waitlist-release.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (Florida PACE Centers - Hialeah)",
+          "alsoKnownAs": [
+            "PACE",
+            "Florida PACE"
+          ],
+          "agency": "Miami Jewish Health / Florida PACE Centers, overseen by AHCA and CMS",
+          "verdict": "possible",
+          "reason": "ZIP 33012 is in the Hialeah PACE center's listed service area and she is 55+ with Medicaid; she needs a CARES level-of-care finding and an available Medicaid PACE slot.",
+          "keyRule": "Age 55+, lives in the PACE service area (Hialeah center lists ZIP 33012), meets nursing-home level of care by DOEA CARES; Medicaid PACE slots limited by state funding",
+          "source": "https://www.caredove.com/miamijewishhealthsystems/service/detail/sid/9209",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "Florida Department of Children and Families (DCF)",
+          "verdict": "likely",
+          "reason": "Income of $1,050 is under the $1,350 QMB limit and $1,200 under $9,950; as a Medicaid member her Part B premium and cost-sharing should already be covered (confirm).",
+          "keyRule": "QMB < 100% FPL ($1,350 single / $1,824 couple incl. $20 disregard), SLMB < 120% ($1,616 / $2,184), QI < 135% ($1,816 / $2,455); resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic with Medicaid/QMB.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "ACCESS Florida food assistance",
+            "EBT"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "likely",
+          "reason": "Single elderly household with $1,050 income: after the $217 standard deduction and shelter costs net income is well under $1,330.",
+          "keyRule": "Elderly/disabled net income ≤ $1,330/mo for 1 (FY2027); no asset test under BBCE",
+          "source": "https://www.myflfamilies.com/services/public-assistance/supplemental-nutrition-assistance-program-snap",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "EHEAP (Emergency Home Energy Assistance for the Elderly, crisis only)"
+          ],
+          "agency": "FloridaCommerce through Miami-Dade Community Action and Human Services Department",
+          "verdict": "likely",
+          "reason": "$1,050/mo is far under the ~$2,680/mo limit for one person; EHEAP crisis help also exists for 60+ households.",
+          "keyRule": "Household income ≤ 60% of Florida state median income or 150% FPL (published table: $2,680/mo for 1, $3,504 for 2, $4,329 for 3; 2025 table)",
+          "source": "https://floridaliheap.com/faq",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via Alliance for Aging (ADRC for Miami-Dade)",
+          "alsoKnownAs": [
+            "Alliance for Aging",
+            "Elder Helpline",
+            "ADRC",
+            "Title III-E",
+            "SHINE (Medicare counseling)"
+          ],
+          "agency": "Alliance for Aging, Inc. (Area Agency on Aging / ADRC for Miami-Dade and Monroe)",
+          "verdict": "likely",
+          "reason": "The Alliance for Aging is the entry point for her LTC screening and offers caregiver support to the working daughter.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers; ADRC is the single entry point for SMMC LTC screening and state programs (CCE, ADI, HCE)",
+          "source": "https://allianceforaging.org/about-us/adrc",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Disease Initiative respite and Memory Disorder Clinics",
+          "alsoKnownAs": [
+            "ADI",
+            "ADI respite",
+            "Memory Disorder Clinic"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC / AAA",
+          "verdict": "possible",
+          "reason": "She has dementia and the daughter is her caregiver, so ADI respite and Memory Disorder Clinic services fit; depends on local funding and waitlist.",
+          "keyRule": "Respite and caregiver support for caregivers of individuals 18+ diagnosed with probable Alzheimer's or related dementia; sliding-scale co-pay; subject to local funding/waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/alzheimers-disease-initiative-adi/",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care for the Elderly",
+          "alsoKnownAs": [
+            "CCE"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "possible",
+          "reason": "Age 60+ and functionally impaired, so CCE can bridge services while she waits for SMMC LTC; depends on funding and waitlist.",
+          "keyRule": "Age 60+ and functionally impaired per comprehensive assessment; co-pay by income; priority for APS-referred high-risk clients; waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/community-care-for-the-elderly-cce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Care for the Elderly",
+          "alsoKnownAs": [
+            "HCE",
+            "caregiver subsidy"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "unlikely",
+          "reason": "HCE requires an approved adult caregiver living with the elder; she lives alone and her daughter lives 20 minutes away.",
+          "keyRule": "Age 60+, income below ICP standard ($2,982), assets within ICP limit ($2,000), at risk of nursing home placement, receives SSI/QMB/SLMB, and has an approved adult caregiver living with them; $160/mo basic subsidy plus special subsidies",
+          "source": "https://elderaffairs.org/programs-and-services/home-care-for-the-elderly-hce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income of $1,030 ($1,050 minus $20) exceeds the $994 SSI rate, and Florida's state supplement only applies in licensed facilities.",
+          "keyRule": "Countable income < $994/mo individual FBR (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Optional State Supplementation",
+          "alsoKnownAs": [
+            "OSS"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "OSS only pays for people living in a licensed assisted living facility, adult family care home or mental health residential facility; she lives at home.",
+          "keyRule": "Must reside in an ALF, AFCH or MHRTF",
+          "source": "https://www.myflfamilies.com/documents/59481.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Florida homestead exemption plus Miami-Dade senior (65+) limited-income additional exemption",
+          "alsoKnownAs": [
+            "homestead exemption",
+            "senior exemption",
+            "DR-501SC"
+          ],
+          "agency": "Miami-Dade County Property Appraiser",
+          "verdict": "possible",
+          "reason": "If she owns her home, she is 65+ and her ~$12,600 income is under $38,686; homeownership not stated.",
+          "keyRule": "Homestead owner 65+ with 2025 household adjusted gross income ≤ $38,686 gets an additional exemption (up to $50,000 off county/participating-city taxes) for 2026",
+          "source": "https://miamidade.gov/pa/exemptions_homestead_senior.asp",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Statewide Medicaid Managed Care Long-Term Care Program screening (and PACE referral)",
+        "phoneOrWhere": "Alliance for Aging Elder Helpline / ADRC, 305-670-4357 (statewide Elder Helpline 1-800-963-5337)",
+        "why": "Every Medicaid long-term care option for in-home help in Florida, plus CCE/ADI as stopgaps, starts with the ADRC screening, and her waitlist priority depends on getting screened."
+      },
+      "notes": "Florida's MEDS-AD excludes people with Medicare (per Florida Health Justice Project; secondary), so her 'Medicaid' may be QMB-only rather than full Medicaid. Either way she meets SMMC LTC financial rules (ICP: $2,982 / $2,000). Living alone with night wandering is a safety risk; the ADRC can ask whether an APS referral or higher-priority release applies. LIHEAP limits are from a 2025 FloridaCommerce-linked table; 2026 table not verified."
+    },
+    {
+      "familyId": "FL-B",
+      "programs": [
+        {
+          "name": "VA Veterans Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "VA Pension",
+            "Aid and Attendance",
+            "A&A",
+            "Improved Pension"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Army service 1962-1965 includes Vietnam-era wartime days (from Aug 5, 1964), entered before Sept 8, 1980, and he is over 65. Household income of $37,200/yr is above the $34,488 MAPR, but deducting the couple's Medicare Part B premiums ($4,870/yr at $202.90/mo each, above the $1,141 deductible) brings countable income to about $33,471, leaving a small award (~$85/mo) that grows with any paid care costs. Net worth ($38,000 + income) is far under $163,699. Needing help bathing plus dementia supervision fits the A&A standard, which VA decides from a doctor's exam (VA Form 21-2680).",
+          "keyRule": "MAPR $34,488/yr for veteran with 1 dependent + A&A; net worth ≤ $163,699; medical expenses deductible above 5% of MAPR ($1,141) (rates effective Dec 1, 2025); 90 days active duty with 1 day in wartime, Vietnam era Aug 5, 1964 to May 7, 1975 for service outside Vietnam",
+          "source": "https://www.va.gov/pension/veterans-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of General Caregiver Support Services",
+          "alsoKnownAs": [
+            "PGCSS",
+            "VA Caregiver Support Program",
+            "Caregiver Support Line 1-855-260-3274"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VHA Caregiver Support Program)",
+          "verdict": "likely",
+          "reason": "Open to family caregivers of veterans enrolled in VA health care, with no disability-rating requirement; gives the exhausted wife training, coaching, peer support and a Caregiver Support Coordinator at the local VA medical center.",
+          "keyRule": "Caregiver of a veteran enrolled in VA health care; no service-connected rating required",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA health care enrollment and home and community-based services (respite, adult day health care, homemaker/home health aide, Veteran-Directed Care)",
+          "alsoKnownAs": [
+            "VA Health Care",
+            "VA HCBS",
+            "VA respite"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "possible",
+          "reason": "As a wartime veteran with an honorable discharge he can apply to enroll; his priority group (and any copays) depends on VA's income thresholds for his area, and HCBS like respite and adult day health care need a VA clinical assessment of need. Pension eligibility, if granted, puts him in a higher priority group.",
+          "keyRule": "Enrollment priority groups depend on service-connected status, pension receipt, and household income vs. VA geographic income limits; HCBS require enrollment plus clinical need",
+          "source": "https://www.va.gov/health-care/eligibility/",
+          "evidence": "official"
+        },
+        {
+          "name": "VA Program of Comprehensive Assistance for Family Caregivers",
+          "alsoKnownAs": [
+            "PCAFC",
+            "VA caregiver stipend"
+          ],
+          "agency": "U.S. Department of Veterans Affairs (VHA Caregiver Support Program)",
+          "verdict": "unlikely",
+          "reason": "The stipend program requires a service-connected disability rating; he has none, so the wife cannot be paid through PCAFC. A naive tool keying on 'veteran + caregiver' would suggest it.",
+          "keyRule": "Veteran must have a VA service-connected disability rating (individual or combined) of 70% or higher",
+          "source": "https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/",
+          "evidence": "official"
+        },
+        {
+          "name": "Statewide Medicaid Managed Care Long-Term Care Program",
+          "alsoKnownAs": [
+            "SMMC LTC",
+            "LTC waiver",
+            "Medicaid waiver",
+            "HCBS waiver"
+          ],
+          "agency": "Florida AHCA; screening and waitlist by Dept. of Elder Affairs through the ADRC (Alliance for Aging)",
+          "verdict": "possible",
+          "reason": "Financially he looks eligible: his own share of income is almost certainly under $2,982 (a Qualified Income Trust is available if not), and Florida lets the community spouse keep up to $162,660, so the couple's $38,000 is fully protected with no spend-down. He must meet nursing-home level of care (moderate dementia with bathing help and supervision may qualify) and then wait for release from the priority-scored waitlist.",
+          "keyRule": "Income ≤ $2,982/mo (300% SSI FBR, 2026); applicant assets ≤ $2,000 with community spouse keeping up to $162,660 (Florida protects the full maximum); nursing-facility level of care via DOEA CARES; ADRC waitlist",
+          "source": "https://ahca.myflorida.com/medicaid/statewide-medicaid-managed-care/long-term-care-program/smmc-ltc-program-waitlist-release.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (Florida PACE Centers - Hialeah)",
+          "alsoKnownAs": [
+            "PACE",
+            "Florida PACE"
+          ],
+          "agency": "Miami Jewish Health / Florida PACE Centers, overseen by AHCA and CMS",
+          "verdict": "possible",
+          "reason": "He lives in the Hialeah PACE service area and is 55+; needs a CARES nursing-home level-of-care finding. Medicaid-funded PACE requires Medicaid eligibility (likely achievable as above) and an available slot; private-pay enrollment is also allowed.",
+          "keyRule": "Age 55+, lives in the PACE service area (Hialeah center lists ZIP 33012), meets nursing-home level of care by DOEA CARES; Medicaid PACE slots limited by state funding",
+          "source": "https://www.caredove.com/miamijewishhealthsystems/service/detail/sid/9209",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Disease Initiative respite and Memory Disorder Clinics",
+          "alsoKnownAs": [
+            "ADI",
+            "ADI respite",
+            "Memory Disorder Clinic"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC / AAA",
+          "verdict": "possible",
+          "reason": "He has dementia and his 80-year-old wife is the sole, exhausted caregiver, a priority profile for ADI respite; depends on funding/waitlist and co-pay.",
+          "keyRule": "Respite and caregiver support for caregivers of individuals 18+ diagnosed with probable Alzheimer's or related dementia; sliding-scale co-pay; subject to local funding/waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/alzheimers-disease-initiative-adi/",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care for the Elderly",
+          "alsoKnownAs": [
+            "CCE"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "possible",
+          "reason": "Age 83 and functionally impaired; CCE in-home services and respite are available with a co-pay, subject to waitlist.",
+          "keyRule": "Age 60+ and functionally impaired per comprehensive assessment; co-pay by income; priority for APS-referred high-risk clients; waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/community-care-for-the-elderly-cce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via Alliance for Aging (ADRC for Miami-Dade)",
+          "alsoKnownAs": [
+            "Alliance for Aging",
+            "Elder Helpline",
+            "ADRC",
+            "Title III-E",
+            "SHINE (Medicare counseling)"
+          ],
+          "agency": "Alliance for Aging, Inc. (Area Agency on Aging / ADRC for Miami-Dade and Monroe)",
+          "verdict": "likely",
+          "reason": "Wife qualifies for caregiver support, training and respite referrals; the ADRC is the entry to SMMC LTC, CCE and ADI.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers; ADRC is the single entry point for SMMC LTC screening and state programs (CCE, ADI, HCE)",
+          "source": "https://allianceforaging.org/about-us/adrc",
+          "evidence": "official"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "EHEAP (Emergency Home Energy Assistance for the Elderly, crisis only)"
+          ],
+          "agency": "FloridaCommerce through Miami-Dade Community Action and Human Services Department",
+          "verdict": "likely",
+          "reason": "Florida uses 60% of state median income, about $3,504/mo for a 2-person household on the published table, and their $3,100 is under it. A tool using only 150% FPL ($2,705) would wrongly say no.",
+          "keyRule": "Household income ≤ 60% of Florida state median income or 150% FPL (published table: $2,680/mo for 1, $3,504 for 2, $4,329 for 3; 2025 table)",
+          "source": "https://floridaliheap.com/faq",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "Florida Department of Children and Families (DCF)",
+          "verdict": "unlikely",
+          "reason": "Couple income of $3,100 exceeds the QI couple limit of $2,455, and $38,000 exceeds the $14,910 resource limit.",
+          "keyRule": "QMB < 100% FPL ($1,350 single / $1,824 couple incl. $20 disregard), SLMB < 120% ($1,616 / $2,184), QI < 135% ($1,816 / $2,455); resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Annual income of $37,200 exceeds the $32,460 couple limit and $38,000 exceeds $36,100.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicaid for Aged and Disabled",
+          "alsoKnownAs": [
+            "MEDS-AD",
+            "full Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "They have Medicare, and couple income $3,100 is far above $1,588 and assets above $6,000.",
+          "keyRule": "Income ≤ 88% FPL ($1,171 single / $1,588 couple, April 2026); assets ≤ $5,000 / $6,000; per Florida Health Justice Project, applicants must not qualify for Medicare (duals reach full Medicaid through ICP/HCBS/hospice groups instead)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/07/MEDS-AD-Fact-Sheet_-Eligibility-and-Application-Process-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medically Needy (share of cost)",
+          "alsoKnownAs": [
+            "Medically Needy",
+            "share of cost Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "The couple's $38,000 exceeds the $6,000 Medically Needy asset limit.",
+          "keyRule": "Assets ≤ $5,000 single / $6,000 couple; monthly share of cost = countable income minus the Medically Needy Income Level (MNIL $180 single / $241 couple)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/05/FHJP_Medically-Needy-05-15-26-1-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "ACCESS Florida food assistance",
+            "EBT"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "Gross $3,100 passes Florida's 200% gross screen (~$3,607 for 2), but net income must be ≤ $1,804: after the $217 standard deduction and ~$371 in Part B premiums above $35, about $2,512 remains, so shelter costs would need to be roughly $1,960/mo or more to qualify.",
+          "keyRule": "Elderly household net income ≤ $1,804/mo for 2 (FY2027)",
+          "source": "https://www.myflfamilies.com/services/public-assistance/supplemental-nutrition-assistance-program-snap",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Florida homestead exemption plus Miami-Dade senior (65+) limited-income additional exemption",
+          "alsoKnownAs": [
+            "homestead exemption",
+            "senior exemption",
+            "DR-501SC"
+          ],
+          "agency": "Miami-Dade County Property Appraiser",
+          "verdict": "possible",
+          "reason": "If they own their home: both are 65+ and household income of $37,200 is under the $38,686 limit for the Miami-Dade senior exemption; homeownership not stated.",
+          "keyRule": "Homestead owner 65+ with 2025 household adjusted gross income ≤ $38,686 gets an additional exemption (up to $50,000 off county/participating-city taxes) for 2026",
+          "source": "https://miamidade.gov/pa/exemptions_homestead_senior.asp",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Veterans Pension with Aid and Attendance (and VA health care enrollment)",
+        "phoneOrWhere": "Miami-Dade County Veteran Services Program, 5400 NW 22nd Ave, 3rd Floor, Miami, 305-756-2830 (Hialeah Community Resource Center, 300 E. 1st Ave, 305-884-4801, Wed/Fri)",
+        "why": "He appears to qualify for the pension now, and VA health enrollment opens respite, adult day health care and home health aide services for his exhausted wife, which can start sooner than SMMC LTC's waitlist. A second call to the ADRC (305-670-4357) for SMMC LTC screening should follow the same week."
+      },
+      "notes": "Unlike Texas, Florida protects up to $162,660 for the community spouse (secondary source: ElderLawAnswers; Florida is commonly described as a full-maximum CSRA state), so no spend-down appears needed for SMMC LTC; a human should confirm. VA pension math assumes $2,300 SS is gross and no other medical premiums. LIHEAP limit uses the 2025 published table; funds are first-come."
+    },
+    {
+      "familyId": "FL-C",
+      "programs": [
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "Florida Department of Children and Families (DCF)",
+          "verdict": "likely",
+          "reason": "Couple countable income is about $1,497.50 ($1,350 SS minus $20, plus half of $400 wages after $65), under the $1,824 QMB couple limit (which already includes the $20), and $4,500 is under $14,910. QMB would pay his $202.90/mo Part B premium and Medicare cost-sharing.",
+          "keyRule": "QMB < 100% FPL ($1,350 single / $1,824 couple incl. $20 disregard), SLMB < 120% ($1,616 / $2,184), QI < 135% ($1,816 / $2,455); resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic with QMB; ~$21,000/yr and $4,500 are also under the direct limits.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "ACCESS Florida food assistance",
+            "EBT"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "likely",
+          "reason": "Gross $1,750 is under Florida's 200% screen and, as an elderly/disabled household, net income after the 20% earned-income deduction and $217 standard deduction (~$1,453 before shelter) is under the $1,804 limit for 2; no asset test.",
+          "keyRule": "Florida broad-based categorical eligibility (gross ≤ 200% FPL, no asset test for most households); elderly/disabled households must meet net income ≤ 100% FPL ($1,330 for 1 / $1,804 for 2, FY2027)",
+          "source": "https://www.myflfamilies.com/services/public-assistance/supplemental-nutrition-assistance-program-snap",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "EHEAP (Emergency Home Energy Assistance for the Elderly, crisis only)"
+          ],
+          "agency": "FloridaCommerce through Miami-Dade Community Action and Human Services Department",
+          "verdict": "likely",
+          "reason": "$1,750/mo is under both 150% FPL ($2,705) and the 60% SMI table (~$3,504) for 2.",
+          "keyRule": "Household income ≤ 60% of Florida state median income or 150% FPL (published table: $2,680/mo for 1, $3,504 for 2, $4,329 for 3; 2025 table)",
+          "source": "https://floridaliheap.com/faq",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via Alliance for Aging (ADRC for Miami-Dade)",
+          "alsoKnownAs": [
+            "Alliance for Aging",
+            "Elder Helpline",
+            "ADRC",
+            "Title III-E",
+            "SHINE (Medicare counseling)"
+          ],
+          "agency": "Alliance for Aging, Inc. (Area Agency on Aging / ADRC for Miami-Dade and Monroe)",
+          "verdict": "likely",
+          "reason": "Wife qualifies as a family caregiver of a person with Alzheimer's; SHINE counselors at the Alliance can file QMB/Extra Help; he is 60+ for OAA services.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers; ADRC is the single entry point for SMMC LTC screening and state programs (CCE, ADI, HCE)",
+          "source": "https://allianceforaging.org/about-us/adrc",
+          "evidence": "official"
+        },
+        {
+          "name": "Alzheimer's Disease Initiative respite and Memory Disorder Clinics",
+          "alsoKnownAs": [
+            "ADI",
+            "ADI respite",
+            "Memory Disorder Clinic"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC / AAA",
+          "verdict": "possible",
+          "reason": "ADI serves caregivers of individuals 18+ with Alzheimer's, so younger-onset is covered; Memory Disorder Clinics offer diagnosis follow-up and caregiver training. Respite depends on funding/waitlist.",
+          "keyRule": "Respite and caregiver support for caregivers of individuals 18+ diagnosed with probable Alzheimer's or related dementia; sliding-scale co-pay; subject to local funding/waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/alzheimers-disease-initiative-adi/",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care for the Elderly",
+          "alsoKnownAs": [
+            "CCE"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "possible",
+          "reason": "Age 66 and impaired in medication and money management; eligibility depends on the CCE assessment and waitlist.",
+          "keyRule": "Age 60+ and functionally impaired per comprehensive assessment; co-pay by income; priority for APS-referred high-risk clients; waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/community-care-for-the-elderly-cce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Social Security Disability Insurance conversion (Compassionate Allowance for Early-Onset Alzheimer's)",
+          "alsoKnownAs": [
+            "SSDI",
+            "Compassionate Allowances",
+            "CAL"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "possible",
+          "reason": "Early-Onset Alzheimer's is a Compassionate Allowance condition. If he claimed retirement early (before full retirement age 67 for a 1960 birth year) after the disease began, SSA may pay disability at his unreduced amount up to full retirement age; depends on his claiming age and onset date.",
+          "keyRule": "Disabled before full retirement age with sufficient work credits; Early-Onset Alzheimer's is a listed Compassionate Allowance condition",
+          "source": "https://www.ssa.gov/compassionateallowances/conditions.htm",
+          "evidence": "inferred"
+        },
+        {
+          "name": "Medically Needy (share of cost)",
+          "alsoKnownAs": [
+            "Medically Needy",
+            "share of cost Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "possible",
+          "reason": "Couple assets of $4,500 are under the $6,000 limit, but with ~$1,497 countable income versus the $241 couple MNIL his monthly share of cost would be about $1,250, so it only helps in months with large medical bills (QMB already covers Medicare cost-sharing).",
+          "keyRule": "Assets ≤ $5,000 single / $6,000 couple; monthly share of cost = countable income minus the Medically Needy Income Level (MNIL $180 single / $241 couple)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/05/FHJP_Medically-Needy-05-15-26-1-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicaid for Aged and Disabled",
+          "alsoKnownAs": [
+            "MEDS-AD",
+            "full Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "MEDS-AD excludes people who qualify for Medicare (he has it), and his countable income may also be over the limit.",
+          "keyRule": "Income ≤ 88% FPL ($1,171 single / $1,588 couple, April 2026); assets ≤ $5,000 / $6,000; per Florida Health Justice Project, applicants must not qualify for Medicare (duals reach full Medicaid through ICP/HCBS/hospice groups instead)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/07/MEDS-AD-Fact-Sheet_-Eligibility-and-Application-Process-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Statewide Medicaid Managed Care Long-Term Care Program",
+          "alsoKnownAs": [
+            "SMMC LTC",
+            "LTC waiver",
+            "Medicaid waiver",
+            "HCBS waiver"
+          ],
+          "agency": "Florida AHCA; screening and waitlist by Dept. of Elder Affairs through the ADRC (Alliance for Aging)",
+          "verdict": "unlikely",
+          "reason": "He can still bathe and dress and mainly needs cueing and help with medication and money, which is unlikely to meet nursing-home level of care now; re-screen as needs grow.",
+          "keyRule": "Income ≤ $2,982/mo (300% of 2026 SSI FBR; Qualified Income Trust if over), assets ≤ $2,000 (community spouse may keep up to $162,660), nursing-facility level of care by DOEA CARES; enrollment via ADRC screening and a priority-scored waitlist released by frailty, not time",
+          "source": "https://ahca.myflorida.com/medicaid/statewide-medicaid-managed-care/long-term-care-program/smmc-ltc-program-waitlist-release.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Care for the Elderly",
+          "alsoKnownAs": [
+            "HCE",
+            "caregiver subsidy"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "unlikely",
+          "reason": "He lives with his wife as caregiver and would have QMB, but HCE requires being at risk of nursing-home placement, which his current needs do not suggest.",
+          "keyRule": "Age 60+, income below ICP standard ($2,982), assets within ICP limit ($2,000), at risk of nursing home placement, receives SSI/QMB/SLMB, and has an approved adult caregiver living with them; $160/mo basic subsidy plus special subsidies",
+          "source": "https://elderaffairs.org/programs-and-services/home-care-for-the-elderly-hce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "His countable Social Security of $1,330 exceeds the $994 individual rate (his 63-year-old wife is not aged/blind/disabled and her $400 earnings are below the deeming threshold).",
+          "keyRule": "Countable income < $994/mo individual (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Florida homestead exemption plus Miami-Dade senior (65+) limited-income additional exemption",
+          "alsoKnownAs": [
+            "homestead exemption",
+            "senior exemption",
+            "DR-501SC"
+          ],
+          "agency": "Miami-Dade County Property Appraiser",
+          "verdict": "possible",
+          "reason": "If they own their home: he is 66 and household income ~$21,000 is under $38,686; homeownership not stated.",
+          "keyRule": "Homestead owner 65+ with 2025 household adjusted gross income ≤ $38,686 gets an additional exemption (up to $50,000 off county/participating-city taxes) for 2026",
+          "source": "https://miamidade.gov/pa/exemptions_homestead_senior.asp",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "Medicare Savings Program (QMB) and Extra Help via SHINE counseling at the Alliance for Aging",
+        "phoneOrWhere": "Alliance for Aging Elder Helpline, 305-670-4357 (or apply for QMB at myaccess.myflfamilies.com / DCF 850-300-4323)",
+        "why": "QMB is the largest certain benefit (about $2,400/yr in Part B premiums plus cost-sharing and automatic Extra Help), and the same call connects the wife to ADI respite and caregiver support and helps file SNAP."
+      },
+      "notes": "MEDS-AD Medicare exclusion and the $1,171/$1,588 limits come from Florida Health Justice Project fact sheets (secondary, July 2026), not the DCF manual. Medically Needy MNIL ($180/$241) also from FHJP secondary. The SSDI angle depends on his claiming age and onset date (not given). The wife (63) is not yet eligible for Medicare or OAA services herself."
+    },
+    {
+      "familyId": "FL-D",
+      "programs": [
+        {
+          "name": "VA Survivors Pension with Aid and Attendance",
+          "alsoKnownAs": [
+            "Survivors Pension",
+            "Widow's Pension",
+            "Death Pension",
+            "Aid and Attendance",
+            "A&A"
+          ],
+          "agency": "U.S. Department of Veterans Affairs",
+          "verdict": "likely",
+          "reason": "Her late husband served in the Navy 1951-1954 (Korean Conflict wartime, June 27, 1950 to Jan 31, 1955), honorable discharge, and she has not remarried. Her income of $16,800/yr is already below the $18,697 surviving-spouse A&A MAPR, and her Medicare Part B premium (~$2,435/yr) is a further deduction, giving roughly $3,700/yr before any paid care costs. Net worth ($9,000 + income) is far under $163,699; her need for help with bathing, dressing, toileting and constant supervision fits the A&A standard.",
+          "keyRule": "Surviving spouse MAPR with A&A $18,697/yr; net worth ≤ $163,699 (Dec 1, 2025 to Nov 30, 2026); veteran served 90 days with 1 day in wartime (Korean Conflict June 27, 1950 to Jan 31, 1955)",
+          "source": "https://www.va.gov/pension/survivors-pension-rates/",
+          "evidence": "official"
+        },
+        {
+          "name": "Medicare Savings Programs (QMB, SLMB, QI-1)",
+          "alsoKnownAs": [
+            "MSP",
+            "QMB",
+            "SLMB",
+            "QI"
+          ],
+          "agency": "Florida Department of Children and Families (DCF)",
+          "verdict": "likely",
+          "reason": "Her $1,400 income (countable $1,380) is above QMB ($1,350 incl. disregard) but under the $1,616 SLMB limit, and $9,000 is under $9,950, so SLMB would pay her Part B premium.",
+          "keyRule": "QMB < 100% FPL ($1,350 single / $1,824 couple incl. $20 disregard), SLMB < 120% ($1,616 / $2,184), QI < 135% ($1,816 / $2,455); resources ≤ $9,950 single / $14,910 couple (2026)",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "evidence": "official"
+        },
+        {
+          "name": "Extra Help with Medicare Prescription Drug Costs",
+          "alsoKnownAs": [
+            "Part D Low-Income Subsidy",
+            "LIS"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "likely",
+          "reason": "Automatic once on SLMB; $16,800/yr is also under $23,940 and $9,000 under $18,090.",
+          "keyRule": "income < $23,940/yr single or $32,460/yr couple; resources ≤ $18,090 single / $36,100 couple (2026); automatic with Medicaid/MSP",
+          "source": "https://www.ssa.gov/pubs/EN-05-10508.pdf",
+          "evidence": "official"
+        },
+        {
+          "name": "Statewide Medicaid Managed Care Long-Term Care Program",
+          "alsoKnownAs": [
+            "SMMC LTC",
+            "LTC waiver",
+            "Medicaid waiver",
+            "HCBS waiver"
+          ],
+          "agency": "Florida AHCA; screening and waitlist by Dept. of Elder Affairs through the ADRC (Alliance for Aging)",
+          "verdict": "possible",
+          "reason": "Her $1,400 income is under $2,982 and her needs (bathing, dressing, toileting, mobility, cannot be alone) point to nursing-home level of care, but $9,000 must come down to $2,000 and she must be screened and released from the waitlist. Only her income counts.",
+          "keyRule": "Income ≤ $2,982/mo (300% of 2026 SSI FBR; Qualified Income Trust if over), assets ≤ $2,000 (community spouse may keep up to $162,660), nursing-facility level of care by DOEA CARES; enrollment via ADRC screening and a priority-scored waitlist released by frailty, not time",
+          "source": "https://ahca.myflorida.com/medicaid/statewide-medicaid-managed-care/long-term-care-program/smmc-ltc-program-waitlist-release.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Home Care for the Elderly",
+          "alsoKnownAs": [
+            "HCE",
+            "caregiver subsidy"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "possible",
+          "reason": "She is 60+, lives with an approved adult caregiver (her daughter), is at risk of nursing-home placement, income is under $2,982, and SLMB would satisfy the SSI/QMB/SLMB prong; but her $9,000 exceeds the ICP asset limit ($2,000), so she would need to spend down first. HCE pays the caregiving household a $160/mo basic subsidy plus special subsidies.",
+          "keyRule": "Age 60+, income below ICP standard ($2,982), assets within ICP limit ($2,000), at risk of nursing home placement, receives SSI/QMB/SLMB, and has an approved adult caregiver living with them; $160/mo basic subsidy plus special subsidies",
+          "source": "https://elderaffairs.org/programs-and-services/home-care-for-the-elderly-hce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Program of All-Inclusive Care for the Elderly (Florida PACE Centers - Hialeah)",
+          "alsoKnownAs": [
+            "PACE",
+            "Florida PACE"
+          ],
+          "agency": "Miami Jewish Health / Florida PACE Centers, overseen by AHCA and CMS",
+          "verdict": "possible",
+          "reason": "Hialeah PACE serves ZIP 33012 and she is 55+ with nursing-home-level needs; Medicaid PACE needs Medicaid eligibility (after spend-down) and an available slot.",
+          "keyRule": "Age 55+, lives in the PACE service area (Hialeah center lists ZIP 33012), meets nursing-home level of care by DOEA CARES; Medicaid PACE slots limited by state funding",
+          "source": "https://www.caredove.com/miamijewishhealthsystems/service/detail/sid/9209",
+          "evidence": "official"
+        },
+        {
+          "name": "Community Care for the Elderly",
+          "alsoKnownAs": [
+            "CCE"
+          ],
+          "agency": "Florida Department of Elder Affairs through the ADRC",
+          "verdict": "possible",
+          "reason": "Age 88 and severely impaired; CCE can provide in-home help or respite with a co-pay while she waits, subject to funding.",
+          "keyRule": "Age 60+ and functionally impaired per comprehensive assessment; co-pay by income; priority for APS-referred high-risk clients; waitlist",
+          "source": "https://elderaffairs.org/programs-and-services/community-care-for-the-elderly-cce-program/",
+          "evidence": "official"
+        },
+        {
+          "name": "Older Americans Act services and National Family Caregiver Support Program via Alliance for Aging (ADRC for Miami-Dade)",
+          "alsoKnownAs": [
+            "Alliance for Aging",
+            "Elder Helpline",
+            "ADRC",
+            "Title III-E",
+            "SHINE (Medicare counseling)"
+          ],
+          "agency": "Alliance for Aging, Inc. (Area Agency on Aging / ADRC for Miami-Dade and Monroe)",
+          "verdict": "likely",
+          "reason": "The daughter qualifies as a family caregiver of a person 60+; the ADRC is the entry for SMMC LTC, HCE and CCE.",
+          "keyRule": "Not means-tested: older adults 60+ and family caregivers; ADRC is the single entry point for SMMC LTC screening and state programs (CCE, ADI, HCE)",
+          "source": "https://allianceforaging.org/about-us/adrc",
+          "evidence": "official"
+        },
+        {
+          "name": "Medically Needy (share of cost)",
+          "alsoKnownAs": [
+            "Medically Needy",
+            "share of cost Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "Her $9,000 in savings exceeds the $5,000 Medically Needy asset limit.",
+          "keyRule": "Assets ≤ $5,000 single / $6,000 couple; monthly share of cost = countable income minus the Medically Needy Income Level (MNIL $180 single / $241 couple)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/05/FHJP_Medically-Needy-05-15-26-1-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Medicaid for Aged and Disabled",
+          "alsoKnownAs": [
+            "MEDS-AD",
+            "full Medicaid"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "She has Medicare (excluded from MEDS-AD) and countable income of $1,380 exceeds the $1,171 limit; $9,000 also exceeds $5,000.",
+          "keyRule": "Income ≤ 88% FPL ($1,171 single / $1,588 couple, April 2026); assets ≤ $5,000 / $6,000; per Florida Health Justice Project, applicants must not qualify for Medicare (duals reach full Medicaid through ICP/HCBS/hospice groups instead)",
+          "source": "https://floridahealthjustice.org/wp-content/uploads/2026/07/MEDS-AD-Fact-Sheet_-Eligibility-and-Application-Process-1.pdf",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Supplemental Security Income",
+          "alsoKnownAs": [
+            "SSI"
+          ],
+          "agency": "Social Security Administration",
+          "verdict": "unlikely",
+          "reason": "Countable income of $1,380 exceeds the $994 FBR.",
+          "keyRule": "Countable income < $994/mo individual (2026)",
+          "source": "https://www.ssa.gov/oact/cola/SSI.html",
+          "evidence": "official"
+        },
+        {
+          "name": "Food Assistance Program (SNAP)",
+          "alsoKnownAs": [
+            "SNAP",
+            "food stamps",
+            "ACCESS Florida food assistance",
+            "EBT"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "She lives and presumably eats with her daughter's family, so the daughter's ~$5,500/mo counts. A 60+ person who cannot prepare her own meals can be a separate household only if the others' income is ≤ 165% FPL (about $2,976/mo for 2), which $5,500 exceeds. A tool counting only the parent's income would wrongly say yes.",
+          "keyRule": "7 CFR 273.1(a)(2)(ii): separate household for an elderly person unable to purchase/prepare meals only if others' income ≤ 165% FPL",
+          "source": "https://www.myflfamilies.com/services/public-assistance/supplemental-nutrition-assistance-program-snap",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Low Income Home Energy Assistance Program",
+          "alsoKnownAs": [
+            "LIHEAP",
+            "EHEAP (Emergency Home Energy Assistance for the Elderly, crisis only)"
+          ],
+          "agency": "FloridaCommerce through Miami-Dade Community Action and Human Services Department",
+          "verdict": "unlikely",
+          "reason": "LIHEAP counts the whole household; the 3-person household's ~$6,900/mo is above the ~$4,329/mo limit.",
+          "keyRule": "Household income ≤ 60% of Florida state median income or 150% FPL (published table: $2,680/mo for 1, $3,504 for 2, $4,329 for 3; 2025 table)",
+          "source": "https://floridaliheap.com/faq",
+          "evidence": "secondary"
+        },
+        {
+          "name": "Florida homestead exemption plus Miami-Dade senior (65+) limited-income additional exemption",
+          "alsoKnownAs": [
+            "homestead exemption",
+            "senior exemption",
+            "DR-501SC"
+          ],
+          "agency": "Miami-Dade County Property Appraiser",
+          "verdict": "unlikely",
+          "reason": "She lives in her daughter's home, so there is no homestead of her own; the daughter (58) is not 65+.",
+          "keyRule": "Homestead owner 65+ with 2025 household adjusted gross income ≤ $38,686 gets an additional exemption (up to $50,000 off county/participating-city taxes) for 2026",
+          "source": "https://miamidade.gov/pa/exemptions_homestead_senior.asp",
+          "evidence": "official"
+        },
+        {
+          "name": "Optional State Supplementation",
+          "alsoKnownAs": [
+            "OSS"
+          ],
+          "agency": "Florida DCF",
+          "verdict": "unlikely",
+          "reason": "OSS only pays for people living in a licensed assisted living facility, adult family care home or mental health residential facility; she lives at home.",
+          "keyRule": "Must reside in an ALF, AFCH or MHRTF",
+          "source": "https://www.myflfamilies.com/documents/59481.pdf",
+          "evidence": "official"
+        }
+      ],
+      "firstCall": {
+        "program": "VA Survivors Pension with Aid and Attendance",
+        "phoneOrWhere": "Miami-Dade County Veteran Services Program, 305-756-2830 (Hialeah Community Resource Center, 305-884-4801, Wed/Fri)",
+        "why": "She clearly qualifies now with no waitlist or spend-down, and the monthly cash can pay for help that relieves the daughter. The ADRC call (305-670-4357) for SMMC LTC/HCE screening should follow, since a spend-down plan for the $9,000 has to be coordinated with both programs."
+      },
+      "notes": "Confirm whether the 'small widow's pension' is already a VA Survivors Pension or DIC; if basic pension, request the A&A increase; DIC and pension cannot both be paid. Payments to the daughter for care under a written agreement may count as medical expenses for VA. SMMC LTC's participant-directed option can pay a non-spouse family caregiver such as the daughter. Spend-down must avoid gifts (Medicaid 5-year look-back; VA 3-year)."
+    }
+  ]
+}
