@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
 import { shouldSendNotification, isControllableNotification, getPrefKeyForEmailType } from "./notification-prefs";
 import { isUndeliverable, verifyAndCache, effectiveStatus, isUnoverridableVerdict, getCachedVerification } from "./email-verification";
-import { NUDGE_EMAIL_TYPES, NUDGE_WEEKLY_CAP, NUDGE_WINDOW_DAYS, isGovernedNudge, capCountedTypesFor, FAMILY_NUDGE_WEEKLY_CAP, FAMILY_NUDGE_DAILY_CAP, PENDING_COUNT_WINDOW_MINUTES, isGovernedFamilyNudge } from "./email-governance";
+import { NUDGE_EMAIL_TYPES, NUDGE_WEEKLY_CAP, NUDGE_WINDOW_DAYS, isGovernedNudge, capCountedTypesFor, FAMILY_NUDGE_WEEKLY_CAP, FAMILY_NUDGE_DAILY_CAP, PENDING_COUNT_WINDOW_MINUTES, isGovernedFamilyNudge, isFamilyHelpEmail } from "./email-governance";
 import { isEmailDoNotContact } from "./do-not-contact";
 
 const FROM_ADDRESS = "Olera <noreply@olera.care>";
@@ -719,8 +719,10 @@ export async function sendEmail(
         );
         const weekCount = counted.length;
         const dayCount = counted.filter((r) => r.created_at && new Date(r.created_at).getTime() >= utcDayStartMs).length;
+        // The outcome check and the provider-silent rescue skip the weekly
+        // ceiling (see FAMILY_HELP_EMAIL_TYPES); the daily one still applies.
         const capHit =
-          weekCount >= FAMILY_NUDGE_WEEKLY_CAP
+          weekCount >= FAMILY_NUDGE_WEEKLY_CAP && !isFamilyHelpEmail(emailType)
             ? { reason: "family_nudge_cap", detail: `${weekCount} in ${NUDGE_WINDOW_DAYS}d` }
             : dayCount >= FAMILY_NUDGE_DAILY_CAP
               ? { reason: "family_daily_cap", detail: `${dayCount} today` }

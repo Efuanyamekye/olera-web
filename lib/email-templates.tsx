@@ -2471,9 +2471,12 @@ export function providerSilentEmail(opts: {
       openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now, but there are other providers in your area worth a look.`;
     }
   } else if (bridge) {
-    openingLine = `${bridge}They haven't gotten back to you yet, and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few others worth comparing:" : ""}`;
+    // Conditional on purpose: "silent" means no reply inside Olera, and most
+    // providers answer by phone, which we cannot see. Stating it as fact told
+    // families a provider who had called them never did (6 Oct 2026).
+    openingLine = `${bridge}If they haven't gotten back to you yet, the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few others worth comparing:" : ""}`;
   } else {
-    openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> hasn't gotten back to you yet, and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few other providers near you worth comparing:" : ""}`;
+    openingLine = `If <strong>${escapeHtml(opts.providerName)}</strong> hasn't gotten back to you yet, the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few other providers near you worth comparing:" : ""}`;
   }
 
   // Adjust closing line based on whether we showed recommendations

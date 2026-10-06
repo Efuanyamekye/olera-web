@@ -57,6 +57,7 @@ const PROBE_PRIORITY: Record<string, PriorityKey | null> = {
   "Revenue": "providers",
   "Support backlog": "operations",
   "Benefits Finder": "benefits",
+  "Directory": "providers",
   "Organic traffic": null,
 };
 

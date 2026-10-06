@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { directoryHealthSummary } from "@/lib/providers/directory-health.server";
 
 /**
  * Read-only investigation probes.
@@ -25,6 +26,7 @@ export const WAR_ROOM_PROBE_IDS = [
   "revenue_by_product",
   "support_backlog_composition",
   "benefits_finder_weekly",
+  "directory_health",
   "none",
 ] as const;
 
@@ -39,7 +41,7 @@ export type WarRoomProbeId = (typeof WAR_ROOM_PROBE_IDS)[number];
  * through a week of shipped Benefits work (TJ, 2026-10-05: "This is wrong").
  * A standing probe is the brief's own reading of a priority, taken daily.
  */
-export const STANDING_PROBE_IDS: ReadonlyArray<Exclude<WarRoomProbeId, "none">> = ["benefits_finder_weekly"];
+export const STANDING_PROBE_IDS: ReadonlyArray<Exclude<WarRoomProbeId, "none">> = ["benefits_finder_weekly", "directory_health"];
 
 export type WarRoomProbeResult = {
   probeId: WarRoomProbeId;
@@ -451,6 +453,30 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
       caveat: "Counts what Olera sent, not what families did with it. Nothing here measures an application started or an award received.",
     };
   },
+
+  /**
+   * The directory's own ledger (provider_health_actions, migration 272): what
+   * the system did to listings this week and how much of the directory it has
+   * checked against Google. A quiet week reads as loudly as a busy one, and a
+   * stalled cron reads as "no action in N days", which is the whole reason the
+   * ledger exists (TJ, 6 Oct 2026: earlier plans "just disappear").
+   */
+  directory_health: async (db) => {
+    const s = await directoryHealthSummary(db, 7);
+    const archived = s.byKind.closed_archived ?? 0;
+    const renamed = s.byKind.rename_applied ?? 0;
+    const flagged = (s.byKind.closed_temporarily ?? 0) + (s.byKind.rename_flagged ?? 0) + (s.byKind.website_dead ?? 0) + (s.byKind.category_flagged ?? 0) + (s.byKind.duplicate_flagged ?? 0);
+    const total = s.checked + s.unchecked;
+    const coverage = total ? Math.round((s.checked / total) * 100) : 0;
+    const sinceLast = s.lastActionAt ? Math.floor((Date.now() - Date.parse(s.lastActionAt)) / DAY) : null;
+    const quiet = sinceLast === null ? "The system has never acted on the directory." : sinceLast > 7 ? ` Last action ${n(sinceLast)} days ago.` : "";
+    return {
+      headline: `${n(archived)} closed providers archived and ${n(renamed)} renamed this week, ${n(s.openFlags)} flags waiting. ${n(coverage)}% of the directory checked against Google.${sinceLast === null ? "" : quiet}`,
+      detail: `${n(s.checked)} providers have a Google status read; ${n(s.unchecked)} with a Place ID never have. This week's ledger: ${Object.entries(s.byKind).map(([k, v]) => `${k.replace(/_/g, " ")} ${n(v)}`).join(", ") || "nothing"}. Archives and cosmetic renames apply themselves and can be undone from /admin/directory/health; temporary closures and substantive renames wait there for a person.${sinceLast === null ? ` ${quiet}` : ""}`,
+      rows: Object.entries(s.byKind).map(([kind, count]) => ({ action: kind.replace(/_/g, " "), this_week: count })),
+      caveat: "Google status is read on 10,000 providers a month at $0 (the free Pro tier plus the review refresh), so coverage grows about 13 points a month. A provider Google marks closed is archived on Google's word; the undo is one click.",
+    };
+  },
 };
 
 export function warRoomProbeMenu() {
@@ -462,6 +488,7 @@ export function warRoomProbeMenu() {
     { id: "revenue_by_product", question: "Where does the Ad Boost revenue funnel stop?" },
     { id: "support_backlog_composition", question: "What is actually in the support backlog?" },
     { id: "benefits_finder_weekly", question: "How many families finished the Benefits Finder this week, and what did the Navigator send them?" },
+    { id: "directory_health", question: "What did the system do to the provider directory this week, and how much of it has been checked against Google?" },
     { id: "none", question: "No probe in the menu can advance this condition." },
   ] as const;
 }

@@ -4,6 +4,7 @@ import { fetchGoogleReviews } from "@/lib/google-places";
 import { withCronRun } from "@/lib/crons/run";
 import { getClaimedProviderIds, getProvidersForReviewRefresh, updateProviderGoogleReviews } from "@/lib/providers";
 import { DEFAULT_REFRESH_CAP, planReviewRefresh } from "@/lib/providers/review-refresh-plan";
+import { applyStatusObservation } from "@/lib/providers/directory-health.server";
 
 /**
  * GET /api/cron/google-reviews
@@ -54,6 +55,12 @@ export async function GET(request: NextRequest) {
           const data = await fetchGoogleReviews(p.place_id);
           if (!data) return null;
           await updateProviderGoogleReviews(p.provider_id, data, db);
+          // Status and name came along for free; act on them (archive a
+          // permanently closed business, flag the rest). Never fails the refresh.
+          if (data.business_status || data.google_name) {
+            await applyStatusObservation(db, p.provider_id, { business_status: data.business_status ?? null, google_name: data.google_name ?? null }, "review_refresh")
+              .catch((err) => console.error(`[google-reviews-cron] Health write failed for ${p.provider_id}:`, err));
+          }
           return p.provider_id;
         }),
       );

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSavedProviders } from "@/hooks/use-saved-providers";
+import NextBestOption from "./NextBestOption";
 
 interface ConnectedStateProps {
   providerName: string;
@@ -16,6 +17,8 @@ interface ConnectedStateProps {
   /** @deprecated Not currently used in the new UI */
   requestDate?: string | null;
   connectionId: string | null;
+  /** This visit sent the inquiry: offer the next best option once. */
+  justSent?: boolean;
 }
 
 /**
@@ -31,6 +34,7 @@ export default function ConnectedState({
   careTypes = [],
   priceRange,
   connectionId,
+  justSent = false,
 }: ConnectedStateProps) {
   const { isSaved, toggleSave } = useSavedProviders();
   const providerIsSaved = isSaved(providerSlug);
@@ -156,6 +160,8 @@ export default function ConnectedState({
         </svg>
         No spam. No sales calls.
       </p>
+
+      {justSent && connectionId && <NextBestOption connectionId={connectionId} providerName={providerName} />}
     </div>
   );
 }

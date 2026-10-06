@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { GoogleReviewsData } from "@/lib/types";
 import { fetchGoogleReviews } from "@/lib/google-places";
+import { applyStatusObservation } from "@/lib/providers/directory-health.server";
 import type { RefreshCandidate } from "./review-refresh-plan";
 
 /**
@@ -144,6 +145,11 @@ export async function refreshGoogleReviews(
     return { refreshed: false, reason: "google_empty", data: existing };
   }
   await writeGoogleReviews(db, target, fresh);
+  // A directory row gets the same health treatment as the monthly pass.
+  if (target.source === "ios" && (fresh.business_status || fresh.google_name)) {
+    await applyStatusObservation(db, target.providerId, { business_status: fresh.business_status ?? null, google_name: fresh.google_name ?? null }, "manual_refresh")
+      .catch((err) => console.error(`[google-reviews] Health write failed for ${target.providerId}:`, err));
+  }
   return { refreshed: true, data: fresh };
 }
 
