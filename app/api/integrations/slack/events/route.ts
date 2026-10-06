@@ -11,6 +11,8 @@ import { downloadSlackFile } from "@/lib/war-room/attachments.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 import { approvalReply, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { withoutStaleRenewalCounts } from "@/lib/war-room/stale-counts";
+import { postAsCortex } from "@/lib/war-room/team-messages.server";
+import { handleInboxCommand, parseInboxCommand } from "@/lib/war-room/inbox-operator.server";
 
 export const maxDuration = 90;
 
@@ -79,6 +81,57 @@ export async function POST(request: NextRequest) {
     // Narrowed on 2026-09-26: "any app_id or subtype" also dropped the
     // founder's own messages sent through the Claude connector and any message
     // with a screenshot. See lib/war-room/dm-intake.ts.
+    // #cortex is the agent's own channel (CORTEX_SLACK_CHANNEL). A human
+    // message there is addressed to Cortex the way a DM is: a question gets
+    // the same answer engine, in the thread; the Telegram inbox commands
+    // ("approve 5 6", "skip 7", "later") work when the founder types them.
+    // The bot already receives message.channels, so nothing else subscribes.
+    // Its own posts, joins and other apps are skipped the way the DM path does
+    // (lib/war-room/dm-intake.ts), or an answer ending in "?" would be read
+    // back as a question and answered again, forever.
+    const cortexChannel = process.env.CORTEX_SLACK_CHANNEL?.trim();
+    const inCortexChannel = Boolean(cortexChannel) && /^[CG][A-Z0-9]{8,}$/.test(cortexChannel!)
+      && payload.event.channel === cortexChannel
+      && payload.event.type === "message"
+      && !payload.event.bot_id && !payload.event.app_id && !payload.event.subtype
+      && Boolean(payload.event.user);
+    if (inCortexChannel) {
+      if (request.headers.get("x-slack-retry-num")) return NextResponse.json({ ok: true, retry: true });
+      const text = cleanDmText(payload.event.text).replace(/<@[A-Z0-9]+>/g, "").replace(/\s+/g, " ").trim();
+      if (!text) return NextResponse.json({ ok: true, cortexChannel: { ignored: "no text" } });
+      const threadTs = payload.event.thread_ts ?? payload.event.ts;
+      const say = (reply: string) => postAsCortex(payload.event!.channel!, reply, { threadTs }).catch(() => null);
+      const founderId = process.env.WAR_ROOM_BRIEF_SLACK_USER_ID?.trim() || null;
+      const fromFounder = Boolean(founderId) && payload.event.user === founderId;
+      const command = parseInboxCommand(text);
+      if (command) {
+        if (!fromFounder) {
+          await say("Only TJ can approve, skip or snooze inbox items. I can answer questions for anyone, though.");
+          return NextResponse.json({ ok: true, cortexChannel: { command: "not the founder" } });
+        }
+        const reply = await handleInboxCommand(db, command);
+        if (reply) await say(reply);
+        return NextResponse.json({ ok: true, cortexChannel: { command: command.verb } });
+      }
+      const addressed = payload.event.thread_ts ? await findAskByThread(db, payload.event.thread_ts) : null;
+      const openExchange = addressed ? null : await loadOpenExchange(db);
+      const answer = await answerFounderQuestion(
+        db,
+        text,
+        addressed?.investigationId ?? openExchange?.focusInvestigationId ?? null,
+        openExchange,
+        {},
+      );
+      await say(answer.reply);
+      if (answer.answered) {
+        await recordExchange(db, {
+          question: text.slice(0, 500),
+          answer: answer.reply.slice(0, 1_500),
+          focusInvestigationId: addressed?.investigationId ?? openExchange?.focusInvestigationId ?? null,
+        });
+      }
+      return NextResponse.json({ ok: true, cortexChannel: { answered: answer.answered } });
+    }
     if (payload.event.channel_type === "im" && isReadableDm(payload)) {
       const text = cleanDmText(payload.event.text);
       // Slack retries anything it does not see answered within three seconds,
