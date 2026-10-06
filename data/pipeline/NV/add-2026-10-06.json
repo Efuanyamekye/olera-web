@@ -1,0 +1,352 @@
+{
+  "state": "NV",
+  "addedAt": "2026-10-06T06:11:17.580Z",
+  "dive": {
+    "state": "NV",
+    "stateName": "Nevada",
+    "diveAt": "2026-10-06T06:07:27.067Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Medical Assistance to the Aged, Blind, and Disabled (MAABD)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "program_basis": "MAABD in Nevada uses SSI-style budgeting methodologies and is separate from MAGI-based Medicaid categories.",
+            "single_applicant": "2026 income limit reported for a single applicant: $994/month.",
+            "married_applicants_combined": "2026 income limit reported for married applicants: $1,491/month combined.",
+            "counting_rules": "Nearly all income is counted, including Social Security, pensions, IRA payments, wages, salary, property income, stock dividends, and alimony.",
+            "household_size_table": "No household-size income table applies in the same way as MAGI Medicaid; the available MAABD limits are reported as individual and married-couple limits."
+          },
+          "asset_limits": {
+            "single_applicant": "$2,000 countable resources.",
+            "married_applicants_combined": "$3,000 combined countable resources.",
+            "what_counts": "Countable resources are subject to the program limit; the available sources indicate MAABD uses a resource test and that exceeding the limit causes ineligibility.",
+            "what_is_exempt": "The provided official excerpts confirm a resource test but do not list a full Nevada-specific exempt-asset catalog in the search results. Common Medicaid exclusions are not stated here unless verified by the cited Nevada materials.",
+            "timing_rule": "If countable resources are under the limit on any day of the month, the customer is eligible for that month."
+          },
+          "other_requirements": [
+            "Must be age 65 or older, or blind, or disabled.",
+            "If under 65 and applying through the disabled pathway, disability must meet SSA criteria used by Nevada.",
+            "Blindness/disablement is evaluated under Social Security Administration criteria.",
+            "Applicants who are not eligible under SSI may still qualify using MAABD rules.",
+            "Some MAABD-related groups also cover people who require medical facility care but can be cared for at home, and aged individuals who can be cared for in adult group care facilities.",
+            "Non-citizens may qualify for limited emergency medical coverage only if they meet specific requirements."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Medicaid medical coverage for eligible aged, blind, or disabled Nevadans. The cited Nevada materials specifically include physician visits, prescription medication, emergency room visits, short-term hospital stays, and, for some applicants, long-term care services and supports or home- and community-based waiver services. The program can also cover up to three months of prior medical coverage for people who qualify.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Access Nevada: https://accessnevada.dwss.nv.gov/",
+            "Use the Access Nevada pre-screening tool via the Nevada DSS/Access Nevada site to identify the right application path",
+            "Phone: (775) 684-0800",
+            "Request an application from the district office or customer service",
+            "Download the application form from the Nevada DSS/DWSS website",
+            "In-person through a local district office"
+          ],
+          "processing_time": "No exact statewide processing-time deadline was found in the cited Nevada materials. Disability-related cases may require medical evidence; the cited manual says medical records and, if indicated, a death certificate must be received by the district office within 45 days of request.",
+          "waitlist": "No general MAABD waitlist was identified in the cited materials. Some waiver or care-setting pathways may require functional review, but the search results did not show a standing statewide waitlist for basic MAABD coverage.",
+          "forms": [
+            "Form 2920, Application for Assistance to Aged, Blind and Disabled (MAABD)",
+            "Application for Assistance (MAABD-SNAP).pdf",
+            "MAABD Addendum (2059-EM)"
+          ],
+          "documents": [
+            "Proof of age (for age-based eligibility)",
+            "Proof of disability or blindness, if applying under those categories",
+            "Medical records supporting a disability determination",
+            "Income proof for all countable income sources",
+            "Resource/asset proof such as bank statements and other financial account records",
+            "Social Security number information, if available",
+            "Citizenship or qualified immigration status documents, if requested",
+            "Proof of Nevada residency",
+            "Any paperwork related to nursing facility care, home care, or waiver needs if applying for a long-term-care-related category"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Nevada Medicaid program; eligibility is administered by Nevada DSS/DWSS with district-office involvement. No county-only restriction was identified.",
+          "regional_variations": "The cited materials do not show different eligibility rules by county. Practical differences may come from local district-office handling, document submission, and disability review timing, but no official regional benefit differences were identified.",
+          "offices_or_providers": [
+            "Nevada Department of Social Services / Division of Welfare and Supportive Services (state administration)",
+            "Local district offices",
+            "Access Nevada online portal"
+          ]
+        },
+        "official_source": "https://www.dss.nv.gov/programs/Medicaid/apply-for-assistance/",
+        "gotchas": [
+          "MAABD is not the same as MAGI Medicaid; it uses SSI-style budgeting and a resource test.",
+          "Income is counted differently than many families expect; nearly all income sources are included.",
+          "Eligibility is not just about age; blind or disabled applicants under 65 can qualify if they meet the SSA disability standard used by Nevada.",
+          "Resource eligibility can be lost if assets go over the limit even temporarily, though the cited rule says eligibility exists if resources are under the limit on any day of the month.",
+          "There is no single simple household-size table like marketplace Medicaid; the practical limits shown in the cited Nevada materials are single vs. married-couple limits.",
+          "Families applying for disability-based MAABD should be ready to provide medical records promptly, because the cited manual requires them within 45 days of request.",
+          "Some people qualify for only limited emergency coverage if they are ineligible non-citizens."
+        ],
+        "data_shape_notes": "This program is a means-tested Medicaid category with SSI-style budgeting, a strict resource test, and separate pathways for age, blindness, disability, and some long-term-care/waiver situations.",
+        "_raw": "{\n  \"name\": \"Medical Assistance to the Aged, Blind, and Disabled (MAABD)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"program_basis\": \"MAABD in Nevada uses SSI-style budgeting methodologies and is separate from MAGI-based Medicaid categories.\",\n      \"single_applicant\": \"2026 income limit reported for a single applicant: $994/month.\",\n      \"married_applicants_combined\": \"2026 income limit reported for married applicants: $1,491/month combined.\",\n      \"counting_rules\": \"Nearly all income is counted, including Social Security, pensions, IRA payments, wages, salary, property income, stock dividends, and alimony.\",\n      \"household_size_table\": \"No household-size income table applies in the same way as MAGI Medicaid; the available MAABD limits are reported as individual and married-couple limits.\"\n    },\n    \"asset_limits\": {\n      \"single_applicant\": \"$2,000 countable resources.\",\n      \"married_applicants_combined\": \"$3,000 combined countable resources.\",\n      \"what_counts\": \"Countable resources are subject to the program limit; the available sources indicate MAABD uses a resource test and that exceeding the limit causes ineligibility.\",\n      \"what_is_exempt\": \"The provided official excerpts confirm a resource test but do not list a full Nevada-specific exempt-asset catalog in the search results. Common Medicaid exclusions are not stated here unless verified by the cited Nevada materials.\",\n      \"timing_rule\": \"If countable resources are under the limit on any day of the month, the customer is eligible for that month.\"\n    },\n    \"other_requirements\": [\n      \"Must be age 65 or older, or blind, or disabled.\",\n      \"If under 65 and applying through the disabled pathway, disability must meet SSA criteria used by Nevada.\",\n      \"Blindness/disablement is evaluated under Social Security Administration criteria.\",\n      \"Applicants who are not eligible under SSI may still qualify using MAABD rules.\",\n      \"Some MAABD-related groups also cover people who require medical facility care but can be cared for at home, and aged individuals who can be cared for in adult group care facilities.\",\n      \"Non-citizens may qualify for limited emergency medical coverage only if they meet specific requirements.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Medicaid medical coverage for eligible aged, blind, or disabled Nevadans. The cited Nevada materials specifically include physician visits, prescription medication, emergency room visits, short-term hospital stays, and, for some applicants, long-term care services and supports or home- and community-based waiver services. The program can also cover up to three months of prior medical coverage for people who qualify.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Access Nevada: https://accessnevada.dwss.nv.gov/\",\n      \"Use the Access Nevada pre-screening tool via the Nevada DSS/Access Nevada site to identify the right application path\",\n      \"Phone: (775) 684-0800\",\n      \"Request an application from the district office or customer service\",\n      \"Download the application form from the Nevada DSS/DWSS website\",\n      \"In-person through a local district office\"\n    ],\n    \"processing_time\": \"No exact statewide processing-time deadline was found in the cited Nevada materials. Disability-related cases may require medical evidence; the cited manual says medical records and, if indicated, a death certificate must be received by the district office within 45 days of request.\",\n    \"waitlist\": \"No general MAABD waitlist was identified in the cited materials. Some waiver or care-setting pathways may require functional review, but the search results did not show a standing statewide waitlist for basic MAABD coverage.\",\n    \"forms\": [\n      \"Form 2920, Application for Assistance to Aged, Blind and Disabled (MAABD)\",\n      \"Application for Assistance (MAABD-SNAP).pdf\",\n      \"MAABD Addendum (2059-EM)\"\n    ],\n    \"documents\": [\n      \"Proof of age (for age-based eligibility)\",\n      \"Proof of disability or blindness, if applying under those categories\",\n      \"Medical records supporting a disability determination\",\n      \"Income proof for all countable income sources\",\n      \"Resource/asset proof such as bank statements and other financial account records\",\n      \"Social Security number information, if available\",\n      \"Citizenship or qualified immigration status documents, if requested\",\n      \"Proof of Nevada residency\",\n      \"Any paperwork related to nursing facility care, home care, or waiver needs if applying for a long-term-care-related category\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Nevada Medicaid program; eligibility is administered by Nevada DSS/DWSS with district-office involvement. No county-only restriction was identified.\",\n    \"regional_variations\": \"The cited materials do not show different eligibility rules by county. Practical differences may come from local district-office handling, document submission, and disability review timing, but no official regional benefit differences were identified.\",\n    \"offices_or_providers\": [\n      \"Nevada Department of Social Services / Division of Welfare and Supportive Services (state administration)\",\n      \"Local district offices\",\n      \"Access Nevada online portal\"\n    ]\n  },\n  \"official_source\": \"https://www.dss.nv.gov/programs/Medicaid/apply-for-assistance/\",\n  \"gotchas\": [\n    \"MAABD is not the same as MAGI Medicaid; it uses SSI-style budgeting and a resource test.\",\n    \"Income is counted differently than many families expect; nearly all income sources are included.\",\n    \"Eligibility is not just about age; blind or disabled applicants under 65 can qualify if they meet the SSA disability standard used by Nevada.\",\n    \"Resource eligibility can be lost if assets go over the limit even temporarily, though the cited rule says eligibility exists if resources are under the limit on any day of the month.\",\n    \"There is no single simple household-size table like marketplace Medicaid; the practical limits shown in the cited Nevada materials are single vs. married-couple limits.\",\n    \"Families applying for disability-based MAABD should be ready to provide medical records promptly, because the cited manual requires them within 45 days of request.\",\n    \"Some people qualify for only limited emergency coverage if they are ineligible non-citizens.\"\n  ],\n  \"data_shape_notes\": \"This program is a means-tested Medicaid category with SSI-style budgeting, a strict resource test, and separate pathways for age, blindness, disability, and some long-term-care/waiver situations.\"\n}"
+      },
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "No Nevada-specific PACE income table applies because Nevada does not currently operate a PACE program; nationally, PACE is generally for people who are eligible for Medicare and/or Medicaid, and many programs focus on low-income, dual-eligible seniors.",
+          "asset_limits": "No Nevada-specific asset limits are established because there is no Nevada PACE program. In states that do offer PACE, asset rules are usually tied to the underlying Medicaid eligibility rules and can vary by state.",
+          "other_requirements": [
+            "Must live in the service area of a PACE organization",
+            "Must be certified by the state as needing nursing-home-level care",
+            "Must be able to live safely in the community with PACE services",
+            "PACE is designed for people who can remain in the community rather than entering a nursing facility"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE is an all-inclusive care model that typically covers primary care, specialty care, hospital care, prescription drugs, transportation, adult day health care, therapy, home care, meals, social services, and long-term services and supports. It is not a cash-benefit program and does not pay a set dollar amount directly to the participant.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "No Nevada PACE application route currently exists because Nevada does not have an operating PACE program",
+            "To find a nearby out-of-state PACE plan, use the national PACE program finder on the National PACE Association website",
+            "If evaluating Medicaid long-term care eligibility in Nevada more broadly, families can use Nevada Medicaid/Access Nevada routes instead of PACE"
+          ],
+          "processing_time": "Not applicable for a Nevada PACE enrollment because Nevada does not currently operate a PACE program.",
+          "waitlist": null,
+          "forms": [],
+          "documents": [
+            "Proof of age",
+            "Medicare card, if applicable",
+            "Medicaid card, if applicable",
+            "Proof of residence in a PACE service area, if applying out of state",
+            "Medical records showing need for nursing-home-level care",
+            "Medication list",
+            "Insurance information",
+            "Identification and contact information for family or caregivers"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Nevada currently has no operating PACE program, so there is no in-state service area or county-specific enrollment region to use.",
+          "regional_variations": "The biggest variation is not within Nevada but between Nevada and neighboring states that actually operate PACE programs. Coverage, service areas, and enrollment rules depend on the specific out-of-state PACE organization.",
+          "offices_or_providers": []
+        },
+        "official_source": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
+        "gotchas": [
+          "Nevada does not currently have a PACE program, so families searching for a local Nevada enrollment office will not find one.",
+          "PACE is often confused with C-PACE or other programs that use the acronym PACE; those are unrelated to elder care.",
+          "Eligibility is not just about age or income; the nursing-home-level-of-care requirement is critical.",
+          "Enrollment depends on living inside a participating PACE organization’s service area.",
+          "PACE is generally for people who can safely stay in the community with intensive support, not for someone who already needs long-term institutional placement."
+        ],
+        "data_shape_notes": "This program is state- and service-area-specific, but Nevada currently has no operating PACE program. That means the Nevada data shape is essentially a non-operating-state case: no in-state application form, no local provider list, and no Nevada income/asset schedule for PACE enrollment.",
+        "_raw": "{\n  \"name\": \"Program of All-Inclusive Care for the Elderly (PACE)\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"No Nevada-specific PACE income table applies because Nevada does not currently operate a PACE program; nationally, PACE is generally for people who are eligible for Medicare and/or Medicaid, and many programs focus on low-income, dual-eligible seniors.\",\n    \"asset_limits\": \"No Nevada-specific asset limits are established because there is no Nevada PACE program. In states that do offer PACE, asset rules are usually tied to the underlying Medicaid eligibility rules and can vary by state.\",\n    \"other_requirements\": [\n      \"Must live in the service area of a PACE organization\",\n      \"Must be certified by the state as needing nursing-home-level care\",\n      \"Must be able to live safely in the community with PACE services\",\n      \"PACE is designed for people who can remain in the community rather than entering a nursing facility\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE is an all-inclusive care model that typically covers primary care, specialty care, hospital care, prescription drugs, transportation, adult day health care, therapy, home care, meals, social services, and long-term services and supports. It is not a cash-benefit program and does not pay a set dollar amount directly to the participant.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"No Nevada PACE application route currently exists because Nevada does not have an operating PACE program\",\n      \"To find a nearby out-of-state PACE plan, use the national PACE program finder on the National PACE Association website\",\n      \"If evaluating Medicaid long-term care eligibility in Nevada more broadly, families can use Nevada Medicaid/Access Nevada routes instead of PACE\"\n    ],\n    \"processing_time\": \"Not applicable for a Nevada PACE enrollment because Nevada does not currently operate a PACE program.\",\n    \"waitlist\": null,\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of age\",\n      \"Medicare card, if applicable\",\n      \"Medicaid card, if applicable\",\n      \"Proof of residence in a PACE service area, if applying out of state\",\n      \"Medical records showing need for nursing-home-level care\",\n      \"Medication list\",\n      \"Insurance information\",\n      \"Identification and contact information for family or caregivers\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Nevada currently has no operating PACE program, so there is no in-state service area or county-specific enrollment region to use.\",\n    \"regional_variations\": \"The biggest variation is not within Nevada but between Nevada and neighboring states that actually operate PACE programs. Coverage, service areas, and enrollment rules depend on the specific out-of-state PACE organization.\",\n    \"offices_or_providers\": []\n  },\n  \"official_source\": \"https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE\",\n  \"gotchas\": [\n    \"Nevada does not currently have a PACE program, so families searching for a local Nevada enrollment office will not find one.\",\n    \"PACE is often confused with C-PACE or other programs that use the acronym PACE; those are unrelated to elder care.\",\n    \"Eligibility is not just about age or income; the nursing-home-level-of-care requirement is critical.\",\n    \"Enrollment depends on living inside a participating PACE organization’s service area.\",\n    \"PACE is generally for people who can safely stay in the community with intensive support, not for someone who already needs long-term institutional placement.\"\n  ],\n  \"data_shape_notes\": \"This program is state- and service-area-specific, but Nevada currently has no operating PACE program. That means the Nevada data shape is essentially a non-operating-state case: no in-state application form, no local provider list, and no Nevada income/asset schedule for PACE enrollment.\"\n}"
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income test was found for the federal Title III-E Family Caregiver Support Program in Nevada in the available sources. Eligibility is based on the care recipient’s age/condition and caregiver relationship, not household income.",
+          "asset_limits": null,
+          "other_requirements": [
+            "The caregiver is generally a family member or other informal caregiver, age 18 or older, caring for an adult age 60 or older.",
+            "Family caregivers of a person living with Alzheimer’s disease or a related dementia may be served regardless of the care recipient’s age.",
+            "Grandparents or other relative caregivers who are age 55 or older and caring for a child age 18 or younger may also be eligible.",
+            "The program is for informal caregivers, not paid personal attendants or institutional care providers.",
+            "Services depend on local availability and the specific caregiver’s assessed needs."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "A cluster of caregiver support services funded under Title III-E, including caregiver information and assistance, counseling, support groups, caregiver training, respite care, and supplemental services. The sources did not provide a fixed dollar amount or guaranteed weekly hour limit; assistance is typically arranged based on assessed need and local program capacity.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.nevadacareconnection.org/",
+            "Through Nevada Care Connection Resource Centers for one-on-one assistance",
+            "Through the Nevada Aging and Disability Services Division ADRC page: https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/",
+            "By contacting a regional center or caregiver support coordinator"
+          ],
+          "processing_time": "No statewide processing-time standard was found in the available sources.",
+          "waitlist": "No statewide waitlist policy was found in the available sources; access may depend on local provider capacity and available respite funds.",
+          "forms": [],
+          "documents": [
+            "Proof of the care recipient’s age and condition, if requested",
+            "Basic household and caregiver contact information",
+            "Information about the care recipient’s living situation and functional needs",
+            "Any existing care or benefit documents that help staff assess eligibility and service needs"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Nevada, but services are delivered through local Nevada Care Connection Resource Centers and regional Aging and Disability Services Division partners.",
+          "regional_variations": "Yes. The program is statewide, but service availability, referral routes, respite capacity, and wait times can vary by region and local provider.",
+          "offices_or_providers": [
+            "Nevada Care Connection Resource Centers",
+            "Nevada Aging and Disability Services Division (ADSD)",
+            "Local regional centers"
+          ]
+        },
+        "official_source": "https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/",
+        "gotchas": [
+          "This is not a cash-benefit program for the caregiver in the same way a paid family caregiver wage program would be.",
+          "People often confuse this with Nevada Medicaid personal care or paid caregiver programs; this Title III-E program is broader caregiver support, not Medicaid payment.",
+          "Eligibility focuses on the care recipient and caregiver relationship, not on household income.",
+          "Dementia-related caregiver services may be available even if the care recipient is under 60.",
+          "Because services are delivered locally, the exact mix of counseling, training, and respite can differ by county or provider."
+        ],
+        "data_shape_notes": "Statewide caregiver support with service-based benefits and regional delivery; no clear income test, no fixed dollar award, and likely variable availability by local center/provider.",
+        "_raw": "{\n  \"name\": \"Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income test was found for the federal Title III-E Family Caregiver Support Program in Nevada in the available sources. Eligibility is based on the care recipient’s age/condition and caregiver relationship, not household income.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"The caregiver is generally a family member or other informal caregiver, age 18 or older, caring for an adult age 60 or older.\",\n      \"Family caregivers of a person living with Alzheimer’s disease or a related dementia may be served regardless of the care recipient’s age.\",\n      \"Grandparents or other relative caregivers who are age 55 or older and caring for a child age 18 or younger may also be eligible.\",\n      \"The program is for informal caregivers, not paid personal attendants or institutional care providers.\",\n      \"Services depend on local availability and the specific caregiver’s assessed needs.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"A cluster of caregiver support services funded under Title III-E, including caregiver information and assistance, counseling, support groups, caregiver training, respite care, and supplemental services. The sources did not provide a fixed dollar amount or guaranteed weekly hour limit; assistance is typically arranged based on assessed need and local program capacity.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.nevadacareconnection.org/\",\n      \"Through Nevada Care Connection Resource Centers for one-on-one assistance\",\n      \"Through the Nevada Aging and Disability Services Division ADRC page: https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/\",\n      \"By contacting a regional center or caregiver support coordinator\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was found in the available sources.\",\n    \"waitlist\": \"No statewide waitlist policy was found in the available sources; access may depend on local provider capacity and available respite funds.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of the care recipient’s age and condition, if requested\",\n      \"Basic household and caregiver contact information\",\n      \"Information about the care recipient’s living situation and functional needs\",\n      \"Any existing care or benefit documents that help staff assess eligibility and service needs\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Nevada, but services are delivered through local Nevada Care Connection Resource Centers and regional Aging and Disability Services Division partners.\",\n    \"regional_variations\": \"Yes. The program is statewide, but service availability, referral routes, respite capacity, and wait times can vary by region and local provider.\",\n    \"offices_or_providers\": [\n      \"Nevada Care Connection Resource Centers\",\n      \"Nevada Aging and Disability Services Division (ADSD)\",\n      \"Local regional centers\"\n    ]\n  },\n  \"official_source\": \"https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/\",\n  \"gotchas\": [\n    \"This is not a cash-benefit program for the caregiver in the same way a paid family caregiver wage program would be.\",\n    \"People often confuse this with Nevada Medicaid personal care or paid caregiver programs; this Title III-E program is broader caregiver support, not Medicaid payment.\",\n    \"Eligibility focuses on the care recipient and caregiver relationship, not on household income.\",\n    \"Dementia-related caregiver services may be available even if the care recipient is under 60.\",\n    \"Because services are delivered locally, the exact mix of counseling, training, and respite can differ by county or provider.\"\n  ],\n  \"data_shape_notes\": \"Statewide caregiver support with service-based benefits and regional delivery; no clear income test, no fixed dollar award, and likely variable availability by local center/provider.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NV",
+    "stateName": "Nevada",
+    "classifiedAt": "2026-10-06T06:07:27.074Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 2,
+      "local": 1
+    },
+    "complexitySummary": {
+      "deep": 2,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Medical Assistance to the Aged, Blind, and Disabled (MAABD)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Nevada Department of Social Services / Division of Welfare and Supportive Services (state administration)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local district offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Access Nevada online portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Nevada Care Connection Resource Centers",
+              "type": "service-area"
+            },
+            {
+              "name": "Nevada Aging and Disability Services Division (ADSD)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local regional centers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NV",
+      "id": "nv-maabd-medicaid",
+      "name": "Medical Assistance to the Aged, Blind, and Disabled (MAABD)",
+      "legacyId": "medical-assistance-to-the-aged-blind-and-disabled-maabd",
+      "programType": "benefit"
+    },
+    {
+      "state": "NV",
+      "id": "nv-pace-all-inclusive-care",
+      "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "legacyId": "program-of-all-inclusive-care-for-the-elderly-pace",
+      "programType": "benefit"
+    },
+    {
+      "state": "NV",
+      "id": "nv-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "legacyId": "family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

@@ -33,7 +33,7 @@ import {
   rankProgramsForFamily,
   incomeLimitFromTable,
   draftMinAge,
-  medicaidGatedName,
+  requiresMedicaid,
   isWaiverPath,
   isMedicaidDoor,
 } from "@/lib/benefits/eligibility.server";
@@ -64,7 +64,7 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
   health: ["healthcare"],
 };
 
-const PAYS_FOR_CARE = /aid (and|&) attendance|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
+const PAYS_FOR_CARE = /aid (and|&) attendance|home help|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -208,7 +208,7 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
     else income = "unknown";
   }
 
-  const gated = medicaidGatedName(p.name);
+  const gated = requiresMedicaid(p.name, p.structuredEligibility?.summary);
   const hasMedicaid = a.medicaid === "alreadyHas";
   const also = otherRequirement(p);
   const withAlso = (text: string) => (also ? `${text} ${also}` : text);
@@ -298,8 +298,14 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     dailyHelp,
     savings,
     disability: null,
-    household: a.household === "1" ? "alone" : a.household ? "couple" : null,
+    household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
   };
+}
+
+/** A program the person must already have Medicaid for (Michigan's Home
+ *  Help, state-plan personal care). A waiver is itself a way into Medicaid. */
+function needsMedicaidFirst(p: WaiverProgram): boolean {
+  return !isWaiverPath(p.name) && requiresMedicaid(p.name, p.structuredEligibility?.summary);
 }
 
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
@@ -417,6 +423,13 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
     const contact = pickCallContact(item.contacts);
     let { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
     const c = convOf(item);
+    // Someone living with family: a program that counts the whole home's
+    // income can't be "likely" from their own (answer key, 6 Oct 2026:
+    // SNAP read likely for a parent in her daughter's household).
+    if (c && c.rules.countsHousehold && conv?.household === "family" && tier === "likely") {
+      tier = "check";
+      reason = "It counts the income of everyone in the home, so it depends on the whole household.";
+    }
     if (c && c.e.status === "likely" && tier === "check") {
       tier = "likely";
       reason = whyLine("likely", c.e.failed, c.e.met) ?? reason;
@@ -444,6 +457,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       hours: contact?.hours || null,
       docs: (item.documentsNeeded || []).slice(0, 4),
       url: `/benefits/${stateSlug}/${item.id}`,
+      needsMedicaid: a.medicaid !== "alreadyHas" && needsMedicaidFirst(item),
     };
     return { program, category, score, raw: item, fitsButAssess };
   });

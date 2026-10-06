@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.633Z
+ * Last updated: 2026-10-06T06:44:48.366Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2320,6 +2320,226 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ar-medicaid-aabd",
+      "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+      "shortName": "Arkansas AABD Medicaid",
+      "tagline": "If your parent is 65 or older, blind, or disabled in Arkansas, they may qualify for full Medicaid coverage that pays for doctor visits, hospital stays, and potentially dental and vision care at little or no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county Arkansas DHS office",
+            "type": "service-area"
+          },
+          {
+            "name": "Access Arkansas online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Arkansas's Aged, Blind, and Disabled (AABD) Medicaid program provides full health coverage for people who are 65 or older, blind, or disabled and who meet income and asset rules. For your parent, that means Medicaid pays for doctor visits, hospital stays, lab work, and prescription drugs. If your parent also has Medicare, AABD Medicaid can help cover Medicare cost-sharing such as copays and deductibles. Arkansas DHS materials also indicate adult dental benefits and vision coverage, including one eye exam and one pair of glasses every 12 months, may be included, though the exact scope should be confirmed with DHS.\n\nThe income limits for this program are unusually structured. The official Arkansas DHS chart lists a net income limit of $108.33 per month for an individual and $216.66 per month for a couple. However, if your parent's income is above that threshold, Arkansas allows medical bills to be deducted from their income to reach the limit. This is called a \"spend-down\" and means that many people who appear to earn too much can still qualify once their out-of-pocket medical costs are counted. A current third-party summary also references higher modern income figures for some AABD categories, so confirming the exact current test with Arkansas DHS before assuming your parent doesn't qualify is essential.\n\nThis program is administered through your parent's local county Arkansas DHS office. The application can start online at access.arkansas.gov, but you will likely need to work with the county office and submit supporting documents before coverage begins. If your parent is already receiving SSI, they may qualify automatically; call DHS to confirm.",
+      "savingsRange": "",
+      "savingsSource": "Free service: AABD Medicaid covers the cost of covered medical services; there is no standard dollar benefit to cite.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR blind, OR disabled under SSA criteria",
+          "Arkansas resident",
+          "Income at or below the program limit (spend-down may apply if income is higher)",
+          "Assets within program limits",
+          "U.S. citizen or qualifying immigration status"
+        ],
+        "ageRequirement": "65+ (or any age if blind or disabled under SSA criteria)",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 108.33
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 216.66
+          }
+        ],
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Real property other than the primary home",
+            "Other non-exempt property"
+          ],
+          "exemptAssets": [
+            "Primary home (confirm exemption details with DHS)",
+            "Other exemptions not fully detailed in official materials; ask DHS which assets are excluded before applying"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or meet qualifying noncitizen status (some long-term noncitizens may qualify in limited circumstances; confirm with DHS)",
+          "Disabled applicants must meet SSA disability criteria or pass a DHS Medical Review Team assessment depending on the application category",
+          "If income is above the income limit, medical bills may be deducted to reach the limit (spend-down). Bring documentation of any out-of-pocket medical expenses."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can start the application online at access.arkansas.gov or by calling 1-800-482-8988, but plan to work with your local county DHS office to submit documents before coverage is finalized.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "Collect their proof of age or disability, Social Security award letter, proof of Arkansas residency, and current bank account balances. If their income is above the program limit, also gather any medical bills they have paid out of pocket, because those can be deducted. Having these ready before you call or log on prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Start the application online or by phone",
+            "description": "Go to access.arkansas.gov to begin an online application, or call 1-800-482-8988 (or 1-855-372-1084) Monday through Friday during business hours. The online portal is the Access Arkansas system managed by Arkansas DHS. If you prefer, you can also walk into your local county DHS office in person."
+          },
+          {
+            "step": 3,
+            "title": "Submit supporting documents to your county DHS office",
+            "description": "After starting the application, you will be directed to submit documents to your local county DHS office. You can mail them or deliver them in person. The main forms referenced for this program are the DHS-1 (general health care application) and, for disabled or long-term-care applicants, the ABD Application. Ask the DHS worker which form applies to your parent's situation."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from DHS",
+            "description": "DHS may ask for additional information or schedule a review. If your parent is applying based on disability rather than age, a medical review by SSA or the DHS Medical Review Team may be required. Respond promptly; delays in returning information are the most common reason applications stall."
+          },
+          {
+            "step": 5,
+            "title": "Receive a determination letter",
+            "description": "DHS will mail a written decision. If approved, coverage may be backdated to the application date in some cases. If denied, the letter will explain the reason and describe your parent's right to appeal. To appeal, follow the instructions in the denial letter or call 1-800-482-8988."
+          }
+        ],
+        "processingTime": "The official Arkansas DHS sources reviewed did not publish a specific processing-time target for AABD Medicaid. Ask your county DHS office for an estimated timeline when you submit the application.",
+        "waitlist": null,
+        "tip": "If your parent's income looks too high at first glance, do not stop. Arkansas allows out-of-pocket medical bills to be deducted from countable income. Bring every medical bill and prescription receipt you can find. This spend-down rule means many families who assume their parent won't qualify actually can.",
+        "urls": [
+          {
+            "label": "Access Arkansas: Apply Online",
+            "url": "https://www.access.arkansas.gov"
+          },
+          {
+            "label": "Arkansas DHS Health Care Programs",
+            "url": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI letter showing current monthly benefit amount",
+        "Proof of Arkansas residency (utility bill, lease agreement, or Arkansas-issued ID showing current address)",
+        "Proof of age (birth certificate, passport, or Social Security card combined with another age-verifying document)",
+        "Medicare card, if your parent has Medicare (helpful but confirm with DHS whether required for your parent's category)",
+        "Proof of disability if your parent is under 65 and applying based on disability (SSA disability award letter or documentation for DHS Medical Review Team)",
+        "Pension, retirement, or other income statements showing all sources of monthly income",
+        "Current balances for all checking and savings accounts (DHS will ask; bring account numbers and the most recent statements you have)",
+        "Documentation of any certificates of deposit, investment accounts, or bonds",
+        "Medical bills and prescription receipts paid out of pocket, especially if your parent's income is above the income limit and you plan to use the spend-down deduction",
+        "Health insurance premium statements showing what your parent pays monthly for any existing coverage",
+        "Life insurance policy documents showing face value amounts",
+        "Deeds or property tax statements for any real property other than the primary home",
+        "Legal documents such as power of attorney or guardianship papers if you are applying on behalf of your parent"
+      ],
+      "contacts": [
+        {
+          "label": "Arkansas DHS Benefits Line",
+          "phone": "1-800-482-8988",
+          "description": "Start or check on a Medicaid application, ask about eligibility, or get connected to your county DHS office. This is the main application door for AABD Medicaid.",
+          "hours": "Monday through Friday, business hours (confirm current hours when you call)"
+        },
+        {
+          "label": "Arkansas DHS Alternate Benefits Line",
+          "phone": "1-855-372-1084",
+          "description": "Second DHS number for Medicaid applications and benefit inquiries; use this if the primary line has long wait times.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Access Arkansas Online Portal",
+          "phone": null,
+          "description": "Apply online at access.arkansas.gov. You can start and track an application without calling.",
+          "hours": "Available online at any time"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income appears to be above the income limit, do not assume they are ineligible. Arkansas allows unpaid or paid medical bills to be deducted from countable income under a spend-down rule. Bring all medical expense documentation when you apply.",
+        "Applicants age 65 and older are reviewed under different criteria than applicants who are blind or disabled. If your parent is under 65 and applying based on disability, the process will likely include a medical review by SSA or the DHS Medical Review Team, which adds time.",
+        "The income limits cited in official DHS charts and in third-party summaries do not match cleanly. Treat the county DHS office as the source of truth for the current income and asset tests before deciding not to apply.",
+        "If your parent is already receiving SSI (Supplemental Security Income), ask DHS whether they qualify for Medicaid automatically. SSI recipients often receive Medicaid without a separate full application process."
+      ],
+      "relatedPrograms": [
+        "Arkansas ARChoices in Homecare (HCBS waiver for home-based services for older and disabled adults)",
+        "Arkansas Medicare Savings Programs (help paying Medicare premiums, deductibles, and copays)",
+        "Arkansas PACE (Program of All-inclusive Care for the Elderly, for people who qualify for nursing-level care)",
+        "Arkansas Extra Help / Low Income Subsidy (federal help with Medicare Part D prescription costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The income limit may be lower than you expect, but that doesn't mean your parent won't qualify",
+          "body": "The official Arkansas DHS chart lists a net income limit of $108.33 per month for a single person. That number shocks most families, but Arkansas allows your parent to deduct medical bills from their countable income to reach the limit. This is called a spend-down. If your parent has regular prescription costs, doctor visits, or other out-of-pocket medical expenses, those costs can bring their countable income down to the qualifying level. Do not rule out AABD Medicaid based on income alone until you talk to DHS."
+        },
+        {
+          "type": "callout",
+          "title": "Asset limits are unverified; confirm before applying",
+          "body": "One current third-party summary reports asset limits of $9,950 for an individual and $14,910 for a couple. These figures were not confirmed in the official Arkansas DHS materials reviewed. The primary home is generally exempt from Medicaid asset calculations, but other exemptions were not fully detailed in the official sources found. Ask your DHS worker specifically which assets are counted and which are excluded before assuming your parent has too much."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,200 per month from Social Security. Does that automatically disqualify them?",
+          "answer": "Not necessarily. The official income limit on the DHS chart is $108.33 per month for a single person, but Arkansas allows medical bills to be subtracted from countable income under the spend-down rule. If your parent pays for prescriptions, doctor visits, or other medical costs out of pocket, those expenses can reduce their countable income to the qualifying level. Call 1-800-482-8988 and ask a DHS worker to walk through the spend-down calculation before you give up."
+        },
+        {
+          "question": "Can I apply for AABD Medicaid on behalf of my elderly parent if they can't do it themselves?",
+          "answer": "Yes. A family member or legally authorized representative can apply on a parent's behalf. Bring documentation of your authority to act, such as a power of attorney or guardianship order, when you apply. If that paperwork doesn't exist yet, DHS can often still accept the application and work with the family while legal documents are arranged."
+        },
+        {
+          "question": "My parent has a savings account with $8,000. Will that disqualify them?",
+          "answer": "Based on the asset limit reported by a current third-party summary ($9,950 for an individual), $8,000 in a savings account alone would be within the limit. However, that figure has not been confirmed in official Arkansas DHS materials reviewed for this page. You should call 1-800-482-8988 or visit your county DHS office to get the current, confirmed asset limit before concluding your parent qualifies or doesn't qualify based on savings."
+        },
+        {
+          "question": "My parent has Medicare. Should they still apply for AABD Medicaid?",
+          "answer": "Yes. If your parent has Medicare and qualifies for AABD Medicaid, Medicaid can act as secondary coverage and help pay Medicare's cost-sharing, including copays and deductibles. This is sometimes called \"dual eligibility.\" Having both can significantly reduce your parent's out-of-pocket medical costs. Bring your parent's Medicare card when you apply so DHS can coordinate coverage."
+        },
+        {
+          "question": "Can my parent apply for AABD Medicaid and an Arkansas HCBS waiver at the same time?",
+          "answer": "Yes, and doing so may make sense. AABD Medicaid covers medical services, while programs like ARChoices in Homecare cover home-based personal care services. Qualifying for AABD Medicaid is often a required first step to access HCBS waiver services. Ask your DHS worker about ARChoices when you apply for AABD Medicaid."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent must report changes in income, assets, or living situation to Arkansas DHS. Changes can affect eligibility. DHS conducts periodic renewals, typically annually, where eligibility is re-evaluated. If your parent's situation changes significantly between renewals, contact 1-800-482-8988 promptly to report it. Failing to report changes can result in overpayment recovery or loss of coverage."
+        },
+        {
+          "question": "How long will it take to find out if my parent is approved?",
+          "answer": "The official Arkansas DHS materials reviewed for this page did not publish a specific processing-time target for AABD Medicaid. Ask the DHS worker at the time of application for an estimated timeline. If your parent's application involves a disability determination by SSA or the DHS Medical Review Team, the process will likely take longer than a straightforward age-based application."
+        },
+        {
+          "question": "My parent was denied. Is there anything we can do?",
+          "answer": "Yes. The denial letter will include instructions for requesting a fair hearing (an appeal). You must act within the deadline stated in the letter; missing it can waive your parent's appeal rights. To start an appeal, follow the instructions in the denial letter or call 1-800-482-8988. A legal aid attorney who specializes in Medicaid can help if the situation is complex."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-482-8988",
+      "sourceUrl": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

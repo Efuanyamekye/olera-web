@@ -1,0 +1,9 @@
+[
+  {
+    "state": "OR",
+    "id": "or-medicaid-apd-waiver",
+    "name": "Oregon Medicaid - Aged and Physically Disabled (APD) Waiver",
+    "legacyId": "oregon-medicaid-aged-and-physically-disabled-apd-waiver",
+    "programType": "benefit"
+  }
+]

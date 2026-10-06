@@ -1,0 +1,149 @@
+{
+  "state": "SC",
+  "addedAt": "2026-10-06T06:34:49.964Z",
+  "dive": {
+    "state": "SC",
+    "stateName": "South Carolina",
+    "diveAt": "2026-10-06T06:33:18.608Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "No fixed income limit is stated for South Carolina PACE on the official state PACE page; eligibility is based on age, service area, nursing-home level of care, and ability to live safely in the community with PACE support. South Carolina’s PACE materials also describe financial eligibility categories such as Medicare/Medicaid, Medicaid only, Medicare only with private-pay Medicaid premium, private pay only, and veterans under the VA-PACE partnership, but they do not publish a universal income table for all applicants.",
+          "asset_limits": "No statewide asset limit is published on the official South Carolina PACE page or provider materials reviewed. The available official guidance does not provide a countable-assets test, exempt-assets list, or dollar thresholds for PACE in South Carolina.",
+          "other_requirements": [
+            "Live in the service area of a participating PACE organization",
+            "Be certified by South Carolina DHHS as needing nursing facility level of care",
+            "Be able to live safely in the community with PACE support",
+            "Have Medicare, Medicaid, or both; South Carolina materials also list other financial pathways including private pay and VA-PACE participation",
+            "Be 55 or older"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE is a comprehensive, all-inclusive care model rather than a cash benefit. South Carolina’s official guidance indicates participants receive the care and support needed to remain in the community, including the full PACE package of services coordinated by the local PACE organization. The state page does not publish a dollar cap, hours-per-week cap, or tiered benefit amount. In practice, the benefit is the entire PACE service package authorized by the provider and care team.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Apply through the local PACE organization serving the applicant’s county",
+            "Call the state PACE information line at 855-801-2653",
+            "Contact the specific provider directly by phone",
+            "Use the provider’s enrollment process described by the PACE organization"
+          ],
+          "processing_time": "No single statewide processing time is published. Timing depends on completion of the functional/nursing-home-level-of-care assessment, provider intake, and whether a slot is available in the local PACE organization.",
+          "waitlist": "South Carolina materials reviewed do not publish a statewide waitlist. Availability is constrained by the county-based service areas of the participating PACE organizations, so access depends on whether a provider serves the applicant’s county.",
+          "forms": [
+            "No statewide public application form number was published in the sources reviewed",
+            "PACE enrollment/eligibility determination is handled by the local PACE organization and South Carolina DHHS assessment process"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of residence in a covered county/service area",
+            "Medicare card, Medicaid card, or other insurance information",
+            "Current medication list",
+            "Medical history and provider contact information",
+            "Any records showing functional need, hospitalizations, or diagnoses",
+            "If requested by the provider, financial or veterans documentation"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "PACE is only available in certain South Carolina counties. The official state page lists current availability in Anderson, Bamberg, Berkeley, Calhoun, Charleston, Dorchester, Greenville, Lexington, Orangeburg, Pickens, and Richland counties.",
+          "regional_variations": "Yes. South Carolina PACE is county-based and operated through specific organizations. Services, intake logistics, and contact details vary by provider. The service area determines whether a person can enroll at all, and the local PACE organization handles enrollment and care coordination.",
+          "offices_or_providers": [
+            "BoldAge PACE - serving Berkeley, Charleston, and Dorchester counties",
+            "Prisma Health SeniorCare PACE-Midlands - serving Richland and Lexington counties",
+            "Prisma Health SeniorCare PACE-Upstate - serving Greenville, Pickens, and Anderson counties",
+            "The Orangeburg Senior Helping Center - serving Orangeburg, Calhoun, and Bamberg counties"
+          ]
+        },
+        "official_source": "https://www.scdhhs.gov/members/managed-care-plan-information/program-all-inclusive-care-elderly-pace",
+        "gotchas": [
+          "PACE is not a statewide benefit open in every county; county/service-area eligibility is the first gate",
+          "Applicants must meet nursing-facility level of care, which is stricter than simply needing some home help",
+          "A person must be safe in the community with PACE support; someone who needs full-time institutional care may not qualify",
+          "There is no single universal application form shown on the state page; enrollment runs through the local provider",
+          "The program is medical-care based, not a cash assistance program, so families should expect coordinated services instead of a monthly check",
+          "Because the service area is limited, families often need to identify the local PACE organization before anything else"
+        ],
+        "data_shape_notes": "PACE in South Carolina is county-restricted, provider-specific, and eligibility is functional rather than income-tiered. The key structure is: age 55+, in-service-area, nursing-home-level-of-care, and safe living in the community with PACE support; benefits are a bundled care model rather than a dollar-grant benefit.",
+        "_raw": "{\n  \"name\": \"Program of All-Inclusive Care for the Elderly (PACE)\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"No fixed income limit is stated for South Carolina PACE on the official state PACE page; eligibility is based on age, service area, nursing-home level of care, and ability to live safely in the community with PACE support. South Carolina’s PACE materials also describe financial eligibility categories such as Medicare/Medicaid, Medicaid only, Medicare only with private-pay Medicaid premium, private pay only, and veterans under the VA-PACE partnership, but they do not publish a universal income table for all applicants.\",\n    \"asset_limits\": \"No statewide asset limit is published on the official South Carolina PACE page or provider materials reviewed. The available official guidance does not provide a countable-assets test, exempt-assets list, or dollar thresholds for PACE in South Carolina.\",\n    \"other_requirements\": [\n      \"Live in the service area of a participating PACE organization\",\n      \"Be certified by South Carolina DHHS as needing nursing facility level of care\",\n      \"Be able to live safely in the community with PACE support\",\n      \"Have Medicare, Medicaid, or both; South Carolina materials also list other financial pathways including private pay and VA-PACE participation\",\n      \"Be 55 or older\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE is a comprehensive, all-inclusive care model rather than a cash benefit. South Carolina’s official guidance indicates participants receive the care and support needed to remain in the community, including the full PACE package of services coordinated by the local PACE organization. The state page does not publish a dollar cap, hours-per-week cap, or tiered benefit amount. In practice, the benefit is the entire PACE service package authorized by the provider and care team.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through the local PACE organization serving the applicant’s county\",\n      \"Call the state PACE information line at 855-801-2653\",\n      \"Contact the specific provider directly by phone\",\n      \"Use the provider’s enrollment process described by the PACE organization\"\n    ],\n    \"processing_time\": \"No single statewide processing time is published. Timing depends on completion of the functional/nursing-home-level-of-care assessment, provider intake, and whether a slot is available in the local PACE organization.\",\n    \"waitlist\": \"South Carolina materials reviewed do not publish a statewide waitlist. Availability is constrained by the county-based service areas of the participating PACE organizations, so access depends on whether a provider serves the applicant’s county.\",\n    \"forms\": [\n      \"No statewide public application form number was published in the sources reviewed\",\n      \"PACE enrollment/eligibility determination is handled by the local PACE organization and South Carolina DHHS assessment process\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of residence in a covered county/service area\",\n      \"Medicare card, Medicaid card, or other insurance information\",\n      \"Current medication list\",\n      \"Medical history and provider contact information\",\n      \"Any records showing functional need, hospitalizations, or diagnoses\",\n      \"If requested by the provider, financial or veterans documentation\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"PACE is only available in certain South Carolina counties. The official state page lists current availability in Anderson, Bamberg, Berkeley, Calhoun, Charleston, Dorchester, Greenville, Lexington, Orangeburg, Pickens, and Richland counties.\",\n    \"regional_variations\": \"Yes. South Carolina PACE is county-based and operated through specific organizations. Services, intake logistics, and contact details vary by provider. The service area determines whether a person can enroll at all, and the local PACE organization handles enrollment and care coordination.\",\n    \"offices_or_providers\": [\n      \"BoldAge PACE - serving Berkeley, Charleston, and Dorchester counties\",\n      \"Prisma Health SeniorCare PACE-Midlands - serving Richland and Lexington counties\",\n      \"Prisma Health SeniorCare PACE-Upstate - serving Greenville, Pickens, and Anderson counties\",\n      \"The Orangeburg Senior Helping Center - serving Orangeburg, Calhoun, and Bamberg counties\"\n    ]\n  },\n  \"official_source\": \"https://www.scdhhs.gov/members/managed-care-plan-information/program-all-inclusive-care-elderly-pace\",\n  \"gotchas\": [\n    \"PACE is not a statewide benefit open in every county; county/service-area eligibility is the first gate\",\n    \"Applicants must meet nursing-facility level of care, which is stricter than simply needing some home help\",\n    \"A person must be safe in the community with PACE support; someone who needs full-time institutional care may not qualify\",\n    \"There is no single universal application form shown on the state page; enrollment runs through the local provider\",\n    \"The program is medical-care based, not a cash assistance program, so families should expect coordinated services instead of a monthly check\",\n    \"Because the service area is limited, families often need to identify the local PACE organization before anything else\"\n  ],\n  \"data_shape_notes\": \"PACE in South Carolina is county-restricted, provider-specific, and eligibility is functional rather than income-tiered. The key structure is: age 55+, in-service-area, nursing-home-level-of-care, and safe living in the community with PACE support; benefits are a bundled care model rather than a dollar-grant benefit.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "SC",
+    "stateName": "South Carolina",
+    "classifiedAt": "2026-10-06T06:33:18.614Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "local": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "BoldAge PACE - serving Berkeley, Charleston, and Dorchester counties",
+              "type": "service-area"
+            },
+            {
+              "name": "Prisma Health SeniorCare PACE-Midlands - serving Richland and Lexington counties",
+              "type": "service-area"
+            },
+            {
+              "name": "Prisma Health SeniorCare PACE-Upstate - serving Greenville, Pickens, and Anderson counties",
+              "type": "service-area"
+            },
+            {
+              "name": "The Orangeburg Senior Helping Center - serving Orangeburg, Calhoun, and Bamberg counties",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": false
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "SC",
+      "id": "sc-pace-all-inclusive-elder-care",
+      "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "legacyId": "program-of-all-inclusive-care-for-the-elderly-pace",
+      "programType": "benefit"
+    }
+  ]
+}

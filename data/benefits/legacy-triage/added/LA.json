@@ -1,0 +1,30 @@
+[
+  {
+    "state": "LA",
+    "id": "la-aged-blind-disabled-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "LA",
+    "id": "la-liheap-energy-assistance",
+    "name": "LIHEAP (Low-Income Home Energy Assistance Program)",
+    "legacyId": "liheap-low-income-home-energy-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "LA",
+    "id": "la-home-delivered-meals",
+    "name": "Home-Delivered Meals (Nutrition Program)",
+    "legacyId": "home-delivered-meals-nutrition-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "LA",
+    "id": "la-national-family-caregiver-support-program",
+    "name": "National Family Caregiver Support Program",
+    "legacyId": "national-family-caregiver-support-program",
+    "programType": "benefit"
+  }
+]

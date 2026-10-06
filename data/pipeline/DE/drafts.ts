@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.696Z
+ * Last updated: 2026-10-06T06:44:48.370Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2325,6 +2325,219 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "de-medicaid-aged-blind-disabled",
+      "name": "Regular Medicaid / Aged Blind and Disabled",
+      "shortName": "DE ABD Medicaid",
+      "tagline": "If your parent is 65 or older and has limited income and savings, Delaware's ABD Medicaid can cover their doctor visits, hospital stays, prescriptions, and more at no cost to them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Division of Social Services (DSS) offices / State Service Centers in Delaware",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent has little income and limited savings, Delaware's Aged, Blind, and Disabled (ABD) Medicaid program can cover the full cost of their medical care: doctor visits, hospital stays, prescription drugs, lab work, mental health services, and even transportation to medical appointments. There is no monthly premium and no copay structure under regular ABD Medicaid for people who qualify.\n\nThis program is specifically for Delaware residents who are 65 or older (or who are blind or permanently disabled at any age) and whose income and assets fall within strict federal SSI-related limits. For a single person in 2026, that means income at or below $994 per month and savings or assets at or below $2,000. For a married couple, the limits are $1,491 per month in income and $3,000 in assets. If your parent already receives SSI benefits from Social Security, they are automatically eligible for Delaware Medicaid and may not need to apply separately.\n\nABD Medicaid is not the same as Medicaid for families with children. It uses a different set of income and asset rules tied to SSI standards, and it is separate from Delaware's long-term care waiver programs that pay for home care or nursing facility services. If your parent needs those additional services, they may need to apply for a separate waiver program alongside this one.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid covers the cost of covered medical services with no monthly premium for qualifying enrollees. Delaware DHSS / DMMA does not publish a dollar-value benefit amount for this program because it pays providers directly based on actual services used.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or permanently disabled)",
+          "Income at or below $994/month for a single person (2026)",
+          "Assets at or below $2,000 for a single person",
+          "Delaware resident",
+          "SSI recipients are automatically eligible"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 994
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1491
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Additional real property beyond the primary home"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Delaware resident",
+          "Must be a U.S. citizen or qualifying immigrant",
+          "SSI recipients are automatically eligible and may not need a separate Medicaid application",
+          "Income must be too low to cover the cost of necessary medical services"
+        ],
+        "povertyLevelReference": "100% FPL (Delaware references this as a general guideline; ABD-specific limits are the SSI-related dollar figures above, which may differ from standard FPL tables)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online through Delaware's ASSIST portal at assist.dhss.delaware.gov, or by calling Medicaid Customer Relations at 1-800-372-2022.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether your parent already qualifies automatically",
+            "description": "If your parent receives SSI (Supplemental Security Income) from Social Security, they are automatically enrolled in Delaware Medicaid. Call Medicaid Customer Relations at 1-800-372-2022 to confirm their enrollment before starting a new application."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "You will need your parent's Social Security award letter or SSI letter, proof of Delaware residency, proof of income (such as a Social Security benefit letter or pension statement), and their Social Security card. Have current bank balances available. The Division of Social Services may request additional documents after reviewing the application."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, by mail, or in person",
+            "description": "Online: visit assist.dhss.delaware.gov to complete the Application for Health Insurance/Medicaid. By phone: call Medicaid Customer Relations at 1-800-372-2022 or (302) 255-9500, or call the ASSIST help line at (302) 255-9040. By mail: download the Application for Health Insurance/Medicaid from the DHSS website, complete it in ink, sign and date it, and mail it to the address printed on the form. In person: visit your nearest DSS office or State Service Center."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any requests for information",
+            "description": "After submitting, the Division of Social Services (DSS) or the Division of Medicaid and Medical Assistance (DMMA) may contact you for additional documents. Delays in responding are the most common reason applications stall. Respond to any notices as quickly as possible."
+          },
+          {
+            "step": 5,
+            "title": "Receive your decision and Medicaid card",
+            "description": "If approved, your parent will receive a Delaware Medicaid card. Keep the card in a safe place and bring it to every medical appointment. If denied, the notice will explain the reason and how to request a fair hearing if you believe the decision was wrong."
+          }
+        ],
+        "processingTime": "The official Delaware sources do not publish a specific processing-time target for ABD Medicaid. Standard Medicaid applications are often processed within 45 days, but this timeline is not confirmed in official Delaware ABD-specific guidance.",
+        "waitlist": null,
+        "tip": "If your parent is hospitalized right now, tell the hospital's discharge planner or social worker. They can often initiate a Medicaid application on your parent's behalf before discharge, which may allow Medicaid to cover bills from the date of the hospital admission.",
+        "urls": [
+          {
+            "label": "Apply online through ASSIST",
+            "url": "https://assist.dhss.delaware.gov"
+          },
+          {
+            "label": "Delaware Medicaid FAQ (official program page)",
+            "url": "https://dhss.delaware.gov/dmma/home/medicaid/faq/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter or SSI benefit letter (shows monthly income amount)",
+        "Proof of Delaware residency: a current utility bill, lease agreement, or other document showing your parent's Delaware address",
+        "Social Security card for your parent (and for a spouse if applying as a couple)",
+        "Proof of age: birth certificate, passport, or other government-issued document showing date of birth",
+        "Current balances for any checking or savings accounts (the amount as of the application date; Delaware DSS will tell you the exact statement period they need after you submit)",
+        "Pension, annuity, or retirement income statements if your parent receives any income outside of Social Security",
+        "Documentation of any other assets: CDs, investment accounts, or additional real property",
+        "Signed and dated Application for Health Insurance/Medicaid form, completed in ink (required for mail applications)",
+        "Legal documents showing authority to apply on your parent's behalf, if you are acting as their power of attorney or guardian"
+      ],
+      "contacts": [
+        {
+          "label": "Delaware Medicaid Customer Relations",
+          "phone": "1-800-372-2022",
+          "description": "The primary line to apply for ABD Medicaid, ask eligibility questions, and get help with your application. This is the Division of Medicaid and Medical Assistance (DMMA) line.",
+          "hours": "Monday through Friday, business hours (specific hours not confirmed in official sources; call during regular business hours)"
+        },
+        {
+          "label": "Delaware Medicaid Customer Relations (local)",
+          "phone": "(302) 255-9500",
+          "description": "Local number for the same Medicaid Customer Relations office. Use this if the toll-free line is busy.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "ASSIST Help Line",
+          "phone": "(302) 255-9040",
+          "description": "Assistance with using the ASSIST online application portal. Call this number if you have trouble completing or submitting the online application.",
+          "hours": "Monday through Friday, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent receives SSI, do not apply for Medicaid separately until you call 1-800-372-2022 to confirm whether they are already enrolled. Many families go through the full application process when their parent was already covered.",
+        "ABD Medicaid does not cover long-term home care or nursing facility services through this pathway alone. If your parent needs personal care at home or is considering a nursing home, ask about Delaware's separate HCBS waiver programs at the same time you apply.",
+        "The income and asset rules for ABD Medicaid are based on SSI standards, not the standard Federal Poverty Level tables Delaware uses for other Medicaid programs. If your parent was told they earn too much for 'regular' Medicaid, that decision may have used the wrong income table. Ask specifically about ABD Medicaid eligibility.",
+        "If your parent's application is denied, you have the right to request a fair hearing. The denial notice will include instructions. Do not skip this step if you believe the income or asset calculation was wrong."
+      ],
+      "relatedPrograms": [
+        "Delaware HCBS Medicaid Waiver (home and community-based services for people who need nursing-level care but want to stay home)",
+        "Delaware PACE (Program of All-inclusive Care for the Elderly, for people 55+ who meet nursing facility level of care)",
+        "Delaware Extra Help / Low Income Subsidy (reduces Medicare Part D prescription drug costs for people with limited income)",
+        "Delaware Pharmaceutical Assistance Program (DPAP)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Already on SSI? You may already have Medicaid.",
+          "body": "In Delaware, people who receive SSI (Supplemental Security Income) from Social Security are automatically eligible for Medicaid. If your parent gets an SSI check, call Medicaid Customer Relations at 1-800-372-2022 to confirm their Medicaid status before starting a new application. This one phone call could save you significant paperwork."
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid covers",
+          "body": "Delaware ABD Medicaid covers a broad range of medical services at no cost to your parent: doctor and specialist visits, hospital care (inpatient and outpatient), laboratory and imaging services, prescription drugs, transportation to and from medical appointments, mental health services, and substance abuse treatment. The program pays providers directly; your parent does not receive a check. There is no standard monthly benefit dollar amount because the program pays based on actual services used."
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid does not cover through this pathway",
+          "body": "Regular ABD Medicaid is not the same as a long-term care program. It does not pay for personal care aides at home, adult day services, or nursing home care through this pathway alone. Those services are funded through separate Delaware waiver programs. If your parent needs help with daily activities like bathing, dressing, or medication management, ask about Delaware's HCBS (Home and Community-Based Services) waivers when you apply for ABD Medicaid."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does it count against the $2,000 asset limit?",
+          "answer": "The primary home is generally not counted as an asset for SSI-related Medicaid programs when the applicant lives in it. However, the official Delaware ABD pages retrieved for this content do not publish a complete exemption list. Call Medicaid Customer Relations at 1-800-372-2022 to confirm how your parent's home is treated before assuming it is excluded."
+        },
+        {
+          "question": "Can I apply for ABD Medicaid on behalf of my parent?",
+          "answer": "Yes. A family member, friend, or legal representative can apply on behalf of a person who is unable to apply themselves. If you have power of attorney or legal guardianship, bring those documents when you apply. You can apply online through assist.dhss.delaware.gov, by phone at 1-800-372-2022, or in person at a local DSS office."
+        },
+        {
+          "question": "My parent's Social Security check is $1,100 a month. Does that income make them ineligible?",
+          "answer": "Possibly, but not automatically. The 2026 income limit for a single person is $994 per month, and Social Security income counts toward that limit. However, Medicaid income calculations allow certain deductions (such as medical expenses paid out of pocket) that can bring countable income below the limit. This is called a 'spend-down.' Call 1-800-372-2022 to ask whether a spend-down calculation applies to your parent's situation before concluding they do not qualify."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a Delaware HCBS waiver at the same time?",
+          "answer": "Yes, and it is worth doing both at the same time if your parent needs home care services. ABD Medicaid covers medical care; the HCBS waiver covers personal care at home. You can ask about both programs when you call 1-800-372-2022 or when you apply through ASSIST. The waiver may have separate eligibility criteria and a different application process."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent must report changes in income or assets to the Division of Social Services. Significant increases may affect eligibility. Delaware Medicaid conducts annual renewals (called 'redeterminations') to verify continued eligibility. You will receive a renewal notice in the mail; respond to it by the deadline to avoid a coverage gap."
+        },
+        {
+          "question": "My parent was denied Medicaid before. Is it worth applying again under ABD Medicaid?",
+          "answer": "Possibly yes. ABD Medicaid uses SSI-related income and asset rules, which are different from the income rules used for family or low-income adult Medicaid. If a prior denial was based on the wrong income table, your parent may qualify under ABD rules. Call 1-800-372-2022 and ask specifically about ABD Medicaid eligibility based on age 65 or older and SSI-related standards."
+        },
+        {
+          "question": "Does ABD Medicaid pay for prescription drugs?",
+          "answer": "Yes. Prescription drug coverage is included under Delaware ABD Medicaid. Your parent's covered prescriptions will be billed directly to Medicaid. If your parent also has Medicare Part D, Medicaid typically coordinates with Medicare to cover drug costs, and your parent may want to apply for the federal Extra Help (Low Income Subsidy) program at the same time to reduce any remaining Part D costs."
+        },
+        {
+          "question": "How long does it take to get a decision after applying?",
+          "answer": "Delaware's official ABD Medicaid pages do not publish a specific processing-time target for this program. Standard Medicaid applications are often processed within 45 days, but this is not confirmed in official Delaware ABD guidance. The most common cause of delays is missing documentation. Submit all requested documents as quickly as possible and follow up by calling (302) 255-9500 if you have not received a decision or a request for information within a few weeks."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-372-2022",
+      "sourceUrl": "https://dhss.delaware.gov/dmma/home/medicaid/faq/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

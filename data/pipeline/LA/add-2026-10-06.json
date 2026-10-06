@@ -1,0 +1,562 @@
+{
+  "state": "LA",
+  "addedAt": "2026-10-06T05:54:56.200Z",
+  "dive": {
+    "state": "LA",
+    "stateName": "Louisiana",
+    "diveAt": "2026-10-06T05:50:18.115Z",
+    "total": 4,
+    "parsed": 4,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Louisiana’s aged/blind/disabled Medicaid coverage uses SSI-related income and resource methodology for many applicants, and the state also has medically needy coverage for people age 65+ or disabled who do not qualify as categorically needy. Louisiana Medicaid materials confirm that people age 65 or older, or blind/disabled, may qualify; the state plan amendment says one group has income no higher than 100% of the federal poverty level, while another medically needy group uses the medically needy income level. A separate Medicaid manual source says SSI recipients are automatically eligible.",
+            "tables": [
+              {
+                "group": "Categorically needy aged/blind/disabled group",
+                "income_standard": "No higher than 100% of Federal Poverty Level",
+                "household_size_table": "The source set confirms the 100% FPL standard but does not provide the full household-size dollar table in the retrieved official pages."
+              },
+              {
+                "group": "Medically needy aged/blind/disabled group",
+                "income_standard": "At or below the medically needy income level",
+                "household_size_table": "The source set confirms this pathway exists, but the retrieved official pages do not include the full dollar-by-household-size table."
+              }
+            ],
+            "note": "Louisiana also states that SSI recipients are automatically eligible for Medicaid, and financial eligibility for aged/blind/disabled applicants is based on SSI income and resource methodologies, which are more restrictive than SSI for some applicants."
+          },
+          "asset_limits": {
+            "limit": "$2,000 for an individual is the resource limit shown in Louisiana Medicaid policy for Provisional Medicaid; the state plan materials also refer to resource limits for aged/blind/disabled pathways but the retrieved pages do not include the full aged/blind/disabled resource table.",
+            "what_counts": [
+              "Cash",
+              "Bank accounts",
+              "Stocks and bonds",
+              "Other countable liquid resources"
+            ],
+            "what_is_exempt": [
+              "The retrieved official pages did not provide a complete Louisiana exemption list for this specific category in the search results."
+            ],
+            "important_note": "Louisiana Medicaid eligibility for aged/blind/disabled people is tied to SSI-style resource rules, and the state policy materials explicitly use a $2,000 individual resource figure in the retrieved source set."
+          },
+          "other_requirements": [
+            "Must be age 65 or older, or be blind, or meet SSA disability criteria.",
+            "Must be a Louisiana resident.",
+            "Must meet citizenship or eligible immigration requirements.",
+            "Must have a Social Security number or proof of having applied for one.",
+            "For disability-based cases, SSA disability standards apply, and blindness is evaluated under SSA visual criteria.",
+            "For some pathways, the state requires a separate Medicaid application even if the person receives SSI.",
+            "Some aged/blind/disabled applicants may need a medical eligibility determination."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "This coverage provides Medicaid health coverage for low-income seniors and people with disabilities. The retrieved official sources do not list a single fixed cash value because it is an insurance/coverage program, not a cash benefit. For people who need long-term care, Louisiana Medicaid says recipients age 65 or older, or age 21 with disabilities, may qualify for nursing facility services if they meet medical standards and additional targeting criteria and can participate in directing their care independently or through a representative.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online: Louisiana Medicaid Self-Service Portal",
+            "Phone: 1-888-342-6207",
+            "Mail: Louisiana Department of Health Medicaid Application Office, P.O. Box 91030, Baton Rouge, LA 70821-9030",
+            "In person: local Medicaid office",
+            "In person: Medicaid Application Center statewide"
+          ],
+          "processing_time": "The retrieved official sources do not state a single standard processing time for aged/blind/disabled Medicaid applications.",
+          "waitlist": null,
+          "forms": [
+            "Application for Health Coverage (Louisiana Medicaid application)"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of blindness or disability if applying on that basis",
+            "Social Security number or proof of application for one",
+            "Proof of Louisiana residency",
+            "Proof of citizenship or eligible immigration status",
+            "Income proof such as Social Security, pension, wages, or other unearned income",
+            "Resource proof such as bank statements or account balances",
+            "Medical records or disability/vision documentation if requested",
+            "Any Medicare information if the applicant has Medicare"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Louisiana Medicaid program; no parish-only restriction was identified in the retrieved official sources.",
+          "regional_variations": "The retrieved official sources do not describe different eligibility rules by parish or region. Access points can differ by local Medicaid office or application center, and long-term-care service delivery can vary by provider availability and local office workflow.",
+          "offices_or_providers": [
+            "Louisiana Medicaid local offices",
+            "Medicaid Application Centers statewide"
+          ]
+        },
+        "official_source": "https://ldh.la.gov/medicaid",
+        "gotchas": [
+          "SSI eligibility does not always eliminate the need for a separate Louisiana Medicaid application; Louisiana says many aged/blind/disabled applicants must file one.",
+          "Being age 65+ is not the only path; blindness or SSA-defined disability can also qualify a person.",
+          "Income and resource rules are not the same as the ACA expansion rules; this is a separate pathway for seniors and disabled individuals.",
+          "Louisiana’s medically needy pathway can help people who are over the regular limit but still meet medically needy standards.",
+          "For disability cases, Louisiana relies on SSA-style standards, so medical documentation matters.",
+          "Long-term care services have extra medical and functional criteria beyond financial eligibility.",
+          "Applicants often miss that resources matter as much as income."
+        ],
+        "data_shape_notes": "This program is not a single flat benefit. It is a Medicaid eligibility group with multiple sub-pathways: age 65+, blind, disabled, SSI-linked, and medically needy coverage. It has income and resource tests, and some applicants need a separate Medicaid application plus a medical eligibility review.",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Louisiana’s aged/blind/disabled Medicaid coverage uses SSI-related income and resource methodology for many applicants, and the state also has medically needy coverage for people age 65+ or disabled who do not qualify as categorically needy. Louisiana Medicaid materials confirm that people age 65 or older, or blind/disabled, may qualify; the state plan amendment says one group has income no higher than 100% of the federal poverty level, while another medically needy group uses the medically needy income level. A separate Medicaid manual source says SSI recipients are automatically eligible.\",\n      \"tables\": [\n        {\n          \"group\": \"Categorically needy aged/blind/disabled group\",\n          \"income_standard\": \"No higher than 100% of Federal Poverty Level\",\n          \"household_size_table\": \"The source set confirms the 100% FPL standard but does not provide the full household-size dollar table in the retrieved official pages.\"\n        },\n        {\n          \"group\": \"Medically needy aged/blind/disabled group\",\n          \"income_standard\": \"At or below the medically needy income level\",\n          \"household_size_table\": \"The source set confirms this pathway exists, but the retrieved official pages do not include the full dollar-by-household-size table.\"\n        }\n      ],\n      \"note\": \"Louisiana also states that SSI recipients are automatically eligible for Medicaid, and financial eligibility for aged/blind/disabled applicants is based on SSI income and resource methodologies, which are more restrictive than SSI for some applicants.\"\n    },\n    \"asset_limits\": {\n      \"limit\": \"$2,000 for an individual is the resource limit shown in Louisiana Medicaid policy for Provisional Medicaid; the state plan materials also refer to resource limits for aged/blind/disabled pathways but the retrieved pages do not include the full aged/blind/disabled resource table.\",\n      \"what_counts\": [\n        \"Cash\",\n        \"Bank accounts\",\n        \"Stocks and bonds\",\n        \"Other countable liquid resources\"\n      ],\n      \"what_is_exempt\": [\n        \"The retrieved official pages did not provide a complete Louisiana exemption list for this specific category in the search results.\"\n      ],\n      \"important_note\": \"Louisiana Medicaid eligibility for aged/blind/disabled people is tied to SSI-style resource rules, and the state policy materials explicitly use a $2,000 individual resource figure in the retrieved source set.\"\n    },\n    \"other_requirements\": [\n      \"Must be age 65 or older, or be blind, or meet SSA disability criteria.\",\n      \"Must be a Louisiana resident.\",\n      \"Must meet citizenship or eligible immigration requirements.\",\n      \"Must have a Social Security number or proof of having applied for one.\",\n      \"For disability-based cases, SSA disability standards apply, and blindness is evaluated under SSA visual criteria.\",\n      \"For some pathways, the state requires a separate Medicaid application even if the person receives SSI.\",\n      \"Some aged/blind/disabled applicants may need a medical eligibility determination.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"This coverage provides Medicaid health coverage for low-income seniors and people with disabilities. The retrieved official sources do not list a single fixed cash value because it is an insurance/coverage program, not a cash benefit. For people who need long-term care, Louisiana Medicaid says recipients age 65 or older, or age 21 with disabilities, may qualify for nursing facility services if they meet medical standards and additional targeting criteria and can participate in directing their care independently or through a representative.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Louisiana Medicaid Self-Service Portal\",\n      \"Phone: 1-888-342-6207\",\n      \"Mail: Louisiana Department of Health Medicaid Application Office, P.O. Box 91030, Baton Rouge, LA 70821-9030\",\n      \"In person: local Medicaid office\",\n      \"In person: Medicaid Application Center statewide\"\n    ],\n    \"processing_time\": \"The retrieved official sources do not state a single standard processing time for aged/blind/disabled Medicaid applications.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Health Coverage (Louisiana Medicaid application)\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of blindness or disability if applying on that basis\",\n      \"Social Security number or proof of application for one\",\n      \"Proof of Louisiana residency\",\n      \"Proof of citizenship or eligible immigration status\",\n      \"Income proof such as Social Security, pension, wages, or other unearned income\",\n      \"Resource proof such as bank statements or account balances\",\n      \"Medical records or disability/vision documentation if requested\",\n      \"Any Medicare information if the applicant has Medicare\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Louisiana Medicaid program; no parish-only restriction was identified in the retrieved official sources.\",\n    \"regional_variations\": \"The retrieved official sources do not describe different eligibility rules by parish or region. Access points can differ by local Medicaid office or application center, and long-term-care service delivery can vary by provider availability and local office workflow.\",\n    \"offices_or_providers\": [\n      \"Louisiana Medicaid local offices\",\n      \"Medicaid Application Centers statewide\"\n    ]\n  },\n  \"official_source\": \"https://ldh.la.gov/medicaid\",\n  \"gotchas\": [\n    \"SSI eligibility does not always eliminate the need for a separate Louisiana Medicaid application; Louisiana says many aged/blind/disabled applicants must file one.\",\n    \"Being age 65+ is not the only path; blindness or SSA-defined disability can also qualify a person.\",\n    \"Income and resource rules are not the same as the ACA expansion rules; this is a separate pathway for seniors and disabled individuals.\",\n    \"Louisiana’s medically needy pathway can help people who are over the regular limit but still meet medically needy standards.\",\n    \"For disability cases, Louisiana relies on SSA-style standards, so medical documentation matters.\",\n    \"Long-term care services have extra medical and functional criteria beyond financial eligibility.\",\n    \"Applicants often miss that resources matter as much as income.\"\n  ],\n  \"data_shape_notes\": \"This program is not a single flat benefit. It is a Medicaid eligibility group with multiple sub-pathways: age 65+, blind, disabled, SSI-linked, and medically needy coverage. It has income and resource tests, and some applicants need a separate Medicaid application plus a medical eligibility review.\"\n}"
+      },
+      {
+        "name": "LIHEAP (Low-Income Home Energy Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "basis": "Louisiana uses 60% of State Median Income for FFY 2026.",
+            "table": [
+              {
+                "household_members": 1,
+                "annual_income_limit": 30618
+              },
+              {
+                "household_members": 2,
+                "annual_income_limit": 40039
+              },
+              {
+                "household_members": 3,
+                "annual_income_limit": 49460
+              },
+              {
+                "household_members": 4,
+                "annual_income_limit": 58882
+              },
+              {
+                "household_members": 5,
+                "annual_income_limit": 68303
+              },
+              {
+                "household_members": 6,
+                "annual_income_limit": 77724
+              },
+              {
+                "household_members": 7,
+                "annual_income_limit": 79490
+              },
+              {
+                "household_members": 8,
+                "annual_income_limit": 81257
+              },
+              {
+                "household_members": 9,
+                "annual_income_limit": 83023
+              },
+              {
+                "household_members": 10,
+                "annual_income_limit": 84790
+              }
+            ],
+            "notes": "The household income figure is used to determine minimum eligibility requirements. Availability is not guaranteed."
+          },
+          "asset_limits": "No asset limit was identified in the official Louisiana LIHEAP materials reviewed.",
+          "other_requirements": [
+            "Applicant must be responsible for the household energy bill.",
+            "Applicant must have an active heating/cooling utility account.",
+            "There may be additional eligibility requirements.",
+            "Household must apply through Louisiana Housing Corporation's LIHEAP system or an administering local provider."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Program pays an energy benefit toward eligible household heating and/or cooling costs. A cited parish example states benefits can be up to $800 toward heating cost. The state LIHEAP page also indicates applications processed through the online portal during the listed period, but does not publish one universal statewide dollar amount in the material reviewed.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online via the Louisiana Housing Corporation Energy Assistance page: https://www.lhc.la.gov/energy-assistance",
+            "By phone for public inquiries: 1-888-454-2001",
+            "State office contact: (225) 763-8700",
+            "Local administering agencies and parish offices"
+          ],
+          "processing_time": "Online portal applications were scheduled to be processed for payment between May 1, 2026 and July 15, 2026. Exact turnaround time is not published statewide.",
+          "waitlist": "The state page says availability is not guaranteed. No formal statewide waitlist description was identified in the official materials reviewed.",
+          "forms": [
+            "Web-based LIHEAP application system used by the Louisiana Housing Corporation"
+          ],
+          "documents": [
+            "Proof of income",
+            "Picture identification",
+            "Social Security cards for all household members",
+            "Current utility bill or printout from the utility company/companies"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Louisiana program, but applications and administration are handled through local community action agencies and parish offices; some parish offices may have their own intake sites and schedules.",
+          "regional_variations": "Yes. Local administering agencies and parish offices vary by region, and some parishes publish their own intake locations and phone numbers. Benefit administration and appointment access can differ locally even though statewide eligibility is set by Louisiana LIHEAP rules.",
+          "offices_or_providers": [
+            "Louisiana Housing Corporation Energy Assistance Department, 11637 Industriplex Blvd., Baton Rouge, LA 70809",
+            "Public inquiries: 1-888-454-2001",
+            "Louisiana LIHEAP state contact: (225) 763-8700",
+            "Examples of local providers listed in state materials include Quad Area Community Action Agency, Cameron Community Action Agency, Union Community Action Agency, and parish-specific offices"
+          ]
+        },
+        "official_source": "https://www.lhc.la.gov/energy-assistance",
+        "gotchas": [
+          "Louisiana LIHEAP is not a cash grant in the usual sense; it is an energy-assistance payment made toward the utility bill.",
+          "Eligibility is income-based, and the official page uses 60% of State Median Income rather than a flat poverty guideline.",
+          "There is no guarantee of funding availability.",
+          "The program depends on having an active utility account and being responsible for the household energy bill.",
+          "Local offices, not just the state office, may control intake and timing.",
+          "The official state page lists the application processing window, but families should not assume immediate payment after applying."
+        ],
+        "data_shape_notes": "Benefits are utility-payment assistance with income tiers and local administration; the key structure is household-size income limits, plus regional/local intake differences.",
+        "_raw": "{\n  \"name\": \"LIHEAP (Low-Income Home Energy Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"basis\": \"Louisiana uses 60% of State Median Income for FFY 2026.\",\n      \"table\": [\n        {\"household_members\": 1, \"annual_income_limit\": 30618},\n        {\"household_members\": 2, \"annual_income_limit\": 40039},\n        {\"household_members\": 3, \"annual_income_limit\": 49460},\n        {\"household_members\": 4, \"annual_income_limit\": 58882},\n        {\"household_members\": 5, \"annual_income_limit\": 68303},\n        {\"household_members\": 6, \"annual_income_limit\": 77724},\n        {\"household_members\": 7, \"annual_income_limit\": 79490},\n        {\"household_members\": 8, \"annual_income_limit\": 81257},\n        {\"household_members\": 9, \"annual_income_limit\": 83023},\n        {\"household_members\": 10, \"annual_income_limit\": 84790}\n      ],\n      \"notes\": \"The household income figure is used to determine minimum eligibility requirements. Availability is not guaranteed.\"\n    },\n    \"asset_limits\": \"No asset limit was identified in the official Louisiana LIHEAP materials reviewed.\",\n    \"other_requirements\": [\n      \"Applicant must be responsible for the household energy bill.\",\n      \"Applicant must have an active heating/cooling utility account.\",\n      \"There may be additional eligibility requirements.\",\n      \"Household must apply through Louisiana Housing Corporation's LIHEAP system or an administering local provider.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Program pays an energy benefit toward eligible household heating and/or cooling costs. A cited parish example states benefits can be up to $800 toward heating cost. The state LIHEAP page also indicates applications processed through the online portal during the listed period, but does not publish one universal statewide dollar amount in the material reviewed.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online via the Louisiana Housing Corporation Energy Assistance page: https://www.lhc.la.gov/energy-assistance\",\n      \"By phone for public inquiries: 1-888-454-2001\",\n      \"State office contact: (225) 763-8700\",\n      \"Local administering agencies and parish offices\"\n    ],\n    \"processing_time\": \"Online portal applications were scheduled to be processed for payment between May 1, 2026 and July 15, 2026. Exact turnaround time is not published statewide.\",\n    \"waitlist\": \"The state page says availability is not guaranteed. No formal statewide waitlist description was identified in the official materials reviewed.\",\n    \"forms\": [\n      \"Web-based LIHEAP application system used by the Louisiana Housing Corporation\"\n    ],\n    \"documents\": [\n      \"Proof of income\",\n      \"Picture identification\",\n      \"Social Security cards for all household members\",\n      \"Current utility bill or printout from the utility company/companies\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Louisiana program, but applications and administration are handled through local community action agencies and parish offices; some parish offices may have their own intake sites and schedules.\",\n    \"regional_variations\": \"Yes. Local administering agencies and parish offices vary by region, and some parishes publish their own intake locations and phone numbers. Benefit administration and appointment access can differ locally even though statewide eligibility is set by Louisiana LIHEAP rules.\",\n    \"offices_or_providers\": [\n      \"Louisiana Housing Corporation Energy Assistance Department, 11637 Industriplex Blvd., Baton Rouge, LA 70809\",\n      \"Public inquiries: 1-888-454-2001\",\n      \"Louisiana LIHEAP state contact: (225) 763-8700\",\n      \"Examples of local providers listed in state materials include Quad Area Community Action Agency, Cameron Community Action Agency, Union Community Action Agency, and parish-specific offices\"\n    ]\n  },\n  \"official_source\": \"https://www.lhc.la.gov/energy-assistance\",\n  \"gotchas\": [\n    \"Louisiana LIHEAP is not a cash grant in the usual sense; it is an energy-assistance payment made toward the utility bill.\",\n    \"Eligibility is income-based, and the official page uses 60% of State Median Income rather than a flat poverty guideline.\",\n    \"There is no guarantee of funding availability.\",\n    \"The program depends on having an active utility account and being responsible for the household energy bill.\",\n    \"Local offices, not just the state office, may control intake and timing.\",\n    \"The official state page lists the application processing window, but families should not assume immediate payment after applying.\"\n  ],\n  \"data_shape_notes\": \"Benefits are utility-payment assistance with income tiers and local administration; the key structure is household-size income limits, plus regional/local intake differences.\"\n}"
+      },
+      {
+        "name": "Home-Delivered Meals (Nutrition Program)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No statewide income table was found for Louisiana’s home-delivered meals program. The program is generally age- and need-based rather than means-tested; local providers may ask about need, homebound status, and ability to prepare meals, but an income limit was not identified in the official Louisiana sources reviewed.",
+          "asset_limits": "No asset test was identified. No official Louisiana source found a countable-assets limit, exempt-assets list, or resource test for this program.",
+          "other_requirements": [
+            "Must be age 60 or older.",
+            "Must be homebound or otherwise unable to purchase, prepare, or procure meals for themselves.",
+            "Must have a health or physical need in some local provider rules.",
+            "Availability can depend on the local Area Agency on Aging, parish provider, and route capacity.",
+            "Some local providers prioritize frail, disabled, or isolated older adults."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "A hot, nutritious meal delivered to the home, typically Monday through Friday. Program descriptions say meals are designed to provide at least one-third of the recommended daily nutrition requirements. Some local providers describe the meals as hot, ready-to-eat; others may deliver meals in other forms depending on the site or provider. Donations may be suggested or encouraged, but no required payment amount was identified statewide.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact the local Area Agency on Aging or Council on Aging serving the parish.",
+            "Call the local provider directly; for example, Lafayette Council on Aging can be reached at (337) 262-5990.",
+            "Apply through a local meals site or senior center if that parish offers intake there.",
+            "Use the Governor’s Office of Elderly Affairs agency directory to identify the correct parish provider."
+          ],
+          "processing_time": "No statewide processing timeline was identified. Timing appears to vary by parish/provider and depends on route capacity and local assessment.",
+          "waitlist": "A statewide waitlist was not identified, but local providers may have waiting lists or route constraints when capacity is limited.",
+          "forms": [],
+          "documents": [
+            "Proof of age may be requested.",
+            "Basic contact information and home address.",
+            "Information about mobility, ability to shop or cook, and any health/physical limitations.",
+            "Emergency contact information may be helpful.",
+            "Any local assessment or intake paperwork requested by the parish provider."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through local Area Agencies on Aging, Councils on Aging, and parish providers across Louisiana; exact access depends on the parish and provider network.",
+          "regional_variations": "Yes. Meal frequency, delivery style, donation requests, and provider capacity vary by parish. Some providers deliver hot meals five days per week; some agencies also describe frozen or other meal forms depending on local operations. Wait times and eligibility wording can differ by local agency.",
+          "offices_or_providers": [
+            "Governor’s Office of Elderly Affairs agency directory",
+            "Area Agencies on Aging directory",
+            "Local Councils on Aging",
+            "New Orleans Council on Aging",
+            "Jefferson Council on Aging",
+            "Lafourche Council on Aging",
+            "Lafayette Council on Aging"
+          ]
+        },
+        "official_source": "https://goea.louisiana.gov/agency-directory/",
+        "gotchas": [
+          "This is usually not a statewide direct-application benefit; families must work through the parish-level provider that serves the older adult’s area.",
+          "There does not appear to be a single income-limit chart for this program in Louisiana.",
+          "Eligibility language varies locally, but the practical test is often whether the person is homebound and unable to prepare meals.",
+          "Some providers encourage donations, but meals may still be available without a fixed charge.",
+          "Meal availability and wait times can differ sharply by parish because routes and delivery capacity are local.",
+          "If the person qualifies for one parish’s program, that does not guarantee identical service frequency or meal type in another parish."
+        ],
+        "data_shape_notes": "This program is locally administered statewide, so the data structure is region-dependent rather than a single uniform statewide benefit. The key variables are age, homebound/need criteria, parish provider, and route capacity; income and asset limits are not clearly established statewide.",
+        "_raw": "{\n  \"name\": \"Home-Delivered Meals (Nutrition Program)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No statewide income table was found for Louisiana’s home-delivered meals program. The program is generally age- and need-based rather than means-tested; local providers may ask about need, homebound status, and ability to prepare meals, but an income limit was not identified in the official Louisiana sources reviewed.\",\n    \"asset_limits\": \"No asset test was identified. No official Louisiana source found a countable-assets limit, exempt-assets list, or resource test for this program.\",\n    \"other_requirements\": [\n      \"Must be age 60 or older.\",\n      \"Must be homebound or otherwise unable to purchase, prepare, or procure meals for themselves.\",\n      \"Must have a health or physical need in some local provider rules.\",\n      \"Availability can depend on the local Area Agency on Aging, parish provider, and route capacity.\",\n      \"Some local providers prioritize frail, disabled, or isolated older adults.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"A hot, nutritious meal delivered to the home, typically Monday through Friday. Program descriptions say meals are designed to provide at least one-third of the recommended daily nutrition requirements. Some local providers describe the meals as hot, ready-to-eat; others may deliver meals in other forms depending on the site or provider. Donations may be suggested or encouraged, but no required payment amount was identified statewide.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the local Area Agency on Aging or Council on Aging serving the parish.\",\n      \"Call the local provider directly; for example, Lafayette Council on Aging can be reached at (337) 262-5990.\",\n      \"Apply through a local meals site or senior center if that parish offers intake there.\",\n      \"Use the Governor’s Office of Elderly Affairs agency directory to identify the correct parish provider.\"\n    ],\n    \"processing_time\": \"No statewide processing timeline was identified. Timing appears to vary by parish/provider and depends on route capacity and local assessment.\",\n    \"waitlist\": \"A statewide waitlist was not identified, but local providers may have waiting lists or route constraints when capacity is limited.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of age may be requested.\",\n      \"Basic contact information and home address.\",\n      \"Information about mobility, ability to shop or cook, and any health/physical limitations.\",\n      \"Emergency contact information may be helpful.\",\n      \"Any local assessment or intake paperwork requested by the parish provider.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through local Area Agencies on Aging, Councils on Aging, and parish providers across Louisiana; exact access depends on the parish and provider network.\",\n    \"regional_variations\": \"Yes. Meal frequency, delivery style, donation requests, and provider capacity vary by parish. Some providers deliver hot meals five days per week; some agencies also describe frozen or other meal forms depending on local operations. Wait times and eligibility wording can differ by local agency.\",\n    \"offices_or_providers\": [\n      \"Governor’s Office of Elderly Affairs agency directory\",\n      \"Area Agencies on Aging directory\",\n      \"Local Councils on Aging\",\n      \"New Orleans Council on Aging\",\n      \"Jefferson Council on Aging\",\n      \"Lafourche Council on Aging\",\n      \"Lafayette Council on Aging\"\n    ]\n  },\n  \"official_source\": \"https://goea.louisiana.gov/agency-directory/\",\n  \"gotchas\": [\n    \"This is usually not a statewide direct-application benefit; families must work through the parish-level provider that serves the older adult’s area.\",\n    \"There does not appear to be a single income-limit chart for this program in Louisiana.\",\n    \"Eligibility language varies locally, but the practical test is often whether the person is homebound and unable to prepare meals.\",\n    \"Some providers encourage donations, but meals may still be available without a fixed charge.\",\n    \"Meal availability and wait times can differ sharply by parish because routes and delivery capacity are local.\",\n    \"If the person qualifies for one parish’s program, that does not guarantee identical service frequency or meal type in another parish.\"\n  ],\n  \"data_shape_notes\": \"This program is locally administered statewide, so the data structure is region-dependent rather than a single uniform statewide benefit. The key variables are age, homebound/need criteria, parish provider, and route capacity; income and asset limits are not clearly established statewide.\"\n}"
+      },
+      {
+        "name": "National Family Caregiver Support Program",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No statewide income test was identified for Louisiana’s National Family Caregiver Support Program in the official materials reviewed. The program is described as a support service for family caregivers and for grandparents or older individuals who are relative caregivers, rather than as a means-tested cash benefit.[12] In Louisiana, access is typically routed through the local Area Agency on Aging network and related caregiver intake processes, which focus on caregiver status and care-recipient eligibility rather than a fixed income table.[3][15]",
+          "asset_limits": "No asset limit was identified in the official Louisiana program materials reviewed. The available official descriptions do not list countable assets, exempt assets, or an asset test for NFCSP services.[12][3]",
+          "other_requirements": [
+            "The caregiver must be caring for an older adult or, in the grandparent/relative caregiver category, for a child or older relative as covered by the program purpose statement.[12]",
+            "Services are coordinated through Louisiana’s Governor’s Office of Elderly Affairs and the Area Agencies on Aging network.[1][15]",
+            "Eligibility for specific services can depend on the local provider’s assessment and available funding.[4][15]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Louisiana lists NFCSP-related services such as caregiver public education, caregiver sitter service, support groups, counseling, in-home respite, group respite, information and assistance, and related support services.[1][3] The official materials reviewed do not give a universal dollar amount or statewide fixed number of hours; service amounts are administered locally and may depend on assessment and available funding.[3][4][15]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call Louisiana Answers / Information Station at 1-800-738-2256 for caregiver support guidance and referral to local resources.[2]",
+            "Call the Louisiana Department of Health Aging services line at 1-877-456-1146 to request services.[5]",
+            "Contact your local Council on Aging / Area Agency on Aging for intake and local caregiver services.[2][15]",
+            "Contact the Governor’s Office of Elderly Affairs at (225) 342-7100 for statewide program information.[1][3]"
+          ],
+          "processing_time": "No official statewide processing time was identified in the materials reviewed. Timing appears to depend on the local Area Agency on Aging, the intake assessment, and service availability.[4][15]",
+          "waitlist": "No statewide waitlist policy was identified. Some local services may be limited by funding or provider capacity, so availability can vary by parish/region.[3][15]",
+          "forms": [
+            "National Family Caregiver Support Program Intake Assessment Form"
+          ],
+          "documents": [
+            "Identification for the caregiver and care recipient, if requested by the local office",
+            "Basic contact information and address",
+            "Information about the care recipient’s age, relationship to the caregiver, and caregiving situation",
+            "Any insurance, service, or medical information requested during local intake",
+            "Notes about the kinds of help needed, such as respite, sitter support, education, or counseling"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide through Louisiana’s statewide aging network, but services are delivered locally through Area Agencies on Aging and related councils on aging.[1][15]",
+          "regional_variations": "Yes. The mix of services, local intake pathways, and availability can differ by parish/region because each Area Agency on Aging and local provider network administers services differently.[3][15] Some regions list specific NFCSP services such as information and assistance or in-home respite, while others emphasize different support options.[15]",
+          "offices_or_providers": [
+            "Governor’s Office of Elderly Affairs, (225) 342-7100[1][3]",
+            "Louisiana Answers / Information Station, 1-800-738-2256[2]",
+            "Local Area Agencies on Aging listed in the GOEA directory[15]"
+          ]
+        },
+        "official_source": "https://goea.louisiana.gov/about-us/agency-overview/",
+        "gotchas": [
+          "There is no single statewide application form or uniform dollar benefit amount in the materials reviewed; local agencies determine what is available.[3][4][15]",
+          "People often look for an income or asset limit, but the official Louisiana materials reviewed do not show a fixed means test for NFCSP.[12][3]",
+          "The program supports the caregiver, not just the older adult, so the key question is whether the caller is an eligible family caregiver or relative caregiver.[12]",
+          "Wait times and service availability can differ significantly by parish because services are administered through local aging agencies.[15]",
+          "Some services are education, counseling, or respite support rather than direct cash assistance.[1][3]"
+        ],
+        "data_shape_notes": "This program is locally administered within a statewide framework. The key data shape is not a fixed benefit formula; instead, it is a network of services that vary by region, provider, and available funding.[3][15]",
+        "source_notes": [
+          "Official Louisiana Office of Elderly Affairs materials describe the program purpose and service menu.[1][3][12]",
+          "The caregiver intake form exists, but the reviewed materials did not provide a statewide processing timeline or benefit dollar cap.[4]",
+          "Louisiana aging-service contact points and local provider directory entries show regional administration through Area Agencies on Aging.[2][15]"
+        ],
+        "_raw": "{\n  \"name\": \"National Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No statewide income test was identified for Louisiana’s National Family Caregiver Support Program in the official materials reviewed. The program is described as a support service for family caregivers and for grandparents or older individuals who are relative caregivers, rather than as a means-tested cash benefit.[12] In Louisiana, access is typically routed through the local Area Agency on Aging network and related caregiver intake processes, which focus on caregiver status and care-recipient eligibility rather than a fixed income table.[3][15]\",\n    \"asset_limits\": \"No asset limit was identified in the official Louisiana program materials reviewed. The available official descriptions do not list countable assets, exempt assets, or an asset test for NFCSP services.[12][3]\",\n    \"other_requirements\": [\n      \"The caregiver must be caring for an older adult or, in the grandparent/relative caregiver category, for a child or older relative as covered by the program purpose statement.[12]\",\n      \"Services are coordinated through Louisiana’s Governor’s Office of Elderly Affairs and the Area Agencies on Aging network.[1][15]\",\n      \"Eligibility for specific services can depend on the local provider’s assessment and available funding.[4][15]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Louisiana lists NFCSP-related services such as caregiver public education, caregiver sitter service, support groups, counseling, in-home respite, group respite, information and assistance, and related support services.[1][3] The official materials reviewed do not give a universal dollar amount or statewide fixed number of hours; service amounts are administered locally and may depend on assessment and available funding.[3][4][15]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call Louisiana Answers / Information Station at 1-800-738-2256 for caregiver support guidance and referral to local resources.[2]\",\n      \"Call the Louisiana Department of Health Aging services line at 1-877-456-1146 to request services.[5]\",\n      \"Contact your local Council on Aging / Area Agency on Aging for intake and local caregiver services.[2][15]\",\n      \"Contact the Governor’s Office of Elderly Affairs at (225) 342-7100 for statewide program information.[1][3]\"\n    ],\n    \"processing_time\": \"No official statewide processing time was identified in the materials reviewed. Timing appears to depend on the local Area Agency on Aging, the intake assessment, and service availability.[4][15]\",\n    \"waitlist\": \"No statewide waitlist policy was identified. Some local services may be limited by funding or provider capacity, so availability can vary by parish/region.[3][15]\",\n    \"forms\": [\n      \"National Family Caregiver Support Program Intake Assessment Form\"\n    ],\n    \"documents\": [\n      \"Identification for the caregiver and care recipient, if requested by the local office\",\n      \"Basic contact information and address\",\n      \"Information about the care recipient’s age, relationship to the caregiver, and caregiving situation\",\n      \"Any insurance, service, or medical information requested during local intake\",\n      \"Notes about the kinds of help needed, such as respite, sitter support, education, or counseling\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide through Louisiana’s statewide aging network, but services are delivered locally through Area Agencies on Aging and related councils on aging.[1][15]\",\n    \"regional_variations\": \"Yes. The mix of services, local intake pathways, and availability can differ by parish/region because each Area Agency on Aging and local provider network administers services differently.[3][15] Some regions list specific NFCSP services such as information and assistance or in-home respite, while others emphasize different support options.[15]\",\n    \"offices_or_providers\": [\n      \"Governor’s Office of Elderly Affairs, (225) 342-7100[1][3]\",\n      \"Louisiana Answers / Information Station, 1-800-738-2256[2]\",\n      \"Local Area Agencies on Aging listed in the GOEA directory[15]\"\n    ]\n  },\n  \"official_source\": \"https://goea.louisiana.gov/about-us/agency-overview/\",\n  \"gotchas\": [\n    \"There is no single statewide application form or uniform dollar benefit amount in the materials reviewed; local agencies determine what is available.[3][4][15]\",\n    \"People often look for an income or asset limit, but the official Louisiana materials reviewed do not show a fixed means test for NFCSP.[12][3]\",\n    \"The program supports the caregiver, not just the older adult, so the key question is whether the caller is an eligible family caregiver or relative caregiver.[12]\",\n    \"Wait times and service availability can differ significantly by parish because services are administered through local aging agencies.[15]\",\n    \"Some services are education, counseling, or respite support rather than direct cash assistance.[1][3]\"\n  ],\n  \"data_shape_notes\": \"This program is locally administered within a statewide framework. The key data shape is not a fixed benefit formula; instead, it is a network of services that vary by region, provider, and available funding.[3][15]\",\n  \"source_notes\": [\n    \"Official Louisiana Office of Elderly Affairs materials describe the program purpose and service menu.[1][3][12]\",\n    \"The caregiver intake form exists, but the reviewed materials did not provide a statewide processing timeline or benefit dollar cap.[4]\",\n    \"Louisiana aging-service contact points and local provider directory entries show regional administration through Area Agencies on Aging.[2][15]\"\n  ]\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "LA",
+    "stateName": "Louisiana",
+    "classifiedAt": "2026-10-06T05:50:18.119Z",
+    "total": 4,
+    "typeSummary": {
+      "benefit": 4
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 3,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Louisiana Medicaid local offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Medicaid Application Centers statewide",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "LIHEAP (Low-Income Home Energy Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Louisiana Housing Corporation Energy Assistance Department, 11637 Industriplex Blvd., Baton Rouge, LA 70809",
+              "type": "service-area"
+            },
+            {
+              "name": "Public inquiries: 1-888-454-2001",
+              "type": "service-area"
+            },
+            {
+              "name": "Louisiana LIHEAP state contact: (225) 763-8700",
+              "type": "service-area"
+            },
+            {
+              "name": "Examples of local providers listed in state materials include Quad Area Community Action Agency, Cameron Community Action Agency, Union Community Action Agency, and parish-specific offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Home-Delivered Meals (Nutrition Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Governor’s Office of Elderly Affairs agency directory",
+              "type": "service-area"
+            },
+            {
+              "name": "Area Agencies on Aging directory",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Councils on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "New Orleans Council on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Jefferson Council on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Lafourche Council on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Lafayette Council on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "National Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Governor’s Office of Elderly Affairs, (225) 342-7100[1][3]",
+              "type": "service-area"
+            },
+            {
+              "name": "Louisiana Answers / Information Station, 1-800-738-2256[2]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Area Agencies on Aging listed in the GOEA directory[15]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "LA",
+      "id": "la-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "LA",
+      "id": "la-liheap-energy-assistance",
+      "name": "LIHEAP (Low-Income Home Energy Assistance Program)",
+      "legacyId": "liheap-low-income-home-energy-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "LA",
+      "id": "la-home-delivered-meals",
+      "name": "Home-Delivered Meals (Nutrition Program)",
+      "legacyId": "home-delivered-meals-nutrition-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "LA",
+      "id": "la-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program",
+      "legacyId": "national-family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

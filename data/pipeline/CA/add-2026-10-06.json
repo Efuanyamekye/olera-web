@@ -1,0 +1,430 @@
+{
+  "state": "CA",
+  "addedAt": "2026-10-06T06:02:50.440Z",
+  "dive": {
+    "state": "CA",
+    "stateName": "California",
+    "diveAt": "2026-10-06T05:58:49.295Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Medi-Cal for Aged and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "program_type": "Aged & Disabled Federal Poverty Level (A&D FPL) Medi-Cal",
+            "limits_by_household_size_monthly": [
+              {
+                "household_size": 1,
+                "limit": 1836
+              },
+              {
+                "household_size": 2,
+                "limit": 2490
+              },
+              {
+                "household_size": 3,
+                "limit": 3143
+              },
+              {
+                "household_size": 4,
+                "limit": 3795
+              },
+              {
+                "household_size": 5,
+                "limit": 4450
+              },
+              {
+                "household_size": 6,
+                "limit": 5102
+              },
+              {
+                "household_size": 7,
+                "limit": 5755
+              },
+              {
+                "household_size": 8,
+                "limit": 6409
+              },
+              {
+                "household_size": 9,
+                "limit": 7062
+              },
+              {
+                "household_size": 10,
+                "limit": 7715
+              },
+              {
+                "household_size": "each additional person",
+                "limit": 655
+              }
+            ],
+            "notes": [
+              "This is the key income test for the A&D FPL category.",
+              "County guidance indicates the program provides full-scope, zero share-of-cost Medi-Cal when income is at or below these limits."
+            ]
+          },
+          "asset_limits": {
+            "resource_limit": {
+              "single": 130000,
+              "couple": 195000
+            },
+            "what_counts": [
+              "Countable resources are considered in the asset/resource test.",
+              "A home is generally not counted.",
+              "A car is generally not counted."
+            ],
+            "what_is_exempt_or_not_counted": [
+              "Primary home",
+              "Vehicle"
+            ],
+            "notes": [
+              "Sources summarized the resource limit as $130,000 for one person and $195,000 for a couple.",
+              "Families should verify whether any specific bank accounts, investments, or other holdings are countable under current county rules before applying."
+            ]
+          },
+          "other_requirements": [
+            "Must be a California resident.",
+            "Must be either age 65 or older, or disabled under Social Security disability standards.",
+            "Disability can be established through SSA disability status, and in some cases through a county/state disability evaluation if SSA has not already determined disability.",
+            "Must not reside in a long-term care facility for the A&D FPL program as described in county guidance.",
+            "Must be a citizen or have satisfactory immigration status for the category described in county guidance."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Full-scope, zero share-of-cost Medi-Cal for eligible aged or disabled individuals. Covered services include medically necessary care such as doctor visits, hospital care, ambulance/transport services, prescription drugs, and home care.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: BenefitsCal / county Medi-Cal online application portal",
+            "Online: Covered California application (eligibility is screened automatically for Medi-Cal)",
+            "Phone: Call your county Medi-Cal office to request a paper application",
+            "Mail: Send a completed paper application to your local county office",
+            "In person: Apply at your local county social services or Medi-Cal office",
+            "State information: https://www.dhcs.ca.gov/medi-cal/apply/"
+          ],
+          "processing_time": "County guidance says applications are generally processed within 45 days when eligibility does not depend on establishing disability or blindness.",
+          "waitlist": null,
+          "forms": [
+            "Single Streamlined Application",
+            "County Medi-Cal application forms (paper)",
+            "Covered California application (when used as the entry point)"
+          ],
+          "documents": [
+            "Proof of California residency",
+            "Proof of age or disability status",
+            "Proof of income",
+            "Proof of resources/assets if requested",
+            "Immigration/citizenship documentation if applicable",
+            "Any medical or SSA disability records if disability must be established",
+            "Completed application form"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in California through county Medi-Cal systems.",
+          "regional_variations": "Eligibility rules are statewide, but application handling, local office procedures, and processing speed can vary by county. Some counties direct applicants to their own portals or customer service centers, and disability-development cases can take longer than standard non-disability cases.",
+          "offices_or_providers": [
+            "Local county Medi-Cal office",
+            "Local county social services agency",
+            "County online portals such as BenefitsCal"
+          ]
+        },
+        "official_source": "https://www.dhcs.ca.gov/medi-cal/apply/",
+        "gotchas": [
+          "This is not a cash-benefit program; it is a Medi-Cal coverage category.",
+          "Income and resource limits are separate tests; meeting one does not guarantee eligibility if the other fails.",
+          "Households often miss that the resource limit can matter even when monthly income is low enough.",
+          "If disability is not already established by SSA, the county may need extra time to verify it.",
+          "Families should not assume all assets count the same way; home and car are generally exempt, but other assets may count.",
+          "Some county sites and materials refer to related paths such as A&D FPL or medically needy ABD categories, which are not identical.",
+          "The easiest application route is usually online, but paper, phone, mail, and in-person options also exist."
+        ],
+        "data_shape_notes": "This program has a dual eligibility structure: a categorical requirement (age 65+ or disability) plus both income and resource tests. Benefits are fixed as full-scope Medi-Cal rather than tiered by household size or a benefit amount. County processing can vary because disability verification may add steps.",
+        "_raw": "{\n  \"name\": \"Medi-Cal for Aged and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"program_type\": \"Aged & Disabled Federal Poverty Level (A&D FPL) Medi-Cal\",\n      \"limits_by_household_size_monthly\": [\n        { \"household_size\": 1, \"limit\": 1836 },\n        { \"household_size\": 2, \"limit\": 2490 },\n        { \"household_size\": 3, \"limit\": 3143 },\n        { \"household_size\": 4, \"limit\": 3795 },\n        { \"household_size\": 5, \"limit\": 4450 },\n        { \"household_size\": 6, \"limit\": 5102 },\n        { \"household_size\": 7, \"limit\": 5755 },\n        { \"household_size\": 8, \"limit\": 6409 },\n        { \"household_size\": 9, \"limit\": 7062 },\n        { \"household_size\": 10, \"limit\": 7715 },\n        { \"household_size\": \"each additional person\", \"limit\": 655 }\n      ],\n      \"notes\": [\n        \"This is the key income test for the A&D FPL category.\",\n        \"County guidance indicates the program provides full-scope, zero share-of-cost Medi-Cal when income is at or below these limits.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"resource_limit\": {\n        \"single\": 130000,\n        \"couple\": 195000\n      },\n      \"what_counts\": [\n        \"Countable resources are considered in the asset/resource test.\",\n        \"A home is generally not counted.\",\n        \"A car is generally not counted.\"\n      ],\n      \"what_is_exempt_or_not_counted\": [\n        \"Primary home\",\n        \"Vehicle\"\n      ],\n      \"notes\": [\n        \"Sources summarized the resource limit as $130,000 for one person and $195,000 for a couple.\",\n        \"Families should verify whether any specific bank accounts, investments, or other holdings are countable under current county rules before applying.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a California resident.\",\n      \"Must be either age 65 or older, or disabled under Social Security disability standards.\",\n      \"Disability can be established through SSA disability status, and in some cases through a county/state disability evaluation if SSA has not already determined disability.\",\n      \"Must not reside in a long-term care facility for the A&D FPL program as described in county guidance.\",\n      \"Must be a citizen or have satisfactory immigration status for the category described in county guidance.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Full-scope, zero share-of-cost Medi-Cal for eligible aged or disabled individuals. Covered services include medically necessary care such as doctor visits, hospital care, ambulance/transport services, prescription drugs, and home care.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: BenefitsCal / county Medi-Cal online application portal\",\n      \"Online: Covered California application (eligibility is screened automatically for Medi-Cal)\",\n      \"Phone: Call your county Medi-Cal office to request a paper application\",\n      \"Mail: Send a completed paper application to your local county office\",\n      \"In person: Apply at your local county social services or Medi-Cal office\",\n      \"State information: https://www.dhcs.ca.gov/medi-cal/apply/\"\n    ],\n    \"processing_time\": \"County guidance says applications are generally processed within 45 days when eligibility does not depend on establishing disability or blindness.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Single Streamlined Application\",\n      \"County Medi-Cal application forms (paper)\",\n      \"Covered California application (when used as the entry point)\"\n    ],\n    \"documents\": [\n      \"Proof of California residency\",\n      \"Proof of age or disability status\",\n      \"Proof of income\",\n      \"Proof of resources/assets if requested\",\n      \"Immigration/citizenship documentation if applicable\",\n      \"Any medical or SSA disability records if disability must be established\",\n      \"Completed application form\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in California through county Medi-Cal systems.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but application handling, local office procedures, and processing speed can vary by county. Some counties direct applicants to their own portals or customer service centers, and disability-development cases can take longer than standard non-disability cases.\",\n    \"offices_or_providers\": [\n      \"Local county Medi-Cal office\",\n      \"Local county social services agency\",\n      \"County online portals such as BenefitsCal\"\n    ]\n  },\n  \"official_source\": \"https://www.dhcs.ca.gov/medi-cal/apply/\",\n  \"gotchas\": [\n    \"This is not a cash-benefit program; it is a Medi-Cal coverage category.\",\n    \"Income and resource limits are separate tests; meeting one does not guarantee eligibility if the other fails.\",\n    \"Households often miss that the resource limit can matter even when monthly income is low enough.\",\n    \"If disability is not already established by SSA, the county may need extra time to verify it.\",\n    \"Families should not assume all assets count the same way; home and car are generally exempt, but other assets may count.\",\n    \"Some county sites and materials refer to related paths such as A&D FPL or medically needy ABD categories, which are not identical.\",\n    \"The easiest application route is usually online, but paper, phone, mail, and in-person options also exist.\"\n  ],\n  \"data_shape_notes\": \"This program has a dual eligibility structure: a categorical requirement (age 65+ or disability) plus both income and resource tests. Benefits are fixed as full-scope Medi-Cal rather than tiered by household size or a benefit amount. County processing can vary because disability verification may add steps.\"\n}"
+      },
+      {
+        "name": "California Assisted Living Waiver (ALW)",
+        "eligibility": {
+          "age": 21,
+          "income_limits": "No fixed monthly income cap was found in the official program materials gathered. The key financial rule is that the person must have full-scope Medi-Cal with zero share of cost, and people with a Medi-Cal share of cost cannot enroll in ALW. The program materials do not present a separate ALW income table by household size.",
+          "asset_limits": "No separate ALW asset limit was found in the gathered official materials. The practical requirement is Medi-Cal eligibility without a share of cost, plus enough personal funds to pay room and board and retain some money for personal/incidental needs. The gathered sources did not provide a distinct ALW countable-assets table or an exemption list.",
+          "other_requirements": [
+            "Must have full-scope Medi-Cal eligibility with zero share of cost",
+            "Must need a nursing-facility level of care",
+            "Must be willing to live in an assisted living setting instead of a nursing facility",
+            "Must be able to reside safely in an assisted living facility or public subsidized housing",
+            "Must live in one of the ALW service counties: Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, or Sonoma",
+            "Must be able to pay for room and board"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The ALW provides three main waiver benefits: Assisted Living Services (called Assisted Care when delivered in publicly funded housing), Care Coordination, and Nursing Facility Transition Care Coordination. The service package includes homemaker services, home health aide services, personal care, residential habilitation, augmented plan-of-care development and follow-up, and transition support from nursing facilities to the community.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Apply through the official DHCS Assisted Living Waiver program page: https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+            "Use provider enrollment routes through participating assisted living providers, care coordination agencies, or home health agencies in ALW counties"
+          ],
+          "processing_time": "No single statewide processing-time standard was found in the gathered official materials. Enrollment timing depends on Medi-Cal eligibility, level-of-care review, local provider availability, and county capacity.",
+          "waitlist": "The program is limited to specific counties and a capped service structure, so access can be constrained by local provider availability and county enrollment capacity. The gathered sources did not provide a single official waitlist length or timeline.",
+          "forms": [
+            "ALW Program Initial Provider Application",
+            "ALW Program Provider Agreement",
+            "Home and Community-Based Setting Characteristics Provider Attestation (DHCS 5304)",
+            "ALW Program Application Checklist"
+          ],
+          "documents": [
+            "Proof of Medi-Cal eligibility",
+            "Evidence of zero share of cost",
+            "Medical/functional information showing nursing-facility level of care",
+            "Documents showing ability to pay room and board",
+            "If applying through a provider: NPPES/NPI confirmation, facility floor plan, Resident Admission Agreement, local licensing documents, sample full month of meals, sample activity schedule, evacuation plan, and facility license"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Only available in Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, and Sonoma counties.",
+          "regional_variations": "Yes. The program operates only in participating counties, so access depends heavily on local provider participation and county-level enrollment capacity. The service setting can also differ: assisted living facility versus publicly subsidized senior or disabled housing.",
+          "offices_or_providers": [
+            "Participating Residential Care Facilities for the Elderly (RCFEs)",
+            "Participating Adult Residential Care Facilities (ARFs)",
+            "Participating Care Coordination Agencies",
+            "Participating Home Health Agencies"
+          ]
+        },
+        "official_source": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+        "gotchas": [
+          "ALW is not a cash benefit; it is a waiver that pays for services, not room and board.",
+          "A person can be otherwise financially Medi-Cal-eligible but still be ineligible for ALW if they have a share of cost.",
+          "The person must need nursing-facility level care, which is stricter than ordinary assisted-living needs.",
+          "The program is not statewide; county availability is a major limiter.",
+          "The participant must be able to safely live in the assisted-living or subsidized-housing setting.",
+          "Room and board must still be paid by the participant, usually from SSI/SSP and personal funds.",
+          "Provider enrollment and facility compliance matter; the facility itself must be ALW-qualified."
+        ],
+        "data_shape_notes": "This program is county-restricted, service-based, and tied to Medi-Cal with zero share of cost. The main eligibility gate is nursing-facility level of care rather than income tables, and the main practical bottleneck is local provider/county capacity rather than a universal statewide application queue.",
+        "_raw": "{\n  \"name\": \"California Assisted Living Waiver (ALW)\",\n  \"eligibility\": {\n    \"age\": 21,\n    \"income_limits\": \"No fixed monthly income cap was found in the official program materials gathered. The key financial rule is that the person must have full-scope Medi-Cal with zero share of cost, and people with a Medi-Cal share of cost cannot enroll in ALW. The program materials do not present a separate ALW income table by household size.\",\n    \"asset_limits\": \"No separate ALW asset limit was found in the gathered official materials. The practical requirement is Medi-Cal eligibility without a share of cost, plus enough personal funds to pay room and board and retain some money for personal/incidental needs. The gathered sources did not provide a distinct ALW countable-assets table or an exemption list.\",\n    \"other_requirements\": [\n      \"Must have full-scope Medi-Cal eligibility with zero share of cost\",\n      \"Must need a nursing-facility level of care\",\n      \"Must be willing to live in an assisted living setting instead of a nursing facility\",\n      \"Must be able to reside safely in an assisted living facility or public subsidized housing\",\n      \"Must live in one of the ALW service counties: Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, or Sonoma\",\n      \"Must be able to pay for room and board\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The ALW provides three main waiver benefits: Assisted Living Services (called Assisted Care when delivered in publicly funded housing), Care Coordination, and Nursing Facility Transition Care Coordination. The service package includes homemaker services, home health aide services, personal care, residential habilitation, augmented plan-of-care development and follow-up, and transition support from nursing facilities to the community.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through the official DHCS Assisted Living Waiver program page: https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/\",\n      \"Use provider enrollment routes through participating assisted living providers, care coordination agencies, or home health agencies in ALW counties\"\n    ],\n    \"processing_time\": \"No single statewide processing-time standard was found in the gathered official materials. Enrollment timing depends on Medi-Cal eligibility, level-of-care review, local provider availability, and county capacity.\",\n    \"waitlist\": \"The program is limited to specific counties and a capped service structure, so access can be constrained by local provider availability and county enrollment capacity. The gathered sources did not provide a single official waitlist length or timeline.\",\n    \"forms\": [\n      \"ALW Program Initial Provider Application\",\n      \"ALW Program Provider Agreement\",\n      \"Home and Community-Based Setting Characteristics Provider Attestation (DHCS 5304)\",\n      \"ALW Program Application Checklist\"\n    ],\n    \"documents\": [\n      \"Proof of Medi-Cal eligibility\",\n      \"Evidence of zero share of cost\",\n      \"Medical/functional information showing nursing-facility level of care\",\n      \"Documents showing ability to pay room and board\",\n      \"If applying through a provider: NPPES/NPI confirmation, facility floor plan, Resident Admission Agreement, local licensing documents, sample full month of meals, sample activity schedule, evacuation plan, and facility license\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Only available in Alameda, Contra Costa, Fresno, Kern, Los Angeles, Orange, Riverside, Sacramento, San Bernardino, San Diego, San Francisco, San Joaquin, San Mateo, Santa Clara, and Sonoma counties.\",\n    \"regional_variations\": \"Yes. The program operates only in participating counties, so access depends heavily on local provider participation and county-level enrollment capacity. The service setting can also differ: assisted living facility versus publicly subsidized senior or disabled housing.\",\n    \"offices_or_providers\": [\n      \"Participating Residential Care Facilities for the Elderly (RCFEs)\",\n      \"Participating Adult Residential Care Facilities (ARFs)\",\n      \"Participating Care Coordination Agencies\",\n      \"Participating Home Health Agencies\"\n    ]\n  },\n  \"official_source\": \"https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/\",\n  \"gotchas\": [\n    \"ALW is not a cash benefit; it is a waiver that pays for services, not room and board.\",\n    \"A person can be otherwise financially Medi-Cal-eligible but still be ineligible for ALW if they have a share of cost.\",\n    \"The person must need nursing-facility level care, which is stricter than ordinary assisted-living needs.\",\n    \"The program is not statewide; county availability is a major limiter.\",\n    \"The participant must be able to safely live in the assisted-living or subsidized-housing setting.\",\n    \"Room and board must still be paid by the participant, usually from SSI/SSP and personal funds.\",\n    \"Provider enrollment and facility compliance matter; the facility itself must be ALW-qualified.\"\n  ],\n  \"data_shape_notes\": \"This program is county-restricted, service-based, and tied to Medi-Cal with zero share of cost. The main eligibility gate is nursing-facility level of care rather than income tables, and the main practical bottleneck is local provider/county capacity rather than a universal statewide application queue.\"\n}"
+      },
+      {
+        "name": "California PACE Programs",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "No income limit is used to determine PACE eligibility. California PACE eligibility is based on age, residence in a PACE service area, ability to live safely in the community with PACE support, and meeting the state’s nursing-home-level-of-care requirement.",
+          "asset_limits": "No asset limit is described in the official California PACE materials reviewed. PACE is not a means-tested cash program; eligibility is medical and geographic rather than income/asset-based.",
+          "other_requirements": [
+            "Must live in a PACE service area (county and zip code served by a participating PACE organization).",
+            "Must be determined to need a nursing home level of care by the California Department of Health Care Services or the PACE organization’s interdisciplinary assessment, depending on the provider’s process.",
+            "Must be able to live safely in the community at the time of enrollment with PACE support.",
+            "Enrollment is voluntary."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE provides an integrated medical and long-term care package at no additional cost for people who have both Medicare and Medi-Cal, and otherwise coordinates covered care through the PACE plan. Services include primary care, specialist care, social services, home care/personal care, skilled nursing, physical and occupational therapy, restorative therapy, meals, nutritional counseling, recreational therapy, dental, hearing, and vision care, mental and behavioral health services, durable medical equipment, home health care, non-medical transportation to appointments, and transportation to and from the PACE center.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Online through the local PACE organization’s enrollment page",
+            "By phone through the local PACE organization",
+            "In person through the local PACE center or enrollment office"
+          ],
+          "processing_time": "The application and health assessment can take a few weeks.",
+          "waitlist": null,
+          "forms": [
+            "No single statewide form number was identified in the official materials reviewed; enrollment is handled by each local PACE organization."
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of residence in the service area",
+            "Medicare card, if applicable",
+            "Medi-Cal card, if applicable",
+            "List of current medications",
+            "Medical history and current diagnoses",
+            "Contact information for doctors and caregivers",
+            "Any insurance information"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Available only in California counties and zip codes served by participating PACE organizations.",
+          "regional_variations": "Yes. Eligibility is statewide in concept but local in practice because each PACE plan serves specific counties and zip codes. Services are standardized in broad categories, but providers, centers, transportation routes, and enrollment processes vary by region. Wait times can also vary by local provider capacity.",
+          "offices_or_providers": [
+            "Local PACE organizations and PACE centers in participating California service areas"
+          ]
+        },
+        "official_source": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/",
+        "gotchas": [
+          "PACE is not a generic senior program; it is only for people who meet a nursing-home-level-of-care standard and can still live safely in the community with support.",
+          "There is no statewide open enrollment everywhere in California; you must live inside a specific PACE service area.",
+          "People often confuse this program with California’s Property Assessed Clean Energy program because both use the acronym PACE, but they are completely different.",
+          "The exact services and enrollment workflow depend on the local PACE organization.",
+          "The process includes a health assessment, so families should expect medical review, not just a basic application."
+        ],
+        "data_shape_notes": "This program is geographically restricted and provider-specific, with no income or asset test. The key filters are age, service area, and medical level-of-care eligibility, and the benefit package is comprehensive rather than cash-based.",
+        "_raw": "{\n  \"name\": \"California PACE Programs\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"No income limit is used to determine PACE eligibility. California PACE eligibility is based on age, residence in a PACE service area, ability to live safely in the community with PACE support, and meeting the state’s nursing-home-level-of-care requirement.\",\n    \"asset_limits\": \"No asset limit is described in the official California PACE materials reviewed. PACE is not a means-tested cash program; eligibility is medical and geographic rather than income/asset-based.\",\n    \"other_requirements\": [\n      \"Must live in a PACE service area (county and zip code served by a participating PACE organization).\",\n      \"Must be determined to need a nursing home level of care by the California Department of Health Care Services or the PACE organization’s interdisciplinary assessment, depending on the provider’s process.\",\n      \"Must be able to live safely in the community at the time of enrollment with PACE support.\",\n      \"Enrollment is voluntary.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE provides an integrated medical and long-term care package at no additional cost for people who have both Medicare and Medi-Cal, and otherwise coordinates covered care through the PACE plan. Services include primary care, specialist care, social services, home care/personal care, skilled nursing, physical and occupational therapy, restorative therapy, meals, nutritional counseling, recreational therapy, dental, hearing, and vision care, mental and behavioral health services, durable medical equipment, home health care, non-medical transportation to appointments, and transportation to and from the PACE center.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through the local PACE organization’s enrollment page\",\n      \"By phone through the local PACE organization\",\n      \"In person through the local PACE center or enrollment office\"\n    ],\n    \"processing_time\": \"The application and health assessment can take a few weeks.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No single statewide form number was identified in the official materials reviewed; enrollment is handled by each local PACE organization.\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of residence in the service area\",\n      \"Medicare card, if applicable\",\n      \"Medi-Cal card, if applicable\",\n      \"List of current medications\",\n      \"Medical history and current diagnoses\",\n      \"Contact information for doctors and caregivers\",\n      \"Any insurance information\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Available only in California counties and zip codes served by participating PACE organizations.\",\n    \"regional_variations\": \"Yes. Eligibility is statewide in concept but local in practice because each PACE plan serves specific counties and zip codes. Services are standardized in broad categories, but providers, centers, transportation routes, and enrollment processes vary by region. Wait times can also vary by local provider capacity.\",\n    \"offices_or_providers\": [\n      \"Local PACE organizations and PACE centers in participating California service areas\"\n    ]\n  },\n  \"official_source\": \"https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/\",\n  \"gotchas\": [\n    \"PACE is not a generic senior program; it is only for people who meet a nursing-home-level-of-care standard and can still live safely in the community with support.\",\n    \"There is no statewide open enrollment everywhere in California; you must live inside a specific PACE service area.\",\n    \"People often confuse this program with California’s Property Assessed Clean Energy program because both use the acronym PACE, but they are completely different.\",\n    \"The exact services and enrollment workflow depend on the local PACE organization.\",\n    \"The process includes a health assessment, so families should expect medical review, not just a basic application.\"\n  ],\n  \"data_shape_notes\": \"This program is geographically restricted and provider-specific, with no income or asset test. The key filters are age, service area, and medical level-of-care eligibility, and the benefit package is comprehensive rather than cash-based.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "CA",
+    "stateName": "California",
+    "classifiedAt": "2026-10-06T05:58:49.299Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 1,
+      "local": 2
+    },
+    "complexitySummary": {
+      "deep": 3
+    },
+    "programs": [
+      {
+        "name": "Medi-Cal for Aged and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county Medi-Cal office",
+              "type": "service-area"
+            },
+            {
+              "name": "Local county social services agency",
+              "type": "service-area"
+            },
+            {
+              "name": "County online portals such as BenefitsCal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "California Assisted Living Waiver (ALW)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Participating Residential Care Facilities for the Elderly (RCFEs)",
+              "type": "service-area"
+            },
+            {
+              "name": "Participating Adult Residential Care Facilities (ARFs)",
+              "type": "service-area"
+            },
+            {
+              "name": "Participating Care Coordination Agencies",
+              "type": "service-area"
+            },
+            {
+              "name": "Participating Home Health Agencies",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "California PACE Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local PACE organizations and PACE centers in participating California service areas",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "CA",
+      "id": "ca-medi-cal-aged-disabled",
+      "name": "Medi-Cal for Aged and Disabled",
+      "legacyId": "medi-cal-for-aged-and-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "CA",
+      "id": "ca-assisted-living-waiver-alw",
+      "name": "California Assisted Living Waiver (ALW)",
+      "legacyId": "california-assisted-living-waiver-alw",
+      "programType": "benefit"
+    },
+    {
+      "state": "CA",
+      "id": "ca-pace-programs",
+      "name": "California PACE Programs",
+      "legacyId": "california-pace-programs",
+      "programType": "benefit"
+    }
+  ]
+}

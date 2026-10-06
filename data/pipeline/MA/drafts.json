@@ -2,8 +2,8 @@
   "state": "MA",
   "stateName": "Massachusetts",
   "draftedAt": "2026-04-13T22:29:50.207Z",
-  "total": 16,
-  "successful": 16,
+  "total": 21,
+  "successful": 21,
   "programs": [
     {
       "id": "masshealth-medicare-savings",
@@ -3110,6 +3110,1051 @@
         }
       ],
       "lastVerifiedDate": null
+    },
+    {
+      "id": "ma-masshealth-standard-aged-blind-disabled",
+      "name": "MassHealth Standard (Aged, Blind, and Disabled Medicaid)",
+      "shortName": "MassHealth Standard",
+      "tagline": "Full Medicaid coverage for Massachusetts seniors and adults with disabilities: doctors, dental, vision, hearing aids, home care, and long-term care, all under one program.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "MassHealth Customer Service Center",
+            "type": "service-area"
+          },
+          {
+            "name": "MassHealth Enrollment Centers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or has a qualifying disability and lives in Massachusetts, MassHealth Standard is the most comprehensive Medicaid coverage available to them. It covers doctor visits, inpatient hospital stays, dental care, vision care, eyeglasses, hearing aids, prescription drugs, lab tests, physical therapy, and medical equipment. It also covers home health services, adult day health programs, mental health and addiction treatment, and, when the time comes, long-term care in a facility. This is not a supplemental plan. For many seniors who do not have Medicare, it is their primary and only coverage.\n\nEligibility depends on three things: category (your parent must qualify as aged 65+, blind, or disabled), countable income (MassHealth looks at income after deductions, not gross pay), and countable assets (the limit is $2,000 for one person and $3,000 for a couple). The income standard varies by category. For 2026, MassHealth publishes a monthly standard of $1,143.74 for blind applicants and $1,108.39 for disabled applicants. Seniors applying under the aged category should confirm the current standard directly with MassHealth, as it follows its own rule set. If your parent is in a long-term care facility, a separate income standard of $72.80 per month applies to what they keep as a personal needs allowance.\n\nThis program is not the same as ConnectorCare or a Medicare plan. If your parent already has Medicare, MassHealth Standard can work as secondary coverage, picking up costs Medicare does not cover. But many seniors qualify for MassHealth Standard regardless of whether they have Medicare. The application process for seniors and people needing long-term care uses a specific form, not the standard under-65 MassHealth application, and the senior/long-term-care route is the correct path for most families in this situation.",
+      "savingsRange": "",
+      "savingsSource": "Free service: MassHealth Standard is a Medicaid program that pays covered medical costs directly to providers. There is no fixed dollar benefit to report. Coverage value depends on the services your parent uses.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or blind or disabled at any age)",
+          "Massachusetts resident",
+          "Countable assets under $2,000 (individual) or $3,000 (couple)",
+          "Income within MassHealth limits after allowable deductions",
+          "Must meet citizenship or qualified immigration-status rules"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Cash on hand",
+            "Second vehicles (in most cases)",
+            "Second real property (in most cases)"
+          ],
+          "exemptAssets": [
+            "Certain assets are excluded under MassHealth rules; applicants should verify exemptions directly with MassHealth before assuming any asset counts or does not count"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Massachusetts resident",
+          "Must qualify under the aged (65+), blind, or disabled category",
+          "Must meet MassHealth citizenship or qualified immigration-status rules",
+          "Disability applicants must have disability verified through MassHealth documentation rules",
+          "Long-term care applicants face separate financial rules from community-based applicants; the personal needs allowance in a facility is $72.80/month (2026)"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through Mass.gov using the senior and long-term care application form, or call MassHealth at (800) 841-2900; online submission is described as faster than mailing a paper form.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Use the right application",
+            "description": "Most seniors and people needing long-term care should use the 'Application for Health Coverage for Seniors and People Needing Long-Term Care Services,' not the general MassHealth application. Using the wrong form can slow processing. Find it at mass.gov or request it by calling (800) 841-2900."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you start",
+            "description": "You will need proof of income, proof of assets, your parent's identification and residency documents, and any disability documentation if applying under the disability category. Submitting everything at once prevents delays. See the document checklist below."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application",
+            "description": "Apply online at mass.gov (described by MassHealth as faster than mail), call (800) 841-2900 to apply by phone or get help, or visit a MassHealth Enrollment Center in person. TTY users can reach MassHealth at 711. An alternate enrollment line is available at (877) 623-6765."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for information",
+            "description": "MassHealth may contact you for missing documents or clarification. Respond promptly; unanswered requests are the most common reason applications stall. Keep copies of everything you submit."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility decision",
+            "description": "MassHealth will send a written notice with the decision. If approved, your parent's coverage may be backdated to the application date. If denied, the notice will explain why and describe your right to appeal."
+          }
+        ],
+        "processingTime": "No exact statewide timeline is published by MassHealth for this application type. Online submission is described as faster than mailing a paper application. Complex cases involving disability determination or long-term care financial review may take longer.",
+        "waitlist": null,
+        "tip": "If your parent is already in a hospital or nursing facility, tell the discharge planner or social worker. They can often help initiate the MassHealth application and may be familiar with documentation requirements for long-term care cases.",
+        "urls": [
+          {
+            "label": "MassHealth coverage types (official overview)",
+            "url": "https://www.mass.gov/info-details/masshealth-coverage-types-for-individuals-and-families-including-people-with-disabilities"
+          },
+          {
+            "label": "Apply for MassHealth online (Mass.gov)",
+            "url": "https://www.mass.gov/how-to/apply-for-masshealth-coverage"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or number for your parent",
+        "Proof of Massachusetts residency (utility bill, lease agreement, or state-issued document in your parent's name)",
+        "Proof of income: Social Security award letter, pension or retirement income statements, or most recent pay stubs if still working",
+        "Government-issued photo ID or proof of age (birth certificate or passport)",
+        "Current balances for any checking or savings accounts (MassHealth will ask for account information as part of the asset review; the period of documentation they require should be confirmed with MassHealth directly at the time of application)",
+        "Documentation of any other assets: certificates of deposit, stocks, bonds, annuities, or investment accounts",
+        "Property documents if your parent owns real estate beyond their primary home (deed or tax statement)",
+        "Life insurance policies, including face values and any cash value",
+        "Vehicle title or registration if your parent owns a vehicle",
+        "Any disability-related documentation if applying under the disability category (MassHealth will specify what is needed based on the claimed condition)",
+        "Immigration or citizenship documents if your parent is not a U.S. citizen",
+        "Legal documents if a representative, power of attorney, or legal guardian is applying on your parent's behalf",
+        "Documentation of health insurance premiums paid, if your parent has Medicare or other coverage"
+      ],
+      "contacts": [
+        {
+          "label": "MassHealth Customer Service Center",
+          "phone": "(800) 841-2900",
+          "description": "Apply by phone, ask eligibility questions, and get help with the senior and long-term care application. This is the main application line.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "MassHealth TTY Line",
+          "phone": "711",
+          "description": "TTY/TTY-TDD access for people who are deaf or hard of hearing.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "MassHealth Alternate Enrollment Line",
+          "phone": "(877) 623-6765",
+          "description": "Alternate enrollment support line; use this if the main line is busy or you need additional help starting an application.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "Seniors and people needing long-term care must use the senior-specific application form, not the general MassHealth under-65 form. Using the wrong form can cause delays or require resubmission.",
+        "If your parent is in a nursing facility or preparing for one, different financial rules apply than for community-based applicants. The personal needs allowance in a facility is $72.80/month (2026). Ask MassHealth explicitly about long-term care financial rules when you call.",
+        "MassHealth counts income after deductions, not gross income. If your parent's Social Security or pension seems too high, do not assume they are ineligible without speaking to MassHealth first. The countable income may be lower than the gross amount.",
+        "Do not assume your parent's house or primary vehicle counts against the asset limit. Some assets are exempt under MassHealth rules. Verify which assets are excluded before concluding your parent is over the limit. Call (800) 841-2900 to ask."
+      ],
+      "relatedPrograms": [
+        "MassHealth CommonHealth (for working adults with disabilities)",
+        "MassHealth CarePlus (for adults 19-64 not eligible for Standard)",
+        "Program of All-Inclusive Care for the Elderly (PACE) in Massachusetts",
+        "Medicare Savings Programs (help paying Medicare premiums for dual-eligible seniors)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What MassHealth Standard actually covers",
+          "body": "Inpatient hospital care. Outpatient care including doctors, clinics, dentists, and vision care. Lab tests, X-rays, and imaging. Physical, occupational, and speech therapy. Prescription drugs. Eyeglasses and hearing aids. Medical equipment and supplies. Adult day health programs. Adult foster care. Mental health and addiction treatment, both inpatient and outpatient. Home health services. Long-term care in a facility. Transportation to medical appointments. Smoking-cessation services. This is not a limited benefit package. It is comprehensive Medicaid coverage."
+        },
+        {
+          "type": "prose",
+          "title": "How income is counted (this matters)",
+          "body": "MassHealth does not look at your parent's gross monthly income and compare it to a limit. It looks at countable income after specific deductions are applied. That means a parent whose Social Security check looks too high on paper may still qualify once MassHealth applies its deductions. The 2026 monthly income standards published by MassHealth are $1,143.74 for blind applicants and $1,108.39 for disabled applicants. The aged category (65+) follows its own standard; confirm the current figure with MassHealth at (800) 841-2900. For a parent in a long-term care facility, the income standard works differently: MassHealth sets what the resident keeps as a personal needs allowance ($72.80/month in 2026) and applies the rest toward the cost of care."
+        },
+        {
+          "type": "prose",
+          "title": "MassHealth Standard is not Medicare",
+          "body": "These are two separate programs. Medicare is federal health insurance your parent earns through work history or disability status. MassHealth Standard is Massachusetts Medicaid, funded jointly by the state and federal government, and based on income and assets rather than work history. If your parent has both Medicare and MassHealth, MassHealth can act as secondary coverage, paying costs Medicare does not cover (such as dental, vision, and hearing aids, which Medicare generally excludes). If your parent has no Medicare, MassHealth Standard can serve as their primary coverage."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if it's worth more than $2,000?",
+          "answer": "The primary home is generally treated as an exempt asset under MassHealth rules, meaning it does not count toward the $2,000 limit while your parent lives there. However, MassHealth has estate recovery rules that may apply after a beneficiary passes away, and separate rules govern home equity in long-term care situations. Do not assume the house disqualifies your parent without speaking to MassHealth directly at (800) 841-2900 or consulting an elder law attorney."
+        },
+        {
+          "question": "My parent's Social Security income seems higher than the income limit. Should I even apply?",
+          "answer": "Yes. MassHealth counts income after deductions, not the gross amount shown on the Social Security award letter. Many applicants whose gross income looks too high are eligible once MassHealth applies its income deductions. Call (800) 841-2900 and describe your parent's income before concluding they do not qualify. The countable income MassHealth uses in its decision may be meaningfully lower than the gross monthly check."
+        },
+        {
+          "question": "Can a family member apply on behalf of an elderly parent who cannot manage the process alone?",
+          "answer": "Yes. A family member, legal guardian, or person holding power of attorney can apply on your parent's behalf. You will need to provide the relevant legal documents (power of attorney, guardianship paperwork) as part of the application. Call (800) 841-2900 or visit a MassHealth Enrollment Center in person if you need guidance on how to submit on someone else's behalf."
+        },
+        {
+          "question": "Can my parent apply for MassHealth Standard and Medicare Savings Programs at the same time?",
+          "answer": "Yes, and it is worth doing both if your parent has Medicare. Medicare Savings Programs are separate programs that help pay Medicare premiums and cost-sharing. MassHealth and Medicare Savings Programs use different eligibility rules, and some people qualify for one but not the other. When you call MassHealth at (800) 841-2900, ask about both programs so you are not leaving any coverage on the table."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent is required to report changes in income, assets, household size, or living situation to MassHealth. MassHealth conducts periodic renewals and may also conduct redeterminations if a change is reported. Failing to report a change can result in a coverage termination or an overpayment determination. Report changes by calling (800) 841-2900 or through Mass.gov. MassHealth will tell you at enrollment what changes must be reported and within what timeframe."
+        },
+        {
+          "question": "Is there a waitlist for MassHealth Standard?",
+          "answer": "No waitlist applies to MassHealth Standard itself. It is an entitlement program, meaning everyone who meets the eligibility rules is enrolled. Some specific long-term care services that MassHealth covers, such as certain home- and community-based waiver slots, may have separate waitlists, but standard Medicaid coverage is not waitlisted."
+        },
+        {
+          "question": "What if my parent is already in a nursing home? Can they still apply?",
+          "answer": "Yes, and they should. MassHealth Standard covers nursing facility care for eligible individuals. The financial rules for long-term care applicants differ from community-based rules, and the personal needs allowance for a resident in a facility is $72.80/month in 2026. If your parent is already in a facility, the facility's social worker or billing staff can often help initiate the MassHealth application. You can also call (800) 841-2900 to start the process directly."
+        },
+        {
+          "question": "Does MassHealth Standard cover dental and vision care for adults?",
+          "answer": "Yes. MassHealth Standard covers outpatient dental care, vision care, and eyeglasses for eligible adults. It also covers hearing aids. This is one of the key advantages of MassHealth Standard over Medicare, which generally does not cover routine dental, vision, or hearing services. Confirm your parent's specific covered services with their MassHealth plan or by calling (800) 841-2900."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 841-2900",
+      "sourceUrl": "https://www.mass.gov/info-details/masshealth-coverage-types-for-individuals-and-families-including-people-with-disabilities",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ma-liheap-home-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "shortName": "Home Energy Assistance",
+      "tagline": "If your parent heats their home on a fixed income, they may qualify for up to $600 toward winter heating bills, plus emergency help if service is at risk of being shut off.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Massachusetts local fuel assistance agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Community Action agencies serving individual cities/towns",
+            "type": "service-area"
+          },
+          {
+            "name": "MASSCAP network agencies",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Massachusetts LIHEAP, also called the Fuel Assistance or HEAP program, helps lower-income households pay heating costs from November through April. If your parent lives alone and earns less than $53,585 per year (roughly $4,465 per month gross), they likely meet the income threshold. The standard heating benefit for FY2026 ranges from $200 to $600, paid directly to the heating provider so your parent never has to manage a reimbursement.\n\nThe program has three separate parts you should know about: regular heating assistance (up to $600), a crisis benefit (up to $600 if heat service is at risk of shutoff or runs out), and weatherization assistance (up to $18,500 for home insulation, sealing, and efficiency upgrades that lower bills long-term). Each component has its own eligibility trigger, so your parent may qualify for more than one at the same time.\n\nApplications go through the fuel assistance agency for your parent's specific city or town, not a single statewide office. That means phone numbers, appointment availability, and wait times vary by location. The heating season application window runs November 1 through April 30. Applying early in November gives the most flexibility if your parent's agency requires an in-person appointment.",
+      "savingsRange": "$200 minimum to $600 maximum for standard heating assistance; up to $600 for crisis heating help; up to $18,500 for weatherization (FY2026 statewide figures)",
+      "savingsSource": "Massachusetts HEAP program benefit levels for FY2026, as reported on the state information page at mass.gov/info-details/home-energy-assistance. These are statewide figures; local agency payments may vary.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Household gross income at or below 60% of Massachusetts State Median Income",
+          "Single person: income limit $53,585/year ($4,465/month gross)",
+          "Two-person household: income limit $70,073/year ($5,839/month gross)",
+          "Must be a Massachusetts resident applying through your city or town's local fuel assistance agency",
+          "Must have heating costs to pay (own account or heat included in rent)"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 4465
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5839
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 7213
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 8587
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 9961
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 11335
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 11593
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 11851
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 12108
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 12366
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must apply through the local fuel assistance agency serving your parent's city or town (not a central state office)",
+          "Heating season program: applications accepted November 1 through April 30",
+          "Income is calculated on gross household income (before taxes), not take-home pay",
+          "All household members' income counts, not just the applicant's",
+          "If your parent rents and heat is included in rent, they can still apply; they will need landlord or utility account information"
+        ],
+        "povertyLevelReference": "60% of Massachusetts State Median Income (2026)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest path is the online pre-application at toapply.org/MassHEAP, which routes your parent to the correct local agency; phone and in-person options are also available, and the Massachusetts Heat Line can answer questions before you start.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the income limit for your parent's household size",
+            "description": "Household size determines the income ceiling. A single person must earn less than $53,585/year gross. For two people living together, the limit is $70,073/year. Count gross income (before taxes) for every person in the home. If your parent is close to the limit, it is worth applying anyway since local agencies make the final determination."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you start",
+            "description": "You will need: a recent heating bill or utility account number, proof of income for everyone in the home (Social Security award letter, pension statement, pay stubs), proof of Massachusetts residence, and a photo ID. Having these ready speeds up the intake appointment or online submission."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: Start at toapply.org/MassHEAP. The portal routes the application to the correct local agency based on your parent's city or town. By phone: Call the Massachusetts Heat Line at 1-800-632-8175 for program questions, or the DTA Assistance Line at (877) 382-2363 to apply by phone. In person: Contact your local Community Action agency directly. Local agencies vary; some require an appointment, some offer walk-in intake."
+          },
+          {
+            "step": 4,
+            "title": "Complete the local agency intake",
+            "description": "After the initial application, your parent's local fuel assistance agency may schedule a phone or in-person appointment to verify documents. Bring everything listed in the document checklist. The local agency handles processing and benefit payments directly to the heating provider."
+          },
+          {
+            "step": 5,
+            "title": "Ask about crisis and weatherization benefits at the same appointment",
+            "description": "If your parent's heat is at risk of shutoff or they have run out of fuel, ask specifically about the crisis benefit (up to $600) during intake. If the home is drafty or heating bills are very high, ask about weatherization (up to $18,500 for insulation, air sealing, and efficiency work). These are separate program components with their own approval processes."
+          }
+        ],
+        "processingTime": "Not published as a fixed statewide number. The heating season runs November 1 through April 30. Processing time varies by local agency. Apply as early in November as possible to allow time for any follow-up document requests.",
+        "waitlist": null,
+        "tip": "Apply in early November. Local agencies book up quickly once cold weather arrives, and getting in early gives you time to gather missing documents without risking a gap in heat coverage.",
+        "urls": [
+          {
+            "label": "MassHEAP Online Application",
+            "url": "https://toapply.org/MassHEAP"
+          },
+          {
+            "label": "Massachusetts Home Energy Assistance Information Page",
+            "url": "https://www.mass.gov/info-details/home-energy-assistance"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent heating bill or utility account statement (showing account number and service address)",
+        "Proof of income for every household member (Social Security award letter, pension or retirement statement, or most recent pay stubs)",
+        "Government-issued photo ID for the applicant (driver's license, state ID, or passport)",
+        "Proof of Massachusetts residence (utility bill, lease agreement, or official mail showing your parent's address)",
+        "Social Security numbers for all household members (or other household identifiers if requested by the local agency)",
+        "If heat is included in rent: landlord contact information or a copy of the lease showing what utilities are included",
+        "Documentation of any other income sources in the household (VA benefits letter, workers' compensation, rental income records)",
+        "If someone other than your parent is applying on their behalf: documentation of that person's authority to act (power of attorney or written authorization)"
+      ],
+      "contacts": [
+        {
+          "label": "Massachusetts Heat Line",
+          "phone": "1-800-632-8175",
+          "description": "Program-specific helpline for HEAP questions. Can answer eligibility questions, help find your parent's local fuel assistance agency, and guide you through the application process.",
+          "hours": "Contact the line for current hours; available during the heating season (November through April)"
+        },
+        {
+          "label": "MassHEAP Online Application Portal",
+          "phone": null,
+          "description": "Start the application online at toapply.org/MassHEAP. The portal routes your parent's application to the correct local agency based on their city or town.",
+          "hours": "Available online; check the portal for submission deadlines"
+        },
+        {
+          "label": "DTA Assistance Line",
+          "phone": "(877) 382-2363",
+          "description": "Department of Transitional Assistance phone line. Can assist with applications and general benefit questions.",
+          "hours": "Mon-Fri 8:30am-4:30pm"
+        },
+        {
+          "label": "Massachusetts 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line. If you cannot reach the Heat Line or DTA, 2-1-1 can connect you to your local Community Action agency. This line transfers you; it does not process HEAP applications itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's heat has been shut off or they have run out of fuel oil or propane, call the Massachusetts Heat Line at 1-800-632-8175 immediately and say there is a heating emergency. The crisis benefit (up to $600) has its own expedited pathway and is handled separately from the regular heating application.",
+        "Income is calculated on gross household income before taxes, not take-home pay. If your parent receives Social Security, use the gross benefit amount shown on their award letter, not the net amount deposited to their bank account.",
+        "Local agency procedures are not identical across Massachusetts. Some agencies process applications entirely online or by phone; others require an in-person appointment. When you call or log in, ask specifically what your parent's local agency requires so there are no surprises.",
+        "Participating in SNAP, SSI, MassHealth, or subsidized housing may simplify intake at some local agencies, but these programs do not automatically qualify your parent for HEAP. The income test still applies. Do not assume your parent is enrolled until the local agency confirms it."
+      ],
+      "relatedPrograms": [
+        "Weatherization Assistance Program (WAP) Massachusetts",
+        "SNAP (Food and Nutrition Assistance) Massachusetts",
+        "MassHealth (Medicaid) Massachusetts",
+        "Discount Electric Rate Program (utility company low-income rates)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Three Program Components: What Each Covers",
+          "description": "LIHEAP in Massachusetts has three distinct parts. Most families think of it as one program, but each component serves a different need and must be requested separately.",
+          "tiers": [
+            {
+              "name": "Regular Heating Assistance",
+              "amount": "$200 minimum to $600 maximum (FY2026)",
+              "trigger": "Standard income-eligible application during the November 1 to April 30 heating season",
+              "notes": "Paid directly to your parent's heating provider. Your parent does not receive a check."
+            },
+            {
+              "name": "Crisis Heating Benefit",
+              "amount": "Up to $600 (FY2026)",
+              "trigger": "Active shutoff notice, heat service already interrupted, or fuel supply (oil, propane) running out",
+              "notes": "Ask for crisis assistance specifically when you call. This is a separate approval from the regular benefit."
+            },
+            {
+              "name": "Weatherization Assistance",
+              "amount": "Up to $18,500",
+              "trigger": "Home has significant heat loss due to insulation gaps, air leaks, or inefficient equipment",
+              "notes": "Covers physical improvements to the home: insulation, air sealing, furnace tune-ups or replacement. Reduces heating bills in future years. Has its own assessment and scheduling process."
+            }
+          ]
+        },
+        {
+          "type": "stat-callout",
+          "stats": [
+            {
+              "label": "Standard heating benefit (FY2026 max)",
+              "value": "$600"
+            },
+            {
+              "label": "Crisis benefit maximum",
+              "value": "$600"
+            },
+            {
+              "label": "Weatherization maximum",
+              "value": "$18,500"
+            },
+            {
+              "label": "Single-person income limit",
+              "value": "$53,585/year"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent rents and heat is included in the rent. Can they still apply?",
+          "answer": "Yes. Renters whose heat is included in rent are eligible. The benefit calculation is different, and your parent will need landlord contact information or a lease showing that heat is included. The local agency handles the specifics; mention the rental situation when you call or apply online."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot manage the process themselves?",
+          "answer": "Yes. A family member or caregiver can apply on behalf of an elderly or disabled household member. You may be asked to show documentation of your authority to act, such as a power of attorney. Mention when you contact the local agency that you are acting on your parent's behalf so they can tell you exactly what is needed."
+        },
+        {
+          "question": "My parent's heat was shut off last week. Is it too late to get emergency help?",
+          "answer": "No. Call the Massachusetts Heat Line at 1-800-632-8175 right away and say there is an active heating emergency. The crisis benefit (up to $600) exists specifically for situations involving shutoff or fuel runout, and local agencies have expedited processes for these cases. Do not wait to gather all documents before calling."
+        },
+        {
+          "question": "My parent is already on SNAP or MassHealth. Does that mean they automatically qualify for HEAP?",
+          "answer": "Not automatically. Receiving SNAP, MassHealth, SSI, or other means-tested benefits may simplify the intake process at some local agencies, but HEAP has its own income test based on 60% of Massachusetts State Median Income. The local agency will still verify your parent's gross household income. Apply through toapply.org/MassHEAP or call 1-800-632-8175 to confirm eligibility."
+        },
+        {
+          "question": "How does the benefit actually get paid? Does my parent receive a check?",
+          "answer": "No. The benefit is paid directly to your parent's heating provider, not to your parent. Your parent's heating account will be credited for the approved amount. This means there is no check to cash and no risk of the funds being spent on something else before the bill is paid."
+        },
+        {
+          "question": "My parent's home is drafty and their heating bills are very high. Is there help beyond the cash benefit?",
+          "answer": "Yes. The Weatherization Assistance component can pay up to $18,500 for physical improvements to the home: insulation, air sealing, furnace tune-ups, and similar upgrades. This is a separate process from the regular heating benefit and requires a home assessment by the local agency. Ask about weatherization specifically when you apply, because it is not automatically added to a heating assistance application."
+        },
+        {
+          "question": "The income limit for a single person is $53,585 per year. Does that include Social Security?",
+          "answer": "Yes. Gross Social Security income counts toward the household income total. Use the gross benefit amount from your parent's Social Security award letter, not the net amount deposited to their account after Medicare premiums are withheld. If your parent's gross income is close to the limit, it is still worth applying; the local agency makes the final determination."
+        },
+        {
+          "question": "Can my parent apply for LIHEAP and also apply for Weatherization Assistance as a separate program?",
+          "answer": "Yes, and the two programs often work together. LIHEAP's weatherization component is one pathway. There is also a separate federal Weatherization Assistance Program (WAP) administered in Massachusetts that serves income-eligible households. Ask your local fuel assistance agency about both options when you apply, since approval for one does not exclude your parent from the other."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-800-632-8175",
+      "sourceUrl": "https://www.mass.gov/info-details/home-energy-assistance",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ma-senior-circuit-breaker-tax-credit",
+      "name": "Clause 41C Senior Circuit Breaker Tax Credit",
+      "shortName": "Senior Circuit Breaker",
+      "tagline": "If your parent is 65 or older and pays property taxes or rent in Massachusetts, they may be owed up to $2,820 back on their state taxes, even if they don't usually file.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "If your parent is 65 or older and owns or rents a home in Massachusetts, they may qualify for a refundable state tax credit worth up to $2,820 for tax year 2025. Refundable means if the credit exceeds what they owe in state taxes, Massachusetts sends them the difference as a check or direct deposit. It is not just a reduction in what they owe; it can put real money back in their pocket.\n\nThis credit is available to homeowners and renters alike. Income limits are generous: up to $75,000 for a single filer, $94,000 for a head of household, and $112,000 for a married couple filing jointly. There is no asset test. The credit is claimed by filing Schedule CB with a Massachusetts income tax return, which your parent may need to file even if they normally skip it because of low income.\n\nThe biggest reason families miss this credit is not knowing it exists, or assuming it only applies to people who already file state taxes. If your parent has not claimed this in recent years, Massachusetts allows amended returns going back three years. A missed credit from 2022, 2023, and 2024 could mean thousands of dollars your family never collected.",
+      "savingsRange": "Up to $2,820 for tax year 2025",
+      "savingsSource": "Massachusetts Department of Revenue, Schedule CB 2025 instructions; the $2,820 figure is the published maximum credit amount for tax year 2025.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older by December 31 of the tax year",
+          "Massachusetts resident who owns or rents their principal home",
+          "Income under $75,000 (single), $94,000 (head of household), or $112,000 (married filing jointly)",
+          "No asset test",
+          "Must file a Massachusetts state income tax return with Schedule CB"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must occupy the property as a principal residence in Massachusetts",
+          "Homeowners: the assessed value of the home cannot exceed the annually set maximum for the tax year (check the current Schedule CB instructions for the exact cap)",
+          "Must file Massachusetts Form 1 or Form 1-NR/PY and include Schedule CB",
+          "For married couples filing jointly, at least one spouse must be 65 or older by December 31 of the tax year"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Claim the credit by filing Schedule CB with your Massachusetts state income tax return online through MassTaxConnect or by mailing Form 1 with Schedule CB; there is no separate application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent meets the age and income requirements",
+            "description": "Your parent must be 65 or older by December 31 of the tax year. Their total income for 2025 must be under $75,000 (single filer), $94,000 (head of household), or $112,000 (married filing jointly). There is no asset test."
+          },
+          {
+            "step": 2,
+            "title": "Gather property tax or rent records",
+            "description": "Homeowners need their property tax bills and the assessed value of their home from the local assessor's office. Renters need their annual rent amount and the address of the rental property. The Schedule CB instructions will tell you exactly which figures to enter."
+          },
+          {
+            "step": 3,
+            "title": "Download Schedule CB for the correct tax year",
+            "description": "Go to mass.gov and search for 'Schedule CB.' Download the version for the tax year you are filing. The credit amount and assessed-value cap change each year, so using the correct year's form matters."
+          },
+          {
+            "step": 4,
+            "title": "Complete Schedule CB and attach it to Massachusetts Form 1",
+            "description": "Fill out Schedule CB to calculate the credit amount. Then attach it to Massachusetts Form 1 (for full-year residents) or Form 1-NR/PY (for part-year or nonresidents). The credit transfers automatically to the main return."
+          },
+          {
+            "step": 5,
+            "title": "File online through MassTaxConnect or mail the return",
+            "description": "File online at MassTaxConnect (mtc.dor.state.ma.us), which is the fastest way to receive a refund. Alternatively, mail the completed Form 1 and Schedule CB to the Massachusetts Department of Revenue at the address printed on the form. Keep a copy of everything."
+          },
+          {
+            "step": 6,
+            "title": "If your parent missed prior years, file amended returns",
+            "description": "Massachusetts allows amended returns for up to three prior tax years. If your parent did not claim this credit in 2022, 2023, or 2024, file an amended Massachusetts return (Form CA-6) for each year and attach the correct year's Schedule CB. Each year is a separate filing."
+          }
+        ],
+        "processingTime": "Processed with the Massachusetts income tax return. No separate approval timeline is published; refund timing follows standard Massachusetts return processing.",
+        "waitlist": null,
+        "tip": "Many libraries, senior centers, and AARP Tax-Aide sites in Massachusetts offer free tax preparation help for seniors and will prepare Schedule CB at no charge. Call 888-227-7669 to find the nearest AARP Tax-Aide site.",
+        "urls": [
+          {
+            "label": "Massachusetts Senior Circuit Breaker Tax Credit (official program page)",
+            "url": "https://www.mass.gov/info-details/senior-circuit-breaker-tax-credit"
+          },
+          {
+            "label": "MassTaxConnect (file your return online)",
+            "url": "https://mtc.dor.state.ma.us"
+          },
+          {
+            "label": "Schedule CB and instructions (Massachusetts DOR forms library)",
+            "url": "https://www.mass.gov/lists/dor-personal-income-tax-forms-and-instructions"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Property tax bills for the tax year (homeowners), showing the total amount paid",
+        "Total annual rent paid for the tax year (renters), which you can calculate from rent receipts, a lease, or bank records",
+        "Assessed value of the home for the tax year, available from the local city or town assessor's office",
+        "Massachusetts income records for the tax year: Social Security benefit statements (SSA-1099), pension or retirement income statements (1099-R), and any other income documents",
+        "Proof of age if needed (birth certificate, passport, or Massachusetts driver's license showing date of birth)",
+        "Schedule CB for the correct tax year, downloaded from mass.gov",
+        "Massachusetts Form 1 (full-year resident) or Form 1-NR/PY (part-year or nonresident)",
+        "Prior-year Massachusetts tax returns if filing amended returns for missed credits (Form CA-6 plus the prior year's Schedule CB)"
+      ],
+      "contacts": [
+        {
+          "label": "Massachusetts Department of Revenue, Personal Income Tax Line",
+          "phone": "(617) 887-6367",
+          "description": "Ask questions about Schedule CB, eligibility rules, or how to file an amended return to claim a missed credit.",
+          "hours": "Mon-Fri 9am-4pm ET"
+        },
+        {
+          "label": "AARP Tax-Aide (free senior tax preparation, including Schedule CB)",
+          "phone": "(888) 227-7669",
+          "description": "Free tax filing help for seniors at sites across Massachusetts. Volunteers are trained to prepare Schedule CB and will handle the filing for your parent at no cost.",
+          "hours": "Hours vary by site; call to find your nearest location and schedule"
+        },
+        {
+          "label": "Massachusetts DOR Toll-Free (outside 617 area code)",
+          "phone": "(800) 392-6089",
+          "description": "Same personal income tax support line, toll-free for callers outside the Boston area.",
+          "hours": "Mon-Fri 9am-4pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent must file a Massachusetts return even if their income is low enough that they would not normally be required to file. Filing is the only way to claim the refund.",
+        "Homeowners face two eligibility gates: the income limit and an assessed-value cap on their home. If the home's assessed value exceeds the cap set for the tax year, the credit is not available regardless of income. Check the current Schedule CB instructions for the exact cap, because it is adjusted annually.",
+        "Renters qualify too. The credit is not limited to homeowners, but the calculation is different. The Schedule CB instructions walk through both calculations.",
+        "Massachusetts allows amended returns for up to three prior tax years. If your parent missed this credit in 2022, 2023, or 2024, file a separate amended return (Form CA-6) for each missed year using that year's Schedule CB. Each year has its own income limit and maximum credit amount."
+      ],
+      "relatedPrograms": [
+        "Massachusetts Elderly Exemption (Clause 41A Property Tax Deferral)",
+        "Massachusetts Property Tax Exemption for Seniors (Clause 41)",
+        "SNAP (Supplemental Nutrition Assistance Program) for Massachusetts seniors",
+        "Low Income Home Energy Assistance Program (LIHEAP) in Massachusetts"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "title": "Up to $2,820 back on your parent's 2025 state taxes",
+          "body": "This is a refundable credit. If your parent owes less than the credit amount in state taxes, Massachusetts pays them the difference. It is not just a deduction."
+        },
+        {
+          "type": "prose",
+          "title": "Income limits for tax year 2025",
+          "body": "Single filer (not head of household): $75,000. Head of household: $94,000. Married filing jointly: $112,000. For joint filers, only one spouse needs to be 65 or older. These limits apply to 'total income' as Massachusetts defines it for this credit; check the Schedule CB instructions for exactly which income types count."
+        },
+        {
+          "type": "prose",
+          "title": "What the assessed-value cap means for homeowners",
+          "body": "If your parent owns their home, Massachusetts also limits the credit based on how much the home is worth according to the local assessor. If the assessed value is above the cap set for the tax year, your parent does not qualify as a homeowner. The cap is adjusted annually and is printed in the Schedule CB instructions for each year. Renters are not subject to this cap."
+        },
+        {
+          "type": "prose",
+          "title": "Missed years: you may be able to go back",
+          "body": "Massachusetts allows amended returns for up to three prior tax years. That means if your parent did not claim this credit for 2022, 2023, or 2024, they may still be able to collect. Each year requires a separate amended return using that year's Schedule CB. File Form CA-6 (Massachusetts Amended Return) and attach the prior-year Schedule CB. Credits from multiple years can add up quickly."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent doesn't usually file a Massachusetts tax return because their income is so low. Do they still need to file to get this credit?",
+          "answer": "Yes. There is no way to claim the credit without filing a Massachusetts state income tax return. The good news is that if the credit exceeds any taxes your parent owes, Massachusetts will refund the difference directly. Free tax preparation help is available through AARP Tax-Aide at (888) 227-7669, with sites across Massachusetts that can handle the filing at no cost."
+        },
+        {
+          "question": "My parent rents an apartment. Can they still qualify, or is this only for homeowners?",
+          "answer": "Renters can qualify. The credit uses a different calculation than the homeowner version, but it is available to renters who meet the age and income requirements. The assessed-value cap that applies to homeowners does not apply to renters. Your parent will need to know the total rent they paid for the tax year; rent receipts, a lease, or bank records can document this."
+        },
+        {
+          "question": "My parent's home is worth a lot. Does that disqualify them?",
+          "answer": "It might, if they are a homeowner. Massachusetts limits the credit for homeowners based on the assessed value of the home (the value set by the local city or town assessor, not the market price). If the assessed value exceeds the cap for the tax year, the homeowner version of the credit is not available. The exact cap changes each year and is published in the Schedule CB instructions. Renters are not subject to this cap."
+        },
+        {
+          "question": "My parent missed this credit for the last few years. Can we go back and claim it?",
+          "answer": "Yes, for up to three prior tax years. File a separate amended Massachusetts return (Form CA-6) for each year your parent missed, and attach that year's Schedule CB with the correct income limits and credit maximum for that year. The Massachusetts DOR personal income tax line at (617) 887-6367 can answer questions about amended filings."
+        },
+        {
+          "question": "Can I file the return on behalf of my parent, or do they have to do it themselves?",
+          "answer": "You can prepare and file the return on your parent's behalf. If your parent is unable to sign, a legal guardian or someone with power of attorney can sign. AARP Tax-Aide volunteers can also prepare the return for your parent at no cost, including completing Schedule CB, and can walk through the process with you present."
+        },
+        {
+          "question": "My parents are married and only one of them is 65. Do both spouses need to meet the age requirement?",
+          "answer": "No. For a married couple filing jointly, only one spouse needs to be 65 or older by December 31 of the tax year. The combined income of both spouses must still fall under the $112,000 limit for joint filers."
+        },
+        {
+          "question": "Is there an asset limit, like a rule about how much money my parent can have in savings?",
+          "answer": "No. The Massachusetts Senior Circuit Breaker Tax Credit has no asset test. The only financial thresholds are the income limits and, for homeowners, the home assessed-value cap. Savings accounts, investments, and other assets do not affect eligibility."
+        },
+        {
+          "question": "My parent already files their Massachusetts taxes every year. What do they need to do differently to claim this?",
+          "answer": "They need to add Schedule CB to their existing return. If they file through tax software, the software should prompt them to complete Schedule CB once they enter their age. If they file by mail, they download Schedule CB from mass.gov, fill it out, and attach it to Form 1. If they have filed in prior years without Schedule CB, they can file amended returns going back three years to collect what they missed."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(617) 887-6367",
+      "sourceUrl": "https://www.mass.gov/info-details/senior-circuit-breaker-tax-credit",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ma-state-supplement-ssi",
+      "name": "State Supplement to SSI",
+      "shortName": "MA SSP Cash Supplement",
+      "tagline": "If your parent receives SSI in Massachusetts, the state adds a monthly cash payment on top of the federal benefit automatically.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Massachusetts State Supplement Program (state admin contact through Mass.gov)",
+            "type": "service-area"
+          },
+          {
+            "name": "Social Security Administration offices and phone system for SSI filing",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older (or disabled or blind) and living in Massachusetts on a limited income, they may qualify for a monthly state cash payment added on top of their federal Supplemental Security Income (SSI) benefit. This program is called the Massachusetts State Supplement Program (SSP). The state payment arrives alongside the federal SSI check and requires no separate application.\n\nThe exact monthly amount depends on three things: whether your parent is aged, disabled, or blind; how they live (alone, with a spouse, sharing expenses with others, or in someone else's household); and how much countable income they already receive. Massachusetts publishes payment levels for each combination of these factors, and the state payment is reduced dollar-for-dollar by countable income above what the federal SSI portion already accounts for.\n\nOne important nuance: some people who are turned down for federal SSI purely because their income is slightly too high may still qualify for the Massachusetts supplement, if their countable income falls below the combined federal plus state payment level. If SSA denies your parent for SSI based on income alone, it is worth contacting the state SSP line to confirm whether any state-only benefit remains available.",
+      "savingsRange": "",
+      "savingsSource": "Massachusetts publishes payment levels by eligibility category and living arrangement at mass.gov/massachusetts-state-supplement-program-ssp, but specific dollar amounts by category were not confirmed in the research data used to draft this page. Verify current figures directly with the program.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR disabled, OR blind",
+          "Massachusetts resident",
+          "Must apply for SSI through Social Security first",
+          "Income and assets reviewed under federal SSI rules",
+          "Payment amount varies by living arrangement and category"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Cash and bank account balances",
+            "Stocks, bonds, and investment accounts",
+            "Real property other than the primary home",
+            "Additional vehicles beyond one household vehicle"
+          ],
+          "exemptAssets": [
+            "Primary home (if the applicant or their spouse lives there)",
+            "One vehicle used for transportation",
+            "Household goods and personal effects",
+            "Burial funds and irrevocable burial trusts up to SSI limits"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Massachusetts resident at the time of application",
+          "Must apply for federal SSI through the Social Security Administration; that SSI application also serves as the SSP application",
+          "SSP eligibility is determined after SSA issues its SSI decision; no separate state form exists",
+          "People living in certain private medical facilities may qualify under older federal and state supplement categories"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Apply by calling Social Security at (800) 772-1213; the SSI application automatically triggers the Massachusetts SSP review with no separate state form required.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call Social Security to start the SSI application",
+            "description": "Call the Social Security Administration at (800) 772-1213, Monday through Friday 8am to 7pm. Tell them your parent wants to apply for Supplemental Security Income (SSI). This single application also serves as the Massachusetts SSP application. You can also start the SSI application online at ssa.gov/ssi/apply."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before the interview",
+            "description": "SSA will schedule a phone or in-person interview. Before that call, collect your parent's Social Security card, proof of Massachusetts residency, proof of age (birth certificate or passport), income documents (award letters, pension statements), and information about any assets. Living arrangement details, such as whether your parent pays rent, shares a home, or lives with family, will affect the payment amount."
+          },
+          {
+            "step": 3,
+            "title": "SSA makes the SSI decision",
+            "description": "Social Security reviews the application and issues a decision. This step controls timing; Massachusetts does not process SSP independently. If SSA approves SSI, Massachusetts adds the state supplement automatically. If SSA denies SSI based on income only, call the Massachusetts SSP line at (877) 863-1128 to ask whether your parent still qualifies for any state-only payment."
+          },
+          {
+            "step": 4,
+            "title": "Confirm the SSP payment with Massachusetts if needed",
+            "description": "Once SSA issues its decision, Massachusetts calculates the state supplement based on your parent's category (aged, disabled, or blind) and living arrangement. If the combined payment does not appear or seems incorrect, contact the Massachusetts SSP Assistance Line at (877) 863-1128. The official program page is mass.gov/massachusetts-state-supplement-program-ssp."
+          }
+        ],
+        "processingTime": "No separate Massachusetts processing timeline applies. Timing follows the SSA SSI determination, which varies by case complexity. SSA does not publish a single universal timeline.",
+        "waitlist": null,
+        "tip": "If your parent has been denied SSI in the past, the denial reason matters. A denial based solely on income is different from a denial based on assets or residency. Only income-based denials may still leave open a path to the Massachusetts state supplement.",
+        "urls": [
+          {
+            "label": "Massachusetts SSP Program Page",
+            "url": "https://www.mass.gov/massachusetts-state-supplement-program-ssp"
+          },
+          {
+            "label": "Apply for SSI Online (SSA)",
+            "url": "https://www.ssa.gov/ssi/apply"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card (for your parent and any co-applicant spouse)",
+        "Proof of Massachusetts residency (utility bill, lease agreement, or state-issued document showing current address)",
+        "Proof of age (birth certificate or U.S. passport)",
+        "Social Security award letter or most recent SSA benefit statement showing current monthly amount",
+        "Proof of any other income: pension or retirement statements, VA benefit letters, or employment pay stubs",
+        "Living arrangement details: lease or rent receipts, or a written statement about shared housing costs if your parent lives with others",
+        "Current balances for any checking or savings accounts (SSA will ask your parent to report these; no specific statement period is published by the program)",
+        "Information about any real property other than the primary home (deed or tax statement)",
+        "Life insurance policy documents, if applicable, showing face value and cash surrender value",
+        "Vehicle title if your parent owns more than one vehicle",
+        "Marriage certificate or divorce decree if applying as a couple or if marital status is relevant",
+        "Immigration or citizenship documents if your parent was not born in the United States",
+        "Documentation of any burial funds or irrevocable burial trusts"
+      ],
+      "contacts": [
+        {
+          "label": "Social Security Administration (SSI Applications)",
+          "phone": "(800) 772-1213",
+          "description": "Call here to start the SSI application, which also serves as the Massachusetts SSP application. This is the primary door for new applicants.",
+          "hours": "Mon-Fri 8am-7pm"
+        },
+        {
+          "label": "Massachusetts SSP Assistance Line",
+          "phone": "(877) 863-1128",
+          "description": "Call here after SSA has issued its SSI decision, if you have questions about the Massachusetts state supplement specifically, or if your parent was denied SSI on income grounds and you want to know whether any state-only payment is available.",
+          "hours": "Contact mass.gov for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "There is no separate Massachusetts SSP application. Filing the SSI application with Social Security is the only action your parent needs to take. The state reviews eligibility automatically after SSA issues its decision.",
+        "If SSA denies SSI because your parent's income is above the federal SSI limit, do not stop there. Massachusetts can still pay a state supplement if countable income falls below the combined federal plus state payment level. Call (877) 863-1128 to confirm.",
+        "The monthly payment is not a flat amount. It depends on whether your parent is categorized as aged, disabled, or blind, and on their specific living arrangement. Two people with the same income can receive different SSP amounts if one lives alone and the other lives in someone else's household.",
+        "SSA, not Massachusetts, makes the underlying eligibility decision. If there is a dispute about the SSI denial, the appeal goes through SSA's process, not through the state SSP office."
+      ],
+      "relatedPrograms": [
+        "Supplemental Security Income (SSI, federal)",
+        "MassHealth (Massachusetts Medicaid)",
+        "Extra Help / Low Income Subsidy for Medicare Part D",
+        "Massachusetts Fuel Assistance Program (LIHEAP)"
+      ],
+      "contentSections": [
+        {
+          "type": "prose",
+          "title": "How the state payment relates to federal SSI",
+          "body": "Federal SSI sets a base monthly payment for people who are aged, blind, or disabled and have limited income and resources. Massachusetts adds a state supplement on top of that base. The two payments are coordinated: the state calculates how much countable income your parent has, applies federal SSI rules, and then determines what the state can add.\n\nBecause SSA administers both programs together, your parent receives one combined deposit. The SSP portion is not separately itemized on most benefit letters, but the Massachusetts SSP line at (877) 863-1128 can confirm the breakdown.\n\nThis program pays cash only. It does not provide home care, nursing services, or any kind of service delivery. If your parent needs help with daily tasks at home, MassHealth-funded home care programs are a separate path."
+        },
+        {
+          "type": "prose",
+          "title": "How living arrangement affects the payment",
+          "body": "Massachusetts calculates different SSP payment levels depending on how your parent lives. The main categories are: living independently and paying your own rent or mortgage; sharing living expenses with others in a household; or living in the home of another person where someone else covers the costs.\n\nIf your parent moves in with you and you pay most of the household expenses, that living arrangement is counted differently than if your parent pays their own share. This can reduce the monthly payment compared to what they would receive living independently. If your parent's living situation changes after they are enrolled, report it to SSA at (800) 772-1213, because it will affect the payment amount going forward."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent was already denied for SSI. Can they still get the Massachusetts state supplement?",
+          "answer": "Possibly, if the denial was based on income alone. Massachusetts can pay a state supplement to people who do not qualify for federal SSI solely because their income is above the SSI limit, as long as their countable income still falls below the combined federal plus state payment level. Call the Massachusetts SSP Assistance Line at (877) 863-1128 and explain that SSA denied SSI based on income. A denial for other reasons, such as assets or residency, does not open this path."
+        },
+        {
+          "question": "Does my parent need to file a separate Massachusetts application for SSP?",
+          "answer": "No. Filing the SSI application with Social Security at (800) 772-1213 or at ssa.gov/ssi/apply is the only application required. Massachusetts reviews SSP eligibility automatically after SSA issues its SSI decision. There is no separate state form."
+        },
+        {
+          "question": "My parent lives with me and I pay all the household bills. How does that affect their payment?",
+          "answer": "Living in another person's household where someone else covers expenses is a distinct category under SSI rules, and Massachusetts applies those same rules to SSP. The monthly payment in that situation is typically lower than what your parent would receive living independently. If you want to protect the higher payment level, your parent may need to contribute a defined share of household costs. Ask SSA at (800) 772-1213 to explain the 'value of one-third reduction' rule and how it applies to your parent's specific situation."
+        },
+        {
+          "question": "How much does my parent actually receive each month from SSP?",
+          "answer": "The amount is not public in a simple table here because it varies by eligibility category (aged, disabled, or blind), living arrangement, and your parent's countable income. Massachusetts publishes current payment levels at mass.gov/massachusetts-state-supplement-program-ssp. You can also call the SSP Assistance Line at (877) 863-1128 to get the figure that applies to your parent's specific situation."
+        },
+        {
+          "question": "Can my parent get SSP and still keep their home?",
+          "answer": "Yes. The primary home is exempt under SSI resource rules, and Massachusetts SSP follows those same rules. Owning a home does not count against the asset limit as long as your parent or their spouse lives there. The home's value does not affect eligibility."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they start receiving SSP?",
+          "answer": "Any change in income, living arrangement, or household composition must be reported to SSA at (800) 772-1213, because those changes affect the monthly payment amount. SSA recalculates SSI, and Massachusetts adjusts the SSP accordingly. Failing to report changes can result in an overpayment that SSA will seek to recover later."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the process themselves?",
+          "answer": "Yes. SSA allows an authorized representative or a Representative Payee to act on your parent's behalf. You can be present on the application call and speak for your parent. If your parent already has a designated Representative Payee for their Social Security benefits, that same person typically manages SSI and SSP as well. Call SSA at (800) 772-1213 to ask about Representative Payee designation if one is not already in place."
+        },
+        {
+          "question": "Does SSP also cover my parent's spouse if they live together?",
+          "answer": "SSP has different payment levels for individuals and couples. If both spouses qualify for SSI, both can receive SSP, but the combined couple payment is calculated differently than two individual payments. The exact couple payment level is published by Massachusetts at mass.gov/massachusetts-state-supplement-program-ssp. Both spouses apply through the same SSI application process at SSA."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(877) 863-1128",
+      "sourceUrl": "https://www.mass.gov/massachusetts-state-supplement-program-ssp",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ma-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are an unpaid family caregiver in Massachusetts, this free program connects you with a specialist who builds a personalized care plan and links you to training, support groups, and local resources.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "MassOptions at (800) 243-4636",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Aging Services Access Points (ASAPs)",
+            "type": "service-area"
+          },
+          {
+            "name": "Regional caregiver support providers in the Massachusetts aging services network",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Caring for an aging parent or a family member with dementia is a full-time role most people take on without any training or backup. Massachusetts's Family Caregiver Support Program exists specifically for you: the unpaid adult who is doing the caregiving. It is free, there is no income test, and getting started requires only a phone call.\n\nOnce you connect, a Caregiver Specialist works with you directly to assess what you need and builds a care plan around your situation. That support can include one-on-one coaching, tips and education on how to handle specific caregiving challenges, access to caregiver training, and connection to local support groups. Because the program routes you to the specialist serving your area, everything is localized to your community rather than a generic statewide resource list.\n\nThe program is available to unpaid caregivers across Massachusetts who are helping someone age 60 or older, or a person of any age with Alzheimer's disease or a related dementia. Grandparents and relatives (age 55 or older) caring for a child under 18 or for an adult with a disability also qualify. Services are delivered through regional Aging Services Access Points, so what is available to you may differ slightly by area. MassOptions at (800) 243-4636 is the single statewide starting point and will route you to the right local provider.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "You must be an unpaid caregiver",
+          "Age 18+ if caring for someone 60+ or with dementia",
+          "Age 55+ if a grandparent or relative caring for a child under 18 or an adult with a disability",
+          "No income or asset test",
+          "Available statewide in Massachusetts"
+        ],
+        "ageRequirement": "18+ (or 55+ for grandparent/relative categories)",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "You must be an unpaid caregiver. Paid caregiving arrangements do not qualify.",
+          "If you are age 18 or older: you may qualify if the person you care for is age 60 or older, or has Alzheimer's disease or a related dementia at any age.",
+          "If you are age 55 or older: you may qualify as a grandparent or other relative (not a parent) caring for a child under 18.",
+          "If you are age 55 or older: you may qualify as a grandparent or other relative (including parents) caring for an adult age 18 through 59 with a disability.",
+          "The care recipient must be: age 60 or older; or any age with Alzheimer's disease or a related dementia; or a child under 18; or an adult age 18 through 59 with a disability."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call MassOptions at (800) 243-4636 and they will connect you with a Caregiver Specialist in your area at no cost.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call MassOptions",
+            "description": "Call (800) 243-4636. Tell them you are an unpaid caregiver and want to reach the Family Caregiver Support Program. MassOptions will identify the Aging Services Access Point (ASAP) or regional caregiver provider serving your area and either transfer you or give you the direct contact."
+          },
+          {
+            "step": 2,
+            "title": "Speak with a Caregiver Specialist",
+            "description": "A Caregiver Specialist will speak with you about your situation: who you are caring for, their age, whether they have dementia or a disability, and what caregiving help you are looking for. There is no formal application form. Be ready to describe the caregiving relationship and what kind of support would help most."
+          },
+          {
+            "step": 3,
+            "title": "Build your care plan",
+            "description": "Your Caregiver Specialist will work with you to create a personalized care plan. This can include one-on-one coaching, caregiver education and training, referrals to local support groups, and connections to other community resources. Services vary by region depending on your local ASAP provider."
+          }
+        ],
+        "processingTime": "No statewide processing timeline is published. Enrollment is handled through a Caregiver Specialist after your initial call; timing depends on your local ASAP's capacity.",
+        "waitlist": "No statewide waitlist is described in official program materials. Availability can vary by region depending on local ASAP staffing and capacity.",
+        "tip": "You do not need to find your local ASAP on your own. Call MassOptions at (800) 243-4636 and they will route you directly. Starting there saves time.",
+        "urls": [
+          {
+            "label": "Massachusetts Family Caregiver Support Program (Mass.gov)",
+            "url": "https://www.mass.gov/info-details/family-caregiver-support-program"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your name, address, and phone number so the Caregiver Specialist can reach you and route you to your local provider",
+        "The age of the person you are caring for (or confirmation that they have Alzheimer's disease, a related dementia, or a disability if they are under 60)",
+        "A brief description of the caregiving relationship (for example: adult child caring for a parent, grandparent caring for a grandchild) and whether your role is unpaid",
+        "A description of what caregiving tasks you are currently handling and what kind of support you are looking for"
+      ],
+      "contacts": [
+        {
+          "label": "MassOptions",
+          "phone": "(800) 243-4636",
+          "description": "The statewide starting point for the Family Caregiver Support Program. Call here first. They will connect you with the Caregiver Specialist or Aging Services Access Point serving your area.",
+          "hours": "Contact Mass.gov or call to confirm current hours"
+        }
+      ],
+      "applicationNotes": [
+        "Because services are delivered through regional Aging Services Access Points, what is available to you (support group schedules, local training options, specialist availability) can differ depending on where you live in Massachusetts. Ask your Caregiver Specialist what is offered in your area.",
+        "There is no income test and no asset test for this program. Do not assume you need to prove financial need. Eligibility is based entirely on the caregiving relationship and the ages or diagnoses involved."
+      ],
+      "relatedPrograms": [
+        "PACE (Program of All-inclusive Care for the Elderly)",
+        "MassHealth Home and Community-Based Services Waivers",
+        "Executive Office of Elder Affairs Respite Care Programs",
+        "SHINE (Serving the Health Insurance Needs of Everyone) free Medicare counseling"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No application form. One phone call.",
+          "body": "This program has no income limit and no asset limit. Eligibility is based on who you are caring for and your relationship to them. Getting started requires only a call to MassOptions at (800) 243-4636."
+        },
+        {
+          "type": "prose",
+          "title": "What 'caregiver support' actually means day to day",
+          "body": "The program does not pay you a wage or provide a cash benefit. What it does provide is a Caregiver Specialist who is assigned to work with you, learns your specific situation, and helps you figure out next steps. That might mean learning how to manage a parent's medication routine, finding a local dementia caregiver support group, getting training on how to prevent caregiver burnout, or being connected to other services in your community. The value is practical guidance from someone whose job is to know what is available in your area and how to access it."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "I am already overwhelmed. Is this program going to add paperwork to my plate?",
+          "answer": "No. There is no application form for this program. You call MassOptions at (800) 243-4636, describe your situation to a Caregiver Specialist, and they begin working with you from there. The program is designed specifically for caregivers who are stretched thin, so the intake process is meant to be straightforward."
+        },
+        {
+          "question": "My parent is only 58 and was just diagnosed with Alzheimer's. Do they have to be 60 to qualify?",
+          "answer": "No. The age-60 rule applies to older adults in general, but the program explicitly covers people of any age with Alzheimer's disease or a related dementia. If your parent has a confirmed dementia diagnosis, the program is available to you regardless of their age. Be ready to mention the diagnosis when you call MassOptions at (800) 243-4636."
+        },
+        {
+          "question": "I hired a part-time home health aide to help me. Does that disqualify me from the program?",
+          "answer": "The eligibility language requires that you, the caregiver applying, are unpaid. If you personally are providing unpaid care to your family member, you likely still qualify even if a paid aide also helps. The program is for you as the unpaid caregiver, not a restriction on whether any paid help exists in the home. Ask the Caregiver Specialist to confirm your specific situation when you call."
+        },
+        {
+          "question": "Will I get the same services as someone in Boston if I live in western Massachusetts?",
+          "answer": "Not necessarily. Services are delivered through regional Aging Services Access Points, and what is available (support groups, training schedules, specialist capacity) can vary by area. The program is statewide, but local availability differs. MassOptions at (800) 243-4636 will connect you with your specific regional provider, and you can ask directly what services are currently available in your area."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": false,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "(800) 243-4636",
+      "sourceUrl": "https://www.mass.gov/info-details/family-caregiver-support-program",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

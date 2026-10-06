@@ -1,0 +1,606 @@
+{
+  "state": "ME",
+  "addedAt": "2026-10-06T05:50:05.921Z",
+  "dive": {
+    "state": "ME",
+    "stateName": "Maine",
+    "diveAt": "2026-10-06T05:44:07.153Z",
+    "total": 5,
+    "parsed": 5,
+    "programs": [
+      {
+        "name": "MaineCare Aged, Blind, and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "basis": "Household income up to 100% of the Federal Poverty Level (FPL) for full MaineCare benefit.",
+            "table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": 1330
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": 1804
+              }
+            ],
+            "notes": "The official Maine eligibility guidance identifies Aged, Blind, Disabled coverage as 100% FPL. Maine’s 2026 materials and secondary Medicaid guidance show the current monthly figures above for the core ABD category. If the person is married, financial treatment may depend on whether both spouses are applying and on spousal rules."
+          },
+          "asset_limits": {
+            "individual": 2000,
+            "couple": 3000,
+            "what_counts": [
+              "cash",
+              "checking and savings accounts",
+              "stocks and bonds",
+              "other countable resources typically treated as available assets"
+            ],
+            "what_is_exempt": [
+              "primary home, if protected under Medicaid home-equity rules",
+              "one vehicle",
+              "personal belongings",
+              "household goods",
+              "certain burial arrangements and limited life-insurance rules may also be exempt"
+            ],
+            "notes": "Maine’s published eligibility guideline for Aged, Blind, Disabled shows a $2,000 asset limit for one person and $3,000 for a couple."
+          },
+          "other_requirements": [
+            "Must be a Maine resident",
+            "Must be age 65 or older, blind, or disabled under Social Security Administration standards",
+            "Must meet medical/functional level-of-care rules for long-term care or certain services when applying for those benefits",
+            "If the applicant does not already receive SSI or Social Security disability benefits, MaineCare may require a disability determination"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Full MaineCare coverage for medically necessary covered services. For the ABD category, this generally includes doctor visits, hospital care, outpatient care, prescription drugs, lab and imaging services, preventive care, and other Medicaid-covered services. For people qualifying for long-term care-related MaineCare, the program can also cover nursing facility care, some home and community-based services, and assessed in-home services; there is no single universal weekly hour amount because services are based on assessment and program category.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.mymaineconnection.gov",
+            "Mail: Office for Family Independence, 114 Corn Shop Lane, Farmington, ME 04938",
+            "Email: Farmington.DHHS@Maine.gov",
+            "Fax: (207) 778-8429",
+            "Phone: 1-855-797-4357",
+            "In person: local DHHS Office for Family Independence district office"
+          ],
+          "processing_time": "No single official processing time is stated in the sources reviewed; applicants should expect review by the Office for Family Independence and possible requests for additional verification or disability determination.",
+          "waitlist": "No waitlist for the core ABD MaineCare benefit. Long-term care or home- and community-based service approvals can involve assessment and, depending on the service category, possible functional/financial screening rather than a simple first-come waitlist.",
+          "forms": [
+            "MaineCare Application",
+            "MaineCare Disability Determination form (used when a disability determination is needed)",
+            "Long-Term Care application when applying for services tied to functional eligibility"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Maine residency",
+            "Proof of age or disability",
+            "Social Security number",
+            "Proof of income such as Social Security award letter, pension, retirement income, wages, or bank deposits",
+            "Proof of assets such as bank statements, retirement accounts, and vehicle information",
+            "Health insurance information, including Medicare cards if applicable",
+            "Medical records or provider information if a disability determination is needed",
+            "Spouse information if married"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide program; no county restriction for the core MaineCare ABD category.",
+          "regional_variations": "The benefit rules are statewide, but applicants may use different DHHS district offices, and local office access, document handling, and service coordination can vary by region. Home care and other in-home services may also vary based on local assessment resources and provider availability.",
+          "offices_or_providers": [
+            "Office for Family Independence (state processing unit)",
+            "Local DHHS district offices",
+            "Local Aging and Disability Resource Centers for application help"
+          ]
+        },
+        "official_source": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+        "gotchas": [
+          "The program is not just for seniors; blind and disabled adults can qualify too.",
+          "Income is not the only test; assets matter and can disqualify people who have too much countable property.",
+          "Some applicants who are not already on SSI or Social Security disability may need a separate disability determination.",
+          "For home care or other long-term services, medical/functional eligibility can matter in addition to financial eligibility.",
+          "People often confuse full MaineCare coverage with Medicare Savings Programs; they are different programs with different rules.",
+          "The mailing address for paper applications is centralized in Farmington, not a local town office.",
+          "Coverage itself has no regional limit, but service access can vary by provider supply in different parts of Maine."
+        ],
+        "data_shape_notes": "This program has a fairly simple statewide eligibility structure for core coverage: age 65+, or blind, or disabled; income at 100% FPL; and a low asset test. The main complexity is that long-term-care-related services add functional/medical assessment layers and some applicants need a disability determination.",
+        "_raw": "{\n  \"name\": \"MaineCare Aged, Blind, and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"basis\": \"Household income up to 100% of the Federal Poverty Level (FPL) for full MaineCare benefit.\",\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": 1330\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": 1804\n        }\n      ],\n      \"notes\": \"The official Maine eligibility guidance identifies Aged, Blind, Disabled coverage as 100% FPL. Maine’s 2026 materials and secondary Medicaid guidance show the current monthly figures above for the core ABD category. If the person is married, financial treatment may depend on whether both spouses are applying and on spousal rules.\"\n    },\n    \"asset_limits\": {\n      \"individual\": 2000,\n      \"couple\": 3000,\n      \"what_counts\": [\n        \"cash\",\n        \"checking and savings accounts\",\n        \"stocks and bonds\",\n        \"other countable resources typically treated as available assets\"\n      ],\n      \"what_is_exempt\": [\n        \"primary home, if protected under Medicaid home-equity rules\",\n        \"one vehicle\",\n        \"personal belongings\",\n        \"household goods\",\n        \"certain burial arrangements and limited life-insurance rules may also be exempt\"\n      ],\n      \"notes\": \"Maine’s published eligibility guideline for Aged, Blind, Disabled shows a $2,000 asset limit for one person and $3,000 for a couple.\"\n    },\n    \"other_requirements\": [\n      \"Must be a Maine resident\",\n      \"Must be age 65 or older, blind, or disabled under Social Security Administration standards\",\n      \"Must meet medical/functional level-of-care rules for long-term care or certain services when applying for those benefits\",\n      \"If the applicant does not already receive SSI or Social Security disability benefits, MaineCare may require a disability determination\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Full MaineCare coverage for medically necessary covered services. For the ABD category, this generally includes doctor visits, hospital care, outpatient care, prescription drugs, lab and imaging services, preventive care, and other Medicaid-covered services. For people qualifying for long-term care-related MaineCare, the program can also cover nursing facility care, some home and community-based services, and assessed in-home services; there is no single universal weekly hour amount because services are based on assessment and program category.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.mymaineconnection.gov\",\n      \"Mail: Office for Family Independence, 114 Corn Shop Lane, Farmington, ME 04938\",\n      \"Email: Farmington.DHHS@Maine.gov\",\n      \"Fax: (207) 778-8429\",\n      \"Phone: 1-855-797-4357\",\n      \"In person: local DHHS Office for Family Independence district office\"\n    ],\n    \"processing_time\": \"No single official processing time is stated in the sources reviewed; applicants should expect review by the Office for Family Independence and possible requests for additional verification or disability determination.\",\n    \"waitlist\": \"No waitlist for the core ABD MaineCare benefit. Long-term care or home- and community-based service approvals can involve assessment and, depending on the service category, possible functional/financial screening rather than a simple first-come waitlist.\",\n    \"forms\": [\n      \"MaineCare Application\",\n      \"MaineCare Disability Determination form (used when a disability determination is needed)\",\n      \"Long-Term Care application when applying for services tied to functional eligibility\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Maine residency\",\n      \"Proof of age or disability\",\n      \"Social Security number\",\n      \"Proof of income such as Social Security award letter, pension, retirement income, wages, or bank deposits\",\n      \"Proof of assets such as bank statements, retirement accounts, and vehicle information\",\n      \"Health insurance information, including Medicare cards if applicable\",\n      \"Medical records or provider information if a disability determination is needed\",\n      \"Spouse information if married\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide program; no county restriction for the core MaineCare ABD category.\",\n    \"regional_variations\": \"The benefit rules are statewide, but applicants may use different DHHS district offices, and local office access, document handling, and service coordination can vary by region. Home care and other in-home services may also vary based on local assessment resources and provider availability.\",\n    \"offices_or_providers\": [\n      \"Office for Family Independence (state processing unit)\",\n      \"Local DHHS district offices\",\n      \"Local Aging and Disability Resource Centers for application help\"\n    ]\n  },\n  \"official_source\": \"https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities\",\n  \"gotchas\": [\n    \"The program is not just for seniors; blind and disabled adults can qualify too.\",\n    \"Income is not the only test; assets matter and can disqualify people who have too much countable property.\",\n    \"Some applicants who are not already on SSI or Social Security disability may need a separate disability determination.\",\n    \"For home care or other long-term services, medical/functional eligibility can matter in addition to financial eligibility.\",\n    \"People often confuse full MaineCare coverage with Medicare Savings Programs; they are different programs with different rules.\",\n    \"The mailing address for paper applications is centralized in Farmington, not a local town office.\",\n    \"Coverage itself has no regional limit, but service access can vary by provider supply in different parts of Maine.\"\n  ],\n  \"data_shape_notes\": \"This program has a fairly simple statewide eligibility structure for core coverage: age 65+, or blind, or disabled; income at 100% FPL; and a low asset test. The main complexity is that long-term-care-related services add functional/medical assessment layers and some applicants need a disability determination.\"\n}"
+      },
+      {
+        "name": "MaineCare Elderly and Adults with Disabilities Waiver",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "This waiver is for Maine residents who are age 65+ or age 18+ with a physical disability, and who also meet MaineCare financial rules for older adults/adults with disabilities.[2][6][15] The published 2026 income limit is 300% of the Supplemental Security Income (SSI) federal benefit rate, which is $2,982/month for a single applicant in 2026.[6] If both spouses are applicants, each spouse is considered separately and each may have up to $2,982/month in income.[6] For comparison, Maine’s aged/blind/disabled full-benefit category uses a 100% FPL income test, but the waiver itself is the long-term-care pathway tied to the 300% SSI level.[4][10]",
+          "asset_limits": "The published 2026 asset limit is $10,000 in countable resources for a single applicant and $15,000 if both spouses are applicants.[6] Maine’s broader MaineCare guidance also shows aged/blind/disabled full-benefit asset limits of $2,000 per individual and $3,000 per couple, but the waiver-specific long-term-care pathway uses the higher waiver limits above.[4][6][7] Countable assets generally include bank accounts, stocks, bonds, and similar resources, while the state guidance also notes that some income may be disregarded and lists common asset types such as vehicles and real estate for review purposes.[4] The available sources do not give a complete waiver-specific exemption list, so the safest summary is that eligibility is based on countable resources and applicants should expect the state to review financial accounts, investments, and other available resources.[4][6]",
+          "other_requirements": [
+            "Must be a Maine resident.[2][6]",
+            "Must be age 65 or older, or age 18+ with a physical disability.[6][15]",
+            "Must meet the medical/functional level-of-care criteria for a nursing facility-level waiver program.[11][12]",
+            "Cannot be living in an adult foster care home or assisted living facility while using this waiver.[11]",
+            "Must be eligible for MaineCare and complete the medical review process.[12]",
+            "If over income or assets, another MaineCare pathway may be needed; the waiver is not a stand-alone nonfinancial program.[2][6]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "This is a home- and community-based services waiver that is meant to help people who would otherwise need nursing facility care remain at home or in a loved one’s home.[11][15] The sources available here do not publish a single fixed dollar cap for each member’s services, but the program covers waiver services rather than cash benefits.[2][11][15] The member handbook identifies this as a full benefit package for adults 18+ with physical disabilities and older adults who do not live in an institution.[15]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through My Maine Connection / MaineCare application portal[6][3]",
+            "By calling the Office for Family Independence at 855-797-4357[6]",
+            "In person at a local DHHS district office[6]"
+          ],
+          "processing_time": "No exact statewide processing-time guarantee was found in the sources available here. The functional and financial review must be completed before waiver services begin, and a medical review is part of the process.[12]",
+          "waitlist": "The available sources do not identify a waiver-specific waitlist for this program. Families should expect that services depend on waiver approval, medical review, and available capacity in the program structure.[2][12]",
+          "forms": [
+            "Application for Long Term Care MaineCare[6]",
+            "MaineCare application through My Maine Connection[3][6]"
+          ],
+          "documents": [
+            "Proof of age or disability status",
+            "Proof of Maine residence",
+            "Income records such as Social Security, pensions, wages, and other income sources",
+            "Asset records such as bank statements, retirement accounts, and investment statements",
+            "Medical records supporting the need for nursing facility-level care",
+            "Identification for the applicant and, if relevant, spouse"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Maine program; the sources do not show county-only eligibility. The practical route includes local DHHS district offices and regional aging/disability offices for medical review.[6][12]",
+          "regional_variations": "The core rules appear statewide, but intake and medical review happen through local district/regional offices, so staffing, appointment availability, and local processing experience can vary by region.[6][12]",
+          "offices_or_providers": [
+            "Local DHHS district offices for in-person application help[6]",
+            "Office of Aging and Disability Services regional offices for medical review coordination[12]"
+          ]
+        },
+        "official_source": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+        "gotchas": [
+          "This waiver is for people who meet both financial rules and a nursing-facility level of care; meeting only one is not enough.[2][11][12]",
+          "It is not for someone living in assisted living or adult foster care under the waiver rules described in the sources.[11]",
+          "The applicant must use countable assets, not total assets; some resources may be treated differently, so bank/investment paperwork matters.[4][6]",
+          "The state’s general aged/blind/disabled MaineCare limits are not the same thing as the waiver rules, so families should not assume the 100% FPL category is the waiver threshold.[4][6][10]",
+          "The sources here do not show a fixed processing time, so families should plan for medical review and eligibility verification to take time.[12]"
+        ],
+        "data_shape_notes": "This program is a combined medical-and-financial long-term-care waiver: eligibility hinges on age/disability, countable assets, monthly income, and a nursing-facility level of care, with services provided in the community rather than as cash.[2][6][11][12][15]",
+        "_raw": "{\n  \"name\": \"MaineCare Elderly and Adults with Disabilities Waiver\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"This waiver is for Maine residents who are age 65+ or age 18+ with a physical disability, and who also meet MaineCare financial rules for older adults/adults with disabilities.[2][6][15] The published 2026 income limit is 300% of the Supplemental Security Income (SSI) federal benefit rate, which is $2,982/month for a single applicant in 2026.[6] If both spouses are applicants, each spouse is considered separately and each may have up to $2,982/month in income.[6] For comparison, Maine’s aged/blind/disabled full-benefit category uses a 100% FPL income test, but the waiver itself is the long-term-care pathway tied to the 300% SSI level.[4][10]\",\n    \"asset_limits\": \"The published 2026 asset limit is $10,000 in countable resources for a single applicant and $15,000 if both spouses are applicants.[6] Maine’s broader MaineCare guidance also shows aged/blind/disabled full-benefit asset limits of $2,000 per individual and $3,000 per couple, but the waiver-specific long-term-care pathway uses the higher waiver limits above.[4][6][7] Countable assets generally include bank accounts, stocks, bonds, and similar resources, while the state guidance also notes that some income may be disregarded and lists common asset types such as vehicles and real estate for review purposes.[4] The available sources do not give a complete waiver-specific exemption list, so the safest summary is that eligibility is based on countable resources and applicants should expect the state to review financial accounts, investments, and other available resources.[4][6]\",\n    \"other_requirements\": [\n      \"Must be a Maine resident.[2][6]\",\n      \"Must be age 65 or older, or age 18+ with a physical disability.[6][15]\",\n      \"Must meet the medical/functional level-of-care criteria for a nursing facility-level waiver program.[11][12]\",\n      \"Cannot be living in an adult foster care home or assisted living facility while using this waiver.[11]\",\n      \"Must be eligible for MaineCare and complete the medical review process.[12]\",\n      \"If over income or assets, another MaineCare pathway may be needed; the waiver is not a stand-alone nonfinancial program.[2][6]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"This is a home- and community-based services waiver that is meant to help people who would otherwise need nursing facility care remain at home or in a loved one’s home.[11][15] The sources available here do not publish a single fixed dollar cap for each member’s services, but the program covers waiver services rather than cash benefits.[2][11][15] The member handbook identifies this as a full benefit package for adults 18+ with physical disabilities and older adults who do not live in an institution.[15]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through My Maine Connection / MaineCare application portal[6][3]\",\n      \"By calling the Office for Family Independence at 855-797-4357[6]\",\n      \"In person at a local DHHS district office[6]\"\n    ],\n    \"processing_time\": \"No exact statewide processing-time guarantee was found in the sources available here. The functional and financial review must be completed before waiver services begin, and a medical review is part of the process.[12]\",\n    \"waitlist\": \"The available sources do not identify a waiver-specific waitlist for this program. Families should expect that services depend on waiver approval, medical review, and available capacity in the program structure.[2][12]\",\n    \"forms\": [\n      \"Application for Long Term Care MaineCare[6]\",\n      \"MaineCare application through My Maine Connection[3][6]\"\n    ],\n    \"documents\": [\n      \"Proof of age or disability status\",\n      \"Proof of Maine residence\",\n      \"Income records such as Social Security, pensions, wages, and other income sources\",\n      \"Asset records such as bank statements, retirement accounts, and investment statements\",\n      \"Medical records supporting the need for nursing facility-level care\",\n      \"Identification for the applicant and, if relevant, spouse\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Maine program; the sources do not show county-only eligibility. The practical route includes local DHHS district offices and regional aging/disability offices for medical review.[6][12]\",\n    \"regional_variations\": \"The core rules appear statewide, but intake and medical review happen through local district/regional offices, so staffing, appointment availability, and local processing experience can vary by region.[6][12]\",\n    \"offices_or_providers\": [\n      \"Local DHHS district offices for in-person application help[6]\",\n      \"Office of Aging and Disability Services regional offices for medical review coordination[12]\"\n    ]\n  },\n  \"official_source\": \"https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities\",\n  \"gotchas\": [\n    \"This waiver is for people who meet both financial rules and a nursing-facility level of care; meeting only one is not enough.[2][11][12]\",\n    \"It is not for someone living in assisted living or adult foster care under the waiver rules described in the sources.[11]\",\n    \"The applicant must use countable assets, not total assets; some resources may be treated differently, so bank/investment paperwork matters.[4][6]\",\n    \"The state’s general aged/blind/disabled MaineCare limits are not the same thing as the waiver rules, so families should not assume the 100% FPL category is the waiver threshold.[4][6][10]\",\n    \"The sources here do not show a fixed processing time, so families should plan for medical review and eligibility verification to take time.[12]\"\n  ],\n  \"data_shape_notes\": \"This program is a combined medical-and-financial long-term-care waiver: eligibility hinges on age/disability, countable assets, monthly income, and a nursing-facility level of care, with services provided in the community rather than as cash.[2][6][11][12][15]\"\n}"
+      },
+      {
+        "name": "MaineCare Medicare Savings Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "Eligibility is based on Medicare status and countable monthly income. Maine’s current MSP rules appear to use three tiers—QMB, SLMB, and QI—with income levels higher than older federal minimums. The official Maine page says people with higher income levels now qualify and points applicants to apply rather than self-screen first.[1]",
+            "tiers": [
+              {
+                "tier": "QMB",
+                "income_limit": "The official Maine materials indicate QMB is the most generous tier and pays Part B premiums plus Medicare deductibles and coinsurance; a recent Maine document shows QMB at 140% FPL with an asset limit, while another 2026 Maine source says QMB is now at 185% FPL and monthly income for a single person is $2,461 / couple $3,337.[5][8][12][15]",
+                "notes": "Because the sources conflict on exact thresholds, families should verify the current limit on the Maine DHHS page or by applying; Maine explicitly says not to rule yourself out before applying.[1][5][8][12][15]"
+              },
+              {
+                "tier": "SLMB",
+                "income_limit": "Recent Maine sources identify SLMB as paying the Medicare Part B premium and show it between QMB and QI in income eligibility; older and newer materials conflict on whether the threshold is 160% FPL, 170% FPL, or another adjusted figure.[8][9][13][14][15]",
+                "notes": "Exact current dollar limits were not consistently stated across the sources surfaced; Maine’s own page directs applicants to apply for a determination rather than self-assess.[1][5][8][12][15]"
+              },
+              {
+                "tier": "QI",
+                "income_limit": "Recent sources show QI as the least generous tier and paying the Part B premium only; one Maine source states QI at 185% FPL, while another 2026 source shows a higher upper band up to 250% FPL with a single-person monthly income limit of $3,325 and couple limit of $4,509.[8][12][15]",
+                "notes": "QI can be subject to annual funding/availability rules in some states, but Maine materials found here emphasize applying through MaineCare rather than a separate waitlist description.[1][8][12][15]"
+              }
+            ],
+            "full_picture": "MaineCare MSP eligibility depends on Medicare enrollment, income, and in some older guidance, assets. Maine’s current public-facing materials indicate the program expanded in July 2024 and now covers people with higher income levels than before.[1][8][12][15]"
+          },
+          "asset_limits": {
+            "summary": "Older Maine guidance lists an asset limit of $50,000 per individual or $75,000 per couple for MSP, with only liquid assets counting.[5][9][14] A 2026 Maine Council on Aging summary says there is no asset test for MSP, which conflicts with the Maine DHHS guideline documents.[12]",
+            "what_counts": [
+              "Liquid assets in older guidance[5][9][14]"
+            ],
+            "what_is_exempt": [
+              "The surfaced official snippets did not list the full exemption set; older materials specifically say only liquid assets count, implying non-liquid assets may be exempt.[5][9][14]"
+            ],
+            "important_caveat": "Because the sources conflict on whether any asset test applies, the safest family strategy is to apply and let Maine determine countable resources.[1][5][12][14]"
+          },
+          "other_requirements": [
+            "The person must have Medicare, and Maine materials state eligibility is for people who have Medicare and may qualify for Part A and/or Part B premium help.[1][10][12]",
+            "Must be a Maine resident and apply through Maine DHHS / MaineCare channels.[1][2][4]",
+            "Some tiers in older guidance required entitlement to both Medicare Part A and Part B.[5][9][14]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Depending on the tier, MaineCare may pay the Medicare Part B premium only (SLMB/QI) or the Part B premium plus Medicare deductibles and coinsurance (QMB); Maine also states MSP can help pay Part A premiums in some cases.[1][5][10][12][15]",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: MyMaineConnection.gov[1][12]",
+            "Maine DHHS Applications & Forms page for downloadable application options[2]",
+            "Mail, email, or fax after completing the paper application[12]",
+            "In-person / other DHHS options referenced on the MaineCare options page[4]"
+          ],
+          "processing_time": "No official processing-time number was surfaced in the available sources. Maine’s public materials emphasize applying rather than self-screening, but do not provide a specific turnaround time in the excerpts found.[1][4][12]",
+          "waitlist": null,
+          "forms": [
+            "MaineCare application used for MaineCare programs including Medicare Savings Program (Buy-In)[2]",
+            "Paper MaineCare application downloadable from the DHHS Applications & Forms page[2][12]"
+          ],
+          "documents": [
+            "Proof of Medicare enrollment (Part A and/or Part B as relevant)[1][5][9][10][12][14]",
+            "Income documents such as Social Security award letters, pension statements, pay stubs, or retirement account statements",
+            "Resource/asset information if asked, especially bank statements and information about liquid assets[5][9][14]",
+            "Identification and Maine residency information",
+            "Any current Medicare card or insurance notices"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "No county restriction surfaced; the program is statewide for eligible Maine residents.[1][4][12]",
+          "regional_variations": "No regional benefit variation was surfaced. The main practical variation is administrative rather than substantive: application channels are statewide, and the sources found do not describe region-specific MSP offices or different benefit levels by county.[1][4][12]",
+          "offices_or_providers": []
+        },
+        "official_source": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+        "gotchas": [
+          "Maine’s MSP rules appear to have changed in 2024, so older income tables may be outdated; families should use current Maine DHHS guidance rather than old handouts.[1][5][8][15]",
+          "The sources conflict on asset limits: some official-style Maine documents show a liquid-asset test, while another 2026 summary says there is no asset test.[5][9][12][14]",
+          "Income thresholds also conflict across materials; some sources still show older 140%/160%/170%/185% FPL figures, while newer material indicates higher eligibility levels after July 1, 2024.[1][5][8][12][15]",
+          "Applicants should not assume they are over-income because Maine explicitly says people with higher income levels now qualify and advises applying anyway.[1]",
+          "QI and related MSP tiers can be subtle because the benefit may only cover the Part B premium, while QMB can also cover deductibles and coinsurance.[1][5][10][12][15]",
+          "The program name can be confusing: MaineCare uses 'Medicare Savings Program' and 'Buy-In' language in its application materials.[2]"
+        ],
+        "data_shape_notes": "This program’s data structure is tiered, income-driven, and partially affected by conflicting published thresholds; benefits scale by MSP tier (QMB/SLMB/QI), not by household size alone. The key nuance is that Maine expanded MSP eligibility in 2024, so older tables may understate who qualifies.[1][5][8][12][15]",
+        "_raw": "{\n  \"name\": \"MaineCare Medicare Savings Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"Eligibility is based on Medicare status and countable monthly income. Maine’s current MSP rules appear to use three tiers—QMB, SLMB, and QI—with income levels higher than older federal minimums. The official Maine page says people with higher income levels now qualify and points applicants to apply rather than self-screen first.[1]\",\n      \"tiers\": [\n        {\n          \"tier\": \"QMB\",\n          \"income_limit\": \"The official Maine materials indicate QMB is the most generous tier and pays Part B premiums plus Medicare deductibles and coinsurance; a recent Maine document shows QMB at 140% FPL with an asset limit, while another 2026 Maine source says QMB is now at 185% FPL and monthly income for a single person is $2,461 / couple $3,337.[5][8][12][15]\",\n          \"notes\": \"Because the sources conflict on exact thresholds, families should verify the current limit on the Maine DHHS page or by applying; Maine explicitly says not to rule yourself out before applying.[1][5][8][12][15]\"\n        },\n        {\n          \"tier\": \"SLMB\",\n          \"income_limit\": \"Recent Maine sources identify SLMB as paying the Medicare Part B premium and show it between QMB and QI in income eligibility; older and newer materials conflict on whether the threshold is 160% FPL, 170% FPL, or another adjusted figure.[8][9][13][14][15]\",\n          \"notes\": \"Exact current dollar limits were not consistently stated across the sources surfaced; Maine’s own page directs applicants to apply for a determination rather than self-assess.[1][5][8][12][15]\"\n        },\n        {\n          \"tier\": \"QI\",\n          \"income_limit\": \"Recent sources show QI as the least generous tier and paying the Part B premium only; one Maine source states QI at 185% FPL, while another 2026 source shows a higher upper band up to 250% FPL with a single-person monthly income limit of $3,325 and couple limit of $4,509.[8][12][15]\",\n          \"notes\": \"QI can be subject to annual funding/availability rules in some states, but Maine materials found here emphasize applying through MaineCare rather than a separate waitlist description.[1][8][12][15]\"\n        }\n      ],\n      \"full_picture\": \"MaineCare MSP eligibility depends on Medicare enrollment, income, and in some older guidance, assets. Maine’s current public-facing materials indicate the program expanded in July 2024 and now covers people with higher income levels than before.[1][8][12][15]\"\n    },\n    \"asset_limits\": {\n      \"summary\": \"Older Maine guidance lists an asset limit of $50,000 per individual or $75,000 per couple for MSP, with only liquid assets counting.[5][9][14] A 2026 Maine Council on Aging summary says there is no asset test for MSP, which conflicts with the Maine DHHS guideline documents.[12]\",\n      \"what_counts\": [\n        \"Liquid assets in older guidance[5][9][14]\"\n      ],\n      \"what_is_exempt\": [\n        \"The surfaced official snippets did not list the full exemption set; older materials specifically say only liquid assets count, implying non-liquid assets may be exempt.[5][9][14]\"\n      ],\n      \"important_caveat\": \"Because the sources conflict on whether any asset test applies, the safest family strategy is to apply and let Maine determine countable resources.[1][5][12][14]\"\n    },\n    \"other_requirements\": [\n      \"The person must have Medicare, and Maine materials state eligibility is for people who have Medicare and may qualify for Part A and/or Part B premium help.[1][10][12]\",\n      \"Must be a Maine resident and apply through Maine DHHS / MaineCare channels.[1][2][4]\",\n      \"Some tiers in older guidance required entitlement to both Medicare Part A and Part B.[5][9][14]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Depending on the tier, MaineCare may pay the Medicare Part B premium only (SLMB/QI) or the Part B premium plus Medicare deductibles and coinsurance (QMB); Maine also states MSP can help pay Part A premiums in some cases.[1][5][10][12][15]\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: MyMaineConnection.gov[1][12]\",\n      \"Maine DHHS Applications & Forms page for downloadable application options[2]\",\n      \"Mail, email, or fax after completing the paper application[12]\",\n      \"In-person / other DHHS options referenced on the MaineCare options page[4]\"\n    ],\n    \"processing_time\": \"No official processing-time number was surfaced in the available sources. Maine’s public materials emphasize applying rather than self-screening, but do not provide a specific turnaround time in the excerpts found.[1][4][12]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"MaineCare application used for MaineCare programs including Medicare Savings Program (Buy-In)[2]\",\n      \"Paper MaineCare application downloadable from the DHHS Applications & Forms page[2][12]\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare enrollment (Part A and/or Part B as relevant)[1][5][9][10][12][14]\",\n      \"Income documents such as Social Security award letters, pension statements, pay stubs, or retirement account statements\",\n      \"Resource/asset information if asked, especially bank statements and information about liquid assets[5][9][14]\",\n      \"Identification and Maine residency information\",\n      \"Any current Medicare card or insurance notices\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"No county restriction surfaced; the program is statewide for eligible Maine residents.[1][4][12]\",\n    \"regional_variations\": \"No regional benefit variation was surfaced. The main practical variation is administrative rather than substantive: application channels are statewide, and the sources found do not describe region-specific MSP offices or different benefit levels by county.[1][4][12]\",\n    \"offices_or_providers\": []\n  },\n  \"official_source\": \"https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities\",\n  \"gotchas\": [\n    \"Maine’s MSP rules appear to have changed in 2024, so older income tables may be outdated; families should use current Maine DHHS guidance rather than old handouts.[1][5][8][15]\",\n    \"The sources conflict on asset limits: some official-style Maine documents show a liquid-asset test, while another 2026 summary says there is no asset test.[5][9][12][14]\",\n    \"Income thresholds also conflict across materials; some sources still show older 140%/160%/170%/185% FPL figures, while newer material indicates higher eligibility levels after July 1, 2024.[1][5][8][12][15]\",\n    \"Applicants should not assume they are over-income because Maine explicitly says people with higher income levels now qualify and advises applying anyway.[1]\",\n    \"QI and related MSP tiers can be subtle because the benefit may only cover the Part B premium, while QMB can also cover deductibles and coinsurance.[1][5][10][12][15]\",\n    \"The program name can be confusing: MaineCare uses 'Medicare Savings Program' and 'Buy-In' language in its application materials.[2]\"\n  ],\n  \"data_shape_notes\": \"This program’s data structure is tiered, income-driven, and partially affected by conflicting published thresholds; benefits scale by MSP tier (QMB/SLMB/QI), not by household size alone. The key nuance is that Maine expanded MSP eligibility in 2024, so older tables may understate who qualifies.[1][5][8][12][15]\"\n}"
+      },
+      {
+        "name": "Maine State SSI Supplement",
+        "eligibility": {
+          "age": null,
+          "income_limits": "For Maine’s state supplement, the person must be receiving federal SSI or would be eligible for SSI except for income or citizenship rules.[9][11][13] Maine specifically notes that if a person is financially eligible for SSI, they must apply for and receive SSI first.[11] The state supplement is tied to SSI eligibility rather than a separate household-income table.[11][13] Maine also notes an important exception: a person who is ineligible for SSI only because of income-in-kind may still be eligible for the state supplement, because SSI counts income-in-kind but the state supplement does not.[11]",
+          "asset_limits": "No separate Maine asset limit was identified for the state supplement in the available official materials; eligibility is described in terms of SSI eligibility.[11][13] In practice, that means SSI’s federal resource rules generally matter for people who must qualify for SSI first. Countable resources and exemptions are therefore governed by SSI rules rather than a Maine-only asset schedule.",
+          "other_requirements": [
+            "Must be a Maine resident.[13]",
+            "Must be aged, blind, or disabled, because the state program is for blind, disabled, and elderly people.[13]",
+            "If financially eligible for SSI, must apply for and receive SSI first.[11]",
+            "If not SSI-eligible only because of citizenship rules or certain income rules, may still qualify for the state supplement.[11]",
+            "State supplement eligibility can exist even when SSI is denied for income-in-kind reasons, because Maine does not count income-in-kind the same way SSI does.[11]",
+            "The program is administered through Maine DHHS / OFI local offices.[2]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A regular monthly state supplemental income payment for eligible blind, disabled, and elderly Maine residents.[13] Maine law requires the supplement to increase the minimum monthly federal payment standard by at least $8 per month for an individual and $12 per month for a couple.[6] The exact payable amount depends on the person’s circumstances and supplement category, and Maine’s program is described as need-based.[13]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "In person at local Maine DHHS / Office for Family Independence offices.[2]",
+            "Through Maine DHHS applications portal at My Maine Connection.[4]",
+            "By phone through Maine DHHS / OFI channels referenced in Maine application rules.[9][11]",
+            "By mail or other paper application route submitted to OFI regional offices, as recognized in Maine application rules.[9][11]"
+          ],
+          "processing_time": "Maine application rules state applications must be processed within 45 days of receipt by the department.[9][11]",
+          "waitlist": null,
+          "forms": [
+            "No single public state-supplement-specific form number was identified in the official sources reviewed.[2][4][9][11]"
+          ],
+          "documents": [
+            "Proof of SSI award or proof of SSI application status",
+            "Proof of age, blindness, or disability if not already established through SSI",
+            "Proof of Maine residency",
+            "Income statements and any information about in-kind support or living arrangement",
+            "Citizenship or immigration information if relevant",
+            "Bank statements and resource information if SSI financial eligibility must be established"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide to Maine residents; no county restriction was identified.[13]",
+          "regional_variations": "Administration occurs through local DHHS/OFI offices, but the benefit itself is statewide. No official regional benefit formula or county-based payment variation was identified in the sources reviewed.[2][13] The most meaningful variation is administrative, not benefit-based.",
+          "offices_or_providers": [
+            "Maine Department of Health and Human Services, Office for Family Independence local offices[2]",
+            "My Maine Connection online portal[4]"
+          ]
+        },
+        "official_source": "https://www.maine.gov/dhhs/ofi/applications-forms",
+        "gotchas": [
+          "Families often assume Maine has a separate, stand-alone cash program with its own income table; the available official materials show the supplement is tied to SSI eligibility instead.[11][13]",
+          "Maine’s state supplement can differ from SSI because income-in-kind is treated differently; someone denied SSI for that reason may still qualify for the state supplement.[11]",
+          "If the person is financially eligible for SSI, the family must apply for SSI first; the state supplement is not a substitute for SSI application.[11]",
+          "The supplement is need-based, but the official materials reviewed do not provide a simple universal household-size table for the state payment; amount depends on the category and circumstances.[13]",
+          "Local offices handle applications, so the practical experience can vary by office even though the program itself is statewide.[2]"
+        ],
+        "data_shape_notes": "This program is a statewide, state-administered SSI supplement that is eligibility-linked to SSI rather than a separate stand-alone needs program with a full household income table.[2][11][13] The key unusual feature is that Maine’s rules specifically note that income-in-kind is handled differently from SSI, which can make someone eligible for the state supplement even when SSI is denied on that ground.[11]",
+        "_raw": "{\n  \"name\": \"Maine State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"For Maine’s state supplement, the person must be receiving federal SSI or would be eligible for SSI except for income or citizenship rules.[9][11][13] Maine specifically notes that if a person is financially eligible for SSI, they must apply for and receive SSI first.[11] The state supplement is tied to SSI eligibility rather than a separate household-income table.[11][13] Maine also notes an important exception: a person who is ineligible for SSI only because of income-in-kind may still be eligible for the state supplement, because SSI counts income-in-kind but the state supplement does not.[11]\",\n    \"asset_limits\": \"No separate Maine asset limit was identified for the state supplement in the available official materials; eligibility is described in terms of SSI eligibility.[11][13] In practice, that means SSI’s federal resource rules generally matter for people who must qualify for SSI first. Countable resources and exemptions are therefore governed by SSI rules rather than a Maine-only asset schedule.\",\n    \"other_requirements\": [\n      \"Must be a Maine resident.[13]\",\n      \"Must be aged, blind, or disabled, because the state program is for blind, disabled, and elderly people.[13]\",\n      \"If financially eligible for SSI, must apply for and receive SSI first.[11]\",\n      \"If not SSI-eligible only because of citizenship rules or certain income rules, may still qualify for the state supplement.[11]\",\n      \"State supplement eligibility can exist even when SSI is denied for income-in-kind reasons, because Maine does not count income-in-kind the same way SSI does.[11]\",\n      \"The program is administered through Maine DHHS / OFI local offices.[2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A regular monthly state supplemental income payment for eligible blind, disabled, and elderly Maine residents.[13] Maine law requires the supplement to increase the minimum monthly federal payment standard by at least $8 per month for an individual and $12 per month for a couple.[6] The exact payable amount depends on the person’s circumstances and supplement category, and Maine’s program is described as need-based.[13]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"In person at local Maine DHHS / Office for Family Independence offices.[2]\",\n      \"Through Maine DHHS applications portal at My Maine Connection.[4]\",\n      \"By phone through Maine DHHS / OFI channels referenced in Maine application rules.[9][11]\",\n      \"By mail or other paper application route submitted to OFI regional offices, as recognized in Maine application rules.[9][11]\"\n    ],\n    \"processing_time\": \"Maine application rules state applications must be processed within 45 days of receipt by the department.[9][11]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"No single public state-supplement-specific form number was identified in the official sources reviewed.[2][4][9][11]\"\n    ],\n    \"documents\": [\n      \"Proof of SSI award or proof of SSI application status\",\n      \"Proof of age, blindness, or disability if not already established through SSI\",\n      \"Proof of Maine residency\",\n      \"Income statements and any information about in-kind support or living arrangement\",\n      \"Citizenship or immigration information if relevant\",\n      \"Bank statements and resource information if SSI financial eligibility must be established\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide to Maine residents; no county restriction was identified.[13]\",\n    \"regional_variations\": \"Administration occurs through local DHHS/OFI offices, but the benefit itself is statewide. No official regional benefit formula or county-based payment variation was identified in the sources reviewed.[2][13] The most meaningful variation is administrative, not benefit-based.\",\n    \"offices_or_providers\": [\n      \"Maine Department of Health and Human Services, Office for Family Independence local offices[2]\",\n      \"My Maine Connection online portal[4]\"\n    ]\n  },\n  \"official_source\": \"https://www.maine.gov/dhhs/ofi/applications-forms\",\n  \"gotchas\": [\n    \"Families often assume Maine has a separate, stand-alone cash program with its own income table; the available official materials show the supplement is tied to SSI eligibility instead.[11][13]\",\n    \"Maine’s state supplement can differ from SSI because income-in-kind is treated differently; someone denied SSI for that reason may still qualify for the state supplement.[11]\",\n    \"If the person is financially eligible for SSI, the family must apply for SSI first; the state supplement is not a substitute for SSI application.[11]\",\n    \"The supplement is need-based, but the official materials reviewed do not provide a simple universal household-size table for the state payment; amount depends on the category and circumstances.[13]\",\n    \"Local offices handle applications, so the practical experience can vary by office even though the program itself is statewide.[2]\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide, state-administered SSI supplement that is eligibility-linked to SSI rather than a separate stand-alone needs program with a full household income table.[2][11][13] The key unusual feature is that Maine’s rules specifically note that income-in-kind is handled differently from SSI, which can make someone eligible for the state supplement even when SSI is denied on that ground.[11]\"\n}"
+      },
+      {
+        "name": "Maine Property Tax Stabilization for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No statewide income limit applies to the core Maine property tax stabilization program for seniors. The statute and state guidance describe it as a stabilization/freezing program tied to age, residency, and homeownership rather than income. Some municipalities may adopt different or additional local rules if they choose to run their own ordinance-based program, but the statewide program itself does not use a household income table.",
+          "asset_limits": "No statewide asset or resource limit applies to the core program. The home must be the applicant’s homestead/primary residence. The available official materials do not impose countable-asset tests, and the program is not structured like a means-tested benefits program.",
+          "other_requirements": [
+            "Applicant must own and occupy the property as a homestead/primary residence in Maine.",
+            "Applicant must be a Maine resident and apply to the municipality where the homestead is located.",
+            "Application must be filed by December 1 for the property tax year beginning the following April 1.",
+            "A new application is required each year.",
+            "Eligibility is tied to the municipality’s implementation of the program and local application criteria.",
+            "If the municipality requires proof, the applicant must submit the requested proof with the application."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "The municipality stabilizes, or freezes, the property tax assessed on the eligible homestead at the amount from the most recent April 1 assessment prior to application. Taxes above that stabilized amount are deferred in subsequent years as long as the taxpayer remains eligible. This is a property-tax benefit, not cash assistance.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Municipal application to the town or city where the homestead is located",
+            "Mail application; the Maine Revenue Services Property Tax Division can mail an application on request",
+            "Municipal office in person",
+            "Maine Revenue Services website for application materials"
+          ],
+          "processing_time": "Applications are due by December 1 and apply to the tax year beginning the following April 1. Official materials reviewed do not give a standard statewide processing-time estimate.",
+          "waitlist": null,
+          "forms": [
+            "Property Tax Stabilization for Senior Citizens application",
+            "Municipal application form adopted by the local municipality, if the municipality uses its own version"
+          ],
+          "documents": [
+            "Completed application",
+            "Proof of qualification if requested by the municipality",
+            "Information showing ownership and occupancy of the homestead",
+            "Any local supporting documents required by the municipality"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applies through the municipality where the homestead is located; a municipality must have adopted or be administering the program under the state framework.",
+          "regional_variations": "The core state law is the same statewide, but municipalities may set local eligibility details in their ordinance, such as additional residency rules, minimum years of ownership/occupancy, and application procedures. Wait time and administration can therefore differ by town or city.",
+          "offices_or_providers": [
+            "Local municipal office where the homestead is located",
+            "Maine Revenue Services Property Tax Division, Augusta"
+          ]
+        },
+        "official_source": "https://www.maine.gov/revenue/taxes/tax-relief-credits-programs/property-tax-relief-programs",
+        "gotchas": [
+          "This is not a general state tax credit; it is a municipal program under state law.",
+          "The benefit is not automatic; the homeowner must apply every year by December 1.",
+          "The program freezes the tax assessment amount, but it does not erase property taxes already owed or necessarily stop future tax bills entirely.",
+          "Local ordinances can add requirements beyond the statewide baseline, so one town’s rules may differ from another’s.",
+          "Some municipalities may offer their own senior tax relief programs alongside or instead of this program.",
+          "Residents in municipalities participating in the State Property Tax Deferral Program may not also participate in this municipal stabilization program.",
+          "Because the benefit is tied to the homestead and local ordinance, families should verify the exact municipal rules before assuming eligibility."
+        ],
+        "data_shape_notes": "This program is municipal and ordinance-driven, not a statewide income-tested benefit. The key data shape is 'age plus homestead ownership/occupancy plus annual municipal application,' with possible local add-on rules and no statewide income or asset table.",
+        "_raw": "{\n  \"name\": \"Maine Property Tax Stabilization for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No statewide income limit applies to the core Maine property tax stabilization program for seniors. The statute and state guidance describe it as a stabilization/freezing program tied to age, residency, and homeownership rather than income. Some municipalities may adopt different or additional local rules if they choose to run their own ordinance-based program, but the statewide program itself does not use a household income table.\",\n    \"asset_limits\": \"No statewide asset or resource limit applies to the core program. The home must be the applicant’s homestead/primary residence. The available official materials do not impose countable-asset tests, and the program is not structured like a means-tested benefits program.\",\n    \"other_requirements\": [\n      \"Applicant must own and occupy the property as a homestead/primary residence in Maine.\",\n      \"Applicant must be a Maine resident and apply to the municipality where the homestead is located.\",\n      \"Application must be filed by December 1 for the property tax year beginning the following April 1.\",\n      \"A new application is required each year.\",\n      \"Eligibility is tied to the municipality’s implementation of the program and local application criteria.\",\n      \"If the municipality requires proof, the applicant must submit the requested proof with the application.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"The municipality stabilizes, or freezes, the property tax assessed on the eligible homestead at the amount from the most recent April 1 assessment prior to application. Taxes above that stabilized amount are deferred in subsequent years as long as the taxpayer remains eligible. This is a property-tax benefit, not cash assistance.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Municipal application to the town or city where the homestead is located\",\n      \"Mail application; the Maine Revenue Services Property Tax Division can mail an application on request\",\n      \"Municipal office in person\",\n      \"Maine Revenue Services website for application materials\"\n    ],\n    \"processing_time\": \"Applications are due by December 1 and apply to the tax year beginning the following April 1. Official materials reviewed do not give a standard statewide processing-time estimate.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Property Tax Stabilization for Senior Citizens application\",\n      \"Municipal application form adopted by the local municipality, if the municipality uses its own version\"\n    ],\n    \"documents\": [\n      \"Completed application\",\n      \"Proof of qualification if requested by the municipality\",\n      \"Information showing ownership and occupancy of the homestead\",\n      \"Any local supporting documents required by the municipality\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applies through the municipality where the homestead is located; a municipality must have adopted or be administering the program under the state framework.\",\n    \"regional_variations\": \"The core state law is the same statewide, but municipalities may set local eligibility details in their ordinance, such as additional residency rules, minimum years of ownership/occupancy, and application procedures. Wait time and administration can therefore differ by town or city.\",\n    \"offices_or_providers\": [\n      \"Local municipal office where the homestead is located\",\n      \"Maine Revenue Services Property Tax Division, Augusta\"\n    ]\n  },\n  \"official_source\": \"https://www.maine.gov/revenue/taxes/tax-relief-credits-programs/property-tax-relief-programs\",\n  \"gotchas\": [\n    \"This is not a general state tax credit; it is a municipal program under state law.\",\n    \"The benefit is not automatic; the homeowner must apply every year by December 1.\",\n    \"The program freezes the tax assessment amount, but it does not erase property taxes already owed or necessarily stop future tax bills entirely.\",\n    \"Local ordinances can add requirements beyond the statewide baseline, so one town’s rules may differ from another’s.\",\n    \"Some municipalities may offer their own senior tax relief programs alongside or instead of this program.\",\n    \"Residents in municipalities participating in the State Property Tax Deferral Program may not also participate in this municipal stabilization program.\",\n    \"Because the benefit is tied to the homestead and local ordinance, families should verify the exact municipal rules before assuming eligibility.\"\n  ],\n  \"data_shape_notes\": \"This program is municipal and ordinance-driven, not a statewide income-tested benefit. The key data shape is 'age plus homestead ownership/occupancy plus annual municipal application,' with possible local add-on rules and no statewide income or asset table.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "ME",
+    "stateName": "Maine",
+    "classifiedAt": "2026-10-06T05:44:07.161Z",
+    "total": 5,
+    "typeSummary": {
+      "benefit": 4,
+      "resource": 1
+    },
+    "scopeSummary": {
+      "state": 4,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 4,
+      "simple": 1
+    },
+    "programs": [
+      {
+        "name": "MaineCare Aged, Blind, and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Office for Family Independence (state processing unit)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local DHHS district offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Aging and Disability Resource Centers for application help",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "MaineCare Elderly and Adults with Disabilities Waiver",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local DHHS district offices for in-person application help[6]",
+              "type": "service-area"
+            },
+            {
+              "name": "Office of Aging and Disability Services regional offices for medical review coordination[12]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "MaineCare Medicare Savings Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Maine State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Maine Department of Health and Human Services, Office for Family Independence local offices[2]",
+              "type": "service-area"
+            },
+            {
+              "name": "My Maine Connection online portal[4]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Maine Property Tax Stabilization for Seniors",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local municipal office where the homestead is located",
+              "type": "service-area"
+            },
+            {
+              "name": "Maine Revenue Services Property Tax Division, Augusta",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "ME",
+      "id": "me-mainecare-aged-blind-disabled",
+      "name": "MaineCare Aged, Blind, and Disabled",
+      "legacyId": "mainecare-aged-blind-and-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "ME",
+      "id": "me-mainecare-ead-waiver",
+      "name": "MaineCare Elderly and Adults with Disabilities Waiver",
+      "legacyId": "mainecare-elderly-and-adults-with-disabilities-waiver",
+      "programType": "benefit"
+    },
+    {
+      "state": "ME",
+      "id": "me-mainecare-medicare-savings-programs",
+      "name": "MaineCare Medicare Savings Programs",
+      "legacyId": "mainecare-medicare-savings-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "ME",
+      "id": "me-state-ssi-supplement",
+      "name": "Maine State SSI Supplement",
+      "legacyId": "maine-state-ssi-supplement",
+      "programType": "benefit"
+    },
+    {
+      "state": "ME",
+      "id": "me-property-tax-stabilization-seniors",
+      "name": "Maine Property Tax Stabilization for Seniors",
+      "legacyId": "maine-property-tax-stabilization-for-seniors",
+      "programType": "resource"
+    }
+  ]
+}

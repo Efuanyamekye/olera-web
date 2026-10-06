@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.170Z
+ * Last updated: 2026-10-06T06:44:48.403Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 

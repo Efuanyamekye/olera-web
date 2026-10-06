@@ -1,0 +1,544 @@
+{
+  "state": "VT",
+  "addedAt": "2026-10-06T05:58:37.418Z",
+  "dive": {
+    "state": "VT",
+    "stateName": "Vermont",
+    "diveAt": "2026-10-06T05:54:02.996Z",
+    "total": 4,
+    "parsed": 4,
+    "programs": [
+      {
+        "name": "3Squares Vermont (SNAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "general_rule": "Most households qualify if gross monthly income is at or below 185% of the Federal Poverty Level (FPL). Vermont also says a household may qualify if it has children and receives the VT Earned Income Tax Credit (VT EITC). Households with a person age 60+ or a person with a disability may still qualify even if over the gross-income limit, because asset rules can apply instead of the standard gross-income test.",
+            "gross_monthly_income_table_185_fpl": [
+              {
+                "household_size": 1,
+                "limit": 2413
+              },
+              {
+                "household_size": 2,
+                "limit": 3262
+              },
+              {
+                "household_size": 3,
+                "limit": 4109
+              },
+              {
+                "household_size": 4,
+                "limit": 4958
+              },
+              {
+                "household_size": 5,
+                "limit": 5805
+              },
+              {
+                "household_size": 6,
+                "limit": 6653
+              },
+              {
+                "household_size": 7,
+                "limit": 7501
+              },
+              {
+                "household_size": 8,
+                "limit": 8349
+              },
+              {
+                "household_size": "each additional person",
+                "limit": 849
+              }
+            ],
+            "net_income_note": "For monthly benefits, net household income must be below 100% of FPL after allowable deductions. Vermont’s guidance says net income is gross monthly income minus allowable deductions, and benefit amounts are based on that net income.",
+            "net_monthly_income_table_100_fpl": [
+              {
+                "household_size": 1,
+                "limit": 1255
+              },
+              {
+                "household_size": 2,
+                "limit": 1704
+              },
+              {
+                "household_size": 3,
+                "limit": 2152
+              },
+              {
+                "household_size": 4,
+                "limit": 2600
+              },
+              {
+                "household_size": 5,
+                "limit": 3049
+              },
+              {
+                "household_size": 6,
+                "limit": 3497
+              },
+              {
+                "household_size": 7,
+                "limit": 3945
+              },
+              {
+                "household_size": 8,
+                "limit": 4394
+              },
+              {
+                "household_size": 9,
+                "limit": 4843
+              },
+              {
+                "household_size": 10,
+                "limit": 5292
+              },
+              {
+                "household_size": "each additional person",
+                "limit": 449
+              }
+            ],
+            "deductions_note": "Allowable deductions can include shelter expenses, medical expenses, and dependent care costs."
+          },
+          "asset_limits": {
+            "applies_to": "Households that include someone age 60+ or a person with a disability when income is over the gross-income threshold; Vermont notes these households are subject to an asset test.",
+            "limit": 4500,
+            "countable_resources": "Countable resources can include things like cash and other assets that can be turned into money.",
+            "exempt_assets": [
+              "home",
+              "certain retirement accounts"
+            ]
+          },
+          "other_requirements": [
+            "Must live in Vermont and apply as a household for food assistance.",
+            "Most households must be under the gross income limit unless categorically eligible.",
+            "Categorically eligible households include some households receiving Reach Up, SSI, or VT EITC.",
+            "Work requirements may apply to some adults, but they do not apply to people under 18, over 64, pregnant people, people with disabilities, or caregivers of children under 14."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly food benefits loaded onto an EBT card to buy groceries and eligible food items. The benefit amount is based on household size, income, and deductions; Vermont describes the benefit formula as maximum Thrifty Food Plan amount for the household size minus 30% of net income.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online through Vermont's myBenefits portal: https://dcf.vermont.gov/benefits/3SquaresVT",
+            "Paper application: Form 202 or Form 202-3SNP",
+            "Phone request for a paper application: 1-800-479-6151",
+            "Submit by document uploader after completing the form",
+            "Mail the completed application to the address on the form",
+            "Drop off at a district office in person"
+          ],
+          "processing_time": "Not stated in the provided official material; applicants should expect standard SNAP processing timelines and ask the district office for current timing.",
+          "waitlist": null,
+          "forms": [
+            "Form 202",
+            "Form 202-3SNP"
+          ],
+          "documents": [
+            "Completed and signed application",
+            "Proof of identity",
+            "Proof of household income",
+            "Proof of household size and living situation",
+            "Information about shelter costs if claiming deductions",
+            "Medical expense information for an older adult or disabled household member, if applicable",
+            "Bank or asset information if the household includes someone 60+ or disabled and an asset test applies"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "No county restriction; 3SquaresVT is a statewide Vermont SNAP program.",
+          "regional_variations": "The benefit rules are statewide, but application handling can vary by district office location and workload. No regional benefit tiers or county-specific eligibility rules were identified.",
+          "offices_or_providers": [
+            "Vermont Department for Children and Families district offices",
+            "Vermont Economic Services Division district offices"
+          ]
+        },
+        "official_source": "https://dcf.vermont.gov/benefits/3SquaresVT",
+        "gotchas": [
+          "The gross-income test is not the whole story: households with someone age 60+ or with a disability may be evaluated under asset rules instead.",
+          "Vermont’s materials say some households can still qualify above the gross-income limit if they have a person age 60+ or disabled, but countable resources must stay under the limit.",
+          "Benefit amount is not a fixed grant; it changes with household size and net income.",
+          "A household can be categorically eligible through programs like Reach Up, SSI, or VT EITC.",
+          "Families often miss deductions such as shelter and medical expenses, which can lower net income and raise the benefit amount.",
+          "People do not need to be elderly to apply for 3SquaresVT; the age-60 issue matters mainly for the special asset rules."
+        ],
+        "data_shape_notes": "This program has a tiered structure: eligibility generally depends on gross income, benefit size depends on net income and household size, and a special asset test applies only for households with a member age 60+ or a disability when income is over the gross-income threshold.",
+        "_raw": "{\n  \"name\": \"3Squares Vermont (SNAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"general_rule\": \"Most households qualify if gross monthly income is at or below 185% of the Federal Poverty Level (FPL). Vermont also says a household may qualify if it has children and receives the VT Earned Income Tax Credit (VT EITC). Households with a person age 60+ or a person with a disability may still qualify even if over the gross-income limit, because asset rules can apply instead of the standard gross-income test.\",\n      \"gross_monthly_income_table_185_fpl\": [\n        {\n          \"household_size\": 1,\n          \"limit\": 2413\n        },\n        {\n          \"household_size\": 2,\n          \"limit\": 3262\n        },\n        {\n          \"household_size\": 3,\n          \"limit\": 4109\n        },\n        {\n          \"household_size\": 4,\n          \"limit\": 4958\n        },\n        {\n          \"household_size\": 5,\n          \"limit\": 5805\n        },\n        {\n          \"household_size\": 6,\n          \"limit\": 6653\n        },\n        {\n          \"household_size\": 7,\n          \"limit\": 7501\n        },\n        {\n          \"household_size\": 8,\n          \"limit\": 8349\n        },\n        {\n          \"household_size\": \"each additional person\",\n          \"limit\": 849\n        }\n      ],\n      \"net_income_note\": \"For monthly benefits, net household income must be below 100% of FPL after allowable deductions. Vermont’s guidance says net income is gross monthly income minus allowable deductions, and benefit amounts are based on that net income.\",\n      \"net_monthly_income_table_100_fpl\": [\n        {\n          \"household_size\": 1,\n          \"limit\": 1255\n        },\n        {\n          \"household_size\": 2,\n          \"limit\": 1704\n        },\n        {\n          \"household_size\": 3,\n          \"limit\": 2152\n        },\n        {\n          \"household_size\": 4,\n          \"limit\": 2600\n        },\n        {\n          \"household_size\": 5,\n          \"limit\": 3049\n        },\n        {\n          \"household_size\": 6,\n          \"limit\": 3497\n        },\n        {\n          \"household_size\": 7,\n          \"limit\": 3945\n        },\n        {\n          \"household_size\": 8,\n          \"limit\": 4394\n        },\n        {\n          \"household_size\": 9,\n          \"limit\": 4843\n        },\n        {\n          \"household_size\": 10,\n          \"limit\": 5292\n        },\n        {\n          \"household_size\": \"each additional person\",\n          \"limit\": 449\n        }\n      ],\n      \"deductions_note\": \"Allowable deductions can include shelter expenses, medical expenses, and dependent care costs.\"\n    },\n    \"asset_limits\": {\n      \"applies_to\": \"Households that include someone age 60+ or a person with a disability when income is over the gross-income threshold; Vermont notes these households are subject to an asset test.\",\n      \"limit\": 4500,\n      \"countable_resources\": \"Countable resources can include things like cash and other assets that can be turned into money.\",\n      \"exempt_assets\": [\n        \"home\",\n        \"certain retirement accounts\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must live in Vermont and apply as a household for food assistance.\",\n      \"Most households must be under the gross income limit unless categorically eligible.\",\n      \"Categorically eligible households include some households receiving Reach Up, SSI, or VT EITC.\",\n      \"Work requirements may apply to some adults, but they do not apply to people under 18, over 64, pregnant people, people with disabilities, or caregivers of children under 14.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly food benefits loaded onto an EBT card to buy groceries and eligible food items. The benefit amount is based on household size, income, and deductions; Vermont describes the benefit formula as maximum Thrifty Food Plan amount for the household size minus 30% of net income.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Vermont's myBenefits portal: https://dcf.vermont.gov/benefits/3SquaresVT\",\n      \"Paper application: Form 202 or Form 202-3SNP\",\n      \"Phone request for a paper application: 1-800-479-6151\",\n      \"Submit by document uploader after completing the form\",\n      \"Mail the completed application to the address on the form\",\n      \"Drop off at a district office in person\"\n    ],\n    \"processing_time\": \"Not stated in the provided official material; applicants should expect standard SNAP processing timelines and ask the district office for current timing.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Form 202\",\n      \"Form 202-3SNP\"\n    ],\n    \"documents\": [\n      \"Completed and signed application\",\n      \"Proof of identity\",\n      \"Proof of household income\",\n      \"Proof of household size and living situation\",\n      \"Information about shelter costs if claiming deductions\",\n      \"Medical expense information for an older adult or disabled household member, if applicable\",\n      \"Bank or asset information if the household includes someone 60+ or disabled and an asset test applies\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"No county restriction; 3SquaresVT is a statewide Vermont SNAP program.\",\n    \"regional_variations\": \"The benefit rules are statewide, but application handling can vary by district office location and workload. No regional benefit tiers or county-specific eligibility rules were identified.\",\n    \"offices_or_providers\": [\n      \"Vermont Department for Children and Families district offices\",\n      \"Vermont Economic Services Division district offices\"\n    ]\n  },\n  \"official_source\": \"https://dcf.vermont.gov/benefits/3SquaresVT\",\n  \"gotchas\": [\n    \"The gross-income test is not the whole story: households with someone age 60+ or with a disability may be evaluated under asset rules instead.\",\n    \"Vermont’s materials say some households can still qualify above the gross-income limit if they have a person age 60+ or disabled, but countable resources must stay under the limit.\",\n    \"Benefit amount is not a fixed grant; it changes with household size and net income.\",\n    \"A household can be categorically eligible through programs like Reach Up, SSI, or VT EITC.\",\n    \"Families often miss deductions such as shelter and medical expenses, which can lower net income and raise the benefit amount.\",\n    \"People do not need to be elderly to apply for 3SquaresVT; the age-60 issue matters mainly for the special asset rules.\"\n  ],\n  \"data_shape_notes\": \"This program has a tiered structure: eligibility generally depends on gross income, benefit size depends on net income and household size, and a special asset test applies only for households with a member age 60+ or a disability when income is over the gross-income threshold.\"\n}"
+      },
+      {
+        "name": "State SSI Supplement (Essential Person Benefit)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Vermont says the person must be blind, age 65 or older, or disabled, and must meet income guidelines, receive or have applied for SSI and/or SSDI, and have an essential person living with them to provide daily assistance. The exact dollar income limits are not published on the program page; the state directs applicants to its eligibility rules and application materials instead.[1][3][5] For the broader Vermont SSI/AABD framework, the state rule says a person must pass the federal SSI non-income tests and have countable income below the combined SSI/AABD payment standard for the living arrangement, but the essential-person page itself does not provide a household-size income table.[5]",
+          "asset_limits": "No asset limit is stated on the Essential Person program page. The official page focuses on age/disability status, income guidelines, SSI/SSDI application status, and the presence of an essential person in the home.[1] Vermont’s referenced SSI/AABD rules on the state regulation page discuss federal SSI-style eligibility tests, but the search results provided do not include a current essential-person-specific resource limit or exempt-asset list.[5]",
+          "other_requirements": [
+            "Must be blind, age 65 or older, or disabled.[1]",
+            "Must meet Vermont income guidelines.[1]",
+            "Must receive or have applied for SSI and/or SSDI.[1]",
+            "Must have an essential person living with the applicant to provide daily assistance needed to stay at home.[1]",
+            "The essential person must live with the applicant and cannot be eligible for SSI/AABD or Reach Up, and cannot be paid by the Department of Disabilities, Aging and Independent Living to provide personal services.[1]",
+            "Applicant must be a Vermont resident under the state AABD framework referenced in Vermont rules.[5]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Monthly cash assistance paid as a state supplement for having an essential person in the home. The official page does not state a dollar amount on the page itself, but it says the benefit can be received by direct deposit or on an EBT card.[1] Vermont’s SSI supplement tables show state supplement amounts vary by living arrangement, with the essential-person-related AABD-EP category appearing in state rules rather than on the program page; the provided search results do not include a current official dollar figure for the essential person payment.[5][7][10]",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online: myBenefits.vt.gov / MyBenefits portal[2][3]",
+            "Phone: 1-800-479-6151 to request a paper application[1][3]",
+            "Mail: send the completed application to DCF - Economic Services Division, Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500[3]",
+            "In person: at a local Vermont district office; Vermont says there are 12 district offices[1][3]"
+          ],
+          "processing_time": "No official processing-time estimate was found in the provided results. Vermont’s application instructions say you may be asked to participate in an interview if required.[3]",
+          "waitlist": null,
+          "forms": [
+            "Form 202 (application for 3SquaresVT, Reach Up, Fuel Assistance, and Essential Person)[3]"
+          ],
+          "documents": [
+            "Completed and signed application[3]",
+            "Copies of any required supporting documents requested by the application[3]",
+            "If applying for multiple programs together, the same Form 202 can be used[3]",
+            "Any documents needed to verify identity, residence, income, and household situation if requested during processing[3]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Vermont; applications can be submitted through the state portal, by mail, or at local district offices.[1][3]",
+          "regional_variations": "No regional benefit variation was identified in the provided results. The main geographic difference is administrative access through different district offices, and Vermont notes there are 12 district offices for in-person filing.[3]",
+          "offices_or_providers": [
+            "DCF Economic Services Division Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500[3]",
+            "Local Vermont district offices (12 offices statewide)[1][3]"
+          ]
+        },
+        "official_source": "https://dcf.vermont.gov/benefits/essential-person",
+        "gotchas": [
+          "The essential person must live with the applicant and cannot be someone already paid by the state to provide personal services.[1]",
+          "Applicants often miss that the same Form 202 can cover Essential Person plus 3SquaresVT, Reach Up, and Fuel Assistance.[3]",
+          "The official page does not publish a simple income chart or payment amount, so families often have to call or apply to confirm the exact current amount and eligibility.[1][3][5]",
+          "The benefit is cash assistance, not a home-care service package.[1]",
+          "The program is tied to SSI/SSDI and Vermont’s AABD rules, so filing with Social Security or for SSI/SSDI status can matter for related eligibility.[1][5]"
+        ],
+        "data_shape_notes": "This program is a statewide Vermont cash supplement with a special household condition: the applicant must have a qualifying essential person living in the home. It does not appear to use a county-specific waitlist or service-hours model; instead, eligibility and payment are tied to SSI/SSDI status, age/disability, income rules, and the living-with-you essential person requirement.[1][3][5]",
+        "_raw": "{\n  \"name\": \"State SSI Supplement (Essential Person Benefit)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Vermont says the person must be blind, age 65 or older, or disabled, and must meet income guidelines, receive or have applied for SSI and/or SSDI, and have an essential person living with them to provide daily assistance. The exact dollar income limits are not published on the program page; the state directs applicants to its eligibility rules and application materials instead.[1][3][5] For the broader Vermont SSI/AABD framework, the state rule says a person must pass the federal SSI non-income tests and have countable income below the combined SSI/AABD payment standard for the living arrangement, but the essential-person page itself does not provide a household-size income table.[5]\",\n    \"asset_limits\": \"No asset limit is stated on the Essential Person program page. The official page focuses on age/disability status, income guidelines, SSI/SSDI application status, and the presence of an essential person in the home.[1] Vermont’s referenced SSI/AABD rules on the state regulation page discuss federal SSI-style eligibility tests, but the search results provided do not include a current essential-person-specific resource limit or exempt-asset list.[5]\",\n    \"other_requirements\": [\n      \"Must be blind, age 65 or older, or disabled.[1]\",\n      \"Must meet Vermont income guidelines.[1]\",\n      \"Must receive or have applied for SSI and/or SSDI.[1]\",\n      \"Must have an essential person living with the applicant to provide daily assistance needed to stay at home.[1]\",\n      \"The essential person must live with the applicant and cannot be eligible for SSI/AABD or Reach Up, and cannot be paid by the Department of Disabilities, Aging and Independent Living to provide personal services.[1]\",\n      \"Applicant must be a Vermont resident under the state AABD framework referenced in Vermont rules.[5]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Monthly cash assistance paid as a state supplement for having an essential person in the home. The official page does not state a dollar amount on the page itself, but it says the benefit can be received by direct deposit or on an EBT card.[1] Vermont’s SSI supplement tables show state supplement amounts vary by living arrangement, with the essential-person-related AABD-EP category appearing in state rules rather than on the program page; the provided search results do not include a current official dollar figure for the essential person payment.[5][7][10]\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: myBenefits.vt.gov / MyBenefits portal[2][3]\",\n      \"Phone: 1-800-479-6151 to request a paper application[1][3]\",\n      \"Mail: send the completed application to DCF - Economic Services Division, Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500[3]\",\n      \"In person: at a local Vermont district office; Vermont says there are 12 district offices[1][3]\"\n    ],\n    \"processing_time\": \"No official processing-time estimate was found in the provided results. Vermont’s application instructions say you may be asked to participate in an interview if required.[3]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Form 202 (application for 3SquaresVT, Reach Up, Fuel Assistance, and Essential Person)[3]\"\n    ],\n    \"documents\": [\n      \"Completed and signed application[3]\",\n      \"Copies of any required supporting documents requested by the application[3]\",\n      \"If applying for multiple programs together, the same Form 202 can be used[3]\",\n      \"Any documents needed to verify identity, residence, income, and household situation if requested during processing[3]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Vermont; applications can be submitted through the state portal, by mail, or at local district offices.[1][3]\",\n    \"regional_variations\": \"No regional benefit variation was identified in the provided results. The main geographic difference is administrative access through different district offices, and Vermont notes there are 12 district offices for in-person filing.[3]\",\n    \"offices_or_providers\": [\n      \"DCF Economic Services Division Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500[3]\",\n      \"Local Vermont district offices (12 offices statewide)[1][3]\"\n    ]\n  },\n  \"official_source\": \"https://dcf.vermont.gov/benefits/essential-person\",\n  \"gotchas\": [\n    \"The essential person must live with the applicant and cannot be someone already paid by the state to provide personal services.[1]\",\n    \"Applicants often miss that the same Form 202 can cover Essential Person plus 3SquaresVT, Reach Up, and Fuel Assistance.[3]\",\n    \"The official page does not publish a simple income chart or payment amount, so families often have to call or apply to confirm the exact current amount and eligibility.[1][3][5]\",\n    \"The benefit is cash assistance, not a home-care service package.[1]\",\n    \"The program is tied to SSI/SSDI and Vermont’s AABD rules, so filing with Social Security or for SSI/SSDI status can matter for related eligibility.[1][5]\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Vermont cash supplement with a special household condition: the applicant must have a qualifying essential person living in the home. It does not appear to use a county-specific waitlist or service-hours model; instead, eligibility and payment are tied to SSI/SSDI status, age/disability, income rules, and the living-with-you essential person requirement.[1][3][5]\"\n}"
+      },
+      {
+        "name": "General Assistance Fuel",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Gross monthly household income must be at or below 185% of the federal poverty level, based on household size[1][12][15]. The official page says some people in the home may not count as part of the fuel household, such as a caretaker or roomer, and their income is not counted for eligibility even though they must be listed on the application[1].",
+          "asset_limits": "No asset limit is stated in the source materials reviewed for this program[1][2]. The official fuel assistance page and related rules emphasize income-based eligibility and residency/citizenship requirements rather than a separate asset test[1][12][15].",
+          "other_requirements": [
+            "Must be a Vermont resident[14][15]",
+            "Must meet the 185% of federal poverty level income test[1][12][15]",
+            "Household members must be U.S. citizens, nationals, or qualified immigrants for seasonal fuel benefits under the rule referenced in the program materials[14]",
+            "Some household members may be excluded from the fuel household calculation, such as caretakers or roomers[1]",
+            "The program is for home heating costs; it applies whether heat is paid directly, included in rent, or the household rents a room in someone’s home[1][5]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A yearly, one-time benefit payment that helps pay part of home heating costs[1][11]. It can be used for fuel to heat the home, including situations where heat is paid through rent or as part of housing costs[1][5][11]. The available sources do not provide a fixed dollar amount because the benefit amount varies by household circumstances and program year[1][11].",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application via the Fuel Assistance page on the Vermont Department for Children and Families website: https://dcf.vermont.gov/benefits/fuel[1]",
+            "Phone application/contact through the Vermont Benefits Call Center: 1-800-479-6151[3][8]",
+            "In-person help through local Community Action Agencies, especially for crisis fuel situations[4]"
+          ],
+          "processing_time": "No specific statewide processing time was stated in the sources reviewed. The benefit is annual and can be applied for any time of year, but applying before the end of November may help maximize the benefit amount[11].",
+          "waitlist": null,
+          "forms": [
+            "Fuel Assistance application on the Vermont DCF Fuel Assistance page[1]",
+            "A shorter application for Fuel Assistance is referenced by Vermont Foodbank, and a longer online application is available on the main fuel assistance page[11]"
+          ],
+          "documents": [
+            "Proof of gross household income[1][12][15]",
+            "Information about everyone living in the home, including people who may not count in the fuel household such as caretakers or roomers[1]",
+            "Vermont residency information[14][15]",
+            "Household information needed to determine heating arrangement, such as whether heat is included in rent or paid separately[1][5]",
+            "For crisis situations or in-person applications, local agencies may ask for additional documents and information, and callers are told to contact the agency first[4]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Vermont program; no county restriction was identified in the source materials[1][2][12].",
+          "regional_variations": "The core Fuel Assistance rules are statewide, but application support and crisis-fuel intake are handled through local Community Action Agencies, so access and wait times can vary by region[4]. Crisis fuel has special timing rules depending on whether the household uses bulk fuels or metered fuels[4].",
+          "offices_or_providers": [
+            "Vermont Department for Children and Families, Economic Services Division[1][8][13]",
+            "Local Community Action Agencies for crisis fuel applications[4]",
+            "Vermont Benefits Call Center: 1-800-479-6151[3][8]"
+          ]
+        },
+        "official_source": "https://dcf.vermont.gov/benefits/fuel",
+        "gotchas": [
+          "This is not the same as Emergency/General Assistance; Fuel Assistance is a seasonal home-heating benefit, while General Assistance is for emergency basic needs[2][5].",
+          "The benefit is typically one-time each year, not a monthly payment[11].",
+          "Households can qualify even if heat is included in rent or they rent a room in someone else’s home[1][5][11].",
+          "Some people living in the home may not be counted in the fuel household, but they still need to be listed on the application[1].",
+          "Applying before the end of November may increase the benefit amount[11].",
+          "There is no fixed published dollar benefit amount in the reviewed materials because the payment amount depends on the program year and household factors[1][11]."
+        ],
+        "data_shape_notes": "This program is a statewide, income-based, seasonal heating benefit with a household-size test, not an age-based elder program and not a county-limited emergency grant[1][12][15]. Benefit amounts are not fixed in the source material and instead vary by household and program year[11].",
+        "_raw": "{\n  \"name\": \"General Assistance Fuel\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Gross monthly household income must be at or below 185% of the federal poverty level, based on household size[1][12][15]. The official page says some people in the home may not count as part of the fuel household, such as a caretaker or roomer, and their income is not counted for eligibility even though they must be listed on the application[1].\",\n    \"asset_limits\": \"No asset limit is stated in the source materials reviewed for this program[1][2]. The official fuel assistance page and related rules emphasize income-based eligibility and residency/citizenship requirements rather than a separate asset test[1][12][15].\",\n    \"other_requirements\": [\n      \"Must be a Vermont resident[14][15]\",\n      \"Must meet the 185% of federal poverty level income test[1][12][15]\",\n      \"Household members must be U.S. citizens, nationals, or qualified immigrants for seasonal fuel benefits under the rule referenced in the program materials[14]\",\n      \"Some household members may be excluded from the fuel household calculation, such as caretakers or roomers[1]\",\n      \"The program is for home heating costs; it applies whether heat is paid directly, included in rent, or the household rents a room in someone’s home[1][5]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A yearly, one-time benefit payment that helps pay part of home heating costs[1][11]. It can be used for fuel to heat the home, including situations where heat is paid through rent or as part of housing costs[1][5][11]. The available sources do not provide a fixed dollar amount because the benefit amount varies by household circumstances and program year[1][11].\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application via the Fuel Assistance page on the Vermont Department for Children and Families website: https://dcf.vermont.gov/benefits/fuel[1]\",\n      \"Phone application/contact through the Vermont Benefits Call Center: 1-800-479-6151[3][8]\",\n      \"In-person help through local Community Action Agencies, especially for crisis fuel situations[4]\"\n    ],\n    \"processing_time\": \"No specific statewide processing time was stated in the sources reviewed. The benefit is annual and can be applied for any time of year, but applying before the end of November may help maximize the benefit amount[11].\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Fuel Assistance application on the Vermont DCF Fuel Assistance page[1]\",\n      \"A shorter application for Fuel Assistance is referenced by Vermont Foodbank, and a longer online application is available on the main fuel assistance page[11]\"\n    ],\n    \"documents\": [\n      \"Proof of gross household income[1][12][15]\",\n      \"Information about everyone living in the home, including people who may not count in the fuel household such as caretakers or roomers[1]\",\n      \"Vermont residency information[14][15]\",\n      \"Household information needed to determine heating arrangement, such as whether heat is included in rent or paid separately[1][5]\",\n      \"For crisis situations or in-person applications, local agencies may ask for additional documents and information, and callers are told to contact the agency first[4]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Vermont program; no county restriction was identified in the source materials[1][2][12].\",\n    \"regional_variations\": \"The core Fuel Assistance rules are statewide, but application support and crisis-fuel intake are handled through local Community Action Agencies, so access and wait times can vary by region[4]. Crisis fuel has special timing rules depending on whether the household uses bulk fuels or metered fuels[4].\",\n    \"offices_or_providers\": [\n      \"Vermont Department for Children and Families, Economic Services Division[1][8][13]\",\n      \"Local Community Action Agencies for crisis fuel applications[4]\",\n      \"Vermont Benefits Call Center: 1-800-479-6151[3][8]\"\n    ]\n  },\n  \"official_source\": \"https://dcf.vermont.gov/benefits/fuel\",\n  \"gotchas\": [\n    \"This is not the same as Emergency/General Assistance; Fuel Assistance is a seasonal home-heating benefit, while General Assistance is for emergency basic needs[2][5].\",\n    \"The benefit is typically one-time each year, not a monthly payment[11].\",\n    \"Households can qualify even if heat is included in rent or they rent a room in someone else’s home[1][5][11].\",\n    \"Some people living in the home may not be counted in the fuel household, but they still need to be listed on the application[1].\",\n    \"Applying before the end of November may increase the benefit amount[11].\",\n    \"There is no fixed published dollar benefit amount in the reviewed materials because the payment amount depends on the program year and household factors[1][11].\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide, income-based, seasonal heating benefit with a household-size test, not an age-based elder program and not a county-limited emergency grant[1][12][15]. Benefit amounts are not fixed in the source material and instead vary by household and program year[11].\"\n}"
+      },
+      {
+        "name": "Property Tax Adjustment (Renter/Property Tax Credit)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "This program has two related parts with different income rules. For the Renter Credit, the income limit is based on 65% of HUD county median income by family size, with separate county/family-size tables; if income is below Table 2 you get the full credit, between Table 2 and Table 3 it is scaled, and above Table 3 you are not eligible. For the Property Tax Credit, the household-income cap is $115,000 for tax year 2024 (and the Department says to use the current-year form/instructions for the active limit).",
+          "asset_limits": null,
+          "other_requirements": [
+            "For the Renter Credit, the claimant must be domiciled in Vermont for the entire calendar year.",
+            "For the Renter Credit, the claimant must not be claimed as a dependent by another taxpayer.",
+            "For the Renter Credit, the claimant must have rented in Vermont for at least six months; the six months do not need to be consecutive.",
+            "For the Property Tax Credit, the claimant must file a Homestead Declaration and a Property Tax Credit Claim for a qualifying homestead.",
+            "For the Property Tax Credit, the homestead generally must be the taxpayer's principal residence and the claim is filed annually.",
+            "For the Property Tax Credit, a homestead leased to a tenant on April 1 may still qualify if it is not leased for more than 182 days in the claim year."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Renter Credit: a refundable state tax credit, with a maximum credit of up to $2,500 for eligible renters. If income is at or below the extremely low-income limit, the credit equals 10% of fair market rent; if income is between the extremely low-income and very low-income limits, the credit is reduced proportionally. Property Tax Credit: a household-based property tax adjustment that reduces the property tax burden on a qualifying homestead; the exact amount depends on household income and the homestead's property tax situation.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://myvtax.vermont.gov",
+            "By filing with a Vermont income tax return",
+            "By filing a standalone claim through the Vermont Department of Taxes"
+          ],
+          "processing_time": "No fixed processing timeline was stated in the official materials retrieved. The program does not appear to have a waitlist.",
+          "waitlist": null,
+          "forms": [
+            "Form HS-122, Homestead Declaration and Property Tax Credit Claim",
+            "Schedule HI-144, Household Income",
+            "Form HS-122W, withdrawal form for certain rental-use situations"
+          ],
+          "documents": [
+            "Completed Form HS-122",
+            "Completed Schedule HI-144",
+            "Household income information for all required members",
+            "Rental information, if claiming the Renter Credit",
+            "Property tax bill or homestead details, if claiming the Property Tax Credit",
+            "Information needed to file online through myVTax"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applies to Vermont residents and Vermont property/rental situations; renter income limits vary by county because they are tied to HUD county median income.",
+          "regional_variations": "Yes for the Renter Credit: the income limit changes by county and family size. The Property Tax Credit is statewide, but the amount depends on the household's situation rather than region.",
+          "offices_or_providers": [
+            "Vermont Department of Taxes"
+          ]
+        },
+        "official_source": "https://tax.vermont.gov/ptc",
+        "gotchas": [
+          "This is not a healthcare or service program; it is a refundable tax credit/adjustment.",
+          "The Renter Credit and the Property Tax Credit are related but not identical programs, and they have different eligibility rules.",
+          "Renter-credit eligibility depends on county and family size, so the limit is not a single statewide dollar amount.",
+          "A claimant can be eligible for the Renter Credit even if not required to file a Vermont income tax return.",
+          "For the Property Tax Credit, filing the homestead declaration and household income schedule is essential; missing one of the required pieces can prevent the claim from being allowed.",
+          "The homestead can still qualify in some rented situations if rental use is limited, but the rental-use rules must be reported correctly.",
+          "The Department's income limits and forms change by tax year, so families must use the current year's instructions and tables."
+        ],
+        "data_shape_notes": "This program is unusual because it combines two separate but related benefits: a renter refundable credit with county-and-family-size income tables, and a homestead property tax adjustment with a statewide household-income cap.",
+        "_raw": "{\n  \"name\": \"Property Tax Adjustment (Renter/Property Tax Credit)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"This program has two related parts with different income rules. For the Renter Credit, the income limit is based on 65% of HUD county median income by family size, with separate county/family-size tables; if income is below Table 2 you get the full credit, between Table 2 and Table 3 it is scaled, and above Table 3 you are not eligible. For the Property Tax Credit, the household-income cap is $115,000 for tax year 2024 (and the Department says to use the current-year form/instructions for the active limit).\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"For the Renter Credit, the claimant must be domiciled in Vermont for the entire calendar year.\",\n      \"For the Renter Credit, the claimant must not be claimed as a dependent by another taxpayer.\",\n      \"For the Renter Credit, the claimant must have rented in Vermont for at least six months; the six months do not need to be consecutive.\",\n      \"For the Property Tax Credit, the claimant must file a Homestead Declaration and a Property Tax Credit Claim for a qualifying homestead.\",\n      \"For the Property Tax Credit, the homestead generally must be the taxpayer's principal residence and the claim is filed annually.\",\n      \"For the Property Tax Credit, a homestead leased to a tenant on April 1 may still qualify if it is not leased for more than 182 days in the claim year.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Renter Credit: a refundable state tax credit, with a maximum credit of up to $2,500 for eligible renters. If income is at or below the extremely low-income limit, the credit equals 10% of fair market rent; if income is between the extremely low-income and very low-income limits, the credit is reduced proportionally. Property Tax Credit: a household-based property tax adjustment that reduces the property tax burden on a qualifying homestead; the exact amount depends on household income and the homestead's property tax situation.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://myvtax.vermont.gov\",\n      \"By filing with a Vermont income tax return\",\n      \"By filing a standalone claim through the Vermont Department of Taxes\"\n    ],\n    \"processing_time\": \"No fixed processing timeline was stated in the official materials retrieved. The program does not appear to have a waitlist.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Form HS-122, Homestead Declaration and Property Tax Credit Claim\",\n      \"Schedule HI-144, Household Income\",\n      \"Form HS-122W, withdrawal form for certain rental-use situations\"\n    ],\n    \"documents\": [\n      \"Completed Form HS-122\",\n      \"Completed Schedule HI-144\",\n      \"Household income information for all required members\",\n      \"Rental information, if claiming the Renter Credit\",\n      \"Property tax bill or homestead details, if claiming the Property Tax Credit\",\n      \"Information needed to file online through myVTax\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applies to Vermont residents and Vermont property/rental situations; renter income limits vary by county because they are tied to HUD county median income.\",\n    \"regional_variations\": \"Yes for the Renter Credit: the income limit changes by county and family size. The Property Tax Credit is statewide, but the amount depends on the household's situation rather than region.\",\n    \"offices_or_providers\": [\n      \"Vermont Department of Taxes\"\n    ]\n  },\n  \"official_source\": \"https://tax.vermont.gov/ptc\",\n  \"gotchas\": [\n    \"This is not a healthcare or service program; it is a refundable tax credit/adjustment.\",\n    \"The Renter Credit and the Property Tax Credit are related but not identical programs, and they have different eligibility rules.\",\n    \"Renter-credit eligibility depends on county and family size, so the limit is not a single statewide dollar amount.\",\n    \"A claimant can be eligible for the Renter Credit even if not required to file a Vermont income tax return.\",\n    \"For the Property Tax Credit, filing the homestead declaration and household income schedule is essential; missing one of the required pieces can prevent the claim from being allowed.\",\n    \"The homestead can still qualify in some rented situations if rental use is limited, but the rental-use rules must be reported correctly.\",\n    \"The Department's income limits and forms change by tax year, so families must use the current year's instructions and tables.\"\n  ],\n  \"data_shape_notes\": \"This program is unusual because it combines two separate but related benefits: a renter refundable credit with county-and-family-size income tables, and a homestead property tax adjustment with a statewide household-income cap.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "VT",
+    "stateName": "Vermont",
+    "classifiedAt": "2026-10-06T05:54:03.001Z",
+    "total": 4,
+    "typeSummary": {
+      "benefit": 4
+    },
+    "scopeSummary": {
+      "federal": 1,
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 3,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "3Squares Vermont (SNAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Vermont Department for Children and Families district offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Vermont Economic Services Division district offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "State SSI Supplement (Essential Person Benefit)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "DCF Economic Services Division Application and Document Processing Center, 280 State Drive, Waterbury, VT 05671-1500[3]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Vermont district offices (12 offices statewide)[1][3]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "General Assistance Fuel",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Vermont Department for Children and Families, Economic Services Division[1][8][13]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Community Action Agencies for crisis fuel applications[4]",
+              "type": "service-area"
+            },
+            {
+              "name": "Vermont Benefits Call Center: 1-800-479-6151[3][8]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Property Tax Adjustment (Renter/Property Tax Credit)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Vermont Department of Taxes",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "VT",
+      "id": "vt-3squares-snap",
+      "name": "3Squares Vermont (SNAP)",
+      "legacyId": "3squares-vermont-snap",
+      "programType": "benefit"
+    },
+    {
+      "state": "VT",
+      "id": "vt-ssi-supplement-essential-person",
+      "name": "State SSI Supplement (Essential Person Benefit)",
+      "legacyId": "state-ssi-supplement-essential-person-benefit",
+      "programType": "benefit"
+    },
+    {
+      "state": "VT",
+      "id": "vt-fuel-assistance",
+      "name": "General Assistance Fuel",
+      "legacyId": "general-assistance-fuel",
+      "programType": "benefit"
+    },
+    {
+      "state": "VT",
+      "id": "vt-property-tax-adjustment-renter-credit",
+      "name": "Property Tax Adjustment (Renter/Property Tax Credit)",
+      "legacyId": "property-tax-adjustment-renter-property-tax-credit",
+      "programType": "benefit"
+    }
+  ]
+}

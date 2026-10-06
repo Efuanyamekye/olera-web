@@ -1,0 +1,600 @@
+{
+  "state": "CO",
+  "addedAt": "2026-10-06T05:43:51.033Z",
+  "dive": {
+    "state": "CO",
+    "stateName": "Colorado",
+    "diveAt": "2026-10-06T05:37:51.629Z",
+    "total": 5,
+    "parsed": 5,
+    "programs": [
+      {
+        "name": "Health First Colorado (Medicaid) for Aged, Blind, and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For the Aged, Blind, and Disabled Medicaid pathway, Colorado uses income rules tied to SSI-related standards. The official Colorado guidance indicates a monthly income limit of less than 300% of the current SSI limit for the EBD waiver, and the paper application notes that people who are 65+, blind, or disabled may qualify through a disability-related worksheet. The exact dollar amount changes with the federal SSI rate and should be verified against the current SSI figure at the time of application. No household-size-based income table was provided in the official materials gathered; the relevant test is generally the applicant’s own income and, for some cases, a spouse’s income under Medicaid rules.",
+          "asset_limits": "For the EBD waiver, countable resources must be less than $2,000 for a single person and less than $3,000 for a couple. Colorado’s official materials say countable resources are the key test. The sources gathered do not list a complete exemption schedule, but Medicaid applicants commonly exclude certain assets such as a primary residence, one vehicle, personal belongings, and burial items depending on the program rules; those exemptions should be confirmed during application review.",
+          "other_requirements": [
+            "Must be 65 or older with a significant functional impairment, or be 18-64 and blind or physically disabled, or have HIV/AIDS for the EBD waiver.",
+            "Must be currently residing in, or be at risk of being institutionalized in, a nursing facility or hospital for the EBD waiver.",
+            "Must meet Colorado Medicaid citizenship/legal presence and residency rules.",
+            "Must meet disability-related criteria if applying through the disability pathway.",
+            "If not already enrolled, applicants can still apply for Health First Colorado and then be evaluated for the appropriate disability-related coverage path."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "This is Health First Colorado coverage plus, for the EBD waiver, an extra set of long-term services and supports intended to help people remain in the community instead of a nursing facility. The waiver can include adult day services, alternative care facility services, home accessibility modifications, life skills training, respite care, non-medical transportation, and wellness education. Members also keep standard Medicaid benefits such as doctor visits, hospital care, prescriptions, dental, vision, and behavioral health services.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online at https://www.healthfirstcolorado.gov/apply-now/",
+            "By phone at 1-800-221-3943 (State Relay 711)",
+            "Through a county Department of Human Services office",
+            "Through a local application assistance site"
+          ],
+          "processing_time": "No specific statewide processing timeline was provided in the gathered official sources for the ABD pathway. For disability-related eligibility, processing can take longer because the disability determination step may be required before final enrollment.",
+          "waitlist": null,
+          "forms": [
+            "Health First Colorado and CHP+ Paper Application - English (June 2025)",
+            "Health First Colorado Disability Application"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Social Security number or last 4 digits where requested",
+            "Date of birth",
+            "Proof of Colorado residency",
+            "Proof of citizenship or lawful presence",
+            "Income records such as Social Security award letters, pension statements, pay stubs, or other income proof",
+            "Bank statements and other resource records if asked",
+            "Medical/disability records if applying on a disability basis",
+            "Medicare information if the applicant has Medicare"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Colorado Medicaid program; the EBD waiver and related long-term services are available only to people who meet the medical and financial criteria and, for waiver services, generally through the waiver administration and case management system in Colorado.",
+          "regional_variations": "Eligibility rules are statewide, but application help, county office contacts, and case management agencies are local. The gathered sources indicate that people already enrolled should contact their local Case Management Agency to start the waiver application process, so the exact point of entry and service coordination can vary by county.",
+          "offices_or_providers": [
+            "County Department of Human Services offices",
+            "Local application assistance sites",
+            "Local Case Management Agencies"
+          ]
+        },
+        "official_source": "https://hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd",
+        "gotchas": [
+          "There is no simple one-size-fits-all limit: the pathway depends on whether the applicant is 65+, blind, disabled, or has HIV/AIDS, and whether the person needs long-term services at home or is at risk of institutionalization.",
+          "The waiver is not the same thing as basic Medicaid; people may qualify for regular Health First Colorado without qualifying for the EBD waiver services.",
+          "Applicants often miss the disability determination step; Colorado says people who may have a qualifying disability should also complete the disability application.",
+          "Resource limits are strict, and exceeding them even slightly can block eligibility.",
+          "People already enrolled in Health First Colorado should use their local Case Management Agency for the waiver rather than starting over from scratch.",
+          "The precise income threshold changes because it is pegged to the federal SSI limit, so families should not rely on an outdated dollar figure."
+        ],
+        "data_shape_notes": "This program has a dual structure: regular Medicaid coverage plus a waiver layer with extra long-term services, and the waiver layer has its own age, disability, functional-need, and resource rules.",
+        "_raw": "{\n  \"name\": \"Health First Colorado (Medicaid) for Aged, Blind, and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For the Aged, Blind, and Disabled Medicaid pathway, Colorado uses income rules tied to SSI-related standards. The official Colorado guidance indicates a monthly income limit of less than 300% of the current SSI limit for the EBD waiver, and the paper application notes that people who are 65+, blind, or disabled may qualify through a disability-related worksheet. The exact dollar amount changes with the federal SSI rate and should be verified against the current SSI figure at the time of application. No household-size-based income table was provided in the official materials gathered; the relevant test is generally the applicant’s own income and, for some cases, a spouse’s income under Medicaid rules.\",\n    \"asset_limits\": \"For the EBD waiver, countable resources must be less than $2,000 for a single person and less than $3,000 for a couple. Colorado’s official materials say countable resources are the key test. The sources gathered do not list a complete exemption schedule, but Medicaid applicants commonly exclude certain assets such as a primary residence, one vehicle, personal belongings, and burial items depending on the program rules; those exemptions should be confirmed during application review.\",\n    \"other_requirements\": [\n      \"Must be 65 or older with a significant functional impairment, or be 18-64 and blind or physically disabled, or have HIV/AIDS for the EBD waiver.\",\n      \"Must be currently residing in, or be at risk of being institutionalized in, a nursing facility or hospital for the EBD waiver.\",\n      \"Must meet Colorado Medicaid citizenship/legal presence and residency rules.\",\n      \"Must meet disability-related criteria if applying through the disability pathway.\",\n      \"If not already enrolled, applicants can still apply for Health First Colorado and then be evaluated for the appropriate disability-related coverage path.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"This is Health First Colorado coverage plus, for the EBD waiver, an extra set of long-term services and supports intended to help people remain in the community instead of a nursing facility. The waiver can include adult day services, alternative care facility services, home accessibility modifications, life skills training, respite care, non-medical transportation, and wellness education. Members also keep standard Medicaid benefits such as doctor visits, hospital care, prescriptions, dental, vision, and behavioral health services.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at https://www.healthfirstcolorado.gov/apply-now/\",\n      \"By phone at 1-800-221-3943 (State Relay 711)\",\n      \"Through a county Department of Human Services office\",\n      \"Through a local application assistance site\"\n    ],\n    \"processing_time\": \"No specific statewide processing timeline was provided in the gathered official sources for the ABD pathway. For disability-related eligibility, processing can take longer because the disability determination step may be required before final enrollment.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Health First Colorado and CHP+ Paper Application - English (June 2025)\",\n      \"Health First Colorado Disability Application\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Social Security number or last 4 digits where requested\",\n      \"Date of birth\",\n      \"Proof of Colorado residency\",\n      \"Proof of citizenship or lawful presence\",\n      \"Income records such as Social Security award letters, pension statements, pay stubs, or other income proof\",\n      \"Bank statements and other resource records if asked\",\n      \"Medical/disability records if applying on a disability basis\",\n      \"Medicare information if the applicant has Medicare\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Colorado Medicaid program; the EBD waiver and related long-term services are available only to people who meet the medical and financial criteria and, for waiver services, generally through the waiver administration and case management system in Colorado.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but application help, county office contacts, and case management agencies are local. The gathered sources indicate that people already enrolled should contact their local Case Management Agency to start the waiver application process, so the exact point of entry and service coordination can vary by county.\",\n    \"offices_or_providers\": [\n      \"County Department of Human Services offices\",\n      \"Local application assistance sites\",\n      \"Local Case Management Agencies\"\n    ]\n  },\n  \"official_source\": \"https://hcpf.colorado.gov/elderly-blind-disabled-waiver-ebd\",\n  \"gotchas\": [\n    \"There is no simple one-size-fits-all limit: the pathway depends on whether the applicant is 65+, blind, disabled, or has HIV/AIDS, and whether the person needs long-term services at home or is at risk of institutionalization.\",\n    \"The waiver is not the same thing as basic Medicaid; people may qualify for regular Health First Colorado without qualifying for the EBD waiver services.\",\n    \"Applicants often miss the disability determination step; Colorado says people who may have a qualifying disability should also complete the disability application.\",\n    \"Resource limits are strict, and exceeding them even slightly can block eligibility.\",\n    \"People already enrolled in Health First Colorado should use their local Case Management Agency for the waiver rather than starting over from scratch.\",\n    \"The precise income threshold changes because it is pegged to the federal SSI limit, so families should not rely on an outdated dollar figure.\"\n  ],\n  \"data_shape_notes\": \"This program has a dual structure: regular Medicaid coverage plus a waiver layer with extra long-term services, and the waiver layer has its own age, disability, functional-need, and resource rules.\"\n}"
+      },
+      {
+        "name": "Colorado Energy Assistance Program (LEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Households must have gross monthly income at or below 60% of Colorado State Median Income for the season shown in the official materials. The published 2025-2026 monthly gross income limits are: 1 person $3,607; 2 people $4,717; 3 people $5,827; 4 people $6,938; 5 people $8,048; 6 people $9,158; 7 people $9,366; 8 people $9,574; each additional person +$208. LEAP is a household-based heating assistance program, and the income test is based on the people in the household and their gross income.",
+          "asset_limits": "No asset limit was identified in the official materials gathered. The program materials reviewed focus on income, residency/citizenship status, and heating-cost responsibility rather than savings, vehicles, or other assets.",
+          "other_requirements": [
+            "Must be a Colorado resident",
+            "Must have at least one U.S. citizen or permanent legal resident in the household, or otherwise meet the program's household immigration/citizenship rule as stated by local guidance",
+            "Must pay home heating costs directly to a utility company, fuel dealer, or as part of rent",
+            "Program is for winter heating assistance only"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A one-time payment is sent directly to the utility company or heating vendor on behalf of the household. Reported benefit amounts in current state materials show households receiving between $200 and $1,000 in energy assistance for the season, but the exact amount varies by household and funding availability. Some local and utility materials also note the program may include help with equipment repair and replacement, but the core benefit is the direct heating-cost payment.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Colorado PEAK: https://peak.my.site.com/ColoradoPEAK/s/LEAP-Online-Application",
+            "By phone: 1-866-HEAT-HELP (1-866-432-8435) to request a paper application or get help",
+            "Mail: submit the completed paper application to the county LEAP office or the address provided on the paper application",
+            "In-person/through county human services offices or local administering agencies, depending on county"
+          ],
+          "processing_time": "No single statewide processing-time guarantee was identified. Applications are accepted from November 1 through April 30, and local guidance indicates applications are processed while funding is available.",
+          "waitlist": "No formal statewide waitlist was identified in the materials reviewed. The practical limitation is funding availability; if money is exhausted, later applications may not be paid.",
+          "forms": [
+            "Colorado LEAP application / LEAP paper application",
+            "Colorado PEAK LEAP online application"
+          ],
+          "documents": [
+            "Proof of identity and Colorado residency",
+            "Proof of income for the household",
+            "Recent heating bill or proof that heating costs are included in rent",
+            "Social Security numbers or immigration/citizenship information for household members as required by the form",
+            "Utility account information if paying a vendor directly",
+            "Any disconnection notice or emergency shutoff notice if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Colorado, but applicants generally must apply through their county or the county-designated administrator. County procedures, mailing addresses, and local contact points may differ.",
+          "regional_variations": "The benefit rules are statewide, but administration can differ by county in where applications are submitted, how paper applications are handled, and how quickly local offices process them. Some counties provide their own email or office submission routes, while others route applicants through Colorado PEAK or the state heat-help line.",
+          "offices_or_providers": [
+            "County human services offices",
+            "County LEAP administrators",
+            "Goodwill of Colorado in some regions",
+            "County-specific energy assistance offices"
+          ]
+        },
+        "official_source": "https://cdhs.colorado.gov/leap",
+        "gotchas": [
+          "The program is seasonal: it runs November 1 through April 30, so timing matters.",
+          "Payment goes to the utility or fuel provider, not directly to the household.",
+          "Eligibility is based on gross monthly household income, not net income.",
+          "A household can qualify even if the heating cost is included in rent, but the rent must actually include heating costs.",
+          "Funding is finite; being eligible does not guarantee payment if funds run out.",
+          "County administration can vary, so families should not assume every county uses the same submission method or processing speed.",
+          "The common mistake is waiting until the coldest part of winter; applying early is safer."
+        ],
+        "data_shape_notes": "Statewide seasonal heating-assistance program with household income limits, a one-time direct vendor payment, and county-level administration details. The key variables are household size, gross monthly income, and whether the household pays heating costs directly or through rent.",
+        "_raw": "{\n  \"name\": \"Colorado Energy Assistance Program (LEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Households must have gross monthly income at or below 60% of Colorado State Median Income for the season shown in the official materials. The published 2025-2026 monthly gross income limits are: 1 person $3,607; 2 people $4,717; 3 people $5,827; 4 people $6,938; 5 people $8,048; 6 people $9,158; 7 people $9,366; 8 people $9,574; each additional person +$208. LEAP is a household-based heating assistance program, and the income test is based on the people in the household and their gross income.\",\n    \"asset_limits\": \"No asset limit was identified in the official materials gathered. The program materials reviewed focus on income, residency/citizenship status, and heating-cost responsibility rather than savings, vehicles, or other assets.\",\n    \"other_requirements\": [\n      \"Must be a Colorado resident\",\n      \"Must have at least one U.S. citizen or permanent legal resident in the household, or otherwise meet the program's household immigration/citizenship rule as stated by local guidance\",\n      \"Must pay home heating costs directly to a utility company, fuel dealer, or as part of rent\",\n      \"Program is for winter heating assistance only\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A one-time payment is sent directly to the utility company or heating vendor on behalf of the household. Reported benefit amounts in current state materials show households receiving between $200 and $1,000 in energy assistance for the season, but the exact amount varies by household and funding availability. Some local and utility materials also note the program may include help with equipment repair and replacement, but the core benefit is the direct heating-cost payment.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Colorado PEAK: https://peak.my.site.com/ColoradoPEAK/s/LEAP-Online-Application\",\n      \"By phone: 1-866-HEAT-HELP (1-866-432-8435) to request a paper application or get help\",\n      \"Mail: submit the completed paper application to the county LEAP office or the address provided on the paper application\",\n      \"In-person/through county human services offices or local administering agencies, depending on county\"\n    ],\n    \"processing_time\": \"No single statewide processing-time guarantee was identified. Applications are accepted from November 1 through April 30, and local guidance indicates applications are processed while funding is available.\",\n    \"waitlist\": \"No formal statewide waitlist was identified in the materials reviewed. The practical limitation is funding availability; if money is exhausted, later applications may not be paid.\",\n    \"forms\": [\n      \"Colorado LEAP application / LEAP paper application\",\n      \"Colorado PEAK LEAP online application\"\n    ],\n    \"documents\": [\n      \"Proof of identity and Colorado residency\",\n      \"Proof of income for the household\",\n      \"Recent heating bill or proof that heating costs are included in rent\",\n      \"Social Security numbers or immigration/citizenship information for household members as required by the form\",\n      \"Utility account information if paying a vendor directly\",\n      \"Any disconnection notice or emergency shutoff notice if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Colorado, but applicants generally must apply through their county or the county-designated administrator. County procedures, mailing addresses, and local contact points may differ.\",\n    \"regional_variations\": \"The benefit rules are statewide, but administration can differ by county in where applications are submitted, how paper applications are handled, and how quickly local offices process them. Some counties provide their own email or office submission routes, while others route applicants through Colorado PEAK or the state heat-help line.\",\n    \"offices_or_providers\": [\n      \"County human services offices\",\n      \"County LEAP administrators\",\n      \"Goodwill of Colorado in some regions\",\n      \"County-specific energy assistance offices\"\n    ]\n  },\n  \"official_source\": \"https://cdhs.colorado.gov/leap\",\n  \"gotchas\": [\n    \"The program is seasonal: it runs November 1 through April 30, so timing matters.\",\n    \"Payment goes to the utility or fuel provider, not directly to the household.\",\n    \"Eligibility is based on gross monthly household income, not net income.\",\n    \"A household can qualify even if the heating cost is included in rent, but the rent must actually include heating costs.\",\n    \"Funding is finite; being eligible does not guarantee payment if funds run out.\",\n    \"County administration can vary, so families should not assume every county uses the same submission method or processing speed.\",\n    \"The common mistake is waiting until the coldest part of winter; applying early is safer.\"\n  ],\n  \"data_shape_notes\": \"Statewide seasonal heating-assistance program with household income limits, a one-time direct vendor payment, and county-level administration details. The key variables are household size, gross monthly income, and whether the household pays heating costs directly or through rent.\"\n}"
+      },
+      {
+        "name": "Senior Property Tax Exemption (PTEX)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "None. This program is not income-based.",
+          "asset_limits": "None reported for this exemption. The qualifying rules focus on age, ownership, and primary-residence occupancy, not assets.",
+          "other_requirements": [
+            "Applicant must be 65 years old or older on January 1 of the year of application.",
+            "Applicant, or the applicant's spouse, must be the property owner of record.",
+            "The applicant or spouse must have owned the home for at least 10 consecutive years before January 1.",
+            "The applicant must have occupied the property as the primary residence for at least 10 consecutive years before January 1.",
+            "A surviving spouse of a senior citizen who previously qualified may be eligible using the long form, if not remarried.",
+            "The property must be the applicant's primary residence.",
+            "Application must be filed by July 15 for the year requested."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "When state funding is available, 50% of the first $200,000 of the home's actual value is exempt from property taxation. That equals a maximum exemption of $100,000 in actual value.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Submit the completed application to the county assessor in the county where the property is located.",
+            "Obtain the application from the county assessor’s office.",
+            "Official program page: https://dpt.colorado.gov/senior-property-tax-exemption",
+            "General application guidance: https://dpt.colorado.gov/application-for-property-tax-exemption"
+          ],
+          "processing_time": "Not specified in the official materials reviewed. Applications must be submitted by July 15 for the tax year requested.",
+          "waitlist": null,
+          "forms": [
+            "Senior Property Tax Exemption Short Form",
+            "Senior Property Tax Exemption Long Form"
+          ],
+          "documents": [
+            "Completed short form or long form, as appropriate",
+            "Supporting documents if filing under an exception or as a surviving spouse",
+            "Any documents requested by the county assessor to verify ownership, occupancy, or survivorship"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available in Colorado, but applications go through the county assessor for the county where the property is located.",
+          "regional_variations": "The legal eligibility and benefit are statewide, but county assessor offices handle applications locally. Some counties may provide their own forms, instructions, or office procedures, but the exemption rules themselves are statewide.",
+          "offices_or_providers": [
+            "County assessor office in the county where the property is located"
+          ]
+        },
+        "official_source": "https://dpt.colorado.gov/senior-property-tax-exemption",
+        "gotchas": [
+          "This is not a senior income program; there is no income test.",
+          "The 10-year ownership and 10-year primary residence rules are both required for the standard exemption.",
+          "The application deadline is July 15, and late filing can jeopardize the exemption for that year.",
+          "The exemption only applies when the state budget allows funding.",
+          "The benefit is tied to the home’s actual value, not a cash payment.",
+          "Applicants do not file with the state directly; they file with the county assessor.",
+          "Surviving spouses usually need the long form rather than the short form.",
+          "Only one primary residence can qualify."
+        ],
+        "data_shape_notes": "Statewide property-tax exemption with a fixed benefit formula, no income or asset test, county-level administration, and two application paths (short form and long form) depending on whether exceptions or surviving-spouse rules apply.",
+        "_raw": "{\n  \"name\": \"Senior Property Tax Exemption (PTEX)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"None. This program is not income-based.\",\n    \"asset_limits\": \"None reported for this exemption. The qualifying rules focus on age, ownership, and primary-residence occupancy, not assets.\",\n    \"other_requirements\": [\n      \"Applicant must be 65 years old or older on January 1 of the year of application.\",\n      \"Applicant, or the applicant's spouse, must be the property owner of record.\",\n      \"The applicant or spouse must have owned the home for at least 10 consecutive years before January 1.\",\n      \"The applicant must have occupied the property as the primary residence for at least 10 consecutive years before January 1.\",\n      \"A surviving spouse of a senior citizen who previously qualified may be eligible using the long form, if not remarried.\",\n      \"The property must be the applicant's primary residence.\",\n      \"Application must be filed by July 15 for the year requested.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"When state funding is available, 50% of the first $200,000 of the home's actual value is exempt from property taxation. That equals a maximum exemption of $100,000 in actual value.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Submit the completed application to the county assessor in the county where the property is located.\",\n      \"Obtain the application from the county assessor’s office.\",\n      \"Official program page: https://dpt.colorado.gov/senior-property-tax-exemption\",\n      \"General application guidance: https://dpt.colorado.gov/application-for-property-tax-exemption\"\n    ],\n    \"processing_time\": \"Not specified in the official materials reviewed. Applications must be submitted by July 15 for the tax year requested.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Senior Property Tax Exemption Short Form\",\n      \"Senior Property Tax Exemption Long Form\"\n    ],\n    \"documents\": [\n      \"Completed short form or long form, as appropriate\",\n      \"Supporting documents if filing under an exception or as a surviving spouse\",\n      \"Any documents requested by the county assessor to verify ownership, occupancy, or survivorship\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available in Colorado, but applications go through the county assessor for the county where the property is located.\",\n    \"regional_variations\": \"The legal eligibility and benefit are statewide, but county assessor offices handle applications locally. Some counties may provide their own forms, instructions, or office procedures, but the exemption rules themselves are statewide.\",\n    \"offices_or_providers\": [\n      \"County assessor office in the county where the property is located\"\n    ]\n  },\n  \"official_source\": \"https://dpt.colorado.gov/senior-property-tax-exemption\",\n  \"gotchas\": [\n    \"This is not a senior income program; there is no income test.\",\n    \"The 10-year ownership and 10-year primary residence rules are both required for the standard exemption.\",\n    \"The application deadline is July 15, and late filing can jeopardize the exemption for that year.\",\n    \"The exemption only applies when the state budget allows funding.\",\n    \"The benefit is tied to the home’s actual value, not a cash payment.\",\n    \"Applicants do not file with the state directly; they file with the county assessor.\",\n    \"Surviving spouses usually need the long form rather than the short form.\",\n    \"Only one primary residence can qualify.\"\n  ],\n  \"data_shape_notes\": \"Statewide property-tax exemption with a fixed benefit formula, no income or asset test, county-level administration, and two application paths (short form and long form) depending on whether exceptions or surviving-spouse rules apply.\"\n}"
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No statewide income limit was identified for Colorado home-delivered meals. Eligibility is generally based on age and need, not income, through local Area Agencies on Aging and provider programs. Some local providers note service for older adults age 60+ and homebound status; one provider also serves people with disabilities in limited local areas.",
+          "asset_limits": "No asset limit was identified.",
+          "other_requirements": [
+            "Must generally be homebound or unable to leave home without assistance",
+            "Must usually be age 60 or older",
+            "Some local programs allow temporary homebound service after hospitalization or during emergency recovery",
+            "Eligibility can vary by local Area Agency on Aging or contractor",
+            "For HCBS waiver-based home-delivered meals, the person must be enrolled in an eligible waiver and meet the waiver-specific service criteria"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Home-delivered meals are typically prepared and delivered to the home. Examples found include hot meals delivered by volunteers, or frozen meal packs with five meals per delivery. Some local programs provide five hot meals per week, while others deliver one weekly package containing five frozen meals. At least one local provider charges $2.50 per homebound meal.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact your local Area Agency on Aging",
+            "Colorado Department of Human Services nutrition services page: https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults",
+            "Denver metro eligibility referral line: (303) 294-0111",
+            "Denver metro referral email: MOWReferrals@voacolorado.org",
+            "Larimer County provider phone: (970) 472-9630",
+            "Boulder County home-delivered meals info line: 720-780-3380",
+            "Weld County Meals on Wheels Greeley Office: (970) 353-9738",
+            "Southwest Colorado Senior Citizens Organization Area Agency on Aging: (719) 845-1133 ext. 225",
+            "San Luis Valley Area Agency on Aging administration office: 719-589-4511"
+          ],
+          "processing_time": "No single statewide processing time was identified. Some local programs run ongoing intake and routing through local providers; wait times and start dates vary by county and provider.",
+          "waitlist": "A statewide waitlist was not identified. Availability may depend on local provider capacity and route coverage.",
+          "forms": [],
+          "documents": [
+            "Proof of age may be requested",
+            "Basic contact information",
+            "Address and delivery instructions",
+            "Information about homebound status or difficulty preparing meals",
+            "If applying through a waiver program, case manager and waiver enrollment information"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through local Area Agencies on Aging and local providers across Colorado; exact service area, delivery days, meal type, and fees vary by county and provider. Some programs are limited to specific counties, towns, or routes.",
+          "regional_variations": "Yes. Denver metro, Larimer County, Boulder County, Weld County, San Luis Valley, southwest Colorado, and other regions operate different local programs, with different providers, schedules, meal types, and contact points. Some counties offer hot meals, others frozen meals, and some provide wellness checks during delivery. HCBS waiver meal benefits are statewide but administered through case managers and depend on waiver status.",
+          "offices_or_providers": [
+            "Colorado Department of Human Services",
+            "Local Area Agencies on Aging",
+            "Volunteers of America Colorado",
+            "Meals on Wheels Boulder",
+            "Meals on Wheels – Northern Colorado",
+            "Weld County Meals on Wheels – Greeley Office",
+            "Southwest Colorado Senior Citizens Organization",
+            "San Luis Valley Area Agency on Aging",
+            "United Way of the Arkansas Valley Area Agency on Aging"
+          ]
+        },
+        "official_source": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults",
+        "gotchas": [
+          "Colorado does not appear to have one single, uniform statewide home-delivered meals program; it is a network of local providers and AAAs.",
+          "Eligibility is often based on homebound status, not just age.",
+          "Some local programs have fees, even though the service is nutrition support for older adults.",
+          "Meal format varies: hot meals, frozen meals, grab-and-go, or package deliveries.",
+          "If the person is on an HCBS waiver, home-delivered meals may be tied to specific life events or waiver rules rather than general senior nutrition eligibility.",
+          "Service area boundaries matter a lot; one county’s provider may not serve nearby addresses."
+        ],
+        "data_shape_notes": "This program is region-specific rather than a single uniform benefit. It has no clear statewide income or asset test, and the key eligibility drivers are age, homebound status, local provider rules, and in some cases HCBS waiver enrollment.",
+        "_raw": "{\n  \"name\": \"Home-Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No statewide income limit was identified for Colorado home-delivered meals. Eligibility is generally based on age and need, not income, through local Area Agencies on Aging and provider programs. Some local providers note service for older adults age 60+ and homebound status; one provider also serves people with disabilities in limited local areas.\",\n    \"asset_limits\": \"No asset limit was identified.\",\n    \"other_requirements\": [\n      \"Must generally be homebound or unable to leave home without assistance\",\n      \"Must usually be age 60 or older\",\n      \"Some local programs allow temporary homebound service after hospitalization or during emergency recovery\",\n      \"Eligibility can vary by local Area Agency on Aging or contractor\",\n      \"For HCBS waiver-based home-delivered meals, the person must be enrolled in an eligible waiver and meet the waiver-specific service criteria\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Home-delivered meals are typically prepared and delivered to the home. Examples found include hot meals delivered by volunteers, or frozen meal packs with five meals per delivery. Some local programs provide five hot meals per week, while others deliver one weekly package containing five frozen meals. At least one local provider charges $2.50 per homebound meal.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact your local Area Agency on Aging\",\n      \"Colorado Department of Human Services nutrition services page: https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults\",\n      \"Denver metro eligibility referral line: (303) 294-0111\",\n      \"Denver metro referral email: MOWReferrals@voacolorado.org\",\n      \"Larimer County provider phone: (970) 472-9630\",\n      \"Boulder County home-delivered meals info line: 720-780-3380\",\n      \"Weld County Meals on Wheels Greeley Office: (970) 353-9738\",\n      \"Southwest Colorado Senior Citizens Organization Area Agency on Aging: (719) 845-1133 ext. 225\",\n      \"San Luis Valley Area Agency on Aging administration office: 719-589-4511\"\n    ],\n    \"processing_time\": \"No single statewide processing time was identified. Some local programs run ongoing intake and routing through local providers; wait times and start dates vary by county and provider.\",\n    \"waitlist\": \"A statewide waitlist was not identified. Availability may depend on local provider capacity and route coverage.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of age may be requested\",\n      \"Basic contact information\",\n      \"Address and delivery instructions\",\n      \"Information about homebound status or difficulty preparing meals\",\n      \"If applying through a waiver program, case manager and waiver enrollment information\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through local Area Agencies on Aging and local providers across Colorado; exact service area, delivery days, meal type, and fees vary by county and provider. Some programs are limited to specific counties, towns, or routes.\",\n    \"regional_variations\": \"Yes. Denver metro, Larimer County, Boulder County, Weld County, San Luis Valley, southwest Colorado, and other regions operate different local programs, with different providers, schedules, meal types, and contact points. Some counties offer hot meals, others frozen meals, and some provide wellness checks during delivery. HCBS waiver meal benefits are statewide but administered through case managers and depend on waiver status.\",\n    \"offices_or_providers\": [\n      \"Colorado Department of Human Services\",\n      \"Local Area Agencies on Aging\",\n      \"Volunteers of America Colorado\",\n      \"Meals on Wheels Boulder\",\n      \"Meals on Wheels – Northern Colorado\",\n      \"Weld County Meals on Wheels – Greeley Office\",\n      \"Southwest Colorado Senior Citizens Organization\",\n      \"San Luis Valley Area Agency on Aging\",\n      \"United Way of the Arkansas Valley Area Agency on Aging\"\n    ]\n  },\n  \"official_source\": \"https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults\",\n  \"gotchas\": [\n    \"Colorado does not appear to have one single, uniform statewide home-delivered meals program; it is a network of local providers and AAAs.\",\n    \"Eligibility is often based on homebound status, not just age.\",\n    \"Some local programs have fees, even though the service is nutrition support for older adults.\",\n    \"Meal format varies: hot meals, frozen meals, grab-and-go, or package deliveries.\",\n    \"If the person is on an HCBS waiver, home-delivered meals may be tied to specific life events or waiver rules rather than general senior nutrition eligibility.\",\n    \"Service area boundaries matter a lot; one county’s provider may not serve nearby addresses.\"\n  ],\n  \"data_shape_notes\": \"This program is region-specific rather than a single uniform benefit. It has no clear statewide income or asset test, and the key eligibility drivers are age, homebound status, local provider rules, and in some cases HCBS waiver enrollment.\"\n}"
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No income limit was identified for the Colorado Family Caregiver Support Program itself. The program is eligibility-based on the caregiver/care-recipient relationship and the care-recipient’s functional status, not on household income.",
+          "asset_limits": "No asset limit was identified for the Family Caregiver Support Program. This is not a means-tested cash-benefit program. Exemptions are not applicable because no asset test was found.",
+          "other_requirements": [
+            "Caregiver must be an informal, unpaid family caregiver.",
+            "The care recipient must be an older adult age 60 or older, or a grandchild raised by a grandparent/relative caregiver age 55 or older, or a person with Alzheimer’s disease or a related disorder with neurological/organic brain dysfunction.",
+            "For respite care and supplemental services, the older adult care recipient must be functionally impaired and either unable to perform at least two activities of daily living without substantial human assistance, or require substantial supervision because of cognitive/mental impairment that poses a serious health or safety hazard.",
+            "For grandparent/relative caregiver services, the caregiver generally must live with the child and be the primary caregiver because the parents are unable or unwilling to do so, or have a legal relationship such as custody or guardianship, or be raising the child informally."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Caregiver information and referral, assistance accessing services, individual counseling, support group organization, caregiver training, respite care, and limited supplemental services. The identified sources did not provide a statewide dollar cap or fixed number of respite hours; availability is typically determined locally by the Area Agency on Aging.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact your local Area Agency on Aging",
+            "Call the Colorado state aging office at 303-866-2800",
+            "Call toll-free at 1-888-866-4243",
+            "Use the local county/AAA caregiver program intake or assessment process"
+          ],
+          "processing_time": "No statewide processing timeline was identified. Local agencies may complete an initial caregiver assessment at intake, but wait times and approval timing vary by region.",
+          "waitlist": "No statewide waitlist policy was identified in the available sources. Because services are locally administered, respite and supplemental services may have local capacity limits or delays.",
+          "forms": [
+            "Family Caregiver Support Assessment"
+          ],
+          "documents": [
+            "Identification and contact information for caregiver and care recipient",
+            "Basic information about the care recipient’s age and relationship to the caregiver",
+            "Information about functional limitations or need for supervision",
+            "Any legal guardianship, custody, or caregiving documentation if applicable",
+            "Medications, diagnoses, or care notes if requested by the local agency"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through Colorado’s local Area Agencies on Aging. Eligibility and service delivery can differ by local agency, but the program is statewide.",
+          "regional_variations": "Yes. Colorado routes families through local Area Agencies on Aging, and service menus, intake procedures, assessment forms, and waiting times can differ by region. Some local agencies explicitly require a Family Caregiver Support Assessment before services begin.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging across Colorado",
+            "Colorado Department of Human Services State Unit on Aging"
+          ]
+        },
+        "official_source": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
+        "gotchas": [
+          "This is not a cash stipend program for family caregivers; most support is counseling, training, referral, and respite/services in kind.",
+          "Income and asset limits do not appear to drive eligibility for this program the way Medicaid programs do.",
+          "Respite and supplemental services have a stricter functional-need test than general caregiver information/referral services.",
+          "The program is administered locally, so the exact route to apply and the actual services available depend on the Area Agency on Aging serving the family’s county.",
+          "Families often confuse this program with Medicaid-paid family caregiver programs or IHSS; those are different programs with different eligibility rules."
+        ],
+        "data_shape_notes": "Statewide program with locally administered intake; core eligibility is relationship-based and function-based, with service access varying by Area Agency on Aging rather than by income tier.",
+        "_raw": "{\n  \"name\": \"Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No income limit was identified for the Colorado Family Caregiver Support Program itself. The program is eligibility-based on the caregiver/care-recipient relationship and the care-recipient’s functional status, not on household income.\",\n    \"asset_limits\": \"No asset limit was identified for the Family Caregiver Support Program. This is not a means-tested cash-benefit program. Exemptions are not applicable because no asset test was found.\",\n    \"other_requirements\": [\n      \"Caregiver must be an informal, unpaid family caregiver.\",\n      \"The care recipient must be an older adult age 60 or older, or a grandchild raised by a grandparent/relative caregiver age 55 or older, or a person with Alzheimer’s disease or a related disorder with neurological/organic brain dysfunction.\",\n      \"For respite care and supplemental services, the older adult care recipient must be functionally impaired and either unable to perform at least two activities of daily living without substantial human assistance, or require substantial supervision because of cognitive/mental impairment that poses a serious health or safety hazard.\",\n      \"For grandparent/relative caregiver services, the caregiver generally must live with the child and be the primary caregiver because the parents are unable or unwilling to do so, or have a legal relationship such as custody or guardianship, or be raising the child informally.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Caregiver information and referral, assistance accessing services, individual counseling, support group organization, caregiver training, respite care, and limited supplemental services. The identified sources did not provide a statewide dollar cap or fixed number of respite hours; availability is typically determined locally by the Area Agency on Aging.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact your local Area Agency on Aging\",\n      \"Call the Colorado state aging office at 303-866-2800\",\n      \"Call toll-free at 1-888-866-4243\",\n      \"Use the local county/AAA caregiver program intake or assessment process\"\n    ],\n    \"processing_time\": \"No statewide processing timeline was identified. Local agencies may complete an initial caregiver assessment at intake, but wait times and approval timing vary by region.\",\n    \"waitlist\": \"No statewide waitlist policy was identified in the available sources. Because services are locally administered, respite and supplemental services may have local capacity limits or delays.\",\n    \"forms\": [\n      \"Family Caregiver Support Assessment\"\n    ],\n    \"documents\": [\n      \"Identification and contact information for caregiver and care recipient\",\n      \"Basic information about the care recipient’s age and relationship to the caregiver\",\n      \"Information about functional limitations or need for supervision\",\n      \"Any legal guardianship, custody, or caregiving documentation if applicable\",\n      \"Medications, diagnoses, or care notes if requested by the local agency\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through Colorado’s local Area Agencies on Aging. Eligibility and service delivery can differ by local agency, but the program is statewide.\",\n    \"regional_variations\": \"Yes. Colorado routes families through local Area Agencies on Aging, and service menus, intake procedures, assessment forms, and waiting times can differ by region. Some local agencies explicitly require a Family Caregiver Support Assessment before services begin.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging across Colorado\",\n      \"Colorado Department of Human Services State Unit on Aging\"\n    ]\n  },\n  \"official_source\": \"https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support\",\n  \"gotchas\": [\n    \"This is not a cash stipend program for family caregivers; most support is counseling, training, referral, and respite/services in kind.\",\n    \"Income and asset limits do not appear to drive eligibility for this program the way Medicaid programs do.\",\n    \"Respite and supplemental services have a stricter functional-need test than general caregiver information/referral services.\",\n    \"The program is administered locally, so the exact route to apply and the actual services available depend on the Area Agency on Aging serving the family’s county.\",\n    \"Families often confuse this program with Medicaid-paid family caregiver programs or IHSS; those are different programs with different eligibility rules.\"\n  ],\n  \"data_shape_notes\": \"Statewide program with locally administered intake; core eligibility is relationship-based and function-based, with service access varying by Area Agency on Aging rather than by income tier.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "CO",
+    "stateName": "Colorado",
+    "classifiedAt": "2026-10-06T05:37:51.638Z",
+    "total": 5,
+    "typeSummary": {
+      "benefit": 5
+    },
+    "scopeSummary": {
+      "state": 5
+    },
+    "complexitySummary": {
+      "deep": 3,
+      "medium": 2
+    },
+    "programs": [
+      {
+        "name": "Health First Colorado (Medicaid) for Aged, Blind, and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County Department of Human Services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Local application assistance sites",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Case Management Agencies",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Colorado Energy Assistance Program (LEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County human services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "County LEAP administrators",
+              "type": "service-area"
+            },
+            {
+              "name": "Goodwill of Colorado in some regions",
+              "type": "service-area"
+            },
+            {
+              "name": "County-specific energy assistance offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Senior Property Tax Exemption (PTEX)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County assessor office in the county where the property is located",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Colorado Department of Human Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Area Agencies on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Volunteers of America Colorado",
+              "type": "service-area"
+            },
+            {
+              "name": "Meals on Wheels Boulder",
+              "type": "service-area"
+            },
+            {
+              "name": "Meals on Wheels – Northern Colorado",
+              "type": "service-area"
+            },
+            {
+              "name": "Weld County Meals on Wheels – Greeley Office",
+              "type": "service-area"
+            },
+            {
+              "name": "Southwest Colorado Senior Citizens Organization",
+              "type": "service-area"
+            },
+            {
+              "name": "San Luis Valley Area Agency on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "United Way of the Arkansas Valley Area Agency on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging across Colorado",
+              "type": "service-area"
+            },
+            {
+              "name": "Colorado Department of Human Services State Unit on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "CO",
+      "id": "co-medicaid-aged-blind-disabled",
+      "name": "Health First Colorado (Medicaid) for Aged, Blind, and Disabled",
+      "legacyId": "health-first-colorado-medicaid-for-aged-blind-and-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "CO",
+      "id": "co-leap-energy-assistance",
+      "name": "Colorado Energy Assistance Program (LEAP)",
+      "legacyId": "colorado-energy-assistance-program-leap",
+      "programType": "benefit"
+    },
+    {
+      "state": "CO",
+      "id": "co-senior-property-tax-exemption",
+      "name": "Senior Property Tax Exemption (PTEX)",
+      "legacyId": "senior-property-tax-exemption-ptex",
+      "programType": "benefit"
+    },
+    {
+      "state": "CO",
+      "id": "co-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "legacyId": "home-delivered-meals",
+      "programType": "benefit"
+    },
+    {
+      "state": "CO",
+      "id": "co-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "legacyId": "family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

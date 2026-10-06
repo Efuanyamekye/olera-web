@@ -165,6 +165,22 @@ export function medicaidGatedName(name: string): boolean {
   return /\bmedicaid\b|\bwaiver\b/i.test(name);
 }
 
+/** A program's own rules saying the person must already have Medicaid
+ *  ("Must have active Michigan Medicaid"), when its name doesn't say so. */
+const MUST_HAVE_MEDICAID = /^\s*(must|need to) (have|be enrolled in|be on|receive|qualify for)( an?)?( active| full| current)?( [a-z]+)? medicaid\b/i;
+
+/**
+ * Sits on top of Medicaid, by its name (medicaidGatedName) or by its own
+ * rules. Michigan's Home Help is "Home Help Program" but requires Medicaid;
+ * read by name alone it was "likely" for couples with no Medicaid and led
+ * their plans (answer key, 6 Oct 2026).
+ */
+export function requiresMedicaid(name: string, summary?: string[] | null): boolean {
+  if (medicaidGatedName(name)) return true;
+  if (archetypeOf(name) === "msp" || isMedicaidDoor(name)) return false;
+  return (summary || []).some((x) => MUST_HAVE_MEDICAID.test(x));
+}
+
 /**
  * Is this program the Medicaid APPLICATION rather than something that sits on
  * top of Medicaid?

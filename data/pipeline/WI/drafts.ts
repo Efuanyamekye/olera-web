@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.936Z
+ * Last updated: 2026-10-06T06:44:48.409Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -932,6 +932,1888 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:48:16.664Z"
         }
       ]
+    },
+    {
+      "id": "wi-medicaid-elderly-blind-disabled",
+      "name": "Medicaid for the Elderly, Blind, or Disabled",
+      "shortName": "Wisconsin EBD Medicaid",
+      "tagline": "Full health coverage for your parent age 65 or older in Wisconsin, including the possibility of in-home care, meal delivery, and long-term support if they need daily help.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county/tribal human services agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Wisconsin ACCESS online application system",
+            "type": "service-area"
+          },
+          {
+            "name": "Wisconsin Department of Health Services Medicaid program",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living in Wisconsin on a limited income, Wisconsin EBD Medicaid can cover their doctor visits, hospital care, prescriptions, and more at little or no cost. For parents who need daily help, the program can also connect them to in-home personal care, adult day programs, meal delivery, home modifications, and personal emergency response systems, provided they meet the clinical criteria for those services.\n\nEligibility works in two ways. If your parent's income is at or below $1,086.16 per month (single) or $1,636.26 per month (couple), they may qualify outright under the standard track. If their income is higher, they may still qualify under the medically needy track by meeting a deductible. This means income above those limits does not automatically disqualify them; it just changes how their eligibility is calculated. Asset limits are strict: $2,000 for a single person and $3,000 for a couple, though the home, one vehicle, and certain other items are not counted.\n\nThis program is administered through your parent's local county or tribal human services agency. Eligibility rules are the same statewide, but the agency handling the application and scheduling interviews is county-based. Most decisions are made within 30 calendar days of a complete application.",
+      "savingsRange": "",
+      "savingsSource": "Free service: EBD Medicaid covers health and long-term care costs rather than providing a cash benefit. Copays, when charged, cannot exceed 5% of total income before taxes or other deductions, per Wisconsin DHS Medicaid program rules.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or blind or disabled under Medicaid rules",
+          "Wisconsin resident and U.S. citizen or qualifying immigrant",
+          "Single person income at or below $1,086.16/month (standard track; higher income may still qualify)",
+          "Assets at or below $2,000 single / $3,000 couple (home and one vehicle typically exempt)",
+          "Disability must be officially determined if applying on that basis"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1086
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1636
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash and checking or savings account balances",
+            "Most non-exempt investments",
+            "Other countable resources owned by the fiscal group"
+          ],
+          "exemptAssets": [
+            "Primary home (if it is the primary residence and otherwise exempt under Medicaid rules)",
+            "One vehicle",
+            "Certain burial spaces and burial arrangements",
+            "Certain household goods and personal effects",
+            "Other assets specifically excluded by Wisconsin Medicaid rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Wisconsin resident",
+          "Must be a U.S. citizen or qualifying immigrant",
+          "If applying based on disability rather than age, disability must be determined by Wisconsin's Disability Determination Bureau (a formal review, not a self-certification)",
+          "Must meet nonfinancial Medicaid requirements including citizenship and residency verification"
+        ],
+        "povertyLevelReference": "100% FPL (medically needy track; a deductible may apply if income exceeds this level)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at access.wi.gov, by mail using form F-10101, or in person at your local county or tribal human services agency; most decisions take 30 days from a complete application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's key documents before you start",
+            "description": "You will need their Social Security award letter, proof of Wisconsin residency, proof of citizenship, income statements, and bank account information. If applying based on disability rather than age, gather any medical records or existing disability determinations. Having these ready prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online is fastest: go to access.wi.gov and create or log in to an account to submit the application. If you prefer paper, request or download the Wisconsin Medicaid for the Elderly, Blind, or Disabled Application Packet (form F-10101) and mail it to the address on the form. In-person or phone applications go through your local county or tribal human services agency."
+          },
+          {
+            "step": 3,
+            "title": "Complete the interview",
+            "description": "Most applicants must complete an interview with their local agency. This can be done by phone or in person. The agency will contact you to schedule it. Make sure the contact information on the application is current so you do not miss the scheduling call."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any verification requests promptly",
+            "description": "If the agency needs additional documents, Wisconsin law gives them at least 20 days from the mailing date of the request, but the 30-day decision clock does not restart. Missing or delayed documents are the most common reason applications take longer than expected. Submit everything requested as quickly as possible."
+          },
+          {
+            "step": 5,
+            "title": "Receive your eligibility decision",
+            "description": "The agency must issue a decision within 30 calendar days of receiving a complete application. If your parent's disability must be formally determined by the Disability Determination Bureau, that review can extend the timeline. You will receive written notice of the decision and, if approved, information about what is covered."
+          }
+        ],
+        "processingTime": "30 calendar days from the date the application is received; extended as needed to allow at least 20 days from the mailing date of any verification request. Disability determinations may add additional time.",
+        "waitlist": null,
+        "tip": "If your parent's income is above $1,086.16 per month, do not skip the application. The medically needy track uses a deductible calculation that may still result in eligibility. Ask the agency to explain how the deductible is calculated for your parent's specific income.",
+        "urls": [
+          {
+            "label": "Apply online via Wisconsin ACCESS",
+            "url": "https://access.wi.gov/"
+          },
+          {
+            "label": "Wisconsin DHS EBD Medicaid program page",
+            "url": "https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter showing current monthly benefit amount",
+        "Proof of Wisconsin residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of U.S. citizenship or qualifying immigrant status (birth certificate, U.S. passport, or immigration documents)",
+        "Social Security numbers for all household members applying",
+        "Proof of age if not already established through Social Security records (birth certificate or passport)",
+        "Pension, retirement, or annuity income statements",
+        "Current balances for any checking or savings accounts (Wisconsin DHS will specify what documentation to provide; have account numbers and institution names ready)",
+        "Life insurance policy documents showing cash surrender value, if any",
+        "Vehicle registration or title information",
+        "Documentation of burial arrangements or pre-need burial contracts, if any",
+        "Medicare card if your parent has Medicare (helpful but not required for this program)",
+        "Medical records or existing disability determination documentation if applying on the basis of disability rather than age",
+        "Legal documents if a representative, guardian, or power of attorney will be acting on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "Local County or Tribal Human Services Agency",
+          "phone": null,
+          "description": "Your parent's local county or tribal human services agency is the office that accepts applications, conducts interviews, and makes eligibility decisions. Find your county's agency through the Wisconsin DHS county agency directory at dhs.wisconsin.gov. This is the office that can actually start and process the application.",
+          "hours": "Varies by county; typically Monday through Friday during business hours"
+        },
+        {
+          "label": "Wisconsin ACCESS (Online Application)",
+          "phone": null,
+          "description": "Apply online at access.wi.gov at any time. This is the fastest way to submit the application without waiting for an office appointment.",
+          "hours": "Available 24 hours a day, 7 days a week"
+        },
+        {
+          "label": "Wisconsin DHS Medicaid Program",
+          "phone": "(800) 362-3002",
+          "description": "General Medicaid information line for Wisconsin. Can answer questions about the program and help you identify your local agency if you are unsure which office to contact.",
+          "hours": "Monday through Friday, 8am to 4:30pm CT"
+        }
+      ],
+      "applicationNotes": [
+        "Income above $1,086.16 per month (single) does not automatically mean denial. The medically needy track uses a deductible based on the difference between your parent's income and the applicable limit. If your parent has significant medical expenses, that deductible may be met and they may still qualify. Ask your local agency to walk through this calculation.",
+        "The asset limit applies to the fiscal group as a whole, not just the individual applicant. If your parent is married, both spouses' countable assets are combined and tested against the $3,000 couple limit before either can qualify.",
+        "If your parent is applying based on disability rather than age (under 65), the disability must be formally reviewed by Wisconsin's Disability Determination Bureau. This review takes additional time beyond the standard 30-day window. Plan ahead if this pathway applies.",
+        "EBD Medicaid is a health coverage program, but it can also be a gateway to long-term care supports such as in-home personal care, adult day care, and home modifications for those who meet the clinical criteria. If your parent needs daily help, ask the agency specifically about long-term care support options when applying."
+      ],
+      "relatedPrograms": [
+        "PACE (Program of All-Inclusive Care for the Elderly): covers all medical and long-term care under one team for people who meet nursing facility level of care criteria",
+        "Wisconsin Family Care: Medicaid-funded long-term care program for adults who need ongoing support to live in the community",
+        "Medicare Savings Programs (SLMB, SLMB+): related programs that help pay Medicare premiums for people with incomes above EBD Medicaid limits but still limited",
+        "SeniorCare (Wisconsin Prescription Drug Assistance Program): helps lower-income Wisconsin adults age 65 and older with prescription drug costs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two ways to qualify: standard track and medically needy track",
+          "body": "The standard (categorically needy) track covers your parent if their income is at or below $1,086.16 per month as a single person. The medically needy track covers your parent if their income is above that limit but they have enough medical expenses to meet a deductible. The deductible is the difference between their income and the limit. Both tracks provide the same Medicaid coverage once eligibility is established. Do not assume a higher income means no coverage without asking the agency to calculate the deductible."
+        },
+        {
+          "type": "callout",
+          "title": "What this program does not cover automatically",
+          "body": "EBD Medicaid covers health care. Long-term care supports (in-home personal care, adult day, meal delivery, home modifications, personal emergency response systems) require your parent to meet additional clinical criteria showing they need that level of care. That determination is made as part of the application process when long-term care services are requested. Ask your local agency about this if your parent needs daily help."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,400 per month. Does that automatically disqualify them?",
+          "answer": "Not necessarily. Wisconsin EBD Medicaid has a medically needy track for people whose income exceeds the standard limit of $1,086.16 per month (single person). Under this track, your parent may still qualify by meeting a deductible, which is calculated based on the difference between their income and the standard limit. If your parent has regular medical expenses, those expenses may satisfy the deductible and make them eligible. Contact your local county human services agency or apply at access.wi.gov and let the agency calculate whether the medically needy track applies."
+        },
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "Yes. The primary home is exempt from the asset limit as long as it remains your parent's primary residence and meets Wisconsin Medicaid's exemption rules. The $2,000 limit ($3,000 for a couple) applies to countable assets such as cash, bank accounts, and most investments, not to the home. One vehicle is also generally exempt. If your parent owns additional real estate or investment accounts, those would count toward the limit."
+        },
+        {
+          "question": "My parent's spouse is not applying. Do both spouses' assets still count?",
+          "answer": "Yes. Wisconsin EBD Medicaid tests assets at the fiscal group level, which generally includes both spouses. The couple asset limit is $3,000, not $2,000 per person. This means the combined countable assets of both spouses are measured against $3,000 before either can qualify. Talk to your local agency about which assets are countable versus exempt in your parent's specific situation."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot manage the process themselves?",
+          "answer": "Yes. A family member, legal guardian, or person holding power of attorney can apply on behalf of an elderly parent. You will need to bring or submit documentation showing your authority to act on their behalf, such as a power of attorney document. The agency can walk you through what is required. Note that legal paperwork confirming your role should be submitted with or shortly after the application to avoid delays."
+        },
+        {
+          "question": "My parent is under 65 and has a disability. Can they still apply?",
+          "answer": "Yes. EBD Medicaid covers people who are blind or disabled under Medicaid rules, regardless of age. However, disability is not self-certified. Wisconsin's Disability Determination Bureau must formally review and approve the disability determination, which can add time beyond the standard 30-day processing window. Gather any existing medical records, physician statements, or prior disability determinations to support the application."
+        },
+        {
+          "question": "Can my parent be enrolled in EBD Medicaid and still have Medicare?",
+          "answer": "Yes. Many people eligible for EBD Medicaid also have Medicare. In those cases, Medicare typically pays first and Medicaid covers remaining costs. Having Medicare does not disqualify your parent from EBD Medicaid. If your parent has Medicare and a limited income, also ask your local agency about Medicare Savings Programs (such as SLMB or SLMB+), which are related but separate programs that help pay Medicare premiums."
+        },
+        {
+          "question": "If my parent qualifies, can EBD Medicaid help pay for in-home care so they do not have to move to a nursing facility?",
+          "answer": "Possibly. EBD Medicaid is primarily a health coverage program, but it can connect qualifying individuals to long-term care supports including in-home personal care, adult day programs, meal delivery, home modifications, and personal emergency response systems. To access those services, your parent must meet additional clinical criteria showing they need that level of support. When you apply, tell the agency your parent needs daily help and ask specifically about long-term care support options."
+        },
+        {
+          "question": "What happens to my parent's coverage if their income or assets change after enrollment?",
+          "answer": "Your parent is required to report changes in income, assets, or household circumstances to their local agency. The agency will reassess eligibility based on the updated information. If their income rises above the standard limit, the agency will evaluate whether the medically needy track still applies. If assets exceed the limit, coverage may be affected. Report changes promptly; unreported changes can result in repayment obligations for benefits received while ineligible."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 362-3002",
+      "sourceUrl": "https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "shortName": "Medicare Savings",
+      "tagline": "Wisconsin can pay your parent's Medicare premiums and, in some cases, their deductibles and coinsurance — potentially saving hundreds of dollars a month.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Wisconsin Department of Health Services local agency / county agency",
+            "type": "service-area"
+          },
+          {
+            "name": "Wisconsin Access online application system",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent has Medicare and a limited income, Wisconsin's Medicare Savings Programs (MSPs) can pay some or all of their Medicare costs on their behalf. Depending on which category they qualify for, the state may cover Medicare Part B premiums (currently $185/month in 2025), and the most comprehensive tier also covers Part A premiums, deductibles, and coinsurance. That can add up to thousands of dollars a year.\n\nWisconsin runs four MSP categories: QMB, SLMB, SLMB+, and QDWI. Each has its own income and asset cutoffs. Many families assume these programs are only for people in poverty, but the income limits go up to 200% of the Federal Poverty Level, which for a single person is $2,608/month. Your parent may qualify even if they have Social Security income, a small pension, or modest savings.\n\nNot all income and not all assets count the same way. Wisconsin applies certain credits before comparing income to the limit, and some assets are excluded entirely. The best way to find out is to apply: the process is free, and Wisconsin will screen for all four MSP categories automatically.",
+      "savingsRange": "Up to $2,220/year in Part B premium coverage alone (at the 2025 standard premium of $185/month); QMB enrollees may save more because Part A premiums, deductibles, and coinsurance are also covered.",
+      "savingsSource": "Part B premium figure is the 2025 Medicare standard monthly premium of $185, published by CMS (medicare.gov). QMB cost-sharing coverage is defined in federal MSP rules and confirmed in Wisconsin DHS program materials (dhs.wisconsin.gov).",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must be enrolled in Medicare (any part)",
+          "Monthly income within 100%–200% FPL depending on MSP tier",
+          "Countable assets below $9,660 (individual) or $14,470 (couple) for most tiers",
+          "Wisconsin resident",
+          "QDWI tier requires disability and current employment"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2608
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 3525
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 4441
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 5357
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 6273
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 7189
+          }
+        ],
+        "assetLimits": {
+          "individual": 9660,
+          "couple": 14470,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Cash on hand"
+          ],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in Medicare",
+          "Must be a Wisconsin resident",
+          "QDWI applicants must be disabled, currently working, and entitled to Medicare Part A",
+          "QDWI asset limit is lower: $4,000 for one person, $6,000 for two people",
+          "Some people already on SSI or certain Medicaid programs may be enrolled automatically"
+        ],
+        "povertyLevelReference": "200% FPL (highest tier, SLMB+)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at access.wi.gov, by calling 800-362-3002, or in person at your parent's county DHS office; Wisconsin screens for all four MSP tiers in one application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather documents before you start",
+            "description": "You will need your parent's Medicare card, Social Security award letter, recent bank statements showing current balances, and proof of any other income (pension statements, VA benefit letters). Having these ready prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online is fastest: go to access.wi.gov and create or log into a MyACCESS account. If your parent prefers phone, call 800-362-3002 (Wisconsin DCTS Benefits line, Monday through Friday). For in-person help, contact your parent's county DHS office; find it at dhs.wisconsin.gov/localoffices."
+          },
+          {
+            "step": 3,
+            "title": "Complete the application",
+            "description": "The application covers all MSP categories at once. You do not need to know which tier fits your parent; the agency will determine that based on income and assets. Answer all questions about household size, income sources, and asset values."
+          },
+          {
+            "step": 4,
+            "title": "Submit verification documents",
+            "description": "After submitting, the agency may request additional documents by mail. Respond promptly to avoid delays. You can upload documents through access.wi.gov or mail them to the address on the request letter."
+          },
+          {
+            "step": 5,
+            "title": "Watch for a decision notice",
+            "description": "The agency will mail a written decision. If approved, coverage may be retroactive to the month of application. If denied, the notice will explain the reason and your parent's right to appeal."
+          }
+        ],
+        "processingTime": "Processing time is not stated in Wisconsin DHS source materials. Contact 800-362-3002 to ask about current timelines after submitting.",
+        "waitlist": null,
+        "tip": "If your parent already receives SSI or is enrolled in a Wisconsin Medicaid program, they may already be enrolled in an MSP automatically. Call 800-362-3002 to confirm before applying.",
+        "urls": [
+          {
+            "label": "Apply online at Wisconsin ACCESS",
+            "url": "https://access.wi.gov"
+          },
+          {
+            "label": "Wisconsin DHS Medicare Savings Program information",
+            "url": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf"
+          },
+          {
+            "label": "Find your county DHS office",
+            "url": "https://www.dhs.wisconsin.gov/localoffices/index.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (showing Part A, Part B, or both)",
+        "Most recent Social Security award letter showing monthly benefit amount",
+        "Proof of Wisconsin residency (utility bill, lease agreement, or Wisconsin ID with current address)",
+        "Current balances for any checking or savings accounts (the agency will tell you what form is acceptable)",
+        "Pension or retirement account statements showing current monthly income",
+        "VA benefit award letter, if applicable",
+        "Proof of any other income sources (annuity statements, rental income documentation)",
+        "Investment account statements (stocks, bonds, CDs) showing current value",
+        "Life insurance policy documents, if applicable",
+        "For QDWI applicants: documentation of current employment and disability status"
+      ],
+      "contacts": [
+        {
+          "label": "Wisconsin DCTS Benefits Line",
+          "phone": "800-362-3002",
+          "description": "Apply for Medicare Savings Programs, ask about eligibility, and check the status of an existing application",
+          "hours": "Monday through Friday"
+        },
+        {
+          "label": "Wisconsin ACCESS Online Application",
+          "phone": null,
+          "description": "Apply online at access.wi.gov; create a MyACCESS account to start an application or upload documents",
+          "hours": "Available 24 hours"
+        },
+        {
+          "label": "County DHS Office (in-person)",
+          "phone": null,
+          "description": "Apply in person at your parent's local county Department of Health Services office; find the address at dhs.wisconsin.gov/localoffices",
+          "hours": "Varies by county"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent already receives SSI, they may be enrolled in QMB or another MSP tier automatically. Confirm enrollment status by calling 800-362-3002 before going through a full application.",
+        "Wisconsin applies income credits before comparing your parent's income to the limit, which means the effective income cutoff is higher than the raw FPL numbers suggest. Do not self-screen your parent out based on gross Social Security income alone.",
+        "QDWI has a lower asset limit ($4,000 for one person) than the other three tiers ($9,660 for one person). If your parent is disabled and working, confirm which limits apply before gathering documents.",
+        "MSP approval can be retroactive to the month of application. Apply as soon as possible even if you are still gathering every document; you can submit missing items after the initial application."
+      ],
+      "relatedPrograms": [
+        "Wisconsin Medicaid (BadgerCare Plus or regular Medicaid for low-income adults)",
+        "Extra Help (Low Income Subsidy for Medicare Part D prescription drug costs)",
+        "SeniorCare (Wisconsin prescription drug assistance program for adults 65+)",
+        "ADRC Benefits Counseling / SHIP (free one-on-one help comparing Medicare options)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which MSP tier might your parent qualify for?",
+          "description": "Wisconsin runs four categories. Each has a different income limit and a different level of help. One application screens for all four.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimit": "100% FPL: $1,304/month for one person; $1,762/month for two",
+              "assetLimit": "$9,660 (individual) / $14,470 (couple)",
+              "covers": "Medicare Part A premiums, Part B premiums, deductibles, and coinsurance. This is the broadest help available."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimit": "120% FPL: $1,565/month for one person; $2,115/month for two",
+              "assetLimit": "$9,660 (individual) / $14,470 (couple)",
+              "covers": "Medicare Part B premiums only ($185/month in 2025)."
+            },
+            {
+              "name": "SLMB+ (also called Qualified Individual, QI)",
+              "incomeLimit": "135% FPL: $1,761/month for one person; $2,379/month for two",
+              "assetLimit": "$9,660 (individual) / $14,470 (couple)",
+              "covers": "Medicare Part B premiums only."
+            },
+            {
+              "name": "QDWI (Qualified Disabled and Working Individual)",
+              "incomeLimit": "200% FPL: $2,608/month for one person; $3,525/month for two",
+              "assetLimit": "$4,000 (individual) / $6,000 (couple) — lower than other tiers",
+              "covers": "Medicare Part A premiums only. Requires current disability and employment."
+            }
+          ],
+          "note": "Income limits shown are gross limits before Wisconsin applies its income credits. Your parent's actual countable income may be lower than their gross income."
+        },
+        {
+          "type": "stat-callout",
+          "stats": [
+            {
+              "label": "Part B premium covered for eligible enrollees",
+              "value": "$185/month",
+              "note": "2025 standard Medicare Part B premium (CMS)"
+            },
+            {
+              "label": "Income limit for highest-tier eligibility (1-person household)",
+              "value": "$2,608/month",
+              "note": "200% FPL, QDWI tier (Wisconsin DHS)"
+            },
+            {
+              "label": "Asset limit for QMB, SLMB, and SLMB+ (individual)",
+              "value": "$9,660",
+              "note": "Wisconsin DHS published limits"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,800/month from Social Security and a small pension. Is that too high to qualify?",
+          "answer": "Not necessarily. Wisconsin applies income credits before comparing your parent's income to the FPL limits. Their countable income may be lower than their gross income. The SLMB+ tier goes up to $1,761/month for a single person at the raw limit, and QDWI goes up to $2,608/month. The only way to know for certain is to apply. Call 800-362-3002 or start an application at access.wi.gov."
+        },
+        {
+          "question": "My parent owns a home. Does that disqualify them from MSP?",
+          "answer": "Wisconsin DHS source materials do not list a home equity cap for MSPs, and the home is generally treated as an exempt asset in Medicaid-related programs. The published asset limits ($9,660 for an individual) apply to countable assets such as bank accounts, investments, and cash. Owning a home alone is unlikely to disqualify your parent, but you should confirm with the agency at 800-362-3002 because the full list of exempt assets is not published in the materials we reviewed."
+        },
+        {
+          "question": "What is the difference between QMB and SLMB? Which one should we apply for?",
+          "answer": "QMB is the most comprehensive tier: it covers Part A and Part B premiums plus deductibles and coinsurance. SLMB and SLMB+ cover Part B premiums only. QDWI covers Part A premiums only and is for disabled people who are currently working. You do not need to choose; one application at access.wi.gov or 800-362-3002 screens for all four tiers, and Wisconsin will place your parent in the highest tier they qualify for."
+        },
+        {
+          "question": "My parent already has Medicaid. Do they still need to apply for MSP separately?",
+          "answer": "Possibly not. People who receive SSI or certain Wisconsin Medicaid programs may be enrolled in an MSP automatically. Call 800-362-3002 and give your parent's name and date of birth; the agency can tell you whether MSP coverage is already in place. If it is not, you can apply on the same call or through access.wi.gov."
+        },
+        {
+          "question": "Can I apply for MSP and Extra Help (the Medicare drug plan subsidy) at the same time?",
+          "answer": "Yes, and you should. Extra Help (also called the Low Income Subsidy) is a separate federal program that reduces Medicare Part D drug costs. Qualifying for MSP often makes your parent automatically eligible for Extra Help, but the applications go through different agencies. Apply for MSP through Wisconsin at access.wi.gov or 800-362-3002, and apply for Extra Help through Social Security at ssa.gov or 800-772-1213."
+        },
+        {
+          "question": "If my parent qualifies for MSP, when does coverage start?",
+          "answer": "Coverage can be retroactive to the month the application was submitted. Wisconsin DHS source materials do not specify a standard processing timeline, so ask about the expected decision date when you submit. Submit the application as soon as possible, even if you are still gathering some documents, because the effective date is tied to the application date, not the approval date."
+        },
+        {
+          "question": "My parent's income or assets change from year to year. Will they lose MSP coverage?",
+          "answer": "MSP eligibility is reviewed periodically. If your parent's income or assets increase and they no longer qualify, Wisconsin will send a notice before ending coverage and explain the right to appeal. If their situation changes significantly, they should report it to their county DHS office. MSP income limits also change each year as FPL levels are updated, so a parent who is near the edge may qualify some years and not others."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent, or does my parent have to apply themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of a parent. Through access.wi.gov, you can set up a MyACCESS account and apply on their behalf. By phone, call 800-362-3002 and explain that you are applying as a representative. If you have legal authority such as power of attorney, have that document ready; the agency may ask for a copy."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "800-362-3002",
+      "sourceUrl": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-foodshare-snap",
+      "name": "FoodShare",
+      "shortName": "Wisconsin SNAP",
+      "tagline": "If your parent is a Wisconsin resident on a fixed income, they may qualify for up to $306/month in grocery benefits loaded onto an EBT card, with no asset test for most households.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wisconsin Department of Health Services ACCESS system",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county human services or economic support agency",
+            "type": "service-area"
+          },
+          {
+            "name": "County-specific offices such as Dane County Human Services or Racine County economic support offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "FoodShare is Wisconsin's name for SNAP, the federal grocery benefit program. If your parent is a Wisconsin resident on a limited income, they may qualify for monthly benefits loaded onto an Electronic Benefit Transfer (EBT) card that works like a debit card at most grocery stores, supercenters, and many farmers markets. For FFY 2027, a one-person household can receive up to $306/month; a two-person household can receive up to $562/month.\n\nOlder adults are often surprised they qualify. Because elderly or disabled household members can deduct significant medical and shelter costs from their countable income, many seniors with income above the basic threshold still come in under the net income limit after deductions. If your parent pays out-of-pocket for prescriptions, Medicare premiums, or home care, those costs can reduce the income figure the program uses to calculate benefits.\n\nFor most Wisconsin households, there is no traditional asset test. Your parent's savings account, retirement funds, and home generally do not count against them. The application takes about 20 minutes online and can be completed at access.wi.gov. A caseworker will follow up to verify documents, but you do not need to gather everything before you start.",
+      "savingsRange": "Up to $306/month for a one-person household; up to $562/month for a two-person household (FFY 2027 maximum allotments)",
+      "savingsSource": "Wisconsin Department of Health Services FoodShare eligibility page; FFY 2027 maximum monthly allotments published by DHS. Source: https://www.dhs.wisconsin.gov/foodshare/eligibility.htm",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Wisconsin resident",
+          "Income within FoodShare limits (varies by household size)",
+          "Meets federal citizenship or immigration rules",
+          "No asset test for most households",
+          "Elderly or disabled members may qualify under separate deduction rules"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1729
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2345
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2960
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 3575
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4191
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 4806
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 5421
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 6037
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Cash",
+            "Checking and savings account balances",
+            "Stocks and bonds",
+            "Certain non-exempt assets"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "Most retirement accounts",
+            "One vehicle in many cases"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Wisconsin resident",
+          "Must meet federal citizenship or immigration status rules for SNAP",
+          "Must apply through ACCESS and provide required verification documents",
+          "Able-bodied adults without dependents may face work requirements unless exempt",
+          "Household composition determines which income test and deductions apply"
+        ],
+        "povertyLevelReference": "130% FPL (gross income limit for standard eligibility; 200% FPL applies under certain categorical eligibility rules)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at access.wi.gov; you can also apply by phone through your county economic support office, by mail using Form F-16019, or in person at your local county office.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather the basics before you start",
+            "description": "You will need your parent's Social Security number, a document showing Wisconsin residency (like a utility bill or lease), proof of income (Social Security award letter, pension statement), and information about shelter costs. You do not need everything perfect before you begin; the system lets you save progress."
+          },
+          {
+            "step": 2,
+            "title": "Apply online at access.wi.gov",
+            "description": "Go to access.wi.gov and select 'Apply for Benefits.' Create an account or log in, then complete the FoodShare application. The system will ask about household members, income, housing costs, and any medical expenses. Submit the application when complete. You will receive a confirmation number."
+          },
+          {
+            "step": 3,
+            "title": "Respond to the interview request from your county office",
+            "description": "After you submit, your county economic support office will contact you to schedule an eligibility interview, usually by phone. This interview is required. Have your documents ready. County offices vary in scheduling speed; if you do not hear within a few business days, call your local county office directly to follow up."
+          },
+          {
+            "step": 4,
+            "title": "Submit verification documents",
+            "description": "After the interview, you may need to provide copies of documents. You can upload them through access.wi.gov, mail them to your county office, or drop them off in person. Submitting everything at once avoids delays."
+          },
+          {
+            "step": 5,
+            "title": "Receive your EBT card",
+            "description": "If approved, benefits will be loaded onto an EBT card mailed to your parent's address. The card works at most grocery stores and supercenters. Benefits load on the same date each month. You cannot use the card for alcohol, tobacco, hot prepared foods, or non-food items."
+          }
+        ],
+        "processingTime": "Not specified in published DHS materials; families should expect a standard eligibility determination after submitting the application and completing the required interview and verification steps. Contact your county office if you have not heard back within 30 days.",
+        "waitlist": null,
+        "tip": "If your parent has high out-of-pocket medical costs (prescriptions, Medicare premiums, home care copays), ask the caseworker specifically about the medical expense deduction for elderly or disabled household members. This deduction can significantly lower the income figure used to calculate benefits and may be the difference between qualifying and not.",
+        "urls": [
+          {
+            "label": "Apply online: ACCESS Wisconsin",
+            "url": "https://access.wi.gov"
+          },
+          {
+            "label": "FoodShare eligibility information (Wisconsin DHS)",
+            "url": "https://www.dhs.wisconsin.gov/foodshare/eligibility.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or other proof of income (pension statement, retirement account distribution letter)",
+        "Proof of Wisconsin residency such as a utility bill, lease agreement, or state-issued document with your parent's current address",
+        "Proof of identity such as a driver's license, state ID, or passport",
+        "Social Security numbers for all household members applying for benefits",
+        "Documentation of shelter costs: most recent rent receipt or mortgage statement, plus a recent utility bill",
+        "Documentation of out-of-pocket medical expenses for elderly or disabled household members (Medicare premium statements, prescription receipts, home care invoices) if claiming the medical expense deduction",
+        "Proof of immigration or citizenship status if applicable",
+        "Bank or financial account information if the county requests it for resource review (note: most Wisconsin FoodShare households are not subject to a traditional asset test under current rules)"
+      ],
+      "contacts": [
+        {
+          "label": "ACCESS Wisconsin (online application portal)",
+          "phone": null,
+          "description": "Apply online at access.wi.gov. Create or log in to an account to start, save, and submit a FoodShare application. This is the fastest way to get a case number on file.",
+          "hours": "Available online at access.wi.gov"
+        },
+        {
+          "label": "Wisconsin DHS FoodShare (statewide information line)",
+          "phone": "(800) 362-3002",
+          "description": "Wisconsin Department of Health Services main line. Use this to ask general FoodShare questions or to be directed to your county economic support office.",
+          "hours": "Mon-Fri 8am-4:30pm CT"
+        },
+        {
+          "label": "Wisconsin 2-1-1",
+          "phone": "2-1-1",
+          "description": "General statewide helpline. Can connect you to your local county economic support office or other food resources if you are unsure who handles FoodShare in your area. This line transfers you; it does not process FoodShare applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income looks too high at first glance, do not stop. Medical expense deductions and shelter cost deductions for elderly or disabled household members can significantly reduce the countable income figure. Apply and let the caseworker run the full calculation.",
+        "Most Wisconsin FoodShare households are not subject to a traditional asset test under current broad-based categorical eligibility rules. Do not assume a savings account or retirement fund disqualifies your parent.",
+        "County offices handle interviews and document review, and their processing speed varies. If your parent is at risk of going without food, ask the caseworker specifically whether they qualify for expedited processing, which can issue benefits more quickly in cases of very low income or resources.",
+        "If your parent lives with you or another family member, the size of the household matters. Adding or removing a household member changes both the income limit and the monthly benefit amount. Be accurate about who regularly buys and eats food together."
+      ],
+      "relatedPrograms": [
+        "SeniorCare (Wisconsin prescription drug assistance for adults 65+)",
+        "LIHEAP / Wisconsin Home Energy Assistance Program (utility bill help)",
+        "Elderly Nutrition Program / Meals on Wheels Wisconsin (home-delivered meals)",
+        "BadgerCare Plus / Wisconsin Medicaid (health coverage for low-income adults)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What the EBT card covers and what it does not",
+          "body": "FoodShare benefits load onto an EBT card each month. Your parent can use it at most grocery stores, supercenters, and many farmers markets to buy bread, meat, dairy, produce, cereals, and seeds or plants that produce food. The card cannot be used for alcohol, tobacco, vitamins or supplements, hot prepared foods (including hot deli items), or any non-food item. It is not a cash card; benefits do not carry over indefinitely, so unused amounts should be spent each month."
+        },
+        {
+          "type": "callout",
+          "title": "Why the income limit shown may not be your parent's real limit",
+          "body": "The 130% FPL gross income figures in the table above are the starting point, not the final word. Wisconsin FoodShare allows elderly or disabled household members to deduct out-of-pocket medical expenses above $35/month, plus a portion of shelter costs that exceed half of countable income. Because of these deductions, a senior whose gross income appears to exceed the limit may still qualify after the deductions are applied. The caseworker is required to calculate both. Do not self-screen out before applying."
+        },
+        {
+          "type": "prose",
+          "title": "FFY 2027 maximum monthly benefit amounts by household size",
+          "body": "Benefits are calculated based on household size and net income. The maximum amounts below assume zero countable net income and represent the highest possible monthly allotment:\n\n1 person: $306\n2 people: $562\n3 people: $808\n4 people: $1,023\n5 people: $1,217\n6 people: $1,463\n7 people: $1,616\n8 people: $1,841\nEach additional person: add $225\n\nMost households receive less than the maximum because the benefit is reduced as net income rises. The exact amount is calculated after deductions are applied.\n\nSource: Wisconsin DHS, FFY 2027 FoodShare allotment schedule."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security income seems too high. Should I still apply?",
+          "answer": "Yes. The gross income figures in the table are the starting point, not the final number. Wisconsin FoodShare allows elderly or disabled household members to deduct out-of-pocket medical expenses above $35/month (Medicare premiums, prescription costs, home care copays) and a portion of shelter costs. After those deductions, many seniors with income above the gross limit still qualify. The only way to know for certain is to apply and have the caseworker run the full calculation."
+        },
+        {
+          "question": "Will my parent's savings account or home disqualify them?",
+          "answer": "Probably not. Most Wisconsin FoodShare households are not subject to a traditional asset test under current broad-based categorical eligibility rules. The primary home, most retirement accounts, and one vehicle are also generally exempt even for households that are subject to resource review. Do not assume assets are a barrier without asking the caseworker directly."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. You can apply as an authorized representative through the ACCESS system at access.wi.gov. You will need to indicate that you are applying on behalf of another person and may be asked to provide documentation of your authority to act for them. The caseworker can explain what is needed in your parent's specific situation."
+        },
+        {
+          "question": "My parent lives with me. Does that affect the benefit?",
+          "answer": "Yes, in two ways. If your parent buys and prepares food separately from the rest of your household, they can apply as their own one-person household, which has its own income limit and benefit amount. If they share food costs and meals with others in the home, the entire group may need to be counted together, which changes both the income limit and the potential benefit. Be accurate when you answer the household composition questions on the application; the caseworker will use that to determine the right assistance group."
+        },
+        {
+          "question": "How quickly will my parent get benefits after applying?",
+          "answer": "Wisconsin DHS does not publish a specific processing timeline in its public materials. After submitting the application, your parent must complete an eligibility interview with the county economic support office and provide any required verification documents. If your parent has very low income or almost no resources, ask the caseworker whether they qualify for expedited processing, which can issue benefits more quickly in urgent cases. Contact your county office if you have not heard back within 30 days of submitting."
+        },
+        {
+          "question": "What happens if my parent's income or household situation changes after enrollment?",
+          "answer": "FoodShare households must report certain changes to the county economic support office, such as significant income increases. If your parent's income rises above the applicable reporting threshold, they must notify their county office. Changes in household size (a family member moving in or out) also affect the benefit calculation. Failing to report required changes can result in an overpayment that must be repaid. Call your county economic support office or log in to access.wi.gov to report changes."
+        },
+        {
+          "question": "Can my parent use FoodShare and also receive Meals on Wheels or a food pantry?",
+          "answer": "Yes. FoodShare does not conflict with home-delivered meal programs like Meals on Wheels or food pantry use. These programs serve different needs and operate independently. Using multiple food resources at the same time is allowed and often necessary for seniors with limited mobility or very low incomes."
+        },
+        {
+          "question": "My parent has dementia and cannot complete an interview. What are the options?",
+          "answer": "You can apply as an authorized representative on your parent's behalf and complete the required eligibility interview yourself. Indicate on the application that you are acting as a representative. If you have legal authority such as a power of attorney, have that document available. The caseworker can advise on what documentation is needed in your county. Call the Wisconsin DHS general line at (800) 362-3002 to ask how your specific county handles representative applications."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "(800) 362-3002",
+      "sourceUrl": "https://www.dhs.wisconsin.gov/foodshare/eligibility.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-pace-program",
+      "name": "Wisconsin PACE Program",
+      "shortName": "Wisconsin PACE",
+      "tagline": "If your parent lives in Kenosha, Milwaukee, Racine, or Waukesha County and needs nursing home-level care, PACE can coordinate all their medical and long-term care services so they can stay home instead.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local ADRC serving Kenosha County",
+            "type": "service-area"
+          },
+          {
+            "name": "Local ADRC serving Milwaukee County",
+            "type": "service-area"
+          },
+          {
+            "name": "Local ADRC serving Racine County",
+            "type": "service-area"
+          },
+          {
+            "name": "Local ADRC serving Waukesha County",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 55 or older, needs the level of care typically provided in a nursing home, and lives in Kenosha, Milwaukee, Racine, or Waukesha County, PACE (Program of All-inclusive Care for the Elderly) can replace the fragmented web of doctors, specialists, home aides, and care coordinators with a single interdisciplinary team. That team handles primary care, specialist visits, home health, adult day services, medications, and more, all under one plan. Your parent does not have to move to a nursing home to receive this level of care.\n\nWisconsin PACE is a Medicaid and Medicare managed care program, which means the cost structure depends on your parent's financial eligibility. People who qualify for Medicaid pay little to nothing out of pocket. People who have Medicare but not Medicaid pay a Medicaid-determined amount. People who have neither can enroll by paying privately, though that is uncommon. The official sources do not publish a single income or asset chart for PACE; a financial review through the Medicaid application determines what your parent owes, if anything.\n\nThe program is not available everywhere in Wisconsin. Only four counties are served: Kenosha, Milwaukee, Racine, and Waukesha. If your parent lives elsewhere, PACE is not currently an option, and you would need to explore Wisconsin Family Care or IRIS instead. If they do live in one of those four counties, the first call is to the local Aging and Disability Resource Center (ADRC), which screens both functional and financial eligibility before enrollment can begin.",
+      "savingsRange": "",
+      "savingsSource": "Free service: PACE is an all-inclusive coordinated care program, not a cash benefit. Cost to the enrollee depends on Medicaid eligibility; most Medicaid-eligible participants pay nothing out of pocket. No fixed dollar savings figure is published in the official Wisconsin DHS materials reviewed.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Lives in Kenosha, Milwaukee, Racine, or Waukesha County",
+          "Needs nursing home level of care (daily help with bathing, dressing, medications, or similar)",
+          "Able to live safely in the community at the time of enrollment",
+          "Must pass both a functional screen and a financial eligibility review"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings accounts",
+            "Investments and brokerage accounts",
+            "Additional real property beyond the primary home",
+            "Other countable assets subject to Wisconsin Medicaid long-term care rules"
+          ],
+          "exemptAssets": [
+            "The official Wisconsin PACE materials reviewed do not publish a complete PACE-specific exempt asset list; exemptions follow Wisconsin Medicaid long-term care rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet Nursing Facility Level of Care, meaning a clinical assessor has determined they need substantial daily help with activities like bathing, dressing, medication management, or mobility. This is not self-reported; a trained assessor completes a Long Term Care Functional Screen through the local ADRC or Tribal ADRS. Your parent must also be able to live safely in the community at the time they enroll, not just meet the nursing-home-level threshold on paper.",
+        "otherRequirements": [
+          "Must live in the PACE service area: Kenosha, Milwaukee, Racine, or Waukesha County",
+          "Must complete a Long Term Care Functional Screen through the local ADRC or Tribal Aging and Disability Resource Specialist (ADRS)",
+          "Must complete a Medicaid application for the financial eligibility review, even if your parent already has Medicare",
+          "Medicare is not required: your parent can enroll with Medicaid only, or by paying privately if they have neither"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Start by calling your county's ADRC; they run the required functional screen and connect you to the Medicaid financial review before any enrollment paperwork is filed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent's county is covered",
+            "description": "Wisconsin PACE is only available in Kenosha, Milwaukee, Racine, and Waukesha counties. If your parent lives in any other county, PACE is not currently available and you should ask the ADRC about Wisconsin Family Care or IRIS instead."
+          },
+          {
+            "step": 2,
+            "title": "Contact the local ADRC to request a Long Term Care Functional Screen",
+            "description": "Call the ADRC serving your parent's county. The ADRC assigns an assessor who completes the Long Term Care Functional Screen, the required clinical evaluation of whether your parent needs nursing-home-level care. This screen must happen before enrollment can proceed. Find your county's ADRC through the Wisconsin ADRC directory at adrc.wi.gov or by calling 2-1-1."
+          },
+          {
+            "step": 3,
+            "title": "Complete the Medicaid financial eligibility review",
+            "description": "Regardless of whether your parent already has Medicare, a Medicaid application is required as part of the PACE process. You can apply online at access.wi.gov, by paper form, or by calling Medicaid Member Services at 800-362-3002. The financial review determines what your parent will pay for PACE services, if anything. If your parent already has active Medicaid, confirm with the ADRC whether an additional application is needed."
+          },
+          {
+            "step": 4,
+            "title": "Work with the ADRC to confirm PACE enrollment eligibility",
+            "description": "The ADRC reviews the functional screen results and coordinates with the Medicaid financial review. If your parent meets both requirements, the ADRC confirms eligibility for PACE. At this stage you will also confirm that a PACE organization is accepting enrollees in your parent's county."
+          },
+          {
+            "step": 5,
+            "title": "Complete the PACE enrollment form",
+            "description": "Once eligibility is confirmed, complete the Wisconsin DHS PACE enrollment form (form DHS F-02483 or F-02483R, available through the ADRC or the DHS website at dhs.wisconsin.gov/familycare/pace.htm). The ADRC will walk you through this step."
+          }
+        ],
+        "processingTime": "The official Wisconsin DHS materials do not publish a guaranteed statewide processing timeline. Timing depends on scheduling the functional screen, completing the Medicaid financial review, and confirming enrollment with the local PACE organization. Ask your ADRC for a realistic estimate based on current local conditions.",
+        "waitlist": "Wisconsin's official PACE pages do not describe a formal statewide waitlist. The practical constraint is geographic: if your parent does not live in one of the four covered counties, PACE is not available regardless of how long you wait. Ask the local ADRC about current enrollment availability in your county.",
+        "tip": "Call the ADRC first, before gathering any paperwork. The functional screen is the step most families skip or delay, and it must be completed before anything else can move forward. The ADRC can also tell you which documents to bring so you are not making multiple trips.",
+        "urls": [
+          {
+            "label": "Wisconsin DHS PACE Program page",
+            "url": "https://www.dhs.wisconsin.gov/familycare/pace.htm"
+          },
+          {
+            "label": "Apply for Medicaid online (ACCESS)",
+            "url": "https://access.wi.gov"
+          },
+          {
+            "label": "Wisconsin ADRC directory",
+            "url": "https://adrc.wi.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of identity (state-issued ID, driver's license, or passport)",
+        "Proof of Wisconsin residency and county address (utility bill, lease agreement, or official mail showing current address)",
+        "Proof of age (birth certificate, passport, or other official document)",
+        "Social Security card or Social Security number for the applicant",
+        "Medicare card if your parent has Medicare (Medicare is not required for PACE, but enrollment details differ depending on coverage)",
+        "Income records (Social Security award letter, pension statements, or any other current income documentation)",
+        "Current balances for any checking or savings accounts (the Medicaid financial review will determine what records are needed; the ADRC or Medicaid worker will tell you the scope required for your parent's situation)",
+        "Any other asset records the Medicaid financial review requests (the official materials point families to the Medicaid application process for the specific list)",
+        "Current health insurance information beyond Medicare if applicable",
+        "Medical or care-needs information relevant to the Long Term Care Functional Screen (the ADRC assessor will guide this)"
+      ],
+      "contacts": [
+        {
+          "label": "Wisconsin ADRC Directory (find your county's ADRC)",
+          "phone": "2-1-1",
+          "description": "Dial 2-1-1 and ask for the Aging and Disability Resource Center serving your parent's county. The ADRC is the required entry point for PACE: they schedule the Long Term Care Functional Screen and coordinate the enrollment process. This is the first call to make.",
+          "hours": "2-1-1 is available 24 hours, 7 days a week; ADRC offices typically operate Monday through Friday during business hours"
+        },
+        {
+          "label": "Wisconsin Medicaid Member Services",
+          "phone": "800-362-3002",
+          "description": "Use this line to apply for Medicaid or ask questions about the financial eligibility portion of the PACE process. A Medicaid application is required as part of PACE enrollment even if your parent already has Medicare.",
+          "hours": "Monday through Friday, 8am to 6pm CT"
+        },
+        {
+          "label": "Wisconsin DHS PACE Program information",
+          "phone": null,
+          "description": "The official Wisconsin DHS PACE page at dhs.wisconsin.gov/familycare/pace.htm has program overviews, enrollment forms (DHS F-02483 and F-02483R), and links to county resources. It does not have a central PACE enrollment phone line; all enrollment begins through the local ADRC.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Both a functional screen AND a financial eligibility review are required. Families often focus on one and delay the other, which stalls enrollment. Start both as close together as the ADRC advises.",
+        "Your parent must be able to live safely in the community at the time of enrollment, not just meet the nursing-home-level clinical threshold. If your parent is in a hospital or short-term rehab, ask the discharge planner whether the functional screen can be initiated before discharge.",
+        "If your parent has a spouse living at home, Wisconsin's spousal impoverishment rules affect how assets are counted. The DHS handbook reviewed indicates that when combined assets are $100,000 or less, the community spouse may keep $50,000 and the PACE applicant may keep $2,000. Ask the Medicaid worker to walk through the spousal rules for your parent's specific situation.",
+        "The official materials do not publish a simple income chart for PACE. The exact financial result depends on the full Medicaid application review. Do not guess from generic Medicaid numbers; get a determination from the ADRC or a Medicaid worker."
+      ],
+      "relatedPrograms": [
+        "Wisconsin Family Care",
+        "Wisconsin IRIS (Include, Respect, I Self-Direct)",
+        "Wisconsin SeniorCare (prescription drug assistance)",
+        "Wisconsin Medicaid (required financial component of PACE enrollment)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "PACE is only available in four Wisconsin counties",
+          "body": "Kenosha, Milwaukee, Racine, and Waukesha. If your parent lives anywhere else in Wisconsin, PACE is not currently available. Ask your local ADRC about Wisconsin Family Care or IRIS, which serve a broader geography."
+        },
+        {
+          "type": "prose",
+          "title": "What PACE actually covers",
+          "body": "There is no fixed benefit dollar amount or service hour cap published in the Wisconsin PACE materials. Instead, an interdisciplinary care team builds a plan specific to your parent's needs. That plan can include: primary and specialty medical care, prescription medications, nursing care, physical and occupational therapy, adult day health services, home health aide visits, social work, dental care, vision care, nutrition counseling, and transportation to PACE services. If your parent's needs increase to the point where nursing home care becomes necessary, the PACE organization covers that too, all under the same enrollment. The care team adjusts the plan as your parent's condition changes; you do not restart the process."
+        },
+        {
+          "type": "prose",
+          "title": "How PACE is different from Wisconsin Family Care and IRIS",
+          "body": "Wisconsin offers three managed long-term care options for people who meet the nursing-home-level-of-care standard: Family Care, Partnership (a combined Medicaid and Medicare plan available through Family Care), and PACE. PACE is the most integrated of the three. Because PACE covers all medical care under one program, your parent will not need to coordinate between a separate primary care doctor, a separate Medicaid waiver manager, and a separate Medicare plan. One team manages everything. The tradeoff is that PACE is only available in four counties, and your parent's care must be delivered through the PACE organization's network. Family Care and IRIS are available in more counties and allow more provider flexibility."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives in Dane County. Can they still enroll in PACE?",
+          "answer": "No. Wisconsin PACE is limited to Kenosha, Milwaukee, Racine, and Waukesha counties. If your parent lives in Dane County or anywhere else in the state, PACE is not currently available to them. Contact your local ADRC and ask about Wisconsin Family Care or IRIS, which serve a broader geographic area. You can find your ADRC at adrc.wi.gov or by calling 2-1-1."
+        },
+        {
+          "question": "Does my parent need Medicare to qualify for PACE?",
+          "answer": "No. Medicare is not required. Your parent can enroll in PACE with Medicaid only. People who have both Medicare and Medicaid can also enroll, and people who have neither can participate by paying privately, though that is uncommon. The PACE enrollment form says a person may be, but does not have to be, enrolled in Medicare. What is required is passing the functional screen and completing the Medicaid financial review."
+        },
+        {
+          "question": "How are assets counted if my parent is married and their spouse still lives at home?",
+          "answer": "Wisconsin's spousal impoverishment rules apply. Based on the DHS handbook reviewed: when a couple's combined countable assets are $100,000 or less, the spouse living at home can keep $50,000 and the PACE applicant can keep $2,000. If combined assets are higher, a different calculation applies. These rules are specific to your parent's situation and the Medicaid worker will calculate them during the financial review. Do not assume these numbers apply without a formal determination."
+        },
+        {
+          "question": "What happens if my parent's care needs increase after they enroll in PACE?",
+          "answer": "The interdisciplinary care team adjusts the care plan as your parent's needs change. If your parent eventually needs nursing home care, PACE covers that too, under the same enrollment. You do not need to re-apply or switch programs. The team is designed to follow your parent across settings."
+        },
+        {
+          "question": "Can I apply for PACE and Wisconsin Family Care at the same time?",
+          "answer": "You can begin the process for both, but your parent will ultimately enroll in one. Both programs start with the same first step: a Long Term Care Functional Screen through the local ADRC. The ADRC can explain the differences and help you choose. Because PACE is only available in four counties and requires care delivery through the PACE network, Family Care may offer more provider flexibility if that matters for your parent's situation."
+        },
+        {
+          "question": "How long does the enrollment process take?",
+          "answer": "The official Wisconsin DHS materials do not publish a guaranteed statewide processing timeline. The length depends on when the functional screen can be scheduled, how long the Medicaid financial review takes, and whether the local PACE organization has capacity. Ask your county ADRC for a realistic local estimate when you call. Delays most commonly happen when families do not start the Medicaid application at the same time as the functional screen."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to apply themselves?",
+          "answer": "Yes, a family member or authorized representative can initiate the process on behalf of an aging parent. Tell the ADRC your parent's situation and your relationship when you call. If your parent has cognitive decline or cannot participate in the functional screen without support, mention that upfront so the assessor can plan accordingly. You may also need documentation of your authority to act on their behalf if you are applying for Medicaid on their behalf."
+        },
+        {
+          "question": "What if my parent's income is too high for Medicaid?",
+          "answer": "The official Wisconsin PACE materials do not publish a standalone income limit for PACE. Financial eligibility is determined through the Medicaid application process, and the exact result depends on your parent's income, assets, and household situation. A Medicaid worker can tell you whether your parent qualifies and, if income is above the standard limit, whether a spend-down or other mechanism applies. Call Medicaid Member Services at 800-362-3002 or ask the ADRC to walk through the financial eligibility question with you before assuming your parent does not qualify."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "800-362-3002",
+      "sourceUrl": "https://www.dhs.wisconsin.gov/familycare/pace.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-wheap-home-energy-assistance",
+      "name": "Wisconsin Home Energy Assistance Program (WHEAP)",
+      "shortName": "Home Energy Assistance",
+      "tagline": "If your parent pays for heat on a fixed income, Wisconsin may cover part of their annual energy bill through a direct payment to their utility provider.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Approved county human services agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Approved tribal agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Home Energy Plus/WHEAP contractors such as community action agencies in some regions",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is a Wisconsin resident with a heating or electric bill and a household income below 60% of the state median, they may qualify for WHEAP: a once-a-year payment made directly toward their home energy costs. The benefit goes straight to the utility provider, so your parent does not need to manage a check or reimbursement.\n\nThe income limits for the 2026-2027 program year (October 1, 2026 through September 30, 2027) are $3,322/month for a single-person household and $4,344/month for a two-person household. There is no asset test. Eligibility is based on gross income, and the program uses the prior month's income to estimate an annual figure, which matters if your parent recently changed their Social Security benefit, started a pension, or received a one-time payment.\n\nWHEAP is part of Wisconsin's broader Home Energy Plus network, which also includes crisis assistance if a shutoff is imminent and referrals to weatherization services. Applications go through the approved agency for your parent's county or tribal area, or online at energybenefit.wi.gov. Because local agencies set their own intake rules and appointment systems, applying early in the program year (October) is the most reliable way to avoid delays.",
+      "savingsRange": "",
+      "savingsSource": "The official sources reviewed do not publish a single statewide benefit dollar amount. The payment varies by household circumstances and local administration. No verified figure for a typical or maximum grant was located in the official materials. See energyandhousing.wi.gov for program details.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Wisconsin resident",
+          "Gross household income at or below 60% of state median income",
+          "Single person: income at or below $3,322/month (2026-2027)",
+          "No asset test",
+          "Must apply through the agency serving your parent's county or tribe"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3322
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4344
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 5366
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 6388
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 7411
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 8433
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 8624
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 8816
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Wisconsin resident in the service area of the applying local agency.",
+          "Must apply through the approved WHEAP agency for the county or tribe where your parent lives, or through the statewide online portal at energybenefit.wi.gov.",
+          "Households with income above the standard limit may still qualify under categorical eligibility rules; the local agency can screen for this.",
+          "Eligibility is based on gross income; the prior month's income is used and annualized for the income test."
+        ],
+        "povertyLevelReference": "60% of Wisconsin State Median Income (SMI)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest path is the online portal at energybenefit.wi.gov, which is available statewide; applying by phone or in person through your parent's county agency is also accepted and may be necessary if the portal presents barriers.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather documents before you start",
+            "description": "Pull together your parent's most recent utility bill showing the account number, proof of income for everyone in the household (Social Security award letter, pension statement, or most recent tax return), and a photo ID. Missing the account number is the most common reason intake is delayed."
+          },
+          {
+            "step": 2,
+            "title": "Apply online or find your county agency",
+            "description": "Go to energybenefit.wi.gov to apply online through the Home Energy Plus portal. If your parent prefers phone or in-person help, find the approved agency for their county at the same site or through the Wisconsin Department of Administration's energy assistance page at energyandhousing.wi.gov. Applications are also accepted by mail through the local agency."
+          },
+          {
+            "step": 3,
+            "title": "Complete the Home Energy Plus Application",
+            "description": "The form asks for household size, gross income for all household members, heating and electric account information, and residency details. If your parent has income that is hard to document (irregular or self-generated), the local agency may ask them to complete a Self-Generated Income Report Form (S-GIRF)."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any follow-up requests promptly",
+            "description": "Local agencies may contact you by phone or mail if documents are missing or if they need to schedule an intake appointment. Delays in responding can push your parent's application back in the queue, especially during the busy fall period."
+          },
+          {
+            "step": 5,
+            "title": "Benefit is paid directly to the utility provider",
+            "description": "If approved, WHEAP pays the benefit directly to your parent's heating or electric provider. Your parent does not receive a check. Confirm with the local agency which account the payment will be applied to, especially if your parent has both a gas and electric account."
+          }
+        ],
+        "processingTime": "No single statewide processing timeline is published. Timing depends on local agency workload and application method. Some agencies begin scheduling appointments in early fall; applying at the program's October 1 opening is the most reliable way to be processed early in the season.",
+        "waitlist": "No formal statewide waitlist. Local agencies may queue applications during high-volume periods. Crisis cases with active shutoff notices may be handled on an expedited basis separate from regular seasonal applications.",
+        "tip": "If your parent rents and does not pay utilities directly, contact the local agency before applying. The intake process for renters whose heat is included in rent or shared through a landlord can differ from standard applications.",
+        "urls": [
+          {
+            "label": "Online Application Portal",
+            "url": "https://energybenefit.wi.gov/OnlineApps"
+          },
+          {
+            "label": "Home Energy Plus Program Home",
+            "url": "https://energybenefit.wi.gov/"
+          },
+          {
+            "label": "Official WHEAP Program Page (Wisconsin DOA)",
+            "url": "https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent heating utility bill showing the account number and account holder name",
+        "Proof of gross income for all household members: Social Security award letter, pension or retirement income statement, or most recent federal tax return",
+        "Valid government-issued photo ID for the applicant (driver's license, state ID, or passport)",
+        "Most recent electric bill showing the account number, if electric is separate from heat",
+        "Names, dates of birth, and Social Security numbers for all household members",
+        "Proof of Wisconsin residency if requested by the local agency (a current utility bill or lease agreement typically satisfies this)",
+        "Self-Generated Income Report Form (S-GIRF) if your parent has income that is not documented by a standard statement, such as self-employment or informal income; the local agency will tell you if this applies"
+      ],
+      "contacts": [
+        {
+          "label": "Home Energy Plus Online Portal",
+          "phone": null,
+          "description": "Apply directly online through the statewide application portal. Available to all Wisconsin residents regardless of county.",
+          "hours": "Available online; visit energybenefit.wi.gov/OnlineApps"
+        },
+        {
+          "label": "Wisconsin DOA Energy Assistance Program Office",
+          "phone": "(608) 267-3680",
+          "description": "Wisconsin Department of Administration office that oversees WHEAP statewide. Can direct you to the approved local agency for your parent's county if you are unsure which office to contact.",
+          "hours": "Business hours, Monday-Friday; confirm current hours at energyandhousing.wi.gov"
+        },
+        {
+          "label": "Wisconsin 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide helpline that can connect you to the WHEAP agency in your parent's county. This line does not process applications itself but can refer you to the right local office.",
+          "hours": "Available 24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has an active disconnection notice or is at immediate risk of a utility shutoff, tell the local agency right away. Crisis cases under the Home Energy Plus network may be handled separately and more quickly than regular seasonal applications.",
+        "Income is measured gross and based on the prior month's earnings, which are then annualized. If your parent recently received a one-time payment (such as a tax refund or insurance settlement) or their Social Security benefit recently changed, the timing of the application may affect whether they qualify. Ask the local agency how the prior-month test applies in your parent's situation.",
+        "If your parent's gross income is above the standard limit, they may still qualify under categorical eligibility rules. Do not assume they are ineligible until the local agency has screened them.",
+        "WHEAP approval does not automatically enroll your parent in weatherization services. Qualifying for WHEAP may connect them to the weatherization referral network, but that is a separate program with its own process and timeline."
+      ],
+      "relatedPrograms": [
+        "Wisconsin Home Energy Plus Crisis Assistance",
+        "Wisconsin Weatherization Assistance Program",
+        "Wisconsin SeniorCare (prescription drug assistance for seniors)",
+        "Low Income Home Energy Assistance Program (LIHEAP, the federal program WHEAP operates under)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "How the benefit is paid",
+          "body": "WHEAP does not send a check to your parent. The payment goes directly to their heating or electric utility provider and is applied as a credit to the account. Make sure the account number on the application matches the account your parent actually pays, especially if they have both a gas and an electric account with different providers."
+        },
+        {
+          "type": "callout",
+          "title": "No asset test",
+          "body": "WHEAP does not have an asset limit. Savings accounts, a home, or a car do not affect eligibility. The only financial test is gross household income compared to 60% of the Wisconsin state median income for the program year."
+        },
+        {
+          "type": "prose",
+          "title": "How income is calculated",
+          "body": "Eligibility is based on gross income (before taxes or deductions), not take-home pay. The program uses the prior month's income and projects it forward to estimate annual household income for the income test. This matters for seniors whose income changes: a recent cost-of-living adjustment to Social Security, a new pension payment, or a one-time income source in the prior month could affect how the household's income is measured. If your parent's income fluctuates or recently changed, explain this to the local agency at intake."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is just above the limit. Is there any way they still qualify?",
+          "answer": "Yes, possibly. WHEAP has categorical eligibility rules that may cover households whose income exceeds the standard limit under certain circumstances. The local agency is the right place to find out; do not assume your parent is ineligible without asking. Contact the agency for your parent's county through energybenefit.wi.gov or call the Wisconsin DOA at (608) 267-3680."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the process themselves?",
+          "answer": "Yes. An authorized representative, such as an adult child or power of attorney, can apply on behalf of the household. Let the local agency know at the start of intake that you are applying on your parent's behalf and have documentation of your authority if they request it. The local agency may have a specific authorization process."
+        },
+        {
+          "question": "My parent rents and heat is included in the rent. Do they still qualify?",
+          "answer": "Possibly, but the application process is different. Renters whose heat is built into their rent or shared through a landlord arrangement have a different intake path than those who pay utilities directly. Contact the local agency before applying to understand how they handle this situation in your parent's county."
+        },
+        {
+          "question": "My parent received a one-time payment last month. Will that count against them?",
+          "answer": "It could. WHEAP uses the prior month's gross income and projects it annually for the income test. A one-time payment in the prior month would be included in that calculation and could temporarily push the household above the income limit. If this applies to your parent, explain the situation to the local agency at intake. Timing the application to a month when income reflects normal levels may matter."
+        },
+        {
+          "question": "Can my parent apply for WHEAP and weatherization at the same time?",
+          "answer": "WHEAP approval does not automatically enroll a household in weatherization. Qualifying for WHEAP may connect your parent to the weatherization referral network, but weatherization is a separate program with its own eligibility review and waiting period. Ask the local agency about the referral process when you apply for WHEAP."
+        },
+        {
+          "question": "What if my parent has an urgent shutoff notice and cannot wait for regular processing?",
+          "answer": "Tell the local agency immediately. Wisconsin's Home Energy Plus network includes a crisis assistance component for households facing imminent disconnection. Crisis cases may be handled separately and more quickly than standard seasonal applications. Do not wait; contact the local agency the same day a shutoff notice arrives."
+        },
+        {
+          "question": "Does my parent need to reapply every year?",
+          "answer": "Yes. WHEAP is an annual benefit. The program year runs October 1 through September 30, and households must apply each year to receive a benefit. Approval in one year does not carry over to the next. Applying early in October is the best way to secure processing before local agency queues fill up."
+        },
+        {
+          "question": "How much will my parent actually receive?",
+          "answer": "Wisconsin does not publish a single statewide benefit amount. The payment varies by household circumstances and is determined by the local agency. No verified typical or maximum figure was available in the official materials reviewed. For an estimate specific to your parent's situation, contact the local agency for their county through energybenefit.wi.gov."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "(608) 267-3680",
+      "sourceUrl": "https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-property-tax-relief-circuit-breaker-credit",
+      "name": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+      "shortName": "WI Homestead Credit",
+      "tagline": "If your parent owns or rents a home in Wisconsin and earns less than $24,680 per year, they may qualify for up to $1,168 back on their taxes, even if they owe nothing.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wisconsin Department of Revenue statewide offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Wisconsin's Homestead Credit puts money back in your parent's pocket based on what they pay in property taxes or rent. For tax year 2025, the maximum credit is $1,168. The credit is refundable, which means if your parent owes no state income tax, they still receive the money as a direct refund. This is not a discount on a future bill; it is a check or credit issued after filing.\n\nBoth homeowners and renters can qualify. If your parent rents, a portion of their rent is treated as property taxes under the program's formula. The credit covers up to 80% of qualifying property taxes or rent constituting property taxes, calculated on the first $1,460 of those costs. The benefit phases down as household income rises, and cuts off entirely once household income reaches $24,680 for the year.\n\nYour parent does not need to owe income taxes to receive this credit, and there is no asset test. The main requirements are Wisconsin residency, a qualifying homestead, and household income below the limit. Your parent files Schedule H or Schedule H-EZ alongside their Wisconsin tax return, or by itself if no tax return is otherwise required.",
+      "savingsRange": "Up to $1,168 for tax year 2025",
+      "savingsSource": "Wisconsin Department of Revenue; maximum credit for tax year 2025 as published on the Homestead Credit program page (revenue.wi.gov).",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 18 or older by December 31 of the claim year",
+          "Wisconsin resident who owns or rents a Wisconsin homestead",
+          "Household income below $24,680 for tax year 2025",
+          "No asset limit",
+          "Renters qualify; a share of rent counts as property taxes"
+        ],
+        "ageRequirement": "18+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Wisconsin resident for the relevant tax year",
+          "Must own or rent a Wisconsin homestead (primary residence)",
+          "Must file Schedule H or Schedule H-EZ; can file it alone if no income tax return is otherwise required",
+          "Only one member of a shared household may claim the credit for a given year",
+          "Renters must obtain a Rent Certificate signed by their landlord to document qualifying rent",
+          "Household income includes Wisconsin-taxable income plus certain nontaxable income items; a $500 deduction applies per qualifying dependent who lived in the homestead more than six months during the year"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Schedule H or Schedule H-EZ with the Wisconsin Department of Revenue, either electronically through WisTax or by mailing the paper form, after gathering property tax or rent documentation.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent qualifies",
+            "description": "Check two things: household income for 2025 must be under $24,680, and your parent must have owned or rented a Wisconsin homestead during 2025. If renting, your parent's landlord must provide a signed Rent Certificate."
+          },
+          {
+            "step": 2,
+            "title": "Gather the required documents",
+            "description": "Homeowners need the property tax bill for the claim year. Renters need a completed Rent Certificate from their landlord. Both groups need income records for all household income lines on Schedule H or H-EZ, plus Social Security numbers for household members."
+          },
+          {
+            "step": 3,
+            "title": "Choose your filing method",
+            "description": "File electronically through WisTax at tap.revenue.wi.gov if your parent's income items fit the e-file rules; property tax bill information or rent certificate data must still be submitted electronically. Alternatively, complete paper Schedule H (standard) or Schedule H-EZ (simplified version for straightforward situations) and attach it to the Wisconsin income tax return, or mail it alone to Wisconsin Department of Revenue, P.O. Box 8903, Madison, WI 53708-8903."
+          },
+          {
+            "step": 4,
+            "title": "Submit and track",
+            "description": "Mail the completed Schedule H or H-EZ with all supporting documents, or submit electronically through WisTax. The Wisconsin DOR does not publish a fixed processing window, but electronically filed returns are generally processed faster than paper. Keep copies of everything submitted."
+          },
+          {
+            "step": 5,
+            "title": "Receive the refund or credit",
+            "description": "If the credit exceeds your parent's Wisconsin income tax liability, the difference is issued as a cash refund. If the calculated credit is more than zero but less than $10, the amount paid is $10."
+          }
+        ],
+        "processingTime": "No official fixed processing window is published by the Wisconsin Department of Revenue. Electronic filings are typically processed faster than paper. No waitlist applies.",
+        "waitlist": null,
+        "tip": "If your parent is a renter, ask their landlord for the Rent Certificate early. Landlords are required to provide it, but delays in getting it signed are one of the most common reasons this filing gets pushed back.",
+        "urls": [
+          {
+            "label": "Wisconsin DOR Homestead Credit program page",
+            "url": "https://www.revenue.wi.gov/Pages/Individuals/homestead.aspx"
+          },
+          {
+            "label": "WisTax electronic filing portal",
+            "url": "https://tap.revenue.wi.gov"
+          },
+          {
+            "label": "Schedule H (Wisconsin Homestead Credit Claim)",
+            "url": "https://www.revenue.wi.gov/Pages/HTML/formpub.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Property tax bill for the 2025 claim year (if your parent owns their home)",
+        "Rent Certificate completed and signed by your parent's landlord (if your parent rents)",
+        "Social Security numbers for all household members listed on the claim",
+        "Income records for all household income lines on Schedule H or H-EZ, including any Social Security benefit statements, pension statements, or other income your parent received in 2025",
+        "Documentation of any nontaxable income that must be included in household income under Schedule H instructions (for example, nontaxable Social Security or railroad retirement amounts)",
+        "Names, dates of birth, and residency information for any qualifying dependents who lived in the homestead more than six months during 2025 (to claim the $500 dependent deduction)",
+        "Wisconsin homestead address and proof of Wisconsin residency if the DOR requests verification"
+      ],
+      "contacts": [
+        {
+          "label": "Wisconsin Department of Revenue Individual Income Tax Line",
+          "phone": "(608) 266-2486",
+          "description": "Ask questions about Homestead Credit eligibility, Schedule H filing requirements, and the status of a submitted claim.",
+          "hours": "Mon-Fri 7:45am-4:30pm CT"
+        },
+        {
+          "label": "Wisconsin DOR General Information Line",
+          "phone": "(608) 266-2776",
+          "description": "General questions and referrals to the appropriate DOR unit if the income tax line is unavailable.",
+          "hours": "Mon-Fri 7:45am-4:30pm CT"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent can file Schedule H even if they have no Wisconsin income tax return to file. The credit is refundable, meaning a zero tax liability still produces a cash refund if the credit calculates above zero.",
+        "Only one person per household may claim the credit for a given year. If your parent shares a home with another adult (a sibling, roommate, or other relative), coordinate before filing to avoid duplicate claims.",
+        "If your parent's landlord refuses to complete the Rent Certificate, contact the Wisconsin Department of Revenue. Landlords are required by program rules to provide it.",
+        "Electronic filers must still submit property tax bill information or rent certificate data as part of the WisTax filing. Do not assume the DOR already has this information on file."
+      ],
+      "relatedPrograms": [
+        "Wisconsin Earned Income Tax Credit (for working-age caregivers or parents with earned income)",
+        "Wisconsin Senior Care (prescription assistance for low-income seniors)",
+        "Wisconsin Medicaid (for parents who may also need health coverage help)",
+        "LIHEAP Wisconsin Energy Assistance Program (utility cost help for low-income households)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Renters qualify too",
+          "body": "Many families assume this credit is only for homeowners. It is not. If your parent rents, 20% of their annual rent is treated as property taxes under the formula. The same income limit ($24,680) and maximum credit ($1,168) apply. The one extra step: your parent's landlord must sign a Rent Certificate, which is a standard Wisconsin DOR form."
+        },
+        {
+          "type": "callout",
+          "title": "How the credit amount is calculated",
+          "body": "The credit is 80% of qualifying property taxes or rent treated as property taxes, calculated only on the first $1,460 of those costs. So the mathematical ceiling on the raw credit is $1,168 (80% of $1,460). The credit phases out as household income rises toward $24,680. A higher property tax bill does not automatically increase the credit once property taxes exceed $1,460 for the year."
+        },
+        {
+          "type": "prose",
+          "title": "What counts as household income",
+          "body": "Household income for this program is not just taxable income. It includes Wisconsin-taxable income plus certain nontaxable items listed on Schedule H or H-EZ, such as nontaxable Social Security benefits, nontaxable pension income, and other specified items. If your parent receives nontaxable income, it likely still counts toward the $24,680 limit. A $500 deduction per qualifying dependent who lived in the homestead more than six months during the year reduces the total. Read Schedule H's household income instructions carefully, or call the Wisconsin DOR at (608) 266-2486 before filing."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent doesn't owe any Wisconsin income tax. Can they still get this credit?",
+          "answer": "Yes. The Homestead Credit is refundable. That means if the credit is larger than your parent's income tax liability, the state pays the difference as a direct refund. Your parent does not need to owe taxes to benefit. They do need to file Schedule H or H-EZ, even if no income tax return is otherwise required."
+        },
+        {
+          "question": "My parent's Social Security benefits push their income close to $24,680. Does Social Security count?",
+          "answer": "It depends on which part. Nontaxable Social Security benefits are included in household income for Homestead Credit purposes, not just the taxable portion. This catches many families off guard. Before assuming your parent qualifies, add up all income sources including the full Social Security benefit amount and compare to the $24,680 limit. The Schedule H instructions list every item that counts."
+        },
+        {
+          "question": "My parent rents. Will the landlord cooperate with the Rent Certificate?",
+          "answer": "Wisconsin landlords are required to provide a completed Rent Certificate to tenants who request one for this purpose. If a landlord refuses, contact the Wisconsin Department of Revenue at (608) 266-2486. Document the request in writing (email or letter) so you have a record if the DOR needs to follow up."
+        },
+        {
+          "question": "My parent lives with a sibling who also wants to claim the credit. Who files?",
+          "answer": "Only one household member may claim the Homestead Credit for a given year. If your parent and a sibling share the same homestead at the end of the calendar year, you need to decide who files before either person submits. Duplicate claims for the same address will be flagged by the Wisconsin DOR."
+        },
+        {
+          "question": "Can I file on behalf of my parent if they can't manage the paperwork themselves?",
+          "answer": "Yes. A family member can prepare and submit the claim on a parent's behalf. If your parent cannot sign the form themselves, Wisconsin DOR rules address authorized representatives. Contact the DOR at (608) 266-2486 to confirm the correct procedure for your parent's specific situation before submitting."
+        },
+        {
+          "question": "My parent's property taxes are much higher than $1,460 per year. Will they get a larger credit?",
+          "answer": "No. The formula counts only the first $1,460 in property taxes (or rent treated as property taxes). Property taxes above that amount are not factored into the credit calculation. The maximum credit remains $1,168 regardless of the actual tax bill."
+        },
+        {
+          "question": "What if my parent forgot to claim this credit in a previous year?",
+          "answer": "Your parent may be able to file an amended return or a late Homestead Credit claim for prior years. Wisconsin generally allows amended returns within four years of the original due date. Contact the Wisconsin Department of Revenue at (608) 266-2486 or visit revenue.wi.gov to confirm whether a prior-year claim is still possible for your parent's situation."
+        },
+        {
+          "question": "Is there an asset limit? My parent has some savings in the bank.",
+          "answer": "No. The Wisconsin Homestead Credit has no asset test. The only financial threshold is the household income limit of $24,680 for tax year 2025. Savings, a car, or other assets do not affect eligibility and do not need to be disclosed on the form."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(608) 266-2486",
+      "sourceUrl": "https://www.revenue.wi.gov/Pages/Individuals/homestead.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-home-delivered-meals",
+      "name": "Wisconsin Home Delivered Meals",
+      "shortName": "Home Delivered Meals",
+      "tagline": "If your parent is 60+ and mostly homebound, they may qualify for free weekday meal deliveries to their door, with no income test and no requirement to pay.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "ADRC of Oneida County",
+            "type": "service-area"
+          },
+          {
+            "name": "Dodge County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Crawford County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Ozaukee County Nutrition Manager",
+            "type": "service-area"
+          },
+          {
+            "name": "Manitowoc County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Clark County Nutrition Team",
+            "type": "service-area"
+          },
+          {
+            "name": "Waukesha County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "ADRC of Central Wisconsin",
+            "type": "service-area"
+          },
+          {
+            "name": "Washington County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Iron County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Taylor County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Polk County ADRC",
+            "type": "service-area"
+          },
+          {
+            "name": "Grant County ADRC",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older, mostly homebound, and struggling to prepare their own meals, Wisconsin's Home Delivered Meals program can send a hot lunch to their door most weekdays at no required cost. The program is available in every county through local Aging and Disability Resource Centers (ADRCs), the county offices that coordinate services for older adults.\n\nThere is no income test. Many counties explicitly welcome participants regardless of income. Some counties ask for a voluntary contribution of around $5 to $6 per meal, but your parent cannot be turned away for being unable to contribute. Depending on the county, meals are typically delivered Monday through Friday between roughly 11:00 a.m. and 1:00 p.m. Some rural counties deliver frozen meals once a week instead of hot meals daily.\n\nBecause this program is run county by county, the rules and delivery schedule in your parent's area may differ from a neighboring county. The right first step is calling your parent's county ADRC, which can screen eligibility, explain local delivery options, and start an assessment. Find your county's ADRC through the Wisconsin Department of Health Services at dhs.wisconsin.gov.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Mostly homebound or unable to leave home easily",
+          "Unable to prepare meals independently",
+          "No income limit",
+          "Spouse or disabled household member may also qualify in some counties"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be substantially homebound (meaning they have difficulty leaving home due to illness, disability, or frailty) and must be unable to prepare their own meals or lack help with meal preparation. An eligibility assessment is typically completed before service begins. The assessment is done by the local ADRC and evaluates mobility, daily functioning, and meal preparation ability.",
+        "otherRequirements": [
+          "Must live in a county with an active delivery route.",
+          "In most counties, the participant must be present and able to accept the meal at delivery.",
+          "Some counties also serve a spouse or an adult with a disability living in the same household.",
+          "A voluntary contribution of approximately $5 to $6 per meal is often suggested but is never required and cannot be used to deny service."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your parent's county ADRC directly; a staff member will screen eligibility and schedule an in-home or phone assessment before service begins.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your county ADRC",
+            "description": "Wisconsin has no single statewide application line. Use the Wisconsin DHS ADRC directory at dhs.wisconsin.gov/aging/resources.htm to find the phone number for your parent's county. Each county operates its own program."
+          },
+          {
+            "step": 2,
+            "title": "Call to screen eligibility",
+            "description": "When you call, the ADRC will ask about your parent's age, whether they are mostly homebound, and whether they can prepare their own meals. Have your parent's home address, date of birth, and a brief description of their daily mobility and cooking ability ready. You can call on your parent's behalf."
+          },
+          {
+            "step": 3,
+            "title": "Complete the eligibility assessment",
+            "description": "The ADRC will schedule an assessment, which may be done by phone or in person depending on the county. The assessor reviews homebound status, functional ability, and whether a spouse or disabled household member also qualifies. Proof of age may be requested at this stage."
+          },
+          {
+            "step": 4,
+            "title": "Confirm your parent's delivery schedule",
+            "description": "Once approved, the ADRC will tell you the delivery days and window (typically Monday through Friday, 11:00 a.m. to 1:00 p.m. in many counties, or a weekly frozen meal delivery in some rural areas). Confirm whether your parent needs to be home to receive the delivery."
+          }
+        ],
+        "processingTime": "No statewide timeline is published. Timing depends on local ADRC staffing and assessment scheduling. Contact your county ADRC for a realistic estimate in your area.",
+        "waitlist": "No statewide waitlist data is available. Some counties have route-based limits, so local capacity varies. Ask the ADRC directly whether there is a current wait in your parent's area.",
+        "tip": "Call during the week and ask specifically whether your parent's neighborhood is on an active delivery route. In some rural counties, route coverage is the main constraint, not eligibility.",
+        "urls": [
+          {
+            "label": "Wisconsin DHS Aging Resources and ADRC Directory",
+            "url": "https://dhs.wisconsin.gov/aging/resources.htm"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your parent's date of birth or proof of age (a driver's license, state ID, or birth certificate)",
+        "Your parent's home address and phone number",
+        "A brief description of why your parent is homebound and unable to prepare meals (you can explain this verbally on the call)",
+        "Names and dates of birth of any spouse or disabled household member who may also need meals",
+        "Medical or functional details the ADRC assessor may ask about during the eligibility assessment, such as recent diagnoses or mobility limitations"
+      ],
+      "contacts": [
+        {
+          "label": "ADRC of Oneida County",
+          "phone": "(715) 369-6170",
+          "description": "Apply for home delivered meals in Oneida County. Also reachable toll-free at 800-379-7499.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Dodge County ADRC",
+          "phone": "(920) 386-3580",
+          "description": "Apply for home delivered meals in Dodge County. Also reachable toll-free at 800-924-6407.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Crawford County ADRC",
+          "phone": "(608) 326-0235",
+          "description": "Apply for home delivered meals in Crawford County.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Ozaukee County Nutrition Manager",
+          "phone": "(262) 284-8120",
+          "description": "Apply for home delivered meals in Ozaukee County.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Manitowoc County ADRC",
+          "phone": "(920) 683-4180",
+          "description": "Apply for home delivered meals in Manitowoc County. Also reachable toll-free at 877-416-7083.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Clark County Nutrition Team",
+          "phone": "(715) 743-5166",
+          "description": "Apply for home delivered meals in Clark County.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Waukesha County ADRC",
+          "phone": "(262) 548-7848",
+          "description": "Apply for home delivered meals in Waukesha County.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "ADRC of Central Wisconsin",
+          "phone": "(888) 486-9545",
+          "description": "Apply for home delivered meals in the Central Wisconsin service area.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Washington County ADRC",
+          "phone": "(608) 723-6113",
+          "description": "Apply for home delivered meals in Washington County.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Wisconsin DHS Aging Resources (all other counties)",
+          "phone": null,
+          "description": "If your parent's county is not listed above, find their local ADRC at dhs.wisconsin.gov/aging/resources.htm. Every county in Wisconsin has an ADRC that administers this program.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Do not assume your parent earns too much. There is no income test in the county programs reviewed. Many counties explicitly say everyone 60+ is welcome.",
+        "If your parent lives in a rural area, ask the ADRC whether hot daily delivery or weekly frozen delivery is available on their route. The answer affects how much food security the program provides.",
+        "Some counties also deliver meals to a spouse or a disabled adult living in the same home, even if that person is under 60. Ask about this when you call."
+      ],
+      "relatedPrograms": [
+        "Wisconsin Elderly Nutrition Program (congregate meal sites)",
+        "Wisconsin Family Caregiver Support Program",
+        "FoodShare Wisconsin (SNAP)",
+        "Wisconsin ADRC Care Coordination Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No required fee.",
+          "body": "Many families assume their parent earns too much or will be charged for meals. Neither is true. The county programs reviewed do not use an income test. A suggested contribution of about $5 to $6 per meal may be mentioned, but your parent cannot be denied service for not paying it."
+        },
+        {
+          "type": "prose",
+          "title": "What your parent will actually receive",
+          "body": "In most counties, your parent will receive a hot lunch delivered to their front door Monday through Friday, typically between 11:00 a.m. and 1:00 p.m. In some rural counties, frozen meals are delivered once a week instead. Many delivery drivers also do a brief well-check at the door, which means someone is checking on your parent in addition to feeding them. Your parent generally needs to be home and able to answer the door at delivery time."
+        },
+        {
+          "type": "prose",
+          "title": "Why this program is worth a call even if your parent seems borderline eligible",
+          "body": "The eligibility bar is functional, not financial. If your parent has difficulty cooking due to arthritis, a recent fall, a chronic illness, or cognitive decline, they likely qualify. The ADRC assessor makes this determination during a short phone or in-person screening. Because there is no income test and no charge for the service, the main risk of calling is spending 20 minutes on the phone."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent can technically cook but forgets to eat or skips meals. Does that count as unable to prepare meals?",
+          "answer": "Potentially yes. The assessment evaluates whether your parent can safely and reliably prepare adequate meals for themselves, not just whether they are physically capable of operating a stove. Cognitive issues, depression, and poor nutrition due to skipping meals are factors the ADRC assessor can consider. Explain the full picture when you call."
+        },
+        {
+          "question": "My parent's income is higher than what I'd expect for a government program. Will they be disqualified?",
+          "answer": "No. The county programs reviewed have no income limit. Multiple county pages state explicitly that the program is open to anyone 60+ who meets the homebound and meal preparation requirements, regardless of income. Do not skip the call based on income."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to call themselves?",
+          "answer": "You can call on your parent's behalf. The ADRC will want information about your parent's address, age, and functional situation, which you can provide. If an in-home assessment is required, your parent (or a representative) will need to be present."
+        },
+        {
+          "question": "What if my parent's county has a waitlist or doesn't have a delivery route in their neighborhood?",
+          "answer": "Route availability is the most common local constraint, particularly in rural areas. Ask the ADRC directly when you call whether there is a current wait or whether your parent's address is on an active route. If there is a wait, ask to be placed on the list and ask whether any interim options exist, such as a congregate meal site or a food pantry with senior delivery."
+        },
+        {
+          "question": "My parent's spouse is under 60 and also needs help with meals. Can they receive meals too?",
+          "answer": "In some counties, yes. Several county programs extend eligibility to a spouse of the enrolled participant or to an adult with a disability living in the same household, even if that person is under 60. Ask the ADRC specifically about household members when you call."
+        },
+        {
+          "question": "What happens if my parent's health changes after they are enrolled?",
+          "answer": "The ADRC can reassess your parent's situation if their needs change. If their condition improves and they are no longer homebound, eligibility may be reviewed. If their needs increase, you can ask the ADRC about additional services available through the same office, such as personal care or care coordination."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "(888) 486-9545",
+      "sourceUrl": "https://dhs.wisconsin.gov/aging/resources.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wi-state-ssi-supplement",
+      "name": "Wisconsin State SSI Supplement",
+      "shortName": "WI SSI Supplement",
+      "tagline": "If your parent already receives federal SSI, Wisconsin adds a monthly cash supplement automatically, no separate application required.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wisconsin Department of Health Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county agencies",
+            "type": "service-area"
+          },
+          {
+            "name": "Social Security Administration offices for the federal SSI application",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent receives federal Supplemental Security Income (SSI), Wisconsin automatically adds a state cash supplement on top of that payment every month. For most recipients in a basic living arrangement, that supplement is $105.59 per month. No separate Wisconsin application is required. The extra payment arrives with their SSI check, typically in the first week of the month.\n\nThe amount your parent receives depends on their living arrangement and which SSI category applies to them. Most people get the basic supplement. Recipients in certain group homes or natural residential settings through the SSI-E program may receive a different amount. If your parent lives in an institution or has a special grandfathered status, the county agency that administers their case can confirm which category applies.\n\nThe one gate to clear is federal SSI eligibility itself. Wisconsin does not pay the state supplement to anyone who does not also qualify for the federal SSI payment. If your parent is not yet enrolled in federal SSI, that is the first step. If they are already enrolled, the Wisconsin supplement is likely already being paid.",
+      "savingsRange": "$105.59/month ($1,267.08/year) for recipients in a basic living arrangement; $179.77/month for certain SSI-E recipients in qualifying residential settings",
+      "savingsSource": "Wisconsin Department of Health Services, SSI program page (dhs.wisconsin.gov/ssi). Figures reflect the state supplement amounts published by DHS. The $105.59 is the basic state supplement; $179.77 applies to SSI-E recipients in private nonmedical group homes or natural residential settings per DHS program documentation.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must currently receive federal SSI",
+          "Must be a Wisconsin resident",
+          "No separate Wisconsin income test for the basic supplement",
+          "No separate Wisconsin asset test for the basic supplement",
+          "Amount varies by living arrangement and SSI category"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must qualify for and actively receive a federal SSI payment.",
+          "Must be a Wisconsin resident at the time of eligibility.",
+          "The state supplement stops if federal SSI eligibility ends.",
+          "Recipients in state-only SSI categories (grandfathered status or SSI-E) follow special Wisconsin rules beyond basic federal SSI eligibility.",
+          "For certain state SSI categories, the county agency must certify eligibility even if no separate application is filed."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "If your parent is already receiving federal SSI, the Wisconsin supplement is paid automatically; if they are not yet on federal SSI, apply through the Social Security Administration first.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether federal SSI is already approved",
+            "description": "Look at your parent's current benefit letter or bank deposit description. If it shows an SSI payment from Social Security, the Wisconsin supplement should already be included in their monthly deposit. If you are unsure, call the Wisconsin DHS SSI information line at 1-800-362-3002 to confirm."
+          },
+          {
+            "step": 2,
+            "title": "If not yet on federal SSI, apply through Social Security",
+            "description": "Call the Social Security Administration at 1-800-772-1213 (TTY 1-800-325-0778), Monday through Friday 8am to 7pm, to start a federal SSI application. You can also apply online at ssa.gov/ssi or visit your nearest Social Security office. Wisconsin's state supplement is automatic once Social Security approves the federal claim."
+          },
+          {
+            "step": 3,
+            "title": "Gather documents for the federal SSI application",
+            "description": "Social Security will ask for proof of identity, age, residency, income, and resources. See the document checklist below. Medical or functional records are needed if the basis for SSI is disability rather than age."
+          },
+          {
+            "step": 4,
+            "title": "Confirm your parent's SSI category with the county agency",
+            "description": "If your parent lives in a group home, an assisted living facility, or a special residential setting, contact your local county agency to confirm which SSI category applies. The category determines the supplement amount. County contact information is available through Wisconsin DHS at dhs.wisconsin.gov/ssi or by calling 1-800-362-3002."
+          },
+          {
+            "step": 5,
+            "title": "For questions about the state supplement specifically, contact Wisconsin DHS",
+            "description": "Write to DHS/State SSI, P.O. Box 6680, Madison, WI 53716-0680, or call 1-800-362-3002. If your parent's living situation changes (moving into or out of a group home, for example), notify both Social Security and the county agency promptly, because the supplement amount may change."
+          }
+        ],
+        "processingTime": "The Wisconsin state supplement is issued once Social Security approves the federal SSI claim and the county agency certifies eligibility. No separate Wisconsin processing timeline was identified in official sources.",
+        "waitlist": null,
+        "tip": "If your parent is already on federal SSI and you are not sure whether the state supplement is being paid, call 1-800-362-3002. Confirm the monthly amount matches the correct category for their living arrangement. Some recipients in group homes have received the wrong supplement amount because the county was not notified of a move.",
+        "urls": [
+          {
+            "label": "Wisconsin DHS SSI Program Page",
+            "url": "https://www.dhs.wisconsin.gov/ssi/index.htm"
+          },
+          {
+            "label": "Apply for Federal SSI Online (SSA)",
+            "url": "https://www.ssa.gov/ssi/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or current benefit verification letter (shows existing SSI approval)",
+        "Proof of Wisconsin residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of identity (driver's license, state ID, or birth certificate)",
+        "Social Security card for your parent",
+        "Proof of age (birth certificate, passport, or other official document)",
+        "Income statements for all current income sources (Social Security, pension, or any other monthly payments)",
+        "Current balances for any checking or savings accounts (Social Security will ask for the balance; contact them at 1-800-772-1213 for the specific documentation they accept)",
+        "Life insurance policy documents showing face value, if applicable",
+        "Medical or functional records if the basis for SSI eligibility is disability rather than age",
+        "Legal documents if you are applying as a representative payee or have power of attorney for your parent"
+      ],
+      "contacts": [
+        {
+          "label": "Wisconsin DHS SSI Information Line",
+          "phone": "1-800-362-3002",
+          "description": "For questions about the Wisconsin state supplement, confirming payment amounts, and resolving issues with the state portion of your parent's SSI benefit.",
+          "hours": "Contact Wisconsin DHS for current hours"
+        },
+        {
+          "label": "Social Security Administration (Federal SSI Application)",
+          "phone": "1-800-772-1213",
+          "description": "To apply for federal SSI, which is the required first step before the Wisconsin supplement is paid. TTY: 1-800-325-0778.",
+          "hours": "Mon-Fri 8am-7pm local time"
+        },
+        {
+          "label": "Wisconsin DHS SSI Mailing Address",
+          "phone": null,
+          "description": "For written correspondence: DHS/State SSI, P.O. Box 6680, Madison, WI 53716-0680.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's living situation changes (for example, moving from an independent home into a group home or assisted living), notify both the Social Security Administration and your local county agency. The supplement amount is tied to the living arrangement category, and failure to report a move can result in an overpayment that Wisconsin will seek to recover.",
+        "Recipients in SSI-E arrangements (certain private nonmedical group homes or natural residential settings) may receive a different supplement amount ($179.77/month per DHS documentation) than the basic $105.59. If your parent lives in one of these settings and is receiving only the basic supplement, contact the county agency to review the category.",
+        "For the basic state supplement, no separate Wisconsin application is needed. But for state-only SSI categories, which cover grandfathered recipients and SSI-E cases, county certification is required. If your parent was receiving state SSI before certain federal SSI policy changes, their status may be different from a standard case.",
+        "If the federal SSI payment is reduced or terminated for any reason, the Wisconsin state supplement stops at the same time. Keep Social Security informed of any changes to income, resources, or living situation that could affect federal SSI eligibility."
+      ],
+      "relatedPrograms": [
+        "Federal Supplemental Security Income (SSI)",
+        "Wisconsin Medicaid (ForwardHealth)",
+        "Wisconsin SNAP Food Benefits",
+        "SSI-E Program (for eligible recipients in qualifying residential settings)"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "What the supplement adds up to",
+          "items": [
+            {
+              "label": "Basic monthly supplement",
+              "value": "$105.59"
+            },
+            {
+              "label": "Basic annual total",
+              "value": "$1,267.08"
+            },
+            {
+              "label": "SSI-E monthly supplement (qualifying residential settings)",
+              "value": "$179.77"
+            },
+            {
+              "label": "Payment timing",
+              "value": "First week of the month, with federal SSI"
+            }
+          ],
+          "note": "Amounts are from Wisconsin DHS published program figures. The supplement amount depends on the SSI category and living arrangement, not household size."
+        },
+        {
+          "type": "prose",
+          "heading": "How the supplement amount is set",
+          "body": "Wisconsin sets supplement amounts by SSI category, which is determined by your parent's living arrangement and eligibility status. The basic supplement ($105.59/month) applies to most recipients. Older published DHS materials also show amounts of $83.78 for individuals and $132.05 for couples in certain basic arrangements, reflecting different category rules. Recipients in SSI-E settings may receive $179.77/month.\n\nIf you are not sure which category applies to your parent, the county agency administering their case can tell you. Call 1-800-362-3002 to get the contact information for your parent's county."
+        },
+        {
+          "type": "prose",
+          "heading": "What happens if my parent enters a nursing home",
+          "body": "If your parent moves into a nursing home or other institution that is Medicaid-funded, their federal SSI payment is typically reduced to a personal needs allowance. The Wisconsin state supplement may also change or stop depending on the category rules that apply. Notify Social Security and the county agency before or immediately after a facility move so the correct amount is calculated and overpayments are avoided."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is already on federal SSI. Do I need to do anything to get the Wisconsin supplement?",
+          "answer": "No. The Wisconsin state supplement is paid automatically once federal SSI is approved. Check your parent's monthly deposit or award letter to confirm the supplement is included. If you are unsure, call 1-800-362-3002 and ask Wisconsin DHS to confirm the supplement amount being paid and which category applies to your parent's living arrangement."
+        },
+        {
+          "question": "My parent is not on SSI yet. Can I apply for just the Wisconsin supplement?",
+          "answer": "No. Wisconsin does not pay the state supplement to anyone who is not also receiving a federal SSI payment. The first step is to apply for federal SSI through the Social Security Administration at 1-800-772-1213 or at ssa.gov/ssi. Once Social Security approves the federal claim, Wisconsin's supplement is added automatically."
+        },
+        {
+          "question": "My parent moved from living alone into an assisted living facility. Will their supplement amount change?",
+          "answer": "Possibly. The Wisconsin supplement amount depends on the living arrangement category. A move into a group home, assisted living, or other residential setting may change the applicable category and the monthly amount. Notify both Social Security and your local county agency as soon as possible after a move. Failure to report can cause an overpayment that Wisconsin will require your parent to repay."
+        },
+        {
+          "question": "Can my parent receive both the Wisconsin SSI supplement and Wisconsin Medicaid?",
+          "answer": "Yes. Most people who qualify for federal SSI also qualify for Wisconsin Medicaid (ForwardHealth) automatically or with a straightforward additional enrollment. The SSI supplement and Medicaid are separate programs that can and typically do run together. Contact Wisconsin ForwardHealth at 1-800-362-3002 or visit forwardhealth.wi.gov to confirm Medicaid enrollment."
+        },
+        {
+          "question": "My parent is in an SSI-E residential setting. Are the eligibility rules different?",
+          "answer": "Yes. SSI-E is a Wisconsin state-only category for recipients in certain private nonmedical group homes or natural residential settings. The supplement amount is $179.77/month rather than the basic $105.59, and special county certification rules apply. If your parent is in one of these settings, contact your county agency directly to make sure the correct category and amount are on file. Call 1-800-362-3002 to get your county's contact information."
+        },
+        {
+          "question": "What happens to the Wisconsin supplement if my parent's federal SSI is reduced or terminated?",
+          "answer": "The Wisconsin state supplement stops at the same time. The supplement is paid only while federal SSI eligibility continues. If Social Security reduces or ends your parent's federal SSI for any reason (a change in income, resources, or living situation), the state supplement is affected immediately. If you believe the federal SSI termination was an error, you can appeal with Social Security and request that benefits continue during the appeal."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent who cannot manage their own affairs?",
+          "answer": "Yes. You can apply for federal SSI on your parent's behalf and, if approved, be designated as their representative payee by the Social Security Administration. A representative payee receives and manages the SSI payments for the benefit of the recipient. You can start that process when you call Social Security at 1-800-772-1213. If you have legal power of attorney, bring that documentation to the Social Security appointment."
+        },
+        {
+          "question": "Are there income or asset limits Wisconsin sets separately for the state supplement?",
+          "answer": "No. Wisconsin does not impose a separate income or asset test for the basic state supplement. The only test is federal SSI eligibility, which has its own income and resource rules administered by the Social Security Administration. For 2026 federal SSI resource limits, contact Social Security directly at 1-800-772-1213, as those figures are set federally and updated periodically."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-800-362-3002",
+      "sourceUrl": "https://www.dhs.wisconsin.gov/ssi/index.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

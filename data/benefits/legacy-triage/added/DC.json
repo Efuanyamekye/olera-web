@@ -1,0 +1,30 @@
+[
+  {
+    "state": "DC",
+    "id": "dc-medicaid-aged-blind-disabled",
+    "name": "DC Medicaid for Aged, Blind and Disabled",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "DC",
+    "id": "dc-medicare-savings-programs-qmb-slmb-qi",
+    "name": "DC Medicare Savings Programs (QMB, SLMB, QI)",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "DC",
+    "id": "dc-snap-food-benefits",
+    "name": "DC SNAP (Supplemental Nutrition Assistance Program)",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "DC",
+    "id": "dc-liheap-energy-assistance",
+    "name": "DC Low Income Home Energy Assistance Program (LIHEAP)",
+    "legacyId": null,
+    "programType": "benefit"
+  }
+]

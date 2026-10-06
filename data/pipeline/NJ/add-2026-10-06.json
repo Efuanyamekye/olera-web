@@ -1,0 +1,1078 @@
+{
+  "state": "NJ",
+  "addedAt": "2026-10-06T05:30:14.516Z",
+  "dive": {
+    "state": "NJ",
+    "stateName": "New Jersey",
+    "diveAt": "2026-10-06T05:18:35.048Z",
+    "total": 9,
+    "parsed": 9,
+    "programs": [
+      {
+        "name": "NJ FamilyCare Aged, Blind, Disabled (ABD) Programs",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Eligibility depends on the specific ABD pathway and the applicant’s countable income, along with the spouse’s or parents’ income if applicable. The official NJ materials say the programs use income and other countable resources, and that financial eligibility is determined considering the applicant together with a spouse or parents. The official brochures provided here do not include a published statewide income table in the search results, so an exact dollar table cannot be confirmed from the gathered sources. The program brochure does state that the Medicaid Only Program is for individuals who do not receive SSI but have income and resources under the SSI standards.",
+          "asset_limits": "Eligibility uses countable resources. The official brochure says income and other countable resources are used to determine eligibility, but the gathered sources do not publish the full statewide asset test or the exempt-versus-countable list. A county page snippet indicates examples commonly requested include bank statements and financial asset information, which suggests liquid assets matter. Because the exact asset rules were not present in the retrieved official text, they should be verified directly on the application materials or by county office before applying.",
+          "other_requirements": [
+            "Must be a New Jersey resident",
+            "Must be a U.S. citizen or qualified immigrant",
+            "An adult qualified immigrant must have lawful permanent residence status for at least five years",
+            "Applicant must be age 65 or older, or be determined blind or disabled by the Social Security Administration or by the State of New Jersey",
+            "For some eligibility determinations, spouse income/resources or parents’ income/resources are considered",
+            "The only way to know for sure if someone qualifies is to apply"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Medical coverage through NJ FamilyCare/Medicaid for eligible aged, blind, and disabled individuals. The official brochure says the program provides medical coverage for people age 65+ and people determined blind or disabled. It is designed for people whose income and resources are not enough to meet the cost of necessary care and services. The gathered sources do not provide a dollar cap, hourly service amount, or a single fixed benefit package because this is health coverage rather than a cash program.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://njfamilycare.dhs.state.nj.us/abd.htm",
+            "Online general application portal: https://njfamilycare.dhs.state.nj.us/apply.aspx",
+            "Phone: 1-800-356-1561",
+            "Mail: print the NJ FamilyCare Aged, Blind, Disabled Program Application and mail it with any required supplemental forms",
+            "In person: local County Social Service Agency"
+          ],
+          "processing_time": "The official sources in the gathered results did not give a statewide processing-time standard. A county example in the search results says processing is currently taking approximately 6 to 12 weeks in that county, but that is not a statewide official timeline.",
+          "waitlist": null,
+          "forms": [
+            "NJ FamilyCare Aged, Blind, Disabled Program Application",
+            "Supplemental forms as needed",
+            "Application Checklist (English, Spanish)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of New Jersey residency",
+            "Proof of income",
+            "Proof of U.S. citizenship or qualified immigrant status",
+            "If applying based on disability, medical records or disability determination information",
+            "Bank statements and other financial asset information",
+            "Any forms or papers the county office requests as supplemental documentation"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide New Jersey program; no county-only restriction was identified in the gathered official sources. County social service agencies administer applications locally.",
+          "regional_variations": "The benefit category is statewide, but application handling, office routing, and practical wait times can vary by county social service agency. The gathered sources also suggest county offices may ask for different supporting documents depending on the case. No evidence of different benefit formulas by region was found in the retrieved official materials.",
+          "offices_or_providers": [
+            "Local County Social Service Agency",
+            "County Social Service Agency directory referenced by NJ FamilyCare",
+            "1-800-356-1561 for help locating the correct county office"
+          ]
+        },
+        "official_source": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/aged-disabled/",
+        "gotchas": [
+          "This is not one single program in the everyday sense; it is a set of NJ FamilyCare Medicaid pathways for aged, blind, and disabled people.",
+          "The family’s income and resources may be counted together with a spouse or parents, so household composition matters.",
+          "The official materials retrieved here do not publish a full statewide income and asset chart, so families should not assume SSI-style limits without checking the current application rules.",
+          "Immigration status matters: qualified immigrants may qualify, but some adults must have had lawful permanent residence for five years.",
+          "The application route is centralized, but county offices still handle intake and follow-up, so paperwork requests can differ by county.",
+          "There is no guarantee of immediate approval; the state says the only way to know for sure is to apply."
+        ],
+        "data_shape_notes": "This program has a layered eligibility structure: age/disability status plus financial test plus household-member deeming rules. It is statewide, application-driven, and county-administered, with no single waitlist identified in the retrieved sources.",
+        "_raw": "{\n  \"name\": \"NJ FamilyCare Aged, Blind, Disabled (ABD) Programs\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Eligibility depends on the specific ABD pathway and the applicant’s countable income, along with the spouse’s or parents’ income if applicable. The official NJ materials say the programs use income and other countable resources, and that financial eligibility is determined considering the applicant together with a spouse or parents. The official brochures provided here do not include a published statewide income table in the search results, so an exact dollar table cannot be confirmed from the gathered sources. The program brochure does state that the Medicaid Only Program is for individuals who do not receive SSI but have income and resources under the SSI standards.\",\n    \"asset_limits\": \"Eligibility uses countable resources. The official brochure says income and other countable resources are used to determine eligibility, but the gathered sources do not publish the full statewide asset test or the exempt-versus-countable list. A county page snippet indicates examples commonly requested include bank statements and financial asset information, which suggests liquid assets matter. Because the exact asset rules were not present in the retrieved official text, they should be verified directly on the application materials or by county office before applying.\",\n    \"other_requirements\": [\n      \"Must be a New Jersey resident\",\n      \"Must be a U.S. citizen or qualified immigrant\",\n      \"An adult qualified immigrant must have lawful permanent residence status for at least five years\",\n      \"Applicant must be age 65 or older, or be determined blind or disabled by the Social Security Administration or by the State of New Jersey\",\n      \"For some eligibility determinations, spouse income/resources or parents’ income/resources are considered\",\n      \"The only way to know for sure if someone qualifies is to apply\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Medical coverage through NJ FamilyCare/Medicaid for eligible aged, blind, and disabled individuals. The official brochure says the program provides medical coverage for people age 65+ and people determined blind or disabled. It is designed for people whose income and resources are not enough to meet the cost of necessary care and services. The gathered sources do not provide a dollar cap, hourly service amount, or a single fixed benefit package because this is health coverage rather than a cash program.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://njfamilycare.dhs.state.nj.us/abd.htm\",\n      \"Online general application portal: https://njfamilycare.dhs.state.nj.us/apply.aspx\",\n      \"Phone: 1-800-356-1561\",\n      \"Mail: print the NJ FamilyCare Aged, Blind, Disabled Program Application and mail it with any required supplemental forms\",\n      \"In person: local County Social Service Agency\"\n    ],\n    \"processing_time\": \"The official sources in the gathered results did not give a statewide processing-time standard. A county example in the search results says processing is currently taking approximately 6 to 12 weeks in that county, but that is not a statewide official timeline.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"NJ FamilyCare Aged, Blind, Disabled Program Application\",\n      \"Supplemental forms as needed\",\n      \"Application Checklist (English, Spanish)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of New Jersey residency\",\n      \"Proof of income\",\n      \"Proof of U.S. citizenship or qualified immigrant status\",\n      \"If applying based on disability, medical records or disability determination information\",\n      \"Bank statements and other financial asset information\",\n      \"Any forms or papers the county office requests as supplemental documentation\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide New Jersey program; no county-only restriction was identified in the gathered official sources. County social service agencies administer applications locally.\",\n    \"regional_variations\": \"The benefit category is statewide, but application handling, office routing, and practical wait times can vary by county social service agency. The gathered sources also suggest county offices may ask for different supporting documents depending on the case. No evidence of different benefit formulas by region was found in the retrieved official materials.\",\n    \"offices_or_providers\": [\n      \"Local County Social Service Agency\",\n      \"County Social Service Agency directory referenced by NJ FamilyCare\",\n      \"1-800-356-1561 for help locating the correct county office\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/aged-disabled/\",\n  \"gotchas\": [\n    \"This is not one single program in the everyday sense; it is a set of NJ FamilyCare Medicaid pathways for aged, blind, and disabled people.\",\n    \"The family’s income and resources may be counted together with a spouse or parents, so household composition matters.\",\n    \"The official materials retrieved here do not publish a full statewide income and asset chart, so families should not assume SSI-style limits without checking the current application rules.\",\n    \"Immigration status matters: qualified immigrants may qualify, but some adults must have had lawful permanent residence for five years.\",\n    \"The application route is centralized, but county offices still handle intake and follow-up, so paperwork requests can differ by county.\",\n    \"There is no guarantee of immediate approval; the state says the only way to know for sure is to apply.\"\n  ],\n  \"data_shape_notes\": \"This program has a layered eligibility structure: age/disability status plus financial test plus household-member deeming rules. It is statewide, application-driven, and county-administered, with no single waitlist identified in the retrieved sources.\"\n}"
+      },
+      {
+        "name": "NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "NJ MLTSS is part of NJ FamilyCare/Medicaid and uses Medicaid long-term-care financial rules. For 2026, if monthly income is over $2,982, the applicant may still qualify by establishing a Qualified Income Trust (QIT). Income is counted monthly, and the exact usable limit depends on whether a QIT is needed. The program materials available here do not provide a full household-size table because MLTSS is not structured like a typical family-size-based benefit; it is tied to Medicaid long-term-care eligibility and individual income rules.",
+          "asset_limits": "The applicant must have $2,000 or less in total countable resources. The home the person lives in and the vehicle they use do not count toward that total. Resources are counted as of the first day of the month, and having more than $2,000 on that day makes the person ineligible for that month. The materials reviewed do not list a full exhaustive exemption table, but they specifically note the home and one vehicle as exempt. MLTSS also applies institutional Medicaid-style financial rules, including a five-year look-back for certain transfers.",
+          "other_requirements": [
+            "Must be a New Jersey resident",
+            "Must be age 65 or older, or under 65 and determined blind or disabled by the Social Security Administration or New Jersey",
+            "Must be a U.S. citizen or qualified noncitizen",
+            "Must require, or be expected to require within 30 days, a nursing-home level of care",
+            "Must meet NJ FamilyCare/Medicaid financial eligibility rules",
+            "For adults 21 and older, screening starts through the county Area Agency on Aging / Aging and Disability Resource Connection (ADRC)",
+            "For children through age 20, screening starts through the Division of Disability Services"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "MLTSS provides long-term services and supports through a NJ FamilyCare managed care organization, including care management, access to NJ FamilyCare Plan A benefits, home and vehicle modifications, home-delivered meals, respite care, personal emergency response systems, mental health and addiction services, assisted living, community residential services, and nursing home care. It also covers the full range of coordinated health services, long-term services and supports, and prescription drug benefits through the MCO.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: https://njfamilycare.dhs.state.nj.us/apply.aspx",
+            "Phone for adults 21+: local County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)",
+            "Phone for children through age 20: Division of Disability Services at 1-888-285-3036 (press 2, then press 1)",
+            "County Social Service Agency / County Welfare Agency / Board of Social Services in the applicant’s county",
+            "In person or by mail using the paper NJ FamilyCare application"
+          ],
+          "processing_time": "The materials reviewed do not give a single fixed processing-time guarantee. MLTSS is a two-part process: financial eligibility and a clinical screening for nursing-home level of care. Timing depends on completing both parts and on county/plan processing.",
+          "waitlist": "No formal statewide waitlist is identified in the source material reviewed. Access depends on eligibility determination, clinical screening, and enrollment with a NJ FamilyCare managed care organization.",
+          "forms": [
+            "NJ FamilyCare application",
+            "MLTSS Application Guidance (2026 brochure)",
+            "Qualified Income Trust paperwork, if income exceeds the limit"
+          ],
+          "documents": [
+            "Proof of New Jersey residency",
+            "Proof of age or disability status",
+            "Proof of U.S. citizenship or qualified noncitizen status",
+            "Proof of monthly income",
+            "Bank statements and other proof of resources",
+            "Information on home ownership and vehicles",
+            "Medical and functional information showing need for nursing-home level of care",
+            "Any existing Medicaid/NJ FamilyCare information",
+            "If applicable, information needed to establish a Qualified Income Trust"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New Jersey, but application entry points differ by age group and county. Adults 21+ start through county ADRCs/Area Agencies on Aging; children through 20 start through the Division of Disability Services.",
+          "regional_variations": "The program is statewide, but local administration varies by county through the county ADRC/AAA and county social service agencies. Wait times and access to screening can vary by county and by managed care organization. Provider networks, care management, and local service availability can also differ by region.",
+          "offices_or_providers": [
+            "County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)",
+            "County Social Service Agency / County Welfare Agency / Board of Social Services",
+            "Division of Disability Services at 1-888-285-3036 for children through age 20",
+            "NJ FamilyCare managed care organizations"
+          ]
+        },
+        "official_source": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/mltss/",
+        "gotchas": [
+          "The person must meet both the functional level-of-care test and the financial Medicaid test; qualifying medically is not enough.",
+          "The $2,000 resource limit is strict and is measured on the first day of the month.",
+          "The home and one used vehicle are excluded, but other liquid resources can still disqualify the applicant.",
+          "Income over the monthly limit does not automatically end eligibility if a Qualified Income Trust is set up correctly.",
+          "Applicants often need to start with the county ADRC/AAA or county social services instead of only applying online.",
+          "MLTSS is not just a payment program; enrollment usually routes the person into a managed care organization that coordinates all covered services.",
+          "The services a person receives can depend heavily on the assessed level of need, not just on diagnosis or age."
+        ],
+        "data_shape_notes": "This program is not a simple cash benefit. It is a statewide Medicaid waiver/managed-care long-term services program with a two-part eligibility test, strict resource limits, a possible Qualified Income Trust exception for income, and services that are customized after a nursing-home level-of-care assessment.",
+        "_raw": "{\n  \"name\": \"NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"NJ MLTSS is part of NJ FamilyCare/Medicaid and uses Medicaid long-term-care financial rules. For 2026, if monthly income is over $2,982, the applicant may still qualify by establishing a Qualified Income Trust (QIT). Income is counted monthly, and the exact usable limit depends on whether a QIT is needed. The program materials available here do not provide a full household-size table because MLTSS is not structured like a typical family-size-based benefit; it is tied to Medicaid long-term-care eligibility and individual income rules.\",\n    \"asset_limits\": \"The applicant must have $2,000 or less in total countable resources. The home the person lives in and the vehicle they use do not count toward that total. Resources are counted as of the first day of the month, and having more than $2,000 on that day makes the person ineligible for that month. The materials reviewed do not list a full exhaustive exemption table, but they specifically note the home and one vehicle as exempt. MLTSS also applies institutional Medicaid-style financial rules, including a five-year look-back for certain transfers.\",\n    \"other_requirements\": [\n      \"Must be a New Jersey resident\",\n      \"Must be age 65 or older, or under 65 and determined blind or disabled by the Social Security Administration or New Jersey\",\n      \"Must be a U.S. citizen or qualified noncitizen\",\n      \"Must require, or be expected to require within 30 days, a nursing-home level of care\",\n      \"Must meet NJ FamilyCare/Medicaid financial eligibility rules\",\n      \"For adults 21 and older, screening starts through the county Area Agency on Aging / Aging and Disability Resource Connection (ADRC)\",\n      \"For children through age 20, screening starts through the Division of Disability Services\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"MLTSS provides long-term services and supports through a NJ FamilyCare managed care organization, including care management, access to NJ FamilyCare Plan A benefits, home and vehicle modifications, home-delivered meals, respite care, personal emergency response systems, mental health and addiction services, assisted living, community residential services, and nursing home care. It also covers the full range of coordinated health services, long-term services and supports, and prescription drug benefits through the MCO.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://njfamilycare.dhs.state.nj.us/apply.aspx\",\n      \"Phone for adults 21+: local County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)\",\n      \"Phone for children through age 20: Division of Disability Services at 1-888-285-3036 (press 2, then press 1)\",\n      \"County Social Service Agency / County Welfare Agency / Board of Social Services in the applicant’s county\",\n      \"In person or by mail using the paper NJ FamilyCare application\"\n    ],\n    \"processing_time\": \"The materials reviewed do not give a single fixed processing-time guarantee. MLTSS is a two-part process: financial eligibility and a clinical screening for nursing-home level of care. Timing depends on completing both parts and on county/plan processing.\",\n    \"waitlist\": \"No formal statewide waitlist is identified in the source material reviewed. Access depends on eligibility determination, clinical screening, and enrollment with a NJ FamilyCare managed care organization.\",\n    \"forms\": [\n      \"NJ FamilyCare application\",\n      \"MLTSS Application Guidance (2026 brochure)\",\n      \"Qualified Income Trust paperwork, if income exceeds the limit\"\n    ],\n    \"documents\": [\n      \"Proof of New Jersey residency\",\n      \"Proof of age or disability status\",\n      \"Proof of U.S. citizenship or qualified noncitizen status\",\n      \"Proof of monthly income\",\n      \"Bank statements and other proof of resources\",\n      \"Information on home ownership and vehicles\",\n      \"Medical and functional information showing need for nursing-home level of care\",\n      \"Any existing Medicaid/NJ FamilyCare information\",\n      \"If applicable, information needed to establish a Qualified Income Trust\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New Jersey, but application entry points differ by age group and county. Adults 21+ start through county ADRCs/Area Agencies on Aging; children through 20 start through the Division of Disability Services.\",\n    \"regional_variations\": \"The program is statewide, but local administration varies by county through the county ADRC/AAA and county social service agencies. Wait times and access to screening can vary by county and by managed care organization. Provider networks, care management, and local service availability can also differ by region.\",\n    \"offices_or_providers\": [\n      \"County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)\",\n      \"County Social Service Agency / County Welfare Agency / Board of Social Services\",\n      \"Division of Disability Services at 1-888-285-3036 for children through age 20\",\n      \"NJ FamilyCare managed care organizations\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/mltss/\",\n  \"gotchas\": [\n    \"The person must meet both the functional level-of-care test and the financial Medicaid test; qualifying medically is not enough.\",\n    \"The $2,000 resource limit is strict and is measured on the first day of the month.\",\n    \"The home and one used vehicle are excluded, but other liquid resources can still disqualify the applicant.\",\n    \"Income over the monthly limit does not automatically end eligibility if a Qualified Income Trust is set up correctly.\",\n    \"Applicants often need to start with the county ADRC/AAA or county social services instead of only applying online.\",\n    \"MLTSS is not just a payment program; enrollment usually routes the person into a managed care organization that coordinates all covered services.\",\n    \"The services a person receives can depend heavily on the assessed level of need, not just on diagnosis or age.\"\n  ],\n  \"data_shape_notes\": \"This program is not a simple cash benefit. It is a statewide Medicaid waiver/managed-care long-term services program with a two-part eligibility test, strict resource limits, a possible Qualified Income Trust exception for income, and services that are customized after a nursing-home level-of-care assessment.\"\n}"
+      },
+      {
+        "name": "NJ FamilyCare Medicare Savings Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "QMB": {
+              "single": "$15,960/year",
+              "couple": "$21,640/year"
+            },
+            "SLMB": {
+              "single": "$19,152/year",
+              "couple": "$25,968/year"
+            },
+            "QI-1": {
+              "single": "$21,546/year",
+              "couple": "$29,214/year"
+            },
+            "notes": [
+              "These are 2026 limits shown on New Jersey official materials.",
+              "The program is for people with Medicare Part A and Part B who have limited income and assets.",
+              "NJ materials also describe QMB/SLMB/QI in terms of monthly Federal Poverty Guideline-style thresholds in some consumer guides, but the official New Jersey state pages give the annual limits above."
+            ]
+          },
+          "asset_limits": {
+            "single": "$9,950",
+            "couple": "$14,910",
+            "what_counts": [
+              "Countable assets/liquid resources",
+              "NJ materials describe the limit as assets/liquid assets"
+            ],
+            "what_is_exempt": [
+              "Home",
+              "Car"
+            ],
+            "notes": [
+              "New Jersey official pages state that assets do not include the home or car.",
+              "The same asset limit is shown for QMB, SLMB, and QI."
+            ]
+          },
+          "other_requirements": [
+            "Must be a New Jersey resident",
+            "Must be enrolled in Medicare Part A and Part B",
+            "Must not be financially eligible for NJ FamilyCare Medicaid",
+            "Eligibility is based on income and assets",
+            "No county-specific residency rule is described; it is statewide"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Helps pay Medicare costs. QMB can pay Medicare Part A and Part B premiums, deductibles, copayments, and coinsurance. SLMB and QI help pay the Medicare Part B premium. New Jersey consumer materials say the state can pay the Part B premium and save eligible people over $2,000 per year.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: NJSave application (official NJ.gov/NJSave route)",
+            "Paper application: NJSave paper application",
+            "Phone: 1-800-792-9745",
+            "Help with application / phone enrollment support: 1-800-701-0710 (TTY: 711)",
+            "County SHIP assistance"
+          ],
+          "processing_time": "No specific statewide processing time was stated in the official materials found.",
+          "waitlist": null,
+          "forms": [
+            "NJSave application",
+            "NJSave paper application"
+          ],
+          "documents": [
+            "Proof of Medicare Part A and Part B enrollment",
+            "Proof of New Jersey residency",
+            "Proof of income",
+            "Proof of assets/resources",
+            "Identification information needed to complete the NJSave application"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to New Jersey residents statewide; no county restriction is stated.",
+          "regional_variations": "No formal benefit variation by region was described. Regional differences are mainly in where a person gets help applying, such as county SHIP assistance.",
+          "offices_or_providers": [
+            "County State Health Insurance Assistance Program (SHIP)",
+            "NJSave / NJ FamilyCare application support lines"
+          ]
+        },
+        "official_source": "https://www.nj.gov/humanservices/doas/services/l-p/msp/",
+        "gotchas": [
+          "This is not the same as full Medicaid; it is a Medicare cost-help program tied to Medicare Part A and Part B.",
+          "The benefit level depends on the tier: QMB is broader and can cover deductibles/copays/coinsurance, while SLMB and QI mainly help with Part B premiums.",
+          "The state pages emphasize both income and asset limits; many applicants miss the asset test.",
+          "The home and car are excluded from the asset limit in the New Jersey materials found.",
+          "Some New Jersey pages point people to NJSave rather than a separate Medicare Savings Program-only portal.",
+          "Applicants can get help through SHIP or by calling the hotline if the online form is confusing."
+        ],
+        "data_shape_notes": "This program has tiered benefits by MSP category (QMB, SLMB, QI), with separate income thresholds but a shared asset test and statewide administration.",
+        "_raw": "{\n  \"name\": \"NJ FamilyCare Medicare Savings Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"QMB\": {\n        \"single\": \"$15,960/year\",\n        \"couple\": \"$21,640/year\"\n      },\n      \"SLMB\": {\n        \"single\": \"$19,152/year\",\n        \"couple\": \"$25,968/year\"\n      },\n      \"QI-1\": {\n        \"single\": \"$21,546/year\",\n        \"couple\": \"$29,214/year\"\n      },\n      \"notes\": [\n        \"These are 2026 limits shown on New Jersey official materials.\",\n        \"The program is for people with Medicare Part A and Part B who have limited income and assets.\",\n        \"NJ materials also describe QMB/SLMB/QI in terms of monthly Federal Poverty Guideline-style thresholds in some consumer guides, but the official New Jersey state pages give the annual limits above.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"single\": \"$9,950\",\n      \"couple\": \"$14,910\",\n      \"what_counts\": [\n        \"Countable assets/liquid resources\",\n        \"NJ materials describe the limit as assets/liquid assets\"\n      ],\n      \"what_is_exempt\": [\n        \"Home\",\n        \"Car\"\n      ],\n      \"notes\": [\n        \"New Jersey official pages state that assets do not include the home or car.\",\n        \"The same asset limit is shown for QMB, SLMB, and QI.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a New Jersey resident\",\n      \"Must be enrolled in Medicare Part A and Part B\",\n      \"Must not be financially eligible for NJ FamilyCare Medicaid\",\n      \"Eligibility is based on income and assets\",\n      \"No county-specific residency rule is described; it is statewide\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Helps pay Medicare costs. QMB can pay Medicare Part A and Part B premiums, deductibles, copayments, and coinsurance. SLMB and QI help pay the Medicare Part B premium. New Jersey consumer materials say the state can pay the Part B premium and save eligible people over $2,000 per year.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: NJSave application (official NJ.gov/NJSave route)\",\n      \"Paper application: NJSave paper application\",\n      \"Phone: 1-800-792-9745\",\n      \"Help with application / phone enrollment support: 1-800-701-0710 (TTY: 711)\",\n      \"County SHIP assistance\"\n    ],\n    \"processing_time\": \"No specific statewide processing time was stated in the official materials found.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"NJSave application\",\n      \"NJSave paper application\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare Part A and Part B enrollment\",\n      \"Proof of New Jersey residency\",\n      \"Proof of income\",\n      \"Proof of assets/resources\",\n      \"Identification information needed to complete the NJSave application\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to New Jersey residents statewide; no county restriction is stated.\",\n    \"regional_variations\": \"No formal benefit variation by region was described. Regional differences are mainly in where a person gets help applying, such as county SHIP assistance.\",\n    \"offices_or_providers\": [\n      \"County State Health Insurance Assistance Program (SHIP)\",\n      \"NJSave / NJ FamilyCare application support lines\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/humanservices/doas/services/l-p/msp/\",\n  \"gotchas\": [\n    \"This is not the same as full Medicaid; it is a Medicare cost-help program tied to Medicare Part A and Part B.\",\n    \"The benefit level depends on the tier: QMB is broader and can cover deductibles/copays/coinsurance, while SLMB and QI mainly help with Part B premiums.\",\n    \"The state pages emphasize both income and asset limits; many applicants miss the asset test.\",\n    \"The home and car are excluded from the asset limit in the New Jersey materials found.\",\n    \"Some New Jersey pages point people to NJSave rather than a separate Medicare Savings Program-only portal.\",\n    \"Applicants can get help through SHIP or by calling the hotline if the online form is confusing.\"\n  ],\n  \"data_shape_notes\": \"This program has tiered benefits by MSP category (QMB, SLMB, QI), with separate income thresholds but a shared asset test and statewide administration.\"\n}"
+      },
+      {
+        "name": "NJ SNAP (Supplemental Nutrition Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "New Jersey SNAP uses a gross monthly income test for most households. As of October 2026–September 2027, the limits are: household size 1: $2,461; 2: $3,337; 3: $4,212; 4: $5,088; 5: $5,964; 6: $6,839; 7: $7,715; 8: $8,591; each additional household member: +$876. Households that include a senior age 60 or older or a person with a disability may qualify even if gross income is above these figures. Meeting the income standard does not guarantee eligibility.",
+          "asset_limits": "Resource eligibility is part of the SNAP test, but the official page retrieved here does not provide a New Jersey dollar limit. For elderly/disabled households, SNAP commonly looks at countable resources such as cash on hand, checking/savings balances, and similar liquid assets, while certain resources are excluded under SNAP rules. The official New Jersey material emphasized income, resources, and household situation, but did not provide a full state-specific asset table in the retrieved source.",
+          "other_requirements": [
+            "Must live in New Jersey",
+            "Must have a household that meets SNAP rules for income, resources, and household composition",
+            "Must complete an interview with the county social services agency",
+            "Must provide requested verification documents",
+            "Households with a member age 60 or older or with a disability may have different eligibility treatment than standard households"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "An electronic benefits card that can be used to buy groceries at most food retail stores and some farmers markets. The retrieved NJ SNAP material listed monthly benefit ranges of $95-$298 for a 1-person household, $95-$546 for 2 people, $95-$785 for 3 people, and $95-$994 for 4 people, with each additional person adding up to $218 in the cited benefit range table.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application through MyNJHelps / NJHelps",
+            "In person at your County Social Service Agency",
+            "Phone application with telephonic signature support in some situations",
+            "Help from a county SNAP Navigator"
+          ],
+          "processing_time": "Most cases are decided within 30 days of application. Expedited benefits may be available within 7 days for qualifying emergency cases.",
+          "waitlist": null,
+          "forms": [
+            "NJ SNAP application through NJHelps / MyNJHelps",
+            "County interview and verification forms as requested by the county agency"
+          ],
+          "documents": [
+            "Monthly household income information",
+            "Household resources information",
+            "Personal identification information",
+            "Proof of New Jersey residency",
+            "Proof of expenses if requested, especially housing costs and utility costs",
+            "Proof of age/disability for elderly or disabled household members if relevant",
+            "Any documents the county requests for verification during the interview"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New Jersey through county social service agencies; eligibility is not limited to a particular county or region.",
+          "regional_variations": "The core program rules are statewide, but administration happens through county social service agencies, so interview scheduling, office procedures, and processing speed can vary by county. The retrieved sources did not provide a county-by-county wait time table.",
+          "offices_or_providers": [
+            "County Social Service Agencies across New Jersey",
+            "NJHelps.gov",
+            "MyNJHelps.gov"
+          ]
+        },
+        "official_source": "https://www.nj.gov/humanservices/njsnap/",
+        "gotchas": [
+          "A household can be under the income limit and still be denied if other SNAP rules are not met.",
+          "Households with a senior age 60+ or a member with a disability may qualify above the usual gross income limits.",
+          "SNAP is not automatic; an interview with the county is required.",
+          "Benefits are not cash; they are food-purchase benefits on a Families First-style EBT card.",
+          "Expedited 7-day processing is only for specific urgent situations, not everyone.",
+          "The application can be completed online in about 20 to 40 minutes, but the county interview still follows afterward.",
+          "Because counties administer cases, practical timing and document requests can differ a bit by county even though the rules are statewide."
+        ],
+        "data_shape_notes": "This program is household-based, income-tested, and resource-tested, with benefit amounts that scale by household size. Elderly or disabled households may have special eligibility treatment, and administration is statewide but handled locally by county agencies.",
+        "_raw": "{\n  \"name\": \"NJ SNAP (Supplemental Nutrition Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"New Jersey SNAP uses a gross monthly income test for most households. As of October 2026–September 2027, the limits are: household size 1: $2,461; 2: $3,337; 3: $4,212; 4: $5,088; 5: $5,964; 6: $6,839; 7: $7,715; 8: $8,591; each additional household member: +$876. Households that include a senior age 60 or older or a person with a disability may qualify even if gross income is above these figures. Meeting the income standard does not guarantee eligibility.\",\n    \"asset_limits\": \"Resource eligibility is part of the SNAP test, but the official page retrieved here does not provide a New Jersey dollar limit. For elderly/disabled households, SNAP commonly looks at countable resources such as cash on hand, checking/savings balances, and similar liquid assets, while certain resources are excluded under SNAP rules. The official New Jersey material emphasized income, resources, and household situation, but did not provide a full state-specific asset table in the retrieved source.\",\n    \"other_requirements\": [\n      \"Must live in New Jersey\",\n      \"Must have a household that meets SNAP rules for income, resources, and household composition\",\n      \"Must complete an interview with the county social services agency\",\n      \"Must provide requested verification documents\",\n      \"Households with a member age 60 or older or with a disability may have different eligibility treatment than standard households\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"An electronic benefits card that can be used to buy groceries at most food retail stores and some farmers markets. The retrieved NJ SNAP material listed monthly benefit ranges of $95-$298 for a 1-person household, $95-$546 for 2 people, $95-$785 for 3 people, and $95-$994 for 4 people, with each additional person adding up to $218 in the cited benefit range table.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application through MyNJHelps / NJHelps\",\n      \"In person at your County Social Service Agency\",\n      \"Phone application with telephonic signature support in some situations\",\n      \"Help from a county SNAP Navigator\"\n    ],\n    \"processing_time\": \"Most cases are decided within 30 days of application. Expedited benefits may be available within 7 days for qualifying emergency cases.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"NJ SNAP application through NJHelps / MyNJHelps\",\n      \"County interview and verification forms as requested by the county agency\"\n    ],\n    \"documents\": [\n      \"Monthly household income information\",\n      \"Household resources information\",\n      \"Personal identification information\",\n      \"Proof of New Jersey residency\",\n      \"Proof of expenses if requested, especially housing costs and utility costs\",\n      \"Proof of age/disability for elderly or disabled household members if relevant\",\n      \"Any documents the county requests for verification during the interview\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New Jersey through county social service agencies; eligibility is not limited to a particular county or region.\",\n    \"regional_variations\": \"The core program rules are statewide, but administration happens through county social service agencies, so interview scheduling, office procedures, and processing speed can vary by county. The retrieved sources did not provide a county-by-county wait time table.\",\n    \"offices_or_providers\": [\n      \"County Social Service Agencies across New Jersey\",\n      \"NJHelps.gov\",\n      \"MyNJHelps.gov\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/humanservices/njsnap/\",\n  \"gotchas\": [\n    \"A household can be under the income limit and still be denied if other SNAP rules are not met.\",\n    \"Households with a senior age 60+ or a member with a disability may qualify above the usual gross income limits.\",\n    \"SNAP is not automatic; an interview with the county is required.\",\n    \"Benefits are not cash; they are food-purchase benefits on a Families First-style EBT card.\",\n    \"Expedited 7-day processing is only for specific urgent situations, not everyone.\",\n    \"The application can be completed online in about 20 to 40 minutes, but the county interview still follows afterward.\",\n    \"Because counties administer cases, practical timing and document requests can differ a bit by county even though the rules are statewide.\"\n  ],\n  \"data_shape_notes\": \"This program is household-based, income-tested, and resource-tested, with benefit amounts that scale by household size. Elderly or disabled households may have special eligibility treatment, and administration is statewide but handled locally by county agencies.\"\n}"
+      },
+      {
+        "name": "NJ LIHEAP (Low Income Home Energy Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Household gross income must be at or below 60% of New Jersey State Median Income. The official FY2026 LIHEAP/USF income limits shown on NJ.gov are: 1 person $2,518 monthly / $30,216 annual; 2 people $3,291 monthly / $39,492 annual; 3 people $4,064 monthly / $48,768 annual; 4 people $4,837 monthly / $58,044 annual; 5 people $5,610 monthly / $67,320 annual; 6 people $6,383 monthly / $76,596 annual; 7 people $6,509 monthly / $78,108 annual; 8 people $6,636 monthly / $79,626 annual; each additional household member adds $241 monthly / $2,885 annually. The program is household-based, not age-based, and there is no separate elderly-only income table. The household must be responsible for home heating or cooling costs, either directly or because the cost is included in rent.",
+          "asset_limits": "No asset test was identified in the official NJ LIHEAP materials reviewed. The New Jersey materials focus on income, household responsibility for energy costs, and documentation rather than bank-balance or asset eligibility. Because this program is run as an energy assistance benefit, families should not assume a savings limit unless a local agency specifically requests unusual financial documentation.",
+          "other_requirements": [
+            "Must be a New Jersey resident.",
+            "Must be responsible for home heating or cooling costs, either by paying the utility directly or through rent.",
+            "Must submit household income documentation.",
+            "Applications are accepted only during the LIHEAP season, typically October 1 through June 30, while funds last.",
+            "Applicants may apply online or through an authorized local community action agency.",
+            "LIHEAP and USF are separate but often share the same application."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "LIHEAP provides a one-time home energy assistance benefit that is applied to heating and, in some cases, medically necessary cooling costs. NJ materials state that an eligible household may receive a maximum of $4,878 in program benefits, including automatic or special payments, plus any emergency assistance and emergency furnace repair payments. NJ utility materials also describe LIHEAP as averaging about $360 toward heating bills and $300 toward medically necessary cooling, but the official handbook’s maximum is the more precise program cap cited by the state. The benefit is not a fixed monthly grant.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.energyassistance.nj.gov",
+            "Online status/self-service: https://www.nj.gov/dca/dcaid",
+            "Phone assistance hotline: 1-800-510-3102",
+            "Local authorized community action agency in the applicant’s county",
+            "Paper application submitted through the local community action agency"
+          ],
+          "processing_time": "The state materials reviewed do not give a single guaranteed processing time. Applications are handled by local community action agencies, so timing depends on county agency workload, completeness of the application, and season demand. LIHEAP is open October 1 through June 30 while funds last.",
+          "waitlist": "No formal statewide waitlist was identified in the official materials reviewed. Because the program is funded seasonally and accepted while funds last, the practical risk is running into delays or funding exhaustion late in the season.",
+          "forms": [
+            "Home Energy/USF/Weatherization Program Application",
+            "Home Energy Assistance Universal Service Fund application (same combined application package in NJ materials)"
+          ],
+          "documents": [
+            "Completed application",
+            "Proof of identity for household members as requested by the agency",
+            "Proof of New Jersey residency",
+            "Proof of income for all required household members",
+            "Utility bill or lease/rent documentation showing responsibility for heating costs",
+            "Fuel supplier account or heating delivery information if applicable",
+            "Documentation for any household member receiving public benefits if used for income verification",
+            "Any additional documents requested by the local agency to verify household composition or energy responsibility"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New Jersey through authorized local agencies. Applicants must apply through the county agency serving their area, and agency contact points vary by county.",
+          "regional_variations": "The benefit rules are statewide, but application intake, local agency staffing, and wait times vary by county and by whether the applicant applies online, by phone, or through a local community action agency. Some utility companies and local agencies provide their own enrollment help, but the benefit itself is a state program.",
+          "offices_or_providers": [
+            "Authorized local community action agencies in each county",
+            "New Jersey Energy Assistance Hotline: 1-800-510-3102"
+          ]
+        },
+        "official_source": "https://www.nj.gov/dca/dhcr/offices/hea.shtml",
+        "gotchas": [
+          "LIHEAP is not an age-based senior-only program; elderly loved ones qualify based on household income and energy responsibility like any other household.",
+          "People often miss that rent can still count if heat is included in the rent.",
+          "Applications are accepted only during the season and are time-sensitive because funding is limited.",
+          "The application is shared with USF, but the programs are different and should not be confused.",
+          "You usually do not apply through a single statewide office; you submit through a county-level community action agency or online portal.",
+          "Incomplete income or utility documentation is one of the most common reasons for delays.",
+          "An older adult in assisted living or a situation where the household is not responsible for home energy costs may not qualify."
+        ],
+        "data_shape_notes": "This is a statewide, income-tested, household-based energy benefit with seasonal intake, county-level administration, and benefits that vary by household circumstances and program status rather than by age.",
+        "_raw": "{\n  \"name\": \"NJ LIHEAP (Low Income Home Energy Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Household gross income must be at or below 60% of New Jersey State Median Income. The official FY2026 LIHEAP/USF income limits shown on NJ.gov are: 1 person $2,518 monthly / $30,216 annual; 2 people $3,291 monthly / $39,492 annual; 3 people $4,064 monthly / $48,768 annual; 4 people $4,837 monthly / $58,044 annual; 5 people $5,610 monthly / $67,320 annual; 6 people $6,383 monthly / $76,596 annual; 7 people $6,509 monthly / $78,108 annual; 8 people $6,636 monthly / $79,626 annual; each additional household member adds $241 monthly / $2,885 annually. The program is household-based, not age-based, and there is no separate elderly-only income table. The household must be responsible for home heating or cooling costs, either directly or because the cost is included in rent.\",\n    \"asset_limits\": \"No asset test was identified in the official NJ LIHEAP materials reviewed. The New Jersey materials focus on income, household responsibility for energy costs, and documentation rather than bank-balance or asset eligibility. Because this program is run as an energy assistance benefit, families should not assume a savings limit unless a local agency specifically requests unusual financial documentation.\",\n    \"other_requirements\": [\n      \"Must be a New Jersey resident.\",\n      \"Must be responsible for home heating or cooling costs, either by paying the utility directly or through rent.\",\n      \"Must submit household income documentation.\",\n      \"Applications are accepted only during the LIHEAP season, typically October 1 through June 30, while funds last.\",\n      \"Applicants may apply online or through an authorized local community action agency.\",\n      \"LIHEAP and USF are separate but often share the same application.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"LIHEAP provides a one-time home energy assistance benefit that is applied to heating and, in some cases, medically necessary cooling costs. NJ materials state that an eligible household may receive a maximum of $4,878 in program benefits, including automatic or special payments, plus any emergency assistance and emergency furnace repair payments. NJ utility materials also describe LIHEAP as averaging about $360 toward heating bills and $300 toward medically necessary cooling, but the official handbook’s maximum is the more precise program cap cited by the state. The benefit is not a fixed monthly grant.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.energyassistance.nj.gov\",\n      \"Online status/self-service: https://www.nj.gov/dca/dcaid\",\n      \"Phone assistance hotline: 1-800-510-3102\",\n      \"Local authorized community action agency in the applicant’s county\",\n      \"Paper application submitted through the local community action agency\"\n    ],\n    \"processing_time\": \"The state materials reviewed do not give a single guaranteed processing time. Applications are handled by local community action agencies, so timing depends on county agency workload, completeness of the application, and season demand. LIHEAP is open October 1 through June 30 while funds last.\",\n    \"waitlist\": \"No formal statewide waitlist was identified in the official materials reviewed. Because the program is funded seasonally and accepted while funds last, the practical risk is running into delays or funding exhaustion late in the season.\",\n    \"forms\": [\n      \"Home Energy/USF/Weatherization Program Application\",\n      \"Home Energy Assistance Universal Service Fund application (same combined application package in NJ materials)\"\n    ],\n    \"documents\": [\n      \"Completed application\",\n      \"Proof of identity for household members as requested by the agency\",\n      \"Proof of New Jersey residency\",\n      \"Proof of income for all required household members\",\n      \"Utility bill or lease/rent documentation showing responsibility for heating costs\",\n      \"Fuel supplier account or heating delivery information if applicable\",\n      \"Documentation for any household member receiving public benefits if used for income verification\",\n      \"Any additional documents requested by the local agency to verify household composition or energy responsibility\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New Jersey through authorized local agencies. Applicants must apply through the county agency serving their area, and agency contact points vary by county.\",\n    \"regional_variations\": \"The benefit rules are statewide, but application intake, local agency staffing, and wait times vary by county and by whether the applicant applies online, by phone, or through a local community action agency. Some utility companies and local agencies provide their own enrollment help, but the benefit itself is a state program.\",\n    \"offices_or_providers\": [\n      \"Authorized local community action agencies in each county\",\n      \"New Jersey Energy Assistance Hotline: 1-800-510-3102\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/dca/dhcr/offices/hea.shtml\",\n  \"gotchas\": [\n    \"LIHEAP is not an age-based senior-only program; elderly loved ones qualify based on household income and energy responsibility like any other household.\",\n    \"People often miss that rent can still count if heat is included in the rent.\",\n    \"Applications are accepted only during the season and are time-sensitive because funding is limited.\",\n    \"The application is shared with USF, but the programs are different and should not be confused.\",\n    \"You usually do not apply through a single statewide office; you submit through a county-level community action agency or online portal.\",\n    \"Incomplete income or utility documentation is one of the most common reasons for delays.\",\n    \"An older adult in assisted living or a situation where the household is not responsible for home energy costs may not qualify.\"\n  ],\n  \"data_shape_notes\": \"This is a statewide, income-tested, household-based energy benefit with seasonal intake, county-level administration, and benefits that vary by household circumstances and program status rather than by age.\"\n}"
+      },
+      {
+        "name": "New Jersey PACE (Program of All-Inclusive Care for the Elderly)",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "No income limit was identified in the official New Jersey PACE materials reviewed. PACE eligibility in New Jersey is based on age, clinical need, ability to live safely in the community with PACE supports, and residence in a PACE service area, not a household-income test.",
+          "asset_limits": "No asset limit was identified in the official New Jersey PACE materials reviewed. PACE materials reviewed did not list countable or exempt resources for eligibility; instead, they focus on clinical eligibility and service-area residency.",
+          "other_requirements": [
+            "Must be 55 years of age or older",
+            "Must be eligible for nursing home level of care",
+            "Must be able to live safely in the community at the time of enrollment with the help of PACE services",
+            "Must live in the service area of a PACE organization",
+            "PACE is covered by Medicare and Medicaid for eligible participants"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "PACE coordinates and provides all needed preventive, primary, acute, and long-term care services for eligible older adults. NJ sources specifically mention primary care, dental care, prescriptions, home care, adult day health care, transportation to appointments, and comprehensive medical and social services through a community-based center and in participants’ homes.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Contact the PACE agency in the applicant’s service area",
+            "Use the New Jersey Department of Human Services Division of Aging Services PACE page: https://www.nj.gov/humanservices/doas/services/l-p/pace/",
+            "Use the New Jersey Caregiver Hub PACE information page: https://nj.gov/caregivers/caregiver.html"
+          ],
+          "processing_time": "No single statewide processing time was identified in the official sources reviewed.",
+          "waitlist": "No statewide waitlist was identified in the official sources reviewed. Availability depends on whether the person lives in a PACE service area and whether a local PACE organization is operating there.",
+          "forms": [
+            "No participant application form number was identified in the official sources reviewed"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of New Jersey residence and address within a PACE service area",
+            "Medicare and Medicaid information, if available",
+            "Medical records or clinician documentation supporting nursing home level-of-care need",
+            "List of current medications",
+            "Insurance cards and contact information for current doctors and caregivers"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Participants must live in the service area of a PACE organization. New Jersey expanded PACE to all 21 counties, but eligibility still depends on living in a local provider’s coverage area.",
+          "regional_variations": "Coverage, provider choice, and practical access vary by local PACE organization and their service area. New Jersey materials note that there are PACE agencies operating in the state and that residents must live in their coverage area to participate.",
+          "offices_or_providers": [
+            "Local PACE organizations serving the applicant’s county or region",
+            "New Jersey Division of Aging Services PACE page for statewide program information"
+          ]
+        },
+        "official_source": "https://www.nj.gov/humanservices/doas/services/l-p/pace/",
+        "gotchas": [
+          "PACE is not a cash benefit; it is a care-delivery model with an interdisciplinary team and a fixed package of covered services.",
+          "Living in New Jersey is not enough by itself; the person must live inside a PACE provider’s service area.",
+          "The key eligibility test is functional: the person must need nursing home level of care but still be safe in the community with PACE support.",
+          "People often miss that PACE is tied to both Medicare and Medicaid and is designed to replace fragmented care with one coordinated program.",
+          "The official sources reviewed did not provide a single statewide application form, statewide processing timeline, or income/asset table for participants."
+        ],
+        "data_shape_notes": "This program is service-area restricted and clinically based rather than income-table based. The most important structure is age 55+, nursing-home-level-of-care need, safe community living at enrollment, and local provider coverage.",
+        "_raw": "{\n  \"name\": \"New Jersey PACE (Program of All-Inclusive Care for the Elderly)\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"No income limit was identified in the official New Jersey PACE materials reviewed. PACE eligibility in New Jersey is based on age, clinical need, ability to live safely in the community with PACE supports, and residence in a PACE service area, not a household-income test.\",\n    \"asset_limits\": \"No asset limit was identified in the official New Jersey PACE materials reviewed. PACE materials reviewed did not list countable or exempt resources for eligibility; instead, they focus on clinical eligibility and service-area residency.\",\n    \"other_requirements\": [\n      \"Must be 55 years of age or older\",\n      \"Must be eligible for nursing home level of care\",\n      \"Must be able to live safely in the community at the time of enrollment with the help of PACE services\",\n      \"Must live in the service area of a PACE organization\",\n      \"PACE is covered by Medicare and Medicaid for eligible participants\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"PACE coordinates and provides all needed preventive, primary, acute, and long-term care services for eligible older adults. NJ sources specifically mention primary care, dental care, prescriptions, home care, adult day health care, transportation to appointments, and comprehensive medical and social services through a community-based center and in participants’ homes.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the PACE agency in the applicant’s service area\",\n      \"Use the New Jersey Department of Human Services Division of Aging Services PACE page: https://www.nj.gov/humanservices/doas/services/l-p/pace/\",\n      \"Use the New Jersey Caregiver Hub PACE information page: https://nj.gov/caregivers/caregiver.html\"\n    ],\n    \"processing_time\": \"No single statewide processing time was identified in the official sources reviewed.\",\n    \"waitlist\": \"No statewide waitlist was identified in the official sources reviewed. Availability depends on whether the person lives in a PACE service area and whether a local PACE organization is operating there.\",\n    \"forms\": [\n      \"No participant application form number was identified in the official sources reviewed\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of New Jersey residence and address within a PACE service area\",\n      \"Medicare and Medicaid information, if available\",\n      \"Medical records or clinician documentation supporting nursing home level-of-care need\",\n      \"List of current medications\",\n      \"Insurance cards and contact information for current doctors and caregivers\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Participants must live in the service area of a PACE organization. New Jersey expanded PACE to all 21 counties, but eligibility still depends on living in a local provider’s coverage area.\",\n    \"regional_variations\": \"Coverage, provider choice, and practical access vary by local PACE organization and their service area. New Jersey materials note that there are PACE agencies operating in the state and that residents must live in their coverage area to participate.\",\n    \"offices_or_providers\": [\n      \"Local PACE organizations serving the applicant’s county or region\",\n      \"New Jersey Division of Aging Services PACE page for statewide program information\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/humanservices/doas/services/l-p/pace/\",\n  \"gotchas\": [\n    \"PACE is not a cash benefit; it is a care-delivery model with an interdisciplinary team and a fixed package of covered services.\",\n    \"Living in New Jersey is not enough by itself; the person must live inside a PACE provider’s service area.\",\n    \"The key eligibility test is functional: the person must need nursing home level of care but still be safe in the community with PACE support.\",\n    \"People often miss that PACE is tied to both Medicare and Medicaid and is designed to replace fragmented care with one coordinated program.\",\n    \"The official sources reviewed did not provide a single statewide application form, statewide processing timeline, or income/asset table for participants.\"\n  ],\n  \"data_shape_notes\": \"This program is service-area restricted and clinically based rather than income-table based. The most important structure is age 55+, nursing-home-level-of-care need, safe community living at enrollment, and local provider coverage.\"\n}"
+      },
+      {
+        "name": "New Jersey Family Caregiver Support Program",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No income eligibility requirement for information or services; the program is open to middle-income families as well as caregivers with the greatest social and economic need.",
+          "asset_limits": "No asset limit is described for this program. The program guidance does not indicate a resource test for caregiver support services.",
+          "other_requirements": [
+            "Caregiver must be caring for an adult age 60 or older, or a person of any age with Alzheimer’s disease or related dementia.",
+            "The program serves family caregivers through the local Area Agency on Aging (AAA) / Aging and Disability Resource Connection (ADRC).",
+            "Priority is given to caregivers with the greatest social and economic need.",
+            "There is no minimum age requirement for caregivers."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Supportive caregiver services rather than cash benefits. The program is described as providing information and services through the local AAA/ADRC, with caregiver support aimed at helping families keep older adults at home. The program guide does not list a standard dollar amount, hourly cap, or uniform package of benefits in the available material.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Phone: 1-877-222-3737",
+            "Phone: 211",
+            "Website: https://nj.gov/caregivers/caregiver.html",
+            "Website: https://nj211.org/initiative/caring-for-caregivers",
+            "Contact the local AAA/ADRC serving the caregiver’s county"
+          ],
+          "processing_time": "No official statewide processing-time standard was identified in the available material.",
+          "waitlist": "No statewide waitlist was identified in the available material.",
+          "forms": [],
+          "documents": [
+            "Information about the care recipient’s age and diagnosis, if applicable",
+            "Basic contact information for the caregiver and care recipient",
+            "Details about caregiving needs and the help currently being provided",
+            "Any relevant medical or functional information that helps the local AAA/ADRC assess need"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in New Jersey through local AAA/ADRC channels.",
+          "regional_variations": "The core eligibility rules are statewide, but service delivery happens locally through county AAA/ADRC offices, so access, referrals, and availability of specific supports can vary by county. The available material does not provide a single uniform statewide office list or regional wait-time chart.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging (AAA) in each county",
+            "Aging and Disability Resource Connection (ADRC)",
+            "NJ 211 caregiver navigation line"
+          ]
+        },
+        "official_source": "https://nj.gov/caregivers/caregiver.html",
+        "gotchas": [
+          "This is not a cash grant program; families are usually looking for services, counseling, respite-related support, and navigation help rather than direct payments.",
+          "There is no income test for basic program access, so middle-income families can qualify.",
+          "The program is for the caregiver, but eligibility is tied to the care recipient being 60+ or having Alzheimer’s/dementia.",
+          "People often confuse this with Medicaid-based long-term care programs; this caregiver program can serve families even when Medicaid rules are not the issue.",
+          "Specific services and availability can differ by county because local AAA/ADRC offices administer the support."
+        ],
+        "data_shape_notes": "No income or asset test is listed for basic access; eligibility is relationship/recipient-based and services are delivered locally through county AAA/ADRC offices, so the important variation is administrative and regional rather than a household-size benefit formula.",
+        "_raw": "{\n  \"name\": \"New Jersey Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No income eligibility requirement for information or services; the program is open to middle-income families as well as caregivers with the greatest social and economic need.\",\n    \"asset_limits\": \"No asset limit is described for this program. The program guidance does not indicate a resource test for caregiver support services.\",\n    \"other_requirements\": [\n      \"Caregiver must be caring for an adult age 60 or older, or a person of any age with Alzheimer’s disease or related dementia.\",\n      \"The program serves family caregivers through the local Area Agency on Aging (AAA) / Aging and Disability Resource Connection (ADRC).\",\n      \"Priority is given to caregivers with the greatest social and economic need.\",\n      \"There is no minimum age requirement for caregivers.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Supportive caregiver services rather than cash benefits. The program is described as providing information and services through the local AAA/ADRC, with caregiver support aimed at helping families keep older adults at home. The program guide does not list a standard dollar amount, hourly cap, or uniform package of benefits in the available material.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Phone: 1-877-222-3737\",\n      \"Phone: 211\",\n      \"Website: https://nj.gov/caregivers/caregiver.html\",\n      \"Website: https://nj211.org/initiative/caring-for-caregivers\",\n      \"Contact the local AAA/ADRC serving the caregiver’s county\"\n    ],\n    \"processing_time\": \"No official statewide processing-time standard was identified in the available material.\",\n    \"waitlist\": \"No statewide waitlist was identified in the available material.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Information about the care recipient’s age and diagnosis, if applicable\",\n      \"Basic contact information for the caregiver and care recipient\",\n      \"Details about caregiving needs and the help currently being provided\",\n      \"Any relevant medical or functional information that helps the local AAA/ADRC assess need\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in New Jersey through local AAA/ADRC channels.\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but service delivery happens locally through county AAA/ADRC offices, so access, referrals, and availability of specific supports can vary by county. The available material does not provide a single uniform statewide office list or regional wait-time chart.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging (AAA) in each county\",\n      \"Aging and Disability Resource Connection (ADRC)\",\n      \"NJ 211 caregiver navigation line\"\n    ]\n  },\n  \"official_source\": \"https://nj.gov/caregivers/caregiver.html\",\n  \"gotchas\": [\n    \"This is not a cash grant program; families are usually looking for services, counseling, respite-related support, and navigation help rather than direct payments.\",\n    \"There is no income test for basic program access, so middle-income families can qualify.\",\n    \"The program is for the caregiver, but eligibility is tied to the care recipient being 60+ or having Alzheimer’s/dementia.\",\n    \"People often confuse this with Medicaid-based long-term care programs; this caregiver program can serve families even when Medicaid rules are not the issue.\",\n    \"Specific services and availability can differ by county because local AAA/ADRC offices administer the support.\"\n  ],\n  \"data_shape_notes\": \"No income or asset test is listed for basic access; eligibility is relationship/recipient-based and services are delivered locally through county AAA/ADRC offices, so the important variation is administrative and regional rather than a household-size benefit formula.\"\n}"
+      },
+      {
+        "name": "New Jersey Home Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No statewide income limit is listed for New Jersey’s home delivered meals program. Eligibility is based on age, homebound status, inability to prepare meals, and lack of help in the home; financial need may be used by local providers to prioritize when demand is high.",
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be homebound",
+            "Must be unable to prepare meals for yourself",
+            "Must have no family member, friend, neighbor, or caregiver available to prepare meals",
+            "A formal needs assessment is conducted",
+            "Spouse may also receive a meal if the eligible participant is approved",
+            "Some county programs require county residency",
+            "County providers may also ask for medical/homebound verification"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Delivered meals to the home. State guidance describes the benefit as home delivered meals for eligible homebound adults 60+; county programs commonly provide one hot meal per weekday, and some counties specify five meals per week. No statewide cash value is assigned.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact your local Area Agency on Aging",
+            "Call the county meal program directly",
+            "County online application where available",
+            "Mail, email, or fax where the county allows it",
+            "In-person county office intake where offered"
+          ],
+          "processing_time": "No statewide processing time is published. Timing varies by county and provider; eligibility requires a needs assessment, and some counties report program review after application submission.",
+          "waitlist": "No statewide waitlist policy is published. Because services are locally administered, wait times and priority can vary by county and by demand.",
+          "forms": [
+            "Home Delivered Meals application or county-specific application",
+            "Plan of Care / needs assessment paperwork where required",
+            "Doctor’s note or medical authorization in some counties"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of county residency when required",
+            "Medical information showing homebound status or inability to prepare meals",
+            "Information about household support/caregiver availability",
+            "Completed county application forms",
+            "Doctor’s note or authorization if requested by the county"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through local Area Agencies on Aging and county nutrition programs across New Jersey; specific eligibility and delivery procedures can vary by county.",
+          "regional_variations": "Yes. Counties administer intake differently, use different phone numbers and forms, and may have different service descriptions, delivery schedules, and documentation requirements. Some counties require county residency and some offer online applications while others rely on phone or paper intake.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging",
+            "County senior services or nutrition program offices",
+            "County Meals on Wheels providers"
+          ]
+        },
+        "official_source": "https://www.nj.gov/disabilities/resources-by-life-stages/older-adults/",
+        "gotchas": [
+          "There is no statewide income limit, so families should not assume they are over income and ineligible.",
+          "The key test is homebound status plus inability to prepare meals and lack of in-home help.",
+          "Eligibility and access can differ by county even though the program is statewide.",
+          "Some counties deliver only on weekdays, so this is usually not a seven-day meal plan.",
+          "A spouse may be served in some cases, but not every household member automatically qualifies.",
+          "A needs assessment is required, so approval is not automatic after a phone call."
+        ],
+        "data_shape_notes": "This is a locally administered statewide service with no single income test and with county-by-county variation in intake, forms, and delivery rules.",
+        "_raw": "{\n  \"name\": \"New Jersey Home Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No statewide income limit is listed for New Jersey’s home delivered meals program. Eligibility is based on age, homebound status, inability to prepare meals, and lack of help in the home; financial need may be used by local providers to prioritize when demand is high.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be homebound\",\n      \"Must be unable to prepare meals for yourself\",\n      \"Must have no family member, friend, neighbor, or caregiver available to prepare meals\",\n      \"A formal needs assessment is conducted\",\n      \"Spouse may also receive a meal if the eligible participant is approved\",\n      \"Some county programs require county residency\",\n      \"County providers may also ask for medical/homebound verification\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Delivered meals to the home. State guidance describes the benefit as home delivered meals for eligible homebound adults 60+; county programs commonly provide one hot meal per weekday, and some counties specify five meals per week. No statewide cash value is assigned.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact your local Area Agency on Aging\",\n      \"Call the county meal program directly\",\n      \"County online application where available\",\n      \"Mail, email, or fax where the county allows it\",\n      \"In-person county office intake where offered\"\n    ],\n    \"processing_time\": \"No statewide processing time is published. Timing varies by county and provider; eligibility requires a needs assessment, and some counties report program review after application submission.\",\n    \"waitlist\": \"No statewide waitlist policy is published. Because services are locally administered, wait times and priority can vary by county and by demand.\",\n    \"forms\": [\n      \"Home Delivered Meals application or county-specific application\",\n      \"Plan of Care / needs assessment paperwork where required\",\n      \"Doctor’s note or medical authorization in some counties\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of county residency when required\",\n      \"Medical information showing homebound status or inability to prepare meals\",\n      \"Information about household support/caregiver availability\",\n      \"Completed county application forms\",\n      \"Doctor’s note or authorization if requested by the county\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through local Area Agencies on Aging and county nutrition programs across New Jersey; specific eligibility and delivery procedures can vary by county.\",\n    \"regional_variations\": \"Yes. Counties administer intake differently, use different phone numbers and forms, and may have different service descriptions, delivery schedules, and documentation requirements. Some counties require county residency and some offer online applications while others rely on phone or paper intake.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging\",\n      \"County senior services or nutrition program offices\",\n      \"County Meals on Wheels providers\"\n    ]\n  },\n  \"official_source\": \"https://www.nj.gov/disabilities/resources-by-life-stages/older-adults/\",\n  \"gotchas\": [\n    \"There is no statewide income limit, so families should not assume they are over income and ineligible.\",\n    \"The key test is homebound status plus inability to prepare meals and lack of in-home help.\",\n    \"Eligibility and access can differ by county even though the program is statewide.\",\n    \"Some counties deliver only on weekdays, so this is usually not a seven-day meal plan.\",\n    \"A spouse may be served in some cases, but not every household member automatically qualifies.\",\n    \"A needs assessment is required, so approval is not automatic after a phone call.\"\n  ],\n  \"data_shape_notes\": \"This is a locally administered statewide service with no single income test and with county-by-county variation in intake, forms, and delivery rules.\"\n}"
+      },
+      {
+        "name": "New Jersey SSI State Supplement",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "This is not a separate NJ-only income test. It is the SSI program, with New Jersey adding a state supplement to the federal SSI payment for eligible recipients. For 2026, New Jersey says an individual may be eligible if gross monthly income is at or below $1,025.25, or $1,516.35 for a couple, with the first $20 of income excluded.[3][6]",
+            "table": [
+              {
+                "household_type": "Individual",
+                "gross_monthly_income_limit_2026": "$1,025.25",
+                "notes": "First $20/month excluded in determining countable income.[3][6]"
+              },
+              {
+                "household_type": "Couple",
+                "gross_monthly_income_limit_2026": "$1,516.35",
+                "notes": "First $20/month excluded in determining countable income.[6]"
+              }
+            ],
+            "important_caveat": "SSA payment amounts vary by living arrangement and other factors, so the actual monthly SSI check can be lower than the maximum.[3][4]"
+          },
+          "asset_limits": {
+            "individual": "$2,000",
+            "couple": "$3,000",
+            "what_counts": [
+              "Cash and bank accounts",
+              "Other countable resources used by SSA in SSI eligibility"
+            ],
+            "what_is_exempt": [
+              "The source confirms a resource maximum but does not fully enumerate all exemptions on the retrieved pages.[6]"
+            ],
+            "notes": "Families should verify the full SSI resource rules with SSA before applying, because some assets are excluded under federal SSI rules even though the program uses these resource caps.[6]"
+          },
+          "other_requirements": [
+            "Must be 65 or older, or blind, or disabled under SSA rules; New Jersey also notes age 65 or older applicants without a disability can qualify if they have little to no income or resources.[3][14]",
+            "Must meet federal SSI nonfinancial rules handled by SSA",
+            "Must live in a qualifying living arrangement for the applicable payment level",
+            "Must be a New Jersey SSI recipient to receive the state supplement, which is paid automatically with SSI rather than through a separate NJ application.[1][4]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "New Jersey’s state supplement is added to the federal SSI payment and is paid monthly as part of the total SSI benefit. For 2026, SSA lists these combined monthly amounts for New Jersey: living alone or with others in own household $1,025.25; living with spouse not eligible for SSI $1,146.99; living in someone else’s household and receiving support and maintenance $706.98; living in a licensed residential health care facility $1,204.05; living in a public general hospital or Medicaid-approved long-term health facility $50.00; couple living alone or with others in own household $1,475.35; couple living in someone else’s household and receiving support and maintenance $1,059.75; couple living in a licensed residential health care facility $2,188.35.[4]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.ssa.gov/ssi/",
+            "Phone: 1-800-772-1213",
+            "TTY: 1-800-325-0778",
+            "In person at a local Social Security office"
+          ],
+          "processing_time": "The retrieved sources do not give a specific processing-time number for New Jersey SSI applications.",
+          "waitlist": "No waitlist is described in the retrieved sources; SSI is administered through SSA and the New Jersey supplement is automatic for eligible SSI recipients.[1][4]",
+          "forms": [
+            "SSA SSI application process (online or by appointment); the retrieved pages do not name a New Jersey-specific supplement form.",
+            "NJ sources point applicants to apply for SSI through SSA rather than a separate state supplement application.[2][3]"
+          ],
+          "documents": [
+            "Identification such as a driver’s license, state ID, or passport[5]",
+            "Birth certificate[5]",
+            "Income information",
+            "Resource/bank information",
+            "Information about living arrangement and household members",
+            "Any SSA disability/blindness/medical records if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide to New Jersey SSI recipients; payment level depends on living arrangement and whether the person is in a licensed residential health care facility, hospital, or lives in someone else’s household.[4]",
+          "regional_variations": "No county-by-county variation was identified in the retrieved sources. The main variation is by living arrangement, not geography.[4][12]",
+          "offices_or_providers": [
+            "Social Security Administration offices statewide",
+            "NJ Division of Disability Determination Services for SSI claims handling in New Jersey[2]"
+          ]
+        },
+        "official_source": "https://www.ssa.gov/ssi/text-benefits-ussi.htm",
+        "gotchas": [
+          "Families often miss that New Jersey’s supplement is not a separate state benefit application; it is paid automatically with SSI if the person qualifies.[1][4]",
+          "The payment depends heavily on living arrangement, so where the person lives can change the monthly amount.[4]",
+          "Gross income limits and the actual payment amounts are not the same thing; a person can qualify but receive less than the maximum because of countable income and living situation.[3][4][6]",
+          "Resource limits are strict at $2,000 for one person and $3,000 for a couple, so even modest savings can affect eligibility.[6]",
+          "Some New Jersey materials also point SSI applicants to SSA phone-based or in-person application routes rather than a special NJ office process.[2][5]"
+        ],
+        "data_shape_notes": "This program is structured as an automatic state cash supplement layered onto federal SSI, with benefit amounts changing by living arrangement and household type rather than by county or a standalone NJ application process.[1][4]",
+        "_raw": "{\n  \"name\": \"New Jersey SSI State Supplement\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"This is not a separate NJ-only income test. It is the SSI program, with New Jersey adding a state supplement to the federal SSI payment for eligible recipients. For 2026, New Jersey says an individual may be eligible if gross monthly income is at or below $1,025.25, or $1,516.35 for a couple, with the first $20 of income excluded.[3][6]\",\n      \"table\": [\n        {\n          \"household_type\": \"Individual\",\n          \"gross_monthly_income_limit_2026\": \"$1,025.25\",\n          \"notes\": \"First $20/month excluded in determining countable income.[3][6]\"\n        },\n        {\n          \"household_type\": \"Couple\",\n          \"gross_monthly_income_limit_2026\": \"$1,516.35\",\n          \"notes\": \"First $20/month excluded in determining countable income.[6]\"\n        }\n      ],\n      \"important_caveat\": \"SSA payment amounts vary by living arrangement and other factors, so the actual monthly SSI check can be lower than the maximum.[3][4]\"\n    },\n    \"asset_limits\": {\n      \"individual\": \"$2,000\",\n      \"couple\": \"$3,000\",\n      \"what_counts\": [\n        \"Cash and bank accounts\",\n        \"Other countable resources used by SSA in SSI eligibility\"\n      ],\n      \"what_is_exempt\": [\n        \"The source confirms a resource maximum but does not fully enumerate all exemptions on the retrieved pages.[6]\"\n      ],\n      \"notes\": \"Families should verify the full SSI resource rules with SSA before applying, because some assets are excluded under federal SSI rules even though the program uses these resource caps.[6]\"\n    },\n    \"other_requirements\": [\n      \"Must be 65 or older, or blind, or disabled under SSA rules; New Jersey also notes age 65 or older applicants without a disability can qualify if they have little to no income or resources.[3][14]\",\n      \"Must meet federal SSI nonfinancial rules handled by SSA\",\n      \"Must live in a qualifying living arrangement for the applicable payment level\",\n      \"Must be a New Jersey SSI recipient to receive the state supplement, which is paid automatically with SSI rather than through a separate NJ application.[1][4]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"New Jersey’s state supplement is added to the federal SSI payment and is paid monthly as part of the total SSI benefit. For 2026, SSA lists these combined monthly amounts for New Jersey: living alone or with others in own household $1,025.25; living with spouse not eligible for SSI $1,146.99; living in someone else’s household and receiving support and maintenance $706.98; living in a licensed residential health care facility $1,204.05; living in a public general hospital or Medicaid-approved long-term health facility $50.00; couple living alone or with others in own household $1,475.35; couple living in someone else’s household and receiving support and maintenance $1,059.75; couple living in a licensed residential health care facility $2,188.35.[4]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.ssa.gov/ssi/\",\n      \"Phone: 1-800-772-1213\",\n      \"TTY: 1-800-325-0778\",\n      \"In person at a local Social Security office\"\n    ],\n    \"processing_time\": \"The retrieved sources do not give a specific processing-time number for New Jersey SSI applications.\",\n    \"waitlist\": \"No waitlist is described in the retrieved sources; SSI is administered through SSA and the New Jersey supplement is automatic for eligible SSI recipients.[1][4]\",\n    \"forms\": [\n      \"SSA SSI application process (online or by appointment); the retrieved pages do not name a New Jersey-specific supplement form.\",\n      \"NJ sources point applicants to apply for SSI through SSA rather than a separate state supplement application.[2][3]\"\n    ],\n    \"documents\": [\n      \"Identification such as a driver’s license, state ID, or passport[5]\",\n      \"Birth certificate[5]\",\n      \"Income information\",\n      \"Resource/bank information\",\n      \"Information about living arrangement and household members\",\n      \"Any SSA disability/blindness/medical records if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide to New Jersey SSI recipients; payment level depends on living arrangement and whether the person is in a licensed residential health care facility, hospital, or lives in someone else’s household.[4]\",\n    \"regional_variations\": \"No county-by-county variation was identified in the retrieved sources. The main variation is by living arrangement, not geography.[4][12]\",\n    \"offices_or_providers\": [\n      \"Social Security Administration offices statewide\",\n      \"NJ Division of Disability Determination Services for SSI claims handling in New Jersey[2]\"\n    ]\n  },\n  \"official_source\": \"https://www.ssa.gov/ssi/text-benefits-ussi.htm\",\n  \"gotchas\": [\n    \"Families often miss that New Jersey’s supplement is not a separate state benefit application; it is paid automatically with SSI if the person qualifies.[1][4]\",\n    \"The payment depends heavily on living arrangement, so where the person lives can change the monthly amount.[4]\",\n    \"Gross income limits and the actual payment amounts are not the same thing; a person can qualify but receive less than the maximum because of countable income and living situation.[3][4][6]\",\n    \"Resource limits are strict at $2,000 for one person and $3,000 for a couple, so even modest savings can affect eligibility.[6]\",\n    \"Some New Jersey materials also point SSI applicants to SSA phone-based or in-person application routes rather than a special NJ office process.[2][5]\"\n  ],\n  \"data_shape_notes\": \"This program is structured as an automatic state cash supplement layered onto federal SSI, with benefit amounts changing by living arrangement and household type rather than by county or a standalone NJ application process.[1][4]\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NJ",
+    "stateName": "New Jersey",
+    "classifiedAt": "2026-10-06T05:18:35.062Z",
+    "total": 9,
+    "typeSummary": {
+      "benefit": 9
+    },
+    "scopeSummary": {
+      "state": 5,
+      "federal": 3,
+      "local": 1
+    },
+    "complexitySummary": {
+      "medium": 2,
+      "deep": 7
+    },
+    "programs": [
+      {
+        "name": "NJ FamilyCare Aged, Blind, Disabled (ABD) Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local County Social Service Agency",
+              "type": "service-area"
+            },
+            {
+              "name": "County Social Service Agency directory referenced by NJ FamilyCare",
+              "type": "service-area"
+            },
+            {
+              "name": "1-800-356-1561 for help locating the correct county office",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County Area Agency on Aging / Aging and Disability Resource Connection (ADRC)",
+              "type": "service-area"
+            },
+            {
+              "name": "County Social Service Agency / County Welfare Agency / Board of Social Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Division of Disability Services at 1-888-285-3036 for children through age 20",
+              "type": "service-area"
+            },
+            {
+              "name": "NJ FamilyCare managed care organizations",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "NJ FamilyCare Medicare Savings Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County State Health Insurance Assistance Program (SHIP)",
+              "type": "service-area"
+            },
+            {
+              "name": "NJSave / NJ FamilyCare application support lines",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "NJ SNAP (Supplemental Nutrition Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County Social Service Agencies across New Jersey",
+              "type": "service-area"
+            },
+            {
+              "name": "NJHelps.gov",
+              "type": "service-area"
+            },
+            {
+              "name": "MyNJHelps.gov",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "NJ LIHEAP (Low Income Home Energy Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Authorized local community action agencies in each county",
+              "type": "service-area"
+            },
+            {
+              "name": "New Jersey Energy Assistance Hotline: 1-800-510-3102",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "New Jersey PACE (Program of All-Inclusive Care for the Elderly)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local PACE organizations serving the applicant’s county or region",
+              "type": "service-area"
+            },
+            {
+              "name": "New Jersey Division of Aging Services PACE page for statewide program information",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "New Jersey Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging (AAA) in each county",
+              "type": "service-area"
+            },
+            {
+              "name": "Aging and Disability Resource Connection (ADRC)",
+              "type": "service-area"
+            },
+            {
+              "name": "NJ 211 caregiver navigation line",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "New Jersey Home Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "County senior services or nutrition program offices",
+              "type": "service-area"
+            },
+            {
+              "name": "County Meals on Wheels providers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "New Jersey SSI State Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Social Security Administration offices statewide",
+              "type": "service-area"
+            },
+            {
+              "name": "NJ Division of Disability Determination Services for SSI claims handling in New Jersey[2]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NJ",
+      "id": "nj-familycare-aged-blind-disabled-abd",
+      "name": "NJ FamilyCare Aged, Blind, Disabled (ABD) Programs",
+      "legacyId": "nj-familycare-aged-blind-disabled-abd-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-familycare-mltss-waiver",
+      "name": "NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver",
+      "legacyId": "nj-familycare-managed-long-term-services-and-supports-mltss-",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-familycare-medicare-savings-programs-current",
+      "name": "NJ FamilyCare Medicare Savings Programs",
+      "legacyId": "nj-familycare-medicare-savings-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-snap-food-benefits",
+      "name": "NJ SNAP (Supplemental Nutrition Assistance Program)",
+      "legacyId": "nj-snap-supplemental-nutrition-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-liheap-home-energy-assistance",
+      "name": "NJ LIHEAP (Low Income Home Energy Assistance Program)",
+      "legacyId": "nj-liheap-low-income-home-energy-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-pace-program-all-inclusive-care-elderly",
+      "name": "New Jersey PACE (Program of All-Inclusive Care for the Elderly)",
+      "legacyId": "new-jersey-pace-program-of-all-inclusive-care-for-the-elderl",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-family-caregiver-support-program",
+      "name": "New Jersey Family Caregiver Support Program",
+      "legacyId": "new-jersey-family-caregiver-support-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-home-delivered-meals",
+      "name": "New Jersey Home Delivered Meals",
+      "legacyId": "new-jersey-home-delivered-meals",
+      "programType": "benefit"
+    },
+    {
+      "state": "NJ",
+      "id": "nj-ssi-state-supplement",
+      "name": "New Jersey SSI State Supplement",
+      "legacyId": "new-jersey-ssi-state-supplement",
+      "programType": "benefit"
+    }
+  ]
+}

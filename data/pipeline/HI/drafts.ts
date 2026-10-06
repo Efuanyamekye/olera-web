@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/HI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.748Z
+ * Last updated: 2026-10-06T06:44:48.373Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -3687,6 +3687,212 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "hi-aabd-cash-assistance",
+      "name": "Assistance to the Aged, Blind and Disabled (AABD)",
+      "shortName": "AABD Cash Aid",
+      "tagline": "Monthly cash assistance for aging Hawaii residents who don't qualify for SSI but have very limited income and savings.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Med-QUEST eligibility office listed on the application instructions",
+            "type": "service-area"
+          },
+          {
+            "name": "Ho'opono (for blindness determinations)",
+            "type": "service-area"
+          },
+          {
+            "name": "ADRC/CYRCA (for disability verification in some cases)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older in Hawaii, has very little income and savings, and does not receive federal SSI benefits, they may qualify for AABD: a state-funded monthly cash payment to help cover food, clothing, shelter, and other daily essentials. One official Hawaii DHS source lists the monthly benefit at $388, though that figure is time-sensitive and should be confirmed at application.\n\nAABD is a means-tested program for a narrow group. It is not available to anyone who receives SSI or who qualifies for SSI but hasn't applied. Hawaii requires your parent to apply for SSI first; if SSI is denied or they are determined ineligible, then AABD becomes an option. The income and resource limits are strict: countable resources cannot exceed $2,000 for a single person or $3,000 for a couple.\n\nThis program provides cash only. It does not include medical coverage. If your parent also needs health insurance or long-term care services, you will need to pursue separate Med-QUEST (Medicaid) eligibility at the same time. The application process involves two forms, possible disability or blindness verification through Hawaii-specific agencies, and submission to your parent's local Med-QUEST eligibility office.",
+      "savingsRange": "Approximately $388/month, based on one Hawaii DHS source (confirm at application, as this figure is time-sensitive)",
+      "savingsSource": "Hawaii Department of Human Services AABD FAQ; the figure cited is a standard monthly benefit, not a maximum or average award. Families should verify the current amount directly with DHS before relying on it.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or blind or disabled under SSA standards)",
+          "Hawaii resident",
+          "Not eligible for SSI, or SSI application required first",
+          "Countable income below Hawaii's AABD standard (based on 34% of the 2006 Federal Poverty Level)",
+          "Countable resources under $2,000 for one person or $3,000 for a couple"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Hawaii resident.",
+          "Must be age 65+, or meet the Social Security Administration's definition of blind or disabled.",
+          "Most recipients do not receive federal Social Security benefits.",
+          "If potentially eligible for SSI, must apply for SSI before AABD can be granted. Refusing to apply for SSI makes your parent ineligible for AABD.",
+          "Blindness must be verified through Ho'opono, Hawaii's Division of Vocational Rehabilitation for the Blind.",
+          "Disability may be verified by ADRC/CYRCA or by proof of SSI/SSDI disability status. The disabling condition must be medically determinable and expected to result in death or last at least 12 months.",
+          "Applicant must use the DHS Med-QUEST supplemental form (DHS 1100B) in addition to the standard application (DHS 1100)."
+        ],
+        "povertyLevelReference": "34% of the 2006 Federal Poverty Level (Hawaii's AABD income standard; not a current household-size chart)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the Hawaii DHS PAIS portal or by calling 1-855-643-1643; two forms are required and the process may involve additional verification steps for blindness or disability.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether SSI is required first",
+            "description": "If your parent might qualify for SSI (federal Supplemental Security Income), Hawaii requires them to apply for SSI before AABD can be granted. Call the Social Security Administration at 1-800-772-1213 or visit ssa.gov to screen for SSI eligibility. If SSI is denied or your parent is determined ineligible, save that documentation: you will need it for the AABD application."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before applying",
+            "description": "Collect proof of age, proof of Hawaii residency, income verification, and resource information. If applying on the basis of blindness or disability, you will also need verification from the appropriate agency (Ho'opono for blindness; ADRC/CYRCA or SSI/SSDI documentation for disability). Having everything ready before you submit will prevent delays."
+          },
+          {
+            "step": 3,
+            "title": "Complete Form DHS 1100 and Form DHS 1100B",
+            "description": "All AABD applicants must complete the standard Med-QUEST financial assistance application (DHS 1100) plus the supplemental form for age, blindness, or disability and long-term care services (DHS 1100B). These forms are available through the online portal at pais.dhs.hawaii.gov or from your parent's Med-QUEST eligibility office."
+          },
+          {
+            "step": 4,
+            "title": "Submit your application",
+            "description": "Apply online at pais.dhs.hawaii.gov/PAIS/ or call the Public Assistance Information Line at 1-855-643-1643. You can also submit the completed forms in person or by mail to the Med-QUEST eligibility office identified on the DHS 1100B supplemental form instructions."
+          },
+          {
+            "step": 5,
+            "title": "Respond to any requests from the Med-QUEST office",
+            "description": "After submission, the Med-QUEST eligibility office may contact you to request additional documents or to schedule a review. For blindness determinations, Ho'opono may be involved. For disability determinations, ADRC/CYRCA may be contacted. Respond promptly to avoid your application being closed."
+          }
+        ],
+        "processingTime": "No standard processing time was stated in the official sources reviewed. Ask the Med-QUEST office directly when you submit.",
+        "waitlist": null,
+        "tip": "Submit both forms (DHS 1100 and DHS 1100B) together with all supporting documents. Applications missing the supplemental form or disability/blindness verification are a common cause of delays.",
+        "urls": [
+          {
+            "label": "Hawaii DHS PAIS Online Application Portal",
+            "url": "https://pais.dhs.hawaii.gov/PAIS/"
+          },
+          {
+            "label": "Hawaii DHS AABD Program Page",
+            "url": "https://humanservices.hawaii.gov/bessd/aabd/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate or passport)",
+        "Proof of Hawaii residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Income verification (Social Security award letter, pension statement, or other income documentation)",
+        "SSI application status documentation: proof that an SSI application was filed, or an SSI denial or ineligibility notice if SSI was already pursued",
+        "Proof of blindness, if applying on that basis (verification through Ho'opono, Hawaii's Division of Vocational Rehabilitation for the Blind)",
+        "Proof of disability, if applying on that basis (ADRC/CYRCA verification, or SSI/SSDI disability award or determination letter)",
+        "Current balances for any checking, savings, or other countable accounts (the Med-QUEST office will tell you exactly what statements or documentation they require)",
+        "Information on any other resources or assets (the official sources do not list a full exempt-asset schedule; be prepared to describe what your parent owns so the eligibility worker can determine what counts)",
+        "Government-issued photo ID for the applicant",
+        "Any additional documents requested by the Med-QUEST eligibility office after submission"
+      ],
+      "contacts": [
+        {
+          "label": "Hawaii DHS Public Assistance Information Line",
+          "phone": "1-855-643-1643",
+          "description": "Call to apply for AABD, ask eligibility questions, or find your parent's local Med-QUEST eligibility office. This is the program's own application line.",
+          "hours": "Contact DHS directly to confirm current hours"
+        },
+        {
+          "label": "Hawaii DHS Med-QUEST Online Application Portal",
+          "phone": null,
+          "description": "Apply online at pais.dhs.hawaii.gov/PAIS/. Use this to submit Form DHS 1100 and Form DHS 1100B electronically.",
+          "hours": null
+        },
+        {
+          "label": "Ho'opono (Division of Vocational Rehabilitation for the Blind)",
+          "phone": null,
+          "description": "Required for blindness determinations in the AABD process. Contact through the Hawaii Department of Human Services. Your Med-QUEST eligibility worker will direct you.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent might qualify for SSI, Hawaii requires an SSI application before AABD can be approved. Skipping this step will make your parent ineligible for AABD, even if they otherwise meet every requirement.",
+        "The income standard uses 34% of the 2006 Federal Poverty Level, not a current poverty chart. The dollar threshold that results is lower than most families expect. Ask the Med-QUEST office for the current dollar figure before assuming your parent qualifies or doesn't qualify.",
+        "The official sources do not publish a full exempt-asset list. The $2,000 individual resource limit sounds strict, but some assets may not count. Ask the eligibility worker specifically what counts and what is exempt before concluding your parent is over the asset limit.",
+        "AABD is cash only. If your parent also needs health coverage, apply for Med-QUEST (Hawaii Medicaid) at the same time. The two programs are separate and need to be pursued in parallel."
+      ],
+      "relatedPrograms": [
+        "Med-QUEST (Hawaii Medicaid, for health coverage)",
+        "Supplemental Security Income (SSI, federal program through Social Security)",
+        "Hawaii SNAP (Supplemental Nutrition Assistance Program, for food)",
+        "Hawaii Kupuna Care (state-funded home and community services for kupuna)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is not for everyone 65+",
+          "body": "AABD is a last-resort cash assistance program for a narrow group: Hawaii residents who are aged, blind, or disabled, have very limited income and resources, and cannot access SSI. If your parent receives Social Security retirement benefits at a typical level, their income will likely exceed the AABD standard. Call 1-855-643-1643 to screen before investing time in a full application."
+        },
+        {
+          "type": "prose",
+          "title": "The SSI-first rule: what it means for your application",
+          "body": "Hawaii requires that anyone who might be eligible for SSI must apply for SSI before the state will grant AABD. This is not optional. If your parent refuses to apply for SSI, they become ineligible for AABD, regardless of their circumstances.\n\nIf SSI is denied, the denial letter becomes one of your required documents for AABD. If your parent receives SSI, they will not be eligible for AABD because AABD is specifically for those who do not receive federal SSI benefits.\n\nTo screen for SSI eligibility, call the Social Security Administration at 1-800-772-1213 or visit ssa.gov/ssi."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that disqualify them because of the $2,000 asset limit?",
+          "answer": "The $2,000 resource limit applies to countable resources, and a primary residence is typically excluded from countable assets in means-tested programs. However, the official AABD sources reviewed do not publish a complete exempt-asset list. Call the Med-QUEST eligibility office at 1-855-643-1643 and ask specifically whether your parent's home counts before concluding they are over the limit."
+        },
+        {
+          "question": "My parent already receives Social Security retirement benefits. Can they still get AABD?",
+          "answer": "Possibly, but it depends on the amount. Most AABD recipients do not receive federal Social Security benefits, because even a modest Social Security retirement payment can push countable income above Hawaii's AABD standard, which is based on 34% of the 2006 Federal Poverty Level. Call 1-855-643-1643 and give the eligibility worker your parent's exact monthly Social Security amount to get a real answer."
+        },
+        {
+          "question": "Can I apply for AABD on behalf of my parent if they can't do it themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of an aging parent. When you call 1-855-643-1643 or use the online portal at pais.dhs.hawaii.gov/PAIS/, you can identify yourself as the representative. Bring documentation showing your authority to act (such as a power of attorney) if the office requests it."
+        },
+        {
+          "question": "What if my parent's blindness or disability has not been formally assessed by a government agency?",
+          "answer": "Hawaii requires verification from specific agencies, not just a statement from a family doctor. For blindness, verification must come through Ho'opono, the state's Division of Vocational Rehabilitation for the Blind. For disability, verification comes from ADRC/CYRCA or from existing SSI/SSDI disability documentation. A physician's letter alone is not sufficient. Your Med-QUEST eligibility worker will tell you how to initiate the verification process."
+        },
+        {
+          "question": "Can my parent apply for AABD and Med-QUEST at the same time?",
+          "answer": "Yes, and they should. AABD provides cash only; it does not cover medical care. If your parent needs health coverage, they need to apply for Med-QUEST (Hawaii Medicaid) separately. Both applications can be submitted through the PAIS portal at pais.dhs.hawaii.gov/PAIS/ or by calling 1-855-643-1643. Applying for both at once prevents a gap in coverage."
+        },
+        {
+          "question": "How long does it take to find out if my parent is approved?",
+          "answer": "The official AABD sources reviewed do not state a standard processing time. If disability or blindness verification is required, the process will take longer because it involves coordination with Ho'opono or ADRC/CYRCA. Ask the Med-QUEST eligibility office directly when you submit: \"What is the typical timeline for a decision on an AABD application?\" Get a date in writing if possible."
+        },
+        {
+          "question": "What happens if my parent's financial situation changes after they are approved?",
+          "answer": "AABD recipients are required to report changes in income, resources, or household circumstances to their Med-QUEST eligibility office. If countable income or resources rise above the program limits, benefits may be reduced or ended. Annual redeterminations are also standard in state assistance programs. Your parent's eligibility worker will explain the reporting requirements at the time of approval."
+        },
+        {
+          "question": "My parent was denied SSI. Does that automatically qualify them for AABD?",
+          "answer": "Not automatically, but an SSI denial or ineligibility notice is a required document for AABD and removes the SSI-first barrier. Your parent still must meet AABD's own income standard, resource limit, age or disability requirements, and Hawaii residency requirement. An SSI denial gets you to the door; it does not guarantee entry. Bring the denial letter when you apply."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-855-643-1643",
+      "sourceUrl": "https://humanservices.hawaii.gov/bessd/aabd/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

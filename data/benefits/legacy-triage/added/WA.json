@@ -1,0 +1,16 @@
+[
+  {
+    "state": "WA",
+    "id": "wa-abd-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "WA",
+    "id": "wa-tailored-supports-older-adults",
+    "name": "Tailored Supports for Older Adults",
+    "legacyId": "tailored-supports-for-older-adults",
+    "programType": "benefit"
+  }
+]

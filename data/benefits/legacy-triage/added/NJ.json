@@ -1,0 +1,65 @@
+[
+  {
+    "state": "NJ",
+    "id": "nj-familycare-aged-blind-disabled-abd",
+    "name": "NJ FamilyCare Aged, Blind, Disabled (ABD) Programs",
+    "legacyId": "nj-familycare-aged-blind-disabled-abd-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-familycare-mltss-waiver",
+    "name": "NJ FamilyCare Managed Long Term Services and Supports (MLTSS) Waiver",
+    "legacyId": "nj-familycare-managed-long-term-services-and-supports-mltss-",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-familycare-medicare-savings-programs-current",
+    "name": "NJ FamilyCare Medicare Savings Programs",
+    "legacyId": "nj-familycare-medicare-savings-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-snap-food-benefits",
+    "name": "NJ SNAP (Supplemental Nutrition Assistance Program)",
+    "legacyId": "nj-snap-supplemental-nutrition-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-liheap-home-energy-assistance",
+    "name": "NJ LIHEAP (Low Income Home Energy Assistance Program)",
+    "legacyId": "nj-liheap-low-income-home-energy-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-pace-program-all-inclusive-care-elderly",
+    "name": "New Jersey PACE (Program of All-Inclusive Care for the Elderly)",
+    "legacyId": "new-jersey-pace-program-of-all-inclusive-care-for-the-elderl",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-family-caregiver-support-program",
+    "name": "New Jersey Family Caregiver Support Program",
+    "legacyId": "new-jersey-family-caregiver-support-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-home-delivered-meals",
+    "name": "New Jersey Home Delivered Meals",
+    "legacyId": "new-jersey-home-delivered-meals",
+    "programType": "benefit"
+  },
+  {
+    "state": "NJ",
+    "id": "nj-ssi-state-supplement",
+    "name": "New Jersey SSI State Supplement",
+    "legacyId": "new-jersey-ssi-state-supplement",
+    "programType": "benefit"
+  }
+]

@@ -1,0 +1,409 @@
+{
+  "state": "NC",
+  "addedAt": "2026-10-06T06:18:09.420Z",
+  "dive": {
+    "state": "NC",
+    "stateName": "North Carolina",
+    "diveAt": "2026-10-06T06:14:20.994Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "programs": [
+              {
+                "category": "Medicaid for Older Citizens (MAA)",
+                "who": "Age 65 or older",
+                "limit": "Income must be below the program limit; the consumer guide points to a separate income table, but the exact dollar table was not included in the gathered excerpts."
+              },
+              {
+                "category": "Medicaid for the Blind or Visually Impaired (MAB)",
+                "who": "Blind or visually impaired people of any age who meet the SSA blindness definition",
+                "limit": "Income must meet the program limit; the gathered excerpts indicate a limit table exists, but the exact dollar table was not included in the gathered excerpts."
+              },
+              {
+                "category": "Medicaid for Disabled Citizens (MAD)",
+                "who": "Any age, if disabled under Medicaid/SSA rules",
+                "limit": "Income must meet the program limit; the gathered excerpts indicate a limit table exists, but the exact dollar table was not included in the gathered excerpts."
+              }
+            ],
+            "known_reference_points": [
+              "One county DSS page states Aged, Blind and Disabled Medicaid uses an income limit of $1,330 per month for an individual.",
+              "A separate DB101 excerpt also states disability-based NC Medicaid uses 100% of the Federal Poverty Guidelines, including $1,330/month for one person and $1,804/month for two people."
+            ],
+            "household_table": null,
+            "note": "North Carolina distinguishes between MAA, MAB, and MAD categories, and the exact income test depends on which category the applicant fits. The official consumer guide referenced a page with the full income table, but those exact figures were not present in the extracted text."
+          },
+          "asset_limits": {
+            "limit": {
+              "individual": 2000,
+              "couple": 3000
+            },
+            "what_counts": [
+              "Savings in the bank",
+              "Other countable resources used in Medicaid resource budgeting"
+            ],
+            "what_is_exempt": [
+              "The excerpts reviewed did not include the full exemption list.",
+              "The state policy manual indicates some property can be treated specially; for example, certain real property may be excluded under specific conditions."
+            ],
+            "notes": [
+              "For disability-based NC Medicaid, countable resources must be at or below $2,000 for one person or $3,000 for a couple.",
+              "NC policy materials also show that resources are a core test for MAA/MAB/MAD."
+            ]
+          },
+          "other_requirements": [
+            "Must meet the Social Security Administration definition of blindness for MAB.",
+            "Must meet disability rules for MAD; the consumer guide says the disability must prevent substantial work and be expected to last at least 12 months.",
+            "Must be a U.S. citizen or otherwise have an immigration status eligible for NC Medicaid.",
+            "Cannot be incarcerated or a resident of a public institution.",
+            "SSI recipients who receive SSI because they are disabled are considered to meet the disability requirement.",
+            "Some cases require state disability determination paperwork through DDS."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "NC Medicaid coverage for medical care under the aged, blind, and disabled categories. The gathered excerpts specifically mention coverage for long-term services and supports, including help at home, in the community, and in nursing homes. Long-term care coverage can include nursing facility care, personal care assistance, skilled nursing, therapy, and some home health services. No fixed dollar benefit or weekly hour amount was provided in the gathered excerpts. CAP/DA, when eligible, is a separate long-term service pathway that can provide in-home/community supports instead of institutional care.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online at https://epass.nc.gov",
+            "Download, print, and mail the application to your local County Department of Social Services",
+            "Email, fax, or bring the application to your local DSS office",
+            "Phone your local DSS office",
+            "In person at your local DSS office"
+          ],
+          "processing_time": "No exact statewide processing time was included in the gathered excerpts.",
+          "waitlist": "No waitlist was identified for Regular Medicaid / Aged Blind and Disabled Medicaid itself. Long-term services through other programs may have separate eligibility or service-delivery constraints, but the gathered excerpts did not show a Medicaid waitlist for this category.",
+          "forms": [
+            "NC Medicaid application (general application)",
+            "DMA-5202D-ia, Income/Resources - Appendix D",
+            "Other additional forms may be required depending on the situation"
+          ],
+          "documents": [
+            "Copies of income proof if available",
+            "Proof of resources/assets if available",
+            "Signed application",
+            "Information supporting disability or blindness if not already established through SSA",
+            "Immigration/citizenship documents if relevant",
+            "Any additional forms requested by DSS"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide in North Carolina, but applications are handled through the county Department of Social Services where the applicant lives.",
+          "regional_variations": "Eligibility rules are statewide. Administrative routing is county-based, and county contact numbers, office access, and any local processing speed differences can vary by county. The gathered excerpts did not show a formal regional benefit variation for the regular Aged, Blind, and Disabled Medicaid category.",
+          "offices_or_providers": [
+            "Local County Department of Social Services offices across North Carolina",
+            "North Carolina DSS local office directory",
+            "NC DHHS Medicaid application portal"
+          ]
+        },
+        "official_source": "https://medicaid.ncdhhs.gov/apply",
+        "gotchas": [
+          "People often confuse Regular Medicaid for Aged, Blind and Disabled with long-term-care waivers or nursing-home Medicaid; those can have different rules.",
+          "Disability-based Medicaid is not automatic unless the person already receives SSI or SSDI-based disability status that NC accepts in the category.",
+          "Income and resource rules are separate; meeting one does not guarantee eligibility.",
+          "Spousal resources can matter when spouses live together.",
+          "Some property may be treated differently than cash resources, so real estate should not be assumed countable without review.",
+          "Applications go through the county DSS, not a single statewide intake office."
+        ],
+        "data_shape_notes": "This program is category-based, not one uniform benefit. The structure changes by whether the person is aged, blind, or disabled, and the eligibility test uses both income and countable resources, with special handling for disability determinations and county-based administration.",
+        "_raw": "{\n  \"name\": \"Regular Medicaid / Aged Blind and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"programs\": [\n        {\n          \"category\": \"Medicaid for Older Citizens (MAA)\",\n          \"who\": \"Age 65 or older\",\n          \"limit\": \"Income must be below the program limit; the consumer guide points to a separate income table, but the exact dollar table was not included in the gathered excerpts.\"\n        },\n        {\n          \"category\": \"Medicaid for the Blind or Visually Impaired (MAB)\",\n          \"who\": \"Blind or visually impaired people of any age who meet the SSA blindness definition\",\n          \"limit\": \"Income must meet the program limit; the gathered excerpts indicate a limit table exists, but the exact dollar table was not included in the gathered excerpts.\"\n        },\n        {\n          \"category\": \"Medicaid for Disabled Citizens (MAD)\",\n          \"who\": \"Any age, if disabled under Medicaid/SSA rules\",\n          \"limit\": \"Income must meet the program limit; the gathered excerpts indicate a limit table exists, but the exact dollar table was not included in the gathered excerpts.\"\n        }\n      ],\n      \"known_reference_points\": [\n        \"One county DSS page states Aged, Blind and Disabled Medicaid uses an income limit of $1,330 per month for an individual.\",\n        \"A separate DB101 excerpt also states disability-based NC Medicaid uses 100% of the Federal Poverty Guidelines, including $1,330/month for one person and $1,804/month for two people.\"\n      ],\n      \"household_table\": null,\n      \"note\": \"North Carolina distinguishes between MAA, MAB, and MAD categories, and the exact income test depends on which category the applicant fits. The official consumer guide referenced a page with the full income table, but those exact figures were not present in the extracted text.\"\n    },\n    \"asset_limits\": {\n      \"limit\": {\n        \"individual\": 2000,\n        \"couple\": 3000\n      },\n      \"what_counts\": [\n        \"Savings in the bank\",\n        \"Other countable resources used in Medicaid resource budgeting\"\n      ],\n      \"what_is_exempt\": [\n        \"The excerpts reviewed did not include the full exemption list.\",\n        \"The state policy manual indicates some property can be treated specially; for example, certain real property may be excluded under specific conditions.\"\n      ],\n      \"notes\": [\n        \"For disability-based NC Medicaid, countable resources must be at or below $2,000 for one person or $3,000 for a couple.\",\n        \"NC policy materials also show that resources are a core test for MAA/MAB/MAD.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must meet the Social Security Administration definition of blindness for MAB.\",\n      \"Must meet disability rules for MAD; the consumer guide says the disability must prevent substantial work and be expected to last at least 12 months.\",\n      \"Must be a U.S. citizen or otherwise have an immigration status eligible for NC Medicaid.\",\n      \"Cannot be incarcerated or a resident of a public institution.\",\n      \"SSI recipients who receive SSI because they are disabled are considered to meet the disability requirement.\",\n      \"Some cases require state disability determination paperwork through DDS.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"NC Medicaid coverage for medical care under the aged, blind, and disabled categories. The gathered excerpts specifically mention coverage for long-term services and supports, including help at home, in the community, and in nursing homes. Long-term care coverage can include nursing facility care, personal care assistance, skilled nursing, therapy, and some home health services. No fixed dollar benefit or weekly hour amount was provided in the gathered excerpts. CAP/DA, when eligible, is a separate long-term service pathway that can provide in-home/community supports instead of institutional care.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at https://epass.nc.gov\",\n      \"Download, print, and mail the application to your local County Department of Social Services\",\n      \"Email, fax, or bring the application to your local DSS office\",\n      \"Phone your local DSS office\",\n      \"In person at your local DSS office\"\n    ],\n    \"processing_time\": \"No exact statewide processing time was included in the gathered excerpts.\",\n    \"waitlist\": \"No waitlist was identified for Regular Medicaid / Aged Blind and Disabled Medicaid itself. Long-term services through other programs may have separate eligibility or service-delivery constraints, but the gathered excerpts did not show a Medicaid waitlist for this category.\",\n    \"forms\": [\n      \"NC Medicaid application (general application)\",\n      \"DMA-5202D-ia, Income/Resources - Appendix D\",\n      \"Other additional forms may be required depending on the situation\"\n    ],\n    \"documents\": [\n      \"Copies of income proof if available\",\n      \"Proof of resources/assets if available\",\n      \"Signed application\",\n      \"Information supporting disability or blindness if not already established through SSA\",\n      \"Immigration/citizenship documents if relevant\",\n      \"Any additional forms requested by DSS\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide in North Carolina, but applications are handled through the county Department of Social Services where the applicant lives.\",\n    \"regional_variations\": \"Eligibility rules are statewide. Administrative routing is county-based, and county contact numbers, office access, and any local processing speed differences can vary by county. The gathered excerpts did not show a formal regional benefit variation for the regular Aged, Blind, and Disabled Medicaid category.\",\n    \"offices_or_providers\": [\n      \"Local County Department of Social Services offices across North Carolina\",\n      \"North Carolina DSS local office directory\",\n      \"NC DHHS Medicaid application portal\"\n    ]\n  },\n  \"official_source\": \"https://medicaid.ncdhhs.gov/apply\",\n  \"gotchas\": [\n    \"People often confuse Regular Medicaid for Aged, Blind and Disabled with long-term-care waivers or nursing-home Medicaid; those can have different rules.\",\n    \"Disability-based Medicaid is not automatic unless the person already receives SSI or SSDI-based disability status that NC accepts in the category.\",\n    \"Income and resource rules are separate; meeting one does not guarantee eligibility.\",\n    \"Spousal resources can matter when spouses live together.\",\n    \"Some property may be treated differently than cash resources, so real estate should not be assumed countable without review.\",\n    \"Applications go through the county DSS, not a single statewide intake office.\"\n  ],\n  \"data_shape_notes\": \"This program is category-based, not one uniform benefit. The structure changes by whether the person is aged, blind, or disabled, and the eligibility test uses both income and countable resources, with special handling for disability determinations and county-based administration.\"\n}"
+      },
+      {
+        "name": "Special Assistance (State SSI Supplement)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "This is a means-tested program tied to SSI rules and North Carolina Special Assistance rules, but the sources gathered do not provide a full current income table for every living arrangement in a clean official format. What is clear is that an applicant must be either SSI-eligible or financially ineligible for SSI solely because of income, and income is counted from wages, Social Security, SSI, other retirement income, and VA income. The program is described as a state supplement to SSI for people in licensed care settings. Source material also indicates current monthly payment benchmarks for the program are up to $473 per month in Special Assistance benefits in addition to SSI, but that is a benefit amount rather than an income limit.",
+          "asset_limits": "An applicant must meet asset/resource eligibility requirements, but the gathered sources do not provide the complete official dollar threshold in a concise current public summary. The brochures say applicants should be prepared to provide information on real and personal property, stocks, bonds, IRAs, annuities, life insurance, burial insurance, and trust funds owned by the applicant and/or spouse, which indicates those items may be reviewed as countable resources. The sources do not clearly separate exempt versus countable assets, so that distinction cannot be stated precisely from the gathered material alone.",
+          "other_requirements": [
+            "Must be age 65 or older, or age 18 to 64 and disabled under Social Security disability standards, or under 18 and legally blind in a specialized community residential center.",
+            "Must need residential facility level of care as verified by a health care provider.",
+            "Must be a U.S. citizen or qualified alien.",
+            "Must be a resident of North Carolina.",
+            "Must reside in a licensed facility authorized to receive Special Assistance payments, such as an adult care home, group home, family care home, or secure care assisted living facility.",
+            "Must be eligible for SSI, or be ineligible for SSI solely because income is too high."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Cash supplement paid to eligible residents in licensed facilities authorized to receive SA payments. Current source material says the benefit can be up to $473 per month in Special Assistance, in addition to SSI. For state/county Special Assistance, the exact amount can vary by program category and current maintenance amounts; one source reference shows maintenance amounts of $1,359/$1,429 and $1,743/$1,813 in a January 2025 manual update, but the source snippet does not fully explain the categories in the excerpt.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Apply at your county Department of Social Services",
+            "Send someone to apply for you in person at the county DSS",
+            "Use the official NC DHHS Special Assistance application workbook/forms through county DSS",
+            "Phone the county DSS office for local intake and application instructions"
+          ],
+          "processing_time": "No single statewide processing-time standard was identified in the gathered sources. In practice, timing depends on county DSS workload, whether a level-of-care verification is needed, and whether the applicant is already in a licensed care facility.",
+          "waitlist": "The gathered sources do not describe a statewide waitlist for Special Assistance itself. Because this is an eligibility-based cash supplement rather than a capped slot program, the main delay is usually county processing and gathering medical/financial verification.",
+          "forms": [
+            "DSS-8190 SSI/Non-SSI Application Workbook",
+            "Special Assistance program application materials from county DSS"
+          ],
+          "documents": [
+            "Recent pay stubs, Social Security award letters, SSI award letters, or VA award letters",
+            "Information about assets such as real and personal property, stocks, bonds, IRAs, annuities, life insurance, burial insurance, and trust funds",
+            "Proof of age and identity",
+            "Proof of North Carolina residence",
+            "Medical verification showing residential facility level of care, typically from a health care provider",
+            "Information about current living arrangement and licensed facility placement",
+            "Proof of citizenship or qualified alien status"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available only to eligible North Carolina residents who live in licensed facilities authorized to receive Special Assistance payments. Some sources describe the program as covering adult care homes, group homes, family care homes, and secure care assisted living facilities. One county page also references Special Assistance at home, but the clearest state-level materials in the gathered results focus on licensed residential settings.",
+          "regional_variations": "The core eligibility rules are statewide, but administration is county-based through local Departments of Social Services, so application handling, office procedures, and processing speed can differ by county. Facility availability also varies by county because the applicant must be in a licensed setting authorized to accept SA payments.",
+          "offices_or_providers": [
+            "County Department of Social Services offices across North Carolina"
+          ]
+        },
+        "official_source": "https://www.ncdhhs.gov/documents/files/sa-program-brochure-11-17-16/open",
+        "gotchas": [
+          "This is not a general cash benefit for older adults living at home; the clearest statewide materials tie it to residence in a licensed facility authorized to receive SA payments.",
+          "People often confuse Special Assistance with Medicaid, but this is a state SSI supplement/cash benefit with its own residency and level-of-care rules.",
+          "You generally need both financial eligibility and a facility/medical level-of-care determination; meeting only the income rule is not enough.",
+          "The applicant may be eligible even if SSI was denied solely because income is too high, so an SSI denial does not automatically disqualify someone.",
+          "Resource documentation matters: applicants should be ready to disclose multiple asset types, not just bank accounts.",
+          "County DSS offices handle intake, so exact local steps and turnaround times can differ across North Carolina."
+        ],
+        "data_shape_notes": "This program has a hybrid structure: it is a statewide SSI state supplement, but eligibility depends heavily on facility type, level of care, and county-administered intake. The benefit is a cash supplement rather than a service package, and the clearest public summaries do not present a simple universal income table in the source snippets.",
+        "_raw": "{\n  \"name\": \"Special Assistance (State SSI Supplement)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"This is a means-tested program tied to SSI rules and North Carolina Special Assistance rules, but the sources gathered do not provide a full current income table for every living arrangement in a clean official format. What is clear is that an applicant must be either SSI-eligible or financially ineligible for SSI solely because of income, and income is counted from wages, Social Security, SSI, other retirement income, and VA income. The program is described as a state supplement to SSI for people in licensed care settings. Source material also indicates current monthly payment benchmarks for the program are up to $473 per month in Special Assistance benefits in addition to SSI, but that is a benefit amount rather than an income limit.\",\n    \"asset_limits\": \"An applicant must meet asset/resource eligibility requirements, but the gathered sources do not provide the complete official dollar threshold in a concise current public summary. The brochures say applicants should be prepared to provide information on real and personal property, stocks, bonds, IRAs, annuities, life insurance, burial insurance, and trust funds owned by the applicant and/or spouse, which indicates those items may be reviewed as countable resources. The sources do not clearly separate exempt versus countable assets, so that distinction cannot be stated precisely from the gathered material alone.\",\n    \"other_requirements\": [\n      \"Must be age 65 or older, or age 18 to 64 and disabled under Social Security disability standards, or under 18 and legally blind in a specialized community residential center.\",\n      \"Must need residential facility level of care as verified by a health care provider.\",\n      \"Must be a U.S. citizen or qualified alien.\",\n      \"Must be a resident of North Carolina.\",\n      \"Must reside in a licensed facility authorized to receive Special Assistance payments, such as an adult care home, group home, family care home, or secure care assisted living facility.\",\n      \"Must be eligible for SSI, or be ineligible for SSI solely because income is too high.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Cash supplement paid to eligible residents in licensed facilities authorized to receive SA payments. Current source material says the benefit can be up to $473 per month in Special Assistance, in addition to SSI. For state/county Special Assistance, the exact amount can vary by program category and current maintenance amounts; one source reference shows maintenance amounts of $1,359/$1,429 and $1,743/$1,813 in a January 2025 manual update, but the source snippet does not fully explain the categories in the excerpt.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply at your county Department of Social Services\",\n      \"Send someone to apply for you in person at the county DSS\",\n      \"Use the official NC DHHS Special Assistance application workbook/forms through county DSS\",\n      \"Phone the county DSS office for local intake and application instructions\"\n    ],\n    \"processing_time\": \"No single statewide processing-time standard was identified in the gathered sources. In practice, timing depends on county DSS workload, whether a level-of-care verification is needed, and whether the applicant is already in a licensed care facility.\",\n    \"waitlist\": \"The gathered sources do not describe a statewide waitlist for Special Assistance itself. Because this is an eligibility-based cash supplement rather than a capped slot program, the main delay is usually county processing and gathering medical/financial verification.\",\n    \"forms\": [\n      \"DSS-8190 SSI/Non-SSI Application Workbook\",\n      \"Special Assistance program application materials from county DSS\"\n    ],\n    \"documents\": [\n      \"Recent pay stubs, Social Security award letters, SSI award letters, or VA award letters\",\n      \"Information about assets such as real and personal property, stocks, bonds, IRAs, annuities, life insurance, burial insurance, and trust funds\",\n      \"Proof of age and identity\",\n      \"Proof of North Carolina residence\",\n      \"Medical verification showing residential facility level of care, typically from a health care provider\",\n      \"Information about current living arrangement and licensed facility placement\",\n      \"Proof of citizenship or qualified alien status\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available only to eligible North Carolina residents who live in licensed facilities authorized to receive Special Assistance payments. Some sources describe the program as covering adult care homes, group homes, family care homes, and secure care assisted living facilities. One county page also references Special Assistance at home, but the clearest state-level materials in the gathered results focus on licensed residential settings.\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but administration is county-based through local Departments of Social Services, so application handling, office procedures, and processing speed can differ by county. Facility availability also varies by county because the applicant must be in a licensed setting authorized to accept SA payments.\",\n    \"offices_or_providers\": [\n      \"County Department of Social Services offices across North Carolina\"\n    ]\n  },\n  \"official_source\": \"https://www.ncdhhs.gov/documents/files/sa-program-brochure-11-17-16/open\",\n  \"gotchas\": [\n    \"This is not a general cash benefit for older adults living at home; the clearest statewide materials tie it to residence in a licensed facility authorized to receive SA payments.\",\n    \"People often confuse Special Assistance with Medicaid, but this is a state SSI supplement/cash benefit with its own residency and level-of-care rules.\",\n    \"You generally need both financial eligibility and a facility/medical level-of-care determination; meeting only the income rule is not enough.\",\n    \"The applicant may be eligible even if SSI was denied solely because income is too high, so an SSI denial does not automatically disqualify someone.\",\n    \"Resource documentation matters: applicants should be ready to disclose multiple asset types, not just bank accounts.\",\n    \"County DSS offices handle intake, so exact local steps and turnaround times can differ across North Carolina.\"\n  ],\n  \"data_shape_notes\": \"This program has a hybrid structure: it is a statewide SSI state supplement, but eligibility depends heavily on facility type, level of care, and county-administered intake. The benefit is a cash supplement rather than a service package, and the clearest public summaries do not present a simple universal income table in the source snippets.\"\n}"
+      },
+      {
+        "name": "Circuit Breaker Property Tax Deferral",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "2026_state_standard": {
+              "max_income": 58200,
+              "source_note": "North Carolina’s 2026 application materials show the Circuit Breaker limit at 150% of the income eligibility limit, which is $58,200 for 2026."
+            },
+            "tiers": [
+              {
+                "income_at_or_below": 38800,
+                "property_tax_cap": "4% of the owner’s income"
+              },
+              {
+                "income_above": 38800,
+                "income_at_or_below": 58200,
+                "property_tax_cap": "5% of the owner’s income"
+              }
+            ],
+            "notes": [
+              "Some county pages and older state documents show prior-year figures that differ from the 2026 statewide amount.",
+              "For this program, the relevant rule is the current tax year’s statewide income threshold used by the county tax assessor."
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Applicant must be a North Carolina resident.",
+            "Applicant must own and occupy the property as a permanent residence.",
+            "The property must have been owned and occupied as a permanent residence for at least five consecutive years.",
+            "Application must be filed annually.",
+            "If there are multiple owners, all owners must qualify; for unmarried joint owners, each owner must apply and qualify separately.",
+            "The owner must either be age 65 or older or totally and permanently disabled."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Property taxes on the qualifying residence are capped at 4% of income for owners with income at or below $38,800, or 5% of income for owners with income above $38,800 and up to $58,200. Any property taxes above that capped amount are deferred rather than forgiven. Deferred taxes become payable later if a disqualifying event occurs, and the last three years of deferred taxes become payable with interest.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Submit Form AV-9 to the county tax assessor where the property is located.",
+            "Use the NCDOR property tax forms page to obtain the current AV-9 application.",
+            "Contact the county tax office for local filing instructions; some counties accept mail and provide local phone assistance."
+          ],
+          "processing_time": "No statewide processing-time standard was identified in the available materials. Applications are annual and generally tied to the June 1 filing deadline.",
+          "waitlist": null,
+          "forms": [
+            "AV-9, Application for Property Tax Relief"
+          ],
+          "documents": [
+            "Federal income tax return for the previous year",
+            "Social Security benefits statement (1099 or equivalent)",
+            "Proof of ownership and occupancy may be requested by the county tax office",
+            "Information on all property owners if there are multiple owners",
+            "Any disability documentation if qualifying through disability rather than age"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in North Carolina through county tax assessors; no county-only restriction was identified.",
+          "regional_variations": "The program rules are statewide, but counties may differ in how they administer intake, answer questions, and remind residents of deadlines. County websites may publish local contact numbers, mailing addresses, and brochures, and some counties show older local summaries with outdated threshold figures.",
+          "offices_or_providers": [
+            "County tax assessor / county tax office where the property is located",
+            "North Carolina Department of Revenue property tax forms page"
+          ]
+        },
+        "official_source": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms",
+        "gotchas": [
+          "This is not a cash benefit; it is a tax deferral. The deferred tax is still owed later if a disqualifying event happens.",
+          "The last three years of deferred taxes become payable with interest after a disqualifying event.",
+          "You must reapply every year; approval is not automatic.",
+          "All owners must qualify, which is easy to miss when a home is jointly owned.",
+          "The five-year ownership-and-occupancy rule is separate from the age or disability rule.",
+          "County brochures and older pages may show outdated income limits, so families should rely on the current year’s AV-9 instructions and county assessor guidance."
+        ],
+        "data_shape_notes": "This program is a statewide property-tax deferral with tiered income-based caps, annual reapplication, and a five-year ownership/occupancy requirement; the benefit is deferred taxes, not a service package or grant.",
+        "_raw": "{\n  \"name\": \"Circuit Breaker Property Tax Deferral\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"2026_state_standard\": {\n        \"max_income\": 58200,\n        \"source_note\": \"North Carolina’s 2026 application materials show the Circuit Breaker limit at 150% of the income eligibility limit, which is $58,200 for 2026.\"\n      },\n      \"tiers\": [\n        {\n          \"income_at_or_below\": 38800,\n          \"property_tax_cap\": \"4% of the owner’s income\"\n        },\n        {\n          \"income_above\": 38800,\n          \"income_at_or_below\": 58200,\n          \"property_tax_cap\": \"5% of the owner’s income\"\n        }\n      ],\n      \"notes\": [\n        \"Some county pages and older state documents show prior-year figures that differ from the 2026 statewide amount.\",\n        \"For this program, the relevant rule is the current tax year’s statewide income threshold used by the county tax assessor.\"\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Applicant must be a North Carolina resident.\",\n      \"Applicant must own and occupy the property as a permanent residence.\",\n      \"The property must have been owned and occupied as a permanent residence for at least five consecutive years.\",\n      \"Application must be filed annually.\",\n      \"If there are multiple owners, all owners must qualify; for unmarried joint owners, each owner must apply and qualify separately.\",\n      \"The owner must either be age 65 or older or totally and permanently disabled.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Property taxes on the qualifying residence are capped at 4% of income for owners with income at or below $38,800, or 5% of income for owners with income above $38,800 and up to $58,200. Any property taxes above that capped amount are deferred rather than forgiven. Deferred taxes become payable later if a disqualifying event occurs, and the last three years of deferred taxes become payable with interest.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Submit Form AV-9 to the county tax assessor where the property is located.\",\n      \"Use the NCDOR property tax forms page to obtain the current AV-9 application.\",\n      \"Contact the county tax office for local filing instructions; some counties accept mail and provide local phone assistance.\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was identified in the available materials. Applications are annual and generally tied to the June 1 filing deadline.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"AV-9, Application for Property Tax Relief\"\n    ],\n    \"documents\": [\n      \"Federal income tax return for the previous year\",\n      \"Social Security benefits statement (1099 or equivalent)\",\n      \"Proof of ownership and occupancy may be requested by the county tax office\",\n      \"Information on all property owners if there are multiple owners\",\n      \"Any disability documentation if qualifying through disability rather than age\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in North Carolina through county tax assessors; no county-only restriction was identified.\",\n    \"regional_variations\": \"The program rules are statewide, but counties may differ in how they administer intake, answer questions, and remind residents of deadlines. County websites may publish local contact numbers, mailing addresses, and brochures, and some counties show older local summaries with outdated threshold figures.\",\n    \"offices_or_providers\": [\n      \"County tax assessor / county tax office where the property is located\",\n      \"North Carolina Department of Revenue property tax forms page\"\n    ]\n  },\n  \"official_source\": \"https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms\",\n  \"gotchas\": [\n    \"This is not a cash benefit; it is a tax deferral. The deferred tax is still owed later if a disqualifying event happens.\",\n    \"The last three years of deferred taxes become payable with interest after a disqualifying event.\",\n    \"You must reapply every year; approval is not automatic.\",\n    \"All owners must qualify, which is easy to miss when a home is jointly owned.\",\n    \"The five-year ownership-and-occupancy rule is separate from the age or disability rule.\",\n    \"County brochures and older pages may show outdated income limits, so families should rely on the current year’s AV-9 instructions and county assessor guidance.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide property-tax deferral with tiered income-based caps, annual reapplication, and a five-year ownership/occupancy requirement; the benefit is deferred taxes, not a service package or grant.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NC",
+    "stateName": "North Carolina",
+    "classifiedAt": "2026-10-06T06:14:21.002Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 3
+    },
+    "complexitySummary": {
+      "deep": 2,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Regular Medicaid / Aged Blind and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local County Department of Social Services offices across North Carolina",
+              "type": "service-area"
+            },
+            {
+              "name": "North Carolina DSS local office directory",
+              "type": "service-area"
+            },
+            {
+              "name": "NC DHHS Medicaid application portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Special Assistance (State SSI Supplement)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County Department of Social Services offices across North Carolina",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Circuit Breaker Property Tax Deferral",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County tax assessor / county tax office where the property is located",
+              "type": "service-area"
+            },
+            {
+              "name": "North Carolina Department of Revenue property tax forms page",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NC",
+      "id": "nc-medicaid-aged-blind-disabled",
+      "name": "Regular Medicaid / Aged Blind and Disabled",
+      "legacyId": "regular-medicaid-aged-blind-and-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "NC",
+      "id": "nc-special-assistance-ssi-supplement",
+      "name": "Special Assistance (State SSI Supplement)",
+      "legacyId": "special-assistance-state-ssi-supplement",
+      "programType": "benefit"
+    },
+    {
+      "state": "NC",
+      "id": "nc-circuit-breaker-property-tax-deferral",
+      "name": "Circuit Breaker Property Tax Deferral",
+      "legacyId": "circuit-breaker-property-tax-deferral",
+      "programType": "benefit"
+    }
+  ]
+}

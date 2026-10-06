@@ -1,0 +1,16 @@
+[
+  {
+    "state": "AZ",
+    "id": "az-abd-medicaid",
+    "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+    "legacyId": "aged-blind-and-disabled-abd-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "AZ",
+    "id": "az-senior-property-valuation-freeze",
+    "name": "Senior Property Valuation Protection Option",
+    "legacyId": "senior-property-valuation-protection-option",
+    "programType": "resource"
+  }
+]
