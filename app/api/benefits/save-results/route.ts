@@ -339,6 +339,27 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     if (account) accountId = account.id;
+
+    // Provider accounts stay provider-only. Without this, a provider who runs
+    // the finder while signed in gets a family profile attached to their
+    // account, and the navbar starts showing "Switch to family".
+    if (account) {
+      const { data: ownProfiles } = await db
+        .from("business_profiles")
+        .select("type")
+        .eq("account_id", account.id);
+      const types = new Set((ownProfiles || []).map((p) => p.type));
+      const isProviderAccount = ["organization", "caregiver", "student"].some((t) => types.has(t));
+      if (isProviderAccount && !types.has("family")) {
+        return NextResponse.json(
+          {
+            error: "You're signed in to a provider account. To save benefits results, sign out and use a different email or phone.",
+            code: "PROVIDER_ACCOUNT",
+          },
+          { status: 409 }
+        );
+      }
+    }
   } else if (contactChannel === "sms") {
     // ── Anonymous SMS path ───────────────────────────────────────────────
     // Phone-based user creation. Simpler than the email path: no magic-link
