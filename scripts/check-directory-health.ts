@@ -50,5 +50,10 @@ const planned = planStatusPass(
   3,
 );
 assert.deepEqual(planned.map((p) => p.provider_id), ["claimed", "clicked", "tail"], "claimed, then clicked, then the never-checked tail; the old recheck is cut by the cap");
+// A dead website puts a provider ahead of everyone, claimed included.
+assert.deepEqual(
+  planStatusPass([c("claimed", "claimed", null, null), c("deadsite", "deadsite", null, null)], new Set(["claimed"]), new Set(), 2, new Set(["deadsite"])).map((p) => p.provider_id),
+  ["deadsite", "claimed"],
+);
 
 console.log("directory health checks passed");
