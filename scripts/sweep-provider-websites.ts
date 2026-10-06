@@ -88,9 +88,7 @@ async function candidates(): Promise<Row[]> {
   const out: Row[] = [];
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await db.from("olera-providers")
-      // facebook_url arrives with migration 273; until it runs the column is
-      // absent and the update below fails per row, which is fine for a dry run.
-      .select("provider_id, provider_name, website")
+      .select("provider_id, provider_name, website, facebook_url")
       .eq("deleted", false)
       .not("website", "is", null)
       .neq("website", "")
