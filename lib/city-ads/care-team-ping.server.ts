@@ -5,7 +5,7 @@ import { getSiteUrl } from "@/lib/site-url";
 /**
  * Tell the care team about a new family the moment the lead lands.
  *
- * WHY A DIRECT MESSAGE. Ces makes the calls, and she was hearing about Meta
+ * WHY A MENTION IN #careseeker-support. Ces makes the calls, and she was hearing about Meta
  * leads an hour late: a native lead posted nothing until escalateUnqualified
  * gave up waiting for a reply to the qualifying text, and a website lead only
  * posted to the shared operations channel, where it scrolls past between
@@ -17,10 +17,18 @@ import { getSiteUrl } from "@/lib/site-url";
  * the first person to ring. A provider's own ad is handed to her when the
  * family answers or after an hour; the message names her so Ces can say so.
  *
- * Slack user ids are not secrets. The env var exists so the person on call can
- * change without a deploy; the default is Ces.
+ * The mention notifies her as fast as a DM would, and the channel lets anyone
+ * covering see that the lead arrived and who is on it (TJ, 6 Oct). The
+ * channel is private, so the bot posts there only once someone has typed
+ * /invite @Olera v2 Alerts (the bot Cortex posts as) in it; until then the post fails with not_in_channel and the
+ * ping falls back to a DM, then to the shared webhook channel.
+ *
+ * Slack ids are not secrets. The env vars exist so the person on call or the
+ * channel can change without a deploy; the defaults are Ces and
+ * #careseeker-support.
  */
 const DEFAULT_CARE_TEAM_SLACK_USER_ID = "U063P1X0WUE";
+const DEFAULT_CARE_TEAM_SLACK_CHANNEL_ID = "C05TN1C48BE";
 
 export type CareTeamPing = {
   city: string;
@@ -65,11 +73,17 @@ export function careTeamPingText(p: CareTeamPing, siteUrl: string): string {
   ].join("\n");
 }
 
-/** Never throws. A DM that fails falls back to the shared channel. */
+/** Never throws. Channel with a mention, else a DM, else the shared webhook channel. */
 export async function pingCareTeam(p: CareTeamPing): Promise<void> {
   try {
     const text = careTeamPingText(p, getSiteUrl());
     const userId = process.env.CARE_TEAM_SLACK_USER_ID?.trim() || DEFAULT_CARE_TEAM_SLACK_USER_ID;
+    const channelId = process.env.CARE_TEAM_SLACK_CHANNEL_ID?.trim() || DEFAULT_CARE_TEAM_SLACK_CHANNEL_ID;
+    // chat.postMessage takes a channel id as readily as a user id; the helper
+    // is named for its first use.
+    const posted = await sendSlackDirectMessage(channelId, `<@${userId}> ${text}`, { timeoutMs: 5000 });
+    if (posted.success) return;
+    console.warn("[care-team-ping] channel post failed, falling back to DM:", posted.error);
     const dm = await sendSlackDirectMessage(userId, text, { timeoutMs: 5000 });
     if (!dm.success) await sendSlackAlert(text, undefined, { timeoutMs: 5000 });
   } catch (err) {
