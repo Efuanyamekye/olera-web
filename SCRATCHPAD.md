@@ -7,6 +7,28 @@
 
 ## Current Focus
 
+### 2026-10-06 — Benefits: researched answer key, federal programs, catalog filled, household/couple rules (`jolly-ramanujan`, #2379 #2380 → PROD via #2382; #2385 open)
+
+**Done (in production via #2382):**
+- **Answer key instead of CARES labels** (TJ: CARES "isn't divine authority"; the study isn't starting yet, build the best product). `data/benefits/answer-key/`: 40 dementia-caregiver families, 4 archetypes × TX FL CA NY PA OH NC GA IL MI, researched from official sources *without reading our data*. Scorer `scripts/benefits-answer-key-score.ts` replays the conversation through the engine. Run it before any recommendation change.
+- **Local agency routing (#2379):** the conversation never sent the county, and ~31% of ZIP prefixes have no agency on file. The plan now names the Eldercare Locator instead of the state's first agency alphabetically (Philadelphia was getting Berks).
+- **Federal programs (#2380):** Extra Help, SSI, and the VA pension with A&A, in `data/benefits/federal-programs.ts` via `getPlanProgramIds`. Pages are noindex and marked "Auto-researched", never "published" (published shows a fake Ces/DuBose reviewer credit). Pennsylvania's PACE drug program no longer leads every PA plan. Saved `/m` plans keep federal programs.
+- Deleted prod test rows: "Test AAA" (agency table) and "Test Program" (federal table). Backups are in the session scratchpad.
+
+**Open: #2385 (catalog + household/couple):**
+- 263 legacy-library programs were hidden from the finder (no programType), including Medicaid ABD in ~25 states. Triage is in `data/benefits/legacy-triage/` (`decisions.json` holds the hand calls): 142 drafted via the new `scripts/benefits-add-programs.js` (append-only), 44 mapped, 80 left as pages (legal, ombudsman, SHIP). 181 legacy ids redirect via `replaced.json` → `duplicateTarget`. Every state now has all 6 core program types; the finder sees 622 programs, up from 472.
+- **Engine:** new household answer `family`. A couple is judged against couple limits. Whole-home programs (SNAP, energy) are never "likely" for someone living with family. SNAP limits confirm only, never rule out. A `notForMedicaid` rule (EISEP, PA PACE). Medicaid/SSI with unreadable limits is never "likely" on age alone.
+- **Data corrections (appliedCorrections):** TX caregiver support (carried STAR+PLUS figures), KY caregiver (grandparent table). MT/NV LIHEAP retyped from navigator to benefit. NV PACE dropped (no provider).
+- **Score (conversation):** wrong "likely" 19→4, 181/181 programs found, first call agrees 48%. Median questions 6 (was 5); **TJ to confirm keeping the extra "who do they live with" question.**
+
+**Next Up:**
+- TJ: confirm the 6th question, then `/pre-test` + `/pr-merge` #2385 → `/promote-to-main`.
+- TJ runs migration 271 (other session's #2378, standing Benefits probe): `ALTER TABLE war_room_investigation_events ALTER COLUMN investigation_id DROP NOT NULL;`
+- The 142 new drafts need the fact-check (the weekly rotation gets them) plus 38 high lint findings (phone drift, 2-1-1 anchors).
+- The remaining wrong "likely" calls need new facts: PACE service area (TX), FL HCE needs a live-in caregiver, dementia-only programs (Project C.A.R.E.).
+- 241 counties have no agency row; ZIP→county uses only 3 digits (Hialeah → Broward).
+- The caseworker doc (APdQ3n36UeTbSLhqUu1kGJ) is stale: Phase 3 still says "not started".
+
 ### 2026-10-04 — Robbie's first pilot family (Richard, Dallas ad): reply sent, no Cortex (`graceful-franklin`, no app code)
 
 **What happened:** Richard Etchepareborde filled in the Olera-run Dallas Meta form (`olera-dallas-native-sep26`) Sat 3 Oct 12:49 PM CT, spouse care, ZIP 75474 (Quinlan). Auto text at 12:50; handed to Assisting Hands at 1:50 PM with no qualification reply; "New family from your ad: Richard" email to Robbie at 1:50; Robbie replied to support@ at 1:56: "I don't understand this process." First live family under the pilot, before the launch note TJ promised "by next week" (2 Oct). Robbie has a login (last sign-in 29 Sep), so the campaign page link works; his inbox shows Richard's number and thread.
