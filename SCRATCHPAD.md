@@ -7,6 +7,24 @@
 
 ## Current Focus
 
+### 2026-10-06 — Team logins IN PROD; Colorado CareAssist call; `/provider-call-prep` (`radiant-jackson`)
+
+**Team logins shipped (#2381 → staging, #2384 → main, migration 272 applied by TJ).** An email added to an agency (admin → Provider Relationships → agency → Team logins) signs in as itself and works the agency next to the owner. `lib/auth/profile-access.server.ts` (`actingProfileIds` / `canActForProfile`) is now the ownership check in ad-families, Boost eligibility, dashboard, provider connections, and the inquiry routes. Members' alert links sign them in as themselves; first sign-in makes the agency active and skips /welcome. Same PR closed two live holes: any user could set `accounts.active_profile_id` to any profile and message as it (trigger + route checks), and `upload-image` never checked ownership. Migration renamed 271 → 272 (staging already had a 271). QA'd on preview with tj@olera.care as a temporary member of Aggie Home Care (removed). Jacob McKay added to Colorado CareAssist 6 Oct.
+
+**Why the proper build instead of a no-login page:** TJ chose team logins over the stopgap; it took under 30 min, not the week I estimated (memory `fb:dont_overestimate_build_time`).
+
+**Colorado CareAssist call (5 Oct, Jacob):** disqualifiers are Medicaid and outside the Front Range (Boulder/Longmont to Springs/Pueblo; no mountains, Western Slope, north of Fort Collins); wants volume with strong-fit/uncertain flags. Recap email + check-in invite (Mon 19 Oct 4:30 PM MT) sent from tfalohun@gmail.com.
+
+**`/provider-call-prep`:** new command (`.claude/commands/provider-call-prep.md`), built from the Robbie and Jacob calls: gather from family_touches, Slack, support inbox and Notion first; open with rapport + who we are (NIH) before questions; A Place for Mom differentiators.
+
+**Hoop Cares:** Liz out sick; check-in booked Wed 7 Oct 9 AM CT. Two of her families have dead numbers (Barbara wrong number, Ramona disconnected).
+
+**Next Up:**
+- Before Thu 9 Oct: if CareAssist's flight is extended, widen Meta geo to the Front Range and add a Medicaid screener.
+- Owner self-serve team section in provider settings (Robbie needs it for his 8 owners, ~14 Oct call).
+- Admin Team logins panel shows "No owner account" for ~1s while loading; add a loading state.
+- Confirm Jacob's first sign-in landed in CareAssist's inbox (first live run of the auto-select).
+
 ### 2026-10-04 — Robbie's first pilot family (Richard, Dallas ad): reply sent, no Cortex (`graceful-franklin`, no app code)
 
 **What happened:** Richard Etchepareborde filled in the Olera-run Dallas Meta form (`olera-dallas-native-sep26`) Sat 3 Oct 12:49 PM CT, spouse care, ZIP 75474 (Quinlan). Auto text at 12:50; handed to Assisting Hands at 1:50 PM with no qualification reply; "New family from your ad: Richard" email to Robbie at 1:50; Robbie replied to support@ at 1:56: "I don't understand this process." First live family under the pilot, before the launch note TJ promised "by next week" (2 Oct). Robbie has a login (last sign-in 29 Sep), so the campaign page link works; his inbox shows Richard's number and thread.
