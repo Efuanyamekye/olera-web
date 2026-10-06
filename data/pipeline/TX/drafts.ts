@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.219Z
+ * Last updated: 2026-10-06T05:10:23.855Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1905,27 +1905,11 @@ export const drafts: PipelineStateDrafts = {
         "summary": [
           "Texas resident",
           "Age 18+ with disability or daily care needs",
-          "Income under $2,982/month (single) or $5,964 (couple)",
-          "Assets under $5,000 (single) or $6,000 (couple)"
+          "No income or savings limit (Older Americans Act caregiver services)"
         ],
         "ageRequirement": "18+",
         "incomeTable": null,
-        "assetLimits": {
-          "individual": 5000,
-          "couple": 6000,
-          "countedAssets": [
-            "Bank accounts",
-            "Stocks and bonds",
-            "Cash"
-          ],
-          "exemptAssets": [
-            "Primary home",
-            "One vehicle",
-            "Burial funds",
-            "Personal belongings"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": "Need help with daily activities like bathing, dressing, meal preparation, or household tasks",
         "otherRequirements": [
           "Texas residency required",
@@ -2067,6 +2051,48 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
           "reason": "page also lists ours ((855) 937-2372)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "structuredEligibility.assetLimits+summary",
+          "from": {
+            "assetLimits": {
+              "individual": 5000,
+              "couple": 6000,
+              "countedAssets": [
+                "Bank accounts",
+                "Stocks and bonds",
+                "Cash"
+              ],
+              "exemptAssets": [
+                "Primary home",
+                "One vehicle",
+                "Burial funds",
+                "Personal belongings"
+              ],
+              "homeEquityCap": null
+            },
+            "summary": [
+              "Texas resident",
+              "Age 18+ with disability or daily care needs",
+              "Income under $2,982/month (single) or $5,964 (couple)",
+              "Assets under $5,000 (single) or $6,000 (couple)"
+            ]
+          },
+          "to": {
+            "assetLimits": null,
+            "summary": [
+              "Texas resident",
+              "Age 18+ with disability or daily care needs",
+              "No income or savings limit (Older Americans Act caregiver services)"
+            ]
+          },
+          "source": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
+          "flaggedAt": "2026-10-06",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "answer-key review",
+          "note": "The income and asset figures are STAR+PLUS's ($2,982 is 300% of SSI), not this program's. Caregiver support through the Area Agency on Aging is Older Americans Act Title III-E, which has no means test; independent research for the answer key (TX-B) found the same. They ruled out a veteran couple who qualifies."
         }
       ]
     },

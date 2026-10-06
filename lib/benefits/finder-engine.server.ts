@@ -298,7 +298,7 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     dailyHelp,
     savings,
     disability: null,
-    household: a.household === "1" ? "alone" : a.household ? "couple" : null,
+    household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
   };
 }
 
@@ -417,6 +417,13 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
     const contact = pickCallContact(item.contacts);
     let { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
     const c = convOf(item);
+    // Someone living with family: a program that counts the whole home's
+    // income can't be "likely" from their own (answer key, 6 Oct 2026:
+    // SNAP read likely for a parent in her daughter's household).
+    if (c && c.rules.countsHousehold && conv?.household === "family" && tier === "likely") {
+      tier = "check";
+      reason = "It counts the income of everyone in the home, so it depends on the whole household.";
+    }
     if (c && c.e.status === "likely" && tier === "check") {
       tier = "likely";
       reason = whyLine("likely", c.e.failed, c.e.met) ?? reason;

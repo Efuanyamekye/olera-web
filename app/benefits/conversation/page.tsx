@@ -226,7 +226,7 @@ export default function BenefitsConversationPage() {
     place: stateName,
     age: facts.age,
     needs: need ? [need] : ["care"],
-    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
+    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : facts.household === "family" ? "3" : null,
     income: facts.income ?? (asked.includes("income") ? "unsure" : null),
     // Carry what the conversation learned; a fact it never asked stays unknown
     // rather than "no", which would rule programs out unasked.

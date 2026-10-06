@@ -101,8 +101,8 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
     dailyHelp: f.dailyHelp,
     savings: f.savings < 2000 ? "under2000" : f.savings < 10000 ? "under10000" : "over10000",
     disability: "yes",
-    // "Does she live with a spouse or partner?" A widow living with her daughter answers no.
-    household: f.householdSize === 2 ? "couple" : "alone",
+    // "Who does she live with?" A widow living with her daughter: family.
+    household: f.householdSize === 2 ? "couple" : f.householdSize === 1 ? "alone" : "family",
   };
   let facts: KnownFacts = { ...EMPTY_FACTS };
   const asked = new Set<FactKey>();
@@ -118,7 +118,7 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
     county,
     age: facts.age,
     needs: [hasDementia(f) ? "memory" : "care"],
-    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
+    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : facts.household === "family" ? "3" : null,
     income: facts.income ?? (asked.has("income") ? "unsure" : null),
     medicaid: facts.medicaid === "has" ? "alreadyHas" : facts.medicaid === "no" ? "doesNotHave" : null,
     veteran: facts.veteran ?? null,
@@ -186,6 +186,8 @@ async function main() {
       if (!res) throw new Error(`no result for ${f.id}`);
       // The first call is not repeated in programs.
       const shown = new Map([...(res.firstStep ? [res.firstStep] : []), ...res.programs].map((p) => [p.id, p.tier]));
+      // Left out because they already have it is the right call for "keeps Medicaid".
+      const alreadyHas = new Set(res.leftOut.filter((l) => /already has/i.test(l.reason)).map((l) => l.id));
       const s = zero();
       const detail: string[] = [];
       for (const { kp, id } of keyed) {
@@ -193,6 +195,7 @@ async function main() {
         if (kp.verdict === "likely") {
           s.keyLikely++;
           if (!id) { s.missing++; detail.push(`  MISSING  ${kp.name}`); continue; }
+          if (!tier && alreadyHas.has(id)) { s.found++; s.likely++; continue; }
           if (tier) s.found++; else detail.push(`  NOT SHOWN ${kp.name}  (${kp.keyRule ?? kp.reason})`);
           if (tier === "likely") s.likely++;
         } else if (kp.verdict === "unlikely" && id && tier) {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.916Z
+ * Last updated: 2026-10-06T05:17:30.288Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1028,6 +1028,1884 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:39:19.738Z"
         }
       ]
+    },
+    {
+      "id": "mi-medicaid-aged-disabled",
+      "name": "Medicaid for Aged and Disabled",
+      "shortName": "Michigan Aged Medicaid",
+      "tagline": "Full health coverage for Michigan seniors 65+ on a fixed income, including doctor visits, dental, vision, and potentially in-home care services.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local MDHHS county offices",
+            "type": "service-area"
+          },
+          {
+            "name": "MI Bridges online portal",
+            "type": "service-area"
+          },
+          {
+            "name": "MI Choice waiver local agencies/providers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living on a fixed income in Michigan, they may qualify for Medicaid coverage that pays for doctor visits, hospital stays, dental, vision, and mental health services at little or no cost. This is not Medicare. Medicaid is a separate, income-based program that can cover costs Medicare doesn't touch, and in some cases it can pay for home care services that let your parent stay out of a nursing facility.\n\nTo qualify, your parent must meet both an income test and an asset test. The income limit is roughly $1,304/month for a single person (2025 figure). The asset limit is approximately $9,660 for one person. If your parent's income is over the limit, they may still qualify through a \"spenddown,\" which works like a medical deductible: once their out-of-pocket medical costs reach a set threshold each month, Medicaid kicks in for the rest.\n\nIf your parent already receives Supplemental Security Income (SSI), they most likely qualify for Medicaid automatically and may not need to apply separately. If they don't receive SSI, the application goes through MI Bridges, Michigan's online benefits portal, or at a local MDHHS office. This page walks through what's covered, who qualifies, and how to apply step by step.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Medicaid covers costs on behalf of the beneficiary rather than providing a cash benefit. Coverage value varies by health needs and services used.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled under Medicaid criteria)",
+          "Income below ~$1,304/month for one person (2025)",
+          "Assets below ~$9,660 for one person",
+          "Michigan resident and U.S. citizen or eligible immigrant",
+          "May still qualify through spenddown if income is over the limit"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1304
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1763
+          }
+        ],
+        "assetLimits": {
+          "individual": 9660,
+          "couple": 14470,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking account balances",
+            "Savings account balances",
+            "Other non-exempt financial assets"
+          ],
+          "exemptAssets": [
+            "Primary home (typically exempt, though this exemption was not spelled out in official sources retrieved for this program; confirm with MDHHS)",
+            "One vehicle (typically exempt under Michigan Medicaid rules; confirm with MDHHS)",
+            "Household goods and personal property (typically exempt; confirm with MDHHS)",
+            "Burial-related items such as irrevocable burial trusts (typically exempt; confirm with MDHHS)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be age 65 or older, or blind, or disabled under Medicaid criteria",
+          "Must be a Michigan resident",
+          "Must meet citizenship or qualifying immigration status requirements for Medicaid",
+          "SSI recipients typically qualify automatically"
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest route is the MI Bridges online portal at michigan.gov; paper and in-person options are also available if online access is a barrier.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check whether your parent already qualifies automatically",
+            "description": "If your parent receives SSI (Supplemental Security Income), they are most likely already enrolled in Michigan Medicaid. Call the Michigan Department of Health and Human Services (MDHHS) at 888-642-7434 to confirm enrollment before starting a new application."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you start",
+            "description": "You will need your parent's Social Security number, proof of age and identity, proof of Michigan residency, income information, and asset information. If your parent's income is over the limit and you plan to qualify through spenddown, gather records of any out-of-pocket medical expenses as well."
+          },
+          {
+            "step": 3,
+            "title": "Apply online through MI Bridges",
+            "description": "Go to michigan.gov/mdhhs and use the MI Bridges portal to submit a healthcare coverage application. The portal walks through each section and allows you to upload supporting documents. You can also apply on behalf of your parent if they cannot apply themselves."
+          },
+          {
+            "step": 4,
+            "title": "Apply by mail or in person if online is not an option",
+            "description": "Download or request Form DCH-1426 (Application for Health Coverage and Help Paying Costs). To request a paper form by phone, call 888-367-6557. Mail the completed form to your parent's local MDHHS county office, or bring it in person. Find your local office at michigan.gov/mdhhs."
+          },
+          {
+            "step": 5,
+            "title": "Respond to any requests from MDHHS",
+            "description": "MDHHS may contact you to request additional documents or to schedule an interview. Responding promptly reduces delays. If your parent is applying through spenddown, be prepared to submit records of medical expenses."
+          },
+          {
+            "step": 6,
+            "title": "Choose or be assigned a Medicaid health plan after approval",
+            "description": "Most Michigan Medicaid beneficiaries receive coverage through a managed care health plan. After your parent is approved, you may receive information about choosing a plan. If no choice is made, MDHHS will assign one. Contact the plan to establish care with a primary care provider."
+          }
+        ],
+        "processingTime": "The official Michigan sources retrieved did not publish a specific processing-time standard for this program. Contact MDHHS at 888-642-7434 to ask about current timelines.",
+        "waitlist": "No statewide waitlist for standard aged and disabled Medicaid coverage. If your parent also needs the MI Choice home and community-based waiver for in-home care services, that program has its own eligibility process and local capacity may vary by county. Ask the MI Choice local agency in your parent's county about current availability.",
+        "tip": "If your parent is being discharged from a hospital or rehabilitation facility and does not yet have Medicaid, you can begin the application while they are still in the facility. Discharge planners at Michigan hospitals can often help initiate the process.",
+        "urls": [
+          {
+            "label": "Apply online through MI Bridges",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/medicaid/portalhome/beneficiaries/apply"
+          },
+          {
+            "label": "Michigan Medicaid health care programs eligibility page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/medicaid/health-care-programs-eligibility"
+          },
+          {
+            "label": "Beneficiary support and DCH-1426 paper application",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/beneficiary-support"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or number for your parent",
+        "Proof of Michigan residency (a utility bill, lease agreement, or state-issued document with your parent's address)",
+        "Proof of age and identity (birth certificate, passport, or state ID)",
+        "Most recent Social Security award letter showing current monthly benefit amount",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current balances for any checking or savings accounts (MDHHS will ask for the current balance; the specific lookback period they may request for a full review should be confirmed with your caseworker)",
+        "Information about any other financial resources such as CDs, stocks, bonds, or annuities",
+        "Life insurance policy documents showing face values",
+        "Vehicle title if your parent owns a car",
+        "Legal documents if a family member or legal guardian will be applying on your parent's behalf (power of attorney or guardianship paperwork)",
+        "Records of out-of-pocket medical expenses if your parent's income is over the limit and you are trying to qualify through spenddown",
+        "Proof of health insurance premiums paid out of pocket, if any"
+      ],
+      "contacts": [
+        {
+          "label": "MDHHS Customer Service Line",
+          "phone": "(888) 642-7434",
+          "description": "Call to ask about Medicaid eligibility, check the status of an application, or get help if you cannot apply online.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Paper Application Request Line",
+          "phone": "(888) 367-6557",
+          "description": "Call to request a paper copy of Form DCH-1426 if your parent cannot apply online.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "MI Bridges Online Portal",
+          "phone": null,
+          "description": "Apply online at michigan.gov/mdhhs. This is the fastest route and allows you to upload documents directly.",
+          "hours": null
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general referral line that can help you find your local MDHHS county office if you are not sure where to go. They do not process Medicaid applications themselves.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income is over the limit, do not assume they are ineligible. Ask MDHHS specifically about the spenddown option. Once documented medical expenses exceed a set monthly threshold, Medicaid coverage activates for that period.",
+        "If your parent already receives SSI, call 888-642-7434 first to confirm whether Medicaid is already in place before starting a new application. Applying again may be unnecessary.",
+        "Basic Medicaid coverage and the MI Choice waiver for in-home care services are two separate things. If your parent needs help at home with bathing, meals, or personal care, ask MDHHS specifically about MI Choice after Medicaid is approved. MI Choice has its own application and eligibility screening.",
+        "After approval, your parent will likely be enrolled in a Medicaid health plan. Different plans cover different networks of doctors. If your parent has an existing doctor they want to keep, confirm that doctor accepts the plan before it is finalized."
+      ],
+      "relatedPrograms": [
+        "MI Choice Medicaid Waiver (in-home care services for Medicaid-eligible seniors)",
+        "Medicare Savings Programs (help paying Medicare premiums for people who have both Medicare and Medicaid)",
+        "Michigan SNAP Food Benefits (food assistance for low-income seniors)",
+        "Michigan Home Heating Credit and LIHEAP (energy bill help for low-income households)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What Medicaid actually covers",
+          "body": "Approved beneficiaries receive a comprehensive health benefit package through a Michigan Medicaid health plan. This includes doctor visits, hospital care, prescription drugs, dental services, vision services, and mental health care. For seniors who need ongoing help at home, the separate MI Choice waiver can add services like personal care, home-delivered meals, adult day health, transportation, respite for family caregivers, and environmental modifications to the home. MI Choice eligibility and enrollment are handled separately from basic Medicaid."
+        },
+        {
+          "type": "prose",
+          "title": "How spenddown works",
+          "body": "If your parent earns more than the monthly income limit ($1,304 for a single person in 2025), they are not automatically disqualified. Michigan allows a spenddown route. Here is how it works: MDHHS calculates the difference between your parent's income and the limit. That difference becomes their monthly medical expense deductible. Once your parent pays that amount in out-of-pocket medical costs in a given month, Medicaid covers the remaining expenses for that month. This is most useful for people with recurring medical costs such as medications, specialist visits, or therapies. Keep receipts and bills. You will need to submit them to MDHHS to document that the spenddown threshold has been met."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that disqualify them?",
+          "answer": "Typically, no. A primary residence is generally exempt from Medicaid asset counting under Michigan rules, meaning it does not count toward the $9,660 asset limit for a single person. However, this exemption was not spelled out in the official sources retrieved for this program, so confirm directly with MDHHS at 888-642-7434 or at your parent's local county office. Note that Medicaid may pursue estate recovery after your parent passes, which can affect what is left to heirs."
+        },
+        {
+          "question": "My parent has about $12,000 in savings. Is that too much to qualify?",
+          "answer": "The asset limit for a single person is approximately $9,660 (as of February 1, 2025). $12,000 in savings would be over that limit. However, certain assets may be exempt, including the primary home and one vehicle. It is worth talking to an MDHHS caseworker or an elder law attorney to understand what counts before concluding your parent cannot qualify. Some assets can be restructured legally, such as through an irrevocable burial trust, before applying."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they have dementia or are otherwise unable to apply themselves?",
+          "answer": "Yes. A family member with legal authority can apply on a parent's behalf. If you have a durable power of attorney or have been appointed legal guardian, bring those documents when you apply. If no legal authority has been established yet, MDHHS may still allow a responsible party to initiate the process. Contact 888-642-7434 to ask about authorized representative procedures."
+        },
+        {
+          "question": "My parent is already on Medicare. Does that affect Medicaid eligibility?",
+          "answer": "Having Medicare does not disqualify your parent from Medicaid. Many seniors have both, which is called being \"dual eligible.\" When someone has both Medicare and Medicaid, Medicare pays first and Medicaid covers remaining costs such as copays and services Medicare does not cover. Your parent may also qualify for a Medicare Savings Program to help pay Medicare premiums, which is a related but separate application."
+        },
+        {
+          "question": "How long does the application take, and will there be a gap in coverage?",
+          "answer": "Michigan's official sources did not publish a specific processing-time standard for this program. Call MDHHS at 888-642-7434 to ask about current timelines. In some cases, Medicaid coverage can be backdated to the month of application or even earlier if your parent was eligible during that period. Ask about retroactive coverage when you apply, especially if your parent has already incurred medical expenses."
+        },
+        {
+          "question": "Can my parent get Medicaid and still receive in-home care services instead of going to a nursing home?",
+          "answer": "Yes, but in-home care services are not automatic with standard Medicaid approval. Your parent would need to separately apply for the MI Choice Medicaid Waiver, which covers personal care, home-delivered meals, transportation, respite, and other supports. MI Choice has its own eligibility screening, and local capacity can vary by county. Ask your MDHHS caseworker about MI Choice after your parent's basic Medicaid is approved, or contact your local Area Agency on Aging to ask about MI Choice referrals."
+        },
+        {
+          "question": "My parent's income is over the limit. Is there any point in applying?",
+          "answer": "Yes. Michigan's spenddown option allows people whose income exceeds the limit to still qualify once their out-of-pocket medical costs reach a calculated monthly threshold. This is particularly worth pursuing for parents with regular prescription costs, specialist visits, therapy, or other recurring medical expenses. When you apply, tell the MDHHS caseworker that you want to explore the spenddown option and bring records of your parent's current medical expenses."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their health needs change?",
+          "answer": "Medicaid eligibility is redetermined periodically, typically once a year. Your parent's health plan manages their ongoing care, and you can request a change in services or a new care plan if needs increase. If your parent's condition worsens to the point where they need nursing facility-level care, contact MDHHS or your parent's health plan to discuss options, which may include long-term care Medicaid or the MI Choice waiver for continued home-based support."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(888) 642-7434",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/medicaid/health-care-programs-eligibility",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-medicare-savings-program",
+      "name": "Medicare Savings Program",
+      "shortName": "Medicare Savings",
+      "tagline": "If your parent is on Medicare with a limited income, Michigan may pay their monthly Medicare premiums and, in some cases, their deductibles and copays too.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Michigan Department of Health and Human Services (MDHHS)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local MDHHS offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on Medicare and living on a fixed income, Michigan's Medicare Savings Program (MSP) can eliminate some or all of their Medicare cost-sharing. Depending on where their income falls, the program can pay their Medicare Part B premium (currently $185/month in 2025), and in some cases also their Part A premium, deductibles, and coinsurance.\n\nThe program has three tiers. The lowest-income tier, QMB, covers the most: both premiums plus Medicare deductibles and coinsurance. The higher two tiers, SLMB and QI, cover the Part B premium only. Income limits for a single person in 2026 range from $1,350/month for QMB up to $1,781/month for QI. A married couple can qualify at up to $2,400/month at the QI tier.\n\nMany families assume this program is only for people with almost no savings. That is not how Michigan administers it. There is a resource limit, but it allows up to $9,950 in countable assets for one person and up to $14,910 for a married couple in 2026. A home is not counted. If your parent has been paying their own Medicare premiums out of pocket and their income is below these thresholds, they may have been leaving real money on the table.",
+      "savingsRange": "Up to $2,220/year for Part B premium alone; QMB recipients also have deductibles and coinsurance covered, which can add substantially more depending on how much Medicare care your parent uses (exact additional savings depend on actual medical utilization)",
+      "savingsSource": "Part B premium of $185/month (2025, CMS.gov) multiplied by 12 months equals $2,220/year. QMB cost-sharing coverage is defined by federal MSP rules administered by MDHHS; the dollar value beyond the premium depends on individual utilization and cannot be stated as a fixed figure without fabricating a number.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Enrolled in Medicare Part A or Part B",
+          "Single person: income up to $1,781/month (QI tier, 2026); couple: up to $2,400/month",
+          "Countable assets up to $9,950 (individual) or $14,910 (couple) in 2026",
+          "Michigan resident with low income and limited resources",
+          "Benefit amount depends on which income tier your parent qualifies for"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1781
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2400
+          }
+        ],
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Checking and savings accounts",
+            "Certificates of deposit",
+            "Stocks and bonds",
+            "Investment accounts"
+          ],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be enrolled in Medicare Part A or Part B",
+          "Must be elderly or disabled with low income and limited resources as defined by MDHHS",
+          "If income qualifies for a lower-cost tier only, enrollment is at that tier; you cannot choose a higher-benefit tier if income is above its limit",
+          "Income limits are updated each April 1 by MDHHS"
+        ],
+        "povertyLevelReference": "QMB: up to 100% FPL; SLMB: 100-120% FPL; QI: 120-135% FPL (with a $20 Social Security/RSDI income disregard applied in some cases)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through MI Bridges, at a local MDHHS office, or by mailing a paper application; no specific processing-time standard was published in official MDHHS materials at the time of this writing.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check income and assets",
+            "description": "Compare your parent's monthly income to the 2026 limits: $1,350/month (QMB), $1,585/month (SLMB), or $1,781/month (QI) for a single person. Count liquid assets: if they are under $9,950 for one person, proceed. These limits change each April 1, so confirm current figures at michigan.gov/mdhhs."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you start",
+            "description": "You will need your parent's Medicare card, most recent Social Security award letter, and proof of any other income. Pull together bank or account statements showing current balances. Having these ready prevents delays."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, in person, or by mail",
+            "description": "Online: go to michigan.gov/mibridges and complete the Application for Health Coverage and Help Paying Costs (form MDCH-769, Rev. 02/25). In person: bring documents to your local MDHHS office. By mail: download the paper application at Michigan.gov under Assistance Programs, then Health Care Coverage, then Application for Health Coverage and Help Paying Costs. You can also call MDHHS and ask them to mail you an application."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any MDHHS follow-up",
+            "description": "MDHHS may contact you for additional verification. Respond promptly with whatever they request. Missing documents are the most common cause of delays."
+          },
+          {
+            "step": 5,
+            "title": "Confirm enrollment and check your Medicare bill",
+            "description": "Once approved, Medicare premiums should stop coming out of your parent's Social Security check (if applicable). Verify this change appears on their Social Security statement within one to two billing cycles and keep a copy of the approval letter."
+          }
+        ],
+        "processingTime": "Not specified in official MDHHS materials. Contact your local MDHHS office directly to ask about current timelines.",
+        "waitlist": null,
+        "tip": "Michigan updates MSP income and resource limits every April 1. If your parent was told they did not qualify in a prior year, check the current limits before assuming they still do not qualify.",
+        "urls": [
+          {
+            "label": "Apply online at MI Bridges",
+            "url": "https://www.michigan.gov/mibridges"
+          },
+          {
+            "label": "Medicare Savings Program official MDHHS page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/disabilities/dualeligible/medicare-savings-programs"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (showing Part A, Part B, or both)",
+        "Most recent Social Security or RSDI award letter showing monthly benefit amount",
+        "Proof of any other income (pension statements, VA benefit letters, or most recent tax return if self-employed)",
+        "Current balances for any checking, savings, or certificate of deposit accounts (MDHHS will ask for account information; contact your local office to confirm the exact statement period they require)",
+        "Proof of Michigan residency (utility bill, lease agreement, or Michigan state-issued ID)",
+        "Completed Application for Health Coverage and Help Paying Costs (form MDCH-769, Rev. 02/25)",
+        "Investment or brokerage account statements if applicable",
+        "Any legal documents authorizing a family member or representative to apply on the parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "MDHHS Customer Service (MSP applications and eligibility questions)",
+          "phone": "(855) 275-6424",
+          "description": "Michigan Department of Health and Human Services main line for benefits and health coverage questions, including MSP applications. Your local MDHHS office can also accept in-person applications.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide helpline that can refer you to your nearest local MDHHS office if you need help locating it. Does not process MSP applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Michigan applies a $20 Social Security or RSDI income disregard in some MSP eligibility calculations. This means your parent's countable income for MSP purposes may be $20/month lower than their gross Social Security amount. Ask MDHHS how this applies when you call.",
+        "If your parent qualifies for QMB (the lowest-income tier), providers who accept Medicare are not allowed to bill them for Medicare deductibles and coinsurance. If a provider sends a bill for those costs, your parent has the right to dispute it. Medicare.gov has guidance on how to do this.",
+        "Income and resource limits change each April 1. If your parent's income changed, or if limits shifted since they last applied, it is worth reapplying even if they were previously denied.",
+        "If your parent already receives Medicaid through MDHHS, they may already be enrolled in an MSP tier. Check their current benefit status before applying again to avoid duplicate applications."
+      ],
+      "relatedPrograms": [
+        "Michigan Medicaid (full coverage for those with very low income who may qualify for more than MSP)",
+        "Extra Help (Low Income Subsidy) for Medicare Part D prescription drug costs",
+        "MI Choice Waiver (Medicaid home and community-based services for those with higher care needs)",
+        "MMAP (Michigan Medicare and Medicaid Assistance Program, free counseling to help choose between programs)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which MSP tier applies to your parent?",
+          "description": "The tier determines exactly what Michigan pays. All three tiers cover the Medicare Part B premium ($185/month in 2025). Only QMB goes further.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimit": "Up to $1,350/month for one person; up to $1,824/month for a couple (2026)",
+              "povertyLevel": "Up to 100% of the Federal Poverty Level",
+              "whatMichiganPays": "Medicare Part A premium (if owed), Medicare Part B premium, Medicare deductibles, and Medicare coinsurance",
+              "note": "Providers cannot bill QMB enrollees for Medicare deductibles or coinsurance. If you receive a bill for these, you can dispute it."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimit": "Over $1,350 and up to $1,585/month for one person; up to $2,135/month for a couple (2026)",
+              "povertyLevel": "Over 100% and up to 120% of the Federal Poverty Level",
+              "whatMichiganPays": "Medicare Part B premium only",
+              "note": null
+            },
+            {
+              "name": "QI (Qualifying Individual, also called ALMB or Q1 in some Michigan materials)",
+              "incomeLimit": "Over $1,585 and up to $1,781/month for one person; up to $2,400/month for a couple (2026)",
+              "povertyLevel": "Over 120% and up to 135% of the Federal Poverty Level",
+              "whatMichiganPays": "Medicare Part B premium only",
+              "note": "QI funding is limited at the federal level. Michigan enrolls applicants on a first-come, first-served basis each year."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "The asset limit is not zero",
+          "body": "Many families skip this program because they assume their parent has too much in savings. Michigan's 2026 resource limit is $9,950 for one person and $14,910 for a married couple. Countable assets are liquid accounts like checking, savings, and investments. A home is not counted. If your parent's savings are below these amounts, assets are not a barrier."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a home. Does that count against the asset limit?",
+          "answer": "Based on how MSP resource rules work under federal and Michigan guidance, a primary residence is not counted as a resource for MSP eligibility. The $9,950 limit for one person applies to countable liquid assets such as bank accounts and investments. Confirm how MDHHS counts any specific asset by calling (855) 275-6424 or visiting your local MDHHS office, since the official exemption list is determined by MDHHS eligibility rules, not this guide."
+        },
+        {
+          "question": "My parent already has Medicaid. Do they still need to apply for MSP?",
+          "answer": "Possibly not. Many Medicaid enrollees in Michigan are automatically enrolled in an MSP tier as part of their Medicaid coverage. Contact MDHHS at (855) 275-6424 and ask specifically which MSP tier, if any, is active on your parent's account before submitting a new application."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. You can complete the application through MI Bridges (michigan.gov/mibridges) or accompany your parent to a local MDHHS office. If your parent cannot sign documents themselves, bring any legal authorization you have, such as a power of attorney. MDHHS will tell you at the office what documentation they need to accept a representative's application."
+        },
+        {
+          "question": "My parent was denied MSP last year. Is it worth trying again?",
+          "answer": "It may be. Michigan updates income and resource limits each April 1. If your parent's income or assets changed, or if the limits shifted since the prior denial, they may qualify now. The QI tier in particular has limits that adjust annually based on the Federal Poverty Level. Apply again through MI Bridges or a local MDHHS office and reference the current 2026 limits."
+        },
+        {
+          "question": "A provider sent my parent a bill for their Medicare copay. They have QMB. Do they owe this?",
+          "answer": "No. Federal law prohibits providers who accept Medicare from billing QMB enrollees for Medicare deductibles, coinsurance, or copays. Your parent should not pay these bills. Contact Medicare at 1-800-MEDICARE (1-800-633-4227) or your State Health Insurance Assistance Program (MMAP in Michigan, at 1-800-803-7174) to dispute the bill."
+        },
+        {
+          "question": "Can my parent apply for MSP and Extra Help (the Part D Low Income Subsidy) at the same time?",
+          "answer": "Yes, and it makes sense to do so. MSP and Extra Help are separate programs: MSP covers Medicare premiums and sometimes cost-sharing; Extra Help covers Medicare drug plan costs. Applying for MSP through MDHHS does not automatically enroll your parent in Extra Help. Apply for Extra Help separately through the Social Security Administration at ssa.gov or by calling 1-800-772-1213."
+        },
+        {
+          "question": "What happens if my parent's income goes up after they are enrolled?",
+          "answer": "Your parent is required to report income changes to MDHHS. If their income rises above the limit for their current tier, they may be moved to a lower-benefit tier or lose eligibility. MDHHS conducts periodic eligibility reviews. Notify MDHHS of any significant income change through MI Bridges or by contacting your local MDHHS office to avoid an overpayment determination."
+        },
+        {
+          "question": "How does the $20 Social Security income disregard work?",
+          "answer": "Michigan applies a $20 disregard to Social Security or RSDI income in some MSP eligibility calculations. This means $20 of your parent's monthly Social Security benefit may not be counted toward the income limit, which could push them into a qualifying tier even if their gross Social Security amount looks slightly too high. Ask MDHHS at (855) 275-6424 to confirm how this applies to your parent's specific case."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "(855) 275-6424",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/disabilities/dualeligible/medicare-savings-programs",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-food-assistance-program-snap",
+      "name": "Food Assistance Program",
+      "shortName": "Michigan Food Assistance",
+      "tagline": "If your parent is on a fixed income in Michigan, they may qualify for monthly grocery benefits loaded onto a Bridge Card, potentially enough to cover a meaningful share of their food budget.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Michigan Department of Health and Human Services local county offices",
+            "type": "service-area"
+          },
+          {
+            "name": "MiCAFE network sites",
+            "type": "service-area"
+          },
+          {
+            "name": "Area Agencies on Aging for home-delivered meals and related senior food supports",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Michigan's Food Assistance Program is the state's version of SNAP. It puts monthly grocery benefits on a Michigan Bridge Card so your parent can pay for food at most grocery stores and supermarkets. Benefits are not cash and cannot be used for alcohol, tobacco, vitamins, or hot prepared meals.\n\nEligibility is based on the full household, meaning everyone who lives together and buys and prepares food together. That matters for you as a caregiver: if your parent lives in your home and shares meals with your family, your household's combined income and expenses go into the calculation. If your parent lives with you but buys and prepares food separately, they may be treated as their own household. Income limits are not a simple cutoff number because allowable expenses, including rent, utilities, and medical costs for older adults, can reduce the countable income used to determine eligibility. Some households with expenses close to or exceeding their income can qualify even if gross income looks too high.\n\nBeyond the Bridge Card, Michigan runs several related programs for older adults: MiCAFE helps seniors navigate the SNAP application, MiCAP provides food benefits to some SSI recipients, CSFP delivers a monthly food box to income-eligible people age 60 and older, TEFAP provides periodic food boxes through local distribution sites, and home-delivered meals are available for qualifying homebound seniors through local aging services. These are separate programs with their own rules, but your parent may qualify for more than one.",
+      "savingsRange": "",
+      "savingsSource": "Benefit amounts are calculated individually based on household size, income, and expenses. The research did not surface a statewide average or standard monthly benefit figure for Michigan FAP/SNAP that can be cited reliably here. Use MI Bridges or contact MDHHS for a household-specific estimate.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Must be a Michigan resident",
+          "Eligibility based on full household income, size, and expenses",
+          "Some households may qualify with income up to 200% of the federal poverty level",
+          "Seniors age 60+ can deduct medical expenses, which can lower countable income",
+          "Households with very low income or cash may qualify under simplified rules"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances"
+          ],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Michigan resident applying through MDHHS or MI Bridges",
+          "Household is defined as people who live together AND buy and prepare food together; if your parent buys and prepares food separately from you, they may qualify as their own household",
+          "All household members' income and expenses are considered together",
+          "Able-bodied adults without dependents may have work requirements; confirm current rules with MDHHS",
+          "Non-citizen status can affect eligibility; MDHHS reviews immigration documentation during the process"
+        ],
+        "povertyLevelReference": "200% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest path is applying online through MI Bridges at michigan.gov/MIBridges, which is available any time; you can also apply in person at your local MDHHS county office.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Decide who is in the household",
+            "description": "Before you start the application, determine whether your parent will apply as their own household or as part of yours. If they live with you and share meals, your combined income counts. If they buy and prepare food separately, they apply alone. This single decision shapes the whole application, so be honest about the living arrangement on the form."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "You will need identification for each household member, proof of Michigan residency, proof of all income sources (Social Security award letter, pension statements, pay stubs if applicable), proof of rent or mortgage and utilities, and, if your parent is 60 or older or has a disability, documentation of out-of-pocket medical expenses. Medical expense deductions can significantly affect eligibility, so gather those records before you start."
+          },
+          {
+            "step": 3,
+            "title": "Apply online through MI Bridges",
+            "description": "Go to michigan.gov/MIBridges and create an account or log in. The application form is DHS-Pub-765. If you run into technical problems with the online portal, call the MI Bridges help desk at 844-799-9876. You can also apply in person at your local MDHHS county office; find the nearest one at michigan.gov/ContactMDHHS."
+          },
+          {
+            "step": 4,
+            "title": "Complete the interview",
+            "description": "After submitting the application, MDHHS will schedule an eligibility interview, typically by phone. Have your documents ready. The worker will ask about income, expenses, household composition, and assets. For seniors with medical expenses, ask specifically about the medical expense deduction because it can lower countable income."
+          },
+          {
+            "step": 5,
+            "title": "Receive your determination and Bridge Card",
+            "description": "MDHHS will notify you of the eligibility decision. If approved, benefits are loaded onto a Michigan Bridge Card, which works like a debit card at most grocery stores. If you have questions about your case after applying, call MDHHS general information at 517-241-3740."
+          }
+        ],
+        "processingTime": "A specific statewide processing timeline was not confirmed in the available official sources. Contact MDHHS at 517-241-3740 or check your MI Bridges account for case status after submitting.",
+        "waitlist": null,
+        "tip": "If your parent is 60 or older, ask MDHHS or a MiCAFE site specifically about the medical expense deduction. Out-of-pocket costs for doctors, prescriptions, transportation to medical appointments, and health insurance premiums can be deducted from countable income, which sometimes makes the difference between qualifying and not qualifying.",
+        "urls": [
+          {
+            "label": "Apply online at MI Bridges",
+            "url": "https://www.michigan.gov/MIBridges"
+          },
+          {
+            "label": "Find your local MDHHS office",
+            "url": "https://www.michigan.gov/ContactMDHHS"
+          },
+          {
+            "label": "Michigan Food Assistance Program official page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/food"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter showing current monthly benefit amount",
+        "Government-issued photo ID for your parent (driver's license, state ID, or passport)",
+        "Proof of Michigan residency (utility bill, lease agreement, or bank statement showing a Michigan address)",
+        "Most recent pension or retirement income statement, if applicable",
+        "Most recent rent or mortgage statement showing the monthly payment amount",
+        "Most recent utility bills (electric, gas, water) showing the account name and address",
+        "Documentation of out-of-pocket medical expenses for household members age 60 or older or with a disability: receipts or statements for prescription costs, doctor visit copays, health insurance premiums paid directly, and medical transportation costs",
+        "Pay stubs or self-employment records for any household member with earned income",
+        "Information about current cash on hand and checking or savings account balances (MDHHS may ask you to provide this verbally or in writing during the interview)",
+        "Immigration or citizenship documents for any household member who is not a U.S. citizen",
+        "Social Security cards for all household members included in the application"
+      ],
+      "contacts": [
+        {
+          "label": "MI Bridges Help Desk (online application support)",
+          "phone": "(844) 799-9876",
+          "description": "Call if you have technical problems starting or submitting your application through the MI Bridges online portal. This line helps with the application system itself.",
+          "hours": "Contact MDHHS or MI Bridges for current hours"
+        },
+        {
+          "label": "MDHHS General Information Line",
+          "phone": "(517) 241-3740",
+          "description": "Call for general program questions, case status after applying, or help finding your local county office. Staff can direct you to in-person application help.",
+          "hours": "Contact MDHHS for current hours"
+        },
+        {
+          "label": "Local MDHHS County Office (in-person application)",
+          "phone": null,
+          "description": "You can apply in person at your county MDHHS office. Find your nearest office at michigan.gov/ContactMDHHS. In-person staff can help complete the DHS-Pub-765 application form.",
+          "hours": "Varies by county office"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's household income before taxes is under $150 per month AND they have $100 or less in cash and accounts, they may qualify under a simplified eligibility path without the standard income test. Mention this situation clearly when you call or apply.",
+        "Seniors age 60 and older and people with disabilities can deduct out-of-pocket medical expenses from their countable income. This deduction is not automatic; you must report those expenses during the application interview. Gather receipts and statements before the call.",
+        "If your parent lives with you but buys and prepares their own food separately from your household, make this clear on the application. They may qualify as a single-person household, which uses different income thresholds than a multi-person household.",
+        "If your parent is already receiving SSI, ask MDHHS about MiCAP, a separate food benefit program for some SSI recipients in Michigan. It is not the same as Food Assistance and has its own rules."
+      ],
+      "relatedPrograms": [
+        "MiCAFE (Michigan Coordinated Access for Food for Elders): free help for seniors navigating the Bridge Card application",
+        "MiCAP (Michigan Categorical Assistance Program): food benefits for some SSI recipients, separate from SNAP",
+        "CSFP (Commodity Supplemental Food Program): monthly food boxes for income-eligible adults age 60 and older",
+        "TEFAP (The Emergency Food Assistance Program): periodic food boxes through local distribution sites",
+        "Home-Delivered Meals through Area Agencies on Aging: for qualifying homebound older adults"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "How household rules affect your parent's eligibility",
+          "body": "This is the single most common source of confusion for family caregivers. If your parent lives with you and your family and you all share meals, MDHHS counts everyone's income together. A household with adult children who earn wages will usually have a higher income limit to qualify, but also a higher countable income. If your parent eats separately and buys their own food even in your home, they can apply as a one-person household. That single-person household faces a lower income threshold but only their income counts. Be accurate about this on the application form; it shapes everything that follows."
+        },
+        {
+          "type": "prose",
+          "title": "Why income alone does not determine eligibility",
+          "body": "Michigan's Food Assistance Program does not use a single income cutoff table the way some programs do. Two households with identical gross income can get very different results because allowable expenses are subtracted before eligibility is calculated. For seniors, the most important deductions are: rent or mortgage costs, utility costs, and out-of-pocket medical expenses (for household members age 60 or older or with a disability). If your parent pays $900 a month in rent and $200 in out-of-pocket prescriptions, those costs reduce the income figure that MDHHS uses in its calculation. Households with expenses that nearly match or exceed income can qualify even when the gross income number looks too high. This is why the fastest way to know whether your parent qualifies is to submit the application and let MDHHS run the actual calculation, rather than trying to estimate eligibility from income alone."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives with me. Does my income count against their eligibility?",
+          "answer": "It depends on whether you buy and prepare food together. If your parent eats your household's meals and you buy groceries together, MDHHS considers everyone in the home one household and counts all income. If your parent buys their own food and prepares meals separately, even in the same house, they can apply as their own household and only their income is counted. Be honest on the application; MDHHS will ask about living and eating arrangements during the interview."
+        },
+        {
+          "question": "My parent's Social Security income seems too high to qualify. Should I still apply?",
+          "answer": "Yes, apply anyway. Michigan's Food Assistance Program subtracts allowable expenses from income before determining eligibility. For adults age 60 and older, out-of-pocket medical costs, rent or mortgage payments, and utility costs are all deductible. A parent whose gross Social Security income appears too high may have enough deductible expenses to bring their countable income within the qualifying range. The only way to know is to submit the application and let MDHHS run the calculation."
+        },
+        {
+          "question": "Can I apply for Food Assistance on behalf of my elderly parent if they cannot manage the process themselves?",
+          "answer": "Yes. An authorized representative can complete and sign the application on behalf of an elderly or disabled household member. You will need to be listed on the application as the authorized representative. Bring or submit your own ID along with your parent's documents. If your parent has a legal guardian or power of attorney, bring that documentation as well."
+        },
+        {
+          "question": "Does my parent need to report their house, car, or savings account as an asset?",
+          "answer": "Michigan reviews assets as part of the eligibility process in some cases. The research available here confirms that a $4,500 asset limit applies to households with income above 200% of the federal poverty level, and that cash and bank accounts are countable resources. The official published materials do not provide a complete table of what is exempt, such as the primary home, one vehicle, or retirement accounts. Because this can significantly affect the result, confirm the current treatment of your parent's specific assets with MDHHS directly at 517-241-3740 or through MI Bridges before applying."
+        },
+        {
+          "question": "Can my parent receive Food Assistance and CSFP food boxes at the same time?",
+          "answer": "Yes, these are separate programs with separate eligibility rules, and qualifying for one does not disqualify a person from the other. CSFP provides a monthly food box specifically for income-eligible adults age 60 and older. TEFAP also provides periodic food boxes. Your parent can apply for Food Assistance through MI Bridges and ask their local Area Agency on Aging about CSFP and TEFAP access at the same time."
+        },
+        {
+          "question": "What happens after my parent is approved? Do they have to reapply?",
+          "answer": "Yes. Food Assistance benefits are approved for a certification period, after which the household must recertify to continue receiving benefits. MDHHS will notify your parent when recertification is due. During recertification, income, expenses, and household composition are reviewed again. Report significant changes in income or household size to MDHHS before recertification because changes can affect the benefit amount."
+        },
+        {
+          "question": "My parent's income is very low and they have almost no cash. Is there a faster or simpler way to qualify?",
+          "answer": "Possibly. Michigan recognizes simplified eligibility paths for households with very low resources. If your parent's monthly income before taxes is under $150 and they have $100 or less in cash and accounts, they may qualify under a simplified test. A similar path exists if their combined monthly income and cash is less than their combined monthly rent or mortgage and utility costs. Tell the MDHHS worker or note this situation clearly when applying through MI Bridges."
+        },
+        {
+          "question": "My parent receives SSI. Do they qualify for Food Assistance, or is there a different program for them?",
+          "answer": "A person receiving SSI can apply for Food Assistance through the standard process, and SSI counts as income in the calculation. However, Michigan also operates MiCAP, a separate food benefit program specifically for some SSI recipients. MiCAP has its own eligibility rules that are different from Food Assistance. Ask MDHHS at 517-241-3740 or MI Bridges whether your parent qualifies for MiCAP in addition to or instead of the standard Food Assistance Program."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "(517) 241-3740",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/food",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-pace-all-inclusive-care",
+      "name": "Michigan PACE",
+      "shortName": "Michigan PACE",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, PACE covers all their medical care, therapies, and personal support through one coordinated team at no out-of-pocket cost for those who qualify for Medicaid.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "PACE Michigan statewide program directory at pacemichigan.com/find-your-pace",
+            "type": "service-area"
+          },
+          {
+            "name": "Local independent PACE organizations in Michigan (14 organizations, 24 locations statewide)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs the kind of daily help that would normally lead to a nursing home, PACE may let them stay home instead. The Program of All-Inclusive Care for the Elderly covers medical visits, therapies, personal care aides, medications ordered by the PACE team, and care coordination, all through one interdisciplinary team of physicians, nurses, social workers, and therapists. For Medicaid-eligible participants who use PACE-arranged providers, there are no out-of-pocket costs.\n\nThe key requirement is not just age (55+). Your parent must be assessed as needing nursing-facility-level care, meaning a clinical team determines they require daily help with things like bathing, dressing, or medication management. They must also live within the geographic service area of one of Michigan's 14 independent PACE organizations, and they must be able to live safely in the community at the time they enroll.\n\nMichigan PACE is not a single state office. It is delivered through 14 independent organizations at 24 locations. Because each organization runs its own enrollment process, your first step is always finding the PACE provider that serves your parent's zip code. Start at pacemichigan.com/find-your-pace.",
+      "savingsRange": "",
+      "savingsSource": "Free service for Medicaid-eligible participants who use PACE-arranged providers; no out-of-pocket cost published by Michigan PACE program sites.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Meets Medicaid long-term care financial eligibility",
+          "Assessed as needing nursing-facility-level care",
+          "Lives within a PACE organization's service area",
+          "Living in the community at time of enrollment (not in a nursing facility)"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be certified as meeting Medicaid long-term care criteria, which is a clinical assessment determining whether they need daily help with activities like bathing, dressing, eating, or medication management. This is called nursing-facility level of care. The assessment is conducted as part of the enrollment process by the PACE organization's interdisciplinary team.",
+        "otherRequirements": [
+          "Must meet Medicaid long-term care financial eligibility. Michigan guidance states income must be at or below 300% of the SSI Federal Benefit Rate. Because the state does not publish a single household-size income table for PACE, the exact dollar threshold depends on the current SSI rate and Medicaid rules in effect when your parent applies. Confirm the current limit with the enrolling PACE organization or a Medicaid caseworker.",
+          "Asset limits follow Medicaid long-term care rules, not a PACE-specific schedule. The state does not publish a standalone PACE asset table. Verify which assets are counted and which are exempt directly with the PACE organization or Medicaid worker before applying.",
+          "Must live within the approved geographic service area of a specific Michigan PACE organization. Being medically eligible does not guarantee access if your parent's address is outside a covered area.",
+          "Must be living safely in the community at the time of enrollment. You cannot enroll while residing in a nursing facility.",
+          "Cannot be concurrently enrolled in Michigan's MI Choice waiver.",
+          "Cannot be concurrently enrolled in a Health Maintenance Organization (HMO).",
+          "Private-pay enrollment may be available for people who do not qualify for Medicaid. Ask the local PACE organization whether self-pay is an option and what the cost would be."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Find the PACE organization serving your parent's zip code at pacemichigan.com/find-your-pace, then contact that organization directly to begin an assessment and enrollment; each of the 14 organizations runs its own process.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find the PACE organization that covers your parent's address",
+            "description": "Go to pacemichigan.com/find-your-pace and enter your parent's zip code. Michigan has 14 independent PACE organizations at 24 locations; only the one assigned to your parent's area can enroll them. Write down the organization's name and phone number before moving to the next step."
+          },
+          {
+            "step": 2,
+            "title": "Call the local PACE organization and ask about eligibility and availability",
+            "description": "Call the phone number listed for the PACE organization covering your parent's area. Ask three specific questions: Does my parent's address fall within your service area? Is there currently a waitlist? What is the first step in your enrollment and assessment process? Because each organization is independent, intake procedures and timing vary."
+          },
+          {
+            "step": 3,
+            "title": "Complete the interdisciplinary assessment",
+            "description": "The PACE organization will schedule a comprehensive assessment conducted by their team of physicians, nurses, social workers, and therapists. This assessment determines whether your parent meets nursing-facility level of care and whether PACE is the right fit. Bring medical records, a list of current medications, and contact information for existing doctors."
+          },
+          {
+            "step": 4,
+            "title": "Complete the Medicaid financial review",
+            "description": "If your parent is not already enrolled in Medicaid long-term care, a financial eligibility determination will be part of the enrollment process. You will need income documentation and asset information. Because financial rules follow Medicaid long-term care policy rather than a PACE-specific standard, ask the enrollment coordinator exactly which documents are required for the current review process."
+          },
+          {
+            "step": 5,
+            "title": "Finalize enrollment and transition care",
+            "description": "Once the assessment is complete and eligibility is confirmed, the PACE team will coordinate the transition of your parent's care. All medical care going forward is arranged through the PACE team; your parent's existing providers may or may not be part of the PACE network, so clarify this before signing enrollment documents."
+          }
+        ],
+        "processingTime": "No statewide processing timeline is published. Timing varies by organization because each of Michigan's 14 PACE programs runs its own enrollment and assessment process. Ask the local PACE organization for their current estimate when you call.",
+        "waitlist": "No statewide waitlist policy exists. Some locations may have immediate openings; others may have a waitlist. Ask the specific PACE organization serving your parent's area whether spots are currently available.",
+        "tip": "Call the local PACE organization before gathering documents. Each organization has its own intake checklist. Starting with a phone call saves you from pulling together paperwork that may not match what that specific program requires.",
+        "urls": [
+          {
+            "label": "Find your local Michigan PACE organization",
+            "url": "https://www.pacemichigan.com/find-your-pace"
+          },
+          {
+            "label": "Michigan PACE official state page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of your parent's current address in the PACE service area (a utility bill, lease agreement, or official mail showing their name and address)",
+        "Medicare card if your parent has Medicare (Medicare is not required to enroll, but have it ready if they are enrolled)",
+        "Medicaid card or Medicaid case number if your parent is already enrolled in Michigan Medicaid",
+        "Proof of age (birth certificate, passport, or state-issued ID)",
+        "Recent Social Security award letter showing current monthly benefit amount",
+        "Documentation of any other income sources (pension statements, Veterans benefits letters, annuity statements)",
+        "Medical records showing diagnoses, functional limitations, and recent hospitalizations or care history",
+        "List of all current medications, prescribers, and dosages",
+        "Names and contact information for current doctors and specialists",
+        "Asset information for Medicaid long-term care financial review: current balances for checking and savings accounts, which the Medicaid worker will request as part of the long-term care eligibility process",
+        "Insurance cards and any supplemental insurance policy documents"
+      ],
+      "contacts": [
+        {
+          "label": "PACE Michigan Program Directory",
+          "phone": null,
+          "description": "Use pacemichigan.com/find-your-pace to identify the specific PACE organization serving your parent's zip code. Each organization has its own phone number and handles its own enrollment. This directory is the correct first stop because Michigan has 14 independent programs and calling a general state line will not start enrollment.",
+          "hours": "Directory available online at any time"
+        },
+        {
+          "label": "Michigan MDHHS Seniors Program Line",
+          "phone": "(800) 642-3195",
+          "description": "Michigan Department of Health and Human Services line for seniors programs. Can provide general information about PACE eligibility and direct you to the correct local organization if you are unsure which one covers your parent's address. Cannot process PACE enrollment directly.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "General helpline that can help identify local PACE organizations, Medicaid offices, and Area Agencies on Aging. Does not process PACE enrollment but can transfer you to the right local contact.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent cannot enroll in PACE while living in a nursing facility. If they are currently in a facility and want to transition home, discharge planning must happen before enrollment can begin. Talk to the facility's social worker about the steps required to return to community living first.",
+        "If your parent is already enrolled in an HMO or the MI Choice waiver, they must disenroll from that program before PACE enrollment can be completed. Ask the PACE organization's enrollment coordinator to explain the timing and how to avoid a coverage gap.",
+        "The financial eligibility review for PACE follows Medicaid long-term care rules, which are more complex than standard Medicaid. If your parent has transferred assets in the past five years, those transfers may be reviewed. Consider speaking with an elder law attorney before applying if this applies to your situation.",
+        "Because PACE replaces your parent's existing care coordination, ask the enrolling organization specifically whether your parent's current doctors are in the PACE network. If they are not, care will shift to PACE-affiliated providers after enrollment."
+      ],
+      "relatedPrograms": [
+        "MI Choice Medicaid Waiver (note: you cannot be enrolled in both MI Choice and PACE at the same time)",
+        "Michigan Medicaid Long-Term Care",
+        "Michigan Home Help Program",
+        "Michigan Area Agencies on Aging"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "PACE is not available everywhere in Michigan",
+          "body": "Michigan has 14 independent PACE organizations covering parts of the state at 24 locations. If your parent's address falls outside every organization's service area, they cannot enroll regardless of medical need. Check coverage first at pacemichigan.com/find-your-pace before beginning the application process."
+        },
+        {
+          "type": "prose",
+          "title": "What PACE actually covers",
+          "body": "PACE is designed as a complete alternative to nursing home placement. The PACE interdisciplinary team coordinates and provides: primary and preventive medical care, specialist referrals, hospital care when needed, physical and occupational therapy, speech therapy, personal care aides, social work services, medications ordered by the PACE team, and transportation to the PACE day center. Because all of these services are managed by one team, your parent does not need to coordinate between separate providers or insurers. The PACE team handles that.\n\nFor participants who are eligible for both Medicare and Medicaid and who use PACE-arranged providers, at least one Michigan PACE program states there are no out-of-pocket costs. Confirm cost details with the specific organization serving your parent's area, as each program operates independently."
+        },
+        {
+          "type": "prose",
+          "title": "What 'nursing-facility level of care' means in plain terms",
+          "body": "To qualify, your parent must be assessed as needing the kind of daily help that would typically require a nursing home. The clinical team looks at whether your parent needs regular assistance with bathing, dressing, eating, moving around, managing medications, or other daily activities. This is a formal assessment conducted by the PACE organization's own team of physicians, nurses, and social workers as part of the enrollment process. You do not need to arrange this assessment separately."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already has a doctor they've seen for years. Do they have to give up that doctor to enroll in PACE?",
+          "answer": "Possibly. PACE coordinates all care through its own interdisciplinary team and network. Your parent's current doctor may or may not participate with the PACE organization in their area. Ask the specific PACE organization during the enrollment conversation whether your parent's existing physicians are in-network. If they are not, care transitions to PACE-affiliated providers after enrollment."
+        },
+        {
+          "question": "My parent doesn't have Medicare. Can they still apply?",
+          "answer": "Yes. CMS is explicit that a person can enroll in PACE with Medicaid only; Medicare is not required. Your parent can also inquire about private-pay enrollment if they do not qualify for Medicaid. Ask the local PACE organization whether self-pay is available and what the cost structure would be."
+        },
+        {
+          "question": "My parent is currently in a nursing home. Can we apply now?",
+          "answer": "No. Michigan PACE requires that your parent be able to live safely in the community at the time of enrollment. If your parent is currently in a nursing facility, you would need to work with the facility's discharge planning team to arrange a return to community living before PACE enrollment can begin. Contact the local PACE organization to discuss whether and how that transition could work."
+        },
+        {
+          "question": "My parent is already on the MI Choice waiver. Can they switch to PACE?",
+          "answer": "Not while simultaneously enrolled. Michigan rules prohibit concurrent enrollment in both MI Choice and PACE. If your parent wants to switch, they would need to disenroll from MI Choice before finalizing PACE enrollment. Ask the PACE enrollment coordinator to explain the timing to avoid a gap in services."
+        },
+        {
+          "question": "How long is the waitlist?",
+          "answer": "There is no statewide waitlist policy for Michigan PACE. Some organizations have immediate openings; others may have a wait. Because Michigan's 14 PACE programs operate independently, waitlist status varies by location. Call the PACE organization serving your parent's zip code and ask directly whether they have current capacity. Find that organization at pacemichigan.com/find-your-pace."
+        },
+        {
+          "question": "What are the income and asset limits exactly?",
+          "answer": "Michigan does not publish a single PACE-specific income table or asset limit chart. Financial eligibility follows Medicaid long-term care rules. State guidance indicates income must be at or below 300% of the SSI Federal Benefit Rate, but the exact dollar amount changes with annual SSI adjustments. Asset limits are evaluated under Medicaid long-term care policy. The most accurate way to get current figures is to contact the enrolling PACE organization or a Michigan Medicaid caseworker directly."
+        },
+        {
+          "question": "Can I, as the adult child, start the enrollment process on behalf of my parent?",
+          "answer": "Yes. You can call the local PACE organization to gather information, ask eligibility questions, and request an assessment appointment on your parent's behalf. Your parent will need to participate in the clinical assessment, and if they have a legal representative such as a durable power of attorney for healthcare or finances, bring that documentation to the enrollment meeting."
+        },
+        {
+          "question": "What happens if my parent's condition gets worse after they enroll in PACE?",
+          "answer": "The PACE model is specifically designed to manage changing needs over time. If your parent's condition changes, the interdisciplinary team adjusts their care plan. PACE is intended to support people through increasing levels of need, including end-of-life care, while keeping them in the community as long as it is safe to do so. If nursing facility placement becomes necessary, the PACE team coordinates that transition as well."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": null,
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-state-emergency-relief",
+      "name": "State Emergency Relief",
+      "shortName": "Emergency Relief",
+      "tagline": "If your parent is facing an eviction notice, a utility shutoff, or a broken furnace in Michigan, this program can step in with emergency cash for the specific crisis.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Michigan Department of Health and Human Services (MDHHS) offices",
+            "type": "service-area"
+          },
+          {
+            "name": "MI Bridges online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is facing a shutoff notice, an overdue rent bill, or a furnace that stopped working, Michigan's State Emergency Relief (SER) program can pay for that specific crisis. This is not a monthly benefit. It is a one-time emergency payment for a situation that threatens health or safety right now, things like past-due electric bills, propane delivery when the tank runs dry, or an emergency furnace repair.\n\nThe program covers rent, mortgage costs, past-due utility bills, deliverable fuel like propane, and essential home repairs including furnaces, water heaters, and septic systems. Eligibility is not decided by a formula you can look up. A local MDHHS specialist reviews every application because the rules depend on the type of crisis, your parent's income, their countable cash assets (which must be at or below $15,000), and whether the emergency is serious enough to meet the program's threshold.\n\nApplying is open to any Michigan resident facing a genuine health-or-safety crisis, regardless of age. The process typically takes around 10 days, though emergency circumstances can speed things up. Start at MI Bridges (newmibridges.michigan.gov) or call your local MDHHS office directly.",
+      "savingsRange": "",
+      "savingsSource": "SER benefit amounts depend entirely on the specific emergency service requested and the costs involved. No fixed maximum has been published by MDHHS for the program as a whole. We cannot responsibly state a dollar range.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Michigan resident (permanent address not required)",
+          "Facing an emergency that threatens health or safety",
+          "Countable cash assets at or below $15,000",
+          "Income is evaluated (energy help generally requires income at or below 150% of the Federal Poverty Level)",
+          "Emergency must not be a recurring, predictable problem"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 15000,
+          "couple": 15000,
+          "countedAssets": [
+            "Checking account balances",
+            "Savings account balances",
+            "Cash on hand",
+            "Other liquid financial assets"
+          ],
+          "exemptAssets": [
+            "Primary home (homestead)",
+            "One vehicle",
+            "Personal goods",
+            "Household goods"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "The emergency must be serious enough to directly threaten health or safety.",
+          "For housing or utility help, the household must show it can handle ongoing costs going forward. A future-unaffordable situation will generally be denied.",
+          "For rent, heat, electric, and utility help, your parent may need to show they already made certain required payments before applying.",
+          "For home repair help, the home must be your parent's permanent usual residence, the repair must be essential for safety or legal compliance, and the property cannot be listed for sale or in jeopardy of loss.",
+          "Unemancipated minors who apply are referred for further evaluation.",
+          "Eligibility is determined individually by a local MDHHS specialist, not automatically by the application system."
+        ],
+        "povertyLevelReference": "150% FPL (for energy-related SER services)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through MI Bridges or in person at your local MDHHS office; applications must be registered within one day of receipt and the process typically takes around 10 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need proof of identity for everyone in the household, proof of income, current bank statements showing your countable cash assets, and documentation of the specific emergency: a shutoff notice, eviction notice, past-due bill, lease, mortgage statement, or repair estimate. Having these ready before you apply prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Apply online at MI Bridges or go to your local MDHHS office",
+            "description": "The fastest route is MI Bridges at newmibridges.michigan.gov. You can also download and complete form DHS-1514 (Application for State Emergency Relief) or the MDHHS-1171 Assistance Application with the MDHHS-1171-SER supplemental form, and deliver it in person, by mail, or by fax to your local MDHHS office. Find your local office at michigan.gov/mdhhs."
+          },
+          {
+            "step": 3,
+            "title": "Your application is registered within one business day",
+            "description": "Michigan law requires that applications be registered within one day of receipt. Once registered, a local MDHHS specialist is assigned to review your case. They may contact you by phone to ask follow-up questions or request additional documents."
+          },
+          {
+            "step": 4,
+            "title": "Specialist reviews your specific emergency",
+            "description": "The specialist evaluates your income, your countable cash assets (the $15,000 limit applies to most services), the nature of the emergency, and whether your parent can handle ongoing costs after the crisis is resolved. This step is not automatic. The specialist makes the final eligibility decision."
+          },
+          {
+            "step": 5,
+            "title": "Decision issued and payment made directly to provider",
+            "description": "If approved, SER pays the vendor directly: the utility company, landlord, fuel supplier, or repair contractor. The full process typically takes around 10 days, though documented emergencies can be handled faster."
+          }
+        ],
+        "processingTime": "Applications must be registered within one business day of receipt. The full review process typically takes around 10 days, though local office volume and the nature of the emergency can affect timing.",
+        "waitlist": null,
+        "tip": "Bring or upload every document at the time you apply. Applications held for missing documents take longer, and in a utility shutoff or eviction situation, days matter.",
+        "urls": [
+          {
+            "label": "MI Bridges Online Application",
+            "url": "https://newmibridges.michigan.gov/"
+          },
+          {
+            "label": "MDHHS State Emergency Relief Program Page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/emergency-relief"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Shutoff notice, eviction notice, past-due bill, or other documentation showing the specific emergency",
+        "Proof of identity for your parent and all household members (driver's license, state ID, or birth certificate)",
+        "Proof of income for all household members (Social Security award letter, pension statement, pay stubs, or benefit letters)",
+        "Bank statements or written current balances for any checking or savings accounts (used to verify the $15,000 countable cash asset limit; MDHHS will tell you what period to cover)",
+        "Lease agreement or mortgage statement showing current housing costs",
+        "Most recent utility bills showing the account name and address, for all utilities involved in the request",
+        "For deliverable fuel requests: documentation of current fuel need and the supplier's contact information",
+        "Any proof of payments already made toward rent, heat, electric, or utility bills (required for some utility and housing requests)",
+        "For home repair requests: proof of homeownership or life estate (deed or tax statement) and a written repair estimate or documentation of the defect from a contractor",
+        "Documentation showing the home is your parent's permanent usual residence if applying for repair help",
+        "Legal documents showing authority to act on your parent's behalf, if you are applying as a representative (power of attorney, guardianship order)"
+      ],
+      "contacts": [
+        {
+          "label": "Local MDHHS Office (find yours at michigan.gov/mdhhs)",
+          "phone": "(855) 275-6424",
+          "description": "Michigan's statewide MDHHS line to reach benefits staff who can start your SER application, answer eligibility questions, and connect you with your county office.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "MI Bridges Online Portal",
+          "phone": null,
+          "description": "Apply for SER online at newmibridges.michigan.gov. You can submit the application, upload documents, and check status without calling.",
+          "hours": "Available 24 hours, 7 days a week"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general information and referral line that can help you locate your nearest MDHHS office or connect you with emergency community resources. It does not process SER applications itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has an active utility shutoff notice or is at immediate risk of losing heat, tell the MDHHS specialist at the start of the call. Emergency circumstances can affect how quickly the case is handled.",
+        "SER can be denied even when income is low. If a specialist determines that your parent cannot afford ongoing utility or housing costs after the crisis is resolved, the application for that service will likely be denied. Be prepared to show current income is sufficient to cover future bills.",
+        "For utility-related requests, your parent may need to show they already made a required payment toward the overdue bill before SER will cover the rest. Ask the specialist what is required for your specific situation.",
+        "Home repair approvals require extra documentation: proof of ownership, a repair estimate, and confirmation that the home is the primary residence and is not listed for sale. Gather these before applying to avoid delays."
+      ],
+      "relatedPrograms": [
+        "Michigan LIHEAP (Low Income Home Energy Assistance Program) for seasonal heating and cooling help",
+        "Michigan Weatherization Assistance Program for home energy efficiency improvements",
+        "Michigan's Home Heating Credit (a state tax credit for heating costs)",
+        "Emergency Solutions Grant (ESG) for homelessness prevention, administered through local housing agencies"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What SER will and will not cover",
+          "body": "SER covers: past-due rent, past-due mortgage or housing costs, utility shutoffs or past-due utility bills, deliverable fuel (propane, fuel oil), and emergency repair or replacement of a non-functioning furnace, water heater, or septic system when the failure threatens health or safety or violates legal requirements.\n\nSER does not cover: ongoing monthly bills as a recurring supplement, situations where the household cannot afford future costs after the crisis, home repairs on a property listed for sale, or general cash assistance for non-emergency needs."
+        },
+        {
+          "type": "callout",
+          "title": "The $15,000 asset limit: what it means in practice",
+          "body": "A local MDHHS specialist looks at your parent's countable cash assets, meaning checking accounts, savings accounts, cash on hand, and similar liquid resources. The limit is $15,000. Your parent's home, one vehicle, personal belongings, and household goods do not count toward this limit. If your parent has a home worth $300,000 and $12,000 in savings, the $12,000 is what matters for the asset test."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a home. Does the home's value count against the $15,000 asset limit?",
+          "answer": "No. The primary home (homestead) is explicitly excluded from countable cash assets under SER rules. One vehicle, personal goods, and household goods are also excluded. The $15,000 limit applies to liquid financial assets like checking and savings account balances and cash on hand."
+        },
+        {
+          "question": "My parent's income is very low, but they can barely afford their bills every month. Will SER still be denied?",
+          "answer": "It can be. For housing and utility help, the program requires that the household be able to handle ongoing costs after the crisis is resolved. If a specialist determines that your parent's income is not enough to keep up with future rent or utility bills, the application for that specific service may be denied even if income is low. This is one of the more unexpected aspects of the program. Being honest about income and current expenses during the review gives the specialist what they need to make an accurate decision."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. You can apply through MI Bridges or in person at a local MDHHS office on your parent's behalf. Bring documentation showing your authority to act, such as a power of attorney or guardianship order. The application will still require your parent's identity, income, and asset information."
+        },
+        {
+          "question": "My parent already received SER help once. Can they apply again?",
+          "answer": "SER is designed for one-time or infrequent crisis situations. A recurring or predictable emergency generally does not meet the program's criteria. If your parent regularly cannot afford utilities or rent, a MDHHS specialist may determine the situation does not qualify as an emergency and may refer you to other programs like LIHEAP or local community action agencies instead."
+        },
+        {
+          "question": "How fast will SER actually move if the heat is shutoff today?",
+          "answer": "Applications must be registered within one business day of receipt. The full process typically takes around 10 days according to Michigan Legal Help. If your parent faces an active shutoff or immediate health risk, tell the MDHHS specialist that at the start of the conversation. Emergency circumstances can affect prioritization, though MDHHS has not published a guaranteed expedited timeline for SER specifically."
+        },
+        {
+          "question": "The furnace broke. Will SER pay for a replacement?",
+          "answer": "It can, but the rules are strict. The home must be your parent's permanent usual residence, the furnace failure must create a direct threat to health or safety (or violate a legal or mobile-home-park requirement), and the home cannot be listed for sale or in jeopardy of loss. You will need proof of homeownership or a life estate and a written repair estimate. Submit these with the initial application to avoid delays."
+        },
+        {
+          "question": "My parent lives in a different county than me. Where do they apply?",
+          "answer": "SER applications can be filed in any county in Michigan. Your parent does not need to be a permanent resident of the county where they apply, only physically present in Michigan. The application will be handled by the local MDHHS office in whichever county your parent files. Find that office at michigan.gov/mdhhs or apply statewide through MI Bridges at newmibridges.michigan.gov."
+        },
+        {
+          "question": "Can my parent apply for SER and LIHEAP at the same time?",
+          "answer": "Yes, and it often makes sense to do so. LIHEAP (Low Income Home Energy Assistance Program) provides seasonal heating and cooling help and has its own eligibility rules. SER is for acute emergencies. If your parent faces an immediate shutoff and also needs seasonal energy help, applying for both ensures they are not left without support once the immediate crisis is resolved. Both programs are administered through MDHHS and can be started at MI Bridges."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lifebuoy",
+      "phone": "(855) 275-6424",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/emergency-relief",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are helping an aging parent in Michigan, this program connects you with free respite care, counseling, training, and support groups through your local Area Agency on Aging.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agency on Aging offices across Michigan",
+            "type": "service-area"
+          },
+          {
+            "name": "Detroit Area Agency on Aging (Region 1A)",
+            "type": "service-area"
+          },
+          {
+            "name": "AgeWays serving Livingston, Macomb, Monroe, Oakland, St. Clair, and Washtenaw counties",
+            "type": "service-area"
+          },
+          {
+            "name": "Jackson County Department on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Kalamazoo County Area Agency on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Saginaw County Commission on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are caring for a parent or older loved one in Michigan, the Family Caregiver Support Program exists specifically for you. It provides free services to family members, friends, neighbors, and spouses who are helping an adult age 60 or older stay at home. Services vary by county but commonly include respite care (temporary relief so you can rest), one-on-one counseling, caregiver training, support groups, and help identifying other local resources.\n\nThis program is not a single statewide benefit with one application form. Michigan delivers it through a network of local Area Agencies on Aging, so the exact mix of services you can access depends on your county. Some counties offer dementia-specific programs, such as a free six-week class called Creating Confident Caregivers, though seats are limited. Other counties provide in-home consultation or unmet-needs assistance.\n\nThere is no income limit and no asset test for this program. If your parent is 60 or older and living at home, and you are the person helping them, you are likely eligible. The fastest way to find out what is available in your county is to call your local Area Agency on Aging directly.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Care recipient must be age 60 or older",
+          "You are a family member, friend, neighbor, or spouse providing unpaid care",
+          "No income limit and no asset test",
+          "Care recipient typically lives at home",
+          "Some programs also cover caregivers of seniors raising an adult disabled child, and kinship caregivers age 55 or older"
+        ],
+        "ageRequirement": "60+ (care recipient)",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "You are providing unpaid care to the older adult as a family member, friend, partner, or neighbor",
+          "For dementia-specific classes such as Creating Confident Caregivers, the person with dementia must be living at home",
+          "Eligibility for some local programs extends to grandparents or kinship caregivers age 55 or older who are raising a child with a disability",
+          "Exact eligibility rules and available services vary by local Area Agency on Aging and county"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your local Area Agency on Aging to ask what services are available in your county; there is no statewide form to fill out.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local Area Agency on Aging",
+            "description": "Go to michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services to find the Area Agency on Aging that covers your county. Michigan has 16 Area Agencies on Aging, each serving a distinct region."
+          },
+          {
+            "step": 2,
+            "title": "Call your local office",
+            "description": "Call the office that covers your county and tell them you are a caregiver for someone age 60 or older. Ask specifically what caregiver support services are currently available and whether there is a waitlist for any of them. Each office has its own intake process."
+          },
+          {
+            "step": 3,
+            "title": "Describe your caregiving situation",
+            "description": "Be ready to share the care recipient's age, your relationship to them, and a general description of what help you provide day to day. If you are interested in dementia-specific programs, mention that the person you care for has a dementia diagnosis and is living at home."
+          },
+          {
+            "step": 4,
+            "title": "Ask about enrollment and next steps",
+            "description": "Your local office will tell you which services you qualify for, whether any have limited availability, and what, if anything, they need from you to get started. No statewide processing timeline applies; timing depends on your county."
+          }
+        ],
+        "processingTime": "No statewide timeline. Timing depends on the local Area Agency on Aging or county office.",
+        "waitlist": "Some services, including the Creating Confident Caregivers dementia class, are free but space-limited. Local waitlists may exist depending on your region and the specific service.",
+        "tip": "When you call, ask two specific questions: what services are available right now, and which ones have a waitlist. Getting on a waitlist immediately is worth it even if you do not need the service this week.",
+        "urls": [
+          {
+            "label": "Michigan Aging Services (find your local Area Agency on Aging)",
+            "url": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Age or date of birth for the person receiving care (to confirm they are 60 or older)",
+        "Your name and contact information as the caregiver",
+        "A brief description of your relationship to the care recipient (spouse, adult child, neighbor, etc.)",
+        "A general description of what daily tasks you help with (bathing, medication, meals, transportation)",
+        "Dementia diagnosis information, if you are applying for dementia-specific classes such as Creating Confident Caregivers",
+        "Confirmation that the care recipient lives at home (required for dementia-specific programs)"
+      ],
+      "contacts": [
+        {
+          "label": "Michigan Elder Law of Michigan Helpline (reach your local Area Agency on Aging)",
+          "phone": "(800) 347-5297",
+          "description": "Call to be connected to caregiver support services in your county. This is the Michigan Elder Law of Michigan Helpline, which routes callers to local aging services including caregiver support.",
+          "hours": "Mon-Fri, hours vary by region"
+        },
+        {
+          "label": "Detroit Area Agency on Aging (Region 1A)",
+          "phone": "(313) 446-4444",
+          "description": "Serves Wayne County and the city of Detroit. Call to ask about caregiver support services available in your area.",
+          "hours": "Mon-Fri, call for hours"
+        },
+        {
+          "label": "AgeWays (Livingston, Macomb, Monroe, Oakland, St. Clair, Washtenaw counties)",
+          "phone": "(800) 852-7795",
+          "description": "Serves six counties in southeast Michigan. Call to ask about caregiver support services available in your county.",
+          "hours": "Mon-Fri, call for hours"
+        },
+        {
+          "label": "Michigan 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general community helpline that can help you identify your local Area Agency on Aging if you are unsure which office serves your county. This line does not handle caregiver support enrollment directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Services and availability are not uniform statewide. Two caregivers in different Michigan counties may qualify for very different services. Always call your local office rather than assuming what is available.",
+        "If the specific service you need has a waitlist, ask to be added immediately. Waitlist position is typically based on when you called, not when you finalize paperwork."
+      ],
+      "relatedPrograms": [
+        "MI Choice Medicaid Waiver (in-home care for Medicaid-eligible seniors)",
+        "PACE (Program of All-Inclusive Care for the Elderly)",
+        "SNAP Food Benefits for Seniors",
+        "Medicare Savings Programs (help paying Medicare premiums)"
+      ],
+      "contentSections": [
+        {
+          "type": "prose",
+          "title": "What services are typically available",
+          "body": "The specific services you can access depend on your county, but most Michigan Area Agencies on Aging offer some combination of the following.\n\nRespite care: Temporary relief for you as the caregiver. This may mean a volunteer or paid aide sits with your parent for a few hours so you can rest, run errands, or attend to your own needs.\n\nCounseling: One-on-one sessions to help you manage the emotional demands of caregiving, make decisions about care, and plan for what comes next.\n\nSupport groups: Regularly scheduled groups where caregivers in similar situations share experiences and strategies. Some are specific to dementia caregiving.\n\nCaregiver training and education: Classes and workshops that teach practical caregiving skills, such as how to safely assist with mobility, manage difficult behaviors in dementia, or navigate medical appointments.\n\nInformation and referral: Help identifying other local programs, services, and resources that your parent or your family may qualify for.\n\nUnmet-needs assistance: Some counties provide limited direct assistance for needs that are not covered elsewhere, such as adaptive equipment or safety items. This varies significantly by region."
+        },
+        {
+          "type": "callout",
+          "title": "No income test. No asset test.",
+          "body": "Income and asset limits were not identified in the official Michigan caregiver services materials. Families should not assume Medicaid-style financial rules apply to this program. Eligibility is based on the care recipient's age (60 or older) and the caregiver's role, not household finances."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives with me. Does that affect eligibility?",
+          "answer": "No. The program supports caregivers helping older adults who live at home, whether that home is the parent's own residence or yours. For dementia-specific programs like Creating Confident Caregivers, the requirement is simply that the person with dementia is living in a home setting, not a facility."
+        },
+        {
+          "question": "I am not a blood relative. I am my parent's neighbor and have been helping them for years. Can I still apply?",
+          "answer": "Yes. Michigan's caregiver support program explicitly includes friends, neighbors, and partners, not just adult children or spouses. If you are providing regular unpaid care to someone age 60 or older, you qualify as a caregiver for purposes of this program."
+        },
+        {
+          "question": "How long is the waitlist for respite care or other services?",
+          "answer": "There is no statewide answer. Waitlists depend entirely on your county and the specific service. Some counties have immediate availability; others have waiting periods for high-demand services. The only way to know is to call your local Area Agency on Aging and ask directly about current availability and waitlist length for each service you need."
+        },
+        {
+          "question": "Can I use this program alongside other state or federal programs my parent already receives?",
+          "answer": "Yes. Family Caregiver Support Program services are designed to complement other programs, not replace them. If your parent receives in-home care through a Medicaid waiver or other program, you can still access caregiver support services for yourself through this program. Your local Area Agency on Aging can also help identify other programs your family may not be using yet."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "(800) 347-5297",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-property-tax-credit-seniors",
+      "name": "Property Tax Credit for Seniors",
+      "shortName": "Senior Property Tax Credit",
+      "tagline": "If your parent owns or rents a home in Michigan and earns under $71,500/year, they may be owed hundreds of dollars back on their taxes, and they may be able to claim missed credits going back four years.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "Michigan's Homestead Property Tax Credit is a refundable tax credit that puts money back in your parent's pocket based on what they pay in property taxes (or the property-tax equivalent built into their rent). For renters age 65 or older, a special alternate calculation can return up to $1,900. For homeowners, the amount depends on their property tax bill and total household income. Either way, this is money the state sends back, not a discount applied up front.\n\nThis is a tax return item, not a separate application. Your parent claims it by filing Form MI-1040 along with the Homestead Property Tax Credit form each year. If they have not been filing, they can go back and claim up to four prior years of credits they may have missed. That retroactive window makes this worth checking even if your parent has not filed Michigan taxes in several years.\n\nBoth homeowners and renters qualify, but the rules differ. Homeowners must have a taxable value under the annual cap set in the instructions. Renters age 65 or older can use Worksheet 5 to calculate under the alternate method, which is often more favorable than the standard formula. Income is measured as Total Household Resources (THR), which is broader than your federal adjusted gross income and includes Social Security and pensions.",
+      "savingsRange": "Up to $1,900 for senior renters age 65+ using the alternate method (annual maximum). Homeowner and standard-renter amounts vary by property tax bill and Total Household Resources; the annual maximum is adjusted each year by the Michigan Treasury.",
+      "savingsSource": "Michigan Department of Treasury, Homestead Property Tax Credit guidance page (michigan.gov/taxes). The $1,900 figure is the statutory maximum for the senior renter alternate method. Homeowner maximums are formula-based and updated annually.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "Michigan resident for at least 6 months of the tax year",
+          "Homestead must be your parent's principal residence in Michigan",
+          "Total Household Resources (income, including Social Security and pensions) below $71,500/year",
+          "Homeowners: taxable value of the property must be under the annual cap in the MI-1040CR instructions"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a natural person (trusts, LLCs, and corporations do not qualify)",
+          "Must own and occupy the homestead as a homeowner, or occupy it as a renter under a lease agreement",
+          "Renters must have a lease or rental agreement; university housing does not qualify for the standard renter credit",
+          "Total Household Resources (THR) includes taxable and nontaxable income such as Social Security and pensions, not just federal AGI",
+          "Credit phases down by 10% for each $1,000 of THR above $62,500, and phases out completely at $71,500",
+          "If THR consists solely of certain public assistance payments, the standard renter credit may not apply"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "File Form MI-1040 with the Homestead Property Tax Credit form (MI-1040CR) when filing Michigan state taxes each year; renters age 65+ also complete Worksheet 5.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather income and housing documents",
+            "description": "Collect your parent's Total Household Resources information for the tax year: Social Security statements, pension statements, and any other income. Homeowners need their property tax statement. Renters need their lease agreement and the total annual rent paid."
+          },
+          {
+            "step": 2,
+            "title": "Determine which form applies",
+            "description": "Most seniors use Form MI-1040CR (Homestead Property Tax Credit Claim). Seniors who are blind or disabled veterans may use MI-1040CR-2. Renters age 65 or older also complete Worksheet 5 (Renters Over Age 65 Estimator) and enter the result on line 44 of Form MI-1040CR."
+          },
+          {
+            "step": 3,
+            "title": "Calculate Total Household Resources (THR)",
+            "description": "THR is not the same as federal adjusted gross income. It includes Social Security, pensions, and other nontaxable income. Use the MI-1040CR instructions to calculate THR correctly. An error here is the most common reason families claim less than they are owed."
+          },
+          {
+            "step": 4,
+            "title": "Complete and file the forms with Michigan Treasury",
+            "description": "File Form MI-1040 along with MI-1040CR (and Worksheet 5 if applicable) with the Michigan Department of Treasury. You can file electronically through Michigan Treasury Online or by mail. The official guidance page is michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc."
+          },
+          {
+            "step": 5,
+            "title": "Check for missed prior years",
+            "description": "If your parent has not claimed this credit in previous years, they can file amended returns to recover credits going back up to four years from the year the credit could have been claimed. Each prior year requires its own MI-1040CR for that tax year."
+          }
+        ],
+        "processingTime": "Processing time for the refund is not specified in Michigan Treasury's official guidance for this credit. Contact Michigan Treasury at (517) 636-4486 for a current estimate.",
+        "waitlist": null,
+        "tip": "Senior renters age 65 or older should always run both the standard calculation and the alternate method using Worksheet 5. The alternate method often produces a larger credit, up to $1,900, but you must calculate both to know which is better for your parent's situation.",
+        "urls": [
+          {
+            "label": "Michigan Treasury: Homestead Property Tax Credit Guidance",
+            "url": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Property tax statement for the tax year (homeowners)",
+        "Lease or rental agreement showing your parent's name and address (renters)",
+        "Total annual rent paid for the full tax year (renters)",
+        "Social Security benefit statement (SSA-1099 or benefit award letter) showing annual benefit amount",
+        "Pension or retirement income statements for the tax year",
+        "Any documentation of other income included in Total Household Resources, such as interest, dividends, or nontaxable income",
+        "Prior-year tax returns if claiming retroactive credits for up to four past years",
+        "Form MI-1040CR from the relevant tax year for each retroactive claim year"
+      ],
+      "contacts": [
+        {
+          "label": "Michigan Department of Treasury: Individual Income Tax",
+          "phone": "(517) 636-4486",
+          "description": "Call to ask about the Homestead Property Tax Credit, filing requirements, or the status of a submitted return. This is the Treasury line that handles individual income tax questions including the senior credit.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "AARP Tax-Aide (free tax preparation for seniors)",
+          "phone": "(888) 227-7669",
+          "description": "Free tax preparation assistance for people age 50 and older. Volunteers can complete MI-1040CR and Worksheet 5 at no cost. Available at many Michigan library and community center locations during tax season. Call to find the nearest site.",
+          "hours": "Seasonal (February through April); call for current site availability"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has not filed Michigan taxes in several years, do not assume the credit is lost. Michigan Treasury allows retroactive claims for up to four years from the year the credit could have been claimed. Each missed year requires its own MI-1040CR completed using the instructions and income figures for that specific year.",
+        "THR is not the same as the number on your parent's federal tax return. It includes Social Security and pension income that may not appear in federal AGI. Using the wrong income figure is the most common mistake on this form, and it usually results in a smaller credit than the family is actually owed.",
+        "Renters age 65 or older have access to an alternate calculation method using Worksheet 5. This method can produce a credit up to $1,900 and is often more favorable than the standard renter formula. Always calculate both methods before filing.",
+        "If your parent's taxable-value cap question applies (homeowners only), check the current year's MI-1040CR instructions for the exact cap figure. The cap is updated annually and is not the same as market value or assessed value."
+      ],
+      "relatedPrograms": [
+        "Michigan Home Heating Credit (MI-1040CR-7): helps low-income Michigan residents pay heating costs, also filed with state taxes",
+        "Michigan Medicaid (for seniors who need ongoing health coverage and may qualify for additional cost assistance)",
+        "Michigan Energy Assistance Program (MEAP): utility bill help for low-income households",
+        "Supplemental Nutrition Assistance Program (SNAP) in Michigan: monthly grocery benefit for seniors on fixed incomes"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Renters Qualify Too",
+          "body": "This credit is widely associated with homeowners, but Michigan renters are also eligible. The state treats a portion of your parent's rent as equivalent to a property tax payment. Renters age 65 or older have access to a separate alternate calculation (Worksheet 5) that can return up to $1,900. If your parent has been renting for years and has never claimed this credit, there may be multiple years of missed refunds worth recovering."
+        },
+        {
+          "type": "callout",
+          "title": "The Four-Year Retroactive Window",
+          "body": "Michigan Treasury allows seniors to file amended returns and claim this credit for up to four prior tax years. If your parent has not been aware of this program, or has been filing without claiming the credit, those missed years may still be recoverable. Each year requires its own MI-1040CR completed with the income figures and property tax or rent amounts for that specific year. Use the instructions booklet from each respective year."
+        },
+        {
+          "type": "prose",
+          "title": "How Total Household Resources (THR) Differs from Your Tax Return Income",
+          "body": "THR is the income measure Michigan uses to determine eligibility and calculate the credit. It is broader than federal adjusted gross income (AGI). THR includes Social Security benefits (even the nontaxable portion), pension and retirement distributions, interest and dividends, and other income that may not appear in federal AGI. Because THR can be higher than the number on your parent's federal return, it is important to calculate it carefully using the MI-1040CR instructions. Families who use federal AGI by mistake often undercount income, which can affect both eligibility and the size of the credit."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent rents and has never filed Michigan state taxes. Can they still get this credit?",
+          "answer": "Yes. Renters qualify for this credit, and filing Michigan state taxes is the mechanism for claiming it. Even if your parent had no other reason to file Michigan taxes, they can file Form MI-1040 with MI-1040CR to claim the credit. If they are age 65 or older, they should also complete Worksheet 5 to check whether the alternate renter method produces a larger refund. They can go back up to four prior years."
+        },
+        {
+          "question": "My parent's income comes mostly from Social Security and a small pension. Does that count against them?",
+          "answer": "Yes, both count toward Total Household Resources (THR). Social Security benefits, including the nontaxable portion, are included in THR. So are pension distributions. THR must stay below $71,500 for any credit to apply. The credit phases down by 10% for each $1,000 of THR above $62,500. A parent with THR around $65,000, for example, would see the credit reduced but not eliminated."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they are unable to manage their own taxes?",
+          "answer": "Yes. If you have power of attorney or are your parent's legal representative, you can prepare and file the return on their behalf. Indicate the representative's relationship on the return per Michigan Treasury's instructions. AARP Tax-Aide, reachable at (888) 227-7669, offers free tax preparation assistance and can work with caregivers who bring documentation for a parent who cannot attend in person."
+        },
+        {
+          "question": "My parent owns their home. Is there a limit on how much the property can be worth?",
+          "answer": "Yes, for homeowners. The taxable value of the homestead must fall under the annual cap stated in the MI-1040CR instructions. That cap is updated each year by Michigan Treasury. Check the instructions for the specific year being filed. Note that taxable value is not the same as market value or assessed value; it is typically lower. Renters do not face a property-value cap."
+        },
+        {
+          "question": "My parent missed claiming this credit for the past three years. Is that money gone?",
+          "answer": "Not necessarily. Michigan Treasury allows retroactive claims for up to four years from the year the credit could have been claimed. To recover prior years, file an amended Michigan return for each year using the MI-1040CR from that specific tax year, with the income and housing figures from that year. The Michigan Treasury individual income tax line at (517) 636-4486 can confirm the process for your parent's situation."
+        },
+        {
+          "question": "My parent lives in a mobile home and pays both rent and property taxes. Which rules apply?",
+          "answer": "Mobile home situations can involve either renter or homeowner rules depending on whether your parent owns the mobile home or rents it, and whether they pay property taxes separately or through lot rent. The MI-1040CR instructions address mobile home situations specifically. Because the calculation can go either way, review the instructions carefully or use a free tax preparer through AARP Tax-Aide at (888) 227-7669."
+        },
+        {
+          "question": "Can my parent claim this credit and the Michigan Home Heating Credit in the same year?",
+          "answer": "Yes. These are separate credits filed on separate forms. The Homestead Property Tax Credit uses MI-1040CR. The Home Heating Credit uses MI-1040CR-7 and has its own income limits and calculation. Many Michigan seniors qualify for both. A tax preparer at an AARP Tax-Aide site can calculate both credits at the same time at no cost."
+        },
+        {
+          "question": "What if my parent's total household resources are just over the $71,500 limit?",
+          "answer": "No credit is available once THR reaches or exceeds $71,500. However, if THR is between $62,500 and $71,500, a partial credit still applies; it phases down by 10% for each $1,000 above $62,500. It is worth calculating even if THR is close to the limit. If your parent's income is near the edge, double-check that THR is being calculated correctly using the MI-1040CR instructions, since errors in the income calculation are common."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(517) 636-4486",
+      "sourceUrl": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "shortName": "Home Meal Delivery",
+      "tagline": "If your parent is 60+ and homebound in Michigan, they may qualify for free nutritious meals delivered to their door, no income test required.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Meals on Wheels or senior nutrition providers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Michigan's Home-Delivered Meals program delivers nutritious meals directly to older adults who are homebound or unable to shop and cook on their own. Unlike most government benefits, this program has no income limit and no asset test. Eligibility is based on age (60+), homebound status, and nutritional need, not on how much money your parent has.\n\nThe number of meals your parent receives is determined by a local assessment of their individual situation. Delivery schedules, meal formats (hot versus frozen), and exact intake processes vary by region. Some areas deliver Monday through Friday; others include frozen meals for weekends and holidays. The state says there is no cost to participate, though most local programs invite a voluntary contribution toward the meal.\n\nThis program is run through local Area Agencies on Aging and their partner providers, including Meals on Wheels affiliates. There is no central state application number. Your first step is finding and contacting the Area Agency on Aging that serves your parent's county.",
+      "savingsRange": "",
+      "savingsSource": "Free service; the Michigan Department of Health and Human Services states there is no cost for meals, though local programs may suggest a voluntary donation contribution.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound or unable to shop and prepare meals",
+          "At high nutritional risk (due to illness, hospitalization, living alone, or inability to cook)",
+          "No income limit",
+          "No asset test"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound or otherwise unable to obtain food or prepare meals under normal circumstances. This is assessed locally and typically means your parent has difficulty leaving the home due to illness, disability, recent hospitalization, or a lack of ability to shop or cook safely.",
+        "otherRequirements": [
+          "Must be at high nutritional risk due to factors such as illness, recent hospitalization, living alone, or inability to shop or cook.",
+          "Family members with disabilities who permanently live in the home of the eligible older adult may also be eligible.",
+          "Local providers may have their own screening criteria or priority rules that affect wait times or eligibility determination."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your local Area Agency on Aging; they can screen your parent, complete an intake interview, and start service within a few days depending on local capacity.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local Area Agency on Aging",
+            "description": "Michigan is divided into regional service areas, each served by a different Area Agency on Aging. Use the Michigan MDHHS program page at michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals to find the agency covering your parent's county, or call the Eldercare Locator at (800) 677-1116 to get a referral to the right local office."
+          },
+          {
+            "step": 2,
+            "title": "Call your local Area Agency on Aging",
+            "description": "Contact the agency directly by phone. Tell them your parent is 60+, homebound, and has difficulty shopping or preparing meals. They will screen for eligibility and schedule an intake assessment."
+          },
+          {
+            "step": 3,
+            "title": "Complete the intake interview or assessment",
+            "description": "A local coordinator will ask about your parent's homebound status, any recent hospitalization or medical concerns, and their nutritional needs. Have your parent's address, phone number, and a brief description of why they cannot shop or cook ready for this call."
+          },
+          {
+            "step": 4,
+            "title": "Confirm delivery schedule and details",
+            "description": "Once approved, the local provider will explain the meal schedule, whether meals are hot or frozen, delivery days, and whether someone needs to be home at the time of delivery. Ask specifically about weekend meals if your parent needs them, since coverage varies by region."
+          }
+        ],
+        "processingTime": "Service can begin within a few days of application, depending on local capacity and assessment. Timelines vary by Area Agency on Aging.",
+        "waitlist": "No statewide waitlist exists, but local waiting lists may exist depending on the Area Agency on Aging or meal provider in your parent's county. Ask the local agency directly about current availability.",
+        "tip": "When you call, mention any recent hospital discharge or medical diagnosis. This can strengthen your parent's nutritional risk classification and may affect how quickly service starts.",
+        "urls": [
+          {
+            "label": "Michigan MDHHS Home-Delivered Meals Program Page",
+            "url": "https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your parent's full name and home address (for service area confirmation and delivery setup)",
+        "A brief description of why your parent is homebound or unable to shop and cook (illness, disability, recent hospital discharge, or similar)",
+        "Information about any recent hospitalization or medical or nutritional concerns that affect your parent's ability to obtain food",
+        "Basic identifying information for the older adult (date of birth and phone number)",
+        "Information about any family members with disabilities who live permanently in the home, if they may also need meals"
+      ],
+      "contacts": [
+        {
+          "label": "Eldercare Locator (to find your local Area Agency on Aging)",
+          "phone": "(800) 677-1116",
+          "description": "This is the fastest way to find the Area Agency on Aging serving your parent's county. They will refer you directly to the local office that can start the meal application. Operated by the U.S. Administration on Aging.",
+          "hours": "Mon-Fri 9am-8pm ET"
+        },
+        {
+          "label": "Michigan MDHHS Program Information",
+          "phone": null,
+          "description": "Visit the official state program page for program details and links to regional providers. This page does not handle applications directly.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent was recently discharged from a hospital or rehabilitation facility, mention this when you call. Recent discharge is a recognized nutritional risk factor and may speed up the intake process.",
+        "Local providers in some areas require the recipient to be home at the time of delivery. Confirm this when you set up service so your parent knows when to expect the driver.",
+        "Although the state program has no cost, your local provider may suggest a voluntary donation. Contribution is optional and declining it will not affect your parent's eligibility or number of meals."
+      ],
+      "relatedPrograms": [
+        "Congregate Meals (Michigan Older Americans Act nutrition program for seniors who can travel to a meal site)",
+        "SNAP Food Benefits (for seniors with limited income who also need help with grocery costs)",
+        "MI Choice Medicaid Waiver (for seniors who need a broader range of in-home services beyond meals)",
+        "Project Fresh / Senior Project Fresh (Michigan farmers market vouchers for eligible seniors)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is not an income-based program",
+          "body": "Many families assume their parent earns too much to qualify, or that owning a home or having savings disqualifies them. This program does not have an income limit or an asset test. If your parent is 60+, homebound, and struggling to shop or prepare meals, they may qualify regardless of their financial situation."
+        },
+        {
+          "type": "prose",
+          "title": "What varies by region",
+          "body": "Because this program is administered locally, details differ significantly depending on where your parent lives. Some areas deliver hot meals Monday through Friday. Others deliver frozen meals for weekends and holidays. Delivery days, meal types, and suggested donation amounts all depend on the local provider. When you call your Area Agency on Aging, ask specifically about delivery frequency, whether meals are hot or frozen, and whether your parent needs to be home to accept the delivery."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home and has savings. Does that disqualify them?",
+          "answer": "No. Michigan's Home-Delivered Meals program has no income limit and no asset test. Eligibility is based on age (60+), homebound status, and nutritional need. Your parent's savings, home value, or retirement income does not affect whether they qualify."
+        },
+        {
+          "question": "How many meals will my parent actually receive?",
+          "answer": "There is no fixed statewide number of meals. The local Area Agency on Aging or their meal provider conducts an individual assessment and determines how many meals your parent needs based on that evaluation. The number can range from a few meals per week to daily delivery. Ask the local agency directly after the intake assessment."
+        },
+        {
+          "question": "Is there a waitlist, and how long is it?",
+          "answer": "There is no statewide waitlist, but individual local providers may have one depending on their capacity. Some areas can start service within a few days; others may have a wait. When you call your local Area Agency on Aging, ask directly about current availability in your parent's zip code."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to call themselves?",
+          "answer": "Yes, a family caregiver can call on behalf of an older parent. Be prepared to describe your parent's situation: why they are homebound, whether they have had a recent hospitalization, and why they cannot shop or prepare meals independently. The intake coordinator may want to speak with your parent at some point in the process, but initiating the call on their behalf is fine."
+        },
+        {
+          "question": "My parent lives with a family member who has a disability. Can that person also receive meals?",
+          "answer": "Possibly. Michigan's program states that family members with disabilities who permanently live in the home of the eligible older adult may also be eligible for meals. Confirm this with your local Area Agency on Aging when you call, since local providers may apply their own rules."
+        },
+        {
+          "question": "Can my parent receive Home-Delivered Meals and SNAP at the same time?",
+          "answer": "Yes. These are separate programs with separate eligibility rules. Home-Delivered Meals is funded through the Older Americans Act and has no income test. SNAP is income-based. If your parent qualifies for both, receiving one does not affect the other. You can apply for SNAP through the Michigan Department of Health and Human Services at michigan.gov or by calling (855) 275-6424."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "(800) 677-1116",
+      "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mi-state-ssi-supplement",
+      "name": "State SSI Supplement",
+      "shortName": "Michigan SSI Supplement",
+      "tagline": "If your parent already receives SSI in Michigan, they may be getting a small state cash supplement automatically; knowing the current amounts helps you catch if a payment is wrong.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Social Security Administration local offices for SSI application",
+            "type": "service-area"
+          },
+          {
+            "name": "Michigan Department of Health and Human Services involvement for certain supplement administration categories",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent receives federal Supplemental Security Income (SSI) and lives in Michigan, they are also receiving a small state cash supplement added on top of their federal SSI payment. This is not a separate application; the supplement is attached automatically once SSI eligibility is established. What changes is the amount: where your parent lives determines how much the state adds.\n\nFor 2026, the state supplement ranges from $7 per month (for someone in a Medicaid-funded facility) up to $179.30 per month (for someone in a home for the aged). People living independently or in someone else's household receive $9.33 to $14 per month, paid quarterly rather than monthly. People in licensed care settings such as domiciliary care, personal care facilities, or homes for the aged receive higher monthly amounts. The full combined payment (federal SSI plus Michigan supplement) for a single person living independently is $1,008 per month in 2026.\n\nThe program splits administration between two agencies. Social Security administers the supplement for most living arrangements. Michigan's Department of Health and Human Services (MDHHS) administers it for others, particularly licensed care settings. Because of that split, families sometimes get confused about where to call when something seems wrong. This page explains what your parent should be receiving, who pays it, and what to do if the amount looks off.",
+      "savingsRange": "Up to $179.30/month state supplement for one person in a home for the aged (2026 published rate); $7/month for one person in a Medicaid facility",
+      "savingsSource": "SSA published 2026 State SSI Supplement payment levels for Michigan, available at ssa.gov",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must already be approved for federal SSI",
+          "Must live in Michigan at the time of payment",
+          "No separate Michigan income or asset test beyond federal SSI rules",
+          "Supplement amount depends on living arrangement, not just income",
+          "Federal SSI resource limit applies: $2,000 for one person, $3,000 for a couple"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Stocks, bonds, and mutual funds",
+            "Real property other than the primary home",
+            "Life insurance policies with cash surrender value above SSI limits"
+          ],
+          "exemptAssets": [
+            "Primary home the person lives in",
+            "One vehicle used for transportation",
+            "Household goods and personal effects",
+            "Certain burial funds set aside for funeral expenses",
+            "Some irrevocable trusts depending on federal SSI rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be receiving federal SSI; Michigan does not pay the supplement to people who have been denied SSI",
+          "Living arrangement at the time of payment determines the supplement category and dollar amount",
+          "People in some care settings (domiciliary care, personal care facility, home for the aged, Medicaid facility) receive a different supplement amount and may be administered through MDHHS rather than SSA",
+          "No minimum length of Michigan residency is required, but the person must be a Michigan resident when paid",
+          "Income reduces the combined SSI payment starting with the federal portion first; any remaining countable income then reduces the state supplement"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "There is no separate Michigan supplement application; apply for federal SSI through Social Security and the supplement is calculated automatically once eligibility and living arrangement are confirmed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Apply for federal SSI",
+            "description": "Call Social Security at 1-800-772-1213 (TTY: 1-800-325-0778), apply online at ssa.gov/ssi, or visit your local Social Security office. You cannot get the Michigan supplement without first being approved for federal SSI. If your parent is already receiving SSI, skip to Step 3."
+          },
+          {
+            "step": 2,
+            "title": "Report your parent's living arrangement accurately",
+            "description": "The Michigan supplement amount depends entirely on where your parent lives: independently, in your home, in a domiciliary care facility, a personal care facility, a home for the aged, or a Medicaid-funded facility. Social Security and MDHHS use this information to assign the correct supplement category. If living arrangement changes later, report it promptly because an incorrect category means an incorrect payment."
+          },
+          {
+            "step": 3,
+            "title": "Confirm which agency administers the supplement",
+            "description": "For most living arrangements (independent, household of another, with an essential person), SSA administers the supplement and it flows through the same SSI payment process. For licensed care settings (domiciliary care, personal care facility, home for the aged), MDHHS may administer it. If you are unsure which agency handles your parent's category, call SSA at 1-800-772-1213 and ask directly."
+          },
+          {
+            "step": 4,
+            "title": "Verify the payment amount and schedule",
+            "description": "People in the independent and household-of-another categories receive the supplement quarterly, not monthly: payments arrive in March, June, September, and December by paper check or direct deposit. People in licensed care settings receive the supplement monthly. Cross-check the published 2026 rates at ssa.gov against what your parent receives to catch any discrepancy."
+          },
+          {
+            "step": 5,
+            "title": "Report any change in living arrangement",
+            "description": "If your parent moves from living independently to a personal care facility, or from a home for the aged to a Medicaid nursing facility, the supplement category changes and so does the amount. Call SSA at 1-800-772-1213 within 10 days of any move to report the change and avoid an overpayment that SSA would later collect back."
+          }
+        ],
+        "processingTime": "The Michigan supplement is calculated as part of the SSI award process. No separate Michigan processing time is published. SSI applications typically take 3 to 6 months; once SSI is approved and living arrangement is confirmed, the supplement is included in the next payment cycle.",
+        "waitlist": null,
+        "tip": "If your parent is already on SSI and you are not sure whether they are receiving the Michigan supplement, ask SSA for a benefit breakdown when you call. The supplement should appear as a line item separate from the federal SSI amount.",
+        "urls": [
+          {
+            "label": "Apply for SSI online at SSA.gov",
+            "url": "https://www.ssa.gov/ssi/"
+          },
+          {
+            "label": "SSA SSI Benefits Overview (official source for Michigan supplement rates)",
+            "url": "https://www.ssa.gov/ssi/text-benefits-ussi.htm"
+          },
+          {
+            "label": "Find your local Social Security office",
+            "url": "https://www.ssa.gov/locator/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or proof of Social Security number for your parent",
+        "Proof of identity and age (birth certificate, U.S. passport, or state-issued ID)",
+        "Proof of Michigan residency (a current utility bill, lease agreement, or other document showing your parent's Michigan address)",
+        "Proof of U.S. citizenship or eligible immigration status (U.S. birth certificate, U.S. passport, or immigration documents)",
+        "Current bank account information, including the name of the bank and account number, for direct deposit setup",
+        "Documentation of current living arrangement (lease, facility admission agreement, or signed statement from the head of household if your parent lives with another person)",
+        "All income information: Social Security award letter, pension statements, or any other regular income your parent receives",
+        "Current bank account balances for any checking or savings accounts (SSA will ask for current figures; the lookback for SSI resources is generally one month of bank statements, but SSA may ask for more if there are recent large transactions)",
+        "Information on any other assets: vehicle title if owned, any real property other than the home, stocks or bonds, or life insurance policies with cash value",
+        "Medical records or disability documentation if your parent is applying for SSI based on disability rather than age (for age-based SSI at 65+, medical records are less central but may still be requested)"
+      ],
+      "contacts": [
+        {
+          "label": "Social Security Administration",
+          "phone": "1-800-772-1213",
+          "description": "Apply for SSI and ask questions about the Michigan state supplement. This is the primary application door for both the federal SSI benefit and most supplement categories.",
+          "hours": "Mon-Fri 8am-7pm local time; automated services available 24 hours"
+        },
+        {
+          "label": "Social Security TTY Line",
+          "phone": "1-800-325-0778",
+          "description": "TTY line for callers who are deaf or hard of hearing.",
+          "hours": "Mon-Fri 8am-7pm local time"
+        },
+        {
+          "label": "Michigan MDHHS Beneficiary Helpline",
+          "phone": "1-800-642-3195",
+          "description": "Contact Michigan's Department of Health and Human Services for questions about state-administered supplement categories, particularly if your parent lives in a licensed care setting such as a domiciliary care home, personal care facility, or home for the aged.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "The Michigan supplement is not paid as a separate check in most cases; for people living independently or in another person's household, the supplement arrives quarterly (March, June, September, December), not with the monthly SSI payment. If your parent expects a monthly supplement and it is not arriving, call SSA to confirm the payment schedule for their specific living arrangement.",
+        "If your parent moves to a licensed care setting, the supplement category changes and MDHHS may take over administration from SSA. Notify SSA within 10 days of any move. Failure to report a change can result in an overpayment that SSA will collect back, sometimes by reducing future SSI payments.",
+        "Income reduces the combined SSI payment starting with the federal portion first. Only after the federal SSI payment is reduced to zero does countable income begin to reduce the Michigan supplement. This means the supplement may be partially or fully paid even when the federal SSI payment has been reduced by income.",
+        "Published supplement amounts change over time as SSA updates its tables. Verify the current year's rates directly at ssa.gov before relying on any figure you find elsewhere, including this page."
+      ],
+      "relatedPrograms": [
+        "Federal Supplemental Security Income (SSI)",
+        "Michigan Medicaid (often linked to SSI eligibility)",
+        "Medicare Savings Programs (help pay Medicare premiums for low-income SSI recipients who also have Medicare)",
+        "SNAP (Supplemental Nutrition Assistance Program, often co-eligible with SSI recipients)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-table",
+          "title": "2026 Michigan State Supplement Amounts by Living Arrangement",
+          "description": "The amount your parent receives depends entirely on where they live. These are the published 2026 monthly state supplement amounts from SSA. Note that independent and household-of-another payments are made quarterly, not monthly.",
+          "rows": [
+            {
+              "category": "Living independently",
+              "individual": "$14/month (paid quarterly)",
+              "couple": "$28/month (paid quarterly)"
+            },
+            {
+              "category": "Living in the household of another",
+              "individual": "$9.33/month (paid quarterly)",
+              "couple": "$18.66/month (paid quarterly)"
+            },
+            {
+              "category": "Living independently with an essential person",
+              "individual": "$14/month (paid quarterly)",
+              "couple": "$21/month (paid quarterly)"
+            },
+            {
+              "category": "Living in household of another with an essential person",
+              "individual": "$9.33/month (paid quarterly)",
+              "couple": "$14/month (paid quarterly)"
+            },
+            {
+              "category": "Domiciliary care facility",
+              "individual": "$87/month",
+              "couple": "N/A (individual rate applies)"
+            },
+            {
+              "category": "Personal care facility",
+              "individual": "$157.50/month",
+              "couple": "N/A (individual rate applies)"
+            },
+            {
+              "category": "Home for the aged",
+              "individual": "$179.30/month",
+              "couple": "N/A (individual rate applies)"
+            },
+            {
+              "category": "Medicaid-funded facility (nursing home)",
+              "individual": "$7/month",
+              "couple": "$14/month"
+            }
+          ],
+          "note": "Source: SSA published 2026 State SSI Supplement payment levels for Michigan (ssa.gov). The total combined monthly payment (federal SSI plus state supplement) for a single person living independently is $1,008 in 2026."
+        },
+        {
+          "type": "callout",
+          "title": "Two agencies administer this supplement",
+          "body": "SSA handles the supplement for people living independently, in another person's household, or with an essential person. MDHHS handles it for people in domiciliary care, personal care facilities, homes for the aged, and Medicaid facilities. If you call SSA about a care-facility supplement issue and they say it is not their program, follow up with MDHHS at 1-800-642-3195."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is already on SSI. Do they need to do anything to get the Michigan supplement?",
+          "answer": "No separate application is needed. The supplement is calculated automatically as part of the SSI payment process once SSI eligibility and living arrangement are confirmed. If your parent is on SSI and you are not sure whether they are receiving the supplement, call SSA at 1-800-772-1213 and ask for a breakdown of their current benefit, including the state supplement line item."
+        },
+        {
+          "question": "My parent moved from living with us into an assisted living facility. Does the supplement amount change?",
+          "answer": "Yes, and significantly. A person living in a household of another receives only $9.33 per month in state supplement. The same person in a personal care facility receives $157.50 per month, and in a home for the aged, $179.30 per month. Report the move to SSA at 1-800-772-1213 within 10 days. The new rate takes effect once SSA updates the living arrangement category. Missing this update can cause either underpayment or overpayment, both of which create problems to correct later."
+        },
+        {
+          "question": "Why does my parent in a nursing home only get $7 per month in state supplement when others get much more?",
+          "answer": "Federal and state policy sets a very low SSI and supplement amount for people in Medicaid-funded facilities because Medicaid is already paying for room, board, and care. The $7 monthly supplement is intended as a small personal-needs allowance on top of the $44 federal SSI personal needs amount, for a combined $44 total monthly payment (the federal and state amounts together equal the published $44 combined rate for Medicaid facility residents in 2026). This is the published rate; it is not an error."
+        },
+        {
+          "question": "My parent's house is worth far more than $2,000. Does that disqualify them from SSI and the supplement?",
+          "answer": "No. The primary home your parent lives in is fully excluded from the SSI resource calculation regardless of its value. The $2,000 resource limit applies to countable assets such as cash, bank balances, and stocks. Owning a home does not count against that limit as long as your parent lives there."
+        },
+        {
+          "question": "Can I apply for SSI on behalf of my elderly parent if they cannot do it themselves?",
+          "answer": "Yes. You can contact SSA on your parent's behalf and be designated as their representative payee, which allows you to manage their benefit. Call SSA at 1-800-772-1213 to start the SSI application and ask about the representative payee process. If your parent has a legal guardian or power of attorney, bring that documentation to the appointment or have it available when you call."
+        },
+        {
+          "question": "My parent receives SSI in another state and is moving to Michigan. Do they need to reapply?",
+          "answer": "SSI itself transfers with the person; they do not lose SSI eligibility by moving to Michigan. However, the Michigan state supplement is not the same amount as what other states pay, and your parent must notify SSA of the move and new address. The Michigan supplement will then be calculated based on their Michigan living arrangement. Call SSA at 1-800-772-1213 before or immediately after the move to report the address change."
+        },
+        {
+          "question": "The supplement for people living independently is paid quarterly, not monthly. How do I make sure my parent does not miss a payment?",
+          "answer": "Quarterly payments arrive in March, June, September, and December. If your parent has direct deposit set up, verify those months that the deposit appears. If they receive a paper check, confirm the mailing address on file with SSA is current. A missed quarterly payment should be reported to SSA at 1-800-772-1213 promptly, not at the end of the year."
+        },
+        {
+          "question": "Can my parent receive both the Michigan SSI supplement and SNAP at the same time?",
+          "answer": "Yes. SSI recipients in Michigan are generally categorically eligible for SNAP (food assistance), meaning SSI approval can streamline or establish SNAP eligibility without a separate income or resource determination. Apply for SNAP through the Michigan MDHHS website at michigan.gov/mdhhs or by calling 1-888-642-7434. Being on SSI does not reduce or eliminate SNAP benefits."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Coins",
+      "phone": "1-800-772-1213",
+      "sourceUrl": "https://www.ssa.gov/ssi/text-benefits-ussi.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

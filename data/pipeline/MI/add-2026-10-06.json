@@ -1,0 +1,1037 @@
+{
+  "state": "MI",
+  "addedAt": "2026-10-06T05:08:35.537Z",
+  "dive": {
+    "state": "MI",
+    "stateName": "Michigan",
+    "diveAt": "2026-10-06T04:56:37.110Z",
+    "total": 9,
+    "parsed": 9,
+    "programs": [
+      {
+        "name": "Medicaid for Aged and Disabled",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Michigan’s aged/disabled Medicaid path is for people who are age 65 or older, blind, or disabled, and it uses both income and asset tests.[1][2] Michigan’s official eligibility page says that if income is over the limit, a person may still qualify by incurring medical expenses that meet or exceed a deductible/spenddown.[1]",
+            "limits": {
+              "single": "The federal poverty-level benchmark cited for this category is 100% FPL; one source summarizes Michigan’s aged/disabled Medicaid income test as less than the federal poverty level plus $20, with a 2025 individual FPL figure of $1,304/month.[2]",
+              "couple": "A source summarizing Michigan’s aged/disabled Medicaid states a married couple limit of $1,763/month in 2025.[2]",
+              "household_size_table": "Michigan’s official page does not present a household-size table for this category in the search results; this program is generally evaluated under aged/blind/disabled rules rather than MAGI household-size rules.[1][2]",
+              "spenddown": "If countable income is over the limit, Michigan allows a medical-expense deductible/spenddown route to qualify.[1][2]"
+            }
+          },
+          "asset_limits": {
+            "summary": "Michigan’s official page confirms asset tests apply.[1] A source summarizing current Michigan policy says the resource limit is approximately $9,660 for one person and $14,470 for a couple as of February 1, 2025.[2]",
+            "what_counts": [
+              "Countable resources generally include cash, checking/savings balances, and other non-exempt assets used for Medicaid resource testing.[1][2]"
+            ],
+            "what_is_exempt": [
+              "The search results did not provide a complete official exemption list for this specific program.[1][2]",
+              "Typical Medicaid exemptions such as a primary home, one vehicle, household goods, and burial-related items may apply under Michigan Medicaid rules, but those specific exemptions were not spelled out in the retrieved official sources for this program.[1][2]"
+            ]
+          },
+          "other_requirements": [
+            "Must be age 65 or older, blind, or disabled under Medicaid criteria.[1][2]",
+            "Must meet Michigan residency and citizenship/immigration eligibility rules for Medicaid coverage.[1]",
+            "Must meet both financial and non-financial Medicaid eligibility conditions.[1][7]",
+            "People receiving SSI typically qualify automatically for Medicaid in Michigan.[2]"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Most beneficiaries are enrolled in a Medicaid health plan and receive a comprehensive package of health care benefits, including vision, dental, and mental health services.[1] For eligible people needing long-term supports, Michigan’s MI Choice waiver can provide Medicaid-covered services that help them remain at home or in another residential setting; covered services include adult day health, chore services, community transportation, counseling, environmental accessibility adaptations, home-delivered meals, nursing services, personal emergency response systems, private duty nursing/respiratory care, respite, specialized medical equipment and supplies, and independent-living skills training.[6]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.michigan.gov/mdhhs/assistance-programs/medicaid/portalhome/beneficiaries/apply (MI Bridges / healthcare application portal).[7]",
+            "Online alternative for healthcare coverage: https://www.michigan.gov/mdhhs/assistance-programs/healthcare/beneficiary-support (use the DCH-1426 application if unable to apply online).[5]",
+            "Mail: complete the DCH-1426 paper application and mail it in.[5][7]",
+            "In person: apply at a local Michigan Department of Health and Human Services (MDHHS) office.[7]",
+            "Phone support for paper application request: 888-367-6557.[10]"
+          ],
+          "processing_time": "The retrieved official search results did not provide a specific Medicaid processing-time standard for this program.[1][5][7]",
+          "waitlist": "No statewide waitlist was identified for standard aged/disabled Medicaid coverage. The MI Choice waiver is a separate long-term-care waiver that can involve local capacity and eligibility screening, but no specific waitlist detail was returned in the search results.[6]",
+          "forms": [
+            "DCH-1426, Application for Health Coverage & Help Paying Costs.[5][7]"
+          ],
+          "documents": [
+            "Social Security number",
+            "Birthdate",
+            "Income information",
+            "Information about financial resources/assets",
+            "Other eligibility information requested by MDHHS",
+            "Medical expense records if trying to qualify through spenddown"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Michigan Medicaid program; local MDHHS offices handle applications and county-level administration, but the basic aged/disabled eligibility rules are statewide.[1][7]",
+          "regional_variations": "The core Medicaid eligibility rules are statewide, but local MDHHS offices, Medicaid health plans, and waiver/service providers can differ by county and service area. The MI Choice waiver is delivered through local agencies/providers and may vary in availability by region.[6][7]",
+          "offices_or_providers": [
+            "Local MDHHS county offices",
+            "MI Bridges online portal",
+            "MI Choice waiver local agencies/providers"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/medicaid/health-care-programs-eligibility",
+        "gotchas": [
+          "This is not just an age-based program; income and asset limits both matter.[1][2]",
+          "If income is over the limit, spenddown can still make someone eligible.[1][2]",
+          "SSI recipients usually qualify automatically, so families should check whether the person is already receiving SSI before starting a separate application.[2]",
+          "The MI Choice waiver is not the same thing as basic Medicaid; it is an add-on long-term-care home- and community-based service option with its own eligibility and service structure.[6]",
+          "Michigan’s official pages emphasize online application through MI Bridges, but paper and in-person routes remain available.[5][7]",
+          "Coverage is often delivered through a Medicaid health plan, so the family may need to pick or be assigned a plan after eligibility is approved.[1]"
+        ],
+        "data_shape_notes": "This program uses aged/blind/disabled Medicaid rules with both income and asset testing, and applicants may qualify through a spenddown if income is too high.[1][2] It is statewide, but long-term-care supports can branch into waiver-based services like MI Choice, which adds service-package complexity beyond ordinary Medicaid.[6][7]",
+        "_raw": "{\n  \"name\": \"Medicaid for Aged and Disabled\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Michigan’s aged/disabled Medicaid path is for people who are age 65 or older, blind, or disabled, and it uses both income and asset tests.[1][2] Michigan’s official eligibility page says that if income is over the limit, a person may still qualify by incurring medical expenses that meet or exceed a deductible/spenddown.[1]\",\n      \"limits\": {\n        \"single\": \"The federal poverty-level benchmark cited for this category is 100% FPL; one source summarizes Michigan’s aged/disabled Medicaid income test as less than the federal poverty level plus $20, with a 2025 individual FPL figure of $1,304/month.[2]\",\n        \"couple\": \"A source summarizing Michigan’s aged/disabled Medicaid states a married couple limit of $1,763/month in 2025.[2]\",\n        \"household_size_table\": \"Michigan’s official page does not present a household-size table for this category in the search results; this program is generally evaluated under aged/blind/disabled rules rather than MAGI household-size rules.[1][2]\",\n        \"spenddown\": \"If countable income is over the limit, Michigan allows a medical-expense deductible/spenddown route to qualify.[1][2]\"\n      }\n    },\n    \"asset_limits\": {\n      \"summary\": \"Michigan’s official page confirms asset tests apply.[1] A source summarizing current Michigan policy says the resource limit is approximately $9,660 for one person and $14,470 for a couple as of February 1, 2025.[2]\",\n      \"what_counts\": [\n        \"Countable resources generally include cash, checking/savings balances, and other non-exempt assets used for Medicaid resource testing.[1][2]\"\n      ],\n      \"what_is_exempt\": [\n        \"The search results did not provide a complete official exemption list for this specific program.[1][2]\",\n        \"Typical Medicaid exemptions such as a primary home, one vehicle, household goods, and burial-related items may apply under Michigan Medicaid rules, but those specific exemptions were not spelled out in the retrieved official sources for this program.[1][2]\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be age 65 or older, blind, or disabled under Medicaid criteria.[1][2]\",\n      \"Must meet Michigan residency and citizenship/immigration eligibility rules for Medicaid coverage.[1]\",\n      \"Must meet both financial and non-financial Medicaid eligibility conditions.[1][7]\",\n      \"People receiving SSI typically qualify automatically for Medicaid in Michigan.[2]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Most beneficiaries are enrolled in a Medicaid health plan and receive a comprehensive package of health care benefits, including vision, dental, and mental health services.[1] For eligible people needing long-term supports, Michigan’s MI Choice waiver can provide Medicaid-covered services that help them remain at home or in another residential setting; covered services include adult day health, chore services, community transportation, counseling, environmental accessibility adaptations, home-delivered meals, nursing services, personal emergency response systems, private duty nursing/respiratory care, respite, specialized medical equipment and supplies, and independent-living skills training.[6]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.michigan.gov/mdhhs/assistance-programs/medicaid/portalhome/beneficiaries/apply (MI Bridges / healthcare application portal).[7]\",\n      \"Online alternative for healthcare coverage: https://www.michigan.gov/mdhhs/assistance-programs/healthcare/beneficiary-support (use the DCH-1426 application if unable to apply online).[5]\",\n      \"Mail: complete the DCH-1426 paper application and mail it in.[5][7]\",\n      \"In person: apply at a local Michigan Department of Health and Human Services (MDHHS) office.[7]\",\n      \"Phone support for paper application request: 888-367-6557.[10]\"\n    ],\n    \"processing_time\": \"The retrieved official search results did not provide a specific Medicaid processing-time standard for this program.[1][5][7]\",\n    \"waitlist\": \"No statewide waitlist was identified for standard aged/disabled Medicaid coverage. The MI Choice waiver is a separate long-term-care waiver that can involve local capacity and eligibility screening, but no specific waitlist detail was returned in the search results.[6]\",\n    \"forms\": [\n      \"DCH-1426, Application for Health Coverage & Help Paying Costs.[5][7]\"\n    ],\n    \"documents\": [\n      \"Social Security number\",\n      \"Birthdate\",\n      \"Income information\",\n      \"Information about financial resources/assets\",\n      \"Other eligibility information requested by MDHHS\",\n      \"Medical expense records if trying to qualify through spenddown\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Michigan Medicaid program; local MDHHS offices handle applications and county-level administration, but the basic aged/disabled eligibility rules are statewide.[1][7]\",\n    \"regional_variations\": \"The core Medicaid eligibility rules are statewide, but local MDHHS offices, Medicaid health plans, and waiver/service providers can differ by county and service area. The MI Choice waiver is delivered through local agencies/providers and may vary in availability by region.[6][7]\",\n    \"offices_or_providers\": [\n      \"Local MDHHS county offices\",\n      \"MI Bridges online portal\",\n      \"MI Choice waiver local agencies/providers\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/medicaid/health-care-programs-eligibility\",\n  \"gotchas\": [\n    \"This is not just an age-based program; income and asset limits both matter.[1][2]\",\n    \"If income is over the limit, spenddown can still make someone eligible.[1][2]\",\n    \"SSI recipients usually qualify automatically, so families should check whether the person is already receiving SSI before starting a separate application.[2]\",\n    \"The MI Choice waiver is not the same thing as basic Medicaid; it is an add-on long-term-care home- and community-based service option with its own eligibility and service structure.[6]\",\n    \"Michigan’s official pages emphasize online application through MI Bridges, but paper and in-person routes remain available.[5][7]\",\n    \"Coverage is often delivered through a Medicaid health plan, so the family may need to pick or be assigned a plan after eligibility is approved.[1]\"\n  ],\n  \"data_shape_notes\": \"This program uses aged/blind/disabled Medicaid rules with both income and asset testing, and applicants may qualify through a spenddown if income is too high.[1][2] It is statewide, but long-term-care supports can branch into waiver-based services like MI Choice, which adds service-package complexity beyond ordinary Medicaid.[6][7]\"\n}"
+      },
+      {
+        "name": "Medicare Savings Program",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "Michigan’s Medicare Savings Program (MSP) is for people who are enrolled in Medicare Part A or Part B and have low income and limited resources. The program has tiered income rules, and the tier determines what help you get.[1][10]",
+            "tiers": [
+              {
+                "tier": "QMB (Qualified Medicare Beneficiary)",
+                "income_limit": "Up to 100% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]",
+                "benefit_link": "Pays Medicare Part A and Part B premiums, deductibles, and coinsurance.[10]"
+              },
+              {
+                "tier": "SLMB (Specified Low-Income Medicare Beneficiary)",
+                "income_limit": "Over 100% and up to 120% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]",
+                "benefit_link": "Pays Medicare Part B premium only.[10]"
+              },
+              {
+                "tier": "QI (Qualifying Individual, also called ALMB/Q1 in some Michigan materials)",
+                "income_limit": "Over 120% and up to 135% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]",
+                "benefit_link": "Pays Medicare Part B premium only.[10]"
+              }
+            ],
+            "table_note": "Michigan materials cite annual updates, and one 2026 job aid says the limits change each April 1.[6] A Michigan consumer guide also shows 2026 monthly examples for one person and a married couple, including QMB at $1,350/$1,824, SLMB at $1,585/$2,135, and QI at $1,781/$2,400, with resources of $9,950 for an individual and $14,910 for a married couple.[11][14]",
+            "household_size_variation": "Yes, the limits vary by household size for the federal poverty-based income test.[11][14]"
+          },
+          "asset_limits": {
+            "applies": true,
+            "limit": "Michigan uses the federal MSP asset limits for QMB, SLMB, and QI: $9,660 for one person and $14,470 for a married couple in one Michigan guide, with another current source showing $9,950 and $14,910 for 2026.[14][11]",
+            "what_counts": "The resources test applies to countable assets/resources used for MSP eligibility.[1][10]",
+            "what_is_exempt": "The sources retrieved do not provide a full Michigan-specific exempt-asset list, so the safest guidance is to treat the official MDHHS application/eligibility rules as controlling and verify how specific items are counted.[1][10]"
+          },
+          "other_requirements": [
+            "Must be enrolled in Medicare Part A or Part B.[1][10]",
+            "Must be elderly or disabled with low income and limited resources.[1]",
+            "Must meet Michigan MDHHS eligibility rules for the specific MSP tier.[10]",
+            "If approved for a lower-cost tier, enrollment must follow that tier rather than a higher one.[13]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Depending on tier, Michigan may pay Medicare premiums, coinsurance, and deductibles.[10] Specifically, QMB pays Part A and Part B premiums plus Medicare deductibles and coinsurance; SLMB pays the Part B premium only; QI also pays the Part B premium only.[10] A Michigan Medicare resource also notes that some beneficiaries can have their Part A premium paid if they owe one.[14]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online at MI Bridges: https://www.michigan.gov/mibridges[1]",
+            "Paper application from MDHHS website: Michigan.gov > Assistance Programs > Health Care Coverage > Application for Health Coverage & Help Paying Costs[1]",
+            "Local Michigan Department of Health and Human Services (MDHHS) office in person or by returning the paper application there[1]",
+            "By requesting an application from MDHHS, which the booklet says MDHHS will send if asked[1]"
+          ],
+          "processing_time": "The retrieved official sources do not state a specific processing-time standard for MSP approvals.[1][10]",
+          "waitlist": null,
+          "forms": [
+            "Application for Health Coverage & Help Paying Costs",
+            "MDCH-769 (Rev. 02/25) appears to be the current form version referenced in MDHHS materials[3]"
+          ],
+          "documents": [
+            "Proof of Medicare enrollment (Part A or Part B)[1][10]",
+            "Proof of income[1]",
+            "Proof of resources/assets[1][10]",
+            "Completed health coverage application[1]",
+            "Any documents MDHHS asks for to verify eligibility"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "No county restriction appears in the retrieved sources; it is a Michigan state program administered by MDHHS.[10]",
+          "regional_variations": "The retrieved sources do not show county-by-county MSP differences. Administration is statewide through MDHHS, so the main variation is not regional service rules but eligibility tier and annual income/resource updates.[1][6][10]",
+          "offices_or_providers": [
+            "Michigan Department of Health and Human Services (MDHHS)",
+            "Local MDHHS offices"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/disabilities/dualeligible/medicare-savings-programs",
+        "gotchas": [
+          "This is not a medical service program; it is help paying Medicare costs, mainly premiums and sometimes cost-sharing.[10]",
+          "Eligibility is tiered, so the exact help depends on where income falls relative to 100%, 120%, and 135% of poverty.[4][7][10]",
+          "Many people think MSP is only for people with no assets at all, but Michigan uses resource limits rather than a pure no-asset rule.[1][10][14]",
+          "The application route is simple, but the official materials push people to MI Bridges or their local MDHHS office rather than a separate MSP-only office.[1]",
+          "Income/resource limits change annually, so any guide should note the effective date of the dollar figures.[6]"
+        ],
+        "data_shape_notes": "This program is tiered by income and household size, with benefits that change by tier; it also uses asset/resource limits and is administered statewide through MDHHS rather than through region-specific service providers.[10][11][14]",
+        "_raw": "{\n  \"name\": \"Medicare Savings Program\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"Michigan’s Medicare Savings Program (MSP) is for people who are enrolled in Medicare Part A or Part B and have low income and limited resources. The program has tiered income rules, and the tier determines what help you get.[1][10]\",\n      \"tiers\": [\n        {\n          \"tier\": \"QMB (Qualified Medicare Beneficiary)\",\n          \"income_limit\": \"Up to 100% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]\",\n          \"benefit_link\": \"Pays Medicare Part A and Part B premiums, deductibles, and coinsurance.[10]\"\n        },\n        {\n          \"tier\": \"SLMB (Specified Low-Income Medicare Beneficiary)\",\n          \"income_limit\": \"Over 100% and up to 120% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]\",\n          \"benefit_link\": \"Pays Medicare Part B premium only.[10]\"\n        },\n        {\n          \"tier\": \"QI (Qualifying Individual, also called ALMB/Q1 in some Michigan materials)\",\n          \"income_limit\": \"Over 120% and up to 135% of the Federal Poverty Level, with Michigan guidance also referencing a $20 Social Security/RSDI disregard in some cases.[4][7]\",\n          \"benefit_link\": \"Pays Medicare Part B premium only.[10]\"\n        }\n      ],\n      \"table_note\": \"Michigan materials cite annual updates, and one 2026 job aid says the limits change each April 1.[6] A Michigan consumer guide also shows 2026 monthly examples for one person and a married couple, including QMB at $1,350/$1,824, SLMB at $1,585/$2,135, and QI at $1,781/$2,400, with resources of $9,950 for an individual and $14,910 for a married couple.[11][14]\",\n      \"household_size_variation\": \"Yes, the limits vary by household size for the federal poverty-based income test.[11][14]\"\n    },\n    \"asset_limits\": {\n      \"applies\": true,\n      \"limit\": \"Michigan uses the federal MSP asset limits for QMB, SLMB, and QI: $9,660 for one person and $14,470 for a married couple in one Michigan guide, with another current source showing $9,950 and $14,910 for 2026.[14][11]\",\n      \"what_counts\": \"The resources test applies to countable assets/resources used for MSP eligibility.[1][10]\",\n      \"what_is_exempt\": \"The sources retrieved do not provide a full Michigan-specific exempt-asset list, so the safest guidance is to treat the official MDHHS application/eligibility rules as controlling and verify how specific items are counted.[1][10]\"\n    },\n    \"other_requirements\": [\n      \"Must be enrolled in Medicare Part A or Part B.[1][10]\",\n      \"Must be elderly or disabled with low income and limited resources.[1]\",\n      \"Must meet Michigan MDHHS eligibility rules for the specific MSP tier.[10]\",\n      \"If approved for a lower-cost tier, enrollment must follow that tier rather than a higher one.[13]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Depending on tier, Michigan may pay Medicare premiums, coinsurance, and deductibles.[10] Specifically, QMB pays Part A and Part B premiums plus Medicare deductibles and coinsurance; SLMB pays the Part B premium only; QI also pays the Part B premium only.[10] A Michigan Medicare resource also notes that some beneficiaries can have their Part A premium paid if they owe one.[14]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at MI Bridges: https://www.michigan.gov/mibridges[1]\",\n      \"Paper application from MDHHS website: Michigan.gov > Assistance Programs > Health Care Coverage > Application for Health Coverage & Help Paying Costs[1]\",\n      \"Local Michigan Department of Health and Human Services (MDHHS) office in person or by returning the paper application there[1]\",\n      \"By requesting an application from MDHHS, which the booklet says MDHHS will send if asked[1]\"\n    ],\n    \"processing_time\": \"The retrieved official sources do not state a specific processing-time standard for MSP approvals.[1][10]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Health Coverage & Help Paying Costs\",\n      \"MDCH-769 (Rev. 02/25) appears to be the current form version referenced in MDHHS materials[3]\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare enrollment (Part A or Part B)[1][10]\",\n      \"Proof of income[1]\",\n      \"Proof of resources/assets[1][10]\",\n      \"Completed health coverage application[1]\",\n      \"Any documents MDHHS asks for to verify eligibility\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"No county restriction appears in the retrieved sources; it is a Michigan state program administered by MDHHS.[10]\",\n    \"regional_variations\": \"The retrieved sources do not show county-by-county MSP differences. Administration is statewide through MDHHS, so the main variation is not regional service rules but eligibility tier and annual income/resource updates.[1][6][10]\",\n    \"offices_or_providers\": [\n      \"Michigan Department of Health and Human Services (MDHHS)\",\n      \"Local MDHHS offices\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/healthcare/disabilities/dualeligible/medicare-savings-programs\",\n  \"gotchas\": [\n    \"This is not a medical service program; it is help paying Medicare costs, mainly premiums and sometimes cost-sharing.[10]\",\n    \"Eligibility is tiered, so the exact help depends on where income falls relative to 100%, 120%, and 135% of poverty.[4][7][10]\",\n    \"Many people think MSP is only for people with no assets at all, but Michigan uses resource limits rather than a pure no-asset rule.[1][10][14]\",\n    \"The application route is simple, but the official materials push people to MI Bridges or their local MDHHS office rather than a separate MSP-only office.[1]\",\n    \"Income/resource limits change annually, so any guide should note the effective date of the dollar figures.[6]\"\n  ],\n  \"data_shape_notes\": \"This program is tiered by income and household size, with benefits that change by tier; it also uses asset/resource limits and is administered statewide through MDHHS rather than through region-specific service providers.[10][11][14]\"\n}"
+      },
+      {
+        "name": "Food Assistance Program",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Michigan’s Food Assistance Program is SNAP, and eligibility is based on the financial situation of everyone in the household group—people who live together and buy and prepare food together. Most earned and unearned income counts, including wages, self-employment earnings, rental income, and Social Security benefits. Michigan’s published food-assistance pages do not present a single simple income table for all households on the main eligibility page; instead, the state says benefits are determined by household income, expenses, and circumstances. Michigan legal help sources note that some households can qualify with income up to 200% of the poverty level depending on expenses. The official Michigan booklet also lists special simplified pathways for households with very low income or little cash on hand, including: monthly income before taxes under $150 and $100 or less in cash/accounts; combined monthly income plus cash/accounts less than combined monthly rent/mortgage and utilities; or migrant/seasonal farmworker rules with $100 or less in cash/accounts.",
+          "asset_limits": "Michigan’s official materials say assets can matter in some cases, and countable assets are reviewed along with income and expenses. Public guidance indicates there is a $4,500 asset limit if household income is more than 200% of the federal poverty level. The official pages available here do not provide a full statewide asset-definition table, but they do indicate that MDHHS reviews assets during eligibility determination. In practice, common countable resources include cash and accounts, while the program booklet’s simplified eligibility tests specifically reference cash/accounts. Exemptions are not fully detailed in the sources surfaced here, so a family should confirm current treatment of specific resources such as a home, vehicle, or retirement accounts with MDHHS or MI Bridges before applying.",
+          "other_requirements": [
+            "Must be a Michigan resident applying for food assistance through MDHHS/MI Bridges.",
+            "Household is defined as people who live together and buy and prepare food together.",
+            "Eligibility depends on the full household financial situation, not just the older adult alone unless they purchase and prepare food separately.",
+            "Special elderly-related benefit path MiCAP may apply only to people who receive SSI and meet certain criteria.",
+            "For seniors age 60+, MiCAFE can help with the SNAP application process, but it is an access service rather than a separate eligibility category."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Monthly food benefits loaded onto a Michigan Bridge Card to help pay for groceries. The program supplements the grocery budget so households can afford nutritious food. It is not cash assistance and not medical care. For older adults, Michigan also points to related supports: MiCAFE helps seniors apply for a Bridge Card, MiCAP provides food benefits to some SSI recipients, TEFAP provides periodic food boxes to eligible households, CSFP provides a monthly food box for income-eligible individuals age 60+, and home-delivered meals are available for qualifying homebound older adults through separate aging services.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: MI Bridges at https://www.michigan.gov/MIBridges",
+            "Phone help desk for online application issues: 844-799-9876",
+            "General information / local office help: 517-241-3740",
+            "Find your local MDHHS office: https://www.michigan.gov/ContactMDHHS",
+            "In person at your local MDHHS office"
+          ],
+          "processing_time": "A specific statewide processing-time standard was not surfaced in the available official pages. Applicants must complete and submit an application before benefits can be determined.",
+          "waitlist": null,
+          "forms": [
+            "Application for Assistance (DHS-Pub-765)",
+            "Information Booklet (DHS-Pub-1010)"
+          ],
+          "documents": [
+            "Identification for household members",
+            "Proof of Michigan residency",
+            "Proof of income such as pay stubs, Social Security award letters, pension statements, or self-employment records",
+            "Proof of expenses, especially rent or mortgage and utilities",
+            "Information about cash, bank accounts, and other assets if requested",
+            "Immigration/citizenship information if applicable",
+            "Medical expense documentation for elderly or disabled household members if applicable, because expenses can affect eligibility"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Michigan through MDHHS; eligibility is based on household circumstances rather than a county restriction. Related senior food supports such as MiCAFE, CSFP, TEFAP distribution points, and home-delivered meals can vary by local provider and county.",
+          "regional_variations": "The SNAP/Food Assistance Program itself is statewide, but application help, office locations, and related senior-food services vary by county and local provider. Wait times and access to support can differ by region because households work through different local MDHHS offices, MiCAFE sites, Area Agencies on Aging, or food distribution partners.",
+          "offices_or_providers": [
+            "Michigan Department of Health and Human Services local county offices",
+            "MiCAFE network sites",
+            "Area Agencies on Aging for home-delivered meals and related senior food supports"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/food",
+        "gotchas": [
+          "The program is SNAP in Michigan, but many people still call it Food Assistance or Bridge Card benefits.",
+          "Household rules matter: if an elderly parent lives with family but buys and prepares food separately, the household can be treated differently.",
+          "Income alone does not tell the whole story because expenses can affect eligibility.",
+          "Some seniors may qualify for a separate or additional food-help program like MiCAP, CSFP, or home-delivered meals; these are not the same as SNAP.",
+          "The fastest application path is MI Bridges, but families can also get help from local MDHHS offices.",
+          "The sources surfaced here do not show one simple universal income table for all SNAP cases in Michigan, so families should use MI Bridges or MDHHS for the current household-specific calculation."
+        ],
+        "data_shape_notes": "This program is household-based and means-tested, with benefits determined by income, expenses, and sometimes assets. It is statewide, but application support and related senior food programs are locally delivered, so the main variation is by household composition and local access points rather than by county eligibility rules.",
+        "_raw": "{\n  \"name\": \"Food Assistance Program\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Michigan’s Food Assistance Program is SNAP, and eligibility is based on the financial situation of everyone in the household group—people who live together and buy and prepare food together. Most earned and unearned income counts, including wages, self-employment earnings, rental income, and Social Security benefits. Michigan’s published food-assistance pages do not present a single simple income table for all households on the main eligibility page; instead, the state says benefits are determined by household income, expenses, and circumstances. Michigan legal help sources note that some households can qualify with income up to 200% of the poverty level depending on expenses. The official Michigan booklet also lists special simplified pathways for households with very low income or little cash on hand, including: monthly income before taxes under $150 and $100 or less in cash/accounts; combined monthly income plus cash/accounts less than combined monthly rent/mortgage and utilities; or migrant/seasonal farmworker rules with $100 or less in cash/accounts.\",\n    \"asset_limits\": \"Michigan’s official materials say assets can matter in some cases, and countable assets are reviewed along with income and expenses. Public guidance indicates there is a $4,500 asset limit if household income is more than 200% of the federal poverty level. The official pages available here do not provide a full statewide asset-definition table, but they do indicate that MDHHS reviews assets during eligibility determination. In practice, common countable resources include cash and accounts, while the program booklet’s simplified eligibility tests specifically reference cash/accounts. Exemptions are not fully detailed in the sources surfaced here, so a family should confirm current treatment of specific resources such as a home, vehicle, or retirement accounts with MDHHS or MI Bridges before applying.\",\n    \"other_requirements\": [\n      \"Must be a Michigan resident applying for food assistance through MDHHS/MI Bridges.\",\n      \"Household is defined as people who live together and buy and prepare food together.\",\n      \"Eligibility depends on the full household financial situation, not just the older adult alone unless they purchase and prepare food separately.\",\n      \"Special elderly-related benefit path MiCAP may apply only to people who receive SSI and meet certain criteria.\",\n      \"For seniors age 60+, MiCAFE can help with the SNAP application process, but it is an access service rather than a separate eligibility category.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Monthly food benefits loaded onto a Michigan Bridge Card to help pay for groceries. The program supplements the grocery budget so households can afford nutritious food. It is not cash assistance and not medical care. For older adults, Michigan also points to related supports: MiCAFE helps seniors apply for a Bridge Card, MiCAP provides food benefits to some SSI recipients, TEFAP provides periodic food boxes to eligible households, CSFP provides a monthly food box for income-eligible individuals age 60+, and home-delivered meals are available for qualifying homebound older adults through separate aging services.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: MI Bridges at https://www.michigan.gov/MIBridges\",\n      \"Phone help desk for online application issues: 844-799-9876\",\n      \"General information / local office help: 517-241-3740\",\n      \"Find your local MDHHS office: https://www.michigan.gov/ContactMDHHS\",\n      \"In person at your local MDHHS office\"\n    ],\n    \"processing_time\": \"A specific statewide processing-time standard was not surfaced in the available official pages. Applicants must complete and submit an application before benefits can be determined.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Assistance (DHS-Pub-765)\",\n      \"Information Booklet (DHS-Pub-1010)\"\n    ],\n    \"documents\": [\n      \"Identification for household members\",\n      \"Proof of Michigan residency\",\n      \"Proof of income such as pay stubs, Social Security award letters, pension statements, or self-employment records\",\n      \"Proof of expenses, especially rent or mortgage and utilities\",\n      \"Information about cash, bank accounts, and other assets if requested\",\n      \"Immigration/citizenship information if applicable\",\n      \"Medical expense documentation for elderly or disabled household members if applicable, because expenses can affect eligibility\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Michigan through MDHHS; eligibility is based on household circumstances rather than a county restriction. Related senior food supports such as MiCAFE, CSFP, TEFAP distribution points, and home-delivered meals can vary by local provider and county.\",\n    \"regional_variations\": \"The SNAP/Food Assistance Program itself is statewide, but application help, office locations, and related senior-food services vary by county and local provider. Wait times and access to support can differ by region because households work through different local MDHHS offices, MiCAFE sites, Area Agencies on Aging, or food distribution partners.\",\n    \"offices_or_providers\": [\n      \"Michigan Department of Health and Human Services local county offices\",\n      \"MiCAFE network sites\",\n      \"Area Agencies on Aging for home-delivered meals and related senior food supports\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/food\",\n  \"gotchas\": [\n    \"The program is SNAP in Michigan, but many people still call it Food Assistance or Bridge Card benefits.\",\n    \"Household rules matter: if an elderly parent lives with family but buys and prepares food separately, the household can be treated differently.\",\n    \"Income alone does not tell the whole story because expenses can affect eligibility.\",\n    \"Some seniors may qualify for a separate or additional food-help program like MiCAP, CSFP, or home-delivered meals; these are not the same as SNAP.\",\n    \"The fastest application path is MI Bridges, but families can also get help from local MDHHS offices.\",\n    \"The sources surfaced here do not show one simple universal income table for all SNAP cases in Michigan, so families should use MI Bridges or MDHHS for the current household-specific calculation.\"\n  ],\n  \"data_shape_notes\": \"This program is household-based and means-tested, with benefits determined by income, expenses, and sometimes assets. It is statewide, but application support and related senior food programs are locally delivered, so the main variation is by household composition and local access points rather than by county eligibility rules.\"\n}"
+      },
+      {
+        "name": "Michigan PACE",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "Michigan’s PACE programs are for people who meet Medicaid long-term care financial eligibility, and state guidance says income for a PACE enrollee must be at or below 300% of the SSI Federal Benefit Rate (FBR).[3] A second official Michigan source says participants must meet applicable Medicaid financial eligibility requirements, while some PACE sites note that private-pay enrollment may exist if a person is not Medicaid-eligible.[1][11][12][13] Because the state PACE page does not publish a household-size income table, the exact dollar amount depends on the current SSI FBR and the Medicaid rules in effect at the time of application.[3][11]",
+          "asset_limits": "The official Michigan PACE page found here does not publish a standalone asset-limit table for PACE enrollment.[1][11] Instead, eligibility is tied to Medicaid long-term care financial rules, which means countable assets are evaluated under Medicaid policy rather than a PACE-specific asset schedule.[1][3][11] The search results reviewed do not provide an official exempt-assets list for Michigan PACE, so families should verify countable and exempt assets directly with the enrolling PACE organization or Medicaid worker before applying.[1][3][11]",
+          "other_requirements": [
+            "Be certified as meeting Medicaid long-term care / nursing facility level of care criteria.[1][11][14]",
+            "Live within the approved geographic service area of the specific PACE organization.[1][11][14]",
+            "Be able to live safely in the community at the time of enrollment; you cannot be residing in a nursing facility when enrolling.[1][11][14]",
+            "Must not be concurrently enrolled in the MI Choice waiver.[1][14]",
+            "Must not be concurrently enrolled in a Health Maintenance Organization (HMO).[1][14]",
+            "A comprehensive interdisciplinary assessment is part of the enrollment decision.[11]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "PACE is an all-inclusive Medicare/Medicaid model that coordinates and provides preventive, primary, acute, and long-term care services through an interdisciplinary team of physicians, nurses, social workers, therapists, and aides.[1][4] The program is explicitly described as an alternative to nursing home care and is designed to help people remain living in the community.[4] Covered services commonly include medical care coordination, therapies, aides, and necessary drugs ordered by the PACE team; one Michigan PACE program says there are no out-of-pocket costs for Medicare-Medicaid eligible participants who use arranged providers.[13]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact the local PACE organization serving the person’s address; Michigan has 14 independent PACE organizations at 24 locations statewide.[5][15]",
+            "Visit https://www.pacemichigan.com/ to find the correct local program and contact information.[2][5]",
+            "Use the local program’s own enrollment and assessment process; each organization operates independently.[15]"
+          ],
+          "processing_time": "No single statewide processing-time standard was found in the official materials reviewed; timing appears to vary by organization because each of the 14 Michigan PACE programs has its own enrollment and assessment process.[15]",
+          "waitlist": "No statewide waitlist policy was identified in the official materials reviewed. Availability is organization- and service-area-specific, so families should ask the local PACE site whether there is a waitlist or immediate openings.[5][15]",
+          "forms": [
+            "No statewide Michigan PACE application form number was identified in the official materials reviewed.[1][11][15]"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of address in the PACE service area",
+            "Medicare and Medicaid information, if applicable",
+            "Income documentation for Medicaid financial review",
+            "Asset information for Medicaid financial review",
+            "Medical records showing functional limitations and nursing-facility-level-of-care needs",
+            "List of current doctors, medications, and health conditions",
+            "Insurance cards and identification"
+          ]
+        },
+        "geography": {
+          "statewide": false,
+          "restrictions": "Michigan PACE is available only in the approved service areas of the individual PACE organizations, not everywhere in the state.[1][5][11][15]",
+          "regional_variations": "Michigan has 14 independent PACE organizations operating at 24 locations, so enrollment rules, service-area boundaries, and assessment workflows vary by provider.[5][15] Some local programs also publicly state their own county-by-county or ZIP-code service areas.[8][10][13] Wait times and access can therefore differ by region and by organization, but no official statewide wait-time chart was identified in the sources reviewed.[15]",
+          "offices_or_providers": [
+            "PACE Michigan statewide program directory / locator at pacemichigan.com/find-your-pace.[5]",
+            "Local independent PACE organizations in Michigan (14 organizations, 24 locations statewide).[5][15]"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+        "gotchas": [
+          "PACE in Michigan is not a single statewide office; each of the 14 organizations is independent and runs its own enrollment and assessment process.[15]",
+          "Eligibility is not just age-based; the key gate is nursing-facility-level-of-care plus living safely in the community in the organization’s service area.[1][11][14]",
+          "You generally cannot enroll if already in a nursing facility, MI Choice waiver, or an HMO.[1][14]",
+          "Service area matters as much as medical need; being eligible medically does not help if the person lives outside the provider’s geographic area.[1][11][14]",
+          "State materials reviewed do not publish a simple household-size income table or an official standalone asset table for PACE, because the financial test is tied to Medicaid long-term care rules.[3][11]",
+          "Because each provider is independent, families should confirm local paperwork, assessment steps, and timing directly with the chosen PACE organization.[15]"
+        ],
+        "data_shape_notes": "Michigan PACE is region-restricted and provider-specific: age is fixed at 55+, medical eligibility is based on nursing-facility level of care, and financial eligibility follows Medicaid long-term care rules rather than a single PACE-only benefit table.[1][3][11][14] The biggest structure difference is that the program is delivered through 14 independent local organizations, so geography and provider choice drive access, timing, and enrollment workflow.[5][15]",
+        "_raw": "{\n  \"name\": \"Michigan PACE\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"Michigan’s PACE programs are for people who meet Medicaid long-term care financial eligibility, and state guidance says income for a PACE enrollee must be at or below 300% of the SSI Federal Benefit Rate (FBR).[3] A second official Michigan source says participants must meet applicable Medicaid financial eligibility requirements, while some PACE sites note that private-pay enrollment may exist if a person is not Medicaid-eligible.[1][11][12][13] Because the state PACE page does not publish a household-size income table, the exact dollar amount depends on the current SSI FBR and the Medicaid rules in effect at the time of application.[3][11]\",\n    \"asset_limits\": \"The official Michigan PACE page found here does not publish a standalone asset-limit table for PACE enrollment.[1][11] Instead, eligibility is tied to Medicaid long-term care financial rules, which means countable assets are evaluated under Medicaid policy rather than a PACE-specific asset schedule.[1][3][11] The search results reviewed do not provide an official exempt-assets list for Michigan PACE, so families should verify countable and exempt assets directly with the enrolling PACE organization or Medicaid worker before applying.[1][3][11]\",\n    \"other_requirements\": [\n      \"Be certified as meeting Medicaid long-term care / nursing facility level of care criteria.[1][11][14]\",\n      \"Live within the approved geographic service area of the specific PACE organization.[1][11][14]\",\n      \"Be able to live safely in the community at the time of enrollment; you cannot be residing in a nursing facility when enrolling.[1][11][14]\",\n      \"Must not be concurrently enrolled in the MI Choice waiver.[1][14]\",\n      \"Must not be concurrently enrolled in a Health Maintenance Organization (HMO).[1][14]\",\n      \"A comprehensive interdisciplinary assessment is part of the enrollment decision.[11]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"PACE is an all-inclusive Medicare/Medicaid model that coordinates and provides preventive, primary, acute, and long-term care services through an interdisciplinary team of physicians, nurses, social workers, therapists, and aides.[1][4] The program is explicitly described as an alternative to nursing home care and is designed to help people remain living in the community.[4] Covered services commonly include medical care coordination, therapies, aides, and necessary drugs ordered by the PACE team; one Michigan PACE program says there are no out-of-pocket costs for Medicare-Medicaid eligible participants who use arranged providers.[13]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the local PACE organization serving the person’s address; Michigan has 14 independent PACE organizations at 24 locations statewide.[5][15]\",\n      \"Visit https://www.pacemichigan.com/ to find the correct local program and contact information.[2][5]\",\n      \"Use the local program’s own enrollment and assessment process; each organization operates independently.[15]\"\n    ],\n    \"processing_time\": \"No single statewide processing-time standard was found in the official materials reviewed; timing appears to vary by organization because each of the 14 Michigan PACE programs has its own enrollment and assessment process.[15]\",\n    \"waitlist\": \"No statewide waitlist policy was identified in the official materials reviewed. Availability is organization- and service-area-specific, so families should ask the local PACE site whether there is a waitlist or immediate openings.[5][15]\",\n    \"forms\": [\n      \"No statewide Michigan PACE application form number was identified in the official materials reviewed.[1][11][15]\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of address in the PACE service area\",\n      \"Medicare and Medicaid information, if applicable\",\n      \"Income documentation for Medicaid financial review\",\n      \"Asset information for Medicaid financial review\",\n      \"Medical records showing functional limitations and nursing-facility-level-of-care needs\",\n      \"List of current doctors, medications, and health conditions\",\n      \"Insurance cards and identification\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": false,\n    \"restrictions\": \"Michigan PACE is available only in the approved service areas of the individual PACE organizations, not everywhere in the state.[1][5][11][15]\",\n    \"regional_variations\": \"Michigan has 14 independent PACE organizations operating at 24 locations, so enrollment rules, service-area boundaries, and assessment workflows vary by provider.[5][15] Some local programs also publicly state their own county-by-county or ZIP-code service areas.[8][10][13] Wait times and access can therefore differ by region and by organization, but no official statewide wait-time chart was identified in the sources reviewed.[15]\",\n    \"offices_or_providers\": [\n      \"PACE Michigan statewide program directory / locator at pacemichigan.com/find-your-pace.[5]\",\n      \"Local independent PACE organizations in Michigan (14 organizations, 24 locations statewide).[5][15]\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace\",\n  \"gotchas\": [\n    \"PACE in Michigan is not a single statewide office; each of the 14 organizations is independent and runs its own enrollment and assessment process.[15]\",\n    \"Eligibility is not just age-based; the key gate is nursing-facility-level-of-care plus living safely in the community in the organization’s service area.[1][11][14]\",\n    \"You generally cannot enroll if already in a nursing facility, MI Choice waiver, or an HMO.[1][14]\",\n    \"Service area matters as much as medical need; being eligible medically does not help if the person lives outside the provider’s geographic area.[1][11][14]\",\n    \"State materials reviewed do not publish a simple household-size income table or an official standalone asset table for PACE, because the financial test is tied to Medicaid long-term care rules.[3][11]\",\n    \"Because each provider is independent, families should confirm local paperwork, assessment steps, and timing directly with the chosen PACE organization.[15]\"\n  ],\n  \"data_shape_notes\": \"Michigan PACE is region-restricted and provider-specific: age is fixed at 55+, medical eligibility is based on nursing-facility level of care, and financial eligibility follows Medicaid long-term care rules rather than a single PACE-only benefit table.[1][3][11][14] The biggest structure difference is that the program is delivered through 14 independent local organizations, so geography and provider choice drive access, timing, and enrollment workflow.[5][15]\"\n}"
+      },
+      {
+        "name": "State Emergency Relief",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Household income is part of the eligibility test, and the program is aimed at low-income households facing an emergency that threatens health or safety[1][4][11]. One official Michigan source also says energy-related SER eligibility is generally tied to income at or below 150% of the Federal Poverty Level, but the SER program as a whole uses service-specific rules and a specialist determines eligibility[13][4].",
+          "asset_limits": "For most SER services, countable cash assets must be at or below $15,000[1][2][8]. Michigan’s eligibility page says this applies to countable cash assets, and some assets are excluded, including the homestead, one vehicle, personal goods, and household goods[1]. The application form also distinguishes non-burial services from burial services, and the $15,000 cash-asset test does not apply the same way to burial services[2].",
+          "other_requirements": [
+            "The applicant must be physically present in Michigan; permanent residence is not required[7].",
+            "There is no minimum age requirement to apply, but an unemancipated minor is referred for further evaluation[5][7].",
+            "The emergency must be serious enough to threaten health or safety[4][6].",
+            "For housing or utility help, the emergency is generally expected not to be likely to happen again, and the household must show ability to handle future ongoing costs[11].",
+            "For rent, heat, electric, and some utility help, the applicant may need to have made certain required payments already[11].",
+            "Eligibility is service-specific and determined by a local MDHHS specialist because many variables affect the decision[4]."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "SER provides limited emergency financial help for home, utilities, and burial needs. Specific covered services include emergency help with rent, mortgage/housing costs, shutoff or past-due utility bills, deliverable fuel such as propane, and certain essential home repairs. Eligible home repairs can include repair or replacement of a non-functioning furnace, hot water heater, or septic system when needed to remove a direct threat to health or safety or to meet legal or mobile-home-park requirements[6][13][15]. The program is not a recurring monthly benefit; it is emergency assistance for a specific crisis[4][6].",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through MI Bridges: https://newmibridges.michigan.gov/",
+            "Paper application form DHS-1514, Application for State Emergency Relief",
+            "MDHHS-1171 Assistance Application with the MDHHS-1171-SER supplemental form",
+            "In person at a local MDHHS office",
+            "Mail or fax for the MDHHS-1171 Assistance Application"
+          ],
+          "processing_time": "Applications must be registered within one day of receipt[5][10]. Michigan Legal Help says the process takes around 10 days to complete, but local specialist review and emergency circumstances can affect timing[8].",
+          "waitlist": null,
+          "forms": [
+            "DHS-1514, Application for State Emergency Relief",
+            "MDHHS-1171, Assistance Application",
+            "MDHHS-1171-SER, State Emergency Relief supplemental form"
+          ],
+          "documents": [
+            "Proof of identity for household members",
+            "Proof of income",
+            "Proof of cash assets or bank statements",
+            "Proof of emergency need, such as past-due bills, shutoff notices, eviction notice, lease, or mortgage statement",
+            "Proof of housing costs and current expenses",
+            "For home repair requests, proof of ownership or life estate and documentation of the repair need",
+            "Any documents showing recent payments already made toward rent, heat, electric, or utility bills"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applicants may file in any county in Michigan, and the program is statewide[5][10].",
+          "regional_variations": "The core eligibility rules are statewide, but local MDHHS specialists make the actual eligibility determination, so processing speed and practical handling can vary by office and county[4][5].",
+          "offices_or_providers": [
+            "Local Michigan Department of Health and Human Services (MDHHS) offices",
+            "MI Bridges online portal"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/emergency-relief",
+        "gotchas": [
+          "SER is not a general cash-assistance program; it is emergency-only help for a specific crisis[4][6].",
+          "A household can still be denied even if income is low if the emergency does not meet the program rules, especially for housing help where future affordability matters[11].",
+          "The $15,000 asset limit is about countable cash assets, and some property such as the home and one vehicle is excluded[1][2].",
+          "Eligibility is not decided automatically by the online application; a local MDHHS specialist makes the final call[4].",
+          "For utility-related assistance, applicants may need prior payments and may need a shutoff or past-due notice[11][13].",
+          "Home repair help has extra rules: the home must be the applicant’s permanent usual residence, repairs must be essential for safety or legal compliance, and the home generally cannot be listed for sale or in jeopardy of loss[15]."
+        ],
+        "data_shape_notes": "This program is service-specific and emergency-based rather than a single fixed benefit. Eligibility combines household income, a $15,000 countable cash-asset limit, and crisis-specific rules, and the benefit amount depends on the particular emergency service requested[1][4][11].",
+        "_raw": "{\n  \"name\": \"State Emergency Relief\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Household income is part of the eligibility test, and the program is aimed at low-income households facing an emergency that threatens health or safety[1][4][11]. One official Michigan source also says energy-related SER eligibility is generally tied to income at or below 150% of the Federal Poverty Level, but the SER program as a whole uses service-specific rules and a specialist determines eligibility[13][4].\",\n    \"asset_limits\": \"For most SER services, countable cash assets must be at or below $15,000[1][2][8]. Michigan’s eligibility page says this applies to countable cash assets, and some assets are excluded, including the homestead, one vehicle, personal goods, and household goods[1]. The application form also distinguishes non-burial services from burial services, and the $15,000 cash-asset test does not apply the same way to burial services[2].\",\n    \"other_requirements\": [\n      \"The applicant must be physically present in Michigan; permanent residence is not required[7].\",\n      \"There is no minimum age requirement to apply, but an unemancipated minor is referred for further evaluation[5][7].\",\n      \"The emergency must be serious enough to threaten health or safety[4][6].\",\n      \"For housing or utility help, the emergency is generally expected not to be likely to happen again, and the household must show ability to handle future ongoing costs[11].\",\n      \"For rent, heat, electric, and some utility help, the applicant may need to have made certain required payments already[11].\",\n      \"Eligibility is service-specific and determined by a local MDHHS specialist because many variables affect the decision[4].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"SER provides limited emergency financial help for home, utilities, and burial needs. Specific covered services include emergency help with rent, mortgage/housing costs, shutoff or past-due utility bills, deliverable fuel such as propane, and certain essential home repairs. Eligible home repairs can include repair or replacement of a non-functioning furnace, hot water heater, or septic system when needed to remove a direct threat to health or safety or to meet legal or mobile-home-park requirements[6][13][15]. The program is not a recurring monthly benefit; it is emergency assistance for a specific crisis[4][6].\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through MI Bridges: https://newmibridges.michigan.gov/\",\n      \"Paper application form DHS-1514, Application for State Emergency Relief\",\n      \"MDHHS-1171 Assistance Application with the MDHHS-1171-SER supplemental form\",\n      \"In person at a local MDHHS office\",\n      \"Mail or fax for the MDHHS-1171 Assistance Application\"\n    ],\n    \"processing_time\": \"Applications must be registered within one day of receipt[5][10]. Michigan Legal Help says the process takes around 10 days to complete, but local specialist review and emergency circumstances can affect timing[8].\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"DHS-1514, Application for State Emergency Relief\",\n      \"MDHHS-1171, Assistance Application\",\n      \"MDHHS-1171-SER, State Emergency Relief supplemental form\"\n    ],\n    \"documents\": [\n      \"Proof of identity for household members\",\n      \"Proof of income\",\n      \"Proof of cash assets or bank statements\",\n      \"Proof of emergency need, such as past-due bills, shutoff notices, eviction notice, lease, or mortgage statement\",\n      \"Proof of housing costs and current expenses\",\n      \"For home repair requests, proof of ownership or life estate and documentation of the repair need\",\n      \"Any documents showing recent payments already made toward rent, heat, electric, or utility bills\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applicants may file in any county in Michigan, and the program is statewide[5][10].\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but local MDHHS specialists make the actual eligibility determination, so processing speed and practical handling can vary by office and county[4][5].\",\n    \"offices_or_providers\": [\n      \"Local Michigan Department of Health and Human Services (MDHHS) offices\",\n      \"MI Bridges online portal\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/emergency-relief\",\n  \"gotchas\": [\n    \"SER is not a general cash-assistance program; it is emergency-only help for a specific crisis[4][6].\",\n    \"A household can still be denied even if income is low if the emergency does not meet the program rules, especially for housing help where future affordability matters[11].\",\n    \"The $15,000 asset limit is about countable cash assets, and some property such as the home and one vehicle is excluded[1][2].\",\n    \"Eligibility is not decided automatically by the online application; a local MDHHS specialist makes the final call[4].\",\n    \"For utility-related assistance, applicants may need prior payments and may need a shutoff or past-due notice[11][13].\",\n    \"Home repair help has extra rules: the home must be the applicant’s permanent usual residence, repairs must be essential for safety or legal compliance, and the home generally cannot be listed for sale or in jeopardy of loss[15].\"\n  ],\n  \"data_shape_notes\": \"This program is service-specific and emergency-based rather than a single fixed benefit. Eligibility combines household income, a $15,000 countable cash-asset limit, and crisis-specific rules, and the benefit amount depends on the particular emergency service requested[1][4][11].\"\n}"
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit was identified in the official Michigan state caregiver services materials surfaced here. Eligibility is instead tied to the care recipient being age 60 or older for most local caregiver support programs described by Michigan counties and Area Agencies on Aging.",
+          "asset_limits": null,
+          "other_requirements": [
+            "The person receiving care is typically age 60 or older for Michigan caregiver support services described by county and state aging pages.",
+            "Services are for family/informal caregivers, including spouses, adult children, friends, partners, and neighbors helping an older adult.",
+            "Some local programs also cover caregivers of a senior who is caring for an adult disabled child, and kinship caregivers 55 or older.",
+            "For dementia-specific classes like Creating Confident Caregivers, the person with dementia must be living at home.",
+            "Eligibility and priority can vary by local Area Agency on Aging or county program."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Typical services include respite care, counseling, support groups, caregiver training, education, information and referral, unmet-needs assistance, and some in-home or consultation support. One specific dementia caregiver class is a free six-week program, but space is limited.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact your local Area Agency on Aging in Michigan",
+            "Use the Michigan state aging services page to find local caregiver services",
+            "County-level caregiver support offices may also take calls directly"
+          ],
+          "processing_time": "No statewide processing timeline was identified in the official materials surfaced here; timing appears to depend on the local Area Agency on Aging or county office.",
+          "waitlist": "Some services, such as the Creating Confident Caregivers class, are free but space-limited; local waitlists may exist depending on the region and service.",
+          "forms": [],
+          "documents": [
+            "Age of the person receiving care",
+            "Basic information about the caregiver’s relationship to the care recipient",
+            "Description of care needs and daily tasks needing help",
+            "Any dementia diagnosis or caregiving context if applying for dementia-specific classes",
+            "Contact information for both caregiver and care recipient"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide access is through local Area Agencies on Aging, but exact services, availability, and intake rules vary by region and county.",
+          "regional_variations": "Michigan’s caregiver support system is locally delivered. Counties and Area Agencies on Aging offer different mixes of counseling, training, support groups, respite, and in-home help; some regions also have special programs such as dementia caregiver classes or home visits. Availability and staffing hours differ by region.",
+          "offices_or_providers": [
+            "Local Area Agency on Aging offices across Michigan",
+            "Detroit Area Agency on Aging (Region 1A)",
+            "AgeWays serving Livingston, Macomb, Monroe, Oakland, St. Clair, and Washtenaw counties",
+            "Jackson County Department on Aging",
+            "Kalamazoo County Area Agency on Aging",
+            "Saginaw County Commission on Aging"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services",
+        "gotchas": [
+          "This is not a single uniform statewide benefit with one application form; Michigan routes caregivers through local Area Agencies on Aging.",
+          "Income and asset tests were not identified in the official caregiver-services materials surfaced here, so families should not assume Medicaid-style financial rules apply.",
+          "Some services are limited to care recipients age 60 or older, while other local programs broaden eligibility in different ways.",
+          "Dementia caregiver classes can be free but may have limited seats.",
+          "Different counties may use different terminology, intake processes, and service menus."
+        ],
+        "data_shape_notes": "This program is locally administered statewide, with benefits that vary by region and service type rather than a single dollar amount or fixed household-size table.",
+        "_raw": "{\n  \"name\": \"Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit was identified in the official Michigan state caregiver services materials surfaced here. Eligibility is instead tied to the care recipient being age 60 or older for most local caregiver support programs described by Michigan counties and Area Agencies on Aging.\",\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"The person receiving care is typically age 60 or older for Michigan caregiver support services described by county and state aging pages.\",\n      \"Services are for family/informal caregivers, including spouses, adult children, friends, partners, and neighbors helping an older adult.\",\n      \"Some local programs also cover caregivers of a senior who is caring for an adult disabled child, and kinship caregivers 55 or older.\",\n      \"For dementia-specific classes like Creating Confident Caregivers, the person with dementia must be living at home.\",\n      \"Eligibility and priority can vary by local Area Agency on Aging or county program.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Typical services include respite care, counseling, support groups, caregiver training, education, information and referral, unmet-needs assistance, and some in-home or consultation support. One specific dementia caregiver class is a free six-week program, but space is limited.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact your local Area Agency on Aging in Michigan\",\n      \"Use the Michigan state aging services page to find local caregiver services\",\n      \"County-level caregiver support offices may also take calls directly\"\n    ],\n    \"processing_time\": \"No statewide processing timeline was identified in the official materials surfaced here; timing appears to depend on the local Area Agency on Aging or county office.\",\n    \"waitlist\": \"Some services, such as the Creating Confident Caregivers class, are free but space-limited; local waitlists may exist depending on the region and service.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Age of the person receiving care\",\n      \"Basic information about the caregiver’s relationship to the care recipient\",\n      \"Description of care needs and daily tasks needing help\",\n      \"Any dementia diagnosis or caregiving context if applying for dementia-specific classes\",\n      \"Contact information for both caregiver and care recipient\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide access is through local Area Agencies on Aging, but exact services, availability, and intake rules vary by region and county.\",\n    \"regional_variations\": \"Michigan’s caregiver support system is locally delivered. Counties and Area Agencies on Aging offer different mixes of counseling, training, support groups, respite, and in-home help; some regions also have special programs such as dementia caregiver classes or home visits. Availability and staffing hours differ by region.\",\n    \"offices_or_providers\": [\n      \"Local Area Agency on Aging offices across Michigan\",\n      \"Detroit Area Agency on Aging (Region 1A)\",\n      \"AgeWays serving Livingston, Macomb, Monroe, Oakland, St. Clair, and Washtenaw counties\",\n      \"Jackson County Department on Aging\",\n      \"Kalamazoo County Area Agency on Aging\",\n      \"Saginaw County Commission on Aging\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services\",\n  \"gotchas\": [\n    \"This is not a single uniform statewide benefit with one application form; Michigan routes caregivers through local Area Agencies on Aging.\",\n    \"Income and asset tests were not identified in the official caregiver-services materials surfaced here, so families should not assume Medicaid-style financial rules apply.\",\n    \"Some services are limited to care recipients age 60 or older, while other local programs broaden eligibility in different ways.\",\n    \"Dementia caregiver classes can be free but may have limited seats.\",\n    \"Different counties may use different terminology, intake processes, and service menus.\"\n  ],\n  \"data_shape_notes\": \"This program is locally administered statewide, with benefits that vary by region and service type rather than a single dollar amount or fixed household-size table.\"\n}"
+      },
+      {
+        "name": "Property Tax Credit for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "general_homestead_property_tax_credit": {
+              "threshold": "$71,500 maximum total household resources (THR); credit is reduced by 10% for each $1,000 (or part of $1,000) above $62,500 until THR reaches $71,500, and no credit is allowed above $71,500",
+              "applies_to": "homeowners and renters who meet the general HPTC rules",
+              "source_note": "Michigan’s official guidance says the senior credit uses the same THR framework, with a senior-specific alternate method for renters age 65+"
+            },
+            "senior_renter_alternate_method": {
+              "threshold": "Available to renters age 65 or older; the alternative method can produce up to a $1,900 maximum credit",
+              "applies_to": "renters age 65+ who choose the alternate renter calculation"
+            },
+            "household_size_table": "No household-size table applies. Eligibility is based on total household resources (THR), not household size.",
+            "income_definition_notes": "THR is broader than federal AGI and can include taxable and nontaxable income such as Social Security and pensions."
+          },
+          "asset_limits": "No asset limit was identified for this program. Eligibility is based on income/THR, homestead status, residency, and property-value rules rather than assets.",
+          "other_requirements": [
+            "Must be a natural person, not a trust, corporation, LLC, or other legal entity",
+            "Michigan homestead must be the claimant’s principal residence",
+            "Must have been a Michigan resident for at least 6 months of the tax year",
+            "Must own and occupy the homestead as a homeowner, or occupy a rental under a lease agreement as a renter",
+            "For homeowners, the taxable value of the homestead must be under the annual cap stated in the instructions; renters are not subject to the taxable-value cap",
+            "Renters must have a lease or rental agreement and cannot be in university housing for the regular homestead credit",
+            "If THR consists solely of certain public assistance payments, the standard renter credit may not apply"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A refundable Michigan homestead property tax credit that helps pay part of property taxes or rent-equivalent property tax burden. For senior renters age 65+, the alternate method can yield up to a $1,900 maximum credit. For homeowners and non-alternate claims, the amount is calculated from property taxes, THR, and statutory formulas, with a maximum that is adjusted annually.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "File with the Michigan individual income tax return using Form MI-1040 and the appropriate homestead property tax credit form/instructions",
+            "Use Michigan Treasury’s official tax guidance page: https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc",
+            "For renters age 65+, complete Worksheet 5 (Renters Over Age 65 Estimator) and enter the result on line 44 of Form MI-1040CR"
+          ],
+          "processing_time": "Not specified in the official guidance retrieved here. Treasury indicates the credit may be claimed retroactively for up to four years from the year it could have been claimed.",
+          "waitlist": null,
+          "forms": [
+            "MI-1040CR (Homestead Property Tax Credit Claim)",
+            "MI-1040CR-2 (used for seniors who are blind or disabled veterans; also relevant in some senior filing situations)",
+            "Worksheet 5: Renters Over Age 65 Estimator"
+          ],
+          "documents": [
+            "Property tax statements for homeowners",
+            "Lease or rental agreement for renters",
+            "Total household resources information",
+            "Annual rent paid for the full year if applying as a senior renter",
+            "Michigan residency and homestead details",
+            "Any documentation needed to support income, pension, Social Security, and other THR items"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Michigan program; no county restriction identified. The credit applies to Michigan homesteads only.",
+          "regional_variations": "No true regional benefit differences were identified. What can vary is local property tax bills and, in practice, local assistance availability for filing help.",
+          "offices_or_providers": []
+        },
+        "official_source": "https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc",
+        "gotchas": [
+          "This is not a service program; it is a refundable tax credit claimed on a tax return.",
+          "People often confuse total household resources with federal adjusted gross income; THR is broader.",
+          "Renters are eligible too, but the renter rules and worksheets differ from homeowner rules.",
+          "The taxable-value cap applies to homeowners, not renters.",
+          "Senior renters age 65+ may qualify for the alternate method, which can be more favorable than the standard calculation.",
+          "The credit can be claimed retroactively for up to four years, so missed prior years may still be recoverable."
+        ],
+        "data_shape_notes": "This program is a statewide, formula-based refundable tax credit with separate homeowner and renter rules, plus a special alternate calculation for renters age 65+.",
+        "_raw": "{\n  \"name\": \"Property Tax Credit for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"general_homestead_property_tax_credit\": {\n        \"threshold\": \"$71,500 maximum total household resources (THR); credit is reduced by 10% for each $1,000 (or part of $1,000) above $62,500 until THR reaches $71,500, and no credit is allowed above $71,500\",\n        \"applies_to\": \"homeowners and renters who meet the general HPTC rules\",\n        \"source_note\": \"Michigan’s official guidance says the senior credit uses the same THR framework, with a senior-specific alternate method for renters age 65+\"\n      },\n      \"senior_renter_alternate_method\": {\n        \"threshold\": \"Available to renters age 65 or older; the alternative method can produce up to a $1,900 maximum credit\",\n        \"applies_to\": \"renters age 65+ who choose the alternate renter calculation\"\n      },\n      \"household_size_table\": \"No household-size table applies. Eligibility is based on total household resources (THR), not household size.\",\n      \"income_definition_notes\": \"THR is broader than federal AGI and can include taxable and nontaxable income such as Social Security and pensions.\"\n    },\n    \"asset_limits\": \"No asset limit was identified for this program. Eligibility is based on income/THR, homestead status, residency, and property-value rules rather than assets.\",\n    \"other_requirements\": [\n      \"Must be a natural person, not a trust, corporation, LLC, or other legal entity\",\n      \"Michigan homestead must be the claimant’s principal residence\",\n      \"Must have been a Michigan resident for at least 6 months of the tax year\",\n      \"Must own and occupy the homestead as a homeowner, or occupy a rental under a lease agreement as a renter\",\n      \"For homeowners, the taxable value of the homestead must be under the annual cap stated in the instructions; renters are not subject to the taxable-value cap\",\n      \"Renters must have a lease or rental agreement and cannot be in university housing for the regular homestead credit\",\n      \"If THR consists solely of certain public assistance payments, the standard renter credit may not apply\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A refundable Michigan homestead property tax credit that helps pay part of property taxes or rent-equivalent property tax burden. For senior renters age 65+, the alternate method can yield up to a $1,900 maximum credit. For homeowners and non-alternate claims, the amount is calculated from property taxes, THR, and statutory formulas, with a maximum that is adjusted annually.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"File with the Michigan individual income tax return using Form MI-1040 and the appropriate homestead property tax credit form/instructions\",\n      \"Use Michigan Treasury’s official tax guidance page: https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc\",\n      \"For renters age 65+, complete Worksheet 5 (Renters Over Age 65 Estimator) and enter the result on line 44 of Form MI-1040CR\"\n    ],\n    \"processing_time\": \"Not specified in the official guidance retrieved here. Treasury indicates the credit may be claimed retroactively for up to four years from the year it could have been claimed.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"MI-1040CR (Homestead Property Tax Credit Claim)\",\n      \"MI-1040CR-2 (used for seniors who are blind or disabled veterans; also relevant in some senior filing situations)\",\n      \"Worksheet 5: Renters Over Age 65 Estimator\"\n    ],\n    \"documents\": [\n      \"Property tax statements for homeowners\",\n      \"Lease or rental agreement for renters\",\n      \"Total household resources information\",\n      \"Annual rent paid for the full year if applying as a senior renter\",\n      \"Michigan residency and homestead details\",\n      \"Any documentation needed to support income, pension, Social Security, and other THR items\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Michigan program; no county restriction identified. The credit applies to Michigan homesteads only.\",\n    \"regional_variations\": \"No true regional benefit differences were identified. What can vary is local property tax bills and, in practice, local assistance availability for filing help.\",\n    \"offices_or_providers\": []\n  },\n  \"official_source\": \"https://www.michigan.gov/taxes/iit/tax-guidance/credits-exemptions/hptc\",\n  \"gotchas\": [\n    \"This is not a service program; it is a refundable tax credit claimed on a tax return.\",\n    \"People often confuse total household resources with federal adjusted gross income; THR is broader.\",\n    \"Renters are eligible too, but the renter rules and worksheets differ from homeowner rules.\",\n    \"The taxable-value cap applies to homeowners, not renters.\",\n    \"Senior renters age 65+ may qualify for the alternate method, which can be more favorable than the standard calculation.\",\n    \"The credit can be claimed retroactively for up to four years, so missed prior years may still be recoverable.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide, formula-based refundable tax credit with separate homeowner and renter rules, plus a special alternate calculation for renters age 65+.\"\n}"
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit is listed for Michigan’s Older Americans Act home-delivered meal program; eligibility is based on age, frailty, and need rather than income.",
+          "asset_limits": "No asset test is listed for the state program.",
+          "other_requirements": [
+            "Must be homebound or otherwise unable to obtain food or prepare meals under normal circumstances.",
+            "Must be at high nutritional risk due to factors such as illness, recent hospitalization, living alone, or inability to shop or cook.",
+            "Family members with disabilities who permanently live in the home of the eligible older adult may also be eligible.",
+            "Local providers may add their own screening or priority rules."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Nutritionally sound meals delivered to the home. The number of meals is based on an individual assessment of need; there is no fixed statewide number of meals or dollar value. The state says there is no cost for meals, but each participant has the opportunity to contribute to the meal cost.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Contact your local Area Agency on Aging",
+            "State program page: https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals"
+          ],
+          "processing_time": "Service can begin within a few days of application, depending on local capacity and assessment.",
+          "waitlist": "No statewide waitlist is described on the state page; local waiting lists may exist depending on the Area Agency on Aging or meal provider.",
+          "forms": [],
+          "documents": [
+            "Basic identifying information for the older adult",
+            "Address and phone number",
+            "Information about homebound status and difficulty shopping or cooking",
+            "Any recent hospital discharge or medical/nutritional concerns that support eligibility",
+            "Local providers may request an intake or assessment interview"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Program is available through local Area Agencies on Aging and their providers across Michigan; exact service area, delivery days, and meal type depend on the local provider.",
+          "regional_variations": "Yes. Meal schedule, hot vs. frozen meals, donation suggestions, delivery frequency, and intake process vary by region and provider. Some areas deliver Monday through Thursday, some Monday through Friday, and some include frozen meals for weekends/holidays.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging",
+            "Local Meals on Wheels or senior nutrition providers"
+          ]
+        },
+        "official_source": "https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals",
+        "gotchas": [
+          "This is not an income-based benefit like Medicaid; need and homebound status matter more than money.",
+          "There is no single statewide application form or central phone number; families must contact the local Area Agency on Aging.",
+          "The exact number of meals, delivery days, and whether meals are hot or frozen depend on the region.",
+          "Although the state says there is no cost, many local programs request a suggested donation.",
+          "Some local providers require the recipient to be home to receive the delivery."
+        ],
+        "data_shape_notes": "Eligibility is needs-based and assessed locally; benefits are service-based rather than cash-based; the main variation is regional/provider-level rather than household size or income tier.",
+        "_raw": "{\n  \"name\": \"Home-Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit is listed for Michigan’s Older Americans Act home-delivered meal program; eligibility is based on age, frailty, and need rather than income.\",\n    \"asset_limits\": \"No asset test is listed for the state program.\",\n    \"other_requirements\": [\n      \"Must be homebound or otherwise unable to obtain food or prepare meals under normal circumstances.\",\n      \"Must be at high nutritional risk due to factors such as illness, recent hospitalization, living alone, or inability to shop or cook.\",\n      \"Family members with disabilities who permanently live in the home of the eligible older adult may also be eligible.\",\n      \"Local providers may add their own screening or priority rules.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Nutritionally sound meals delivered to the home. The number of meals is based on an individual assessment of need; there is no fixed statewide number of meals or dollar value. The state says there is no cost for meals, but each participant has the opportunity to contribute to the meal cost.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact your local Area Agency on Aging\",\n      \"State program page: https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals\"\n    ],\n    \"processing_time\": \"Service can begin within a few days of application, depending on local capacity and assessment.\",\n    \"waitlist\": \"No statewide waitlist is described on the state page; local waiting lists may exist depending on the Area Agency on Aging or meal provider.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Basic identifying information for the older adult\",\n      \"Address and phone number\",\n      \"Information about homebound status and difficulty shopping or cooking\",\n      \"Any recent hospital discharge or medical/nutritional concerns that support eligibility\",\n      \"Local providers may request an intake or assessment interview\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Program is available through local Area Agencies on Aging and their providers across Michigan; exact service area, delivery days, and meal type depend on the local provider.\",\n    \"regional_variations\": \"Yes. Meal schedule, hot vs. frozen meals, donation suggestions, delivery frequency, and intake process vary by region and provider. Some areas deliver Monday through Thursday, some Monday through Friday, and some include frozen meals for weekends/holidays.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging\",\n      \"Local Meals on Wheels or senior nutrition providers\"\n    ]\n  },\n  \"official_source\": \"https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals\",\n  \"gotchas\": [\n    \"This is not an income-based benefit like Medicaid; need and homebound status matter more than money.\",\n    \"There is no single statewide application form or central phone number; families must contact the local Area Agency on Aging.\",\n    \"The exact number of meals, delivery days, and whether meals are hot or frozen depend on the region.\",\n    \"Although the state says there is no cost, many local programs request a suggested donation.\",\n    \"Some local providers require the recipient to be home to receive the delivery.\"\n  ],\n  \"data_shape_notes\": \"Eligibility is needs-based and assessed locally; benefits are service-based rather than cash-based; the main variation is regional/provider-level rather than household size or income tier.\"\n}"
+      },
+      {
+        "name": "State SSI Supplement",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No separate Michigan income limit applies beyond federal SSI eligibility; the state supplement is paid to people who already qualify for SSI. Michigan’s supplement is part of the total SSI benefit calculation, and countable income is first used to reduce the federal SSI payment before any remaining countable income reduces the state supplement. For 2026, the published maximum combined monthly payment levels are: living independently $1,008 for an individual and $1,516 for a couple; living in the household of another $670.67 for an individual and $1,015.33 for a couple; domiciliary care $1,151.50 individual and $2,303.00 couple; personal care facility $1,151.50 individual and $2,303.00 couple; home for the aged $1,173.30 individual and $2,346.60 couple; living independently with an essential person $1,368.00 individual and $1,827.00 couple; living in the household of another with an essential person $913.34 individual and $1,218.67 couple; Medicaid facility $44.00 individual and $88.00 couple. The exact SSI federal income/resource rules still apply for eligibility.",
+          "asset_limits": "No Michigan-only asset limit; SSI federal resource limits apply. In general, SSI counts cash, bank accounts, stocks, and property that is not excluded, while excluding the home you live in, one vehicle used for transportation, certain burial funds, household goods, and some life insurance and trusts depending on the rules. For a single person, the federal SSI resource limit is $2,000; for a couple, $3,000.",
+          "other_requirements": [
+            "Must be approved for federal SSI.",
+            "Must live in Michigan and meet the living-arrangement category tied to the supplement amount.",
+            "No special durational Michigan residency requirement.",
+            "Some supplement categories depend on the person living independently, in another person’s household, in a domiciliary care setting, a personal care facility, a home for the aged, or a Medicaid facility.",
+            "Payment calculation depends on living arrangement and countable income."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A state-paid cash supplement added to federal SSI. For 2026, published monthly state supplement amounts are: $14 for an individual living independently, $28 for a couple living independently, $9.33 for an individual living in the household of another, $18.66 for a couple living in the household of another, $87 for domiciliary care, $157.50 for personal care facility, $179.30 for home for the aged, $14 for an individual living independently with an essential person, $21 for a couple living independently with an essential person, $9.33 for an individual living in the household of another with an essential person, $14 for a couple in that category, and $7 for a Medicaid facility individual rate, $14 for a couple. For people in the independent/household-of-another categories, the state supplement is paid quarterly by paper check or direct deposit in March, June, September, and December.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online through the SSI application process at the Social Security Administration website",
+            "By phone at 1-800-772-1213",
+            "TTY 1-800-325-0778",
+            "By appointment with a local Social Security office",
+            "In person at a local Social Security office"
+          ],
+          "processing_time": "No Michigan-specific processing time is published for the supplement itself; it is generally tied to the SSI application/award process. The state supplement is handled automatically once SSI eligibility and the living arrangement are established.",
+          "waitlist": null,
+          "forms": [
+            "Social Security SSI application forms used for federal SSI",
+            "Michigan does not publish a separate standalone state-supplement application form for this program"
+          ],
+          "documents": [
+            "Proof of age and identity",
+            "Social Security number",
+            "Proof of U.S. citizenship or eligible immigration status",
+            "Bank statements and other proof of income/resources",
+            "Housing or care-setting information showing living arrangement",
+            "Medical records and disability/age-related information if applying for SSI",
+            "Direct deposit information if desired"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Michigan, but the supplement amount depends on the person’s living arrangement. Administration is split: SSA administers some categories and Michigan administers others.",
+          "regional_variations": "No county-by-county variation in the published payment schedule. The practical difference is administrative, not regional: SSA handles certain supplement categories and Michigan handles others. Wait times can differ only based on local Social Security office workload, not an official regional program design.",
+          "offices_or_providers": [
+            "Social Security Administration local offices for SSI application",
+            "Michigan Department of Health and Human Services involvement for certain supplement administration categories"
+          ]
+        },
+        "official_source": "https://www.ssa.gov/ssi/text-benefits-ussi.htm",
+        "gotchas": [
+          "This is not a separate benefit you usually apply for by itself; it is attached to SSI eligibility.",
+          "The supplement amount is driven mainly by living arrangement, not just age or diagnosis.",
+          "People in some care settings get very different amounts, and the state supplement can be administered by different agencies depending on the category.",
+          "The payment may be quarterly rather than monthly for the independent and household-of-another categories.",
+          "Income can reduce the combined SSI payment after the federal portion is reduced first, so the state amount is not always fully paid.",
+          "The published amounts change over time, so families should verify the current year’s rate before relying on a figure."
+        ],
+        "data_shape_notes": "This program is a state SSI supplement with payment levels that vary by living arrangement and household status, plus different administration pathways for different categories. It is not a county program and not a waitlisted service program.",
+        "_raw": "{\n  \"name\": \"State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No separate Michigan income limit applies beyond federal SSI eligibility; the state supplement is paid to people who already qualify for SSI. Michigan’s supplement is part of the total SSI benefit calculation, and countable income is first used to reduce the federal SSI payment before any remaining countable income reduces the state supplement. For 2026, the published maximum combined monthly payment levels are: living independently $1,008 for an individual and $1,516 for a couple; living in the household of another $670.67 for an individual and $1,015.33 for a couple; domiciliary care $1,151.50 individual and $2,303.00 couple; personal care facility $1,151.50 individual and $2,303.00 couple; home for the aged $1,173.30 individual and $2,346.60 couple; living independently with an essential person $1,368.00 individual and $1,827.00 couple; living in the household of another with an essential person $913.34 individual and $1,218.67 couple; Medicaid facility $44.00 individual and $88.00 couple. The exact SSI federal income/resource rules still apply for eligibility.\",\n    \"asset_limits\": \"No Michigan-only asset limit; SSI federal resource limits apply. In general, SSI counts cash, bank accounts, stocks, and property that is not excluded, while excluding the home you live in, one vehicle used for transportation, certain burial funds, household goods, and some life insurance and trusts depending on the rules. For a single person, the federal SSI resource limit is $2,000; for a couple, $3,000.\",\n    \"other_requirements\": [\n      \"Must be approved for federal SSI.\",\n      \"Must live in Michigan and meet the living-arrangement category tied to the supplement amount.\",\n      \"No special durational Michigan residency requirement.\",\n      \"Some supplement categories depend on the person living independently, in another person’s household, in a domiciliary care setting, a personal care facility, a home for the aged, or a Medicaid facility.\",\n      \"Payment calculation depends on living arrangement and countable income.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A state-paid cash supplement added to federal SSI. For 2026, published monthly state supplement amounts are: $14 for an individual living independently, $28 for a couple living independently, $9.33 for an individual living in the household of another, $18.66 for a couple living in the household of another, $87 for domiciliary care, $157.50 for personal care facility, $179.30 for home for the aged, $14 for an individual living independently with an essential person, $21 for a couple living independently with an essential person, $9.33 for an individual living in the household of another with an essential person, $14 for a couple in that category, and $7 for a Medicaid facility individual rate, $14 for a couple. For people in the independent/household-of-another categories, the state supplement is paid quarterly by paper check or direct deposit in March, June, September, and December.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through the SSI application process at the Social Security Administration website\",\n      \"By phone at 1-800-772-1213\",\n      \"TTY 1-800-325-0778\",\n      \"By appointment with a local Social Security office\",\n      \"In person at a local Social Security office\"\n    ],\n    \"processing_time\": \"No Michigan-specific processing time is published for the supplement itself; it is generally tied to the SSI application/award process. The state supplement is handled automatically once SSI eligibility and the living arrangement are established.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Social Security SSI application forms used for federal SSI\",\n      \"Michigan does not publish a separate standalone state-supplement application form for this program\"\n    ],\n    \"documents\": [\n      \"Proof of age and identity\",\n      \"Social Security number\",\n      \"Proof of U.S. citizenship or eligible immigration status\",\n      \"Bank statements and other proof of income/resources\",\n      \"Housing or care-setting information showing living arrangement\",\n      \"Medical records and disability/age-related information if applying for SSI\",\n      \"Direct deposit information if desired\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Michigan, but the supplement amount depends on the person’s living arrangement. Administration is split: SSA administers some categories and Michigan administers others.\",\n    \"regional_variations\": \"No county-by-county variation in the published payment schedule. The practical difference is administrative, not regional: SSA handles certain supplement categories and Michigan handles others. Wait times can differ only based on local Social Security office workload, not an official regional program design.\",\n    \"offices_or_providers\": [\n      \"Social Security Administration local offices for SSI application\",\n      \"Michigan Department of Health and Human Services involvement for certain supplement administration categories\"\n    ]\n  },\n  \"official_source\": \"https://www.ssa.gov/ssi/text-benefits-ussi.htm\",\n  \"gotchas\": [\n    \"This is not a separate benefit you usually apply for by itself; it is attached to SSI eligibility.\",\n    \"The supplement amount is driven mainly by living arrangement, not just age or diagnosis.\",\n    \"People in some care settings get very different amounts, and the state supplement can be administered by different agencies depending on the category.\",\n    \"The payment may be quarterly rather than monthly for the independent and household-of-another categories.\",\n    \"Income can reduce the combined SSI payment after the federal portion is reduced first, so the state amount is not always fully paid.\",\n    \"The published amounts change over time, so families should verify the current year’s rate before relying on a figure.\"\n  ],\n  \"data_shape_notes\": \"This program is a state SSI supplement with payment levels that vary by living arrangement and household status, plus different administration pathways for different categories. It is not a county program and not a waitlisted service program.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MI",
+    "stateName": "Michigan",
+    "classifiedAt": "2026-10-06T04:56:37.120Z",
+    "total": 9,
+    "typeSummary": {
+      "benefit": 8,
+      "resource": 1
+    },
+    "scopeSummary": {
+      "state": 7,
+      "federal": 1,
+      "local": 1
+    },
+    "complexitySummary": {
+      "deep": 7,
+      "simple": 1,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Medicaid for Aged and Disabled",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local MDHHS county offices",
+              "type": "service-area"
+            },
+            {
+              "name": "MI Bridges online portal",
+              "type": "service-area"
+            },
+            {
+              "name": "MI Choice waiver local agencies/providers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Medicare Savings Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Michigan Department of Health and Human Services (MDHHS)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local MDHHS offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Food Assistance Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Michigan Department of Health and Human Services local county offices",
+              "type": "service-area"
+            },
+            {
+              "name": "MiCAFE network sites",
+              "type": "service-area"
+            },
+            {
+              "name": "Area Agencies on Aging for home-delivered meals and related senior food supports",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Michigan PACE",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "local",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "PACE Michigan statewide program directory / locator at pacemichigan.com/find-your-pace.[5]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local independent PACE organizations in Michigan (14 organizations, 24 locations statewide).[5][15]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": false
+        }
+      },
+      {
+        "name": "State Emergency Relief",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Michigan Department of Health and Human Services (MDHHS) offices",
+              "type": "service-area"
+            },
+            {
+              "name": "MI Bridges online portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agency on Aging offices across Michigan",
+              "type": "service-area"
+            },
+            {
+              "name": "Detroit Area Agency on Aging (Region 1A)",
+              "type": "service-area"
+            },
+            {
+              "name": "AgeWays serving Livingston, Macomb, Monroe, Oakland, St. Clair, and Washtenaw counties",
+              "type": "service-area"
+            },
+            {
+              "name": "Jackson County Department on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Kalamazoo County Area Agency on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Saginaw County Commission on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Property Tax Credit for Seniors",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Home-Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Meals on Wheels or senior nutrition providers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Social Security Administration local offices for SSI application",
+              "type": "service-area"
+            },
+            {
+              "name": "Michigan Department of Health and Human Services involvement for certain supplement administration categories",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MI",
+      "id": "mi-medicaid-aged-disabled",
+      "name": "Medicaid for Aged and Disabled",
+      "legacyId": "medicaid-for-aged-and-disabled",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-medicare-savings-program",
+      "name": "Medicare Savings Program",
+      "legacyId": "medicare-savings-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-food-assistance-program-snap",
+      "name": "Food Assistance Program",
+      "legacyId": "food-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-pace-all-inclusive-care",
+      "name": "Michigan PACE",
+      "legacyId": "michigan-pace",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-state-emergency-relief",
+      "name": "State Emergency Relief",
+      "legacyId": "state-emergency-relief",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "legacyId": "family-caregiver-support-program",
+      "programType": "resource"
+    },
+    {
+      "state": "MI",
+      "id": "mi-property-tax-credit-seniors",
+      "name": "Property Tax Credit for Seniors",
+      "legacyId": "property-tax-credit-for-seniors",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "legacyId": "home-delivered-meals",
+      "programType": "benefit"
+    },
+    {
+      "state": "MI",
+      "id": "mi-state-ssi-supplement",
+      "name": "State SSI Supplement",
+      "legacyId": "state-ssi-supplement",
+      "programType": "benefit"
+    }
+  ]
+}

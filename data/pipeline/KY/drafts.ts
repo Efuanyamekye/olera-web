@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.848Z
+ * Last updated: 2026-10-06T05:10:24.459Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1677,24 +1677,7 @@ export const drafts: PipelineStateDrafts = {
           "Must live in eligible Kentucky counties"
         ],
         "ageRequirement": null,
-        "incomeTable": [
-          {
-            "householdSize": 1,
-            "monthlyLimit": 2128
-          },
-          {
-            "householdSize": 2,
-            "monthlyLimit": 2878
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 3628
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 4398
-          }
-        ],
+        "incomeTable": null,
         "assetLimits": null,
         "functionalRequirement": "Care recipient must need help with Activities of Daily Living (bathing, dressing, eating) or Instrumental Activities of Daily Living (managing money, preparing meals, taking medication). For respite care, must meet 'frail' definition: impaired in 2+ daily activities OR requires supervision due to cognitive impairment.",
         "otherRequirements": [
@@ -1859,6 +1842,35 @@ export const drafts: PipelineStateDrafts = {
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
           "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "structuredEligibility.incomeTable",
+          "from": [
+            {
+              "householdSize": 1,
+              "monthlyLimit": 2128
+            },
+            {
+              "householdSize": 2,
+              "monthlyLimit": 2878
+            },
+            {
+              "householdSize": 3,
+              "monthlyLimit": 3628
+            },
+            {
+              "householdSize": 4,
+              "monthlyLimit": 4398
+            }
+          ],
+          "to": null,
+          "source": "https://chfs.ky.gov/agencies/dail/Pages/caregiversupport.aspx",
+          "flaggedAt": "2026-10-06",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "answer-key review",
+          "note": "The draft's own summary says income limits apply only to the Kentucky grandparent program; the national caregiver program (Title III-E) has none. As a rule the table ruled out caregivers of an older parent over it."
         }
       ]
     },
