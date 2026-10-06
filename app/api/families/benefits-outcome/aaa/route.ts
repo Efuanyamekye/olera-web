@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { countyForZip } from "@/lib/benefits/zip-county.server";
 import { getServiceClient } from "@/lib/admin";
 import { validateBenefitsOutcomeToken } from "@/lib/claim-tokens";
 import { findLocalAAA } from "@/lib/benefits/local-aaa";
-import { zipToCounty, zipToState } from "@/lib/benefits/zip-lookup";
+import { zipToState } from "@/lib/benefits/zip-lookup";
 
 /**
  * Local Area Agency on Aging lookup for the benefits-outcome "I want help"
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     const stateCode = zipState || profile?.state || null;
     if (!stateCode) return NextResponse.json({ agency: null });
 
-    const county = await zipToCounty(zip);
+    const county = await countyForZip(zip);
 
     // Quietly bank the location for Phase 3 (real situation capture) — the
     // family just told us where they are; wasting that would be silly.

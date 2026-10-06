@@ -209,7 +209,9 @@ function checks(r: ProgramRules, f: KnownFacts): { rule: string; result: Tri }[]
   // (or them and a spouse); Ohio's SNAP holds only an age rule and read
   // likely for a parent living with her daughter's family.
   if (r.countsHousehold) out.push({ rule: "household", result: f.household === "alone" || f.household === "couple" ? "pass" : "unknown" });
-  if (r.unreadMeansTest) out.push({ rule: "income", result: "unknown" });
+  // A whole-home program is means-tested; with no limit we can read it can't
+  // be "likely" on age and household alone (Ohio SNAP holds only an age rule).
+  if (r.unreadMeansTest || (r.countsHousehold && r.incomeLimit == null && r.incomeLimitCouple == null)) out.push({ rule: "income", result: "unknown" });
   if (r.notForMedicaid) out.push({ rule: "notMedicaid", result: f.medicaid === "has" ? "fail" : "unknown" });
   if (r.medicaidGated) out.push({ rule: "medicaid", result: f.medicaid === "has" ? "pass" : f.medicaid === "no" ? "fail" : "unknown" });
   if (r.veteranOnly) out.push({ rule: "veteran", result: f.veteran === "yes" ? "pass" : f.veteran === "no" ? "fail" : "unknown" });
