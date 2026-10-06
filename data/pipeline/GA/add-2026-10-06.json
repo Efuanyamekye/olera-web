@@ -1,0 +1,132 @@
+{
+  "state": "GA",
+  "addedAt": "2026-10-06T06:31:48.102Z",
+  "dive": {
+    "state": "GA",
+    "stateName": "Georgia",
+    "diveAt": "2026-10-06T06:30:35.585Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Georgia Family Caregiver Support Program",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No income limit was identified for the Georgia Family Caregiver Support Program itself. Eligibility is based on caregiver/care-recipient category, not household income. The program serves adult family members or other informal caregivers age 18+ caring for people age 60+; adults age 18+ caring for people of any age with Alzheimer’s disease or related disorders; and older relatives age 55+ caring for children under 18 or adults ages 18-59 with disabilities.",
+          "asset_limits": "No asset limit was identified for the caregiver support program itself.",
+          "other_requirements": [
+            "Caregiver must be age 18 or older.",
+            "Caregiver must be an adult family member or other informal caregiver.",
+            "The person receiving care must fit one of the program categories: age 60+ with chronic health conditions/frailty, any age with Alzheimer’s disease or related disorders, or certain kinship/disability caregiving situations for older relatives age 55+.",
+            "Services are administered through Georgia’s Area Agencies on Aging (AAAs), so local screening/referral is required.",
+            "The program is for caregiver support, not direct medical treatment for the care recipient."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Supportive caregiver services through the Area Agencies on Aging, including respite care, adult day and adult day health care, legal assistance, nutrition services, telephone counseling, and other supportive services. No fixed cash amount or universal hour allotment was identified in the available sources.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Phone: 1-866-552-4464 (Aging and Disability Resource Connection)",
+            "Website: https://aging.georgia.gov",
+            "Local Area Agency on Aging through the Georgia Division of Aging Services"
+          ],
+          "processing_time": "No statewide processing-time standard was identified. Timing appears to depend on local AAA screening and service availability.",
+          "waitlist": "No statewide waitlist description was identified for the caregiver support program. Availability may vary by local AAA and service type.",
+          "forms": [],
+          "documents": [
+            "Basic information about the caregiver and care recipient",
+            "Proof of age for caregiver and care recipient if requested",
+            "Information about the care recipient’s condition and care needs",
+            "Any relevant medical information for dementia, frailty, or disability-related support needs",
+            "Contact information for the local Area Agency on Aging"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Georgia through the Area Agencies on Aging, but actual services and access depend on the local AAA serving the county.",
+          "regional_variations": "Yes. The Division of Aging Services administers the program through AAAs, and service availability can differ by region, office, and local resources. Some areas may offer more services or have different access levels than others.",
+          "offices_or_providers": [
+            "Georgia Department of Human Services Division of Aging Services",
+            "Local Area Agencies on Aging across Georgia"
+          ]
+        },
+        "official_source": "https://aging.georgia.gov/programs-and-services/home-community-based-services/caregiver-programs",
+        "gotchas": [
+          "This is not a cash-benefit program for every caregiver; it is primarily a supportive-services program.",
+          "Eligibility is tied to the caregiving relationship and the care recipient’s condition, not to household income.",
+          "Service access runs through local Area Agencies on Aging, so what you can actually get may differ by county.",
+          "The program serves caregivers, not just the older adult, and the caregiver must be 18+.",
+          "People often confuse this with Georgia Medicaid waiver programs like CCSP or SOURCE; those are separate programs.",
+          "No universal dollar amount, hourly cap, or single form was identified in the available official sources."
+        ],
+        "data_shape_notes": "This program is statewide but locally administered through AAAs, with eligibility based on caregiver category rather than income or assets, and benefits that are service-based rather than fixed cash payments.",
+        "_raw": "{\n  \"name\": \"Georgia Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No income limit was identified for the Georgia Family Caregiver Support Program itself. Eligibility is based on caregiver/care-recipient category, not household income. The program serves adult family members or other informal caregivers age 18+ caring for people age 60+; adults age 18+ caring for people of any age with Alzheimer’s disease or related disorders; and older relatives age 55+ caring for children under 18 or adults ages 18-59 with disabilities.\",\n    \"asset_limits\": \"No asset limit was identified for the caregiver support program itself.\",\n    \"other_requirements\": [\n      \"Caregiver must be age 18 or older.\",\n      \"Caregiver must be an adult family member or other informal caregiver.\",\n      \"The person receiving care must fit one of the program categories: age 60+ with chronic health conditions/frailty, any age with Alzheimer’s disease or related disorders, or certain kinship/disability caregiving situations for older relatives age 55+.\",\n      \"Services are administered through Georgia’s Area Agencies on Aging (AAAs), so local screening/referral is required.\",\n      \"The program is for caregiver support, not direct medical treatment for the care recipient.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Supportive caregiver services through the Area Agencies on Aging, including respite care, adult day and adult day health care, legal assistance, nutrition services, telephone counseling, and other supportive services. No fixed cash amount or universal hour allotment was identified in the available sources.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Phone: 1-866-552-4464 (Aging and Disability Resource Connection)\",\n      \"Website: https://aging.georgia.gov\",\n      \"Local Area Agency on Aging through the Georgia Division of Aging Services\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was identified. Timing appears to depend on local AAA screening and service availability.\",\n    \"waitlist\": \"No statewide waitlist description was identified for the caregiver support program. Availability may vary by local AAA and service type.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Basic information about the caregiver and care recipient\",\n      \"Proof of age for caregiver and care recipient if requested\",\n      \"Information about the care recipient’s condition and care needs\",\n      \"Any relevant medical information for dementia, frailty, or disability-related support needs\",\n      \"Contact information for the local Area Agency on Aging\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Georgia through the Area Agencies on Aging, but actual services and access depend on the local AAA serving the county.\",\n    \"regional_variations\": \"Yes. The Division of Aging Services administers the program through AAAs, and service availability can differ by region, office, and local resources. Some areas may offer more services or have different access levels than others.\",\n    \"offices_or_providers\": [\n      \"Georgia Department of Human Services Division of Aging Services\",\n      \"Local Area Agencies on Aging across Georgia\"\n    ]\n  },\n  \"official_source\": \"https://aging.georgia.gov/programs-and-services/home-community-based-services/caregiver-programs\",\n  \"gotchas\": [\n    \"This is not a cash-benefit program for every caregiver; it is primarily a supportive-services program.\",\n    \"Eligibility is tied to the caregiving relationship and the care recipient’s condition, not to household income.\",\n    \"Service access runs through local Area Agencies on Aging, so what you can actually get may differ by county.\",\n    \"The program serves caregivers, not just the older adult, and the caregiver must be 18+.\",\n    \"People often confuse this with Georgia Medicaid waiver programs like CCSP or SOURCE; those are separate programs.\",\n    \"No universal dollar amount, hourly cap, or single form was identified in the available official sources.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but locally administered through AAAs, with eligibility based on caregiver category rather than income or assets, and benefits that are service-based rather than fixed cash payments.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "GA",
+    "stateName": "Georgia",
+    "classifiedAt": "2026-10-06T06:30:35.590Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Georgia Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Georgia Department of Human Services Division of Aging Services",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Area Agencies on Aging across Georgia",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "GA",
+      "id": "ga-family-caregiver-support-program",
+      "name": "Georgia Family Caregiver Support Program",
+      "legacyId": "georgia-family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.997Z
+ * Last updated: 2026-10-06T06:44:48.389Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1303,7 +1303,7 @@ export const drafts: PipelineStateDrafts = {
       "name": "Montana Low Income Home Energy Assistance Program (LIHEAP)",
       "shortName": "Montana LIHEAP",
       "tagline": "Help your loved one get one-time payments to cover heating bills and emergency energy costs during Montana winters.",
-      "programType": "navigator",
+      "programType": "benefit",
       "complexity": "simple",
       "geographicScope": {
         "type": "federal",

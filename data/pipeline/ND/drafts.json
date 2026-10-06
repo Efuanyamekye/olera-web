@@ -2,8 +2,8 @@
   "state": "ND",
   "stateName": "North Dakota",
   "draftedAt": "2026-04-13T21:50:19.551Z",
-  "total": 4,
-  "successful": 4,
+  "total": 10,
+  "successful": 10,
   "programs": [
     {
       "id": "basic-care-assistance-program",
@@ -579,6 +579,1406 @@
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "nd-abd-medicaid",
+      "name": "Aged, Blind and Disabled (ABD) Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "Full Medicaid health coverage for North Dakotans 65+ or with a disability, with income limits that may be lower than you expect.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "North Dakota Human Service Zone offices",
+            "type": "service-area"
+          },
+          {
+            "name": "North Dakota Health and Human Services Customer Support Center",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and living on a fixed income in North Dakota, ABD Medicaid can cover their doctor visits, hospital stays, prescriptions, and more at little or no out-of-pocket cost. This is the primary Medicaid pathway for older adults and people who are blind or disabled, and qualifying for it also opens the door to related programs like the Basic Care Assistance Program.\n\nThis program has both an income test and an asset test, which sets it apart from other Medicaid categories. As of April 1, 2026, the income limit for a single person is $1,197 per month, and countable assets must stay below $3,000. Many families are surprised by how low those thresholds are, especially when a parent has modest savings. Knowing what counts, and what does not, before you apply can make a real difference in the outcome.\n\nApplications go through North Dakota's Human Service Zone offices and must use the elderly and disabled application path, specifically the Health Care Application for the Elderly and Disabled (SFN 958). The state has 45 days to make a decision once it receives a complete, signed application. The sections below walk through eligibility, documents, and how to apply.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid is a health coverage program, not a cash benefit. The value depends on your parent's medical needs and is not published as a fixed dollar figure by North Dakota HHS.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+, blind, or disabled under Social Security standards",
+          "North Dakota resident",
+          "U.S. citizen or qualified noncitizen",
+          "Monthly income at or below $1,197 (single person, April 2026)",
+          "Countable assets below $3,000 for a single person"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1197
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1533
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2049
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2475
+          }
+        ],
+        "assetLimits": {
+          "individual": 3000,
+          "couple": 6000,
+          "countedAssets": [
+            "Checking accounts",
+            "Savings accounts",
+            "Certificates of deposit",
+            "Stocks",
+            "Bonds",
+            "Other countable assets"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a resident of North Dakota",
+          "Must be a U.S. citizen or qualified noncitizen",
+          "Must be age 65 or older, blind, or disabled under Social Security Administration standards",
+          "Proof of assets is required for all applicants who are age 65+, blind, or disabled"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the North Dakota HHS self-service portal, by calling (866) 614-6005, or by mailing the completed SFN 958 form; the state has 45 days to decide once it receives a complete, signed application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need your parent's Social Security award letter, proof of all monthly income sources, current balances for any bank or investment accounts, and proof of North Dakota residency. Having these ready before you call or log in will prevent delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply",
+            "description": "Online: use the North Dakota HHS self-service portal at hhs.nd.gov/healthcare/medicaid. By phone: call the Customer Support Center at (866) 614-6005 (Monday through Friday) or 711 for TTY. By mail or in person: request the Health Care Application for the Elderly and Disabled (SFN 958) from your local Human Service Zone office or the Customer Support Center, complete it, and return it."
+          },
+          {
+            "step": 3,
+            "title": "Submit the correct application form",
+            "description": "Do not use the general Medicaid application. Applicants who are 65+, blind, or disabled must use SFN 958, the Health Care Application for the Elderly and Disabled. If you apply online, the portal routes you to the appropriate form. If you apply on paper, ask for SFN 958 specifically."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional information",
+            "description": "After submission, the Human Service Zone office may contact you for missing documents. Responding quickly keeps the 45-day clock moving. If your parent has a disability determination pending with Social Security, let the caseworker know, as this can affect how the application is processed."
+          },
+          {
+            "step": 5,
+            "title": "Receive a written decision",
+            "description": "The state must issue a written decision within 45 days of receiving a complete, signed application. If approved, coverage can be backdated in some cases. If denied, the notice will explain why and how to appeal."
+          }
+        ],
+        "processingTime": "45 days from the date the Human Service Zone office or Medical Services Division receives a complete, signed application.",
+        "waitlist": null,
+        "tip": "Submit all documents at once rather than in pieces. Incomplete applications pause the 45-day clock, and back-and-forth mailing can add weeks to the process.",
+        "urls": [
+          {
+            "label": "North Dakota HHS Medicaid page",
+            "url": "https://www.hhs.nd.gov/healthcare/medicaid"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows monthly benefit amount)",
+        "Proof of North Dakota residency (utility bill, lease, or state-issued document in your parent's name)",
+        "Proof of identity (birth certificate, passport, or state-issued ID)",
+        "Pension or retirement income statements showing current monthly amount",
+        "Current balances for any checking or savings accounts (the state will ask for proof of assets for all applicants 65+, blind, or disabled)",
+        "Certificates of deposit statements showing current balance and account holder",
+        "Statements for any stocks, bonds, or investment accounts",
+        "Proof of citizenship or qualified noncitizen status (U.S. passport, naturalization certificate, or immigration documents)",
+        "Any disability or blindness verification from the Social Security Administration if applicable",
+        "Documentation of any other monthly income (rental income, annuity payments, veterans benefits)",
+        "Legal authorization documents if a family member or representative is applying on the parent's behalf (power of attorney or guardianship order)"
+      ],
+      "contacts": [
+        {
+          "label": "ND HHS Customer Support Center",
+          "phone": "(866) 614-6005",
+          "description": "The primary line to apply for ABD Medicaid by phone, ask eligibility questions, and request the SFN 958 paper application. This line can connect you to your local Human Service Zone office.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "ND HHS Customer Support Center (local)",
+          "phone": "701-328-1000",
+          "description": "Local number for the same Customer Support Center if you prefer not to use the toll-free line.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "TTY Line",
+          "phone": "711",
+          "description": "Relay service for applicants who are deaf or hard of hearing.",
+          "hours": "Available through the relay service"
+        }
+      ],
+      "applicationNotes": [
+        "ABD Medicaid uses a separate application form (SFN 958) for applicants who are 65+, blind, or disabled. Submitting the general Medicaid application instead can delay or redirect your case. Ask specifically for SFN 958 if applying by phone or mail.",
+        "Qualifying for ABD Medicaid is often the required first step to access the Basic Care Assistance Program (BCAP), which helps cover residential care costs. If your parent may need BCAP in the future, applying for ABD Medicaid now preserves that pathway.",
+        "The income and asset limits change each year. The figures on this page reflect April 1, 2026 standards. Verify current limits at hhs.nd.gov/healthcare/medicaid before submitting your application.",
+        "If your parent is hospitalized or in a rehabilitation facility, you can begin the application process while they are still in the facility. Discharge planners at the facility may be able to assist with initiating paperwork."
+      ],
+      "relatedPrograms": [
+        "Basic Care Assistance Program (BCAP)",
+        "North Dakota Medicaid Long-Term Services and Supports",
+        "Medicare Savings Programs (MSP) in North Dakota",
+        "North Dakota PACE (Program of All-Inclusive Care for the Elderly)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Asset limits apply here even if they don't elsewhere",
+          "body": "Unlike some Medicaid categories that do not count your assets, ABD Medicaid in North Dakota requires proof of assets for all applicants who are 65+, blind, or disabled. A single person must have countable assets below $3,000; a couple must stay below $6,000. Some assets are exempt under North Dakota Medicaid policy, but the state does not publish a complete exemption list on its main Medicaid page. If your parent has assets near or above these limits, contact the Customer Support Center at (866) 614-6005 or speak with a benefits counselor before applying to understand what may or may not count."
+        },
+        {
+          "type": "callout",
+          "title": "Each additional household member adds $426 to the income limit",
+          "body": "The income table above covers households of one through four people. For households with five or more members, add $426 per additional person above four. These figures are effective April 1, 2026, and are updated periodically by North Dakota HHS."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's monthly Social Security income is $1,300. Does that automatically disqualify them?",
+          "answer": "Not necessarily. The gross income limit for a single person is $1,197 per month as of April 2026, but North Dakota may allow certain deductions when calculating countable income. The only way to know for certain is to apply or speak with a caseworker. Call (866) 614-6005 to walk through your parent's specific income before deciding not to apply."
+        },
+        {
+          "question": "Does my parent's house count toward the $3,000 asset limit?",
+          "answer": "The home is typically excluded from countable assets under Medicaid rules for primary residences, but the complete list of exempt assets is not published on the North Dakota HHS main Medicaid page. Contact the Customer Support Center at (866) 614-6005 or ask your local Human Service Zone office for the full exemption list before making decisions about your parent's finances."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they can't handle the paperwork themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on a parent's behalf. You will need to provide documentation of your legal authority to act for them, such as a signed power of attorney or a court-issued guardianship order. Include those documents when you submit the SFN 958 application."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and the Basic Care Assistance Program at the same time?",
+          "answer": "ABD Medicaid eligibility is a required gateway to the Basic Care Assistance Program in North Dakota, so it makes sense to apply for ABD Medicaid first. Ask the caseworker at your Human Service Zone office about the BCAP application process at the same time you submit the ABD Medicaid paperwork, since both are handled through the same system."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Enrollees are required to report changes in income or assets to their Human Service Zone office. A change that pushes income or countable assets above the limit can affect continued eligibility. Report changes promptly; unreported changes can result in an overpayment that the state may seek to recover."
+        },
+        {
+          "question": "How long does the application process actually take, and is there anything that slows it down?",
+          "answer": "The state has 45 days from receipt of a complete, signed application to issue a decision. The most common cause of delays is missing documentation, particularly asset verification. Submit all required documents at the same time you submit the application. If a disability determination is still pending with the Social Security Administration, inform the caseworker, as this may affect how the application is processed."
+        },
+        {
+          "question": "My parent was just approved. What does ABD Medicaid actually pay for?",
+          "answer": "ABD Medicaid provides full Medicaid health coverage, which generally includes doctor visits, hospital care, prescription drugs, lab work, and certain long-term services depending on what your parent needs. The specific services covered follow North Dakota's Medicaid benefit package. Your parent will receive a notice of coverage details after approval, and you can also ask the caseworker at your Human Service Zone office what is included."
+        },
+        {
+          "question": "What if my parent is denied? Can we appeal?",
+          "answer": "Yes. The denial notice must explain the reason for denial and include instructions for requesting a fair hearing. You have the right to appeal the decision. Read the notice carefully for deadlines, as there is typically a limited window to file an appeal after the denial date."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "(866) 614-6005",
+      "sourceUrl": "https://www.hhs.nd.gov/healthcare/medicaid",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_2",
+          "from": 1623,
+          "to": 1533,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1197,
+          "to": 1130,
+          "source": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "severity": "medium",
+          "why": "draft fits a federal formula (100% FPL 2023); verified value fits none",
+          "flaggedAt": "2026-10-06T12:24:49.595Z"
+        }
+      ]
+    },
+    {
+      "id": "nd-hcbs-waiver",
+      "name": "Home and Community-Based Services (HCBS) Waiver",
+      "shortName": "HCBS Waiver",
+      "tagline": "If your parent qualifies for a nursing facility but wants to stay home, North Dakota may pay for the personal care, housekeeping, meals, and other support that makes that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "North Dakota Department of Health and Human Services, Adult and Aging Services, 1237 W. Divide Ave., Suite 6, Bismarck, ND 58501",
+            "type": "service-area"
+          },
+          {
+            "name": "Aging and Disability Resource-LINK",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Human Service Zone offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "North Dakota's HCBS Waiver pays for the day-to-day support that allows an aging parent to stay at home or in the community instead of moving into a nursing facility. If your parent needs help with bathing, dressing, medications, meals, or getting around, and a clinical assessment confirms they meet nursing facility level of care (meaning they need daily help with basic tasks), this waiver can cover a wide range of services so they never have to go.\n\nThe services covered are extensive. A care coordinator works with your family to build an individualized plan that can include personal care, home-delivered meals, housekeeping, laundry, transportation to the grocery store or pharmacy, adult day care, adult foster care, emergency response systems, environmental modifications to the home, respite care for family caregivers, and more. Two people in the same waiver can receive very different packages depending on what the assessment shows they need.\n\nThis is a Medicaid program. Your parent must be enrolled in North Dakota Medicaid and meet both the financial rules for Medicaid and the clinical standard for nursing facility level of care. Meeting Medicaid's income and asset rules alone is not enough: the functional assessment is a separate, required step. The good news is that free help applying is available through multiple channels, and you do not have to figure this out on your own.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the HCBS Waiver pays directly for covered services rather than providing a cash benefit or reimbursement to the family. No dollar figure for the value of the service package was published in the official North Dakota program materials reviewed.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or age 18-64 with a qualifying physical disability)",
+          "Enrolled in North Dakota Medicaid",
+          "Meets nursing facility level of care on a clinical assessment",
+          "Chooses to receive care at home or in the community instead of a nursing facility",
+          "Meets North Dakota Medicaid income and asset rules"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must meet nursing facility level of care. This is a clinical assessment, not a financial one. A state-approved assessor evaluates whether your parent needs substantial help with daily activities such as bathing, dressing, transferring (moving from bed to chair), toileting, or managing medications. If the assessment finds that level of need, the functional requirement is met.",
+        "otherRequirements": [
+          "Must be enrolled in North Dakota Medicaid at the time of application. If your parent is not yet on Medicaid, that application must happen first or at the same time.",
+          "Must choose community-based services rather than placement in a nursing facility. The waiver exists specifically for people who could qualify for a nursing facility but prefer to stay home.",
+          "Income and asset eligibility follows North Dakota Medicaid rules. No separate HCBS-only income or asset table was published in the official materials reviewed. Contact the program directly for current Medicaid financial thresholds.",
+          "For adults age 18-64, the disability must be based on Social Security Administration guidelines."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest starting point is to call the Aging and Disability Resource-LINK at 1-855-462-5465; they screen for eligibility, connect you to the right Human Service Zone, and can help schedule the level-of-care assessment.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Aging and Disability Resource-LINK",
+            "description": "Call 1-855-462-5465. This is the statewide entry point for older adults and people with disabilities seeking long-term services. The line can help you understand whether your parent likely qualifies, explain the Medicaid enrollment step if needed, and connect you to your local Human Service Zone office. If you prefer, you can also call the North Dakota HCBS line directly at (701) 328-8930 or toll-free (800) 755-8529."
+          },
+          {
+            "step": 2,
+            "title": "Apply for North Dakota Medicaid if not already enrolled",
+            "description": "Your parent must be on North Dakota Medicaid before the waiver services can begin. If they are not enrolled, the Human Service Zone office or the Aging and Disability Resource-LINK can start that process. The form used is the Health Care Application for the Elderly and Disabled. Free application help is also available through North Dakota Navigators at 1-800-233-1737, or in person at your local Human Service Zone office."
+          },
+          {
+            "step": 3,
+            "title": "Complete the nursing facility level-of-care assessment",
+            "description": "A state-approved assessor will schedule a visit, usually at your parent's home or current care setting, to evaluate their need for daily help with activities like bathing, dressing, transferring, and medication management. This assessment is required and separate from the Medicaid financial review. Bring any current medical records, doctor notes, or a list of diagnoses and medications to support the assessment."
+          },
+          {
+            "step": 4,
+            "title": "Work with a care coordinator to build the service plan",
+            "description": "Once eligibility is confirmed, an HCBS care coordinator works with your family to identify which services your parent needs and which providers are available in your area. The plan is individualized: your parent may receive personal care, home-delivered meals, transportation, respite care, or a different combination depending on the assessment. Provider availability can vary by region."
+          },
+          {
+            "step": 5,
+            "title": "Services begin and the plan is reviewed regularly",
+            "description": "Covered services start once the plan is approved and a provider is assigned. The plan is reviewed on an ongoing basis. If your parent's needs change, contact the care coordinator to request a reassessment and update the service plan."
+          }
+        ],
+        "processingTime": "No official statewide processing-time guarantee was found in the sources reviewed. Ask the Aging and Disability Resource-LINK or your Human Service Zone office for a current estimate when you call.",
+        "waitlist": "The official materials reviewed do not publish a statewide waitlist length for the aged and disabled HCBS waiver. Access can depend on local provider availability and Human Service Zone capacity. Ask specifically about wait times in your area when you call.",
+        "tip": "If your parent is currently in a hospital or short-term rehabilitation facility, ask the discharge planner about starting the HCBS waiver process before discharge. Getting the assessment done while still in a facility can shorten the time between discharge and services starting at home.",
+        "urls": [
+          {
+            "label": "ND HCBS Waiver and Home Care Overview",
+            "url": "https://www.hhs.nd.gov/adults-and-aging/homecare"
+          },
+          {
+            "label": "North Dakota Department of Health and Human Services, Adults and Aging",
+            "url": "https://www.hhs.nd.gov/adults-and-aging"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "North Dakota Medicaid card or proof of current Medicaid enrollment (if already enrolled)",
+        "Proof of age: birth certificate, U.S. passport, or other government-issued document showing date of birth",
+        "Medical records or documentation from a doctor showing the conditions or diagnoses that support the need for daily care",
+        "Social Security card or document showing Social Security number",
+        "Proof of North Dakota residency: a utility bill, lease agreement, or state-issued document showing the current address",
+        "Social Security award letter or other documentation of monthly income",
+        "Information about any other income sources: pension statements, retirement account distributions, or VA benefit letters",
+        "Current balances for any checking, savings, or other financial accounts (the Medicaid financial review will assess resources; ask your Human Service Zone office what documentation format they require)",
+        "Information about any real property other than the primary home: deeds or tax statements",
+        "Life insurance policy information, including face values",
+        "Any current care plan, home health orders, or list of existing in-home supports",
+        "Names and contact information for current doctors, specialists, or other care providers",
+        "Legal documents if a family member or legal guardian is applying on the parent's behalf: power of attorney, guardianship order, or other authorization"
+      ],
+      "contacts": [
+        {
+          "label": "Aging and Disability Resource-LINK",
+          "phone": "1-855-462-5465",
+          "description": "The statewide entry point for HCBS Waiver screening and application help. Call here first to find out if your parent likely qualifies, get connected to your local Human Service Zone, and learn about next steps.",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "ND HCBS Waiver Program Office",
+          "phone": "(701) 328-8930",
+          "description": "The North Dakota Department of Health and Human Services program office for HCBS and Medicaid waivers. Also reachable toll-free at (800) 755-8529.",
+          "hours": "Standard state business hours; contact to confirm"
+        },
+        {
+          "label": "North Dakota Navigators (Free Application Help)",
+          "phone": "1-800-233-1737",
+          "description": "Free, unbiased help completing the Medicaid application and waiver paperwork. Navigators do not make eligibility decisions but can help ensure your application is complete before submission.",
+          "hours": "Contact the line for current hours"
+        },
+        {
+          "label": "Local Human Service Zone Office",
+          "phone": null,
+          "description": "Your local Human Service Zone office handles Medicaid applications, in-person help, and paper forms including the Health Care Application for the Elderly and Disabled. Find your local office at hhs.nd.gov or ask the Aging and Disability Resource-LINK to connect you.",
+          "hours": "Varies by location"
+        }
+      ],
+      "applicationNotes": [
+        "Meeting Medicaid's financial eligibility rules is required but not sufficient on its own. Your parent must also pass the nursing facility level-of-care assessment before waiver services can be authorized. Both steps must be completed.",
+        "If your parent is hospitalized, a discharge planner can often initiate the level-of-care screening before discharge. This can reduce the gap between leaving the hospital and having home services in place.",
+        "Provider availability varies by region. In some parts of North Dakota, specific services or providers may have limited capacity. Ask your care coordinator early which services have the shortest wait in your area.",
+        "If your parent is not yet on Medicaid, start both the Medicaid application and the waiver inquiry at the same time. The Aging and Disability Resource-LINK at 1-855-462-5465 can help you run both tracks in parallel."
+      ],
+      "relatedPrograms": [
+        "North Dakota Medicaid (required enrollment for HCBS Waiver access)",
+        "PACE (Program of All-Inclusive Care for the Elderly, available in select North Dakota areas)",
+        "North Dakota Senior Nutrition Program (home-delivered and congregate meals for adults 60+)",
+        "North Dakota Family Caregiver Support Program (respite and support services for family caregivers)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What the waiver covers: a partial list",
+          "body": "The service plan is individualized, but covered services can include: personal care (bathing, dressing, toileting, transferring), medication management, housekeeping and laundry, meal preparation and home-delivered meals, transportation to non-medical destinations such as the grocery store or pharmacy, adult day care, adult foster care, respite care for family caregivers, emergency response systems, environmental modifications to the home (such as ramp installation or grab bars), specialized equipment and supplies, community support services, supported employment, and transitional living services. No two people in the waiver receive exactly the same package. The combination of services your parent receives depends on what the assessment shows they need."
+        },
+        {
+          "type": "callout",
+          "title": "This is not a cash benefit",
+          "body": "The HCBS Waiver does not send money to your family. It pays providers directly for the services your parent is approved to receive. The value to your family is avoiding nursing facility costs and keeping your parent at home, not a check or card you manage."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent qualifies for Medicaid financially. Is that enough to get into the HCBS Waiver?",
+          "answer": "No. Financial eligibility for Medicaid is required, but the waiver has a second, separate requirement: your parent must also meet nursing facility level of care. A state-approved assessor evaluates whether they need daily help with tasks like bathing, dressing, transferring, or medication management. Both the financial review and the functional assessment must be completed and approved before services can begin."
+        },
+        {
+          "question": "My parent just turned 65. Does that automatically qualify them?",
+          "answer": "Turning 65 changes how your parent is categorized within the waiver (from the disability category to the aged category), but it does not automatically make them eligible. They still must be enrolled in North Dakota Medicaid, meet the nursing facility level-of-care standard, and choose community-based care. All three requirements apply regardless of age."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they can't do it themselves?",
+          "answer": "Yes. A family member, legal guardian, or person holding power of attorney can apply on behalf of an elderly parent. Bring the legal document authorizing you to act on their behalf, such as a power of attorney or guardianship order, when you contact the Human Service Zone or submit the application. The Aging and Disability Resource-LINK at 1-855-462-5465 can walk you through what is needed in your specific situation."
+        },
+        {
+          "question": "How long is the waitlist, and what do we do while waiting?",
+          "answer": "The official North Dakota program materials do not publish a statewide waitlist length. Wait times depend on local provider availability and Human Service Zone capacity, and they vary by region. Ask specifically about current wait times in your parent's area when you call the Aging and Disability Resource-LINK at 1-855-462-5465. While waiting, ask about other programs that may bridge the gap, including the North Dakota Senior Nutrition Program for home-delivered meals or the Family Caregiver Support Program for respite help."
+        },
+        {
+          "question": "My parent's needs have changed since the original assessment. Can the service plan be updated?",
+          "answer": "Yes. The service plan is designed to be updated over time. Contact your parent's HCBS care coordinator and request a reassessment. If your parent's level of need has increased, additional services can be added to the plan. If you do not know who the current care coordinator is, call the Aging and Disability Resource-LINK at 1-855-462-5465 or your local Human Service Zone office."
+        },
+        {
+          "question": "Can my parent receive HCBS Waiver services and also apply for PACE?",
+          "answer": "PACE (Program of All-Inclusive Care for the Elderly) is a separate program that bundles all medical and long-term care under one team. A person cannot be enrolled in both HCBS Waiver services and PACE at the same time, because PACE replaces rather than supplements other Medicaid long-term care programs. PACE is only available in certain areas of North Dakota. Ask the Aging and Disability Resource-LINK which option is available in your parent's area and which better fits their situation."
+        },
+        {
+          "question": "What happens if my parent needs more care than the waiver covers?",
+          "answer": "If your parent's needs increase beyond what the waiver can support at home, the care coordinator will discuss options with your family. This may include increasing the current service plan, adding different service types, or discussing whether a higher level of care such as adult foster care, assisted living with waiver support, or a nursing facility is appropriate. The waiver is meant to be flexible, but it does have limits based on what can safely be provided in a community setting."
+        },
+        {
+          "question": "Does my parent have to keep living in their own house, or can they get waiver services in an assisted living facility?",
+          "answer": "The HCBS Waiver is designed for community-based settings, which can include an individual's home, adult foster care, or certain residential settings, not only a private house. The key requirement is that your parent is not in a nursing facility. Ask the care coordinator which residential arrangements qualify for waiver services in your parent's area, because provider availability and approved settings can vary by Human Service Zone."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "1-855-462-5465",
+      "sourceUrl": "https://www.hhs.nd.gov/adults-and-aging/homecare",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nd-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "shortName": "Medicare Savings",
+      "tagline": "If your parent is on Medicare and a fixed income, North Dakota may pay their Medicare premiums and out-of-pocket costs, saving hundreds to thousands of dollars a year.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County social services offices / Human Service Zone offices across North Dakota",
+            "type": "service-area"
+          },
+          {
+            "name": "North Dakota Department of Health and Human Services online medical assistance application page",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Medicare Savings Programs (MSP) are North Dakota-administered programs that pay some or all of your parent's Medicare costs if their income and assets fall below certain limits. Depending on which tier your parent qualifies for, the program can pay the Medicare Part B premium ($185/month in 2026), and for the broadest tier, it can also pay the Part A premium and Medicare cost-sharing like deductibles and coinsurance.\n\nThere are three tiers: QMB (Qualified Medicare Beneficiary), SLMB (Specified Low-Income Medicare Beneficiary), and QI (Qualifying Individual). QMB is the most comprehensive and covers the most costs. SLMB and QI each pay the Part B premium only. Which tier your parent lands in depends on their monthly income. The income limits differ for each tier and are listed below.\n\nThis is not full Medicaid. MSP specifically helps with Medicare costs. Your parent must already be eligible for Medicare Part A before applying. Applications go through your local county social services office, also called a Human Service Zone office, or through North Dakota HHS online.",
+      "savingsRange": "Up to $2,220/year for Part B premium alone (2026); QMB enrollees may save more because cost-sharing coverage is added on top",
+      "savingsSource": "The Medicare Part B standard premium is $185/month in 2026 (CMS.gov). QMB coverage of Part A premiums and cost-sharing adds additional savings that vary by individual use; no official average-savings figure for North Dakota QMB enrollees was available in the sources reviewed.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Must be eligible for Medicare Part A",
+          "Single monthly income up to $1,816 (QI upper limit, 2026)",
+          "Couple monthly income up to $2,455 (QI upper limit, 2026)",
+          "Assets up to $9,950 for one person or $14,910 for two (2026)",
+          "Home, one vehicle, clothing, and household goods do not count toward assets"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Cash on hand",
+            "Other non-excluded assets"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "One vehicle",
+            "Clothing",
+            "Household goods and furnishings"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be eligible for Medicare Part A (either premium-free or premium Part A)",
+          "Must be enrolled in Medicare and seeking help with Medicare costs, not general Medicaid long-term care",
+          "QI tier is first-come, first-served and subject to available funding; approval is not guaranteed",
+          "Applications are handled through North Dakota county social services / Human Service Zone offices"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply through your local Human Service Zone office in person or by phone, or use the North Dakota HHS online application; no official processing-time estimate is published.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check which tier fits your parent's income",
+            "description": "Use the three-tier table on this page. QMB covers the most (income up to $1,350/month single or $1,824/month couple). SLMB covers Part B premium only (income $1,350 to $1,616/month single). QI also covers Part B premium only (income $1,616 to $1,816/month single) but is first-come, first-served. Knowing the tier before you call saves time."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents",
+            "description": "You will need your parent's Medicare card, a recent Social Security award letter, and proof of any other income (pension statements, veterans benefit letters). You may also need current balances for bank accounts and information about other assets. Home, one vehicle, clothing, and household goods do not count. See the full document list below."
+          },
+          {
+            "step": 3,
+            "title": "Apply online or contact your local Human Service Zone office",
+            "description": "Apply online through North Dakota HHS at hhs.nd.gov, or call 1-866-614-6005 to reach state HHS or to be directed to your local Human Service Zone office. You can also walk into your county social services office directly. Staff can help complete the application."
+          },
+          {
+            "step": 4,
+            "title": "Submit your application and follow up",
+            "description": "No official processing-time estimate is published for North Dakota MSP. After submitting, ask the office for a confirmation number or submission date. If you do not hear back within a few weeks, follow up directly with the office where you applied."
+          }
+        ],
+        "processingTime": "No official processing-time estimate is published by North Dakota HHS for Medicare Savings Programs.",
+        "waitlist": "No waitlist for QMB or SLMB. QI is first-come, first-served and can effectively close when funding runs out; apply as early as possible if your parent falls in the QI income range.",
+        "tip": "If your parent's income is close to the QI upper limit ($1,816/month single), apply immediately. QI enrollment is not guaranteed once funding is exhausted for the year.",
+        "urls": [
+          {
+            "label": "North Dakota HHS Online Application for Medical Assistance",
+            "url": "https://www.hhs.nd.gov/healthcover/medicaid/how-apply"
+          },
+          {
+            "label": "North Dakota Insurance Department: Medicare Financial Assistance Programs",
+            "url": "https://www.insurance.nd.gov/consumers/medicare/medicare-financial-assistance-programs"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (shows Part A enrollment, which is required before MSP can help)",
+        "Most recent Social Security award letter showing the monthly benefit amount",
+        "Proof of any other monthly income: pension or retirement income statement, veterans benefit award letter, or similar",
+        "Current balances for any checking or savings accounts (exact balance required; North Dakota asks whether countable assets are within the limit for at least one day of the month)",
+        "Information about any certificates of deposit, stocks, bonds, or other investments",
+        "Proof of North Dakota residency (utility bill, lease, or state-issued document)",
+        "Photo identification for the applicant",
+        "Social Security card for the applicant and spouse, if applicable",
+        "Proof of age if not established through Social Security records (birth certificate or passport)",
+        "Information about any real property other than the primary home (the home itself is excluded)",
+        "Vehicle information (one vehicle is excluded; additional vehicles may count as an asset)"
+      ],
+      "contacts": [
+        {
+          "label": "North Dakota HHS Benefits Line",
+          "phone": "1-866-614-6005",
+          "description": "Call to apply for Medicare Savings Programs or to be connected to your local Human Service Zone office. This is the main application door for North Dakota medical assistance programs including MSP.",
+          "hours": "Contact the office directly to confirm current hours"
+        },
+        {
+          "label": "North Dakota HHS Main Line",
+          "phone": "701-328-1000",
+          "description": "Alternative state HHS number; can direct you to your county Human Service Zone office for MSP applications.",
+          "hours": "Contact the office directly to confirm current hours"
+        },
+        {
+          "label": "North Dakota Insurance Department (Medicare Questions)",
+          "phone": null,
+          "description": "The North Dakota Insurance Department publishes information on Medicare financial assistance programs at insurance.nd.gov. Contact through the website if you have questions about how MSP interacts with Medicare coverage.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "QI enrollment is not guaranteed. If your parent's income falls between $1,616 and $1,816/month (single) or $2,184 and $2,455/month (couple), apply as early in the year as possible. Once QI funding is exhausted, new applicants may not be approved until the next funding cycle.",
+        "The asset limit changes every year because North Dakota ties it to the federal Medicare Part D Low Income Subsidy standard. If your parent was turned down in a prior year for excess assets, check the current year's limits before assuming they still don't qualify.",
+        "Countable assets are measured on at least one day within the month of application. If your parent's assets fluctuate near the limit, the timing of when you apply within a given month can matter.",
+        "MSP approval may also trigger automatic eligibility review for the Medicare Part D Extra Help program (Low Income Subsidy), which helps with prescription drug costs. Ask the Human Service Zone office about this when you apply."
+      ],
+      "relatedPrograms": [
+        "Medicare Part D Extra Help (Low Income Subsidy)",
+        "North Dakota Medicaid",
+        "SHIC (State Health Insurance Counseling) Program",
+        "PACE (Program of All-inclusive Care for the Elderly)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier covers what: QMB, SLMB, and QI",
+          "description": "The three MSP tiers are stacked by income. Higher income means a narrower benefit. Here is what each tier covers and the 2026 income limits for North Dakota.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "singleMonthlyIncome": "Up to $1,350/month",
+              "coupleMonthlyIncome": "Up to $1,824/month",
+              "covers": "Medicare Part A premium, Medicare Part B premium, and Medicare cost-sharing including deductibles and coinsurance. This is the broadest tier.",
+              "waitlist": false,
+              "note": null
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "singleMonthlyIncome": "$1,350 to $1,616/month",
+              "coupleMonthlyIncome": "$1,824 to $2,184/month",
+              "covers": "Medicare Part B premium only ($185/month in 2026). Does not cover Part A premium or cost-sharing.",
+              "waitlist": false,
+              "note": null
+            },
+            {
+              "name": "QI (Qualifying Individual)",
+              "singleMonthlyIncome": "$1,616 to $1,816/month",
+              "coupleMonthlyIncome": "$2,184 to $2,455/month",
+              "covers": "Medicare Part B premium only ($185/month in 2026). Does not cover Part A premium or cost-sharing.",
+              "waitlist": true,
+              "note": "First-come, first-served. Not guaranteed if funding runs out. Apply early in the calendar year."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "Your parent's home and car do not count against the asset limit",
+          "body": "North Dakota excludes the primary home, one vehicle, clothing, and household goods from the asset test. Families often assume their parent owns too much to qualify. Run the numbers without those items before deciding not to apply. The 2026 asset limit for a single person is $9,950; for a couple it is $14,910."
+        },
+        {
+          "type": "prose",
+          "title": "This program is not full Medicaid",
+          "body": "Medicare Savings Programs help only with Medicare costs: premiums, deductibles, and coinsurance. They do not provide general Medicaid coverage for long-term care, home health, or nursing facility stays. If your parent needs help paying for those services, look into North Dakota Medicaid separately. MSP is specifically for people who already have Medicare and need help affording it."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is just over the QMB limit. Do they get anything?",
+          "answer": "Yes. If their income falls between $1,350 and $1,616/month (single) or $1,824 and $2,184/month (couple), they likely qualify for SLMB, which pays the Part B premium ($185/month in 2026). If their income goes up to $1,816/month (single) or $2,455/month (couple), they may qualify for QI, which also pays the Part B premium but is first-come, first-served. Apply regardless of which tier you think fits; the Human Service Zone office will determine the correct tier."
+        },
+        {
+          "question": "My parent owns a home worth more than the asset limit. Do they automatically not qualify?",
+          "answer": "No. The primary home is excluded from the asset test entirely. The 2026 asset limit ($9,950 for one person, $14,910 for two) applies only to countable assets: bank accounts, investments, and similar resources. One vehicle, clothing, and household goods are also excluded. Your parent could own a home worth several hundred thousand dollars and still qualify if their other assets are within the limit."
+        },
+        {
+          "question": "My parent was denied a few years ago because of their assets. Should they try again?",
+          "answer": "Yes. The asset limit changes every year because North Dakota ties it to the federal Medicare Part D Low Income Subsidy standard. The 2026 limits ($9,950 single, $14,910 couple) may be higher than what applied in a prior year. Asset values also change over time. A denial in a prior year does not predict a denial today."
+        },
+        {
+          "question": "Can I apply on behalf of my parent, or do they have to apply themselves?",
+          "answer": "A family member or authorized representative can apply on behalf of an elderly parent. Bring documentation showing your authority to act for them, such as a power of attorney document, when you contact the Human Service Zone office. Call 1-866-614-6005 to ask what the office requires to set up a representative."
+        },
+        {
+          "question": "Is QI a guaranteed benefit if my parent meets the income limit?",
+          "answer": "No. QI is first-come, first-served and depends on available funding. If funding is exhausted for the year, new applicants in the QI income range may not be approved until the next cycle. QMB and SLMB do not have this limitation. If your parent's income falls in the QI range, apply as early in the calendar year as possible."
+        },
+        {
+          "question": "Can my parent get MSP and Medicare Part D Extra Help at the same time?",
+          "answer": "Yes, and the two programs often go together. MSP covers Medicare premium and cost-sharing costs; Extra Help (also called the Low Income Subsidy) covers prescription drug costs under Part D. QMB, SLMB, and QI enrollees may automatically qualify for Extra Help. Ask the Human Service Zone office about Extra Help when you apply for MSP."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "North Dakota requires that changes in income or assets be reported. If income rises above the QI upper limit, your parent may lose eligibility. If it drops, they may qualify for a higher tier like SLMB or QMB with better coverage. Report changes to the Human Service Zone office that handles your parent's case. Eligibility is reviewed periodically, but you should not wait for a renewal to report a significant change."
+        },
+        {
+          "question": "My parent has assets slightly above the limit right now. Is there any flexibility?",
+          "answer": "North Dakota policy states that eligibility can exist in a month when countable assets are within the limit for at least one day of that month. If your parent's account balance dips below the limit at any point in the month, they may be eligible for that month. This is worth discussing with the Human Service Zone office. Do not assume the answer is no without asking."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-866-614-6005",
+      "sourceUrl": "https://www.insurance.nd.gov/consumers/medicare/medicare-financial-assistance-programs",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nd-snap-food-benefits",
+      "name": "SNAP (Supplemental Nutrition Assistance Program)",
+      "shortName": "SNAP Food Benefits",
+      "tagline": "If your parent has a low or fixed income in North Dakota, they may qualify for up to $298/month loaded onto a grocery card with no cash involved.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "North Dakota Human Service Zone Offices",
+            "type": "service-area"
+          },
+          {
+            "name": "North Dakota Health and Human Services Self-Service Portal",
+            "type": "service-area"
+          },
+          {
+            "name": "Great Plains Food Bank application assistance",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is living on Social Security, a pension, or a small retirement income in North Dakota, SNAP may put up to $298 per month toward groceries at no cost. The benefit loads automatically each month onto an Electronic Benefit Transfer (EBT) card, which works like a debit card at most grocery stores and many farmers markets. It is food assistance only, not cash, and cannot be used for alcohol, tobacco, or non-food items.\n\nMany families assume their parent earns too much to qualify. That assumption is often wrong. North Dakota SNAP allows deductions for medical expenses that are common in older adults, such as prescription costs, Medicare premiums, and transportation to doctor appointments. Those deductions can bring countable income well below the limit even when gross income looks too high at first glance. The program uses three income tests, and passing any one of them, after deductions, may be enough.\n\nThe income limits changed on October 1, 2026, so any guide or screenshot your family has seen before that date may be outdated. Use the figures on this page and confirm current thresholds at hhs.nd.gov before submitting an application.",
+      "savingsRange": "Up to $298/month for a one-person household (FY2026 maximum allotment)",
+      "savingsSource": "North Dakota HHS SNAP brochure, maximum monthly allotment table effective October 1, 2025 through September 30, 2026, published at hhs.nd.gov/applyforhelp/snap",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must reside in North Dakota",
+          "Gross income generally at or below 130% FPL (see income table)",
+          "Some households qualify under broader categorical eligibility rules",
+          "Medical expense deductions can reduce countable income for elderly or disabled applicants",
+          "Must meet financial and non-financial eligibility requirements set by ND HHS"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1729
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2345
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2960
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 3575
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 4191
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 4806
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 5421
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must ordinarily reside in North Dakota",
+          "Must disclose all household income and other eligibility facts during the application and interview",
+          "Some applicants may be subject to work-related or reporting requirements depending on household status",
+          "Households subject to categorical eligibility rules may face different income tests than the standard thresholds above; a denial under one test does not always mean ineligibility"
+        ],
+        "povertyLevelReference": "130% FPL (standard gross income test); 200% FPL (broader categorical eligibility); 100% FPL net income test also applies"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at applyforhelp.nd.gov in about 30 minutes, or call your local Human Service Zone Office to apply by phone or paper; most decisions are made within 30 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's income and expense information",
+            "description": "Before you start, pull together their most recent Social Security award letter, any pension or Veterans Affairs income statements, and a list of regular medical expenses (prescriptions, insurance premiums, doctor visit costs). Medical deductions can significantly lower countable income for older applicants and are worth documenting carefully before you apply."
+          },
+          {
+            "step": 2,
+            "title": "Apply online through the North Dakota Self-Service Portal",
+            "description": "Go to applyforhelp.nd.gov and select SNAP. You do not need to have every document in hand before you start. Save your tracking number when you submit; North Dakota processes the application through this portal and you will need that number to check status or upload documents later."
+          },
+          {
+            "step": 3,
+            "title": "Or apply by phone, mail, or in person",
+            "description": "If online is not convenient, call your local Human Service Zone Office. Staff are required by North Dakota policy to offer you the choice of applying by paper form, online, or through Great Plains Food Bank application assistance. To find your local office, visit hhs.nd.gov/applyforhelp/snap and select your county."
+          },
+          {
+            "step": 4,
+            "title": "Complete the required interview",
+            "description": "North Dakota requires an interview as part of the SNAP application. For most applicants this is a phone interview scheduled after you submit. The interviewer will review your income, household composition, and expenses. Medical deductions for your parent should come up here; mention all out-of-pocket costs."
+          },
+          {
+            "step": 5,
+            "title": "Submit any requested verification documents",
+            "description": "After the interview, the agency may request specific documents by mail or through the Self-Service Portal. Respond quickly. Missing verification is the most common reason approvals are delayed past the standard 30-day window. If your parent qualifies for expedited SNAP (very low income or resources), benefits must be issued within 7 days."
+          },
+          {
+            "step": 6,
+            "title": "Receive and activate the EBT card",
+            "description": "If approved, an EBT card will arrive by mail. Benefits load monthly and can be used at any SNAP-authorized grocery store or farmers market in North Dakota. The card works like a debit card; your parent enters a PIN at checkout."
+          }
+        ],
+        "processingTime": "30 days for standard applications; 7 days for expedited cases (very low income or resources at the time of application)",
+        "waitlist": null,
+        "tip": "Apply before you have every document. North Dakota allows you to file first and provide verification afterward. Waiting until the file is complete can delay the benefit start date by weeks.",
+        "urls": [
+          {
+            "label": "Apply online (ND Self-Service Portal)",
+            "url": "https://www.applyforhelp.nd.gov"
+          },
+          {
+            "label": "SNAP program information (ND HHS)",
+            "url": "https://www.hhs.nd.gov/applyforhelp/snap"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter or SSI notice showing monthly benefit amount",
+        "Proof of North Dakota residency such as a utility bill, lease agreement, or state-issued document showing your parent's current address",
+        "Proof of identity such as a state-issued ID, driver's license, or passport",
+        "Social Security numbers for all household members (cards if available, but the number is sufficient)",
+        "Pension, Veterans Affairs, or retirement income statements showing current monthly amounts",
+        "Documentation of out-of-pocket medical expenses: prescription receipts, Medicare premium notices, and any insurance premium statements (medical deductions can lower countable income for elderly applicants)",
+        "Proof of any other household income such as wages, child support, or rental income",
+        "Current balances for any checking or savings accounts if the agency requests resource information during the interview"
+      ],
+      "contacts": [
+        {
+          "label": "North Dakota HHS Self-Service Portal (Online Application)",
+          "phone": null,
+          "description": "Start or manage a SNAP application online at applyforhelp.nd.gov. Save your tracking number after submitting.",
+          "hours": "Available 24 hours, 7 days a week"
+        },
+        {
+          "label": "Local Human Service Zone Office",
+          "phone": null,
+          "description": "Call your county Human Service Zone Office to apply by phone or paper, schedule an interview, or ask about your case. Find your local office at hhs.nd.gov/applyforhelp/snap by selecting your county.",
+          "hours": "Varies by office; generally Monday through Friday during business hours"
+        },
+        {
+          "label": "Great Plains Food Bank SNAP Application Assistance",
+          "phone": "(701) 232-6219",
+          "description": "Great Plains Food Bank offers help completing SNAP applications at no cost. Staff can walk your parent or your family through the process and help gather documents.",
+          "hours": "Call for current hours and locations"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 614-6005",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income looks too high at first glance, apply anyway. Medical expense deductions for elderly or disabled applicants, such as prescription costs, Medicare or insurance premiums, and transportation to medical appointments, frequently bring countable net income below the limit even when gross income does not.",
+        "Expedited SNAP is available if your parent has very little income or resources at the time of application. In that case, benefits must be issued within 7 days. Tell the caseworker if your parent is in a financial crisis when you call or submit.",
+        "A denial under the basic 130% gross income test does not always mean ineligibility. North Dakota uses categorical eligibility rules that may apply different thresholds. If your parent receives SSI, ask specifically about SSI household rules.",
+        "Income limits changed on October 1, 2026. Any printed guide, prior approval letter, or online resource from before that date may have wrong numbers. Confirm current limits at hhs.nd.gov/applyforhelp/snap before relying on them."
+      ],
+      "relatedPrograms": [
+        "LIHEAP (Low Income Home Energy Assistance Program) North Dakota",
+        "Medicare Savings Programs (help paying Medicare premiums)",
+        "ND Weatherization Assistance Program",
+        "Senior Farmers Market Nutrition Program (SFMNP) North Dakota"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Three income tests: which one applies to your parent?",
+          "body": "North Dakota SNAP uses up to three income tests depending on household type. The 130% gross income test applies to most households. The 200% gross income test applies to some households under categorical eligibility rules. The 100% net income test applies after deductions are subtracted. For a single person, the thresholds for October 1, 2026 through September 30, 2027 are: 200% gross: $2,660/month; 130% gross: $1,729/month; 100% net: $1,330/month. If your parent's gross income is above $1,729 but below $2,660, categorical eligibility rules or deductions may still allow them to qualify. Do not self-screen out without speaking to a caseworker."
+        },
+        {
+          "type": "prose",
+          "title": "What SNAP pays for and what it does not",
+          "body": "SNAP benefits load monthly onto an EBT card and can be used to buy most food items at SNAP-authorized retailers, including grocery stores, supercenters, and many farmers markets. Your parent can buy bread, cereals, fruits, vegetables, meat, poultry, fish, dairy products, and seeds or plants that produce food.\n\nSNAP cannot be used for alcohol, tobacco, vitamins or supplements sold as supplements, hot prepared foods at a deli counter, or non-food household items. It is not cash and cannot be withdrawn from an ATM."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security income is above $1,500/month. Is it even worth applying?",
+          "answer": "Yes, it is worth applying. North Dakota allows elderly and disabled applicants to deduct out-of-pocket medical expenses from their income before the net income test is applied. Prescription costs, Medicare Part B premiums ($185/month in 2026), supplemental insurance premiums, and transportation to doctor visits all count. Those deductions frequently bring a senior's countable income below the $1,330/month net limit even when gross income is well above it. Apply and let the caseworker calculate the deductions."
+        },
+        {
+          "question": "Can I apply for SNAP on behalf of my elderly parent, or do they have to do it themselves?",
+          "answer": "Yes. An authorized representative, which can be an adult child or other trusted person, can apply on behalf of an elderly or disabled household member. You will need to identify yourself as the authorized representative during the application. The Self-Service Portal at applyforhelp.nd.gov and paper applications both allow for this. The interview may still need to include your parent unless they are physically unable to participate."
+        },
+        {
+          "question": "My parent was denied SNAP before. Can they apply again?",
+          "answer": "Yes. Circumstances change, income limits change, and deduction calculations can differ depending on who reviews the case. The income thresholds changed on October 1, 2026, so a prior denial under old rules does not determine eligibility under current rules. If your parent's medical expenses have increased since the prior denial, that alone can change the outcome. Apply again."
+        },
+        {
+          "question": "How quickly can my parent start getting benefits if they are in a financial crisis right now?",
+          "answer": "Expedited SNAP is available when a household has very low income or resources at the time of application. In an expedited case, North Dakota must issue benefits within 7 days. Tell the caseworker or note on the application that your parent is in a financial crisis. Do not wait to gather every document; apply first, then provide verification."
+        },
+        {
+          "question": "My parent lives with me. Does my income count against their SNAP eligibility?",
+          "answer": "It depends on how the household is defined. If your parent buys and prepares food separately from you, they may be able to apply as a separate one-person household, in which case your income does not count. If you and your parent share food costs and preparation, you may be counted as one household, and your income would be included. This is one of the most consequential eligibility questions in SNAP; ask the caseworker specifically about household definition when you call."
+        },
+        {
+          "question": "Can my parent use SNAP at the same time as other benefits like LIHEAP or the Medicare Savings Program?",
+          "answer": "Yes. SNAP is a separate program from energy assistance (LIHEAP) and Medicare cost-reduction programs. Receiving one does not disqualify your parent from the others, and in some cases receiving SSI or certain other benefits may actually make SNAP eligibility easier under categorical eligibility rules. Applying for multiple programs at the same time is both allowed and often advisable."
+        },
+        {
+          "question": "What happens when my parent's income or household situation changes after they are enrolled?",
+          "answer": "Your parent is required to report certain changes to their Human Service Zone Office, such as a significant increase in income or a change in household size. Reporting rules for SNAP in North Dakota depend on the type of household and how benefits were certified. The caseworker will explain reporting requirements at the time of approval. Failing to report required changes can result in an overpayment that must be repaid."
+        },
+        {
+          "question": "How long does SNAP certification last before my parent has to renew?",
+          "answer": "SNAP certification periods vary by household type and circumstances. At the end of the certification period, your parent will receive a renewal notice and must complete a recertification to continue receiving benefits. The notice comes from the Human Service Zone Office. Missing the recertification deadline causes benefits to stop, so watch for the renewal letter and respond promptly. Contact your local Human Service Zone Office at hhs.nd.gov/applyforhelp/snap if you have not received a renewal notice before the certification end date."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": null,
+      "sourceUrl": "https://www.hhs.nd.gov/applyforhelp/snap",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "7012326219"
+          ],
+          "to": "(866) 614-6005",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "nd-liheap-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "shortName": "Home Energy Help",
+      "tagline": "If your parent is struggling to pay heating bills in North Dakota, this program pays a portion of their energy costs directly, and it may also qualify them for free home weatherization.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "North Dakota Health and Human Services Apply for Help portal",
+            "type": "service-area"
+          },
+          {
+            "name": "Local human service zone offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Community Options (application help and outreach)",
+            "type": "service-area"
+          },
+          {
+            "name": "Customer Support Center",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "North Dakota winters are expensive. If your parent is on a fixed income and paying for heat, LIHEAP can help cover a portion of that bill. The program pays directly toward home energy costs, which means your parent does not have to choose between groceries and keeping the heat on.\n\nTo qualify, your parent's household income must be at or below 60% of North Dakota's state median income. For a single person, that limit is $3,446 per month for the 2026-2027 heating season (October 1, 2026 through September 30, 2027). There is no age requirement and no asset test. All household income is counted.\n\nOne more thing worth knowing: if your parent qualifies for LIHEAP, they are automatically eligible for North Dakota's Weatherization Assistance Program, which can reduce long-term energy costs through insulation and efficiency improvements. That is a separate program with its own process, but the LIHEAP application opens the door.",
+      "savingsRange": "",
+      "savingsSource": "The North Dakota LIHEAP program does not publish a fixed statewide benefit amount. The payment varies by household and program year. No verified dollar figure is available from official sources.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "North Dakota resident",
+          "Income at or below 60% of state median income",
+          "No age requirement",
+          "No asset limit",
+          "All household income is counted"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3446
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4507
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 5567
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 6628
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 7688
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 8749
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 8947
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 9146
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 9345
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 9544
+          },
+          {
+            "householdSize": 11,
+            "monthlyLimit": 9743
+          },
+          {
+            "householdSize": 12,
+            "monthlyLimit": 9942
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a North Dakota resident applying for home energy assistance",
+          "All household income is counted, with no separate elderly-only income rule",
+          "Applications are handled through the state portal or local human service zone offices"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at hhs.nd.gov/applyforhelp/liheap; if you need help, call Community Options at 1-800-823-2417.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the income table",
+            "description": "Look at the income table above. Count everyone living in your parent's home and add up all monthly income for the household. If total income is at or below the limit for that household size, your parent likely qualifies. There is no asset test, so savings accounts do not affect eligibility."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you start",
+            "description": "Have your parent's most recent energy bill and proof of income for every household member ready before you begin the application. The online portal and local offices will ask for this information. Submitting everything at once prevents delays."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by mail, or in person",
+            "description": "Online: Go to hhs.nd.gov/applyforhelp/liheap and use the Self-Service Portal (SSP). By mail: Request form SFN 00529 (Application: Low Income Home Energy Assistance Program) and return it to your local human service zone office. In person: Find your local human service zone office through the North Dakota HHS website. All three methods are accepted."
+          },
+          {
+            "step": 4,
+            "title": "Get help if you need it",
+            "description": "If the application feels complicated, call Community Options at 1-800-823-2417. They can walk you through the process. The Customer Support Center at 1-866-614-6005 can also answer questions about the online portal."
+          },
+          {
+            "step": 5,
+            "title": "Ask about Weatherization Assistance",
+            "description": "Once your parent is approved for LIHEAP, they are automatically eligible for Weatherization Assistance. Ask the caseworker or local office how to connect with that program. It is administered separately but the LIHEAP approval is your gateway in."
+          }
+        ],
+        "processingTime": "No official processing time standard was identified in North Dakota's published LIHEAP materials. Ask your local human service zone office for a current timeline when you apply.",
+        "waitlist": "No formal waitlist was identified in the program materials. Availability depends on the annual LIHEAP funding cycle. Applying early in the heating season (October) reduces the risk of funds running out.",
+        "tip": "LIHEAP funding is federal and finite. If your parent qualifies, apply as early as possible in the October-to-September heating season. Funds can run out before the season ends.",
+        "urls": [
+          {
+            "label": "Apply online for LIHEAP",
+            "url": "https://www.hhs.nd.gov/applyforhelp/liheap"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent heating or energy bill showing the account name and address",
+        "Proof of income for all household members (Social Security award letter, pension statements, pay stubs, or similar)",
+        "Names and dates of birth for everyone living in the home",
+        "Government-issued photo ID or contact information for the applicant",
+        "Energy vendor or utility account information if available",
+        "Any other documents requested by the local human service zone office or the online portal during the application process"
+      ],
+      "contacts": [
+        {
+          "label": "Community Options (Application Help)",
+          "phone": "1-800-823-2417",
+          "description": "Can walk you through the LIHEAP application process from start to finish. This is the number to call if the online portal is confusing or if your parent needs help applying.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Customer Support Center",
+          "phone": "1-866-614-6005",
+          "description": "Answers questions about the online Apply for Help portal and can assist with technical issues during the application process.",
+          "hours": "Contact for current hours"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has an active disconnection notice, ask the local human service zone office or Community Options whether expedited processing is available. The official materials do not specify a timeline, but disconnection situations are worth flagging immediately.",
+        "LIHEAP counts all household income. If your parent lives with an adult child or other family member, their income is counted too. Check the income table for the full household size, not just your parent.",
+        "The benefit amount varies by household. Do not assume your parent will receive the same amount as a neighbor or friend who also received LIHEAP. The payment is not a flat statewide figure.",
+        "After your parent is approved for LIHEAP, ask specifically about the Weatherization Assistance Program. LIHEAP approval makes them automatically eligible, but you must take a separate step to connect with weatherization services."
+      ],
+      "relatedPrograms": [
+        "Weatherization Assistance Program (North Dakota)",
+        "SNAP (Supplemental Nutrition Assistance Program)",
+        "Medicaid (North Dakota)",
+        "Community Services Block Grant programs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "The benefit amount is not published",
+          "body": "North Dakota does not list a fixed LIHEAP payment on its public materials. The amount your parent receives depends on their household size, energy costs, and available program funding for that year. The only way to know your parent's specific benefit is to apply. This page will update if official benefit amounts are published."
+        },
+        {
+          "type": "callout",
+          "heading": "No asset test",
+          "body": "Unlike some assistance programs, LIHEAP in North Dakota does not count your parent's savings, vehicle, or other assets. If their household income is at or below the limit for their household size, assets do not disqualify them."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives with me. Does my income count against them?",
+          "answer": "Yes. North Dakota counts all household income for everyone living in the home, not just the person applying. Add your income to your parent's and compare the total to the limit for your household size. A two-person household (you and your parent) has a monthly income limit of $4,507 for the 2026-2027 season. If your combined income exceeds that, your parent would not qualify."
+        },
+        {
+          "question": "My parent rents their apartment. Can they still apply?",
+          "answer": "Yes. LIHEAP does not require homeownership. Renters who pay energy costs directly, or whose rent includes utilities, may qualify. Have the most recent energy bill or rental agreement available when applying. The online portal at hhs.nd.gov/applyforhelp/liheap or Community Options at 1-800-823-2417 can clarify what documentation applies to your parent's specific rental situation."
+        },
+        {
+          "question": "How much will my parent actually receive?",
+          "answer": "North Dakota does not publish a fixed statewide benefit amount. The payment varies by household and by program year. The only way to find out your parent's specific amount is to apply. Do not assume the amount will match what a friend or neighbor received, even if their situation seems similar."
+        },
+        {
+          "question": "Can I apply for LIHEAP on behalf of my parent if they cannot do it themselves?",
+          "answer": "Yes. You can apply online through the Self-Service Portal at hhs.nd.gov/applyforhelp/liheap, by mail using form SFN 00529, or in person at a local human service zone office on your parent's behalf. If you need guidance on submitting as a representative, call Community Options at 1-800-823-2417."
+        },
+        {
+          "question": "What is Weatherization Assistance, and does my parent have to apply separately?",
+          "answer": "Weatherization Assistance is a separate program that reduces long-term energy costs by improving insulation, sealing drafts, and making efficiency upgrades to the home. LIHEAP approval makes your parent automatically eligible for it. However, it is a different program with its own process. Ask your caseworker or local human service zone office how to connect with weatherization services after LIHEAP is approved."
+        },
+        {
+          "question": "Is there a deadline to apply, or can my parent apply at any time?",
+          "answer": "The current heating season runs October 1, 2026 through September 30, 2027. There is no formal waitlist, but LIHEAP is funded annually by the federal government and funds can run out. Applying early in the season reduces the risk of missing out. The official application portal is open at hhs.nd.gov/applyforhelp/liheap."
+        },
+        {
+          "question": "My parent's electricity was shut off. Can they get emergency help?",
+          "answer": "If your parent has a disconnection notice or active shutoff, flag this immediately when you contact the local human service zone office or Community Options at 1-800-823-2417. North Dakota's published materials do not specify an official crisis processing timeline, but disconnection situations are worth escalating right away rather than waiting through a standard queue."
+        },
+        {
+          "question": "Can my parent receive both LIHEAP and SNAP at the same time?",
+          "answer": "Yes. LIHEAP and SNAP are separate programs with separate eligibility rules. Your parent can receive both if they qualify for each individually. SNAP has its own income limits and application process through North Dakota HHS. Apply for each program separately; receiving one does not affect eligibility for the other."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-800-823-2417",
+      "sourceUrl": "https://www.hhs.nd.gov/applyforhelp/liheap",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nd-senior-dining-home-delivered-meals",
+      "name": "Senior Dining Services (Home-Delivered Meals)",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60+ and homebound in North Dakota, they may qualify for nutritious meals delivered to their door at no required cost, with no income or asset test.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Older Americans Act nutrition providers",
+            "type": "service-area"
+          },
+          {
+            "name": "County senior service agencies and councils on aging",
+            "type": "service-area"
+          },
+          {
+            "name": "AgeWellND in Burleigh County",
+            "type": "service-area"
+          },
+          {
+            "name": "Local community organizations such as county councils on aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and homebound, North Dakota's Senior Dining Home-Delivered Meals program can bring nutritious meals directly to their door. This is not a grocery voucher or cash benefit. A local provider delivers hot or frozen meals, typically five days a week, designed to meet at least one-third of your parent's daily nutritional needs. There is no income test and no asset test. Eligibility is based on age and whether your parent genuinely cannot prepare adequate meals for themselves.\n\nThe program is funded under the Older Americans Act and run statewide, but local agencies and councils on aging handle delivery in each area. That means the exact schedule, meal format, and intake process depend on where your parent lives. Some providers deliver Monday through Friday inside city limits and once a week in rural areas. A few require a minimum of three delivery days per week. You will need to ask the local provider what applies in your parent's zip code.\n\nIf your parent's spouse also needs meals, the spouse can qualify even if they are under 60. And if your parent currently attends a congregate meal site but is temporarily ill, they may be able to receive home-delivered meals for up to 30 days without starting a full new enrollment.",
+      "savingsRange": "",
+      "savingsSource": "Free service. No cost is required to participate. Voluntary contributions may be accepted by some local providers but are never mandatory.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound due to illness, injury, disability, or isolation",
+          "Unable to prepare adequate meals independently",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound, meaning they cannot leave home regularly because of injury, illness, physical incapacity, mental or social conditions, or isolation. They must also be unable to prepare adequate meals for themselves. A caseworker will confirm this through a phone screening and then an in-person home assessment, which must happen before meal delivery starts or within 10 working days after it begins.",
+        "otherRequirements": [
+          "Spouse of an eligible participant qualifies regardless of age",
+          "A disabled dependent child of any age living in the home may qualify if it is in the participant's best interest",
+          "Congregate meal participants may receive home-delivered meals for up to 30 days during a short-term illness without a full new enrollment"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your county's senior services office or council on aging; initial eligibility is confirmed by phone, but an in-person home assessment must follow within 10 working days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local provider",
+            "description": "This program is run by local Older Americans Act nutrition providers, not a single statewide office. Call North Dakota 2-1-1 (dial 2-1-1 or 1-800-450-5095) and ask to be connected to the senior meal delivery program in your parent's county. You can also contact your county's council on aging directly. In Burleigh County, contact AgeWellND."
+          },
+          {
+            "step": 2,
+            "title": "Complete the phone screening",
+            "description": "Your local provider will do an initial eligibility determination by phone. You will describe your parent's homebound status and their difficulty preparing meals. Have basic household and contact information ready, along with any relevant medical or functional details about your parent's limitations."
+          },
+          {
+            "step": 3,
+            "title": "Schedule the in-person home assessment",
+            "description": "A caseworker must visit your parent's home to complete the SAMS Outreach/HDM Assessment form and the Home-Delivered Meal Program Registration form. This visit must happen before meal delivery starts, or within 10 working days after the first delivery. Do not skip or delay this step; missing it can interrupt service."
+          },
+          {
+            "step": 4,
+            "title": "Confirm delivery schedule and meal preferences",
+            "description": "Ask the provider specifically: how many days per week meals are delivered in your parent's area, whether meals are hot or frozen, what the minimum required delivery days are, and whether there are any nutrition or dietary restrictions they can accommodate. Rules vary by provider."
+          },
+          {
+            "step": 5,
+            "title": "Meals begin",
+            "description": "Once eligibility is confirmed and the assessment is complete, delivery begins according to the local provider's schedule. Most North Dakota providers deliver five days a week to participants inside city limits."
+          }
+        ],
+        "processingTime": "Initial eligibility can be confirmed by phone. The required in-person home assessment must be completed before service starts or within 10 working days after the first delivery.",
+        "waitlist": "No statewide waitlist policy exists. Availability depends on your parent's local provider and service area. Ask directly when you call.",
+        "tip": "When you call the local provider, ask specifically whether there is a current waitlist, what the minimum delivery days per week are in your parent's area, and whether rural delivery schedules differ from in-town schedules. These details vary and are not posted online in most counties.",
+        "urls": [
+          {
+            "label": "North Dakota DHS Senior Nutrition Policy Manual",
+            "url": "https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm"
+          },
+          {
+            "label": "North Dakota 2-1-1 (find local provider)",
+            "url": "https://www.nd211.org"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Basic contact information for your parent (name, address, phone number) for the intake call",
+        "A brief description of why your parent is homebound and cannot prepare meals (the caseworker will ask this on the phone screening)",
+        "Information about any dietary restrictions, allergies, or medical nutrition needs your parent has",
+        "Proof of age if the local provider requests it (birth certificate, Medicare card, or other government-issued document showing date of birth)",
+        "Name and contact information for your parent's physician or care provider if the local agency asks for it during the assessment",
+        "Details about any disability, isolation, or functional limitations relevant to the home visit assessment"
+      ],
+      "contacts": [
+        {
+          "label": "North Dakota 2-1-1 (connect to local senior meal provider)",
+          "phone": "211",
+          "description": "Dial 2-1-1 or call 1-800-450-5095 to be connected to the senior nutrition provider serving your parent's county. This is the fastest way to reach the local office that runs home-delivered meals in your area. The 2-1-1 operator transfers you directly; they do not handle applications themselves.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "AgeWellND (Burleigh County)",
+          "phone": "(701) 255-6922",
+          "description": "Local Older Americans Act provider for Burleigh County. Call to ask about home-delivered meal eligibility, schedule an assessment, or check waitlist status in that service area.",
+          "hours": "Contact directly for current hours"
+        },
+        {
+          "label": "North Dakota Department of Human Services, Aging Services",
+          "phone": "(701) 328-4601",
+          "description": "State-level office overseeing the Senior Dining program. Use this number if you cannot locate your county's local provider through 2-1-1 or need to escalate a concern.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 462-5465",
+          "description": "Number listed on hhs.nd.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The in-person home assessment is not optional. Even if your parent starts receiving meals after the phone screening, the caseworker must visit within 10 working days. If that visit does not happen, service can be interrupted. Confirm the appointment date when you finish the phone screening.",
+        "If your parent lives outside city limits, ask specifically about rural delivery frequency. Some North Dakota providers deliver only once a week to addresses outside town. If five-days-a-week delivery is needed, the provider may offer frozen meal bundles to bridge the gaps.",
+        "If your parent currently attends a congregate meal site and becomes temporarily ill, they may not need a full new enrollment. Ask the provider about the 30-day short-term home delivery option for current congregate participants.",
+        "There is no income or asset test. You do not need financial documents to apply. If any office asks for bank statements or proof of income as a condition of enrollment, that is not a requirement of this program under North Dakota DHS policy."
+      ],
+      "relatedPrograms": [
+        "Senior Dining Congregate Meals (North Dakota)",
+        "SNAP Food Benefits (North Dakota)",
+        "Home and Community-Based Services Medicaid Waiver (North Dakota)",
+        "Family Caregiver Support Program (North Dakota)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No asset test.",
+          "body": "Unlike most benefit programs, this one does not look at your parent's income or savings. The only questions that matter are: Is your parent 60 or older? Are they homebound? Can they not prepare adequate meals on their own? If the answer to all three is yes, they likely qualify."
+        },
+        {
+          "type": "prose",
+          "title": "What 'homebound' actually means",
+          "body": "Your parent does not need to be bedridden or have a formal medical diagnosis. North Dakota's policy covers anyone who cannot leave home regularly because of injury, illness, physical incapacity, mental or social conditions, or isolation. A caseworker makes that determination during the assessment, not a doctor. If your parent struggles to get out safely, rarely leaves, or lives alone in a rural area with limited support, they are worth a call to the local provider."
+        },
+        {
+          "type": "prose",
+          "title": "What the meals actually provide",
+          "body": "Each delivered meal is designed to meet at least one-third of your parent's Dietary Reference Intakes for the day. Meals may be hot or frozen depending on the local provider. Most providers in North Dakota deliver five days a week to participants inside city limits. Rural areas may receive one delivery per week with frozen meals for multiple days. Some providers require your parent to accept meals at least three days per week to stay enrolled. Ask your local provider for the specifics before enrollment."
+        },
+        {
+          "type": "callout",
+          "title": "Spouse under 60? They may still qualify.",
+          "body": "If your parent qualifies for home-delivered meals and their spouse also needs meals, the spouse can receive them regardless of age. The spouse does not need to meet the homebound requirement separately. This applies to legal spouses living in the same household."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent sometimes leaves home for doctor appointments. Does that disqualify them from being 'homebound'?",
+          "answer": "No. Occasional trips for medical care do not disqualify your parent. North Dakota's homebound definition covers people who cannot leave home regularly due to physical, mental, or social limitations. The caseworker doing the home assessment will look at your parent's overall situation, not whether they occasionally get to a clinic."
+        },
+        {
+          "question": "My parent lives in a rural area. Will meals actually reach them?",
+          "answer": "It depends on the local provider. Some North Dakota providers deliver five days a week inside city limits but only once a week in rural areas, typically with a bundle of frozen meals for the week. Ask specifically about delivery frequency and meal format when you call your county's provider. The 2-1-1 line (dial 2-1-1 or 1-800-450-5095) can connect you to the right office."
+        },
+        {
+          "question": "Is there a cost? Will my parent be billed?",
+          "answer": "The program does not charge a required fee. Some local providers accept voluntary contributions, but participation is never conditioned on paying anything. Your parent cannot be turned away for declining to contribute."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot make the call themselves?",
+          "answer": "Yes. You can call the local provider as your parent's family caregiver and provide the intake information on their behalf. The required in-person home assessment still has to happen at your parent's home, but you can be present and assist with that visit."
+        },
+        {
+          "question": "My parent is already enrolled in SNAP. Can they receive home-delivered meals at the same time?",
+          "answer": "Yes. These are separate programs with different eligibility rules. SNAP is income-based and provides a monthly grocery benefit. Home-Delivered Meals is based on homebound status and functional need, with no income test. Your parent can use both simultaneously. If they are not yet enrolled in SNAP, that may be worth exploring through your county's Department of Human Services."
+        },
+        {
+          "question": "What happens if my parent's needs change after they are enrolled, or they temporarily go into the hospital?",
+          "answer": "If your parent is hospitalized or goes to a skilled nursing facility, delivery will pause. Notify the local provider so they can hold or suspend service rather than drop enrollment. When your parent returns home, contact the provider to restart delivery. If your parent's functional status changes significantly, the provider may conduct a reassessment. Ask your local provider about their specific process for pausing and restarting service."
+        },
+        {
+          "question": "Is there a waitlist? How long is the wait?",
+          "answer": "There is no statewide waitlist policy for North Dakota home-delivered meals. Whether there is a wait depends entirely on your parent's local provider and service area. Some areas have immediate openings; others may have a short wait. Ask directly when you call your county's provider. If you call 2-1-1, the operator can connect you to the right local office."
+        },
+        {
+          "question": "My parent does not always finish the full meal. Will they lose eligibility?",
+          "answer": "No. North Dakota policy is clear that eligibility is based on the nutritional content of the meal provided, not the amount your parent actually eats. If your parent is eligible based on age and homebound status, they remain eligible even if they do not finish every delivery."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "211",
+      "sourceUrl": "https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "7012556922",
+            "7013284601"
+          ],
+          "to": "(855) 462-5465",
+          "source": "https://www.hhs.nd.gov/contact",
+          "flaggedAt": "2026-10-06T12:24:49.595Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -630,5 +2030,5 @@
     ],
     "resourcesVsBenefits": "North Dakota offers both types of help: qualification-based benefits like BCAP that require income and asset screening to help pay for care, and free resources like the Assistive Senior Safety Program that any North Dakota senior can access regardless of income. The AIC Project falls in between, it's free but specifically serves rural communities where volunteer networks are available."
   },
-  "factcheckedAt": "2026-10-02T07:41:13.679Z"
+  "factcheckedAt": "2026-10-06T12:24:49.595Z"
 }

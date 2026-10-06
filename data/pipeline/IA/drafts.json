@@ -2,8 +2,8 @@
   "state": "IA",
   "stateName": "Iowa",
   "draftedAt": "2026-04-13T21:50:19.533Z",
-  "total": 11,
-  "successful": 11,
+  "total": 13,
+  "successful": 13,
   "programs": [
     {
       "id": "medicaid-hcbs-elderly-waiver",
@@ -205,11 +205,11 @@
             "8558897985",
             "8009722017"
           ],
-          "to": "8003388366",
-          "source": "https://hhs.iowa.gov/medicaid/about-medicaid/medicaid-projects/home-project/waiver-redesign-faq",
+          "to": "18003388366",
+          "source": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         }
       ]
     },
@@ -331,6 +331,12 @@
           "phone": "2-1-1",
           "description": "Free helpline connecting to local aging and disability services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -394,7 +400,23 @@
       "sourceUrl": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services/waiver-programs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003388366",
+            "211"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "pace-elderly-care",
@@ -822,7 +844,26 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2086,
+          "to": 1696,
+          "source": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2820,
+          "to": 2292,
+          "source": "https://iowalegalaid.org/resource/food-assistance-helping-families-have-enough-to-eat/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1050,16 +1091,16 @@
       "sourceUrl": "https://iuc.iowa.gov/customer-assistance/how-do-i-apply-energy-assistance-liheap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": [
         {
           "field": "income_1",
           "from": 1822,
-          "to": 2611,
+          "to": 2617,
           "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         },
         {
           "field": "income_2",
@@ -1068,7 +1109,7 @@
           "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
         }
       ],
       "appliedCorrections": [
@@ -1084,6 +1125,15 @@
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "5157768871",
+          "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "reason": "page also lists ours ((800) 972-2017)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -1419,7 +1469,23 @@
       "sourceUrl": "https://www.legis.iowa.gov/docs/iac/rule/02-05-2025.17.7.21.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8554106222",
+            "3193380515",
+            "5156993243",
+            "5157253333",
+            "8007792001"
+          ],
+          "to": "3193983574",
+          "source": "https://gis.linncountyiowa.gov/web-data/lccs/community-resources/Food-Assistance.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1835,6 +1901,12 @@
           "phone": "1-800-772-1213",
           "description": "For the SSI side of eligibility.",
           "hours": "Mon-Fri 8am-7pm local time"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1929,19 +2001,21 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-18",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18773475678",
             "18007792001",
             "18007721213"
           ],
-          "to": "5153283640",
+          "to": "(800) 972-2017",
           "source": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:32.766Z"
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2021,6 +2095,12 @@
           "label": "Iowa Aging and Disability Resource Center (Iowa Compass)",
           "phone": "(800) 779-2001",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [],
@@ -2039,7 +2119,554 @@
         "hasLocationFinder": true,
         "hasDocumentChecklist": true,
         "visualTone": "warm"
-      }
+      },
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8007792001"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/family-community/aging-services/caregiver-resources",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "ia-abd-medicaid",
+      "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "Full Iowa Medicaid coverage for adults 65+ or with a qualifying disability, even if they don't receive SSI.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Iowa HHS offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, blind, or has a qualifying disability and is not enrolled in regular Medicaid, ABD Medicaid may cover their doctor visits, prescriptions, hospital stays, and potentially long-term care services. This is a separate Medicaid pathway for older and disabled Iowans who follow SSI-like income and resource rules, even if they never received SSI.\n\nThere are two ways in: standard ABD Medicaid for those who meet the income and resource limits, and a Medically Needy pathway for those whose income is above the limit. Under Medically Needy, your parent pays down a portion of their medical costs until they reach the threshold, and Medicaid covers the rest. The Medically Needy income levels (effective April 1, 2026) start at $483 per month for a one-person household.\n\nBecause this program follows SSI-related rules rather than the simpler income-percentage rules used for most ACA Medicaid, it takes more documentation and can take up to 90 days to process when a disability determination is needed. Starting early matters. Apply before a hospitalization or care transition creates urgency.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays covered medical and long-term care costs directly to providers; no dollar benefit is issued to the enrollee.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, or blind, or disabled under Social Security standards",
+          "Iowa resident and U.S. citizen or eligible noncitizen",
+          "Follows SSI-like income and resource rules (not MAGI Medicaid)",
+          "Medically Needy pathway available if income is above the standard limit",
+          "Does not need to currently receive SSI"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 483
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 483
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 566
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 666
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 733
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 816
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 891
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 975
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 1058
+          },
+          {
+            "householdSize": 10,
+            "monthlyLimit": 1158
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings accounts",
+            "Investments and brokerage accounts",
+            "Additional real property beyond primary home",
+            "Cash value of life insurance above certain thresholds"
+          ],
+          "exemptAssets": [
+            "Primary home (verify with Iowa HHS at application)",
+            "One vehicle (verify with Iowa HHS at application; not confirmed in current ABD-specific source)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be an Iowa resident",
+          "Must be a U.S. citizen or an eligible noncitizen under Medicaid rules",
+          "Must meet non-MAGI Medicaid eligibility rules",
+          "Must be age 65 or older, or blind, or disabled under Social Security Administration standards",
+          "For the Medically Needy pathway: income or resources exceed the standard limit but a spend-down brings countable costs to the threshold"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through the Iowa HHS Benefits Portal, by paper form mailed or delivered to your local HHS office, or in person; expect 45 days for a decision, or up to 90 days if a disability determination is needed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather documents before you start",
+            "description": "Collect your parent's Social Security award letter, proof of Iowa residency, photo ID, income records, and bank or asset statements. If disability is the qualifying basis, also gather relevant medical records or SSA disability documentation. Missing documents are the most common reason applications stall."
+          },
+          {
+            "step": 2,
+            "title": "Apply online, by mail, or in person",
+            "description": "Online: go to hhs.iowa.gov/medicaid/apply-medicaid/eligibility and complete the Iowa HHS Benefits Portal application. By mail or in person: download the paper Medicaid application form from that same page, fill it out, and bring or mail it to your local Iowa HHS office."
+          },
+          {
+            "step": 3,
+            "title": "Respond to any requests quickly",
+            "description": "Iowa HHS may contact you for additional documents or to schedule a disability assessment. Respond as quickly as possible. Delays in returning requested information add to the processing clock."
+          },
+          {
+            "step": 4,
+            "title": "Track the decision timeline",
+            "description": "Standard processing: 45 days. If a Social Security disability determination is still pending for your parent, processing can extend to 90 days. If you have not heard anything by day 45, call your local Iowa HHS office to ask for a status update."
+          },
+          {
+            "step": 5,
+            "title": "Understand what happens after approval",
+            "description": "Once approved, Iowa Medicaid sends an eligibility notice with the coverage start date and the managed care or fee-for-service plan your parent is enrolled in. For Medically Needy enrollees, coverage begins once the monthly spend-down amount is met and documented."
+          }
+        ],
+        "processingTime": "45 days for most applications; up to 90 days when a blindness or disability determination is pending.",
+        "waitlist": null,
+        "tip": "If your parent is in the hospital or transitioning to a nursing facility, tell the discharge planner or social worker immediately. They can help initiate the Medicaid application and may flag the case for faster processing.",
+        "urls": [
+          {
+            "label": "Iowa HHS Medicaid Eligibility and Application",
+            "url": "https://hhs.iowa.gov/medicaid/apply-medicaid/eligibility"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or benefit verification letter (shows current monthly amount)",
+        "Proof of Iowa residency: a utility bill, lease agreement, or state-issued document showing the current address",
+        "Government-issued photo ID: Iowa driver's license, state ID, or passport",
+        "Social Security card or number for your parent",
+        "Proof of citizenship or immigration status, if not already on file with Iowa HHS",
+        "Pension or retirement account income statements",
+        "Current balances for any checking or savings accounts (Iowa HHS will review resources as part of the SSI-like test; bring the most recent statements you have)",
+        "Investment documents: stocks, bonds, annuities, or trust agreements",
+        "Life insurance policy documents showing face value and any cash value",
+        "Property documents if your parent owns real estate beyond their primary home: deeds or tax statements",
+        "Vehicle title and registration if your parent owns a vehicle",
+        "Medical records, physician statements, or SSA disability determination letters if disability is the qualifying basis",
+        "Information about any other health insurance your parent carries",
+        "Legal documents if someone is applying on your parent's behalf: power of attorney or legal guardianship papers"
+      ],
+      "contacts": [
+        {
+          "label": "Iowa HHS Medicaid Member Services",
+          "phone": "(800) 338-8366",
+          "description": "Call to ask about ABD Medicaid eligibility, get help with the application, or check the status of a pending application.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Local Iowa HHS Office",
+          "phone": null,
+          "description": "Your parent's local HHS office handles in-person applications and document submission. Find your county office at hhs.iowa.gov/contact.",
+          "hours": "Varies by location"
+        },
+        {
+          "label": "Iowa 2-1-1",
+          "phone": "2-1-1",
+          "description": "General referral line that can direct you to local HHS offices and community resources. Does not handle Medicaid applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income is above the Medically Needy limit, do not stop there. The spend-down pathway lets them qualify once they accumulate enough qualifying medical expenses to bring countable income to the threshold. A local HHS worker can walk through how this is calculated.",
+        "A disability determination can add up to 45 extra days to processing (total up to 90 days). If your parent is already receiving Social Security Disability Insurance or Supplemental Security Income, that determination may already satisfy the disability requirement and speed things up.",
+        "ABD Medicaid is not the same as Iowa's standard Medicaid expansion (which covers adults up to 133% of the federal poverty level). If your parent is under 65 and not disabled, they may be on the wrong pathway. Ask specifically about ABD eligibility when you call.",
+        "Some home- and community-based waiver services attached to Iowa Medicaid have age restrictions (for example, one waiver requires the person to be under age 65). Being enrolled in ABD Medicaid does not automatically enroll your parent in every waiver. Ask separately about which long-term care or home-based services your parent may qualify for."
+      ],
+      "relatedPrograms": [
+        "Iowa Medicaid Home- and Community-Based Services (HCBS) Waivers",
+        "Medicare Savings Programs (help paying Medicare premiums and cost-sharing)",
+        "Iowa Extra Help (Low Income Subsidy) for prescription drug costs",
+        "Iowa PACE (Program of All-inclusive Care for the Elderly)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Two ways to qualify: Standard ABD vs. Medically Needy",
+          "description": "ABD Medicaid has two eligibility pathways. Which one applies to your parent depends on their income and resources.",
+          "tiers": [
+            {
+              "name": "Standard ABD Medicaid",
+              "description": "Your parent's countable income and resources fall within Iowa's SSI-like limits. Iowa HHS has not published the exact standard ABD income dollar figure in its public-facing guidelines; the local HHS office or the Member Services line can confirm the current amount. If your parent qualifies here, Medicaid coverage begins from the approval date.",
+              "bestFor": "Parents whose income and savings are modest and near SSI levels."
+            },
+            {
+              "name": "Medically Needy with Spend-Down",
+              "description": "Your parent's income exceeds the Medically Needy Income Level (MNIL) of $483 per month for a single person (effective April 1, 2026). Iowa HHS calculates a spend-down amount: the gap between your parent's income and the MNIL. Once your parent documents that amount in qualifying medical expenses within the budget period, Medicaid covers the rest. This requires tracking and submitting medical bills regularly.",
+              "bestFor": "Parents with higher Social Security or pension income who still have significant medical costs."
+            }
+          ]
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid actually pays for",
+          "body": "ABD Medicaid provides full Iowa Medicaid coverage: doctor and specialist visits, hospital care, prescription drugs, lab work, and for qualifying enrollees, long-term care services including nursing facility care and home- and community-based services. No cash benefit is issued. Medicaid pays covered costs directly to enrolled providers.\n\nIf your parent also has Medicare, ABD Medicaid often acts as secondary insurance, covering Medicare cost-sharing such as deductibles and copays. This coordination can dramatically reduce your parent's out-of-pocket costs. Ask the Iowa HHS worker specifically about how Medicaid and Medicare coordinate for your parent's situation."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent doesn't receive SSI. Can they still qualify for ABD Medicaid?",
+          "answer": "Yes. ABD Medicaid follows SSI-like rules but does not require your parent to be an active SSI recipient. If their income and resources are within SSI-like limits, or if they can qualify through the Medically Needy spend-down, they may be eligible regardless of whether they ever applied for or received SSI. Call (800) 338-8366 to have Iowa HHS run a screen."
+        },
+        {
+          "question": "Can my parent keep their house if they apply?",
+          "answer": "The primary home is commonly excluded as a countable resource in Iowa Medicaid programs, but the specific ABD rule on home exemptions was not confirmed in Iowa HHS's current published ABD source. You should verify this directly with your local Iowa HHS office before assuming an exemption applies. Do not delay applying while waiting for this answer; ask during the application intake."
+        },
+        {
+          "question": "My parent's income is above the limit. Is there still a way in?",
+          "answer": "Yes, through the Medically Needy spend-down. The Medically Needy Income Level for a single person is $483 per month (effective April 1, 2026). Iowa HHS calculates how much of your parent's income exceeds that level. Once your parent documents that amount in qualifying medical bills within the budget period, Medicaid activates for the rest of their costs. This is complicated to manage month to month; ask the HHS worker to walk through the calculation with you."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. A family member can submit the application and provide documents on behalf of an aging parent. If you have legal authority such as a power of attorney or court-ordered guardianship, bring those documents with the application. If you don't yet have legal authority but your parent consents, Iowa HHS will generally allow you to assist. Bring a written statement from your parent authorizing you to speak on their behalf if you apply in person or by phone."
+        },
+        {
+          "question": "How long will the application actually take?",
+          "answer": "Standard processing is 45 days. If your parent's disability status needs to be determined (meaning they don't yet have an SSA disability or blindness determination on file), processing can extend to 90 days. If you need coverage urgently because of a hospital discharge or nursing home placement, tell the HHS worker immediately. Some situations may allow retroactive coverage to the date of application."
+        },
+        {
+          "question": "Can my parent have ABD Medicaid and Medicare at the same time?",
+          "answer": "Yes, and having both is common for adults 65 and older. When your parent has Medicare, ABD Medicaid typically pays secondary: it can cover Medicare deductibles, copays, and premiums depending on which Medicare Savings Program level they qualify for. Ask Iowa HHS specifically whether your parent also qualifies for a Medicare Savings Program when you apply, since that is a separate enrollment that reduces Medicare costs further."
+        },
+        {
+          "question": "Will ABD Medicaid cover nursing home care?",
+          "answer": "ABD Medicaid can cover nursing facility care for eligible enrollees, but the coverage rules depend on your parent's specific category and level of care as assessed by Iowa HHS. Not every ABD enrollee automatically qualifies for nursing facility benefits. If nursing home placement is the reason you're applying, say so explicitly at the start of the application so the right assessment is completed. Call (800) 338-8366 to ask specifically about long-term care coverage under ABD."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a home-based waiver at the same time?",
+          "answer": "You can inquire about both at the same time, but they are separate determinations. ABD Medicaid eligibility does not automatically enroll your parent in home- and community-based services waivers. Some Iowa waivers have age restrictions or functional requirements that differ from ABD Medicaid's rules. Ask Iowa HHS which waiver programs, if any, your parent may separately qualify for once ABD Medicaid eligibility is established."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 338-8366",
+      "sourceUrl": "https://hhs.iowa.gov/medicaid/apply-medicaid/eligibility",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 483,
+          "to": 994,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/iowa/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        },
+        {
+          "field": "income_2",
+          "from": 483,
+          "to": 1491,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/iowa/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:34.044Z"
+        }
+      ]
+    },
+    {
+      "id": "ia-medicare-savings-programs-qmb-slmb-qi",
+      "name": "Iowa Medicare Savings Programs (QMB, SLMB, QI)",
+      "shortName": "Iowa Medicare Savings",
+      "tagline": "If your parent has Medicare and a modest income, Iowa may pay their monthly Medicare premiums and, in some cases, their deductibles and copays too.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Iowa HHS / Iowa Medicaid",
+            "type": "service-area"
+          },
+          {
+            "name": "Local DHS offices",
+            "type": "service-area"
+          },
+          {
+            "name": "SHIIP-SMP counseling support",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Medicare premiums, deductibles, and copays add up fast on a fixed income. Iowa's Medicare Savings Programs exist to cover those costs for older adults and people with disabilities who have Medicare but limited income and assets. Depending on which tier your parent qualifies for, the state pays their Medicare Part B premium ($185/month in 2026) and possibly much more.\n\nThere are three tiers. QMB (Qualified Medicare Beneficiary) is the most valuable: it pays Part A and Part B premiums, deductibles, coinsurance, and copayments. SLMB (Specified Low-Income Medicare Beneficiary) and QI (Qualifying Individual) each pay only the Part B premium, but that alone is worth up to $2,220/year. Which tier your parent lands in depends entirely on their monthly income, and the income windows are narrow, so it's worth checking even if you assume they won't qualify.\n\nAll three programs are administered by Iowa HHS through Iowa Medicaid. The resource limit (what your parent can have in savings and other countable assets) is $9,950 for a single person and $14,910 for a couple as of April 1, 2026. These programs are separate from full Medicaid coverage; they only help with Medicare costs. QI has one important catch: it depends on federal funding each year, so applying early in the calendar year matters.",
+      "savingsRange": "Up to $2,220/year for SLMB and QI (Part B premium only); higher for QMB, which also covers Medicare deductibles, coinsurance, and copays (total QMB value depends on your parent's actual Medicare utilization).",
+      "savingsSource": "The Part B premium of $185/month ($2,220/year) is the 2026 standard Medicare Part B premium published by CMS. QMB savings exceed this amount because they include Medicare cost-sharing, which varies by use; no single official figure captures total QMB value.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must have Medicare Part A and/or Part B",
+          "Single person: income at or below $1,796/month (QI upper limit, April 2026)",
+          "Couple: income at or below $2,455/month (QI upper limit, April 2026)",
+          "Assets at or below $9,950 (individual) or $14,910 (couple)",
+          "Iowa resident eligible under Iowa Medicaid rules"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Bank accounts and other countable liquid assets",
+            "Countable resources as defined under Iowa Medicaid rules for MSP eligibility"
+          ],
+          "exemptAssets": [
+            "Iowa's official Medicare Savings Program page does not publish a complete exempt-asset list; contact Iowa HHS or SHIIP at 1-800-351-4664 to confirm what is excluded in your parent's situation"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must have Medicare Part A and/or Part B",
+          "Must be a U.S. resident eligible under Iowa Medicaid administration rules",
+          "QI is federally funded and may close to new applicants if funding is exhausted for the calendar year; applying early in the year improves the odds"
+        ],
+        "povertyLevelReference": "QMB: at or below 100% FPL; SLMB: over 100% but below 120% FPL; QI: 120% up to 135% FPL (April 2026 figures)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to start is calling SHIIP at 1-800-351-4664, which provides free counseling and can walk your parent through the application; you can also apply online through Iowa HHS.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check the income numbers before you call",
+            "description": "Look at your parent's monthly Social Security award letter and any other income. For a single person, income must be at or below $1,796/month to qualify for at least one tier as of April 1, 2026. For a couple, the ceiling is $2,455/month. Also check savings: the asset limit is $9,950 for one person, $14,910 for a couple. If they're near or under these numbers, proceed."
+          },
+          {
+            "step": 2,
+            "title": "Call SHIIP or go online to start the application",
+            "description": "Call Iowa's SHIIP-SMP line at 1-800-351-4664 (TTY: 1-800-735-2942) or visit hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program to apply online. SHIIP counselors are free, unbiased, and can help identify the right tier. You can also email shiip@iid.iowa.gov."
+          },
+          {
+            "step": 3,
+            "title": "Gather and submit documents",
+            "description": "Iowa HHS will need proof of Medicare coverage, income, and assets. Have your parent's Medicare card, most recent Social Security award letter, and bank account information ready. If DHS needs more detail, they will send form 470-4846 (Medicare Savings Programs Additional Information Request); respond within 10 days or the application may be delayed or closed."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from DHS promptly",
+            "description": "If you receive form 470-4846 in the mail, fill it out and return it to your local DHS office by the deadline stated on the form. You can mail or fax it. Missing this deadline is the most common reason applications stall."
+          },
+          {
+            "step": 5,
+            "title": "Get your determination and confirm the benefit starts",
+            "description": "Once approved, Iowa Medicaid will notify CMS, which will stop deducting the Part B premium from your parent's Social Security check (or reimburse if it was already deducted). Confirm the premium deduction stopped after the first full month. If your parent qualifies for QMB, providers cannot legally bill them for Medicare cost-sharing; if a provider bills them anyway, contact Iowa Medicaid."
+          }
+        ],
+        "processingTime": "Iowa requires applicants to return any additional information requested within 10 days. Iowa HHS does not publish a single statewide final decision timeline on the MSP program page; ask at the time of application how long processing typically takes in your parent's county.",
+        "waitlist": "No waitlist for QMB or SLMB. QI is the exception: federal funding is limited and may be exhausted before year-end, effectively closing new QI enrollment. Apply early in the calendar year if your parent's income falls in the QI range ($1,596 to $1,796/month individual).",
+        "tip": "If your parent is near the border between two tiers, QMB is significantly more valuable than SLMB or QI because it covers deductibles and copays, not just the premium. It's worth getting an exact income figure before assuming they won't qualify for QMB.",
+        "urls": [
+          {
+            "label": "Iowa HHS Medicare Savings Program page",
+            "url": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card showing Part A and/or Part B coverage",
+        "Most recent Social Security award letter showing monthly benefit amount",
+        "Current balances for any checking or savings accounts (Iowa Medicaid will ask for the current balance; the program page does not specify a number of months of statements)",
+        "Proof of any other monthly income: pension statements, retirement account distributions, rental income records",
+        "Proof of Iowa residency: a utility bill, lease agreement, or other document showing your parent's Iowa address",
+        "Form 470-4846 (Medicare Savings Programs Additional Information Request) if mailed to you by DHS: complete and return within 10 days of receipt",
+        "Investment or asset account statements if your parent holds stocks, bonds, or CDs (Iowa Medicaid will assess whether these count toward the $9,950/$14,910 resource limit)",
+        "Life insurance policy documents if applicable (some policies have countable cash value)"
+      ],
+      "contacts": [
+        {
+          "label": "Iowa SHIIP-SMP (Medicare Savings Program counseling and application help)",
+          "phone": "1-800-351-4664",
+          "description": "Free counseling from trained Iowa Medicare counselors. They can screen eligibility, help complete the application, and explain which tier your parent qualifies for. This is the fastest starting point.",
+          "hours": "Contact SHIIP directly to confirm current hours; the line is staffed by Iowa Insurance Division counselors"
+        },
+        {
+          "label": "Iowa SHIIP email",
+          "phone": null,
+          "description": "Email shiip@iid.iowa.gov to ask questions or request help with the Medicare Savings Program application.",
+          "hours": null
+        },
+        {
+          "label": "Iowa SHIIP TTY line",
+          "phone": "1-800-735-2942",
+          "description": "TTY access for the SHIIP counseling line for applicants who are deaf or hard of hearing.",
+          "hours": null
+        },
+        {
+          "label": "Local Iowa DHS office",
+          "phone": null,
+          "description": "If DHS requests additional information or documents, you will correspond with your parent's local DHS office. Find the nearest office at hhs.iowa.gov or by calling SHIIP.",
+          "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 972-2017",
+          "description": "Number listed on hhs.iowa.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "QI funding is limited by federal law each year. If your parent's income falls between $1,596 and $1,796/month (individual) or $2,164 and $2,455/month (couple), apply as early in the calendar year as possible. Waiting until fall risks being shut out if funding runs out.",
+        "QMB protects your parent from being billed by Medicare providers for cost-sharing. If a doctor or hospital bills a QMB enrollee for a copay or deductible, that billing is prohibited under federal law. You can report improper billing to Iowa Medicaid or 1-800-MEDICARE.",
+        "If DHS mails form 470-4846 requesting additional information, you have 10 days to respond. Set a reminder immediately. Failure to respond in time is the most common reason applications are delayed or closed.",
+        "Being approved for a Medicare Savings Program may also automatically qualify your parent for the federal Extra Help program (Low Income Subsidy), which reduces Medicare Part D drug costs. Ask SHIIP about this when you call."
+      ],
+      "relatedPrograms": [
+        "Iowa Medicaid (full coverage for those who qualify beyond Medicare cost-sharing)",
+        "Extra Help / Low Income Subsidy (federal Part D drug cost assistance; QMB/SLMB/QI enrollment often triggers automatic eligibility)",
+        "Iowa PACE (Program of All-inclusive Care for the Elderly, for those needing nursing-home-level care)",
+        "Iowa Low Income Home Energy Assistance Program (LIHEAP, for utility cost help on a fixed income)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier does your parent qualify for?",
+          "description": "The three tiers have overlapping income ranges. Find your parent's monthly income in the table below to see which program applies and what it covers. All figures are as of April 1, 2026.",
+          "data": [
+            {
+              "tier": "QMB",
+              "individualIncome": "At or below $1,350/month",
+              "coupleIncome": "At or below $1,824/month",
+              "resourceLimit": "$9,950 individual / $14,910 couple",
+              "whatItPays": "Medicare Part A premium, Part B premium, deductibles, coinsurance, and copayments",
+              "fplBand": "At or below 100% FPL"
+            },
+            {
+              "tier": "SLMB",
+              "individualIncome": "$1,330 to $1,596/month",
+              "coupleIncome": "$1,804 to $2,164/month",
+              "resourceLimit": "$9,950 individual / $14,910 couple",
+              "whatItPays": "Medicare Part B premium only ($185/month in 2026)",
+              "fplBand": "Over 100% up to 120% FPL"
+            },
+            {
+              "tier": "QI",
+              "individualIncome": "$1,596 to $1,796/month",
+              "coupleIncome": "$2,164 to $2,455/month",
+              "resourceLimit": "$9,950 individual / $14,910 couple",
+              "whatItPays": "Medicare Part B premium only ($185/month in 2026); subject to annual federal funding availability",
+              "fplBand": "120% up to 135% FPL"
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "QMB is not just a premium program",
+          "body": "Many families hear 'Medicare Savings Program' and assume it only helps with the monthly premium. QMB goes further. It also covers Medicare deductibles, coinsurance, and copayments, which can easily exceed $1,000 in a year for someone with regular medical care. If your parent's income is at or below $1,350/month (individual), check QMB eligibility before assuming the savings are small."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,400/month. Does that put them in QMB, SLMB, or QI?",
+          "answer": "At $1,400/month for a single person, your parent is above the QMB ceiling ($1,350) but within the SLMB range ($1,330 to $1,596) as of April 1, 2026. SLMB pays the Medicare Part B premium ($185/month in 2026) but not deductibles or copays. If your parent's income is close to $1,350, it's worth having Iowa confirm the exact calculation, since some income types may be excluded from the count. Call SHIIP at 1-800-351-4664."
+        },
+        {
+          "question": "My parent has $12,000 in savings. Does that disqualify them?",
+          "answer": "For a single person, the asset limit is $9,950 as of April 1, 2026, so $12,000 in countable assets would put them over the limit. However, not all assets count. Iowa Medicaid applies exclusions, but the official MSP page does not publish the full exempt-asset list. Before assuming your parent is ineligible, call SHIIP at 1-800-351-4664 and ask which assets are excluded. The home and certain personal property may not count."
+        },
+        {
+          "question": "Can my parent be on a Medicare Savings Program and still have a Medicare Advantage plan?",
+          "answer": "Yes. Medicare Savings Programs work with both Original Medicare and Medicare Advantage. If your parent is in a Medicare Advantage plan, QMB still covers the Part B premium and, for QMB, applicable cost-sharing. How cost-sharing protection applies with Medicare Advantage can be nuanced; ask SHIIP at 1-800-351-4664 to confirm how it works for your parent's specific plan."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't manage the paperwork themselves?",
+          "answer": "Yes. An adult child or other authorized representative can apply on behalf of a parent. You may be asked to document your authority to act, such as a power of attorney. SHIIP counselors at 1-800-351-4664 can help you complete the application as a representative."
+        },
+        {
+          "question": "My parent qualifies for QI, but I've heard it can run out. What does that mean in practice?",
+          "answer": "QI is funded through annual federal appropriations. If Iowa's share of federal QI funding is exhausted before the end of the calendar year, new QI enrollments may be suspended until the next year's funding begins. This does not affect QMB or SLMB, which do not have this funding constraint. To reduce the risk, apply for QI as early in the calendar year as possible. Call SHIIP at 1-800-351-4664 to check current availability."
+        },
+        {
+          "question": "If my parent is approved for a Medicare Savings Program, does that also help with drug costs?",
+          "answer": "Potentially yes. Enrollment in QMB, SLMB, or QI often triggers automatic eligibility for the federal Extra Help program (also called the Low Income Subsidy), which reduces Medicare Part D prescription drug premiums and copays. Social Security handles Extra Help separately from Iowa Medicaid. Ask SHIIP at 1-800-351-4664 whether your parent will be automatically enrolled or needs to apply separately."
+        },
+        {
+          "question": "A doctor billed my QMB parent for a copay. Is that allowed?",
+          "answer": "No. Federal law prohibits Medicare providers from billing QMB enrollees for Medicare cost-sharing, including copays, deductibles, and coinsurance. If this happens, ask the provider to correct the billing and reference QMB status. If the provider refuses, you can report the problem to Iowa Medicaid or call 1-800-MEDICARE (1-800-633-4227)."
+        },
+        {
+          "question": "How often does my parent need to renew, and what happens if their income changes?",
+          "answer": "Iowa Medicaid conducts periodic eligibility reviews for Medicare Savings Program enrollees. If your parent's income or assets change significantly, they should report the change to Iowa Medicaid, since it may affect which tier they qualify for or whether they remain eligible. Contact Iowa HHS or SHIIP at 1-800-351-4664 if you're unsure whether a change needs to be reported."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "1-800-351-4664",
+      "sourceUrl": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003514664",
+            "18007352942"
+          ],
+          "to": "(800) 972-2017",
+          "source": "https://hhs.iowa.gov/medicaid/plans-programs/fee-service/medicare-savings-program",
+          "flaggedAt": "2026-10-06T12:20:34.044Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -2111,5 +2738,5 @@
     ],
     "resourcesVsBenefits": "Iowa's programs fall into two categories: income-qualified benefits and free resources. Benefits like SNAP, LIHEAP, and Medicaid waivers require your loved one to meet specific income limits (typically around $2,152/month for singles). Free resources like SHIIP Medicare counseling, Iowa Legal Aid, and the Long-Term Care Ombudsman are available to all Iowa seniors regardless of income, use these first for guidance, then apply for financial benefits based on their recommendations."
   },
-  "factcheckedAt": "2026-10-02T07:36:32.766Z"
+  "factcheckedAt": "2026-10-06T12:20:34.044Z"
 }

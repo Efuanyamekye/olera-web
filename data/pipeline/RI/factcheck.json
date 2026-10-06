@@ -1,12 +1,12 @@
 {
   "state": "RI",
   "stateName": "Rhode Island",
-  "checkedAt": "2026-10-04T00:53:58.349Z",
-  "total": 17,
+  "checkedAt": "2026-10-06T12:28:19.511Z",
+  "total": 20,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 11,
+  "programsWithFlags": 10,
   "totalFlags": 12,
   "highSeverityFlags": 4,
   "programs": [
@@ -27,18 +27,18 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 4000,
-        "assets_couple": null,
-        "phone": "8556974347",
+        "assets_couple": 8000,
+        "phone": "4015748474",
         "sources": {
           "age": "https://rules.sos.ri.gov/Regulations/part/210-50-00-6?reg_id=11892",
           "income": "https://rules.sos.ri.gov/Regulations/part/210-50-00-6?reg_id=11892",
           "assets": "https://rules.sos.ri.gov/Regulations/part/210-50-00-6?reg_id=11892",
-          "phone": "https://dhs.ri.gov/about-us/contact-us"
+          "phone": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply"
         },
-        "notes": "Current Rhode Island LTSS elder pathway uses age 65+; assets are $4,000 for an individual. A couple-specific countable asset limit for this senior pathway was not clearly retrievable from the authoritative sources surfaced, so it is null."
+        "notes": "Current senior pathway is for elders age 65+; Rhode Island's FY2027 budget would raise asset limits effective 2027, but 2026 rules remain $4,000 individual and $8,000 couple."
       },
       "flags": [],
-      "notes": "Current Rhode Island LTSS elder pathway uses age 65+; assets are $4,000 for an individual. A couple-specific countable asset limit for this senior pathway was not clearly retrievable from the authoritative sources surfaced, so it is null."
+      "notes": "Current senior pathway is for elders age 65+; Rhode Island's FY2027 budget would raise asset limits effective 2027, but 2026 rules remain $4,000 individual and $8,000 couple."
     },
     {
       "programId": "class-waiver",
@@ -56,19 +56,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": 4000,
-        "assets_couple": null,
+        "assets_couple": 6000,
         "phone": "4014624444",
         "sources": {
-          "age": null,
-          "income": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply",
-          "assets": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply",
+          "age": "https://rules.sos.ri.gov/Regulations/part/210-40-05-1?reg_id=11170",
+          "income": "null",
+          "assets": "https://www.rilegislature.gov/commissions/OARIC/commdocs/06-07-2024--Medicaid%20101%20Presentation.pdf",
           "phone": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply"
         },
-        "notes": "Could not verify a separate CLASS waiver age or monthly income standard from an authoritative current source; the available official DHS LTSS page confirms a $4,000 countable resource limit and The POINT phone number."
+        "notes": "CLASS appears to be part of Rhode Island Medicaid long-term services and supports/Community Medicaid for the senior pathway; the current official source found confirms age 65+ and the countable asset limits, but no authoritative current income limit specific to CLASS was retrievable from the gathered sources."
       },
       "flags": [
         {
@@ -81,7 +81,7 @@
           "verifiedValue": "4014624444"
         }
       ],
-      "notes": "Could not verify a separate CLASS waiver age or monthly income standard from an authoritative current source; the available official DHS LTSS page confirms a $4,000 countable resource limit and The POINT phone number."
+      "notes": "CLASS appears to be part of Rhode Island Medicaid long-term services and supports/Community Medicaid for the senior pathway; the current official source found confirms age 65+ and the countable asset limits, but no authoritative current income limit specific to CLASS was retrievable from the gathered sources."
     },
     {
       "programId": "pace-elderly-care",
@@ -95,7 +95,8 @@
         "phones": [
           "4014341400",
           "4016544176",
-          "211"
+          "211",
+          "4014906566"
         ],
         "hasVerifiableFacts": true
       },
@@ -108,25 +109,14 @@
         "phone": "4014906566",
         "sources": {
           "age": "https://eohhs.ri.gov/consumer/older-adults/healthcare-older-adults",
-          "income": "https://eohhs.ri.gov/consumer/older-adults",
-          "assets": "https://eohhs.ri.gov/consumer/older-adults",
+          "income": null,
+          "assets": null,
           "phone": "https://eohhs.ri.gov/consumer/older-adults"
         },
-        "notes": "PACE in Rhode Island is current and age 55+; authoritative sources found for age and contact number, but no official current countable asset limit was found in the retrieved sources."
+        "notes": "Rhode Island PACE is current and active; official RI sources confirm age 55+ and provide the main contact number, but I could not find an official current countable-asset limit or income limit for the senior pathway in retrievable sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "4014341400",
-            "4016544176",
-            "211"
-          ],
-          "verifiedValue": "4014906566"
-        }
-      ],
-      "notes": "PACE in Rhode Island is current and age 55+; authoritative sources found for age and contact number, but no official current countable asset limit was found in the retrieved sources."
+      "flags": [],
+      "notes": "Rhode Island PACE is current and active; official RI sources confirm age 55+ and provide the main contact number, but I could not find an official current countable-asset limit or income limit for the senior pathway in retrievable sources."
     },
     {
       "programId": "medicare-savings-programs",
@@ -139,7 +129,8 @@
         "assets_couple": 14910,
         "phones": [
           "4014620311",
-          "211"
+          "211",
+          "8556974347"
         ],
         "hasVerifiableFacts": true
       },
@@ -149,27 +140,17 @@
         "income_2": 2275,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "4014625300",
+        "phone": "18556974347",
         "sources": {
           "age": "https://eohhs.ri.gov/Consumer/ProgramsServices/MedicarePremiumPaymentProgram.aspx",
           "income": "https://eohhs.ri.gov/Consumer/ProgramsServices/MedicarePremiumPaymentProgram.aspx",
           "assets": "https://eohhs.ri.gov/Consumer/ProgramsServices/MedicarePremiumPaymentProgram.aspx",
-          "phone": "https://oha.ri.gov/what-we-do/access/health-insurance-counseling/benefits-enrollment-center"
+          "phone": "https://eohhs.ri.gov/Consumer/ProgramsServices/MedicarePremiumPaymentProgram.aspx"
         },
-        "notes": "Rhode Island’s Medicare Savings Program is labeled the Medicare Premium Payment Program; 2026 limits were posted by RI EOHHS. SLMB was folded into QMB effective Feb. 1, 2026."
+        "notes": "Rhode Island’s Medicare Savings Program is called the Medicare Premium Payment Program; 2026 state guidance shows QMB eligibility for people 65+ and adults with disabilities, with SLMB folded into QMB effective 2026-02-01."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "4014620311",
-            "211"
-          ],
-          "verifiedValue": "4014625300"
-        }
-      ],
-      "notes": "Rhode Island’s Medicare Savings Program is labeled the Medicare Premium Payment Program; 2026 limits were posted by RI EOHHS. SLMB was folded into QMB effective Feb. 1, 2026."
+      "flags": [],
+      "notes": "Rhode Island’s Medicare Savings Program is called the Medicare Premium Payment Program; 2026 state guidance shows QMB eligibility for people 65+ and adults with disabilities, with SLMB folded into QMB effective 2026-02-01."
     },
     {
       "programId": "snap-food-benefits",
@@ -189,8 +170,8 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 2610,
-        "income_2": 3526,
+        "income_1": 2461,
+        "income_2": 3337,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18556974347",
@@ -200,10 +181,25 @@
           "assets": null,
           "phone": "https://dhs.ri.gov/about-us/contact-us"
         },
-        "notes": "SNAP in Rhode Island has an older-adult pathway at age 60+; no countable asset limit was found in the current official materials reviewed, so assets are null."
+        "notes": "Rhode Island SNAP uses an older-adult pathway at age 60+; no authoritative countable asset limit was found in the retrieved official sources, and SNAP generally has no broad asset test in RI household guidance."
       },
-      "flags": [],
-      "notes": "SNAP in Rhode Island has an older-adult pathway at age 60+; no countable asset limit was found in the current official materials reviewed, so assets are null."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "medium",
+          "draftValue": 2608,
+          "verifiedValue": 2461,
+          "pctDiff": 5.6
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 3540,
+          "verifiedValue": 3337,
+          "pctDiff": 5.7
+        }
+      ],
+      "notes": "Rhode Island SNAP uses an older-adult pathway at age 60+; no authoritative countable asset limit was found in the retrieved official sources, and SNAP generally has no broad asset test in RI household guidance."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -227,14 +223,14 @@
         "income_2": 4604,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8007456575",
+        "phone": "4014626419",
         "sources": {
           "age": null,
           "income": "https://dhs.ri.gov/programs-and-services/energy-assistance-programs-heating/ffy-2026-low-income-guidelines",
           "assets": null,
-          "phone": "https://liheapch.acf.hhs.gov/profiles/RI.htm"
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "Rhode Island LIHEAP uses income limits only; no age or asset test was found in the current official guidance. Income values are monthly figures from FFY 2026 guidelines for the senior pathway."
+        "notes": "Rhode Island LIHEAP uses a 60% State Median Income test; no asset test was found in authoritative current sources. The LIHEAP heating assistance application period closed on April 15, 2026, but the FFY 2026 income guidelines remain published."
       },
       "flags": [
         {
@@ -245,10 +241,10 @@
             "4014371000",
             "211"
           ],
-          "verifiedValue": "8007456575"
+          "verifiedValue": "4014626419"
         }
       ],
-      "notes": "Rhode Island LIHEAP uses income limits only; no age or asset test was found in the current official guidance. Income values are monthly figures from FFY 2026 guidelines for the senior pathway."
+      "notes": "Rhode Island LIHEAP uses a 60% State Median Income test; no asset test was found in authoritative current sources. The LIHEAP heating assistance application period closed on April 15, 2026, but the FFY 2026 income guidelines remain published."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -273,12 +269,12 @@
         "assets_couple": null,
         "phone": "18556974347",
         "sources": {
-          "age": "https://dhs.ri.gov/programs-and-services/energy-assistance-programs-heating/weatherization-assistance-program-wap",
-          "income": "https://dhs.ri.gov/programs-and-services/energy-assistance-programs-heating/weatherization-assistance-program-wap",
-          "assets": null,
+          "age": "https://dhs.ri.gov/media/7941/download?language=en",
+          "income": "https://dhs.ri.gov/media/7941/download?language=en",
+          "assets": "https://dhs.ri.gov/media/7941/download?language=en",
           "phone": "https://dhs.ri.gov/media/7941/download?language=en"
         },
-        "notes": "Rhode Island WAP is administered through CAP agencies and is tied to LIHEAP eligibility; no separate age or asset test was found. Older adults are explicitly prioritized/accommodated, and the main DHS help line is 1-855-MY-RIDHS."
+        "notes": "No separate age, income, or asset test found for the senior pathway; WAP is tied to LIHEAP eligibility and prioritizes older adults. Official DHS contact line listed."
       },
       "flags": [
         {
@@ -291,7 +287,7 @@
           "verifiedValue": "18556974347"
         }
       ],
-      "notes": "Rhode Island WAP is administered through CAP agencies and is tied to LIHEAP eligibility; no separate age or asset test was found. Older adults are explicitly prioritized/accommodated, and the main DHS help line is 1-855-MY-RIDHS."
+      "notes": "No separate age, income, or asset test found for the senior pathway; WAP is tied to LIHEAP eligibility and prioritizes older adults. Official DHS contact line listed."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -321,12 +317,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/senior-health-insurance-program-ship/general-beneficiary-contact/1562196"
+          "phone": "https://oha.ri.gov/media/1631/download?language=en"
         },
-        "notes": "RI SHIP is a Medicare counseling program for seniors; no age, income, or asset test found. Official phone number found on CMS and Rhode Island sources."
+        "notes": "RI SHIP is a Medicare counseling program with no age, income, or asset test found for the senior pathway; official main line listed as 1-888-884-8721."
       },
       "flags": [],
-      "notes": "RI SHIP is a Medicare counseling program for seniors; no age, income, or asset test found. Official phone number found on CMS and Rhode Island sources."
+      "notes": "RI SHIP is a Medicare counseling program with no age, income, or asset test found for the senior pathway; official main line listed as 1-888-884-8721."
     },
     {
       "programId": "meals-on-wheels",
@@ -350,15 +346,15 @@
         "assets_couple": null,
         "phone": "4013516700",
         "sources": {
-          "age": "https://www.rimeals.org/get-meals/how-to-get-meals/",
+          "age": "https://vets.ri.gov/node/1151",
           "income": null,
           "assets": null,
-          "phone": "https://www.rimeals.org/"
+          "phone": "https://www.rimeals.org/contact/"
         },
-        "notes": "Current official site states the Home-Delivered Meal Program senior pathway is for Rhode Island residents aged 60 or older; no income or asset test was found on the program page."
+        "notes": "Current official Rhode Island state listing and agency contact page show the senior pathway at age 60+; no income or asset test found for this program."
       },
       "flags": [],
-      "notes": "Current official site states the Home-Delivered Meal Program senior pathway is for Rhode Island residents aged 60 or older; no income or asset test was found on the program page."
+      "notes": "Current official Rhode Island state listing and agency contact page show the senior pathway at age 60+; no income or asset test found for this program."
     },
     {
       "programId": "caregiver-respite-support",
@@ -371,7 +367,8 @@
         "assets_couple": null,
         "phones": [
           "4014217833",
-          "211"
+          "211",
+          "4014624444"
         ],
         "hasVerifiableFacts": true
       },
@@ -381,27 +378,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4014624444",
+        "phone": "4014217833",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://oha.ri.gov/resources/caregiver-supportsrespite"
+          "phone": "https://oha.ri.gov/media/2386/download"
         },
-        "notes": "CareBreaks/Lifespan Respite is the relevant Rhode Island senior-caregiver pathway; no age, income, or asset test was found in the retrievable official sources, and the main help number is The Point at 401-462-4444."
+        "notes": "Current authoritative eligibility test values for the senior caregiver/respite pathway could not be verified from the retrieved sources; the CareBreaks respite program contact number is listed by Rhode Island Office of Healthy Aging materials."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "4014217833",
-            "211"
-          ],
-          "verifiedValue": "4014624444"
-        }
-      ],
-      "notes": "CareBreaks/Lifespan Respite is the relevant Rhode Island senior-caregiver pathway; no age, income, or asset test was found in the retrievable official sources, and the main help number is The Point at 401-462-4444."
+      "flags": [],
+      "notes": "Current authoritative eligibility test values for the senior caregiver/respite pathway could not be verified from the retrieved sources; the CareBreaks respite program contact number is listed by Rhode Island Office of Healthy Aging materials."
     },
     {
       "programId": "scsep-employment-program",
@@ -420,18 +407,18 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1582,
+        "income_2": 2145,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4014628794",
+        "phone": "8778725627",
         "sources": {
           "age": "https://www.dol.gov/agencies/eta/seniors",
-          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "income": "https://dlt.ri.gov/media/3686/download?language=en",
           "assets": null,
-          "phone": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611"
+          "phone": "https://www.dol.gov/agencies/eta/seniors"
         },
-        "notes": "SCSEP is an older-worker employment program; Rhode Island materials identify participants as 55+ and low-income, with income capped at 125% of federal poverty level. No separate Rhode Island household-specific monthly income table or asset test was found in authoritative sources."
+        "notes": "SCSEP is current in Rhode Island; official sources show a 55+ minimum age and income at no more than 125% of federal poverty guidelines. No asset test was found in authoritative sources."
       },
       "flags": [
         {
@@ -441,10 +428,10 @@
             "4014628000",
             "211"
           ],
-          "verifiedValue": "4014628794"
+          "verifiedValue": "8778725627"
         }
       ],
-      "notes": "SCSEP is an older-worker employment program; Rhode Island materials identify participants as 55+ and low-income, with income capped at 125% of federal poverty level. No separate Rhode Island household-specific monthly income table or asset test was found in authoritative sources."
+      "notes": "SCSEP is current in Rhode Island; official sources show a 55+ minimum age and income at no more than 125% of federal poverty guidelines. No asset test was found in authoritative sources."
     },
     {
       "programId": "legal-aid-seniors",
@@ -477,7 +464,7 @@
           "assets": null,
           "phone": "https://ribar.com/?pg=PublicServiceProgramsHome"
         },
-        "notes": "Current RI Bar Association elderly legal referral program appears active; senior pathway uses age 60+ and no retrievable official income or asset test was found for the referral/consultation service."
+        "notes": "Program appears current under the Rhode Island Bar Association's Legal Information & Referral Service for the Elderly; no official income or asset test found for this senior referral program."
       },
       "flags": [
         {
@@ -493,7 +480,7 @@
           "verifiedValue": "4015215040"
         }
       ],
-      "notes": "Current RI Bar Association elderly legal referral program appears active; senior pathway uses age 60+ and no retrievable official income or asset test was found for the referral/consultation service."
+      "notes": "Program appears current under the Rhode Island Bar Association's Legal Information & Referral Service for the Elderly; no official income or asset test found for this senior referral program."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -519,15 +506,15 @@
         "assets_couple": null,
         "phone": "4017853340",
         "sources": {
-          "age": "https://dhs.ri.gov/sites/g/files/xkgbur426/files/Regulations/218-RICR-40-00-1GoverningTheLongTermCareOmbudspersonProgram.pdf",
-          "income": "https://dhs.ri.gov/sites/g/files/xkgbur426/files/Regulations/218-RICR-40-00-1GoverningTheLongTermCareOmbudspersonProgram.pdf",
-          "assets": "https://dhs.ri.gov/sites/g/files/xkgbur426/files/Regulations/218-RICR-40-00-1GoverningTheLongTermCareOmbudspersonProgram.pdf",
-          "phone": "https://alliancebltc.org/ombudsman-program/overview/"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://oha.ri.gov/resources/fraud-and-abuse/ombudsman-program"
         },
-        "notes": "No age, income, or asset eligibility test found for the Rhode Island Long-Term Care Ombudsman Program; program is a complaint/help resource for long-term care residents. Phone number verified from current program page."
+        "notes": "No age, income, or asset eligibility test found for Rhode Island's Long-Term Care Ombudsman Program; program serves long-term care residents and caregivers. Main ombudsman phone is 401-785-3340."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility test found for the Rhode Island Long-Term Care Ombudsman Program; program is a complaint/help resource for long-term care residents. Phone number verified from current program page."
+      "notes": "No age, income, or asset eligibility test found for Rhode Island's Long-Term Care Ombudsman Program; program serves long-term care residents and caregivers. Main ombudsman phone is 401-785-3340."
     },
     {
       "programId": "pharmaceutical-assistance-elderly",
@@ -554,15 +541,15 @@
         "assets_couple": null,
         "phone": "4014623000",
         "sources": {
-          "age": "https://dhs.ri.gov/sites/g/files/xkgbur426/files/Regulations/218-RICR-40-00-2GoverningThePharmaceuticalAssistanceToTheElderlyProgram.pdf",
+          "age": "https://oha.ri.gov/media/2966/download?language=en",
           "income": "https://oha.ri.gov/media/2966/download?language=en",
-          "assets": null,
+          "assets": "https://oha.ri.gov/media/2966/download?language=en",
           "phone": "https://oha.ri.gov/media/881/download?language=en"
         },
-        "notes": "RIPAE appears current in 2026; official materials show a senior pathway for age 65+ and a separate 55-64 disability pathway. No authoritative asset-test source was found in the retrieved materials."
+        "notes": "Official OHA RIPAE materials show the senior pathway as age 65+; some materials also describe a 55-64 disabled pathway, but the senior threshold is 65. No current official income/assets thresholds were retrievable from the available sources."
       },
       "flags": [],
-      "notes": "RIPAE appears current in 2026; official materials show a senior pathway for age 65+ and a separate 55-64 disability pathway. No authoritative asset-test source was found in the retrieved materials."
+      "notes": "Official OHA RIPAE materials show the senior pathway as age 65+; some materials also describe a 55-64 disabled pathway, but the senior threshold is 65. No current official income/assets thresholds were retrievable from the available sources."
     },
     {
       "programId": "at-home-cost-share-program",
@@ -581,8 +568,8 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2583,
-        "income_2": 3497,
+        "income_1": 1041,
+        "income_2": 1409,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "4014624444",
@@ -592,25 +579,25 @@
           "assets": "https://oha.ri.gov/resources/home-care/home-cost-share",
           "phone": "https://oha.ri.gov/resources/home-care/home-cost-share"
         },
-        "notes": "Current official OHA source says the senior pathway is age 65+; there is no asset limit. Income is capped at 250% of FPL and the source does not publish household-size-specific monthly figures, so household 1 and 2 were derived from the official annual cap using the required annual-to-monthly conversion."
+        "notes": "Current official OHA page says the senior pathway is 65+ and has no asset limit; income is capped at 250% FPL annually, converted to monthly and rounded (2026 page)."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1569,
-          "verifiedValue": 2583,
-          "pctDiff": 39.3
+          "verifiedValue": 1041,
+          "pctDiff": 33.7
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 2129,
-          "verifiedValue": 3497,
-          "pctDiff": 39.1
+          "verifiedValue": 1409,
+          "pctDiff": 33.8
         }
       ],
-      "notes": "Current official OHA source says the senior pathway is age 65+; there is no asset limit. Income is capped at 250% of FPL and the source does not publish household-size-specific monthly figures, so household 1 and 2 were derived from the official annual cap using the required annual-to-monthly conversion."
+      "notes": "Current official OHA page says the senior pathway is 65+ and has no asset limit; income is capped at 250% FPL annually, converted to monthly and rounded (2026 page)."
     },
     {
       "programId": "hcc-senior-companion-program",
@@ -635,12 +622,12 @@
         "assets_couple": null,
         "phone": "4014620569",
         "sources": {
-          "age": "https://oha.ri.gov/media/2891/download?language=en",
-          "income": "https://oha.ri.gov/media/2891/download?language=en",
-          "assets": "https://oha.ri.gov/media/2891/download?language=en",
-          "phone": "https://oha.ri.gov/media/2891/download?language=en"
+          "age": "https://oha.ri.gov/media/2766/download?language=en",
+          "income": "https://oha.ri.gov/media/2766/download?language=en",
+          "assets": "https://oha.ri.gov/media/2766/download?language=en",
+          "phone": "https://myoptions.ri.gov/sites/g/files/xkgbur531/files/2025-02/HCBS%20factsheet%20brochure.pdf"
         },
-        "notes": "Current Rhode Island Office of Healthy Aging materials describe the AmeriCorps Senior Companion Program as serving volunteers age 55+ and list 401-462-0569; no authoritative age-specific income/assets thresholds for the senior pathway were found in the retrieved source."
+        "notes": "Current Rhode Island Office of Healthy Aging materials list Senior Companion Program volunteers as age 55+ and provide the main contact number 401-462-0569; no separate income or asset test for the senior pathway was found in the retrieved sources."
       },
       "flags": [
         {
@@ -650,7 +637,7 @@
           "verifiedValue": 55
         }
       ],
-      "notes": "Current Rhode Island Office of Healthy Aging materials describe the AmeriCorps Senior Companion Program as serving volunteers age 55+ and list 401-462-0569; no authoritative age-specific income/assets thresholds for the senior pathway were found in the retrieved source."
+      "notes": "Current Rhode Island Office of Healthy Aging materials list Senior Companion Program volunteers as age 55+ and provide the main contact number 401-462-0569; no separate income or asset test for the senior pathway was found in the retrieved sources."
     },
     {
       "programId": "point-ltss-entry",
@@ -669,29 +656,137 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2266,
-        "income_2": null,
+        "income_1": 24980,
+        "income_2": 33830,
         "assets_individual": 4000,
         "assets_couple": null,
         "phone": "4014624444",
         "sources": {
-          "age": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/ssi-enhanced-assisted-living",
-          "income": "https://oha.ri.gov/media/2766/download?language=en",
+          "age": "https://oha.ri.gov/media/2886/download?language=en",
+          "income": "https://oha.ri.gov/media/1121/download?language=en",
           "assets": "https://dhs.ri.gov/programs-and-services/long-term-services-and-supports/eligibility-how-apply",
-          "phone": "https://oha.ri.gov/media/2766/download?language=en"
+          "phone": "https://oha.ri.gov/get-help"
         },
-        "notes": "The POINT is Rhode Island’s Aging & Disability Resource Center and is used to connect seniors to multiple programs; the retrieved official sources do not show a separate POINT-specific income or asset test, so the values reflect the senior pathway program information surfaced by official RI sources. No authoritative source found for a 2-person income limit or couple asset limit tied directly to The POINT."
+        "notes": "The POINT is an ADRC/referral hub, not a single benefits program; the requested values reflect the senior pathway for RI OHA/Medicaid LTSS-related services accessible through The POINT. No separate couple asset cap was found in the retrieved official sources."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 2982,
-          "verifiedValue": 2266,
-          "pctDiff": 24
+          "verifiedValue": 24980,
+          "pctDiff": 88.1
         }
       ],
-      "notes": "The POINT is Rhode Island’s Aging & Disability Resource Center and is used to connect seniors to multiple programs; the retrieved official sources do not show a separate POINT-specific income or asset test, so the values reflect the senior pathway program information surfaced by official RI sources. No authoritative source found for a 2-person income limit or couple asset limit tied directly to The POINT."
+      "notes": "The POINT is an ADRC/referral hub, not a single benefits program; the requested values reflect the senior pathway for RI OHA/Medicaid LTSS-related services accessible through The POINT. No separate couple asset cap was found in the retrieved official sources."
+    },
+    {
+      "programId": "ri-medicaid-ead-elders-adults-disabilities",
+      "programName": "Medicaid for Elders and Adults with Disabilities (EAD)",
+      "facts": {
+        "age": 65,
+        "income_1": 1330,
+        "income_2": 1803,
+        "assets_individual": 4000,
+        "assets_couple": 6000,
+        "phones": [
+          "8556974347",
+          "18558404774"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 4000,
+        "assets_couple": 6000,
+        "phone": "8556974347",
+        "sources": {
+          "age": "https://rules.sos.ri.gov/regulations/part/210-40-00-1",
+          "income": "https://rules.sos.ri.gov/Regulations/part/210-40-05-1?reg_id=11024",
+          "assets": "https://rules.sos.ri.gov/Regulations/part/210-40-05-1?reg_id=11024",
+          "phone": "https://dhs.ri.gov/media/11996/download?language=en"
+        },
+        "notes": "EAD is a Rhode Island Medicaid pathway for elders age 65+ and adults with disabilities. The official sources found clearly state the age and resource limits, and the program uses 100% FPL income eligibility but the retrievable sources did not provide a current dollar monthly figure for household sizes 1 and 2 in the materials captured."
+      },
+      "flags": [],
+      "notes": "EAD is a Rhode Island Medicaid pathway for elders age 65+ and adults with disabilities. The official sources found clearly state the age and resource limits, and the program uses 100% FPL income eligibility but the retrievable sources did not provide a current dollar monthly figure for household sizes 1 and 2 in the materials captured."
+    },
+    {
+      "programId": "ri-ssi-state-supplement",
+      "programName": "Rhode Island State SSI Supplement",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18556974347",
+          "18007455555",
+          "18007721213"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18556974347",
+        "sources": {
+          "age": "https://www.ssa.gov/pubs/EN-05-11164.pdf",
+          "income": "https://rules.sos.ri.gov/Regulations/part/218-20-00-5?reg_id=10697",
+          "assets": "https://www.ssa.gov/pubs/EN-05-11164.pdf",
+          "phone": "https://dhs.ri.gov/programs-and-services/ssi-state-supplemental-payment"
+        },
+        "notes": "Rhode Island SSP is administered with SSI; no separate senior-specific income limit was found in the official sources. State-only eligibility can depend on countable income, but an exact current threshold was not clearly stated in the retrievable official source."
+      },
+      "flags": [],
+      "notes": "Rhode Island SSP is administered with SSI; no separate senior-specific income limit was found in the official sources. State-only eligibility can depend on countable income, but an exact current threshold was not clearly stated in the retrievable official source."
+    },
+    {
+      "programId": "ri-property-tax-relief-seniors",
+      "programName": "Rhode Island Property Tax Relief for Seniors",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "4015748829"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "4014215900",
+        "sources": {
+          "age": "https://www.providenceri.gov/tax-assessor/exemptions/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.providenceri.gov/tax-assessor/exemptions/"
+        },
+        "notes": "Current senior property tax relief program located is Providence’s Elderly Exemption; no statewide RI senior property tax relief program with a uniform age threshold was confirmed from the retrieved sources."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "4015748829"
+          ],
+          "verifiedValue": "4014215900"
+        }
+      ],
+      "notes": "Current senior property tax relief program located is Providence’s Elderly Exemption; no statewide RI senior property tax relief program with a uniform age threshold was confirmed from the retrieved sources."
     }
   ]
 }

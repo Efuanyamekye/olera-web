@@ -1,13 +1,13 @@
 {
   "state": "ND",
   "stateName": "North Dakota",
-  "checkedAt": "2026-10-02T07:41:13.679Z",
-  "total": 4,
+  "checkedAt": "2026-10-06T12:24:49.595Z",
+  "total": 10,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 1,
-  "totalFlags": 1,
+  "programsWithFlags": 3,
+  "totalFlags": 4,
   "highSeverityFlags": 0,
   "programs": [
     {
@@ -32,15 +32,15 @@
         "assets_couple": 6000,
         "phone": "8666146005",
         "sources": {
-          "age": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program",
-          "income": "https://www.hhs.nd.gov/sites/default/files/documents/EA/application-for-assistance-guidebook-exclusion.pdf",
-          "assets": "https://www.nd.gov/dhs/policymanuals/40029/PDF_of_Manual/SC%20400-29%20BCAP%20ML%203735%207.1.23.pdf",
-          "phone": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program"
+          "age": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program-bcap",
+          "income": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program-bcap",
+          "assets": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "phone": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program-bcap"
         },
-        "notes": "Official ND HHS page shows the senior pathway threshold as age 65+; program also serves disabled/blind adults. No clear current countable-asset cap for BCAP was found in the retrieved official sources beyond the cited equity/property limits, so the reported asset values reflect the manual's stated unit equity limits."
+        "notes": "Current BCAP appears active; official North Dakota sources indicate age 65+ for the senior pathway and Medicaid-linked asset limits of $3,000 individual / $6,000 couple. No separate senior-specific income limit found on the BCAP page; BCAP directs applicants to Medicaid eligibility."
       },
       "flags": [],
-      "notes": "Official ND HHS page shows the senior pathway threshold as age 65+; program also serves disabled/blind adults. No clear current countable-asset cap for BCAP was found in the retrieved official sources beyond the cited equity/property limits, so the reported asset values reflect the manual's stated unit equity limits."
+      "notes": "Current BCAP appears active; official North Dakota sources indicate age 65+ for the senior pathway and Medicaid-linked asset limits of $3,000 individual / $6,000 couple. No separate senior-specific income limit found on the BCAP page; BCAP directs applicants to Medicaid eligibility."
     },
     {
       "programId": "aging-in-community-project",
@@ -52,6 +52,7 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "7012315948",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -67,21 +68,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.ndsu.edu/agriculture/extension/impact-stories/ndsu-extensions-aging-community-project-brings-care-rural-communities"
+          "phone": "https://www.ag.ndsu.edu/news/newsreleases/2025/october/ndsu-extension2019s-aging-in-community-project-expands-to-southern-north-dakota-counties"
         },
-        "notes": "No authoritative senior-specific age threshold was found; program is described as serving older adults with no explicit minimum age test. Main program contact found for Jane Strommen."
+        "notes": "No authoritative senior-specific age or means-test eligibility found; available sources describe the project as serving older adults in rural communities. Main contact number found for program staff is 701-231-5948."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "7012315948"
-        }
-      ],
-      "notes": "No authoritative senior-specific age threshold was found; program is described as serving older adults with no explicit minimum age test. Main program contact found for Jane Strommen."
+      "flags": [],
+      "notes": "No authoritative senior-specific age or means-test eligibility found; available sources describe the project as serving older adults in rural communities. Main contact number found for program staff is 701-231-5948."
     },
     {
       "programId": "assistive-senior-safety-program",
@@ -108,14 +100,14 @@
         "phone": "8008954728",
         "sources": {
           "age": "https://ndassistive.org/senior-safety-program/",
-          "income": null,
+          "income": "https://ndassistive.org/wp-content/uploads/2026/09/2026-Senior-Safety-Application-Standard-Print-09.2026.pdf",
           "assets": null,
-          "phone": "https://ndassistive.org/senior-safety-program/"
+          "phone": "https://ndassistive.org/contact/"
         },
-        "notes": "Current ND Assistive Senior Safety Program appears active; source states eligibility for North Dakota residents aged 60+ and provides the main contact number. No official income or asset test was found in the retrieved source."
+        "notes": "Current program name appears to be Senior Safety Program under ND Assistive. Income-related materials mention a poverty-level screening, but no fixed income limit or asset test was found; assets do not appear to apply."
       },
       "flags": [],
-      "notes": "Current ND Assistive Senior Safety Program appears active; source states eligibility for North Dakota residents aged 60+ and provides the main contact number. No official income or asset test was found in the retrieved source."
+      "notes": "Current program name appears to be Senior Safety Program under ND Assistive. Income-related materials mention a poverty-level screening, but no fixed income limit or asset test was found; assets do not appear to apply."
     },
     {
       "programId": "family-caregiver-support",
@@ -132,7 +124,7 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
@@ -140,14 +132,249 @@
         "phone": "18554625465",
         "sources": {
           "age": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
-          "income": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
-          "assets": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
+          "income": null,
+          "assets": null,
           "phone": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program"
         },
-        "notes": "Current North Dakota FCSP appears active and has no income or asset test listed; eligibility is based on caregiver/care-recipient criteria instead."
+        "notes": "Current official North Dakota FCSP page lists caregiver pathway eligibility by age/care-recipient relationship, with no income or asset test found on the official source."
       },
       "flags": [],
-      "notes": "Current North Dakota FCSP appears active and has no income or asset test listed; eligibility is based on caregiver/care-recipient criteria instead."
+      "notes": "Current official North Dakota FCSP page lists caregiver pathway eligibility by age/care-recipient relationship, with no income or asset test found on the official source."
+    },
+    {
+      "programId": "nd-abd-medicaid",
+      "programName": "Aged, Blind and Disabled (ABD) Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": 1197,
+        "income_2": 1623,
+        "assets_individual": 3000,
+        "assets_couple": 6000,
+        "phones": [
+          "8666146005",
+          "7013281000",
+          "711"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1130,
+        "income_2": 1533,
+        "assets_individual": 3000,
+        "assets_couple": 6000,
+        "phone": "8666146005",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "income": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "assets": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "phone": "https://www.hhs.nd.gov/healthcare/medicaid/apply"
+        },
+        "notes": "North Dakota’s aged/blind/disabled Medicaid coverage is current and effective April 1, 2026; official eligibility page lists the age threshold, income limits, and countable asset limits."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "medium",
+          "draftValue": 1197,
+          "verifiedValue": 1130,
+          "pctDiff": 5.6
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 1623,
+          "verifiedValue": 1533,
+          "pctDiff": 5.5
+        }
+      ],
+      "notes": "North Dakota’s aged/blind/disabled Medicaid coverage is current and effective April 1, 2026; official eligibility page lists the age threshold, income limits, and countable asset limits."
+    },
+    {
+      "programId": "nd-hcbs-waiver",
+      "programName": "Home and Community-Based Services (HCBS) Waiver",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18554625465",
+          "7013288930",
+          "18002331737"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8554625465",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/sites/www/files/documents/Adult%20and%20Aging/1915c-hcbs-waiver-2026.pdf",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.hhs.nd.gov/adults-and-aging/homecare"
+        },
+        "notes": "Current ND HCBS waiver is the 2026 1915(c) waiver; senior-specific age threshold is 65. No income or asset limits were found in the retrieved official sources."
+      },
+      "flags": [],
+      "notes": "Current ND HCBS waiver is the 2026 1915(c) waiver; senior-specific age threshold is 65. No income or asset limits were found in the retrieved official sources."
+    },
+    {
+      "programId": "nd-medicare-savings-programs",
+      "programName": "Medicare Savings Programs",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phones": [
+          "18666146005",
+          "7013281000"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1796,
+        "income_2": 2434,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8666146005",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/healthcare/medicaid/eligibility",
+          "income": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualifying-individuals-qis/",
+          "assets": "https://www.nd.gov/dhs/policymanuals/51005/PDF_of_Manual/Non-ACA%20Medicaid%20Effective%20April%201,%202026.pdf",
+          "phone": "https://www.nd.gov/dhs/policymanuals/51005/Archived%20Documents/2026/26.1/510_05_60_20.htm"
+        },
+        "notes": "North Dakota Medicare Savings Programs are current in 2026 and use federal resource limits for QMB/SLMB/QI eligibility; age shown is the senior pathway Medicare/Medicaid eligibility context, not a separate MSP age minimum."
+      },
+      "flags": [],
+      "notes": "North Dakota Medicare Savings Programs are current in 2026 and use federal resource limits for QMB/SLMB/QI eligibility; age shown is the senior pathway Medicare/Medicaid eligibility context, not a separate MSP age minimum."
+    },
+    {
+      "programId": "nd-snap-food-benefits",
+      "programName": "SNAP (Supplemental Nutrition Assistance Program)",
+      "facts": {
+        "age": null,
+        "income_1": 1729,
+        "income_2": 2345,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "7012326219"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1729,
+        "income_2": 2345,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8666146005",
+        "sources": {
+          "age": null,
+          "income": "https://www.hhs.nd.gov/applyforhelp/snap",
+          "assets": null,
+          "phone": "https://www.hhs.nd.gov/contact"
+        },
+        "notes": "SNAP in North Dakota has income limits but no age-based eligibility for the senior-caregiver pathway; asset limits were not found in the retrieved official source."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7012326219"
+          ],
+          "verifiedValue": "8666146005"
+        }
+      ],
+      "notes": "SNAP in North Dakota has income limits but no age-based eligibility for the senior-caregiver pathway; asset limits were not found in the retrieved official source."
+    },
+    {
+      "programId": "nd-liheap-energy-assistance",
+      "programName": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "facts": {
+        "age": null,
+        "income_1": 3446,
+        "income_2": 4507,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18008232417",
+          "18666146005"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 3446,
+        "income_2": 4507,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18008232417",
+        "sources": {
+          "age": null,
+          "income": "https://www.hhs.nd.gov/applyforhelp/liheap",
+          "assets": null,
+          "phone": "https://www.hhs.nd.gov/applyforhelp/liheap"
+        },
+        "notes": "Current North Dakota LIHEAP uses a 60% state median income test; monthly limits shown on the state page for the 2026-2027 heating season. No asset test found in the retrieved official sources. The listed help line for application assistance is Community Options at 1-800-823-2417."
+      },
+      "flags": [],
+      "notes": "Current North Dakota LIHEAP uses a 60% state median income test; monthly limits shown on the state page for the 2026-2027 heating season. No asset test found in the retrieved official sources. The listed help line for application assistance is Community Options at 1-800-823-2417."
+    },
+    {
+      "programId": "nd-senior-dining-home-delivered-meals",
+      "programName": "Senior Dining Services (Home-Delivered Meals)",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "211",
+          "7012556922",
+          "7013284601"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8554625465",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/sites/www/files/documents/Adult%20and%20Aging/adult-aging-brochure.pdf",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.hhs.nd.gov/contact"
+        },
+        "notes": "Official North Dakota Adult & Aging Services nutrition services program: age 60+ and spouses regardless of age; no income or asset test found in current state materials."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211",
+            "7012556922",
+            "7013284601"
+          ],
+          "verifiedValue": "8554625465"
+        }
+      ],
+      "notes": "Official North Dakota Adult & Aging Services nutrition services program: age 60+ and spouses regardless of age; no income or asset test found in current state materials."
     }
   ]
 }

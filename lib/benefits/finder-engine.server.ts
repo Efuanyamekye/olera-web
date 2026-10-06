@@ -26,14 +26,14 @@ import { US_STATES } from "@/lib/us-states";
 import { ageMeetsMin } from "@/lib/benefits/age";
 import { pickCallContact, stripParen } from "@/lib/benefits/call-script";
 import { findLocalAAA } from "@/lib/benefits/local-aaa";
-import { zipToCounty } from "@/lib/benefits/zip-lookup";
+import { countyForZip } from "@/lib/benefits/zip-county.server";
 import { programCategory } from "@/lib/benefits/program-category";
 import {
   loadSbfEligibility,
   rankProgramsForFamily,
   incomeLimitFromTable,
   draftMinAge,
-  medicaidGatedName,
+  requiresMedicaid,
   isWaiverPath,
   isMedicaidDoor,
 } from "@/lib/benefits/eligibility.server";
@@ -64,7 +64,7 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
   health: ["healthcare"],
 };
 
-const PAYS_FOR_CARE = /aid (and|&) attendance|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
+const PAYS_FOR_CARE = /aid (and|&) attendance|home help|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -208,7 +208,7 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
     else income = "unknown";
   }
 
-  const gated = medicaidGatedName(p.name);
+  const gated = requiresMedicaid(p.name, p.structuredEligibility?.summary);
   const hasMedicaid = a.medicaid === "alreadyHas";
   const also = otherRequirement(p);
   const withAlso = (text: string) => (also ? `${text} ${also}` : text);
@@ -298,8 +298,53 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     dailyHelp,
     savings,
     disability: null,
-    household: a.household === "1" ? "alone" : a.household ? "couple" : null,
+    household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
   };
+}
+
+const DEMENTIA_ONLY = /alzheimer|dementia|memory care|project c\.?a\.?r\.?e/i;
+const LIVE_IN_CAREGIVER = /live-in (adult |family )?caregiver|caregiver (who )?lives with/i;
+const SERVICE_AREA = /\bpace\b(?!\s*\(pharmac)|all-inclusive care/i;
+const LIVES_IN_AREA = /(live|lives|living|reside|resides) (in|within) (a|an|the|its|their)?\s*([a-z]+ )?(pace )?service area/i;
+
+/**
+ * Why a program can't be "likely" from what the family told us, or null.
+ *  - It counts the whole home's income and they live with family, or we
+ *    don't know who they live with and it holds no income limit to judge
+ *    (SNAP read likely for a parent in her daughter's household; Ohio SNAP
+ *    holds only an age rule).
+ *  - It serves only some areas (PACE) and its own text doesn't name their
+ *    county (San Antonio has no PACE; Texas's draft names only El Paso).
+ *  - It needs a caregiver living with them and they live alone (Florida HCE).
+ *  - It's for dementia and they didn't say memory loss (Project C.A.R.E.).
+ */
+function likelyCap(p: WaiverProgram, a: FinderAnswers, county: string | null, engine: string | null, hasConv: boolean): string | null {
+  const summary = p.structuredEligibility?.summary || [];
+  const text = [p.name, ...summary, ...((p.geographicScope as { localEntities?: { name?: string }[] } | undefined)?.localEntities || []).map((e) => e.name || "")].join(" ");
+  const rules = rulesOf(p as Parameters<typeof rulesOf>[0]);
+  // Only the conversation asks for the person's own income; the form asks a
+  // household of two or more for the whole household's, which a whole-home
+  // program can judge, so the form keeps its own call.
+  if (hasConv && rules.countsHousehold && (a.household === "3" || engine === "check")) {
+    return "It counts the income of everyone in the home, so it depends on the whole household.";
+  }
+  if (SERVICE_AREA.test(p.name) || summary.some((x) => LIVES_IN_AREA.test(x))) {
+    const named = county && new RegExp(`\\b${county.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+county$/i, "")}\\b`, "i").test(text);
+    if (!named) return `It's only offered in some areas. Ask whether it serves ${county ? `${county.replace(/\s+county$/i, "")} County` : "where they live"}.`;
+  }
+  if (a.household === "1" && summary.some((x) => LIVE_IN_CAREGIVER.test(x))) {
+    return "It needs a caregiver who lives with them.";
+  }
+  if (DEMENTIA_ONLY.test(p.name) && !a.needs.includes("memory")) {
+    return "It's for families caring for someone with Alzheimer's or dementia.";
+  }
+  return null;
+}
+
+/** A program the person must already have Medicaid for (Michigan's Home
+ *  Help, state-plan personal care). A waiver is itself a way into Medicaid. */
+function needsMedicaidFirst(p: WaiverProgram): boolean {
+  return !isWaiverPath(p.name) && requiresMedicaid(p.name, p.structuredEligibility?.summary);
 }
 
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
@@ -364,15 +409,15 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? stateCode;
   const helping = isHelpingSomeone(a);
 
+  // The county routes the family to their own agency and decides whether a
+  // service-area program (PACE) can be "likely". Callers that skip the
+  // lookup (the conversation did until 6 Oct 2026) would otherwise get the
+  // state's first agency alphabetically.
+  const zip5 = a.zip.length === 5 ? a.zip : null;
+  const county = await countyForZip(zip5, a.county);
   const [sbfRows, aaa] = await Promise.all([
     loadSbfEligibility(db, stateCode),
-    // The county routes the family to their own agency. Callers that skip
-    // the lookup (the conversation did until 6 Oct 2026) would otherwise get
-    // the state's first agency alphabetically.
-    (async () => {
-      const zip = a.zip.length === 5 ? a.zip : null;
-      return findLocalAAA(db, stateCode, zip, a.county || (zip ? await zipToCounty(zip) : null));
-    })(),
+    findLocalAAA(db, stateCode, zip5, county),
   ]);
 
   // The state's canonical programs plus the federal ones it doesn't hold
@@ -426,6 +471,14 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
         fitsButAssess = true;
       }
     }
+    // Rules a program holds that our answers can't confirm keep it at
+    // "worth checking", with the reason (answer key, 6 Oct 2026).
+    const cap = likelyCap(item, a, county, c?.e.status ?? null, !!conv);
+    if (cap && tier === "likely") {
+      tier = "check";
+      reason = cap;
+      fitsButAssess = false;
+    }
     let score = verdict.boost - idx * 0.01;
     if (wanted.has(category)) score += 15;
     if (a.needs.includes("memory") && /alzheimer|dementia|memory|respite|adult day/i.test(item.name)) score += 10;
@@ -444,6 +497,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       hours: contact?.hours || null,
       docs: (item.documentsNeeded || []).slice(0, 4),
       url: `/benefits/${stateSlug}/${item.id}`,
+      needsMedicaid: a.medicaid !== "alreadyHas" && needsMedicaidFirst(item),
     };
     return { program, category, score, raw: item, fitsButAssess };
   });

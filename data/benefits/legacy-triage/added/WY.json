@@ -1,0 +1,37 @@
+[
+  {
+    "state": "WY",
+    "id": "wy-aged-blind-disabled-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "WY",
+    "id": "wy-community-choice-waiver",
+    "name": "Community Choice Waiver (CCW)",
+    "legacyId": "community-choice-waiver-ccw",
+    "programType": "benefit"
+  },
+  {
+    "state": "WY",
+    "id": "wy-medicare-savings-programs",
+    "name": "Medicare Savings Programs",
+    "legacyId": "medicare-savings-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "WY",
+    "id": "wy-snap-food-benefits",
+    "name": "Supplemental Nutrition Assistance Program (SNAP)",
+    "legacyId": "supplemental-nutrition-assistance-program-snap",
+    "programType": "benefit"
+  },
+  {
+    "state": "WY",
+    "id": "wy-home-delivered-meals",
+    "name": "Home-Delivered Meals",
+    "legacyId": "home-delivered-meals",
+    "programType": "benefit"
+  }
+]

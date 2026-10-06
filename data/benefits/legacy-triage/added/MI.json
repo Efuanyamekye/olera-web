@@ -1,0 +1,86 @@
+[
+  {
+    "state": "MI",
+    "id": "mi-medicaid-aged-disabled",
+    "name": "Medicaid for Aged and Disabled",
+    "legacyId": "medicaid-for-aged-and-disabled",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-medicare-savings-program",
+    "name": "Medicare Savings Program",
+    "legacyId": "medicare-savings-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-food-assistance-program-snap",
+    "name": "Food Assistance Program",
+    "legacyId": "food-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-pace-all-inclusive-care",
+    "name": "Michigan PACE",
+    "legacyId": "michigan-pace",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-state-emergency-relief",
+    "name": "State Emergency Relief",
+    "legacyId": "state-emergency-relief",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-family-caregiver-support-program",
+    "name": "Family Caregiver Support Program",
+    "legacyId": "family-caregiver-support-program",
+    "programType": "resource"
+  },
+  {
+    "state": "MI",
+    "id": "mi-property-tax-credit-seniors",
+    "name": "Property Tax Credit for Seniors",
+    "legacyId": "property-tax-credit-for-seniors",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-home-delivered-meals",
+    "name": "Home-Delivered Meals",
+    "legacyId": "home-delivered-meals",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-state-ssi-supplement",
+    "name": "State SSI Supplement",
+    "legacyId": "state-ssi-supplement",
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-home-help-program",
+    "name": "Home Help Program",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-home-heating-credit",
+    "name": "Michigan Home Heating Credit",
+    "legacyId": null,
+    "programType": "benefit"
+  },
+  {
+    "state": "MI",
+    "id": "mi-meap-energy-assistance",
+    "name": "Michigan Energy Assistance Program (MEAP)",
+    "legacyId": null,
+    "programType": "benefit"
+  }
+]

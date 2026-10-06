@@ -1,0 +1,44 @@
+[
+  {
+    "state": "ND",
+    "id": "nd-abd-medicaid",
+    "name": "Aged, Blind and Disabled (ABD) Medicaid",
+    "legacyId": "aged-blind-and-disabled-abd-medicaid",
+    "programType": "benefit"
+  },
+  {
+    "state": "ND",
+    "id": "nd-hcbs-waiver",
+    "name": "Home and Community-Based Services (HCBS) Waiver",
+    "legacyId": "home-and-community-based-services-hcbs-waiver",
+    "programType": "benefit"
+  },
+  {
+    "state": "ND",
+    "id": "nd-medicare-savings-programs",
+    "name": "Medicare Savings Programs",
+    "legacyId": "medicare-savings-programs",
+    "programType": "benefit"
+  },
+  {
+    "state": "ND",
+    "id": "nd-snap-food-benefits",
+    "name": "SNAP (Supplemental Nutrition Assistance Program)",
+    "legacyId": "snap-supplemental-nutrition-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "ND",
+    "id": "nd-liheap-energy-assistance",
+    "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+    "legacyId": "liheap-low-income-home-energy-assistance-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "ND",
+    "id": "nd-senior-dining-home-delivered-meals",
+    "name": "Senior Dining Services (Home-Delivered Meals)",
+    "legacyId": "senior-dining-services-home-delivered-meals",
+    "programType": "benefit"
+  }
+]

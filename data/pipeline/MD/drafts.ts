@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:13.898Z
+ * Last updated: 2026-10-06T12:32:14.473Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -543,7 +543,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-14",
-      "lastVerifiedDate": "2026-09-14",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -558,6 +558,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8002433425",
+          "source": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
+          "reason": "page also lists ours ((410) 767-1100)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -685,6 +694,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 492-5231",
           "description": "Questions about Medicaid eligibility for PACE",
           "hours": "Mon-Fri 8am-6pm EST"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 767-6500",
+          "description": "Number listed on health.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -748,18 +763,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8002433425",
             "8004925231"
           ],
-          "to": "4107671739",
+          "to": "(410) 767-6500",
           "source": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -922,6 +939,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-243-3425",
           "description": "Free Medicare counseling and MSP guidance",
           "hours": "Mon-Fri 8:30am-5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 486-3101",
+          "description": "Number listed on mdsp.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1004,6 +1027,20 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:38:57.033Z",
           "appliedAt": "2026-10-02",
           "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "4107676860",
+            "18006383403",
+            "18002433425"
+          ],
+          "to": "(410) 486-3101",
+          "source": "https://mdsp.maryland.gov/about-us/offices-departments/office-superintendent",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
       "reviewQueue": [
@@ -1011,19 +1048,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "source": "https://health.maryland.gov/mmcp/Medicaid%20Manual/Appendix%20schedules%202026%20Eff%201_1_2026%20updates.docx.pdf",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "source": "https://health.maryland.gov/mmcp/Medicaid%20Manual/Appendix%20schedules%202026%20Eff%201_1_2026%20updates.docx.pdf",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     },
@@ -1261,40 +1298,31 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-14",
       "reviewQueue": [
         {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dhs.maryland.gov/maryland-offers-support-as-trump-administrations-new-snap-work-requirements-begin-to-impact-customers-this-march/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        },
+        {
           "field": "income_1",
           "from": 2152,
-          "to": 1696,
-          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "to": 1615,
+          "source": "https://dhs.maryland.gov/documents/Supplemental%20Nutrition%20Assistance%20Program%20(SNAP)/October-2026-Income-Guidelines-revised-8_2026.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         },
         {
           "field": "income_2",
           "from": 2909,
-          "to": 2292,
-          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "to": 2184,
+          "source": "https://dhs.maryland.gov/documents/Supplemental%20Nutrition%20Assistance%20Program%20(SNAP)/October-2026-Income-Guidelines-revised-8_2026.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
-        {
-          "field": "assets_individual",
-          "from": 3001,
-          "to": 4500,
-          "source": "https://aging.maryland.gov/media/116",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 3001,
-          "to": 4500,
-          "source": "https://aging.maryland.gov/media/116",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     },
@@ -1951,6 +1979,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Find your local Area Agency on Aging for county-specific providers",
           "hours": "Visit aging.maryland.gov"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(301) 475-4200",
+          "description": "Number listed on stmaryscountymd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2012,18 +2046,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/pages/nutrition.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4105580923",
             "4102224257"
           ],
-          "to": "3014754200",
+          "to": "(301) 475-4200",
           "source": "https://www.stmaryscountymd.gov/aging/homedeliveredmeals/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2179,22 +2215,19 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://aging.maryland.gov/programs-and-services/caregivers",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "4107671100",
-            "2407773000",
-            "211"
-          ],
-          "to": "18446275465",
+          "proposed": "8002433425",
           "source": "https://aging.maryland.gov/programs-and-services/caregivers",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "reason": "page also lists ours ((410) 767-1100)",
+          "dismissedAt": "2026-10-06"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "scsep-employment",
@@ -2511,6 +2544,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(301) 475-4200 ext. 1064",
           "description": "Local Area Agency on Aging for St. Mary's County",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 243-3425",
+          "description": "Number listed on aging.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2555,20 +2594,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008964213",
             "8006771116",
             "4103965605",
             "30147542001064"
           ],
-          "to": "8446275465",
-          "source": "https://aging.maryland.gov/Pages/senior-legal-assistance.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "to": "(800) 243-3425",
+          "source": "https://aging.maryland.gov/programs-and-services/legal-assistance",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2856,11 +2897,746 @@ export const drafts: PipelineStateDrafts = {
             "8665020560",
             "4107671100"
           ],
-          "to": "18665023560",
+          "to": "18665024325",
           "source": "https://aging.maryland.gov/programs-and-services/senior-call-check",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        }
+      ]
+    },
+    {
+      "id": "md-medicaid-abd-regular",
+      "name": "Maryland Medical Assistance - Regular Medicaid/ABD",
+      "shortName": "Maryland Medicaid ABD",
+      "tagline": "If your parent is 65 or older and has very low income and savings, Maryland Medicaid can cover their doctor visits, prescriptions, and potentially nursing home or home-based care with little or no cost to them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Bureau of Long Term Care (Baltimore City and Anne Arundel, Baltimore, and Prince George's counties)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Department of Social Services (all other Maryland counties)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Maryland Medical Assistance for Aged, Blind, and Disabled (ABD) individuals is the state's full Medicaid coverage for adults 65 and older who have very low income and few assets. If your parent qualifies, the program pays for medically necessary health care: doctor visits, hospital care, prescriptions, and more. If they also need nursing home care or home-based long-term services, this same program can cover those too, once they meet the medical-necessity criteria.\n\nThe income and asset limits are strict. A single person must have income below $350/month and countable assets below $2,500. A married couple has a combined income limit of $392/month and an asset limit of $3,000. These numbers reflect Maryland's ABD Medicaid thresholds as published by the state. If your parent's income is above these limits, they may still qualify through a \"spend-down\" pathway, which works like a deductible: they pay down medical expenses until their remaining income falls within the limit, then Medicaid covers the rest.\n\nThis is not a simple program to navigate. Eligibility depends on age or disability status, income, assets, and sometimes a clinical assessment of care needs. Applications are handled by different offices depending on where your parent lives and whether they need long-term care. The sections below walk you through eligibility rules, what to gather, and exactly where to apply.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Maryland Medical Assistance pays providers directly for covered services. There is no fixed dollar benefit amount because coverage value depends on the individual's medical needs.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or blind or disabled at any age)",
+          "Income below $350/month for one person",
+          "Countable assets below $2,500 for one person",
+          "Maryland resident and U.S. citizen or qualified non-citizen",
+          "May still qualify above income limit via spend-down"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 350
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 392
+          }
+        ],
+        "assetLimits": {
+          "individual": 2500,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks and bonds",
+            "Investment accounts",
+            "Additional real property beyond the primary home"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For long-term care coverage under this program, your parent must meet Nursing Facility Level of Care: a clinical assessment that determines whether they need daily help with activities like bathing, dressing, eating, or medication management. This assessment is done by the state or its designee and is separate from the financial eligibility review.",
+        "otherRequirements": [
+          "Must be a Maryland resident",
+          "Must be a U.S. citizen or a qualified non-citizen who meets immigration requirements",
+          "Must fit the technical category: age 65+, blind, or disabled",
+          "People above the basic income limit may qualify through the medically needy spend-down pathway"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through Maryland's myDHR portal, in person at your local Department of Social Services, or by mail; the state must decide within 30 days of receiving a complete application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check which office handles your parent's application",
+            "description": "If your parent lives in Baltimore City or Anne Arundel, Baltimore, or Prince George's County AND needs long-term care, applications go to the Bureau of Long Term Care. If they live anywhere else in Maryland, or if they are applying for basic ABD coverage (not long-term care), contact your local Department of Social Services. Find your local DSS office at dhr.maryland.gov."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "Collect the items listed in the Documents section below. Having everything ready before you start reduces delays. The most common reason applications are held up is missing paperwork."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application",
+            "description": "You have three options: apply online at mymdthink.maryland.gov (the myDHR/myMDThink portal), apply in person at your local DSS office, or mail a paper application to the appropriate county office or the Bureau of Long Term Care. If your parent is in a hospital or rehabilitation facility, ask the discharge planner to help initiate the application before discharge."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests for additional information",
+            "description": "The agency may contact you for missing documents or to schedule a clinical assessment if long-term care is involved. Respond promptly; delays in returning information extend your processing time."
+          },
+          {
+            "step": 5,
+            "title": "Receive a decision",
+            "description": "Maryland must decide a complete Medicaid application within 30 days of filing with the Department or its designee, or within 10 days if filed with the local health department. If approved, coverage can be retroactive to the date of application or earlier in some circumstances."
+          }
+        ],
+        "processingTime": "30 days from the date a complete application is filed with the Department or its designee; 10 days if filed with the local health department.",
+        "waitlist": null,
+        "tip": "If your parent is being discharged from a hospital or nursing facility, tell the social worker or discharge planner immediately. They can start the Medicaid application while your parent is still in the facility, which protects coverage and prevents gaps.",
+        "urls": [
+          {
+            "label": "Apply online via myMDThink (myDHR portal)",
+            "url": "https://mymdthink.maryland.gov"
+          },
+          {
+            "label": "Find your local Department of Social Services",
+            "url": "https://dhr.maryland.gov/office-of-home-energy-programs/find-your-local-office/"
+          },
+          {
+            "label": "Maryland Medicaid general eligibility information",
+            "url": "https://health.maryland.gov/mmcp/eligibility/Pages/generalrequirements.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (showing current monthly benefit amount)",
+        "Proof of Maryland residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of U.S. citizenship or qualified immigration status (U.S. birth certificate, U.S. passport, or immigration documents)",
+        "Proof of age (birth certificate or passport)",
+        "Medicare card if your parent has Medicare (Parts A and/or B)",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current balances for any checking, savings, or certificate of deposit accounts",
+        "Investment account statements (stocks, bonds, annuities, trust documents)",
+        "Life insurance policies with face values listed",
+        "Vehicle titles if your parent owns a vehicle",
+        "Deed or property tax statement for any real property other than their primary home",
+        "Any long-term care or nursing facility admission records if applying for LTSS coverage",
+        "Legal documents if someone else is applying on your parent's behalf (power of attorney, legal guardianship order)"
+      ],
+      "contacts": [
+        {
+          "label": "Maryland Department of Human Services - Local DSS Offices",
+          "phone": "(800) 332-6347",
+          "description": "The main entry point to apply for Medicaid ABD coverage. Can connect you to your county's Department of Social Services office to start an application.",
+          "hours": "Mon-Fri, business hours (hours vary by county)"
+        },
+        {
+          "label": "Bureau of Long Term Care (Baltimore City, Anne Arundel, Baltimore, Prince George's Counties)",
+          "phone": "(410) 767-7406",
+          "description": "Handles long-term care Medicaid applications for residents of Baltimore City and Anne Arundel, Baltimore, and Prince George's counties. Call here if your parent lives in one of those jurisdictions and needs nursing home or home-based long-term care coverage.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Maryland Medicaid Information",
+          "phone": "(800) 492-5231",
+          "description": "Maryland Medicaid general information line. Can answer questions about coverage and direct you to the right application office, but does not process applications directly.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 767-6500",
+          "description": "Number listed on health.maryland.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income is above $350/month (single) or $392/month (couple), do not assume they are ineligible. The medically needy spend-down pathway may still qualify them. Ask the caseworker specifically about spend-down eligibility when you call.",
+        "The complete list of exempt assets (what does NOT count against the $2,500 limit) is not fully published in a single public document. Before deciding your parent has too many assets to qualify, call the office and ask what is exempt. The primary home is generally not counted while the applicant lives there, but confirm specifics with the agency.",
+        "If your parent needs both basic medical coverage and long-term care services, the application routing depends on their county. Sending the application to the wrong office can delay processing. Confirm the correct office before you mail or submit anything.",
+        "You can apply on behalf of your parent if you have power of attorney or legal guardianship. Bring those legal documents with the application."
+      ],
+      "relatedPrograms": [
+        "Maryland Medicaid Waiver Programs (Community First Choice, Community Personal Assistance Services)",
+        "Medicare Savings Programs (help paying Medicare premiums for those who have Medicare)",
+        "Maryland PACE (Program of All-inclusive Care for the Elderly)",
+        "Maryland Extra Help / Low Income Subsidy (prescription drug cost assistance for Medicare enrollees)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Over the income limit? Spend-down may still get your parent covered.",
+          "body": "If your parent's monthly income exceeds $350 (single) or $392 (couple), Maryland's medically needy pathway lets them qualify by applying out-of-pocket medical expenses toward a spend-down amount, similar to meeting a deductible. Once their countable income minus those expenses falls within the limit, Medicaid covers the rest. Ask the caseworker about spend-down eligibility when you first call."
+        },
+        {
+          "type": "prose",
+          "title": "What does this program actually pay for?",
+          "body": "Maryland Medical Assistance for ABD individuals covers medically necessary services: doctor visits, hospital care, lab work, prescription drugs, mental health services, and preventive care. If your parent also qualifies medically for long-term care, the program can cover nursing facility stays or home and community-based services. Because this is an insurance-style program rather than a cash benefit, there is no single dollar amount to quote; the value depends entirely on your parent's medical needs. For families navigating nursing home costs, the coverage is significant: Maryland nursing facility costs routinely exceed $10,000/month, and Medicaid covers the full cost for eligible individuals beyond any required personal contribution from their income."
+        },
+        {
+          "type": "prose",
+          "title": "Long-term care Medicaid: an additional layer of requirements",
+          "body": "If your parent needs nursing home care or home-based long-term services, qualifying for ABD Medicaid financially is only part of the process. They must also meet Nursing Facility Level of Care: a clinical determination that they need daily assistance with activities like bathing, dressing, eating, transferring, or managing medications. The state or its contracted assessor conducts this review. Applications for long-term care coverage are routed through different offices depending on county, so confirm the right intake point before you submit."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that disqualify them because of the $2,500 asset limit?",
+          "answer": "The primary home is generally not counted as a resource while your parent lives there or intends to return there. The $2,500 asset limit applies to countable assets like bank accounts, investments, and additional property. That said, the complete exempt-asset list is not published in a single public document, so call the local DSS or the Bureau of Long Term Care and ask what is exempt before concluding your parent doesn't qualify."
+        },
+        {
+          "question": "My parent's Social Security check is more than $350/month. Can they still qualify?",
+          "answer": "Possibly, through the medically needy spend-down pathway. If their income exceeds the limit, they may still qualify by counting out-of-pocket medical expenses against the difference. For example, if their income is $600/month and the limit is $350/month, they would need to document $250/month in medical expenses to reach eligibility. Ask the caseworker specifically about spend-down when you call (800) 332-6347."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent, or do they have to apply themselves?",
+          "answer": "Yes. If you have legal authority to act for your parent, such as a durable power of attorney or court-ordered guardianship, you can apply on their behalf. Bring the legal documents with the application. You can apply online at mymdthink.maryland.gov, in person at the local DSS office, or by mail."
+        },
+        {
+          "question": "My parent is in the hospital right now. Should I wait until they are discharged to apply?",
+          "answer": "No. Apply now or as soon as possible. Hospital discharge planners and social workers can often help initiate the Medicaid application while your parent is still admitted. Acting before discharge protects against coverage gaps and can make retroactive coverage more likely. Tell the hospital social worker you need help starting a Medicaid application immediately."
+        },
+        {
+          "question": "How long does the application actually take?",
+          "answer": "Maryland is required by law to decide a complete Medicaid application within 30 days of the filing date, or within 10 days if filed with the local health department. The most common source of delay is missing documentation. Submit everything listed in the Documents section at once to avoid back-and-forth that extends the timeline."
+        },
+        {
+          "question": "Can my parent apply for Maryland Medicaid and Medicare Savings Programs at the same time?",
+          "answer": "Yes, and it is worth doing both. If your parent has Medicare, a Medicare Savings Program can pay some or all of their Medicare premiums and cost-sharing, which reduces their monthly expenses and may also help them reach the Medicaid spend-down threshold. Mention to the caseworker that your parent has Medicare; they can screen for both programs in the same process."
+        },
+        {
+          "question": "My parent needs nursing home care. Do they have to be broke to qualify?",
+          "answer": "For long-term care Medicaid, the financial limits are strict: countable assets below $2,500 for a single person. However, the primary home, a vehicle, personal belongings, and certain other assets are typically exempt. Additionally, your parent will likely be required to contribute most of their monthly income toward the cost of care, keeping only a small personal needs allowance. The exact rules depend on their situation. Call the Bureau of Long Term Care at (410) 767-7406 if they live in Baltimore City or Anne Arundel, Baltimore, or Prince George's County; otherwise contact your local DSS."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their health needs change?",
+          "answer": "Medicaid eligibility is reviewed periodically. If your parent's income, assets, or living situation changes, you are required to report that to the caseworker. If their care needs increase, such as needing nursing facility placement after being on home-based services, the program can be updated to cover the new level of care, but they will need to meet the clinical assessment for that level. Contact your local DSS or the Bureau of Long Term Care to report changes or request a reassessment."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 332-6347",
+      "sourceUrl": "https://health.maryland.gov/mmcp/eligibility/Pages/generalrequirements.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8003326347",
+            "4107677406",
+            "8004925231"
+          ],
+          "to": "(410) 767-6500",
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "md-medical-assistance-medically-needy",
+      "name": "Maryland Medical Assistance - Medically Needy Pathway",
+      "shortName": "Medically Needy Medicaid",
+      "tagline": "If your parent has too much income for regular Medicaid but is drowning in medical bills, Maryland's Medically Needy pathway may still get them covered after those bills are counted.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Maryland Health Connection",
+            "type": "service-area"
+          },
+          {
+            "name": "Local health departments",
+            "type": "service-area"
+          },
+          {
+            "name": "Local departments of social services",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent earns more than the standard Medicaid income limit but spends heavily on doctors, prescriptions, or care, they may still qualify for Maryland Medicaid through the Medically Needy pathway. This route exists specifically for people whose income is above what regular Medicaid allows but whose out-of-pocket medical costs bring their net financial picture low enough to qualify. The program covers the full Medicaid benefit package, including doctor visits, hospital care, prescriptions, and, depending on the coverage group, long-term care services.\n\nThe pathway works through a \"spenddown\" rule (sometimes called a consideration period). Maryland measures your parent's income over a 6-month window. If their medical expenses during that window are high enough to reduce their countable income below the medically needy standard, Medicaid coverage kicks in for that period. The 6-month income standard for a single person is $2,100; for a two-person household it is $2,350. Your parent's documented medical bills are what close the gap.\n\nThis is not a simple yes-or-no income cutoff, and the calculation takes some work to understand. The only way to know for sure whether your parent qualifies is to apply. The sections below explain who is eligible, what documents to gather, and exactly how to start.",
+      "savingsRange": "",
+      "savingsSource": "Free service: Maryland Medical Assistance covers Medicaid health services. No specific cash benefit amount is published for this pathway.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Maryland resident",
+          "Fits a medically needy coverage group (aged, blind, disabled, or certain family categories)",
+          "Income and assets within Maryland's medically needy standards, or above them but reducible through medical expense spenddown",
+          "6-month spenddown income standard: $2,100 for a single person, $2,350 for two people",
+          "Must apply through Maryland Medicaid channels"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 350
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 392
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 434
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 475
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Countable resources and assets as defined under Maryland Medicaid rules"
+          ],
+          "exemptAssets": [
+            "Primary home and one vehicle are commonly exempt under Medicaid rules, but exact exemptions must be confirmed during the application review; Maryland's official eligibility page does not publish the full exempt-asset list"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must fit a medically needy coverage group: aged, blind, disabled, child, or caretaker-relative",
+          "Must be a Maryland resident",
+          "If income is above the monthly medically needy standard, must meet the spenddown rule by showing medical expenses that reduce income below the 6-month consideration-period standard",
+          "Eligibility also depends on age, family size, and disability status depending on the coverage group"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at Maryland Health Connection or by calling 1-855-642-8572; the state says coverage can start right away if you are eligible, though exact processing time for the medically needy pathway is not published.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "You will need proof of identity, Maryland residency, Social Security number, income, assets, and any medical bills you plan to use toward spenddown. Having these ready before you start the application prevents delays. See the full document checklist on this page."
+          },
+          {
+            "step": 2,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: go to marylandhealthconnection.gov or marylandbenefits.gov. By phone: call 1-855-642-8572. In person: visit your local department of social services or local health department. You can also request a paper application (form 9701) and mail it to your local department of social services."
+          },
+          {
+            "step": 3,
+            "title": "Submit all medical bills if your parent earns above the medically needy limit",
+            "description": "If your parent's income is above $350/month (single person), the caseworker will calculate whether their out-of-pocket medical expenses during a 6-month consideration period bring their countable income below $2,100 for that period. Submit every medical bill, prescription receipt, and care invoice you have. Missing bills mean a missed spenddown credit."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any requests for additional information",
+            "description": "The local department of social services or Maryland Health Connection may contact you for additional documents. Delays in responding extend the processing time. Keep a copy of everything you submit."
+          },
+          {
+            "step": 5,
+            "title": "Confirm coverage start date and coverage group",
+            "description": "Once approved, confirm which Medicaid coverage group your parent was placed in (for example, aged/disabled medically needy), because the coverage group affects what services are available, including long-term care eligibility. If your parent is in a nursing facility or seeking home-based services, ask the caseworker specifically about those benefits."
+          }
+        ],
+        "processingTime": "The official Maryland page says coverage can start right away if you are eligible. A specific processing-time range for the medically needy pathway is not published; ask about timeline when you submit.",
+        "waitlist": null,
+        "tip": "If your parent is already in a hospital or nursing facility, tell the admissions or social work team. Discharge planners and social workers can often initiate the Medicaid application on-site and gather documents faster than starting from scratch at home.",
+        "urls": [
+          {
+            "label": "Apply at Maryland Health Connection",
+            "url": "https://www.marylandhealthconnection.gov"
+          },
+          {
+            "label": "Apply at Maryland Benefits",
+            "url": "https://www.marylandbenefits.gov"
+          },
+          {
+            "label": "Maryland Medicaid income limits (official schedule)",
+            "url": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of identity (state-issued ID, driver's license, or passport)",
+        "Social Security card or number for your parent",
+        "Proof of Maryland residency (utility bill, lease, or government-issued document showing Maryland address)",
+        "Proof of income (Social Security award letter, pension statement, or other current income documentation)",
+        "Proof of age or disability if applying under the aged, blind, or disabled medically needy category (birth certificate, Medicare card if they have one, or disability determination letter)",
+        "Proof of assets and resources (current bank account balances, investment account statements, property documents; the caseworker will specify what periods or statements are needed based on the resource test for your parent's coverage group)",
+        "All out-of-pocket medical bills, prescription receipts, and care invoices you intend to use toward spenddown during the 6-month consideration period",
+        "Information about any current health insurance coverage your parent has",
+        "Names, dates of birth, and Social Security numbers for all household members"
+      ],
+      "contacts": [
+        {
+          "label": "Maryland Health Connection (Medicaid Applications)",
+          "phone": "1-855-642-8572",
+          "description": "Apply for Medicaid, ask about eligibility, and get help with the application process. This is the primary state application line.",
+          "hours": "Hours not specified on official source; call during standard business hours"
+        },
+        {
+          "label": "Local Department of Social Services",
+          "phone": null,
+          "description": "Apply in person or submit a paper application (form 9701). Find your local office through the Maryland Department of Human Services directory at dhs.maryland.gov.",
+          "hours": "Varies by county office"
+        },
+        {
+          "label": "Local Health Department",
+          "phone": null,
+          "description": "An additional in-person application site. Find your local health department at health.maryland.gov.",
+          "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 492-5231",
+          "description": "Number listed on msa.maryland.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in a hospital or nursing facility right now, tell the facility's social worker before you leave. They can initiate the Medicaid application and gather documents on-site, which is often faster than applying from home.",
+        "The monthly income standard ($350 for one person) is very low. Most applicants qualify only through the spenddown route, where documented medical expenses close the gap. Collect every bill and receipt before you apply.",
+        "This pathway is not the same as regular MAGI Medicaid (the income-based coverage most working-age adults use). It is a separate, non-MAGI route with its own income standards and a 6-month consideration-period structure. Make sure the caseworker is evaluating your parent under the correct category.",
+        "If your parent is seeking nursing home or home-based long-term care, ask specifically whether they are being assessed as aged or disabled medically needy, because the coverage group affects which long-term care services are covered."
+      ],
+      "relatedPrograms": [
+        "Maryland Medical Assistance - Regular Medicaid (MAGI pathway)",
+        "Maryland Medicaid Long-Term Care (Nursing Facility Medicaid)",
+        "Maryland Community First Choice (HCBS waiver for home-based care)",
+        "Medicare Savings Programs (help paying Medicare premiums for those who have Medicare)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "How the spenddown works",
+          "body": "Maryland measures your parent's income over a 6-month window called the consideration period. The 6-month medically needy income standard for a single person is $2,100. If your parent's income for those 6 months exceeds $2,100, they must show medical bills equal to the difference. Once those bills are documented, Medicaid coverage begins for the remainder of that period. This repeats each 6-month period. Example: if your parent's 6-month income is $3,600 and the standard is $2,100, they need to document $1,500 in out-of-pocket medical costs to qualify."
+        },
+        {
+          "type": "callout",
+          "title": "Monthly income standards by household size",
+          "body": "These are the monthly medically needy income limits from Maryland's official schedule. People with income above these limits may still qualify through spenddown.\n\nHousehold of 1: $350/month\nHousehold of 2: $392/month\nHousehold of 3: $434/month\nHousehold of 4: $475/month\n\nSource: health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx"
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is above $350/month. Does that automatically disqualify them?",
+          "answer": "No. The $350/month figure is the base medically needy standard, but Maryland allows a spenddown route. If your parent's out-of-pocket medical expenses during a 6-month consideration period are large enough to reduce their countable income below $2,100 for that period, they can still qualify. Most applicants use this spenddown route, not the base standard. The more medical bills your parent has, the better their chances."
+        },
+        {
+          "question": "What counts as a medical expense toward the spenddown?",
+          "answer": "The official Maryland source does not publish a specific itemized list on the eligibility page, so confirm with your caseworker exactly which costs they will count. Generally, Medicaid programs count expenses like doctor bills, hospital charges, prescription costs, and care facility fees paid out of pocket. Ask the caseworker at 1-855-642-8572 for the complete list before your appointment so you gather the right receipts."
+        },
+        {
+          "question": "Will my parent have to sell their house or car to qualify?",
+          "answer": "A primary home and one vehicle are commonly exempt under Medicaid rules, but Maryland's official eligibility page does not publish the full exempt-asset list for this pathway. The exact exemptions depend on your parent's coverage group (for example, aged vs. disabled). Ask the caseworker specifically which assets are counted and which are exempt when you apply. Do not assume anything is exempt until you confirm it."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot do it themselves?",
+          "answer": "Yes. A family member, legal guardian, or authorized representative can apply on behalf of an elderly or incapacitated person. If you are acting as a legal representative, bring documentation of that authority (power of attorney or guardianship papers) when you apply. The caseworker can also accept your information as an authorized contact without formal legal documents in many situations; ask when you call 1-855-642-8572."
+        },
+        {
+          "question": "Can my parent apply for this program and Medicare Savings Programs at the same time?",
+          "answer": "Yes, and it is worth doing. Maryland Medical Assistance and the Medicare Savings Programs (which help pay Medicare premiums) are separate programs with separate applications, but applying for both at the same time is common. If your parent has Medicare, the Medicare Savings Program application is a natural companion. Mention this when you call 1-855-642-8572 or visit your local department of social services."
+        },
+        {
+          "question": "What happens after my parent is approved and their situation changes?",
+          "answer": "Maryland Medicaid requires that you report changes in income, assets, household size, or residency. The medically needy pathway uses 6-month consideration periods, so eligibility is reassessed regularly. If your parent's medical expenses drop significantly, they may no longer meet the spenddown requirement in a future period. Report changes promptly to your local department of social services or through Maryland Health Connection to avoid overpayment issues."
+        },
+        {
+          "question": "How is this pathway different from regular Medicaid?",
+          "answer": "Regular Maryland Medicaid (the MAGI pathway) uses a straightforward income cutoff based on a percentage of the federal poverty level. The Medically Needy pathway is a separate, non-MAGI route with much lower base income standards ($350/month for one person) but with a spenddown mechanism that allows people with higher income and high medical costs to qualify. The two pathways also cover different population groups. If your parent was told they earn too much for regular Medicaid, the medically needy pathway is the next place to look."
+        },
+        {
+          "question": "Does this program cover nursing home care?",
+          "answer": "It can, depending on your parent's coverage group. If your parent qualifies under the aged or disabled medically needy category, Medicaid coverage can include nursing facility services. Make sure you tell the caseworker if nursing home care is the reason you are applying, because the coverage group and any related financial tests may differ from other medically needy categories. Ask specifically about long-term care services when you apply."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-855-642-8572",
+      "sourceUrl": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18556428572"
+          ],
+          "to": "(800) 492-5231",
+          "source": "https://msa.maryland.gov/msa/mdmanual/16dhmh/html/dhmh.html",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "md-hcbs-community-options-waiver",
+      "name": "Maryland HCBS Waivers - Medicaid Waiver Programs",
+      "shortName": "MD Community Options Waiver",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, Maryland's Community Options Waiver pays for the in-home supports that make that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Maryland Access Point (statewide entry system)",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county Maryland Access Point offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Nursing facility social workers for residents",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent qualifies medically for nursing home care but wants to stay in their home or apartment, Maryland's Home and Community-Based Options Waiver (also called the Community Options Waiver) pays for the hands-on supports that make that possible. That can include personal care, home health aides, adult day services, assistive devices, and other supports, all coordinated through a single person-centered plan. The goal is to keep your parent safe and as independent as possible outside of an institution.\n\nThis is a Medicaid waiver program, which means it covers services Medicaid does not normally pay for, specifically the kind of daily help at home that would otherwise require a nursing facility stay. Your parent must need what Maryland calls a nursing facility level of care, meaning a clinical assessment shows they need significant daily help with things like bathing, dressing, or managing medications. Financial eligibility under Medicaid long-term care rules also applies; asset limits are strict (generally $2,000 for a single person), though the exact income standard must be confirmed with Maryland Medicaid because the waiver does not publish a single household-income chart.\n\nThe hardest part of this program is access. Most people living at home must first get onto the statewide registry and wait for an invitation to apply. There is no open enrollment. If your parent is already in a nursing facility and Medicaid has paid for at least 30 days of that stay, they may apply immediately with no registry wait. That exception is important and often missed.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the waiver funds individualized in-home supports rather than paying a cash benefit. The dollar value depends entirely on the services included in each person's approved plan and cannot be stated as a single figure without a completed plan of care.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 18 or older (adults of any age; seniors are the primary focus)",
+          "Requires nursing facility level of care (clinical assessment required)",
+          "Financially eligible under Maryland Medicaid long-term care rules",
+          "Countable assets generally cannot exceed $2,000 for a single person",
+          "Community applicants must be on the statewide registry and receive an invitation"
+        ],
+        "ageRequirement": "18+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Cash on hand",
+            "Stocks and bonds",
+            "Certificates of deposit",
+            "Other liquid financial resources"
+          ],
+          "exemptAssets": [
+            "Primary home (in certain situations; exemption rules vary depending on whether a spouse remains in the community)",
+            "One vehicle",
+            "Personal belongings and household goods",
+            "Certain prepaid or irrevocable burial arrangements"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet Nursing Facility Level of Care, meaning a formal clinical assessment determines they need the kind of daily hands-on help, with bathing, dressing, medication management, or similar tasks, that would otherwise require placement in a nursing facility. This assessment is completed as part of the eligibility process.",
+        "otherRequirements": [
+          "Must choose to receive services in the community rather than in an institution",
+          "Must have an approved, cost-neutral plan of services that supports safe community living",
+          "Must meet medical, technical, and financial Medicaid eligibility",
+          "Community-based applicants must be placed on the statewide registry first and wait for an invitation before submitting a Medicaid application",
+          "Nursing facility residents whose Medicaid has paid for at least 30 days of their stay may apply immediately with no registry wait"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call Maryland Access Point at 844-627-5465 to be screened and placed on the registry; the formal Medicaid application comes later, after an invitation.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call Maryland Access Point to start the process",
+            "description": "Call 844-627-5465 to reach Maryland Access Point, the statewide entry point for this waiver. A counselor will screen your parent for eligibility and, if appropriate, place them on the Community Options Waiver statewide registry. If your parent is already in a nursing facility, ask the facility's social worker to contact Maryland Access Point on your behalf instead."
+          },
+          {
+            "step": 2,
+            "title": "Get on the statewide registry and wait for an invitation",
+            "description": "For community-based applicants, there is no open enrollment. After screening, your parent is placed on the registry. Timing depends on registry position and local capacity. There is no published fixed wait time. A nursing facility resident whose Medicaid has already paid for at least 30 days of their stay can skip the registry and apply immediately."
+          },
+          {
+            "step": 3,
+            "title": "Respond to the invitation and submit a Medicaid application",
+            "description": "When an opening becomes available, your parent will receive an invitation to apply. At that point, submit a Medicaid application through Maryland Medicaid. Gather proof of identity, Maryland residency, income, assets, and medical records showing nursing-facility-level need before the invitation arrives so you are ready to move quickly."
+          },
+          {
+            "step": 4,
+            "title": "Complete medical and financial eligibility reviews",
+            "description": "Maryland Medicaid will verify both the clinical determination (nursing facility level of care) and financial eligibility (income and asset review under Medicaid long-term care rules). Both must be approved before services begin."
+          },
+          {
+            "step": 5,
+            "title": "Receive a person-centered service plan",
+            "description": "Once approved, a care coordinator works with your parent and your family to develop an individualized plan of care listing the specific services the waiver will fund. Services are not a fixed package; they are tailored to your parent's assessed needs and must meet the cost-neutral standard (meaning the plan cannot cost more than nursing facility care would)."
+          }
+        ],
+        "processingTime": "No fixed processing time is published. Timing depends on how long your parent waits on the registry, and how quickly medical and financial reviews are completed after the invitation is issued. For nursing facility residents who qualify for the no-wait path, the process moves faster once initiated.",
+        "waitlist": "Yes. Community-based applicants are placed on a statewide registry and must wait for an invitation before applying. Maryland does not publish a single statewide wait-time estimate; the wait depends on registry position and local openings. Nursing facility residents whose Medicaid has paid for at least 30 days of their stay can apply without waiting on the registry.",
+        "tip": "Do not wait until a crisis. Get on the registry as early as possible, because the wait for community-based applicants can be significant. If your parent is currently in a nursing facility and Medicaid has covered at least 30 days, use the faster no-wait path and ask the facility social worker to start the process today.",
+        "urls": [
+          {
+            "label": "Maryland Community Options Waiver official page",
+            "url": "https://health.maryland.gov/mmcp/ltss/Pages/community-options-waiver.aspx"
+          },
+          {
+            "label": "Maryland Medicaid long-term services and supports",
+            "url": "https://health.maryland.gov/mmcp/ltss/Pages/home.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of identity (such as a driver's license, state-issued ID, or birth certificate)",
+        "Proof of Maryland residency (such as a utility bill, lease agreement, or official mail in the applicant's name)",
+        "Proof of income (such as a Social Security award letter, pension statement, or other income documentation)",
+        "Bank account information: current balances for any checking or savings accounts (Maryland Medicaid long-term care review will go further into financial history; gather statements as they become available)",
+        "Social Security number (and Medicare card if the applicant has Medicare, though Medicare is not required)",
+        "Medical records or documentation from a physician showing the nature of the care needs, supporting the nursing facility level of care determination",
+        "List of current medications and treating providers",
+        "Information about any other assets: stocks, bonds, certificates of deposit, vehicle, real property (deeds or tax statements)",
+        "Documentation of any prepaid or irrevocable burial arrangements",
+        "Legal documents if a family member or representative is acting on the applicant's behalf (such as a power of attorney or guardianship order)",
+        "If the applicant is in a nursing facility: name and contact information for the facility social worker, and confirmation that Medicaid has paid for at least 30 days of the current stay"
+      ],
+      "contacts": [
+        {
+          "label": "Maryland Access Point (Waiver Registry and Screening)",
+          "phone": "844-627-5465",
+          "description": "The statewide entry point to get your parent screened and placed on the Community Options Waiver registry. This is the first call to make for community-based applicants. If your parent is in a nursing facility, ask the facility social worker to call on your behalf.",
+          "hours": "Contact Maryland Access Point for current hours; hours may vary by local office."
+        },
+        {
+          "label": "Maryland Medicaid (MMCP, Long-Term Services and Supports)",
+          "phone": "410-767-6500",
+          "description": "Maryland Medicaid's main line for questions about financial eligibility, application status after an invitation is issued, and program rules. Use this after you have been through Maryland Access Point.",
+          "hours": "Monday through Friday, standard state business hours."
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is currently in a nursing facility and Medicaid has paid for at least 30 days of their stay, they do not need to wait on the statewide registry. Ask the facility social worker to start the process immediately. This exception is one of the most commonly missed shortcuts in the program.",
+        "Financial eligibility for this waiver uses Medicaid long-term care rules, not a simple income chart. Spousal situations (when one spouse remains in the community) can significantly affect what income and assets are counted. Confirm the exact standards with Maryland Medicaid or a local Maryland Access Point counselor before assuming your parent does or does not qualify.",
+        "The services approved under this waiver are not a fixed package. They are determined individually through a person-centered plan and must be cost-neutral. Your parent's approved services may look different from what another family receives, even if the medical situation seems similar.",
+        "Maryland has multiple HCBS waivers. If your parent is an older adult or an adult with a physical disability, the Community Options Waiver is the relevant one. Other waivers serve people with developmental disabilities or children and are separate programs with separate application paths."
+      ],
+      "relatedPrograms": [
+        "Maryland Medicaid - Aged, Blind, and Disabled (ABD) Coverage",
+        "Maryland PACE (Program of All-Inclusive Care for the Elderly)",
+        "Maryland Senior Care Act programs and local Area Agency on Aging services",
+        "Maryland Medical Assistance Personal Care (MAPC) for lower-level in-home care needs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Already in a nursing facility? You may not have to wait.",
+          "body": "Most people applying from the community must get on the statewide registry and wait for an invitation. But if your parent is currently in a nursing facility and Maryland Medicaid has paid for at least 30 days of that stay, they can apply for the Community Options Waiver right now with no registry wait. Ask the facility social worker to start the process. This is one of the most important and least-known facts about this program."
+        },
+        {
+          "type": "prose",
+          "title": "What services can the waiver actually cover?",
+          "body": "The Community Options Waiver does not pay a fixed monthly dollar amount. Instead, it funds a plan of services built around your parent's specific needs. Services covered can include personal care assistance (help with bathing, dressing, and grooming), home health aide services, adult day health, assistive technology and devices, environmental modifications to the home, respite care for family caregivers, and care coordination. The exact services in the plan depend on what the assessment shows your parent needs and what keeps them safely at home. The plan must also be cost-neutral, meaning the total cost of the waiver services cannot exceed what Maryland Medicaid would pay for nursing facility care. Official program details are at health.maryland.gov/mmcp/ltss."
+        },
+        {
+          "type": "prose",
+          "title": "Income and asset eligibility: what to expect",
+          "body": "This waiver uses Maryland Medicaid long-term care financial eligibility rules rather than a single published income limit. The asset limit for a single person is generally $2,000 in countable assets. Countable assets include bank account balances, cash, stocks, bonds, and similar resources. The primary home may be exempt in some situations, particularly if a spouse still lives there, and one vehicle, personal belongings, and irrevocable burial arrangements are typically also exempt. The income standard is not published as a single household-size chart for this waiver; it varies by eligibility category and spousal situation. Verify the exact current standard with Maryland Access Point at 844-627-5465 or with Maryland Medicaid at 410-767-6500 before drawing conclusions about whether your parent qualifies."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is on the registry but the wait seems indefinite. Is there anything we can do to move faster?",
+          "answer": "If your parent's condition worsens significantly, tell Maryland Access Point at 844-627-5465 right away. Updated medical information may affect priority. Also check whether your parent is now eligible for the no-wait nursing-facility path: if they are admitted to a nursing facility and Medicaid pays for at least 30 days of the stay, they can apply immediately without the registry wait. That path is separate and faster."
+        },
+        {
+          "question": "My parent owns their home. Does that disqualify them because of the $2,000 asset limit?",
+          "answer": "Not necessarily. Maryland Medicaid long-term care rules generally exempt the primary home from the asset count in certain situations, particularly when a spouse remains living there. The $2,000 limit applies to countable assets, and the home may not be counted. However, the exact rules depend on your parent's eligibility category and family situation. Confirm with Maryland Medicaid at 410-767-6500 rather than assuming one way or the other."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent who cannot manage paperwork themselves?",
+          "answer": "Yes. A family member with legal authority to act for the applicant, such as a power of attorney, can initiate contact with Maryland Access Point and assist with the application process. Bring documentation of that legal authority (a power of attorney or guardianship order) when documents are collected. If your parent is in a nursing facility, the facility social worker can also help initiate the process."
+        },
+        {
+          "question": "Can my parent be enrolled in this waiver and also receive regular Medicaid at the same time?",
+          "answer": "Yes. The Community Options Waiver is a Medicaid program. An approved participant continues to receive standard Medicaid coverage for medical services (doctor visits, hospital care, prescriptions) while the waiver funds the home and community-based supports. The waiver does not replace Medicaid; it adds the home-care services that Medicaid does not normally cover."
+        },
+        {
+          "question": "What happens if my parent's needs increase after they are enrolled?",
+          "answer": "The person-centered service plan is reviewed regularly, and changes in your parent's condition should be reported to their care coordinator. If needs increase, the plan can be updated to add or adjust services, subject to the cost-neutral requirement. If needs increase to a point where community-based care is no longer safe even with waiver supports, the care coordinator can help your family consider other options."
+        },
+        {
+          "question": "Can my parent apply for the Community Options Waiver and PACE at the same time?",
+          "answer": "No. PACE (Program of All-Inclusive Care for the Elderly) and the Community Options Waiver both serve people who need nursing facility level of care and want to remain in the community, but they are separate programs with different structures. A person cannot be enrolled in both simultaneously. PACE consolidates all medical and long-term care into one provider organization; the Community Options Waiver funds a plan of services through multiple providers. Maryland Access Point at 844-627-5465 can help your family compare the two options."
+        },
+        {
+          "question": "How long does financial and medical review take once my parent receives an invitation to apply?",
+          "answer": "Maryland does not publish a fixed processing timeline for this waiver. The review involves both a clinical assessment (nursing facility level of care) and a Medicaid financial eligibility determination. Having all documents ready before the invitation arrives, including income records, asset documentation, and medical records, will help avoid delays. Contact Maryland Medicaid at 410-767-6500 for current processing estimates after the invitation is issued."
+        },
+        {
+          "question": "What if my parent does not qualify financially because their income or assets are slightly too high?",
+          "answer": "Maryland Medicaid has a spend-down process for some eligibility categories, where medical expenses are used to reduce countable income or assets to the eligibility level. Whether a spend-down path is available for waiver applicants depends on the specific eligibility category and situation. Ask Maryland Medicaid at 410-767-6500 whether a spend-down option applies and what the mechanics would be for your parent's situation. An elder law attorney familiar with Maryland Medicaid rules can also help assess options."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "844-627-5465",
+      "sourceUrl": "https://health.maryland.gov/mmcp/ltss/Pages/community-options-waiver.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://health.maryland.gov/mmcp/docs/FINALFormattedWaiverBrochure.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8446275465",
+            "4107676500"
+          ],
+          "to": "4107671739",
+          "source": "https://health.maryland.gov/mmcp/Documents/2505_MMA_HowtoReachMDMedicaid.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     }

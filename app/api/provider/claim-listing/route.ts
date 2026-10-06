@@ -51,8 +51,11 @@ function getAdminClient() {
  * - 200: { profileId: string, verificationState: string }
  * - 401: Not authenticated
  * - 404: Listing not found
- * - 409: Already claimed
+ * - 409: Already claimed by another account, or the login is a different account type
  * - 500: Server error
+ *
+ * A login may claim any number of listings; each becomes its own business
+ * profile and the newest becomes the active one (Switch Profile lists them).
  */
 export async function POST(request: Request) {
   try {
@@ -142,7 +145,12 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "City and state are required" }, { status: 400 });
       }
 
-      // Check if user already has a provider profile
+      // One login, many listings. A provider who already has a business
+      // profile may add another location; the switcher shows them all.
+      // Until 6 Oct 2026 this refused with "You already have a business
+      // profile", and every multi-location provider (Caring Senior, Tennessee
+      // State Veterans' Homes, Concierge Care) had to be set up by hand.
+      // The one thing still refused is mixing account types on one login.
       const { data: existingOrgProfile } = await db
         .from("business_profiles")
         .select("id, type")
@@ -151,21 +159,11 @@ export async function POST(request: Request) {
         .limit(1)
         .maybeSingle();
 
-      if (existingOrgProfile) {
-        if (existingOrgProfile.type !== "organization") {
-          return NextResponse.json(
-            {
-              error: "This email is already used for a different account type.",
-              code: "ACCOUNT_TYPE_MISMATCH"
-            },
-            { status: 409 }
-          );
-        }
-        // Already has a provider profile
+      if (existingOrgProfile && existingOrgProfile.type !== "organization") {
         return NextResponse.json(
           {
-            error: "You already have a business profile.",
-            code: "PROFILE_EXISTS"
+            error: "This email is already used for a different account type.",
+            code: "ACCOUNT_TYPE_MISMATCH"
           },
           { status: 409 }
         );
@@ -355,29 +353,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user already has a provider profile (they can only have one for now)
+    // The profile on this login that already points at this listing, if any.
+    // A login may hold several listings (one profile each); a claim on a
+    // listing it does not hold yet falls through and creates another profile.
+    // Until 6 Oct 2026 any second listing was refused with "You can only
+    // manage one listing per account".
     const { data: existingProfile } = await db
       .from("business_profiles")
       .select("id, source_provider_id, verification_state")
       .eq("account_id", accountId)
       .eq("type", "organization")
       .eq("is_active", true)
+      .eq("source_provider_id", providerId)
       .maybeSingle();
 
     if (existingProfile) {
-      // User already has a provider profile
-      // Block if they're trying to claim a DIFFERENT listing than the one already linked
-      // This includes the case where source_provider_id is NULL (self-created profile)
-      if (existingProfile.source_provider_id !== providerId) {
-        return NextResponse.json(
-          {
-            error: "You already have a business profile. You can only manage one listing per account.",
-            code: "PROFILE_EXISTS"
-          },
-          { status: 409 }
-        );
-      }
-
       // Re-claiming the same listing they already own - update to link source provider
       // User has already verified via OTP, so they get full verified access
       // Sync user's verified email to ensure they receive lead notifications

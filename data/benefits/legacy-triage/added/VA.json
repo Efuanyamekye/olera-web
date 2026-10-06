@@ -1,0 +1,51 @@
+[
+  {
+    "state": "VA",
+    "id": "va-medicaid-abd",
+    "name": "Medicaid for Aged, Blind, or Disabled (ABD)",
+    "legacyId": "medicaid-for-aged-blind-or-disabled-abd",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-medicare-savings-programs",
+    "name": "Medicare Savings Programs (QMB, SLMB, QI)",
+    "legacyId": "medicare-savings-programs-qmb-slmb-qi",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-snap-food-benefits",
+    "name": "Supplemental Nutrition Assistance Program (SNAP)",
+    "legacyId": "supplemental-nutrition-assistance-program-snap",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-pace-all-inclusive-care",
+    "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+    "legacyId": "program-of-all-inclusive-care-for-the-elderly-pace",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-liheap-energy-assistance",
+    "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+    "legacyId": "low-income-home-energy-assistance-program-liheap",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-home-delivered-meals",
+    "name": "Virginia Home-Delivered Meals Program",
+    "legacyId": "virginia-home-delivered-meals-program",
+    "programType": "benefit"
+  },
+  {
+    "state": "VA",
+    "id": "va-property-tax-exemption-elderly-disabled",
+    "name": "Virginia Property Tax Exemption for Elderly/Disabled",
+    "legacyId": "virginia-property-tax-exemption-for-elderly-disabled",
+    "programType": "benefit"
+  }
+]

@@ -222,6 +222,10 @@ export interface GoogleReviewsData {
   review_count: number;
   reviews: GoogleReviewSnippet[];
   last_synced: string; // ISO 8601
+  /** Google's businessStatus at sync time (OPERATIONAL, CLOSED_TEMPORARILY, CLOSED_PERMANENTLY). Absent on caches written before Oct 2026. */
+  business_status?: string | null;
+  /** Google's displayName at sync time, diffed against provider_name for renames. */
+  google_name?: string | null;
 }
 
 /** CMS (Medicare) quality data — stored as JSONB on olera-providers */

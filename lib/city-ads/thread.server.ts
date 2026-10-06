@@ -31,6 +31,7 @@ import { getCityConfig } from "@/lib/city-ads/config";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
 import { resolvePrimaryCampaign } from "@/lib/city-ads/primary.server";
 import { offerStillHolds } from "@/lib/city-ads/offer-holds";
+import { providerAlertPhone } from "@/lib/city-ads/provider-alert-phone";
 
 export type ThreadAuthor = "olera" | "provider" | "family";
 
@@ -209,6 +210,7 @@ export async function getFamilyTimeline(
 export interface ThreadProvider {
   id: string;
   name: string;
+  /** Where her alerts are texted: `metadata.alert_phone` if set, else the profile phone. */
   phone: string | null;
   email: string | null;
   /**
@@ -260,6 +262,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   if (!id) return null;
   const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email, metadata, account_id").eq("id", id).maybeSingle();
   const email = (p?.email as string | null) ?? null;
+  const alertPhone = providerAlertPhone(p as { phone?: string | null; metadata?: unknown } | null);
   const extra = (p?.metadata as { alert_emails?: unknown } | null)?.alert_emails;
   const alertEmails = Array.isArray(extra)
     ? Array.from(new Set(extra.filter((e): e is string => typeof e === "string" && e.includes("@")).map((e) => e.trim().toLowerCase())))
@@ -268,7 +271,7 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   return {
     id,
     name: (p?.display_name as string | null) ?? primary?.providerName ?? "Your care provider",
-    phone: p?.phone ? normalizeUSPhone(p.phone as string) : null,
+    phone: alertPhone ? normalizeUSPhone(alertPhone) : null,
     email,
     alertEmails,
     via: holderId || p?.account_id ? "inbox" : "campaign",

@@ -1,0 +1,129 @@
+{
+  "state": "KY",
+  "addedAt": "2026-10-06T06:33:02.621Z",
+  "dive": {
+    "state": "KY",
+    "stateName": "Kentucky",
+    "diveAt": "2026-10-06T06:31:53.736Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "KY Property Tax Homestead Exemption",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No income limit applies. The program is based on age or disability, not household income. A homeowner qualifies if they are at least 65 years old during the tax period, or if they are classified as totally disabled and receiving disability payments. The home must be owned, occupied, and maintained as the taxpayer’s personal residence on the January 1 assessment date.",
+          "asset_limits": "No asset limit is listed for this exemption. The key property requirement is that the home be the applicant’s owned and occupied personal residence; no savings, bank account, or resource test is described in the official materials.",
+          "other_requirements": [
+            "Must own the property",
+            "Must occupy and maintain the property as the personal residence",
+            "Property must qualify as a residential unit on the January 1 assessment date",
+            "Applicant must submit the application to the county Property Valuation Administrator (PVA)",
+            "If applying under disability, the person must be classified as totally disabled and receiving disability payments",
+            "Application must be submitted by December 31 of the eligible tax year"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A property tax exemption of up to $49,100 of assessed value for the 2025-2026 assessment years. This amount is deducted from the home’s assessed value before taxes are calculated.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through the local PVA office website where available",
+            "Mail the completed application to the county PVA office",
+            "In person at the county PVA office"
+          ],
+          "processing_time": "No statewide processing-time standard is published. The application must be filed by December 31 of the tax year, and timing of approval depends on the local PVA office.",
+          "waitlist": null,
+          "forms": [
+            "Application for Exemption Under the Homestead/Disability Amendment (Revenue Form 62A350)"
+          ],
+          "documents": [
+            "Completed Form 62A350",
+            "Supporting documentation for age or disability",
+            "Proof of residence/ownership as required by the local PVA",
+            "Government-issued photo ID in counties that require it",
+            "Any county-specific documentation requested by the PVA"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Kentucky, but applications are handled locally through the county PVA office for the county where the residential unit is located.",
+          "regional_variations": "The exemption amount is statewide, but application methods and document requirements can vary by county PVA office. Some counties offer online submission; others emphasize mail, fax, email, or in-person filing.",
+          "offices_or_providers": [
+            "County Property Valuation Administrator (PVA) office in the county where the home is located"
+          ]
+        },
+        "official_source": "https://revenue.ky.gov/Property/Residential-Farm-Commercial-Property/Pages/Homestead-Exemption.aspx",
+        "gotchas": [
+          "This is not a needs-based benefit; income does not determine eligibility.",
+          "The exemption applies to assessed value, not as a direct cash refund.",
+          "The home must be the applicant’s owned and occupied primary residence on January 1.",
+          "The application deadline is December 31 of the tax year, not a rolling deadline.",
+          "A disabled applicant must meet the program’s disability definition; not every disability qualifies automatically.",
+          "County PVAs may ask for different supporting documents, so families should confirm local requirements before filing."
+        ],
+        "data_shape_notes": "This program has a fixed statewide exemption amount, no income test, and county-level administration through local PVA offices. The main variation is local application handling, not benefit size.",
+        "_raw": "{\n  \"name\": \"KY Property Tax Homestead Exemption\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No income limit applies. The program is based on age or disability, not household income. A homeowner qualifies if they are at least 65 years old during the tax period, or if they are classified as totally disabled and receiving disability payments. The home must be owned, occupied, and maintained as the taxpayer’s personal residence on the January 1 assessment date.\",\n    \"asset_limits\": \"No asset limit is listed for this exemption. The key property requirement is that the home be the applicant’s owned and occupied personal residence; no savings, bank account, or resource test is described in the official materials.\",\n    \"other_requirements\": [\n      \"Must own the property\",\n      \"Must occupy and maintain the property as the personal residence\",\n      \"Property must qualify as a residential unit on the January 1 assessment date\",\n      \"Applicant must submit the application to the county Property Valuation Administrator (PVA)\",\n      \"If applying under disability, the person must be classified as totally disabled and receiving disability payments\",\n      \"Application must be submitted by December 31 of the eligible tax year\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A property tax exemption of up to $49,100 of assessed value for the 2025-2026 assessment years. This amount is deducted from the home’s assessed value before taxes are calculated.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through the local PVA office website where available\",\n      \"Mail the completed application to the county PVA office\",\n      \"In person at the county PVA office\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard is published. The application must be filed by December 31 of the tax year, and timing of approval depends on the local PVA office.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Exemption Under the Homestead/Disability Amendment (Revenue Form 62A350)\"\n    ],\n    \"documents\": [\n      \"Completed Form 62A350\",\n      \"Supporting documentation for age or disability\",\n      \"Proof of residence/ownership as required by the local PVA\",\n      \"Government-issued photo ID in counties that require it\",\n      \"Any county-specific documentation requested by the PVA\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Kentucky, but applications are handled locally through the county PVA office for the county where the residential unit is located.\",\n    \"regional_variations\": \"The exemption amount is statewide, but application methods and document requirements can vary by county PVA office. Some counties offer online submission; others emphasize mail, fax, email, or in-person filing.\",\n    \"offices_or_providers\": [\n      \"County Property Valuation Administrator (PVA) office in the county where the home is located\"\n    ]\n  },\n  \"official_source\": \"https://revenue.ky.gov/Property/Residential-Farm-Commercial-Property/Pages/Homestead-Exemption.aspx\",\n  \"gotchas\": [\n    \"This is not a needs-based benefit; income does not determine eligibility.\",\n    \"The exemption applies to assessed value, not as a direct cash refund.\",\n    \"The home must be the applicant’s owned and occupied primary residence on January 1.\",\n    \"The application deadline is December 31 of the tax year, not a rolling deadline.\",\n    \"A disabled applicant must meet the program’s disability definition; not every disability qualifies automatically.\",\n    \"County PVAs may ask for different supporting documents, so families should confirm local requirements before filing.\"\n  ],\n  \"data_shape_notes\": \"This program has a fixed statewide exemption amount, no income test, and county-level administration through local PVA offices. The main variation is local application handling, not benefit size.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "KY",
+    "stateName": "Kentucky",
+    "classifiedAt": "2026-10-06T06:31:53.741Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "KY Property Tax Homestead Exemption",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "County Property Valuation Administrator (PVA) office in the county where the home is located",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "KY",
+      "id": "ky-property-tax-homestead-exemption-current",
+      "name": "KY Property Tax Homestead Exemption",
+      "legacyId": "ky-property-tax-homestead-exemption",
+      "programType": "benefit"
+    }
+  ]
+}

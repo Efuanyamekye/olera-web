@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.021Z
+ * Last updated: 2026-10-06T12:32:13.732Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -677,21 +677,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8882450179",
-            "211",
-            "8006334227"
-          ],
-          "to": "8006627030",
-          "source": "https://medicaid.ncdhhs.gov/documents/medicaid/medcare-savings/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -917,25 +903,25 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/child-and-family-well-being/food-and-nutrition-services-food-stamps/simplified-nutritional-assistance-program-snap",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1696,
-          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "to": 2660,
+          "source": "https://www.snapscreener.com/guides/north-carolina",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2292,
-          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "to": 3608,
+          "source": "https://www.snapscreener.com/guides/north-carolina",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         }
       ]
     },
@@ -1056,7 +1042,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Local County Social Services",
-          "phone": null,
+          "phone": "(800) 662-7030",
           "description": "Contact your county Department of Social Services for applications and questions",
           "hours": "Varies by county"
         },
@@ -1123,11 +1109,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": null,
+      "phone": "(800) 662-7030",
       "sourceUrl": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance-lieap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1136,27 +1122,30 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
           "severity": "medium",
           "why": "value fits more than one tier (120% FPL 2023 or 120% FPL 2022 or 125% FPL 2022 or 130% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_2",
           "from": 1930,
-          "to": 2110,
+          "to": 2242,
           "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
           "severity": "medium",
-          "why": "value fits more than one tier (120% FPL 2023 or 125% FPL 2022 or 130% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        },
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ],
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8006627030",
-          "source": "https://liheapch.acf.hhs.gov/profiles/NC.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/news/press-releases/2025/12/08/ncdhhs-receives-low-income-home-and-energy-assistance-program-funds-new-eligible-north-carolinians",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -1481,6 +1470,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline to find your county's meal program",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1534,19 +1529,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "7044321111",
             "7043363144"
           ],
-          "to": "9198553400",
-          "source": "https://www.ncdhhs.gov/home-delivered-meal-provider-directory-fy-24/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/aging/congregate-and-home-delivered-meals",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1660,6 +1657,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "24/7 helpline for all North Carolina social services and caregiver resources",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1730,20 +1733,23 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/aging/family-caregiver-support-program",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        },
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8282655434",
             "8282655434139",
             "211"
           ],
-          "to": "9198553417",
-          "source": "https://www.nctreasurer.gov/documents/files/slgfdcompliancesupplements/93052-2024/open",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/aging/nc-lifespan-respite-program",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1963,7 +1969,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(919) 219-3101",
       "sourceUrl": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1693,
+          "to": 1862,
+          "source": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2289,
+          "to": 2518,
+          "source": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-for-older-adults",
@@ -2575,7 +2601,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://medicaid.ncdhhs.gov/ltss-services-eligibility-fact-sheet/open",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ]
     },
     {
       "id": "project-care-dementia-caregiver-support",
@@ -2751,22 +2788,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-02",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18006627030",
-            "7044321111",
-            "8282655434",
-            "211"
-          ],
-          "to": "9843656992",
-          "source": "https://www.ncdhhs.gov/rfa-fiduciary-agent-fy-25/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "special-assistance-in-home",
@@ -2982,19 +3004,674 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null
+    },
+    {
+      "id": "nc-medicaid-aged-blind-disabled",
+      "name": "Regular Medicaid / Aged Blind and Disabled",
+      "shortName": "NC ABD Medicaid",
+      "tagline": "If your parent is 65 or older, blind, or disabled and has limited income and assets, this program may cover their medical care, personal care at home, and nursing facility costs at no premium.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local County Department of Social Services offices across North Carolina",
+            "type": "service-area"
+          },
+          {
+            "name": "North Carolina DSS local office directory",
+            "type": "service-area"
+          },
+          {
+            "name": "NC DHHS Medicaid application portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "North Carolina's Aged, Blind and Disabled (ABD) Medicaid covers health care for older adults and people with disabilities who cannot afford their medical costs. If your parent qualifies, Medicaid pays for doctor visits, hospital stays, prescription drugs, personal care assistance at home, skilled nursing, therapy, and nursing facility care. There is no monthly premium for this coverage.\n\nThe program has three categories. Medicaid for Older Citizens (MAA) serves people 65 and older. Medicaid for the Blind or Visually Impaired (MAB) serves people of any age who meet the Social Security Administration's definition of blindness. Medicaid for Disabled Citizens (MAD) serves people of any age who meet the SSA's disability definition. Your parent applies for the category that fits their situation, and eligibility depends on both income and countable assets (resources like savings accounts).\n\nApplications go through your parent's county Department of Social Services, not a single statewide office. The rules are uniform across North Carolina, but you apply locally. If your parent already receives SSI because of a disability, they are generally considered to meet the disability requirement for MAD without a separate determination. If they do not receive SSI, the state's Disability Determination Services office will review the medical evidence.",
+      "savingsRange": "",
+      "savingsSource": "Free service: NC Medicaid covers costs directly; there is no monthly premium for ABD Medicaid coverage.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (MAA), or blind/visually impaired (MAB), or disabled (MAD)",
+          "Income at or below approximately $1,330/month for one person (MAD; MAA/MAB limits not confirmed)",
+          "Countable assets at or below $2,000 for one person, $3,000 for a couple",
+          "North Carolina resident and U.S. citizen or eligible immigration status",
+          "Not currently incarcerated or residing in a public institution"
+        ],
+        "ageRequirement": "65+ for MAA; any age for MAB or MAD",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and other investments",
+            "Cash on hand",
+            "Other countable resources under NC Medicaid resource budgeting rules"
+          ],
+          "exemptAssets": [
+            "Certain real property may be excluded under specific conditions per NC Medicaid policy; confirm details with your county DSS worker"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a North Carolina resident",
+          "Must be a U.S. citizen or have an immigration status eligible for NC Medicaid",
+          "Cannot be incarcerated or a resident of a public institution",
+          "For MAB: must meet the SSA definition of blindness (a clinical standard, not simply needing glasses)",
+          "For MAD: disability must prevent substantial work and be expected to last at least 12 months or result in death; SSI recipients are considered to meet this requirement automatically",
+          "For MAD without SSI: state Disability Determination Services will review medical records"
+        ],
+        "povertyLevelReference": "100% FPL for MAD (approximately $1,330/month for one person in 2026, per NC DB101 and county DSS guidance; MAA and MAB limits not confirmed in available sources)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at epass.nc.gov or bring a paper application to your parent's county DSS office; processing time varies by case complexity.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify your parent's category",
+            "description": "Determine which category fits: MAA (age 65+), MAB (blind or visually impaired per SSA standards), or MAD (disabled, any age). If your parent receives SSI, they likely qualify under MAD without additional disability paperwork. If unsure, the county DSS worker can help you sort this out during the application."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before you apply",
+            "description": "Collect proof of identity, income, and assets. See the document checklist below. Submitting everything at once reduces processing delays. If your parent has an SSI award letter, have it ready; it can simplify the disability determination step."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application",
+            "description": "Apply online at epass.nc.gov, or download and print the NC Medicaid application and deliver it to your parent's county DSS office by mail, fax, email, or in person. You can also call your county DSS office to request that a paper application be mailed to you. The general NC Medicaid application covers all ABD categories."
+          },
+          {
+            "step": 4,
+            "title": "Respond to the DSS interview and any requests for more information",
+            "description": "Your county DSS will contact you to schedule an interview (often by phone) and may request additional documents, such as medical records for a disability determination. Respond promptly to avoid delays. If disability determination is needed and your parent does not already receive SSI, state Disability Determination Services (DDS) will review the case, which can extend processing time."
+          },
+          {
+            "step": 5,
+            "title": "Receive the eligibility decision",
+            "description": "DSS will send a written notice approving or denying the application. If approved, coverage may be backdated to the month of application. If denied, the notice will explain the reason and your right to appeal. You can request a fair hearing if you disagree with the decision."
+          }
+        ],
+        "processingTime": "Processing time is not published as a single statewide figure. Cases requiring a disability determination through state Disability Determination Services typically take longer than straightforward age-based applications.",
+        "waitlist": null,
+        "tip": "If your parent is hospitalized or in a nursing facility, apply immediately. Coverage can sometimes be backdated to the month of application, which matters when facility bills are already accruing. Ask the discharge planner or social worker at the facility to help initiate the application.",
+        "urls": [
+          {
+            "label": "Apply online: NC ePASS portal",
+            "url": "https://epass.nc.gov"
+          },
+          {
+            "label": "NC DHHS Medicaid application information",
+            "url": "https://medicaid.ncdhhs.gov/apply"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or award letter for your parent",
+        "Proof of North Carolina residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of identity (birth certificate, state-issued ID, or passport)",
+        "Proof of all income sources: Social Security award letter, pension or retirement statements, any other income received monthly",
+        "Current balances for any checking, savings, or certificate of deposit accounts (DSS will ask for account information; bring the most recent statements you have)",
+        "If your parent owns investments, bonds, or annuities: current account statements or policy documents",
+        "Life insurance policy documents, including face value amounts",
+        "Property documents if your parent owns real estate other than their primary home (deed, tax statement)",
+        "Vehicle title or registration if they own a vehicle",
+        "Any pre-need burial contracts or irrevocable burial trust documents",
+        "For MAB: documentation of blindness or visual impairment from an eye care provider, or SSA blindness determination letter if already established",
+        "For MAD without SSI: medical records and physician documentation supporting the disability, including diagnosis, treatment history, and functional limitations",
+        "Proof of citizenship or immigration status (U.S. passport, birth certificate, or immigration documents if applicable)",
+        "Legal documents if you are applying on behalf of your parent as their power of attorney, legal guardian, or authorized representative"
+      ],
+      "contacts": [
         {
-          "field": "phone",
+          "label": "NC DHHS Medicaid Assistance Line",
+          "phone": "(888) 245-0179",
+          "description": "Call to ask about NC Medicaid eligibility, the ABD categories, and how to apply. You can also use this line if you need guidance on which county DSS office handles your parent's case.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "NC ePASS Online Application Portal",
+          "phone": null,
+          "description": "Apply for NC Medicaid online at epass.nc.gov. You can start, save, and submit the application without calling. This is the fastest way to get the application on record.",
+          "hours": null
+        },
+        {
+          "label": "Local County DSS (find your county office)",
+          "phone": null,
+          "description": "All ABD Medicaid applications are processed at the county level. Find your parent's county DSS office at ncdhhs.gov/divisions/social-services/local-dss-directory to get the direct phone number and address.",
+          "hours": null
+        },
+        {
+          "label": "NC 2-1-1",
+          "phone": "2-1-1",
+          "description": "General information and referral line. Can connect you to local social services if you are having trouble reaching your county DSS. Does not process Medicaid applications itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent already receives SSI, bring the SSI award letter and make that clear on the application. NC accepts SSI disability status for MAD, which skips the separate disability determination process and speeds up the decision.",
+        "Income and asset tests are separate. Your parent must pass both. Having income below the limit does not guarantee approval if countable assets exceed $2,000 for a single person.",
+        "Real estate other than a primary home is potentially countable as a resource, but some property may be treated differently under NC Medicaid rules. Do not assume it disqualifies your parent without asking the DSS worker to review it.",
+        "Do not confuse this program with NC Medicaid waiver programs such as CAP/DA (Community Alternatives Program for Disabled Adults). ABD Medicaid itself has no waitlist; certain long-term services and supports delivered through waiver programs have separate eligibility pathways and may have capacity constraints."
+      ],
+      "relatedPrograms": [
+        "CAP/DA (Community Alternatives Program for Disabled Adults): in-home and community support as an alternative to nursing facility care, for people who qualify for nursing-level care",
+        "Medicare Savings Programs (QMB, SLMB, QI): help paying Medicare premiums and cost-sharing for parents who have both Medicare and limited income",
+        "Extra Help / Low Income Subsidy: reduces prescription drug costs for Medicare Part D enrollees with low income",
+        "NC Senior Pharmaceutical Assistance Program (SPAP): additional prescription drug help for North Carolinians 65 and older"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Three categories, one application",
+          "body": "NC ABD Medicaid uses one general Medicaid application regardless of whether your parent qualifies under the age (MAA), blindness (MAB), or disability (MAD) category. You do not need to file three separate applications. The county DSS worker determines which category applies based on what you submit."
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid actually covers",
+          "body": "Coverage includes doctor visits, hospital care, prescription drugs, laboratory work, and preventive services. For older adults who need ongoing help, it also covers personal care assistance at home (help with bathing, dressing, and daily tasks), skilled nursing visits, physical and occupational therapy, and nursing facility care when that level of care is needed. The specific services available depend on your parent's care needs and which services NC Medicaid authorizes. There is no monthly premium for this coverage."
+        },
+        {
+          "type": "prose",
+          "title": "A note on income limits",
+          "body": "NC Medicaid publishes income limits in a separate table by category, and the exact current figures for MAA and MAB were not available in official sources reviewed for this page. For MAD, county DSS and NC DB101 both cite approximately $1,330 per month for one person and $1,804 per month for a couple, based on 100% of the Federal Poverty Guidelines. These figures should be confirmed with your county DSS or at medicaid.ncdhhs.gov, as limits can change annually."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a house. Does that disqualify them from ABD Medicaid?",
+          "answer": "A primary residence is generally not counted as a resource for Medicaid eligibility purposes. The $2,000 asset limit ($3,000 for a couple) applies to countable resources such as bank accounts, investments, and cash. However, real estate other than the primary home may be counted, and the rules have exceptions. Ask your county DSS worker to review all property your parent owns before assuming they are ineligible."
+        },
+        {
+          "question": "My parent's income is above $1,330/month. Are they automatically disqualified?",
+          "answer": "Not necessarily. The $1,330/month figure is cited for the MAD (disability) category based on 100% of the Federal Poverty Guidelines. The income limits for MAA (age 65+) and MAB (blind) may differ, and those exact figures were not confirmed in official sources reviewed for this page. Contact your county DSS or call (888) 245-0179 to get the current limit for your parent's specific category before assuming they do not qualify."
+        },
+        {
+          "question": "Can I apply for ABD Medicaid on behalf of my parent?",
+          "answer": "Yes. You can apply as your parent's authorized representative if you have power of attorney, are their legal guardian, or they have given written permission for you to act on their behalf. Note that on the application. The county DSS will still communicate with your parent unless you have legal authority to receive information independently."
+        },
+        {
+          "question": "My parent does not receive SSI. Will they have to go through a long disability review for MAD?",
+          "answer": "Possibly. If your parent does not already receive SSI or SSDI based on disability, the state's Disability Determination Services (DDS) office will review medical evidence to confirm eligibility under MAD. This review can take additional time beyond the standard application processing window. Submitting thorough medical documentation with the application, including physician notes, diagnoses, and treatment history, reduces back-and-forth delays."
+        },
+        {
+          "question": "Can my parent be on ABD Medicaid and also apply for a home care waiver like CAP/DA?",
+          "answer": "These are separate programs with separate applications, but ABD Medicaid eligibility is typically required before a person can access CAP/DA services. ABD Medicaid covers the core medical benefit; CAP/DA adds in-home and community supports as an alternative to nursing facility placement. Apply for ABD Medicaid first, then ask your county DSS about CAP/DA if your parent needs ongoing help at home."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent is required to report changes in income or resources to their county DSS within a specific timeframe (DSS will tell you the reporting requirement at enrollment). A significant increase in income or assets could affect eligibility and result in a loss of coverage. DSS conducts periodic eligibility renewals, typically annually, where they reassess the situation."
+        },
+        {
+          "question": "Is there a waitlist for ABD Medicaid itself?",
+          "answer": "No. ABD Medicaid is an entitlement program, meaning anyone who meets the eligibility rules is enrolled without waiting. There is no waitlist for the Medicaid coverage itself. Some long-term services and supports delivered through separate waiver programs (such as CAP/DA) may have capacity constraints; ask your county DSS specifically about those if your parent needs home-based care beyond what standard Medicaid covers."
+        },
+        {
+          "question": "If my parent's application is denied, what can we do?",
+          "answer": "You have the right to request a fair hearing to appeal the decision. The denial notice from DSS will explain the reason for denial and include instructions for requesting a hearing. You must typically request the hearing within a set number of days of the notice. A local legal aid organization can help you prepare if needed; call NC 2-1-1 and ask for legal aid referrals in your parent's county."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(888) 245-0179",
+      "sourceUrl": "https://medicaid.ncdhhs.gov/apply",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "nc-special-assistance-ssi-supplement",
+      "name": "Special Assistance (State SSI Supplement)",
+      "shortName": "NC Special Assistance",
+      "tagline": "If your parent is moving into an adult care home or assisted living in North Carolina and their income is limited, this state cash supplement can help cover the cost of their residential care.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County Department of Social Services offices across North Carolina",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and moving into a licensed adult care home, group home, family care home, or secure care assisted living facility in North Carolina, they may qualify for Special Assistance: a monthly cash supplement paid on top of any SSI benefit they receive. The program is designed specifically for people who need residential care but cannot afford it on their own income.\n\nThe benefit can be up to $473 per month in Special Assistance, paid in addition to any federal SSI payment. That money goes toward the cost of living in the facility. Your parent must meet both a financial eligibility standard and a level-of-care requirement, meaning a health care provider must verify that they need the kind of daily help a residential facility provides.\n\nOne thing that surprises many families: if your parent was denied SSI only because their income was too high, they may still qualify for Special Assistance. An SSI denial does not automatically disqualify them. The county Department of Social Services handles all applications, so your first call will be to the DSS office in the county where your parent lives or will live.",
+      "savingsRange": "Up to $473/month in Special Assistance (in addition to any SSI payment)",
+      "savingsSource": "NC DHHS Special Assistance program brochure (ncdhhs.gov), which states eligible residents may receive up to $473/month in Special Assistance benefits in addition to SSI. This is a program maximum, not a guaranteed benefit for every enrollee.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or 18-64 with a disability under Social Security standards)",
+          "Living in a licensed NC facility authorized to receive Special Assistance payments",
+          "Meets financial eligibility (SSI-eligible or denied SSI only because income is too high)",
+          "Needs residential facility level of care, verified by a health care provider",
+          "North Carolina resident and U.S. citizen or qualified alien"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Real property (other than primary home, in certain circumstances)",
+            "Personal property",
+            "Stocks and bonds",
+            "IRAs",
+            "Annuities",
+            "Life insurance policies",
+            "Burial insurance",
+            "Trust funds"
+          ],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "A health care provider must verify that your parent needs residential facility level of care. This means they require the kind of daily assistance with personal care, supervision, or health management that a licensed adult care home or similar facility provides. The assessment is part of the application process.",
+        "otherRequirements": [
+          "Must reside in a licensed facility authorized to receive Special Assistance payments: adult care home, group home, family care home, or secure care assisted living facility",
+          "Must be eligible for SSI, or have been denied SSI solely because income exceeded the SSI limit",
+          "Must be a North Carolina resident",
+          "Must be a U.S. citizen or qualified alien"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Apply in person at your county Department of Social Services office; bring financial and medical documents and plan for county-variable processing times.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your county DSS office",
+            "description": "Special Assistance is administered county by county. Go to the NC DHHS county directory at https://www.ncdhhs.gov/divisions/social-services/local-dss-directory to find the phone number and address for the DSS office in the county where your parent lives or will be placed."
+          },
+          {
+            "step": 2,
+            "title": "Call the county DSS before visiting",
+            "description": "Call your county DSS office to ask about intake hours, whether you need an appointment, and whether you can send a representative to apply on your parent's behalf. Procedures vary by county."
+          },
+          {
+            "step": 3,
+            "title": "Gather documents before the appointment",
+            "description": "Bring proof of identity, age, NC residency, citizenship or immigration status, income (Social Security award letters, SSI letters, VA award letters), and information about all assets including property, accounts, life insurance, and trust funds. Also bring documentation of the licensed facility your parent is entering or has entered."
+          },
+          {
+            "step": 4,
+            "title": "Complete form DSS-8190",
+            "description": "The primary application is the DSS-8190 SSI/Non-SSI Application Workbook. County DSS staff will provide this form and walk through it with you. A representative such as an adult child or facility staff member can help complete it."
+          },
+          {
+            "step": 5,
+            "title": "Obtain medical level-of-care verification",
+            "description": "A health care provider must verify that your parent needs residential facility level of care. If your parent's physician has not already completed this, county DSS staff will tell you what form or documentation is needed. This step is required and cannot be skipped."
+          },
+          {
+            "step": 6,
+            "title": "Follow up on your application status",
+            "description": "After submitting, keep the name and direct number of the caseworker assigned to your parent's case. Contact them if you have not heard back within 30 days, since processing speed varies by county workload and whether the level-of-care verification is complete."
+          }
+        ],
+        "processingTime": "No statewide standard processing time is published. Timing depends on county DSS workload, whether the level-of-care verification is complete, and how quickly financial documents are submitted. Contact your county DSS directly for a local estimate.",
+        "waitlist": null,
+        "tip": "If your parent is already in a licensed adult care home, tell the facility social worker or administrator that you are applying for Special Assistance. Facility staff often help families initiate the process and know the county DSS contacts.",
+        "urls": [
+          {
+            "label": "NC DHHS Special Assistance program brochure",
+            "url": "https://www.ncdhhs.gov/documents/files/sa-program-brochure-11-17-16/open"
+          },
+          {
+            "label": "NC DHHS local DSS office directory",
+            "url": "https://www.ncdhhs.gov/divisions/social-services/local-dss-directory"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter showing current monthly benefit amount",
+        "SSI award letter (if your parent receives SSI) or SSI denial letter (if denied due to income)",
+        "Proof of North Carolina residency (utility bill, lease, or state-issued document in parent's name)",
+        "Proof of age and identity (birth certificate, passport, or state-issued ID)",
+        "Proof of U.S. citizenship or qualified alien status (U.S. passport, naturalization certificate, or immigration documents)",
+        "VA award letter showing current benefit amount (if your parent receives VA income)",
+        "Documentation of the licensed facility where your parent lives or will be placed (facility name, license type, and address)",
+        "Medical verification from a health care provider confirming residential facility level of care",
+        "Current balances for any checking or savings accounts (county DSS will ask for account information at intake)",
+        "Life insurance policy documents showing face values and any cash surrender value",
+        "Burial insurance policy documents, if any",
+        "Annuity contracts or IRA account statements, if any",
+        "Trust fund documents, if your parent is a beneficiary or grantor of any trust",
+        "Deeds or tax statements for any real property other than a primary residence, if applicable"
+      ],
+      "contacts": [
+        {
+          "label": "Your county Department of Social Services",
+          "phone": null,
+          "description": "Special Assistance applications are taken only at the county DSS office. Find your county's direct phone number and address at https://www.ncdhhs.gov/divisions/social-services/local-dss-directory. This is the office that can open a case, assign a caseworker, and tell you what documents to bring.",
+          "hours": "Hours vary by county; most offices are open Monday through Friday during business hours. Call before visiting."
+        },
+        {
+          "label": "NC DHHS Division of Social Services (program-level questions)",
+          "phone": "(919) 527-6335",
+          "description": "The NC DHHS Division of Social Services can answer general questions about the Special Assistance program statewide, but applications must be submitted through your county DSS office.",
+          "hours": "Monday through Friday, standard business hours"
+        },
+        {
+          "label": "NC 2-1-1",
+          "phone": "2-1-1",
+          "description": "General referral line that can help you identify your county DSS office if you are unsure which county applies. This line does not handle Special Assistance applications directly.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent was denied SSI because their income was too high, do not assume they are disqualified. Special Assistance has its own eligibility rules and an SSI income denial does not automatically close this door. Ask county DSS staff to review Special Assistance eligibility separately.",
+        "Your parent must be in a licensed facility that is authorized to receive Special Assistance payments. Not every assisted living or group home qualifies. Before applying, confirm with the facility administrator that their license type is approved for SA payments.",
+        "Asset documentation is taken seriously in this program. Be prepared to disclose all asset types including life insurance, annuities, IRAs, burial insurance, and any trust fund interests, not just bank accounts. Missing asset information is a common reason applications are delayed.",
+        "A family member or other representative can apply on behalf of a parent who is unable to apply in person. Tell the county DSS office when you call that you will be acting as a representative, and ask what authorization documentation they require."
+      ],
+      "relatedPrograms": [
+        "NC Medicaid (standard Medicaid for low-income adults, often applied for alongside Special Assistance)",
+        "NC Innovations Waiver (Medicaid waiver for people with intellectual/developmental disabilities)",
+        "Supplemental Security Income (SSI, federal program that Special Assistance supplements)",
+        "NC SHIIP (State Health Insurance Assistance Program, free counseling on Medicare and coverage options for seniors)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is for facility residents, not most home settings",
+          "body": "Special Assistance is tied to licensed residential facilities: adult care homes, group homes, family care homes, and secure care assisted living facilities. If your parent is living at home, this program generally does not apply. For in-home financial help, look at SSI directly or NC Medicaid programs."
+        },
+        {
+          "type": "callout",
+          "title": "Special Assistance is not Medicaid",
+          "body": "These are two separate programs with different rules. Medicaid covers medical and health services. Special Assistance is a cash supplement toward the cost of living in a licensed facility. Your parent may need to apply for both, and county DSS can help determine which programs they qualify for."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent was denied SSI. Does that mean they cannot get Special Assistance?",
+          "answer": "Not necessarily. If SSI was denied solely because your parent's income was too high, they may still qualify for Special Assistance. The two programs have different thresholds. Bring the SSI denial letter to the county DSS office and ask staff to evaluate Special Assistance eligibility separately."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot go in person?",
+          "answer": "Yes. County DSS offices allow a family member or authorized representative to apply on behalf of an applicant who cannot appear in person. When you call to schedule or inquire, tell the DSS office that you will be acting as a representative. Ask what, if any, written authorization they require before the visit."
+        },
+        {
+          "question": "Does the facility my parent is in need to be a specific type to qualify?",
+          "answer": "Yes. Your parent must reside in a licensed facility that is specifically authorized to receive Special Assistance payments. This includes adult care homes, group homes, family care homes, and secure care assisted living facilities. Before applying, ask the facility administrator to confirm their license type is approved for SA. If the facility is not authorized, your parent will not qualify regardless of their financial situation."
+        },
+        {
+          "question": "What assets will the county look at, and is the home counted?",
+          "answer": "The county DSS will review a broad range of assets: real and personal property, bank accounts, stocks, bonds, IRAs, annuities, life insurance (including cash surrender value), burial insurance, and trust funds. The research available does not publish a precise dollar threshold or a definitive list of exempt versus countable assets. Go into the appointment prepared to disclose all of these, and let the caseworker determine what is countable. Do not assume assets are exempt without asking."
+        },
+        {
+          "question": "How long will it take to find out if my parent is approved?",
+          "answer": "No single statewide processing time standard is published for Special Assistance. Timing depends on your county DSS office's current caseload, how quickly the level-of-care verification from a health care provider is received, and whether all financial documents are complete at submission. Submit everything at once to avoid delays, and ask your caseworker for a realistic local estimate when you apply."
+        },
+        {
+          "question": "Can my parent receive Special Assistance and Medicaid at the same time?",
+          "answer": "Yes, and many residents in licensed care facilities receive both. They are separate programs covering different things. Medicaid covers medical care; Special Assistance is a cash supplement toward residential facility costs. Your county DSS office can evaluate eligibility for both programs during the same appointment."
+        },
+        {
+          "question": "What if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent is required to report changes in income, assets, or living situation to the county DSS. Changes can affect the benefit amount or continued eligibility. The program conducts periodic reviews, and failure to report changes can result in overpayments that must be repaid. Contact your county DSS caseworker whenever there is a significant financial or living situation change."
+        },
+        {
+          "question": "Is there a waitlist for Special Assistance?",
+          "answer": "Special Assistance is an eligibility-based program, not a capped-slot program. There is no published statewide waitlist. The main delays are county processing time and gathering required documentation, particularly the level-of-care verification from a health care provider. Once all documents are in and eligibility is confirmed, approval is not subject to a queue."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": null,
+      "sourceUrl": "https://www.ncdhhs.gov/documents/files/sa-program-brochure-11-17-16/open",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
           "from": [
-            "18006627030",
-            "9192127000",
+            "9195276335",
             "211"
           ],
-          "to": "9199895300",
-          "source": "https://www.johnstonnc.gov/dss/content.cfm?pageid=saih",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/social-services/special-assistance/state-and-county-special-assistance-adult-care-home-residents",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "nc-circuit-breaker-property-tax-deferral",
+      "name": "Circuit Breaker Property Tax Deferral",
+      "shortName": "Circuit Breaker Tax Relief",
+      "tagline": "If your parent is 65+ and owns their North Carolina home, this program caps how much of their income can go toward property taxes each year.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County tax assessor / county tax office where the property is located",
+            "type": "service-area"
+          },
+          {
+            "name": "North Carolina Department of Revenue property tax forms page",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent owns their home in North Carolina and is 65 or older, the Circuit Breaker Property Tax Deferral sets a ceiling on how much of their income they have to spend on property taxes. For homeowners earning $38,800 or less per year, taxes are capped at 4% of their income. For homeowners earning between $38,800 and $58,200 per year, taxes are capped at 5% of their income. Any taxes above that cap are deferred, meaning they are not erased but are not due right now.\n\nThis matters most when a parent's property tax bill is rising but their income is fixed. Instead of selling the home or skipping taxes, the deferral creates breathing room. The portion they owe each year is predictable and tied to what they actually earn.\n\nOne thing families need to understand before applying: the deferred taxes are still a debt against the property. If a disqualifying event occurs (such as your parent moving, selling the home, or passing away), the last three years of deferred taxes become payable with interest. This is not a forgiveness program. It is a postponement program, and that distinction matters when you are thinking about long-term estate planning.",
+      "savingsRange": "Savings vary by income and tax bill. A homeowner earning $30,000/year is capped at $1,200 in property taxes (4% of income); any amount billed above that is deferred.",
+      "savingsSource": "North Carolina's tiered income caps are set by the Circuit Breaker statute. The 4% and 5% caps are applied to the owner's actual income. Specific dollar savings depend on the local tax bill, which varies by county and assessed home value. No statewide average savings figure was identified in available official materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or totally and permanently disabled)",
+          "Annual income at or below $58,200 (2026)",
+          "Must own and occupy the home as a permanent residence",
+          "Must have owned and occupied the home for at least 5 consecutive years",
+          "North Carolina resident"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must own and occupy the property as a permanent residence.",
+          "Must have owned and occupied the property as a permanent residence for at least five consecutive years.",
+          "Application (Form AV-9) must be filed with the county tax assessor every year. Approval does not carry over automatically.",
+          "If the home has multiple owners, all owners must individually qualify. For unmarried joint owners, each must apply and qualify separately.",
+          "Applicants qualifying through disability rather than age must document total and permanent disability."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "File Form AV-9 with your county tax assessor by June 1 of the tax year; the form is available from the NC Department of Revenue.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Download Form AV-9",
+            "description": "Get the current-year AV-9 (Application for Property Tax Relief) from the NC Department of Revenue at ncdor.gov/taxes-forms/property-tax/property-tax-forms. Use only the current-year version; county brochures or older forms may show outdated income limits."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents",
+            "description": "You will need the previous year's federal income tax return, your Social Security benefits statement (SSA-1099 or equivalent), and proof of ownership and occupancy if requested by the county. If you qualify through disability rather than age, include disability documentation."
+          },
+          {
+            "step": 3,
+            "title": "Contact your county tax office",
+            "description": "Call or visit the county tax assessor's office where the property is located. Ask whether they accept the form by mail or require in-person submission, and confirm the local mailing address and any county-specific instructions. County offices vary in how they handle intake."
+          },
+          {
+            "step": 4,
+            "title": "Submit Form AV-9 by June 1",
+            "description": "File the completed AV-9 with your county tax assessor by the June 1 annual deadline. Late filings are generally not accepted for the current tax year. Keep a copy of everything you submit."
+          },
+          {
+            "step": 5,
+            "title": "Reapply every year",
+            "description": "This program requires a new application each year. Set a reminder before June 1. If your parent's income or ownership situation changes, confirm they still meet all requirements before reapplying."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard was identified in available materials. Applications are tied to the June 1 annual deadline; contact your county tax office for local timelines.",
+        "waitlist": null,
+        "tip": "If the home has more than one owner, every owner must qualify individually. For unmarried co-owners, each must file a separate AV-9. Missing a co-owner's application can disqualify the entire household from the benefit.",
+        "urls": [
+          {
+            "label": "Form AV-9 and Property Tax Forms (NCDOR)",
+            "url": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Federal income tax return for the previous year (shows total income used to determine which cap applies)",
+        "Social Security benefits statement (SSA-1099 or equivalent) for the previous year",
+        "Proof of ownership and occupancy if requested by the county tax office (deed, mortgage statement, or utility bill in your parent's name at the property address)",
+        "Information on all property owners if the home is jointly owned (names, qualifying status, and separate AV-9 for each unmarried co-owner)",
+        "Disability documentation if your parent is qualifying through total and permanent disability rather than age",
+        "Completed Form AV-9 (Application for Property Tax Relief), current-year version from ncdor.gov"
+      ],
+      "contacts": [
+        {
+          "label": "Your County Tax Assessor's Office",
+          "phone": null,
+          "description": "The county tax assessor where the property is located is the only office that can accept your AV-9 application. Look up your county's office at your county government website or search '[county name] NC tax assessor.' Phone numbers and mailing addresses vary by county.",
+          "hours": "Varies by county; typically Monday through Friday during business hours"
+        },
+        {
+          "label": "NC Department of Revenue Property Tax Division",
+          "phone": "(919) 814-1129",
+          "description": "Can answer questions about program rules and direct you to the correct forms. Cannot accept applications; those go to the county.",
+          "hours": "Monday through Friday, 8am to 5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 252-3052",
+          "description": "Number listed on ncdor.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "County websites and older brochures sometimes show prior-year income limits that are no longer current. Always use the income thresholds printed on the current-year AV-9 instructions from ncdor.gov, or confirm with your county assessor.",
+        "If your parent's home is jointly owned with someone who does not qualify (for example, a younger co-owner who is not 65 or disabled), the household may not be eligible. Confirm all owners meet requirements before filing.",
+        "Deferred taxes accumulate as a lien on the property. Families involved in estate planning or considering a future home sale should factor this deferred balance into their financial picture."
+      ],
+      "relatedPrograms": [
+        "Elderly or Disabled Exclusion (North Carolina property tax exclusion that reduces taxable value; separate program from Circuit Breaker)",
+        "Disabled Veteran Exclusion (North Carolina property tax relief for qualifying veterans)",
+        "Low Income Energy Assistance Program (LIEAP) in North Carolina (helps with utility costs for fixed-income households)",
+        "NC Extra Credit Grant and other NC Department of Revenue taxpayer assistance programs"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "2026 Income Limits",
+          "items": [
+            {
+              "label": "Tier 1: Income at or below $38,800/year",
+              "value": "Property taxes capped at 4% of income"
+            },
+            {
+              "label": "Tier 2: Income $38,801 to $58,200/year",
+              "value": "Property taxes capped at 5% of income"
+            },
+            {
+              "label": "Income above $58,200/year",
+              "value": "Not eligible for this program"
+            }
+          ],
+          "note": "Income thresholds are set annually. The figures above are for 2026 applications. Confirm current-year limits on the AV-9 form at ncdor.gov."
+        },
+        {
+          "type": "prose",
+          "heading": "What 'deferral' actually means for your family",
+          "body": "The Circuit Breaker does not erase property taxes. It postpones the portion above the cap. That deferred amount stays attached to the property as a debt. If a disqualifying event occurs (your parent sells the home, moves out, no longer qualifies, or passes away), the last three years of deferred taxes become due with interest. Earlier deferred amounts beyond that three-year window are generally forgiven at that point, but the most recent three years are not. Families thinking about a future home sale or estate transfer should know this deferred balance exists and plan accordingly."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has owned the home for four years. Can they still apply?",
+          "answer": "Not yet. The program requires five consecutive years of ownership and occupancy as a permanent residence. If your parent meets all other requirements, mark the calendar for next year and apply then. Use that time to gather income documents and confirm the June 1 deadline for the year they will first qualify."
+        },
+        {
+          "question": "My parent's home is owned jointly with a sibling who is 45. Does that disqualify them?",
+          "answer": "Yes, it likely does. All owners must individually qualify for the program. If one co-owner does not meet the age or disability requirement, the household is not eligible. The only exception is married couples where the applying spouse meets the requirements; for unmarried joint owners, every person on the deed must qualify separately and file their own AV-9."
+        },
+        {
+          "question": "What happens to the deferred taxes when my parent passes away or moves to a care facility?",
+          "answer": "A disqualifying event (death, sale, or the property no longer being used as the permanent residence) triggers repayment. The last three years of deferred taxes become due with interest. Deferred amounts from earlier years beyond that three-year window are generally not collected. If your parent is considering a move to assisted living or memory care, factor this potential tax balance into the financial planning conversation before the move happens."
+        },
+        {
+          "question": "My parent forgot to apply last year. Can they get credit for prior years?",
+          "answer": "No. The Circuit Breaker requires an annual application filed by June 1 of the current tax year. There is no retroactive option; if a year is missed, that year's tax bill is owed in full. Going forward, set a recurring reminder each spring so the deadline is not missed again."
+        },
+        {
+          "question": "Can my parent get both the Circuit Breaker and the Elderly or Disabled Exclusion?",
+          "answer": "No. North Carolina requires homeowners to choose one property tax relief program. The Elderly or Disabled Exclusion reduces the taxable value of the home; the Circuit Breaker caps the tax based on income. Which one saves more depends on the home's assessed value and your parent's income. Your county tax assessor can help compare the two options before you file."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent if they cannot visit the county office?",
+          "answer": "Many counties accept mailed applications, which removes the need for an in-person visit. Some counties may also accept a legally authorized representative. Call your county tax assessor's office to confirm what they require if your parent cannot apply directly. If your parent has a power of attorney in place, have that document ready when you call."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "House",
+      "phone": "(919) 814-1129",
+      "sourceUrl": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "9198141129"
+          ],
+          "to": "(877) 252-3052",
+          "source": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms/av-9-2018-application-property-tax-relief",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     }

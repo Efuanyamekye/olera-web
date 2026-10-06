@@ -2,8 +2,8 @@
   "state": "AR",
   "stateName": "Arkansas",
   "draftedAt": "2026-04-13T21:50:19.510Z",
-  "total": 12,
-  "successful": 12,
+  "total": 13,
+  "successful": 13,
   "programs": [
     {
       "id": "choices-homecare",
@@ -205,7 +205,27 @@
       "sourceUrl": "https://humanservices.arkansas.gov/wp-content/uploads/ARChoices-Detailed-Overview.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 2742,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/long-term-services-and-supports-ltss-medicaid-assistance/",
+          "severity": "medium",
+          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3000,
+          "to": 2000,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/long-term-services-and-supports-ltss-medicaid-assistance/",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -395,21 +415,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "4794636600",
-            "8702077500",
-            "8002522412"
-          ],
-          "to": "18668013435",
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-programs",
@@ -678,19 +684,19 @@
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -854,6 +860,12 @@
           "phone": "1-800-997-9999",
           "description": "EBT card issues, balance checks, and PIN resets",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 372-1084",
+          "description": "Number listed on humanservices.arkansas.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -917,19 +929,21 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18004828988",
             "211",
             "18009979999"
           ],
-          "to": "18553721084",
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/contact-dco/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "to": "(855) 372-1084",
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/supplemental-nutrition-assistance-snap/snap-overview-and-how-to-apply/",
+          "flaggedAt": "2026-10-06T12:17:59.626Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1141,7 +1155,7 @@
           "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -1396,37 +1410,20 @@
         {
           "field": "income_1",
           "from": 2608,
-          "to": 1280,
+          "to": 395,
           "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
           "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         },
         {
           "field": "income_2",
           "from": 3525,
-          "to": 1820,
+          "to": 533,
           "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
           "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8882330326",
-            "5013791535",
-            "8702021347",
-            "5017768446",
-            "4797852303",
-            "8703335127",
-            "211"
-          ],
-          "to": "5016827390",
-          "source": "https://adeq.state.ar.us/energy/pdfs/state-plan-august-29-2024.pdf",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -1681,6 +1678,12 @@
           "phone": "(800) 482-6359",
           "description": "Number listed on search.arkansas211.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 245-5498",
+          "description": "Number listed on agingarkansas.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1755,6 +1758,20 @@
           "source": "https://search.arkansas211.org/search/2157d3ff-8296-5962-b65f-a3cbc7f1eea2",
           "flaggedAt": "2026-10-02T07:33:22.568Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "5016822441",
+            "211",
+            "8004826359"
+          ],
+          "to": "(866) 245-5498",
+          "source": "https://agingarkansas.org/how-to-get-meals-on-wheels-in-arkansas/",
+          "flaggedAt": "2026-10-06T12:17:59.626Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -2315,6 +2332,264 @@
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ar-medicaid-aabd",
+      "name": "Regular Medicaid / Aged Blind and Disabled (AABD)",
+      "shortName": "Arkansas AABD Medicaid",
+      "tagline": "If your parent is 65 or older, blind, or disabled in Arkansas, they may qualify for full Medicaid coverage that pays for doctor visits, hospital stays, and potentially dental and vision care at little or no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local county Arkansas DHS office",
+            "type": "service-area"
+          },
+          {
+            "name": "Access Arkansas online portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Arkansas's Aged, Blind, and Disabled (AABD) Medicaid program provides full health coverage for people who are 65 or older, blind, or disabled and who meet income and asset rules. For your parent, that means Medicaid pays for doctor visits, hospital stays, lab work, and prescription drugs. If your parent also has Medicare, AABD Medicaid can help cover Medicare cost-sharing such as copays and deductibles. Arkansas DHS materials also indicate adult dental benefits and vision coverage, including one eye exam and one pair of glasses every 12 months, may be included, though the exact scope should be confirmed with DHS.\n\nThe income limits for this program are unusually structured. The official Arkansas DHS chart lists a net income limit of $108.33 per month for an individual and $216.66 per month for a couple. However, if your parent's income is above that threshold, Arkansas allows medical bills to be deducted from their income to reach the limit. This is called a \"spend-down\" and means that many people who appear to earn too much can still qualify once their out-of-pocket medical costs are counted. A current third-party summary also references higher modern income figures for some AABD categories, so confirming the exact current test with Arkansas DHS before assuming your parent doesn't qualify is essential.\n\nThis program is administered through your parent's local county Arkansas DHS office. The application can start online at access.arkansas.gov, but you will likely need to work with the county office and submit supporting documents before coverage begins. If your parent is already receiving SSI, they may qualify automatically; call DHS to confirm.",
+      "savingsRange": "",
+      "savingsSource": "Free service: AABD Medicaid covers the cost of covered medical services; there is no standard dollar benefit to cite.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR blind, OR disabled under SSA criteria",
+          "Arkansas resident",
+          "Income at or below the program limit (spend-down may apply if income is higher)",
+          "Assets within program limits",
+          "U.S. citizen or qualifying immigration status"
+        ],
+        "ageRequirement": "65+ (or any age if blind or disabled under SSA criteria)",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 108.33
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 216.66
+          }
+        ],
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and investment accounts",
+            "Real property other than the primary home",
+            "Other non-exempt property"
+          ],
+          "exemptAssets": [
+            "Primary home (confirm exemption details with DHS)",
+            "Other exemptions not fully detailed in official materials; ask DHS which assets are excluded before applying"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or meet qualifying noncitizen status (some long-term noncitizens may qualify in limited circumstances; confirm with DHS)",
+          "Disabled applicants must meet SSA disability criteria or pass a DHS Medical Review Team assessment depending on the application category",
+          "If income is above the income limit, medical bills may be deducted to reach the limit (spend-down). Bring documentation of any out-of-pocket medical expenses."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can start the application online at access.arkansas.gov or by calling 1-800-482-8988, but plan to work with your local county DHS office to submit documents before coverage is finalized.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's documents before you start",
+            "description": "Collect their proof of age or disability, Social Security award letter, proof of Arkansas residency, and current bank account balances. If their income is above the program limit, also gather any medical bills they have paid out of pocket, because those can be deducted. Having these ready before you call or log on prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Start the application online or by phone",
+            "description": "Go to access.arkansas.gov to begin an online application, or call 1-800-482-8988 (or 1-855-372-1084) Monday through Friday during business hours. The online portal is the Access Arkansas system managed by Arkansas DHS. If you prefer, you can also walk into your local county DHS office in person."
+          },
+          {
+            "step": 3,
+            "title": "Submit supporting documents to your county DHS office",
+            "description": "After starting the application, you will be directed to submit documents to your local county DHS office. You can mail them or deliver them in person. The main forms referenced for this program are the DHS-1 (general health care application) and, for disabled or long-term-care applicants, the ABD Application. Ask the DHS worker which form applies to your parent's situation."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any requests from DHS",
+            "description": "DHS may ask for additional information or schedule a review. If your parent is applying based on disability rather than age, a medical review by SSA or the DHS Medical Review Team may be required. Respond promptly; delays in returning information are the most common reason applications stall."
+          },
+          {
+            "step": 5,
+            "title": "Receive a determination letter",
+            "description": "DHS will mail a written decision. If approved, coverage may be backdated to the application date in some cases. If denied, the letter will explain the reason and describe your parent's right to appeal. To appeal, follow the instructions in the denial letter or call 1-800-482-8988."
+          }
+        ],
+        "processingTime": "The official Arkansas DHS sources reviewed did not publish a specific processing-time target for AABD Medicaid. Ask your county DHS office for an estimated timeline when you submit the application.",
+        "waitlist": null,
+        "tip": "If your parent's income looks too high at first glance, do not stop. Arkansas allows out-of-pocket medical bills to be deducted from countable income. Bring every medical bill and prescription receipt you can find. This spend-down rule means many families who assume their parent won't qualify actually can.",
+        "urls": [
+          {
+            "label": "Access Arkansas: Apply Online",
+            "url": "https://www.access.arkansas.gov"
+          },
+          {
+            "label": "Arkansas DHS Health Care Programs",
+            "url": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI letter showing current monthly benefit amount",
+        "Proof of Arkansas residency (utility bill, lease agreement, or Arkansas-issued ID showing current address)",
+        "Proof of age (birth certificate, passport, or Social Security card combined with another age-verifying document)",
+        "Medicare card, if your parent has Medicare (helpful but confirm with DHS whether required for your parent's category)",
+        "Proof of disability if your parent is under 65 and applying based on disability (SSA disability award letter or documentation for DHS Medical Review Team)",
+        "Pension, retirement, or other income statements showing all sources of monthly income",
+        "Current balances for all checking and savings accounts (DHS will ask; bring account numbers and the most recent statements you have)",
+        "Documentation of any certificates of deposit, investment accounts, or bonds",
+        "Medical bills and prescription receipts paid out of pocket, especially if your parent's income is above the income limit and you plan to use the spend-down deduction",
+        "Health insurance premium statements showing what your parent pays monthly for any existing coverage",
+        "Life insurance policy documents showing face value amounts",
+        "Deeds or property tax statements for any real property other than the primary home",
+        "Legal documents such as power of attorney or guardianship papers if you are applying on behalf of your parent"
+      ],
+      "contacts": [
+        {
+          "label": "Arkansas DHS Benefits Line",
+          "phone": "1-800-482-8988",
+          "description": "Start or check on a Medicaid application, ask about eligibility, or get connected to your county DHS office. This is the main application door for AABD Medicaid.",
+          "hours": "Monday through Friday, business hours (confirm current hours when you call)"
+        },
+        {
+          "label": "Arkansas DHS Alternate Benefits Line",
+          "phone": "1-855-372-1084",
+          "description": "Second DHS number for Medicaid applications and benefit inquiries; use this if the primary line has long wait times.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Access Arkansas Online Portal",
+          "phone": null,
+          "description": "Apply online at access.arkansas.gov. You can start and track an application without calling.",
+          "hours": "Available online at any time"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income appears to be above the income limit, do not assume they are ineligible. Arkansas allows unpaid or paid medical bills to be deducted from countable income under a spend-down rule. Bring all medical expense documentation when you apply.",
+        "Applicants age 65 and older are reviewed under different criteria than applicants who are blind or disabled. If your parent is under 65 and applying based on disability, the process will likely include a medical review by SSA or the DHS Medical Review Team, which adds time.",
+        "The income limits cited in official DHS charts and in third-party summaries do not match cleanly. Treat the county DHS office as the source of truth for the current income and asset tests before deciding not to apply.",
+        "If your parent is already receiving SSI (Supplemental Security Income), ask DHS whether they qualify for Medicaid automatically. SSI recipients often receive Medicaid without a separate full application process."
+      ],
+      "relatedPrograms": [
+        "Arkansas ARChoices in Homecare (HCBS waiver for home-based services for older and disabled adults)",
+        "Arkansas Medicare Savings Programs (help paying Medicare premiums, deductibles, and copays)",
+        "Arkansas PACE (Program of All-inclusive Care for the Elderly, for people who qualify for nursing-level care)",
+        "Arkansas Extra Help / Low Income Subsidy (federal help with Medicare Part D prescription costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The income limit may be lower than you expect, but that doesn't mean your parent won't qualify",
+          "body": "The official Arkansas DHS chart lists a net income limit of $108.33 per month for a single person. That number shocks most families, but Arkansas allows your parent to deduct medical bills from their countable income to reach the limit. This is called a spend-down. If your parent has regular prescription costs, doctor visits, or other out-of-pocket medical expenses, those costs can bring their countable income down to the qualifying level. Do not rule out AABD Medicaid based on income alone until you talk to DHS."
+        },
+        {
+          "type": "callout",
+          "title": "Asset limits are unverified; confirm before applying",
+          "body": "One current third-party summary reports asset limits of $9,950 for an individual and $14,910 for a couple. These figures were not confirmed in the official Arkansas DHS materials reviewed. The primary home is generally exempt from Medicaid asset calculations, but other exemptions were not fully detailed in the official sources found. Ask your DHS worker specifically which assets are counted and which are excluded before assuming your parent has too much."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,200 per month from Social Security. Does that automatically disqualify them?",
+          "answer": "Not necessarily. The official income limit on the DHS chart is $108.33 per month for a single person, but Arkansas allows medical bills to be subtracted from countable income under the spend-down rule. If your parent pays for prescriptions, doctor visits, or other medical costs out of pocket, those expenses can reduce their countable income to the qualifying level. Call 1-800-482-8988 and ask a DHS worker to walk through the spend-down calculation before you give up."
+        },
+        {
+          "question": "Can I apply for AABD Medicaid on behalf of my elderly parent if they can't do it themselves?",
+          "answer": "Yes. A family member or legally authorized representative can apply on a parent's behalf. Bring documentation of your authority to act, such as a power of attorney or guardianship order, when you apply. If that paperwork doesn't exist yet, DHS can often still accept the application and work with the family while legal documents are arranged."
+        },
+        {
+          "question": "My parent has a savings account with $8,000. Will that disqualify them?",
+          "answer": "Based on the asset limit reported by a current third-party summary ($9,950 for an individual), $8,000 in a savings account alone would be within the limit. However, that figure has not been confirmed in official Arkansas DHS materials reviewed for this page. You should call 1-800-482-8988 or visit your county DHS office to get the current, confirmed asset limit before concluding your parent qualifies or doesn't qualify based on savings."
+        },
+        {
+          "question": "My parent has Medicare. Should they still apply for AABD Medicaid?",
+          "answer": "Yes. If your parent has Medicare and qualifies for AABD Medicaid, Medicaid can act as secondary coverage and help pay Medicare's cost-sharing, including copays and deductibles. This is sometimes called \"dual eligibility.\" Having both can significantly reduce your parent's out-of-pocket medical costs. Bring your parent's Medicare card when you apply so DHS can coordinate coverage."
+        },
+        {
+          "question": "Can my parent apply for AABD Medicaid and an Arkansas HCBS waiver at the same time?",
+          "answer": "Yes, and doing so may make sense. AABD Medicaid covers medical services, while programs like ARChoices in Homecare cover home-based personal care services. Qualifying for AABD Medicaid is often a required first step to access HCBS waiver services. Ask your DHS worker about ARChoices when you apply for AABD Medicaid."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are enrolled?",
+          "answer": "Your parent must report changes in income, assets, or living situation to Arkansas DHS. Changes can affect eligibility. DHS conducts periodic renewals, typically annually, where eligibility is re-evaluated. If your parent's situation changes significantly between renewals, contact 1-800-482-8988 promptly to report it. Failing to report changes can result in overpayment recovery or loss of coverage."
+        },
+        {
+          "question": "How long will it take to find out if my parent is approved?",
+          "answer": "The official Arkansas DHS materials reviewed for this page did not publish a specific processing-time target for AABD Medicaid. Ask the DHS worker at the time of application for an estimated timeline. If your parent's application involves a disability determination by SSA or the DHS Medical Review Team, the process will likely take longer than a straightforward age-based application."
+        },
+        {
+          "question": "My parent was denied. Is there anything we can do?",
+          "answer": "Yes. The denial letter will include instructions for requesting a fair hearing (an appeal). You must act within the deadline stated in the letter; missing it can waive your parent's appeal rights. To start an appeal, follow the instructions in the denial letter or call 1-800-482-8988. A legal aid attorney who specializes in Medicaid can help if the situation is complex."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-800-482-8988",
+      "sourceUrl": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 108.33,
+          "to": 1064,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "income_2",
+          "from": 216.66,
+          "to": 1442,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9950,
+          "to": 2000,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 3000,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -2393,5 +2668,5 @@
     ],
     "resourcesVsBenefits": "Benefits like SNAP, LIHEAP, and ARChoices require your loved one to meet specific income and asset limits, typically income below $1,500-$2,200/month. Free resources like Senior Medicare Patrol (Medicare fraud protection), Legal Aid for Seniors, and the Long-Term Care Ombudsman are available to any Arkansas senior regardless of income, assets, or insurance status."
   },
-  "factcheckedAt": "2026-10-02T07:33:22.568Z"
+  "factcheckedAt": "2026-10-06T12:17:59.626Z"
 }

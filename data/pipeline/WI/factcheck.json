@@ -1,14 +1,14 @@
 {
   "state": "WI",
   "stateName": "Wisconsin",
-  "checkedAt": "2026-10-02T07:48:16.664Z",
-  "total": 5,
+  "checkedAt": "2026-10-06T12:31:10.459Z",
+  "total": 13,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 3,
-  "totalFlags": 3,
-  "highSeverityFlags": 0,
+  "programsWithFlags": 7,
+  "totalFlags": 10,
+  "highSeverityFlags": 4,
   "programs": [
     {
       "programId": "seniorcare-prescription-assistance",
@@ -34,14 +34,14 @@
         "phone": "8006572038",
         "sources": {
           "age": "https://www.dhs.wisconsin.gov/seniorcare/index.htm",
-          "income": null,
+          "income": "https://www.dhs.wisconsin.gov/seniorcare/fpl.htm",
           "assets": null,
           "phone": "https://www.dhs.wisconsin.gov/seniorcare/contacts.htm"
         },
-        "notes": "SeniorCare is current and appears active in 2026; no income or asset test values were found in the retrieved official sources."
+        "notes": "SeniorCare is the current Wisconsin senior prescription drug program; no asset test found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "SeniorCare is current and appears active in 2026; no income or asset test values were found in the retrieved official sources."
+      "notes": "SeniorCare is the current Wisconsin senior prescription drug program; no asset test found in the retrieved official sources."
     },
     {
       "programId": "elder-benefit-specialist",
@@ -66,15 +66,15 @@
         "assets_couple": null,
         "phone": "8449472372",
         "sources": {
-          "age": "https://www.dhs.wisconsin.gov/adrc/index.htm",
+          "age": "https://www.dhs.wisconsin.gov/benefit-specialists/ebs.htm",
           "income": null,
           "assets": null,
           "phone": "https://www.dhs.wisconsin.gov/adrc/index.htm"
         },
-        "notes": "Current Wisconsin DHS ADRC page says elder benefit specialists help adults 60 or older; no income or asset test found for the senior pathway."
+        "notes": "Current Wisconsin DHS sources indicate EBS serves adults age 60+; no income or asset test found; main statewide help line is 844-947-2372."
       },
       "flags": [],
-      "notes": "Current Wisconsin DHS ADRC page says elder benefit specialists help adults 60 or older; no income or asset test found for the senior pathway."
+      "notes": "Current Wisconsin DHS sources indicate EBS serves adults age 60+; no income or asset test found; main statewide help line is 844-947-2372."
     },
     {
       "programId": "senior-employment-program-wise",
@@ -98,14 +98,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6082677286",
+        "phone": "6082679097",
         "sources": {
           "age": "https://www.dhs.wisconsin.gov/wise/index.htm",
-          "income": "https://dwd.wisconsin.gov/wioa/pdf/WISE-Policy-Guidance.pdf",
+          "income": null,
           "assets": null,
-          "phone": "https://www.dhs.wisconsin.gov/employment-skills/index.htm"
+          "phone": "https://www.dhs.wisconsin.gov/wise/index.htm"
         },
-        "notes": "Program appears current under Wisconsin DWD; no separate asset test found in the retrieved official sources."
+        "notes": "WISE is current and active; official state page shows age 55+ and directs inquiries to the Wisconsin Department of Workforce Development. No authoritative income or asset thresholds were found in the retrieved official sources."
       },
       "flags": [
         {
@@ -116,10 +116,10 @@
             "6082424928",
             "211"
           ],
-          "verifiedValue": "6082677286"
+          "verifiedValue": "6082679097"
         }
       ],
-      "notes": "Program appears current under Wisconsin DWD; no separate asset test found in the retrieved official sources."
+      "notes": "WISE is current and active; official state page shows age 55+ and directs inquiries to the Wisconsin Department of Workforce Development. No authoritative income or asset thresholds were found in the retrieved official sources."
     },
     {
       "programId": "family-care",
@@ -137,21 +137,28 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
+        "assets_couple": 2000,
         "phone": "8003623002",
         "sources": {
-          "age": "https://www.dhs.wisconsin.gov/publications/p0/p00088d.pdf",
-          "income": null,
+          "age": "https://www.dhs.wisconsin.gov/familycare/index.htm",
+          "income": "https://www.dhs.wisconsin.gov/familycare/index.htm",
           "assets": "https://www.dhs.wisconsin.gov/publications/p0/p00079.pdf",
           "phone": "https://www.dhs.wisconsin.gov/familycare/index.htm"
         },
-        "notes": "Family Care is a Medicaid long-term care program; official DHS materials show a senior pathway age threshold of 65+ and a $2,000 asset limit for one person. No separate current income figure was retrievable from the sources gathered, and the official page lists Medicaid Member Services as the main help line."
+        "notes": "Family Care is an official Wisconsin Medicaid long-term care program for older adults and adults with disabilities. Senior pathway appears to use age 65+ in some materials, but the DHS program page states enrollment starts at age 18; no separate senior-specific minimum age was found. No separate income cap found in the retrieved official sources; Medicaid financial eligibility is referenced instead."
       },
       "flags": [
+        {
+          "field": "age",
+          "severity": "info",
+          "draftValue": 65,
+          "verifiedValue": 18,
+          "note": "likely compound program — drafted senior threshold, verified returned floor age for other population"
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -162,7 +169,7 @@
           "verifiedValue": "8003623002"
         }
       ],
-      "notes": "Family Care is a Medicaid long-term care program; official DHS materials show a senior pathway age threshold of 65+ and a $2,000 asset limit for one person. No separate current income figure was retrievable from the sources gathered, and the official page lists Medicaid Member Services as the main help line."
+      "notes": "Family Care is an official Wisconsin Medicaid long-term care program for older adults and adults with disabilities. Senior pathway appears to use age 65+ in some materials, but the DHS program page states enrollment starts at age 18; no separate senior-specific minimum age was found. No separate income cap found in the retrieved official sources; Medicaid financial eligibility is referenced instead."
     },
     {
       "programId": "iris-self-directed-care",
@@ -192,7 +199,7 @@
           "assets": null,
           "phone": "https://www.dhs.wisconsin.gov/iris/index.htm"
         },
-        "notes": "Official Wisconsin DHS page shows IRIS is for older adults and adults with disabilities, with a minimum age of 18; no separate senior-specific age threshold or income/assets test was found on the retrieved official sources."
+        "notes": "IRIS is currently an active Wisconsin Medicaid long-term care program; official DHS pages state the minimum age is 18 and list the IRIS Call Center at 888-515-4747."
       },
       "flags": [
         {
@@ -205,7 +212,342 @@
           "verifiedValue": "8885154747"
         }
       ],
-      "notes": "Official Wisconsin DHS page shows IRIS is for older adults and adults with disabilities, with a minimum age of 18; no separate senior-specific age threshold or income/assets test was found on the retrieved official sources."
+      "notes": "IRIS is currently an active Wisconsin Medicaid long-term care program; official DHS pages state the minimum age is 18 and list the IRIS Call Center at 888-515-4747."
+    },
+    {
+      "programId": "wi-medicaid-elderly-blind-disabled",
+      "programName": "Medicaid for the Elderly, Blind, or Disabled",
+      "facts": {
+        "age": 65,
+        "income_1": 1086,
+        "income_2": 1636,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8003623002"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1086,
+        "income_2": 1636,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8003623002",
+        "sources": {
+          "age": "https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm",
+          "income": "https://www.dhs.wisconsin.gov/dms/memos/ops/dms-ops-2025-21.pdf",
+          "assets": "https://www.dhs.wisconsin.gov/dms/memos/ops/dms-ops-2025-21.pdf",
+          "phone": "https://www.dhs.wisconsin.gov/medicaid/ssi-related.htm"
+        },
+        "notes": "Current Wisconsin SSI-Related/EBD Medicaid limits for 2026; the program is also described as Elderly, Blind, or Disabled Medicaid / SSI-Related Medicaid."
+      },
+      "flags": [],
+      "notes": "Current Wisconsin SSI-Related/EBD Medicaid limits for 2026; the program is also described as Elderly, Blind, or Disabled Medicaid / SSI-Related Medicaid."
+    },
+    {
+      "programId": "wi-medicare-savings-programs",
+      "programName": "Medicare Savings Programs",
+      "facts": {
+        "age": null,
+        "income_1": 2608,
+        "income_2": 3525,
+        "assets_individual": 9660,
+        "assets_couple": 14470,
+        "phones": [
+          "8003623002"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1330,
+        "income_2": 1803,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8003623002",
+        "sources": {
+          "age": null,
+          "income": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+          "assets": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+          "phone": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf"
+        },
+        "notes": "Wisconsin Medicare Savings Programs are current for 2026; the official DHS flyer lists monthly income and asset limits and the member services phone number. No separate age minimum was found because eligibility is tied to Medicare enrollment, not a standalone age test."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2608,
+          "verifiedValue": 1330,
+          "pctDiff": 49
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 3525,
+          "verifiedValue": 1803,
+          "pctDiff": 48.9
+        }
+      ],
+      "notes": "Wisconsin Medicare Savings Programs are current for 2026; the official DHS flyer lists monthly income and asset limits and the member services phone number. No separate age minimum was found because eligibility is tied to Medicare enrollment, not a standalone age test."
+    },
+    {
+      "programId": "wi-foodshare-snap",
+      "programName": "FoodShare",
+      "facts": {
+        "age": null,
+        "income_1": 1729,
+        "income_2": 2345,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8003623002",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 2660,
+        "income_2": 3608,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18773663635",
+        "sources": {
+          "age": null,
+          "income": "https://www.dhs.wisconsin.gov/foodshare/fpl.htm",
+          "assets": null,
+          "phone": "https://feedingamericawi.org/find-help/assistance/foodshare/"
+        },
+        "notes": "FoodShare is current; for the senior pathway, DHS notes a separate elderly & disabled assistance group, but no separate senior-only income limit was needed for the values requested. No asset limit source found in the retrieved official/current sources."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1729,
+          "verifiedValue": 2660,
+          "pctDiff": 35
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2345,
+          "verifiedValue": 3608,
+          "pctDiff": 35
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8003623002",
+            "211"
+          ],
+          "verifiedValue": "18773663635"
+        }
+      ],
+      "notes": "FoodShare is current; for the senior pathway, DHS notes a separate elderly & disabled assistance group, but no separate senior-only income limit was needed for the values requested. No asset limit source found in the retrieved official/current sources."
+    },
+    {
+      "programId": "wi-pace-program",
+      "programName": "Wisconsin PACE Program",
+      "facts": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": null,
+        "phones": [
+          "8003623002",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8003623002",
+        "sources": {
+          "age": "https://www.dhs.wisconsin.gov/familycare/pace.htm",
+          "income": "https://www.dhs.wisconsin.gov/familycare/pace.htm",
+          "assets": "https://www.dhs.wisconsin.gov/medicaid/spousal-impoverishment.htm",
+          "phone": "https://www.dhs.wisconsin.gov/familycare/pace.htm"
+        },
+        "notes": "Wisconsin PACE is current and age-based at 55+ for the senior pathway; no separate program income or asset limit was found on the official PACE page. Medicaid-related asset rules apply to long-term care eligibility, but the official PACE page does not publish a distinct PACE asset cap."
+      },
+      "flags": [],
+      "notes": "Wisconsin PACE is current and age-based at 55+ for the senior pathway; no separate program income or asset limit was found on the official PACE page. Medicaid-related asset rules apply to long-term care eligibility, but the official PACE page does not publish a distinct PACE asset cap."
+    },
+    {
+      "programId": "wi-wheap-home-energy-assistance",
+      "programName": "Wisconsin Home Energy Assistance Program (WHEAP)",
+      "facts": {
+        "age": null,
+        "income_1": 3322,
+        "income_2": 4344,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "6082673680",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 3322,
+        "income_2": 4344,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8664328947",
+        "sources": {
+          "age": null,
+          "income": "https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx",
+          "assets": null,
+          "phone": "https://energyandhousing.wi.gov/Pages/CustomerResources/assistance.aspx"
+        },
+        "notes": "WHEAP is current for the 2026–2027 program year; no age or asset test was found in the official source for the senior pathway."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "6082673680",
+            "211"
+          ],
+          "verifiedValue": "8664328947"
+        }
+      ],
+      "notes": "WHEAP is current for the 2026–2027 program year; no age or asset test was found in the official source for the senior pathway."
+    },
+    {
+      "programId": "wi-property-tax-relief-circuit-breaker-credit",
+      "programName": "Wisconsin Property Tax Relief (Circuit Breaker Credit)",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "6082662486",
+          "6082662776"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 18,
+        "income_1": 24680,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": null,
+        "sources": {
+          "age": "https://www.revenue.wi.gov/DOR%20Publications/1116hc.pdf",
+          "income": "https://www.revenue.wi.gov/DOR%20Publications/1116hc.pdf",
+          "assets": null,
+          "phone": null
+        },
+        "notes": "Wisconsin Homestead Credit (the circuit breaker credit) is current; it is not senior-specific and applies to residents age 18+ with an income test. I could not verify an official main phone number from the retrieved source."
+      },
+      "flags": [],
+      "notes": "Wisconsin Homestead Credit (the circuit breaker credit) is current; it is not senior-specific and applies to residents age 18+ with an income test. I could not verify an official main phone number from the retrieved source."
+    },
+    {
+      "programId": "wi-home-delivered-meals",
+      "programName": "Wisconsin Home Delivered Meals",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8884869545",
+          "7153696170",
+          "9203863580",
+          "6083260235",
+          "2622848120",
+          "9206834180",
+          "7157435166",
+          "2625487848",
+          "6087236113"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8449472372",
+        "sources": {
+          "age": "https://www.dhs.wisconsin.gov/aging/nutrition.htm",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.dhs.wisconsin.gov/aging/nutrition.htm"
+        },
+        "notes": "Current statewide elder nutrition/home-delivered meals guidance uses age 60+; no official statewide income or asset test found in the retrieved source."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8884869545",
+            "7153696170",
+            "9203863580",
+            "6083260235",
+            "2622848120",
+            "9206834180",
+            "7157435166",
+            "2625487848",
+            "6087236113"
+          ],
+          "verifiedValue": "8449472372"
+        }
+      ],
+      "notes": "Current statewide elder nutrition/home-delivered meals guidance uses age 60+; no official statewide income or asset test found in the retrieved source."
+    },
+    {
+      "programId": "wi-state-ssi-supplement",
+      "programName": "Wisconsin State SSI Supplement",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18003623002",
+          "18007721213"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8003623002",
+        "sources": {
+          "age": "https://www.dhs.wisconsin.gov/ssi/index.htm",
+          "income": "https://www.dhs.wisconsin.gov/ssi/index.htm",
+          "assets": "https://www.dhs.wisconsin.gov/ssi/index.htm",
+          "phone": "https://www.dhs.wisconsin.gov/publications/p2/p23043.pdf"
+        },
+        "notes": "Wisconsin SSI state supplement is tied to federal SSI eligibility; current official DHS pages confirm age 65+ for seniors and the standard SSI asset limits, but I did not find a separate state-specific income test or a different senior-pathway phone number."
+      },
+      "flags": [],
+      "notes": "Wisconsin SSI state supplement is tied to federal SSI eligibility; current official DHS pages confirm age 65+ for seniors and the standard SSI asset limits, but I did not find a separate state-specific income test or a different senior-pathway phone number."
     }
   ]
 }

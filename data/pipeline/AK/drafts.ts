@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:02:47.747Z
+ * Last updated: 2026-10-06T12:32:13.291Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -132,7 +132,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Alaska DPA Medicaid Information",
-          "phone": "Call number provided through pre-screening tool",
+          "phone": "(800) 478-7778",
           "description": "Program-specific number based on your location and situation",
           "hours": "Varies by office"
         },
@@ -232,22 +232,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Stethoscope",
-      "phone": null,
+      "phone": "(800) 478-7778",
       "sourceUrl": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/apply-for-medicaid/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8004787778",
+          "to": "(800) 478-7778",
           "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -439,10 +441,10 @@ export const drafts: PipelineStateDrafts = {
             "211"
           ],
           "to": "8004789996",
-          "source": "https://health.alaska.gov/en/services/hcbs-waivers/",
+          "source": "https://health.alaska.gov/media/kjaduunn/sds_medwaiverbrochure.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         }
       ]
     },
@@ -597,20 +599,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-elderly",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "9074653300",
-            "211"
-          ],
-          "to": "8006334227",
-          "source": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-programs",
@@ -844,15 +833,33 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
+          "field": "income_1",
+          "from": 1663,
+          "to": 2265,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2247,
+          "to": 3064,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
           "field": "phone",
           "from": [
             "8774862048"
           ],
-          "to": "8004786065",
-          "source": "https://health.alaska.gov/en/services/extra-help-on-medicare-drug-costs/",
+          "to": "18004786065",
+          "source": "https://www.medicare.gov/publications/10050-medicare-and-you.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         }
       ]
     },
@@ -1019,6 +1026,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Application assistance and outreach support",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(907) 465-3347",
+          "description": "Number listed on fna.usda.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1086,20 +1099,52 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 3258,
-          "to": 1630,
-          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "to": 2162,
+          "source": "https://health.alaska.gov/media/wzalr0op/alaska-snap-standards.pdf",
           "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         },
         {
           "field": "income_2",
           "from": 4406,
-          "to": 2203,
-          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "to": 2931,
+          "source": "https://health.alaska.gov/media/wzalr0op/alaska-snap-standards.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8004787778"
+          ],
+          "to": "(907) 465-3347",
+          "source": "https://www.fna.usda.gov/snap/snap-state-popup/Alaska",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1795,6 +1840,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "National directory to find local providers",
           "hours": "24/7 online"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(907) 463-6179",
+          "description": "Number listed on ccsak.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1848,19 +1899,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9073490613",
             "9074521735",
             "9078520276"
           ],
-          "to": "9074636179",
-          "source": "https://www.ccsak.org/uploads/8/5/9/6/85963578/brochure__6_commonly_asked_questions_for_clients.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "to": "(907) 463-6179",
+          "source": "https://ccsak.org/services/southeast-senior-services/",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2126,7 +2179,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Alaska Department of Labor and Workforce Development",
-          "phone": null,
+          "phone": "(907) 465-4872",
           "description": "Division of Vocational Rehabilitation administers MASST statewide",
           "hours": "Business hours"
         },
@@ -2193,23 +2246,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": null,
+      "phone": "(907) 465-4872",
       "sourceUrl": "https://labor.alaska.gov/masst/about-masst.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "9074654872",
-          "source": "https://www.jedc.org/wp-content/uploads/2025/10/SREC-Meeting-Minutes-10032025.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "to": "(907) 465-4872",
+          "source": "https://labor.alaska.gov/masst/about-masst.htm",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "legal-services-senior-hotline",
@@ -2523,6 +2579,441 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://akoltco.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ak-alaskans-living-independently-waiver",
+      "name": "Alaskans Living Independently Waiver (ALI)",
+      "shortName": "ALI Waiver",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, this Medicaid waiver can pay for the services that make that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Aging and Disability Resource Center (ADRC)",
+            "type": "service-area"
+          },
+          {
+            "name": "Division of Senior and Disabilities Services (SDS)",
+            "type": "service-area"
+          },
+          {
+            "name": "Division of Public Assistance (DPA) for Medicaid financial eligibility",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs the level of daily help typically provided in a nursing home, but wants to keep living in the community, the Alaskans Living Independently Waiver (ALI) can pay for the services that make that happen. This includes adult day programs, respite care so you can take a break, home-delivered meals, transportation, environmental modifications like grab bars or ramps, specialized medical equipment, private duty nursing, and care coordination. The program covers all of this through Medicaid, at no out-of-pocket cost to your family for covered services.\n\nTo qualify, your parent must meet Alaska Medicaid's financial rules (income at or below $2,982/month in 2026, countable assets at or below $2,000) and must be assessed as needing nursing facility level of care, meaning a clinical reviewer determines they need daily help with tasks like bathing, dressing, or medication management. Adults 65 and older are the core population served, though adults 21 to 64 with qualifying physical disabilities can also qualify.\n\nThe ALI Waiver is not an open-ended entitlement. The program serves up to 3,054 Alaskans per year statewide, and when those slots fill up, applicants go on a waitlist. The right first step is calling the Aging and Disability Resource Center (ADRC) to get the process started, because the assessment and Medicaid eligibility review take time, and getting in line early matters.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ALI Waiver pays approved service providers directly through Medicaid. There is no cash benefit and no out-of-pocket cost to families for covered services.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 21+ (age 65+ is the primary group; adults 21-64 must have qualifying physical disabilities)",
+          "Alaska resident",
+          "Income at or below $2,982/month (2026)",
+          "Countable assets at or below $2,000",
+          "Must be assessed as needing nursing facility level of care",
+          "Must be Medicaid-eligible or become eligible through the application process"
+        ],
+        "ageRequirement": "21+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Cash and checking account balances",
+            "Savings accounts",
+            "Stocks and bonds",
+            "Certificates of deposit",
+            "Other liquid financial accounts"
+          ],
+          "exemptAssets": [
+            "Primary residence (generally exempt)",
+            "One vehicle (generally exempt)",
+            "Basic personal belongings and household goods"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must be assessed as meeting Nursing Facility Level of Care, meaning a clinical reviewer determines they need substantial daily help with activities like bathing, dressing, eating, transferring (moving from bed to chair), or managing medications. This is a formal assessment conducted as part of the waiver application process, not a self-report.",
+        "otherRequirements": [
+          "Must be an Alaska resident",
+          "Must be Medicaid-eligible or able to become Medicaid-eligible through the Division of Public Assistance application",
+          "Program is designed for people who would otherwise require nursing home placement",
+          "Adults ages 21-64 must have physical disabilities or functional needs equivalent to those of an aging adult qualifying for this waiver"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the statewide ADRC at 855-565-2017 to connect with a care coordinator who will guide you through the assessment and application; the full process typically takes 45 to 90 days, plus any waitlist time.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the ADRC to start the process",
+            "description": "Call the statewide Aging and Disability Resource Center (ADRC) at 855-565-2017. Tell them your parent needs help staying at home and you want to explore the ALI Waiver. They will connect you with a local care coordinator who manages the application process. This call is free and does not commit you to anything."
+          },
+          {
+            "step": 2,
+            "title": "Complete the nursing facility level-of-care assessment",
+            "description": "A care coordinator or assessor will schedule a visit, usually in person, to evaluate whether your parent meets Nursing Facility Level of Care. This clinical assessment looks at their ability to bathe, dress, eat, move safely, and manage medications without help. The outcome determines whether your parent qualifies for the waiver at all, regardless of finances."
+          },
+          {
+            "step": 3,
+            "title": "Apply for Medicaid financial eligibility through DPA",
+            "description": "The Division of Public Assistance (DPA) determines whether your parent meets the financial rules for Alaska Medicaid: income at or below $2,982/month and countable assets at or below $2,000 (2026 figures). Your care coordinator can help you complete form NFLOC-04 (Application for ALI/APDD/CCMC) and gather supporting documents. You can also find waiver information at health.alaska.gov/en/services/hcbs-waivers/."
+          },
+          {
+            "step": 4,
+            "title": "Submit form NFLOC-04 with supporting documents",
+            "description": "Your care coordinator will help you submit the NFLOC-04 Application for ALI/APDD/CCMC along with documents proving identity, residency, income, assets, and medical need. Submit everything at once; missing documents are the most common reason applications stall."
+          },
+          {
+            "step": 5,
+            "title": "Wait for eligibility decisions and slot availability",
+            "description": "Medicaid eligibility decisions take up to 45 days for standard cases, or up to 90 days when a disability determination is needed. Even after approval, your parent may be placed on a waitlist if all 3,054 annual waiver slots are filled. Your care coordinator will notify you of your status and position."
+          },
+          {
+            "step": 6,
+            "title": "Waiver enrollment and service plan",
+            "description": "Once a slot is available and all eligibility criteria are confirmed, your parent is enrolled. The care coordinator works with your family to create a service plan specifying which covered services your parent will receive, which providers will deliver them, and how often."
+          }
+        ],
+        "processingTime": "Up to 45 days for standard Medicaid eligibility determinations; up to 90 days when a disability-related determination is needed. Waiver slot availability adds additional time and is unpredictable.",
+        "waitlist": "Yes. The ALI Waiver serves up to 3,054 participants per year statewide. When slots are full, applicants who meet all eligibility requirements are placed on a waitlist. Alaska does not publish a specific average wait time, so ask your care coordinator directly about current wait times in your area.",
+        "tip": "Apply as early as possible. The waitlist can be the longest part of the process, and the clock doesn't start until your application is submitted. Getting the assessment and paperwork done now means your parent is positioned for the next available slot.",
+        "urls": [
+          {
+            "label": "Alaska HCBS Waivers official page",
+            "url": "https://health.alaska.gov/en/services/hcbs-waivers/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of Alaska residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or state-issued ID)",
+        "Proof of income (most recent Social Security award letter, pension statement, or other income verification)",
+        "Social Security card",
+        "Proof of citizenship or immigration status (if needed for Medicaid; U.S. passport, birth certificate, or naturalization certificate)",
+        "Current balances for any checking, savings, or other financial accounts (DPA will specify what documentation they require during the review)",
+        "Health insurance information (Medicare card if your parent has Medicare; private insurance card if applicable)",
+        "Medical records or a written statement from your parent's doctor supporting the need for nursing-facility-level care",
+        "Current medication list",
+        "Contact information for your parent's doctors, hospitals, and any current caregivers or case managers",
+        "Any prior Medicaid notices, approval letters, or denial letters",
+        "Completed form NFLOC-04 (Application for ALI/APDD/CCMC), available through your care coordinator or the Alaska Department of Health"
+      ],
+      "contacts": [
+        {
+          "label": "Statewide Aging and Disability Resource Center (ADRC)",
+          "phone": "855-565-2017",
+          "description": "The first call to make. ADRC connects you with a local care coordinator who can start the ALI Waiver application process, schedule the level-of-care assessment, and guide you through Medicaid eligibility.",
+          "hours": "Contact the ADRC for current hours in your region"
+        },
+        {
+          "label": "Alaska Division of Senior and Disabilities Services (SDS)",
+          "phone": null,
+          "description": "Oversees the ALI Waiver program statewide. Visit health.alaska.gov/en/services/hcbs-waivers/ for program information and forms, including the NFLOC-04 application.",
+          "hours": null
+        },
+        {
+          "label": "Alaska Division of Public Assistance (DPA)",
+          "phone": "800-478-7778",
+          "description": "Handles Medicaid financial eligibility determinations. DPA reviews your parent's income and asset documentation to confirm they meet Medicaid rules for the waiver.",
+          "hours": "Mon-Fri 8am-5pm AKT"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is currently hospitalized or in a short-term rehabilitation facility, you can start the ALI Waiver process before discharge. Discharge planners at the facility may be able to initiate contact with the ADRC on your behalf.",
+        "Rural and remote areas of Alaska may have fewer ALI Waiver service providers and longer wait times for assessments, even though the waiver is statewide. Ask the ADRC specifically about provider availability in your parent's community.",
+        "The ALI Waiver does not pay your family directly. It pays approved service providers through Medicaid. If a family member wants to be paid as a caregiver, ask the care coordinator whether that is an option under the current service plan rules.",
+        "Income and asset limits are based on Alaska Medicaid rules and can change. The $2,982/month income figure and $2,000 asset limit are the most recently cited 2026 figures, but confirm current thresholds with DPA or your care coordinator at the time of application."
+      ],
+      "relatedPrograms": [
+        "Alaska Pioneer Homes (state-operated residential care for seniors)",
+        "Alaska Medicaid Personal Care Services",
+        "Senior Benefits Program (Alaska state supplemental income for low-income seniors)",
+        "Alaska Commission on Aging Area Agency on Aging services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This is not a cash benefit",
+          "body": "The ALI Waiver pays approved providers directly for services your parent receives. Your family does not receive a check. Covered services include adult day programs, respite, home-delivered meals, transportation, home modifications, specialized medical equipment, private duty nursing, and care coordination."
+        },
+        {
+          "type": "callout",
+          "title": "Slot capacity is real",
+          "body": "The ALI Waiver is capped at 3,054 participants statewide per year. If those slots are filled when your parent is approved, they go on a waitlist. There is no published average wait time. Ask the ADRC directly when you call."
+        },
+        {
+          "type": "prose",
+          "title": "What services does ALI actually cover?",
+          "body": "Once enrolled, your parent's care coordinator builds a service plan from the covered service categories. These include: adult day services (structured daytime programs with supervision and activities), care coordination (a single point of contact managing all services), respite (temporary relief for family caregivers), host home care (care in a family-style home setting), environmental modifications (ramps, grab bars, widened doorways), home-delivered meals, nursing oversight, residential supported living, specialized medical equipment, specialized private duty nursing, and transportation to medical appointments and services. Not every service is automatically included; the plan is built around your parent's assessed needs."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if its value is more than $2,000?",
+          "answer": "Yes. The primary residence is generally exempt from Medicaid's asset count for the ALI Waiver, so a home worth far more than $2,000 does not disqualify your parent. The $2,000 limit applies to countable assets like cash, bank accounts, stocks, and bonds. Confirm how Alaska Medicaid treats your parent's specific situation with DPA at 800-478-7778, because Medicaid rules have nuances that depend on individual circumstances."
+        },
+        {
+          "question": "My parent's income is above $2,982/month. Is there any way they can still qualify?",
+          "answer": "If your parent's income exceeds $2,982/month, they would not meet the standard ALI income limit based on current 2026 figures. However, Alaska Medicaid eligibility has multiple pathways, and some situations allow a Medicaid spend-down or other arrangements. Contact DPA at 800-478-7778 or the ADRC at 855-565-2017 to ask whether any alternative applies to your parent's income situation before assuming they are ineligible."
+        },
+        {
+          "question": "How long is the waitlist really?",
+          "answer": "Alaska does not publish a specific average wait time for the ALI Waiver. The waiver serves up to 3,054 people per year statewide, and slot availability varies by region and time of year. The only honest answer is to call the ADRC at 855-565-2017 and ask directly about current wait times in your parent's specific area. Getting the assessment and paperwork done now shortens the wait, because the clock starts when you are confirmed eligible, not when you call."
+        },
+        {
+          "question": "Can I, as a family member, be paid to care for my parent through this program?",
+          "answer": "Possibly, but it depends on program rules and the specific service plan. The ALI Waiver pays approved service providers, and in some Medicaid waiver programs family members can become a paid provider under specific conditions. Ask the care coordinator directly when you call the ADRC at 855-565-2017. This is not automatic and requires formal approval."
+        },
+        {
+          "question": "My parent is 58 and has a serious physical disability. Can they qualify even though they are under 65?",
+          "answer": "Yes. Adults ages 21 to 64 can qualify for the ALI Waiver if they have qualifying physical disabilities and meet the same nursing facility level of care standard as older adults. Age 65 is the core group, but younger adults with significant functional needs are not excluded. The ADRC at 855-565-2017 can confirm whether your parent's specific disability and functional situation fits the program criteria."
+        },
+        {
+          "question": "Can my parent apply for the ALI Waiver and another program at the same time?",
+          "answer": "Yes. Applying for the ALI Waiver does not prevent your parent from simultaneously applying for other programs like the Senior Benefits Program or standard Alaska Medicaid personal care services. In fact, the ADRC can often help identify multiple programs your parent may qualify for. If your parent is not yet enrolled in Medicaid, that application runs in parallel through DPA and is a required part of the ALI process."
+        },
+        {
+          "question": "What happens if my parent's needs change after they are enrolled?",
+          "answer": "The care coordinator reviews and updates the service plan when your parent's condition changes. If your parent's needs increase significantly, the plan can be revised to add services. If their condition improves and they no longer meet nursing facility level of care, they may no longer qualify and could be transitioned out of the waiver. Changes are assessed through periodic reassessments, not on a fixed schedule tied to enrollment."
+        },
+        {
+          "question": "What is the difference between meeting the medical requirement and meeting the financial requirement?",
+          "answer": "These are two separate gates your parent must pass through. The medical requirement, called nursing facility level of care, is a clinical assessment of whether your parent needs substantial daily help with personal care or medical tasks. The financial requirement is whether your parent's income and countable assets fall within Alaska Medicaid limits (income at or below $2,982/month, countable assets at or below $2,000 in 2026). Your parent must meet both. Meeting one but not the other means the application cannot be approved."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "855-565-2017",
+      "sourceUrl": "https://health.alaska.gov/en/services/hcbs-waivers/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8555652017",
+            "8004787778"
+          ],
+          "to": "19072693666",
+          "source": "https://health.alaska.gov/media/qjheyxpy/2025-assesment-brochure.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        }
+      ]
+    },
+    {
+      "id": "ak-senior-property-tax-exemption",
+      "name": "Senior Property Tax Exemption",
+      "shortName": "Senior Tax Exemption",
+      "tagline": "If your parent owns their Alaska home and is 65 or older, the first $150,000 of its assessed value is exempt from municipal property taxes by state law.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local municipal assessor or clerk office",
+            "type": "service-area"
+          },
+          {
+            "name": "Anchorage Property Appraisal Office",
+            "type": "service-area"
+          },
+          {
+            "name": "Fairbanks North Star Borough Assessing Department",
+            "type": "service-area"
+          },
+          {
+            "name": "Ketchikan Gateway Borough assessment office",
+            "type": "service-area"
+          },
+          {
+            "name": "Sitka Assessing Department",
+            "type": "service-area"
+          },
+          {
+            "name": "Other Alaska municipal assessor offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older, owns their home in Alaska, and lives there as their primary residence, state law requires municipalities to exempt the first $150,000 of the home's assessed value from property taxes. This is not a grant or a rebate. It reduces the taxable value of the home before the local tax rate is applied, which means a lower annual tax bill every year your parent qualifies.\n\nThere is no income limit and no asset limit. The program is based on age, ownership, and occupancy only. Your parent does not need to be low-income to qualify. If they turned 65 before January 1 of the year they are applying (some municipalities use a December 31 cutoff, so check locally), own the home, and use it as their permanent residence, they almost certainly qualify.\n\nThe actual dollar savings depend on the local property tax rate, which varies by city and borough. A home assessed at $300,000 in a municipality with a mill rate of 10 mills ($10 per $1,000 of assessed value) would drop from a taxable value of $300,000 to $150,000, cutting the property tax bill roughly in half. Your parent's assessor office can tell you exactly what the exemption means for their specific bill. Applications are handled locally, deadlines differ by municipality, and missing the deadline can mean losing the exemption for that entire tax year.",
+      "savingsRange": "Up to $150,000 of assessed value exempt from municipal property taxes; actual dollar savings depend on your municipality's local tax rate",
+      "savingsSource": "Alaska statute sets the mandatory $150,000 assessed-value exemption for qualifying seniors; the dollar value of the savings is determined by each municipality's mill rate. Source: Alaska Department of Commerce, Community, and Economic Development, https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older before January 1 of the exemption year (some municipalities use December 31)",
+          "Own the property",
+          "Occupy the property as your permanent primary residence",
+          "Property must be a residential home, not a business property",
+          "No income limit; no asset limit"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Property must be your parent's permanent place of abode, not a vacation home or rental",
+          "Some municipalities require the property to be owned and occupied as the primary residence as of January 1 of the exemption year",
+          "Some municipalities require the property to be used as an Alaska residence for a minimum number of days per year",
+          "First-time applicants are typically required to provide proof of age",
+          "Surviving spouses may qualify in some municipalities under local ordinances; rules differ by location",
+          "Application deadlines are set locally and vary by city and borough; missing the deadline typically means losing the exemption for that year"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "in-person",
+        "summary": "Contact your parent's local municipal assessor or clerk office to get the correct form and deadline; many offices describe in-person filing as a 10 to 15 minute process.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your parent's local assessor office",
+            "description": "The application goes to the assessor or clerk in the city or borough where the property is located. Anchorage residents contact the Anchorage Property Appraisal Office. Fairbanks residents contact the Fairbanks North Star Borough Assessing Department. For all other municipalities, search the Alaska DCCED Local Government Resource Desk at https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx to find the right office."
+          },
+          {
+            "step": 2,
+            "title": "Ask for the senior exemption form and the local deadline",
+            "description": "Deadlines are not uniform statewide. Some municipalities use March 15, others use March 31, and some use February 14 or another date. Ask specifically: what is the deadline, and what documents do you need for a first-time application? Get this in writing or confirmed by the office."
+          },
+          {
+            "step": 3,
+            "title": "Gather your documents before you go",
+            "description": "First-time applicants typically need proof of age, proof of ownership, and proof that the property is your parent's primary residence. See the full document list on this page. Some municipalities accept mailed applications; others require in-person filing. Confirm with your local office before mailing anything."
+          },
+          {
+            "step": 4,
+            "title": "Submit the completed application before the local deadline",
+            "description": "File the completed exemption application form with all required documents. If you are filing for the first time, bring originals or certified copies of proof of age. Some offices also require a supplemental form for spouse or occupancy verification. Filing in person lets you confirm receipt on the spot."
+          },
+          {
+            "step": 5,
+            "title": "Confirm the exemption appears on the property tax assessment",
+            "description": "After the assessment cycle is complete, verify that the $150,000 exemption is reflected on the property tax notice. If it is missing, contact the assessor's office immediately with your application receipt."
+          }
+        ],
+        "processingTime": "Varies by municipality; some offices describe the in-person filing process as taking about 10 to 15 minutes, but the exemption takes effect on the next assessment cycle after the deadline. Approval timing follows local assessment schedules.",
+        "waitlist": null,
+        "tip": "Do not wait until close to the local deadline. Missing it by even one day typically means your parent loses the exemption for the entire tax year and must reapply the following year. Call the assessor's office in January to confirm the deadline and get the form.",
+        "urls": [
+          {
+            "label": "Alaska DCCED: Property Tax Exemptions in Alaska",
+            "url": "https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age for first-time applicants (birth certificate, passport, or state-issued ID showing date of birth)",
+        "Proof of ownership of the property (property deed or current property tax statement in your parent's name)",
+        "Proof that the property is your parent's primary residence (Alaska driver's license showing the property address, utility bill in your parent's name at that address, or similar official document)",
+        "Completed senior property tax exemption application form (obtained from your local municipal assessor or clerk office)",
+        "Any supplemental forms required by your municipality for first-time applicants, spouse verification, or occupancy confirmation",
+        "If a surviving spouse is applying under a local ordinance: documentation of the deceased spouse's prior qualification and proof of the applicant's current occupancy"
+      ],
+      "contacts": [
+        {
+          "label": "Anchorage Property Appraisal Office",
+          "phone": "(907) 343-6770",
+          "description": "For Anchorage residents: apply for the senior property tax exemption, ask about deadlines, and request forms",
+          "hours": "Contact office for current hours"
+        },
+        {
+          "label": "Fairbanks North Star Borough Assessing Department",
+          "phone": "(907) 459-1428",
+          "description": "For Fairbanks North Star Borough residents: apply for the senior property tax exemption and confirm the local filing deadline",
+          "hours": "Contact office for current hours"
+        },
+        {
+          "label": "Alaska DCCED Local Government Resource Desk (for all other municipalities)",
+          "phone": "(907) 465-4756",
+          "description": "Can help you identify the correct local assessor office for municipalities not listed above; does not process applications directly",
+          "hours": "Mon-Fri, Alaska business hours"
+        }
+      ],
+      "applicationNotes": [
+        "Deadlines are set locally, not by the state. The most common reason families lose the exemption for a year is missing the local filing deadline. Call your parent's assessor office in January to confirm this year's cutoff.",
+        "If your parent turned 65 late in the prior year, confirm whether their municipality uses a January 1 or December 31 age cutoff. Some municipalities will not grant the exemption if the applicant did not reach 65 before January 1 of the exemption year.",
+        "If your parent spends part of the year outside Alaska (for example, wintering in another state), ask the local assessor whether there is a minimum number of days the property must be occupied in Alaska each year. Some municipalities enforce this rule."
+      ],
+      "relatedPrograms": [
+        "Alaska Senior Benefits Payment Program (monthly cash assistance for low-income seniors 65+)",
+        "Alaska Longevity Bonus Program (historical; confirm current status with the Alaska Department of Health)",
+        "LIHEAP Energy Assistance (help with heating costs for low-income households)",
+        "Alaska Medicaid for Seniors and People with Disabilities"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "Key number: $150,000",
+          "body": "Alaska law requires every municipality to exempt the first $150,000 of a qualifying senior's home assessed value from property taxes. On a home assessed at $250,000, your parent's taxable value drops to $100,000. The exact dollar savings depend on the local mill rate, which your assessor's office can tell you."
+        },
+        {
+          "type": "prose",
+          "heading": "What 'assessed value exemption' actually means on the tax bill",
+          "body": "This program does not send a check. It reduces the taxable base before the local tax rate is applied. Here is how it works in practice: if your parent's home is assessed at $400,000 and the local mill rate is 12 mills ($12 per $1,000 of value), the normal tax would be $4,800 per year. With the $150,000 exemption, the taxable value drops to $250,000 and the tax drops to $3,000 per year. That is $1,800 in savings annually at that rate. Your parent's savings will differ based on their home's assessed value and the local rate."
+        },
+        {
+          "type": "prose",
+          "heading": "Surviving spouses",
+          "body": "Some Alaska municipalities extend eligibility to a qualifying widow or widower after the senior spouse passes away. The rules are not uniform statewide. If your parent's spouse was receiving the exemption and has recently died, contact the local assessor's office immediately to ask about surviving spouse provisions before the next filing deadline."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's home is worth more than $150,000. Do they still benefit?",
+          "answer": "Yes. The exemption removes the first $150,000 of assessed value from the tax calculation regardless of the total home value. A home assessed at $400,000 is taxed as if it were worth $250,000. The exemption does not disappear once a home exceeds $150,000; it is a fixed reduction applied to whatever the home is worth."
+        },
+        {
+          "question": "My parent missed this year's deadline. Can they still apply?",
+          "answer": "In most Alaska municipalities, missing the annual filing deadline means losing the exemption for that entire tax year. There is generally no retroactive relief. Your parent should apply as early as possible the following January to avoid missing the next cycle. Call the local assessor's office to confirm whether any late-filing exceptions exist in your parent's specific municipality."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot get to the office?",
+          "answer": "This depends on the municipality. Some offices accept mailed applications with the completed form and supporting documents. Others require in-person filing, at least for first-time applicants. If your parent is physically unable to come in, call the local assessor's office and ask explicitly whether a representative or caregiver can file on their behalf, and what documentation is needed to authorize that."
+        },
+        {
+          "question": "My parent moves between Alaska and another state seasonally. Do they still qualify?",
+          "answer": "Possibly, but some municipalities require the property to be used as an Alaska residence for a minimum number of days each year. The property must also be your parent's permanent place of abode, not just a seasonal home. If your parent splits time between states, ask the local assessor directly whether the property meets the occupancy requirement before applying."
+        },
+        {
+          "question": "My parent already applied years ago. Do they need to reapply every year?",
+          "answer": "Requirements vary by municipality. Some municipalities require an annual renewal; others do not require reapplication once the exemption is established unless circumstances change. Contact your parent's local assessor's office to confirm whether any annual renewal, reaffirmation, or change-of-status form is required."
+        },
+        {
+          "question": "My parent owns the home jointly with a sibling who is not 65. Does the exemption still apply?",
+          "answer": "Alaska's senior property tax exemption is based on the qualifying senior occupying the property as their primary residence. Joint ownership does not automatically disqualify the application, but the rules vary by municipality. Contact the local assessor's office and describe the ownership structure. They will tell you whether the exemption applies to the full assessed value or a proportional share."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(907) 465-4756",
+      "sourceUrl": "https://www.commerce.alaska.gov/web/dcra/LocalGovernmentResourceDesk/TaxationAssessment/PropertyTaxExemptionsinAlaska.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

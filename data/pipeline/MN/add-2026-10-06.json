@@ -1,0 +1,498 @@
+{
+  "state": "MN",
+  "addedAt": "2026-10-06T06:14:08.369Z",
+  "dive": {
+    "state": "MN",
+    "stateName": "Minnesota",
+    "diveAt": "2026-10-06T06:10:18.170Z",
+    "total": 3,
+    "parsed": 3,
+    "programs": [
+      {
+        "name": "Minnesota Supplemental Aid (MSA)",
+        "eligibility": {
+          "age": 18,
+          "income_limits": {
+            "summary": "You must be age 18 or older and either receive SSI or be eligible for SSI except that your income is too high. For non-SSI applicants, Minnesota cites MSA income standards that are much lower than federal SSI levels and vary by living arrangement.",
+            "table": [
+              {
+                "living_arrangement": "Lives alone",
+                "monthly_standard": "$1,055",
+                "source_note": "Cited in Minnesota DHS updates for 2026."
+              },
+              {
+                "living_arrangement": "Lives with others",
+                "monthly_standard": "$755",
+                "source_note": "Cited in Minnesota DHS updates for 2026."
+              },
+              {
+                "living_arrangement": "Married couple living together, not residing with others",
+                "monthly_standard": "$778",
+                "source_note": "Minnesota statute lists a state standard of assistance; this is not the same as the income limit but is part of the need standard structure."
+              },
+              {
+                "living_arrangement": "Individual not residing with others",
+                "monthly_standard": "$519",
+                "source_note": "Minnesota statute lists a state standard of assistance; this is not the same as the income limit but is part of the need standard structure."
+              }
+            ],
+            "important_note": "For non-SSI recipients, DHS materials also describe a gross income limit equal to 300% of the federal SSI federal benefit rate for an individual and 600% for an eligible couple; DB101 summarized that as $2,982/month for an individual and $5,964/month for an eligible couple in 2026. The program also uses a needs/assistance-standard structure that can vary by living arrangement."
+          },
+          "asset_limits": {
+            "summary": "Assets/resources must be within program limits.",
+            "limits": {
+              "ssi_recipient": "$2,000",
+              "non_ssi_recipient": "$10,000"
+            },
+            "what_counts": [
+              "Bank accounts",
+              "Other assets",
+              "Vehicles",
+              "Resources used in eligibility determination for non-SSI applicants"
+            ],
+            "what_is_exempt_or_not_verified": [
+              "For people already receiving SSI, DHS says assets are not re-verified and they are assumed to be within the SSI asset limit."
+            ]
+          },
+          "other_requirements": [
+            "Must live in Minnesota.",
+            "Must be receiving SSI, or would receive SSI except for excess income.",
+            "If not receiving SSI, must be age 65 or older, blind, or disabled under SSI/RSDI criteria.",
+            "For non-SSI disability cases, disability is determined by the State Medical Review Team (SMRT).",
+            "Must meet MSA assistance-standard/need rules."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Monthly cash assistance. Minnesota DHS says the typical monthly MSA benefit is $81 for an individual and $111 for a couple. For qualifying people with high housing costs, MSA Housing Assistance adds $194 per month to the MSA benefit. MSA Housing Assistance is for people under age 65 whose housing costs are more than 40% of total income.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: MNbenefits.mn.gov",
+            "Paper: Combined Application Form (DHS-5223) submitted to the local county or tribal human services office",
+            "Mail: Send the completed paper application to the local county or tribal human services office",
+            "In person: Bring the completed paper application to the local county or tribal human services office"
+          ],
+          "processing_time": "Minnesota law requires the county agency to determine eligibility as soon as required verifications are received and within 30 days after a signed application is received for aged or blind applicants, or within 60 days for applicants with a disability.",
+          "waitlist": null,
+          "forms": [
+            "Combined Application Form (DHS-5223)"
+          ],
+          "documents": [
+            "Identification",
+            "SSI award letter, if applicable",
+            "Information about who lives in the household and relationships",
+            "Citizenship and residency information",
+            "Employment information",
+            "Bank account statements",
+            "Other asset information",
+            "Vehicle titles or information",
+            "Pay stubs or income verification, if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Minnesota through county or tribal human services agencies.",
+          "regional_variations": "Eligibility rules are statewide, but application handling, local office access, and practical processing speed can vary by county or tribal office. There is no program waitlist described in the source materials.",
+          "offices_or_providers": [
+            "Local county human services office",
+            "Local tribal human services office"
+          ]
+        },
+        "official_source": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+        "gotchas": [
+          "MSA is not the same as SSI. Many applicants qualify only because they would receive SSI if their income were not too high.",
+          "People already on SSI are usually presumed to meet the asset test, but non-SSI applicants face the $10,000 resource limit.",
+          "MSA Housing Assistance is separate from the basic MSA cash benefit and applies only when housing costs exceed 40% of income and the person is under 65.",
+          "The application goes through county or tribal human services, not a single statewide office.",
+          "The disability pathway for non-SSI applicants may require SMRT review.",
+          "Different household/living arrangements affect the assistance standard and can change the practical benefit amount."
+        ],
+        "data_shape_notes": "This program is a statewide cash benefit with eligibility built around SSI status, age/disability/blindness, income and asset tests, and living-arrangement-based assistance standards. It also has a separate housing-assistance add-on with its own age and housing-cost threshold.",
+        "_raw": "{\n  \"name\": \"Minnesota Supplemental Aid (MSA)\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": {\n      \"summary\": \"You must be age 18 or older and either receive SSI or be eligible for SSI except that your income is too high. For non-SSI applicants, Minnesota cites MSA income standards that are much lower than federal SSI levels and vary by living arrangement.\",\n      \"table\": [\n        {\n          \"living_arrangement\": \"Lives alone\",\n          \"monthly_standard\": \"$1,055\",\n          \"source_note\": \"Cited in Minnesota DHS updates for 2026.\"\n        },\n        {\n          \"living_arrangement\": \"Lives with others\",\n          \"monthly_standard\": \"$755\",\n          \"source_note\": \"Cited in Minnesota DHS updates for 2026.\"\n        },\n        {\n          \"living_arrangement\": \"Married couple living together, not residing with others\",\n          \"monthly_standard\": \"$778\",\n          \"source_note\": \"Minnesota statute lists a state standard of assistance; this is not the same as the income limit but is part of the need standard structure.\"\n        },\n        {\n          \"living_arrangement\": \"Individual not residing with others\",\n          \"monthly_standard\": \"$519\",\n          \"source_note\": \"Minnesota statute lists a state standard of assistance; this is not the same as the income limit but is part of the need standard structure.\"\n        }\n      ],\n      \"important_note\": \"For non-SSI recipients, DHS materials also describe a gross income limit equal to 300% of the federal SSI federal benefit rate for an individual and 600% for an eligible couple; DB101 summarized that as $2,982/month for an individual and $5,964/month for an eligible couple in 2026. The program also uses a needs/assistance-standard structure that can vary by living arrangement.\"\n    },\n    \"asset_limits\": {\n      \"summary\": \"Assets/resources must be within program limits.\",\n      \"limits\": {\n        \"ssi_recipient\": \"$2,000\",\n        \"non_ssi_recipient\": \"$10,000\"\n      },\n      \"what_counts\": [\n        \"Bank accounts\",\n        \"Other assets\",\n        \"Vehicles\",\n        \"Resources used in eligibility determination for non-SSI applicants\"\n      ],\n      \"what_is_exempt_or_not_verified\": [\n        \"For people already receiving SSI, DHS says assets are not re-verified and they are assumed to be within the SSI asset limit.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must live in Minnesota.\",\n      \"Must be receiving SSI, or would receive SSI except for excess income.\",\n      \"If not receiving SSI, must be age 65 or older, blind, or disabled under SSI/RSDI criteria.\",\n      \"For non-SSI disability cases, disability is determined by the State Medical Review Team (SMRT).\",\n      \"Must meet MSA assistance-standard/need rules.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Monthly cash assistance. Minnesota DHS says the typical monthly MSA benefit is $81 for an individual and $111 for a couple. For qualifying people with high housing costs, MSA Housing Assistance adds $194 per month to the MSA benefit. MSA Housing Assistance is for people under age 65 whose housing costs are more than 40% of total income.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: MNbenefits.mn.gov\",\n      \"Paper: Combined Application Form (DHS-5223) submitted to the local county or tribal human services office\",\n      \"Mail: Send the completed paper application to the local county or tribal human services office\",\n      \"In person: Bring the completed paper application to the local county or tribal human services office\"\n    ],\n    \"processing_time\": \"Minnesota law requires the county agency to determine eligibility as soon as required verifications are received and within 30 days after a signed application is received for aged or blind applicants, or within 60 days for applicants with a disability.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Combined Application Form (DHS-5223)\"\n    ],\n    \"documents\": [\n      \"Identification\",\n      \"SSI award letter, if applicable\",\n      \"Information about who lives in the household and relationships\",\n      \"Citizenship and residency information\",\n      \"Employment information\",\n      \"Bank account statements\",\n      \"Other asset information\",\n      \"Vehicle titles or information\",\n      \"Pay stubs or income verification, if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Minnesota through county or tribal human services agencies.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but application handling, local office access, and practical processing speed can vary by county or tribal office. There is no program waitlist described in the source materials.\",\n    \"offices_or_providers\": [\n      \"Local county human services office\",\n      \"Local tribal human services office\"\n    ]\n  },\n  \"official_source\": \"https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/\",\n  \"gotchas\": [\n    \"MSA is not the same as SSI. Many applicants qualify only because they would receive SSI if their income were not too high.\",\n    \"People already on SSI are usually presumed to meet the asset test, but non-SSI applicants face the $10,000 resource limit.\",\n    \"MSA Housing Assistance is separate from the basic MSA cash benefit and applies only when housing costs exceed 40% of income and the person is under 65.\",\n    \"The application goes through county or tribal human services, not a single statewide office.\",\n    \"The disability pathway for non-SSI applicants may require SMRT review.\",\n    \"Different household/living arrangements affect the assistance standard and can change the practical benefit amount.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide cash benefit with eligibility built around SSI status, age/disability/blindness, income and asset tests, and living-arrangement-based assistance standards. It also has a separate housing-assistance add-on with its own age and housing-cost threshold.\"\n}"
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "basis": "Minnesota Energy Assistance eligibility is based on household size and gross household income. Minnesota uses annual income limits tied to 50% of State Median Income for household sizes 1-18, and 110% of Federal Poverty Guidelines for household sizes 19-20.",
+            "table_2026_2027": [
+              {
+                "household_size": 1,
+                "annual_income_limit": 38464,
+                "monthly_income_limit": 3205
+              },
+              {
+                "household_size": 2,
+                "annual_income_limit": 50299,
+                "monthly_income_limit": 4191
+              },
+              {
+                "household_size": 3,
+                "annual_income_limit": 62134,
+                "monthly_income_limit": 5117
+              },
+              {
+                "household_size": 4,
+                "annual_income_limit": 73969,
+                "monthly_income_limit": 6164
+              },
+              {
+                "household_size": 5,
+                "annual_income_limit": 85804,
+                "monthly_income_limit": 7150
+              },
+              {
+                "household_size": 6,
+                "annual_income_limit": 97639,
+                "monthly_income_limit": 8136
+              },
+              {
+                "household_size": 7,
+                "annual_income_limit": 99858,
+                "monthly_income_limit": 8321
+              },
+              {
+                "household_size": 8,
+                "annual_income_limit": 102077,
+                "monthly_income_limit": 8506
+              },
+              {
+                "household_size": 9,
+                "annual_income_limit": 104296,
+                "monthly_income_limit": 8691
+              },
+              {
+                "household_size": 10,
+                "annual_income_limit": 106516,
+                "monthly_income_limit": 8876
+              },
+              {
+                "household_size": 11,
+                "annual_income_limit": 108735,
+                "monthly_income_limit": 9061
+              },
+              {
+                "household_size": 12,
+                "annual_income_limit": 110954,
+                "monthly_income_limit": 9246
+              },
+              {
+                "household_size": 13,
+                "annual_income_limit": 113173,
+                "monthly_income_limit": 9431
+              },
+              {
+                "household_size": 14,
+                "annual_income_limit": 115392,
+                "monthly_income_limit": 9616
+              },
+              {
+                "household_size": 15,
+                "annual_income_limit": 117611,
+                "monthly_income_limit": 9800
+              },
+              {
+                "household_size": 16,
+                "annual_income_limit": 119830,
+                "monthly_income_limit": 9985
+              },
+              {
+                "household_size": 17,
+                "annual_income_limit": 122049,
+                "monthly_income_limit": 10170
+              },
+              {
+                "household_size": 18,
+                "annual_income_limit": 124268,
+                "monthly_income_limit": 10355
+              },
+              {
+                "household_size": 19,
+                "annual_income_limit": 126116,
+                "monthly_income_limit": 10509
+              },
+              {
+                "household_size": 20,
+                "annual_income_limit": 128569,
+                "monthly_income_limit": 10714
+              }
+            ],
+            "notes": [
+              "A family of four could earn up to $73,969 annually and qualify.",
+              "Eligibility is determined on the most recent one month of household income for application review, even though the published guideline is annual."
+            ]
+          },
+          "asset_limits": "No asset limit was identified in the Minnesota Energy Assistance materials reviewed. The program materials emphasize income and household size, not countable assets.",
+          "other_requirements": [
+            "Applicant must live in Minnesota.",
+            "Both renters and homeowners can qualify.",
+            "Household must meet the income limit.",
+            "Application is submitted to the local Energy Assistance Program provider or through the state online application."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Energy Assistance provides a financial grant to help pay home energy costs and may also help with the cost of fuel delivery or utility bills. Minnesota’s 2026 LIHEAP model plan lists a minimum benefit of $200 and a maximum benefit of $1,400. The grant amount varies based on household size, income, fuel type, and energy usage.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online application: https://mn.gov/home",
+            "Through the local Energy Assistance Program provider serving the household's county or tribe",
+            "By phone to request an application be mailed: 1-800-657-3710",
+            "General program help: 651-539-1500",
+            "Energy information line / TTY support: 800-657-3710 and 651-296-2860 (TTY)"
+          ],
+          "processing_time": "No single statewide processing time was found. The state says applicants can check status online, and local providers process applications. No fixed timeline or regional wait-time guarantee was identified in the materials reviewed.",
+          "waitlist": null,
+          "forms": [
+            "Minnesota Energy Programs Application",
+            "Paper application available in Hmong, Somali, Spanish, Vietnamese, Russian, or large print"
+          ],
+          "documents": [
+            "One month of proof of income for each household member",
+            "Copy of the most recent heating bill",
+            "Copy of the most recent electric bill",
+            "Heating and electric provider names",
+            "Account number(s)",
+            "Household income information and documents verifying income"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Minnesota through local providers serving counties and tribes.",
+          "regional_variations": "The core rules are statewide, but application intake and service are handled by local Energy Assistance providers, so contact points, mailing instructions, and pace of processing can vary by county or tribe.",
+          "offices_or_providers": [
+            "Local Energy Assistance Program provider for the applicant's county or tribe",
+            "Minnesota Department of Commerce Energy Assistance Program"
+          ]
+        },
+        "official_source": "https://mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/",
+        "gotchas": [
+          "The benefit is a grant toward energy costs, not a cash payment to the family.",
+          "The income test is based on household size and gross income; people often miss that a family of four qualifies at up to $73,969 annually for the 2026-2027 season.",
+          "Applicants need both income proof and utility/fuel account information, not just identification.",
+          "Applications can be started online, but many households still apply through their local provider.",
+          "The statewide deadline for the 2026-2027 winter season is May 31, 2027."
+        ],
+        "data_shape_notes": "This program uses sliding-scale income limits by household size, statewide rules, and local provider administration. Benefits also vary by household characteristics and energy costs, with a defined minimum and maximum grant.",
+        "_raw": "{\n  \"name\": \"Low-Income Home Energy Assistance Program (LIHEAP)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"basis\": \"Minnesota Energy Assistance eligibility is based on household size and gross household income. Minnesota uses annual income limits tied to 50% of State Median Income for household sizes 1-18, and 110% of Federal Poverty Guidelines for household sizes 19-20.\",\n      \"table_2026_2027\": [\n        { \"household_size\": 1, \"annual_income_limit\": 38464, \"monthly_income_limit\": 3205 },\n        { \"household_size\": 2, \"annual_income_limit\": 50299, \"monthly_income_limit\": 4191 },\n        { \"household_size\": 3, \"annual_income_limit\": 62134, \"monthly_income_limit\": 5117 },\n        { \"household_size\": 4, \"annual_income_limit\": 73969, \"monthly_income_limit\": 6164 },\n        { \"household_size\": 5, \"annual_income_limit\": 85804, \"monthly_income_limit\": 7150 },\n        { \"household_size\": 6, \"annual_income_limit\": 97639, \"monthly_income_limit\": 8136 },\n        { \"household_size\": 7, \"annual_income_limit\": 99858, \"monthly_income_limit\": 8321 },\n        { \"household_size\": 8, \"annual_income_limit\": 102077, \"monthly_income_limit\": 8506 },\n        { \"household_size\": 9, \"annual_income_limit\": 104296, \"monthly_income_limit\": 8691 },\n        { \"household_size\": 10, \"annual_income_limit\": 106516, \"monthly_income_limit\": 8876 },\n        { \"household_size\": 11, \"annual_income_limit\": 108735, \"monthly_income_limit\": 9061 },\n        { \"household_size\": 12, \"annual_income_limit\": 110954, \"monthly_income_limit\": 9246 },\n        { \"household_size\": 13, \"annual_income_limit\": 113173, \"monthly_income_limit\": 9431 },\n        { \"household_size\": 14, \"annual_income_limit\": 115392, \"monthly_income_limit\": 9616 },\n        { \"household_size\": 15, \"annual_income_limit\": 117611, \"monthly_income_limit\": 9800 },\n        { \"household_size\": 16, \"annual_income_limit\": 119830, \"monthly_income_limit\": 9985 },\n        { \"household_size\": 17, \"annual_income_limit\": 122049, \"monthly_income_limit\": 10170 },\n        { \"household_size\": 18, \"annual_income_limit\": 124268, \"monthly_income_limit\": 10355 },\n        { \"household_size\": 19, \"annual_income_limit\": 126116, \"monthly_income_limit\": 10509 },\n        { \"household_size\": 20, \"annual_income_limit\": 128569, \"monthly_income_limit\": 10714 }\n      ],\n      \"notes\": [\n        \"A family of four could earn up to $73,969 annually and qualify.\",\n        \"Eligibility is determined on the most recent one month of household income for application review, even though the published guideline is annual.\"\n      ]\n    },\n    \"asset_limits\": \"No asset limit was identified in the Minnesota Energy Assistance materials reviewed. The program materials emphasize income and household size, not countable assets.\",\n    \"other_requirements\": [\n      \"Applicant must live in Minnesota.\",\n      \"Both renters and homeowners can qualify.\",\n      \"Household must meet the income limit.\",\n      \"Application is submitted to the local Energy Assistance Program provider or through the state online application.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Energy Assistance provides a financial grant to help pay home energy costs and may also help with the cost of fuel delivery or utility bills. Minnesota’s 2026 LIHEAP model plan lists a minimum benefit of $200 and a maximum benefit of $1,400. The grant amount varies based on household size, income, fuel type, and energy usage.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application: https://mn.gov/home\",\n      \"Through the local Energy Assistance Program provider serving the household's county or tribe\",\n      \"By phone to request an application be mailed: 1-800-657-3710\",\n      \"General program help: 651-539-1500\",\n      \"Energy information line / TTY support: 800-657-3710 and 651-296-2860 (TTY)\"\n    ],\n    \"processing_time\": \"No single statewide processing time was found. The state says applicants can check status online, and local providers process applications. No fixed timeline or regional wait-time guarantee was identified in the materials reviewed.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Minnesota Energy Programs Application\",\n      \"Paper application available in Hmong, Somali, Spanish, Vietnamese, Russian, or large print\"\n    ],\n    \"documents\": [\n      \"One month of proof of income for each household member\",\n      \"Copy of the most recent heating bill\",\n      \"Copy of the most recent electric bill\",\n      \"Heating and electric provider names\",\n      \"Account number(s)\",\n      \"Household income information and documents verifying income\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Minnesota through local providers serving counties and tribes.\",\n    \"regional_variations\": \"The core rules are statewide, but application intake and service are handled by local Energy Assistance providers, so contact points, mailing instructions, and pace of processing can vary by county or tribe.\",\n    \"offices_or_providers\": [\n      \"Local Energy Assistance Program provider for the applicant's county or tribe\",\n      \"Minnesota Department of Commerce Energy Assistance Program\"\n    ]\n  },\n  \"official_source\": \"https://mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/\",\n  \"gotchas\": [\n    \"The benefit is a grant toward energy costs, not a cash payment to the family.\",\n    \"The income test is based on household size and gross income; people often miss that a family of four qualifies at up to $73,969 annually for the 2026-2027 season.\",\n    \"Applicants need both income proof and utility/fuel account information, not just identification.\",\n    \"Applications can be started online, but many households still apply through their local provider.\",\n    \"The statewide deadline for the 2026-2027 winter season is May 31, 2027.\"\n  ],\n  \"data_shape_notes\": \"This program uses sliding-scale income limits by household size, statewide rules, and local provider administration. Benefits also vary by household characteristics and energy costs, with a defined minimum and maximum grant.\"\n}"
+      },
+      {
+        "name": "Minnesota Property Tax Refund (PTF) for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For the senior property tax deferral program, the applicant must be 65 or older, or if married, one spouse must be at least 65 and the other at least 62, and total household income must be $96,000 or less for the calendar year before the initial application.[3][10][12] Minnesota’s property tax refund system itself also has income-tested rules for the regular homestead credit refund; for claims tied to payable 2026 taxes, the household-income limit shown in the official instructions is $142,490, while the special refund has no household-income limit but is triggered by a large increase in net property tax.[8] The senior-specific deferral program is separate from the regular refund and uses the fixed $96,000 cap.[3][10][12]",
+          "asset_limits": "No general asset limit is stated for the senior property tax refund or the senior deferral program in the cited official materials.[1][3][10] For the deferral program, property-level restrictions do apply: the home must be the applicant’s homestead, there can be no reverse mortgage, life estate, state or federal tax lien, or judgment lien, and other liens must be below 75% of the estimated market value.[7][15]",
+          "other_requirements": [
+            "Must own and occupy the property as a homestead in Minnesota.[1][7][15]",
+            "For the deferral program, the home must have been owned and occupied for at least 5 years per state guidance, though some local summaries describe 15 years for the senior deferral program.[7][10][15]",
+            "For the property tax refund, renters, homeowners, and nursing home residents may apply if the taxes were paid on a principal residence in Minnesota.[1][3]",
+            "The refund is filed using Form M1PR and is due by August 15; you can file up to one year after the due date.[9]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "This program does not provide services; it provides a property tax refund or deferral. For the regular homestead credit refund, the state pays a refund based on how high property taxes are relative to income, and the maximum refund shown in official 2025 instructions is $1,000 for the special refund and $3,310 for refund claims filed in 2024 based on payable 2024 taxes.[4][8] For the senior property tax deferral program, the homeowner pays up to 3% of household income toward homestead property taxes each year, and the state defers the rest by paying the county directly as a loan.[1][10][15]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: Minnesota Department of Revenue property tax refund filing page / M1PR e-file option[9]",
+            "Paper mail: Form M1PR mailed to the Minnesota Department of Revenue[2][9]",
+            "County auditor office: senior deferral applications are available through county auditor offices[10][12]",
+            "Phone help: Minnesota Department of Revenue at 651-296-3781[15]"
+          ],
+          "processing_time": "No official processing-time estimate was provided in the cited materials.",
+          "waitlist": null,
+          "forms": [
+            "Form M1PR, Homestead Credit Refund[2][9]",
+            "2026 Form M1PR, Homestead Credit Refund[2]",
+            "Senior Citizens Property Tax Deferral application materials from the Department of Revenue/county auditor[10][12]"
+          ],
+          "documents": [
+            "Statement of Property Taxes Payable from the county for homeowners[1]",
+            "At least one required tax document to complete Form M1PR[1]",
+            "Information showing household income and property ownership/occupancy[1][3][10]",
+            "Proof of homestead status and any mortgage or lien information for deferral screening[7][15]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Applies statewide in Minnesota, but the deferral program is limited to qualifying homesteads and is administered through the Minnesota Department of Revenue and county auditor offices.[1][10][12]",
+          "regional_variations": "The underlying state rules are statewide, but county auditor offices handle local application access and processing details, so office practices and wait times can vary by county.[10][12][15]",
+          "offices_or_providers": [
+            "Minnesota Department of Revenue",
+            "County auditor offices",
+            "County property tax offices"
+          ]
+        },
+        "official_source": "https://www.revenue.state.mn.us/seniors",
+        "gotchas": [
+          "The regular Minnesota property tax refund and the senior property tax deferral program are different programs with different rules; families often confuse them.[1][10][12]",
+          "There is no age requirement for the regular refund itself, but the senior deferral program does have an age rule.[1][3][10]",
+          "The senior deferral program is not free money: it is a loan secured by the property, and the deferred amount is paid to the county by the state.[1][10]",
+          "Refunds can be limited or offset by the deferral program because any property tax refunds may be applied to deferred property tax amounts.[15]",
+          "Filing deadline matters: Form M1PR is due August 15, and late filing can affect eligibility for a given year.[9]",
+          "The household income figure for eligibility is household income, which includes both taxable and nontaxable income.[3]",
+          "Property liens, reverse mortgages, and the loan-to-value cap can disqualify someone from the deferral program even if age and income fit.[7][15]"
+        ],
+        "data_shape_notes": "This is a state tax refund/deferral program with income-based eligibility, but it splits into multiple pathways: regular homestead refund, special refund, and a separate senior property tax deferral program. The biggest structure quirk is that the senior deferral is a loan mechanism, not a grant, and county-level property conditions matter in addition to age and income.",
+        "_raw": "{\n  \"name\": \"Minnesota Property Tax Refund (PTF) for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For the senior property tax deferral program, the applicant must be 65 or older, or if married, one spouse must be at least 65 and the other at least 62, and total household income must be $96,000 or less for the calendar year before the initial application.[3][10][12] Minnesota’s property tax refund system itself also has income-tested rules for the regular homestead credit refund; for claims tied to payable 2026 taxes, the household-income limit shown in the official instructions is $142,490, while the special refund has no household-income limit but is triggered by a large increase in net property tax.[8] The senior-specific deferral program is separate from the regular refund and uses the fixed $96,000 cap.[3][10][12]\",\n    \"asset_limits\": \"No general asset limit is stated for the senior property tax refund or the senior deferral program in the cited official materials.[1][3][10] For the deferral program, property-level restrictions do apply: the home must be the applicant’s homestead, there can be no reverse mortgage, life estate, state or federal tax lien, or judgment lien, and other liens must be below 75% of the estimated market value.[7][15]\",\n    \"other_requirements\": [\n      \"Must own and occupy the property as a homestead in Minnesota.[1][7][15]\",\n      \"For the deferral program, the home must have been owned and occupied for at least 5 years per state guidance, though some local summaries describe 15 years for the senior deferral program.[7][10][15]\",\n      \"For the property tax refund, renters, homeowners, and nursing home residents may apply if the taxes were paid on a principal residence in Minnesota.[1][3]\",\n      \"The refund is filed using Form M1PR and is due by August 15; you can file up to one year after the due date.[9]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"This program does not provide services; it provides a property tax refund or deferral. For the regular homestead credit refund, the state pays a refund based on how high property taxes are relative to income, and the maximum refund shown in official 2025 instructions is $1,000 for the special refund and $3,310 for refund claims filed in 2024 based on payable 2024 taxes.[4][8] For the senior property tax deferral program, the homeowner pays up to 3% of household income toward homestead property taxes each year, and the state defers the rest by paying the county directly as a loan.[1][10][15]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Minnesota Department of Revenue property tax refund filing page / M1PR e-file option[9]\",\n      \"Paper mail: Form M1PR mailed to the Minnesota Department of Revenue[2][9]\",\n      \"County auditor office: senior deferral applications are available through county auditor offices[10][12]\",\n      \"Phone help: Minnesota Department of Revenue at 651-296-3781[15]\"\n    ],\n    \"processing_time\": \"No official processing-time estimate was provided in the cited materials.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Form M1PR, Homestead Credit Refund[2][9]\",\n      \"2026 Form M1PR, Homestead Credit Refund[2]\",\n      \"Senior Citizens Property Tax Deferral application materials from the Department of Revenue/county auditor[10][12]\"\n    ],\n    \"documents\": [\n      \"Statement of Property Taxes Payable from the county for homeowners[1]\",\n      \"At least one required tax document to complete Form M1PR[1]\",\n      \"Information showing household income and property ownership/occupancy[1][3][10]\",\n      \"Proof of homestead status and any mortgage or lien information for deferral screening[7][15]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Applies statewide in Minnesota, but the deferral program is limited to qualifying homesteads and is administered through the Minnesota Department of Revenue and county auditor offices.[1][10][12]\",\n    \"regional_variations\": \"The underlying state rules are statewide, but county auditor offices handle local application access and processing details, so office practices and wait times can vary by county.[10][12][15]\",\n    \"offices_or_providers\": [\n      \"Minnesota Department of Revenue\",\n      \"County auditor offices\",\n      \"County property tax offices\"\n    ]\n  },\n  \"official_source\": \"https://www.revenue.state.mn.us/seniors\",\n  \"gotchas\": [\n    \"The regular Minnesota property tax refund and the senior property tax deferral program are different programs with different rules; families often confuse them.[1][10][12]\",\n    \"There is no age requirement for the regular refund itself, but the senior deferral program does have an age rule.[1][3][10]\",\n    \"The senior deferral program is not free money: it is a loan secured by the property, and the deferred amount is paid to the county by the state.[1][10]\",\n    \"Refunds can be limited or offset by the deferral program because any property tax refunds may be applied to deferred property tax amounts.[15]\",\n    \"Filing deadline matters: Form M1PR is due August 15, and late filing can affect eligibility for a given year.[9]\",\n    \"The household income figure for eligibility is household income, which includes both taxable and nontaxable income.[3]\",\n    \"Property liens, reverse mortgages, and the loan-to-value cap can disqualify someone from the deferral program even if age and income fit.[7][15]\"\n  ],\n  \"data_shape_notes\": \"This is a state tax refund/deferral program with income-based eligibility, but it splits into multiple pathways: regular homestead refund, special refund, and a separate senior property tax deferral program. The biggest structure quirk is that the senior deferral is a loan mechanism, not a grant, and county-level property conditions matter in addition to age and income.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MN",
+    "stateName": "Minnesota",
+    "classifiedAt": "2026-10-06T06:10:18.175Z",
+    "total": 3,
+    "typeSummary": {
+      "benefit": 3
+    },
+    "scopeSummary": {
+      "state": 2,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 3
+    },
+    "programs": [
+      {
+        "name": "Minnesota Supplemental Aid (MSA)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county human services office",
+              "type": "service-area"
+            },
+            {
+              "name": "Local tribal human services office",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Local Energy Assistance Program provider for the applicant's county or tribe",
+              "type": "service-area"
+            },
+            {
+              "name": "Minnesota Department of Commerce Energy Assistance Program",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Minnesota Property Tax Refund (PTF) for Seniors",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Minnesota Department of Revenue",
+              "type": "service-area"
+            },
+            {
+              "name": "County auditor offices",
+              "type": "service-area"
+            },
+            {
+              "name": "County property tax offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MN",
+      "id": "mn-supplemental-aid-msa",
+      "name": "Minnesota Supplemental Aid (MSA)",
+      "legacyId": "minnesota-supplemental-aid-msa",
+      "programType": "benefit"
+    },
+    {
+      "state": "MN",
+      "id": "mn-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "legacyId": "low-income-home-energy-assistance-program-liheap",
+      "programType": "benefit"
+    },
+    {
+      "state": "MN",
+      "id": "mn-property-tax-refund-seniors",
+      "name": "Minnesota Property Tax Refund (PTF) for Seniors",
+      "legacyId": "minnesota-property-tax-refund-ptf-for-seniors",
+      "programType": "benefit"
+    }
+  ]
+}

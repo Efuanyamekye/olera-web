@@ -36,6 +36,10 @@ const PROBE_LABELS: Record<string, { label: string; question: string }> = {
     label: "Benefits Finder",
     question: "How many families finished the Benefits Finder this week, and what did the Navigator send them?",
   },
+  directory_health: {
+    label: "Directory",
+    question: "What did the system do to the provider directory this week, and how much of it has been checked against Google?",
+  },
   traffic_by_page_family: {
     label: "Organic traffic",
     question: "Which page family gained or lost organic reach?",

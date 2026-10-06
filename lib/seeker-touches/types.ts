@@ -255,7 +255,13 @@ export type SeekerFlag =
    * a fourth call on the same pattern is not the next step, a last written
    * message and an archive is.
    */
-  | "tried_three";
+  | "tried_three"
+  /**
+   * Olera handed this family to a named provider three or more days ago and
+   * nobody has checked how it went. Only Olera's own handovers, never every
+   * inquiry (see queues.ts on why "chase a provider" was removed).
+   */
+  | "check_provider";
 
 export const SEEKER_FLAG_LABEL: Record<SeekerFlag, string> = {
   awaiting_reply: "they wrote, no reply yet",
@@ -267,7 +273,18 @@ export const SEEKER_FLAG_LABEL: Record<SeekerFlag, string> = {
   no_name: "no name on file",
   promise_owed: "promised a call",
   tried_three: "called 3 times, no answer",
+  check_provider: "check with the provider",
 };
+
+/**
+ * The flag's label for one family. promise_owed means "we promised a call" only
+ * for a city-ad family; a provider-page family with a phone is owed a check-in
+ * call we never promised, so the chip must not claim otherwise.
+ */
+export function seekerFlagLabel(flag: SeekerFlag, cityLeadId: string | null): string {
+  if (flag === "promise_owed" && !cityLeadId) return "call to check in";
+  return SEEKER_FLAG_LABEL[flag];
+}
 
 // ── Rows ──────────────────────────────────────────────────────────────────────
 
@@ -324,6 +341,8 @@ export type SeekerRelationshipRow = SeekerContact & {
   call_retry_at: string | null;
   /** Logged calls that did not reach them, since nobody ever has. */
   missed_calls: number;
+  /** The provider Olera handed this family to, and when. Null when we never did. */
+  handed_to: { name: string; at: string } | null;
   /** Their newest text or support email, so a reply row shows what they said. */
   last_inbound: { occurred_at: string; channel: string; title: string; detail: string | null } | null;
   /** Benefits work waiting on a person (letter to read, help due, urgent),
@@ -388,6 +407,8 @@ export type SeekerRelationship = {
   origin: SeekerRelationshipRow["origin"];
   /** See SeekerRelationshipRow.outcome. */
   outcome: SeekerRelationshipRow["outcome"];
+  /** See SeekerRelationshipRow.handed_to. */
+  handed_to: SeekerRelationshipRow["handed_to"];
 };
 
 // ── What a logged note was read to contain ───────────────────────────────────

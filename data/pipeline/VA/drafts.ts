@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.267Z
+ * Last updated: 2026-10-06T12:32:15.194Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -778,6 +778,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "State Department for Aging and Rehabilitative Services - see website for regional contacts",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 992-0959",
+          "description": "Number listed on easyaccess.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -840,18 +846,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dars.virginia.gov/aging/senior-employment-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "5713637688",
             "8043433000"
           ],
-          "to": "8046627035",
-          "source": "https://dars.virginia.gov/aging/senior-employment-program/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:47:11.494Z"
+          "to": "(888) 992-0959",
+          "source": "https://easyaccess.virginia.gov/employment",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -938,6 +946,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(703) 746-5999",
           "description": "Number listed on dars.virginia.gov",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 992-0959",
+          "description": "Number listed on easyaccess.virginia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [],
@@ -969,6 +983,1649 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dars.virginia.gov/aging/home-community/find-local-aaa/",
           "flaggedAt": "2026-10-02T07:47:11.494Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "8005523402",
+            "8046629333",
+            "7037465999"
+          ],
+          "to": "(888) 992-0959",
+          "source": "https://easyaccess.virginia.gov/caregiver",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "va-medicaid-abd",
+      "name": "Medicaid for Aged, Blind, or Disabled (ABD)",
+      "shortName": "Virginia ABD Medicaid",
+      "tagline": "If your parent is 65 or older and on a fixed income, Virginia ABD Medicaid may cover their doctor visits, prescriptions, hospital stays, and more at no cost to them.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Virginia Department of Social Services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Cover Virginia Call Center",
+            "type": "service-area"
+          },
+          {
+            "name": "Virginia Disability Determination Services through DARS",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Virginia's Medicaid for Aged, Blind, or Disabled (ABD) program covers the full range of medical care for qualifying older adults and people with disabilities: doctor visits, hospital stays, prescription drugs, lab work, home health services, and more. If your parent is 65 or older, blind, or disabled and has limited income and assets, this program eliminates or dramatically reduces what they pay out of pocket for health care.\n\nThere is not one single set of rules. ABD Medicaid has several pathways. The most common one for older adults requires income at or below $1,004 per month for a single person and countable assets no greater than $2,000. If your parent's income is higher than that limit, they may still qualify through a spenddown: Medicaid counts their ongoing medical bills against their income until they reach the threshold. People who already receive SSI automatically meet the income test for a separate ABD pathway. For those in a nursing facility or receiving home-and-community-based services, a different income rule applies, up to 300% of the federal SSI benefit rate.\n\nBecause this program has multiple eligibility pathways, income rules, and asset tests, many families benefit from applying even when they assume their parent won't qualify. The income limit is strict on paper, but the spenddown route, the institutional coverage rules, and SSI-linked pathways mean more families are eligible than a simple income check suggests. Start the application process early; disability determination, if needed, adds time.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays for covered medical care directly; there is no fixed dollar benefit that flows to the enrollee.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR blind, OR disabled",
+          "Income at or below $1,004/month for a single person (standard ABD pathway)",
+          "Countable assets no more than $2,000 for one person or $3,000 for a couple",
+          "Virginia resident and U.S. citizen or qualifying immigration status",
+          "Over the income limit? A spenddown pathway may still qualify your parent"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1004
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1463
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Cash on hand",
+            "Certain investment accounts",
+            "Other countable resources as reviewed by the local agency"
+          ],
+          "exemptAssets": null,
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Virginia resident (self-declaration of residence is accepted unless there is reason to question it)",
+          "Must be a U.S. citizen or meet Medicaid immigration and citizenship rules",
+          "Must have a Social Security number or proof of having applied for one",
+          "Blindness is defined as visual acuity no greater than 20/200",
+          "Disability means an impairment expected to last at least 12 months or result in death that prevents substantial gainful activity",
+          "If your parent is not already receiving SSI or SSDI, disability must be formally determined by Virginia Disability Determination Services through DARS before Medicaid can be approved on that basis",
+          "If married, a spouse's income and resources may affect eligibility; both must be reviewed",
+          "People over the income limit may qualify through spenddown after enough medical bills are counted against their income"
+        ],
+        "povertyLevelReference": "80% FPL (standard ABD pathway for older adults)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at commonhelp.virginia.gov or call Cover Virginia at 1-833-522-5582; phone is often the fastest path when your parent's situation is complex.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather key documents before you start",
+            "description": "Collect your parent's Social Security award letter, proof of Virginia residency, photo ID or birth certificate, and recent bank statements showing current balances. If disability must be established, gather any medical records or doctor letters describing the condition and its expected duration. Having these ready prevents delays."
+          },
+          {
+            "step": 2,
+            "title": "Choose how to apply: online, phone, or paper",
+            "description": "Online is fastest: go to commonhelp.virginia.gov and create or log into an account to complete the Medicaid application. By phone: call Cover Virginia at 1-833-522-5582 (TDD 1-888-221-1590), Monday through Friday. By mail or in person: download a paper application from the Cover Virginia website or pick one up at your parent's local Department of Social Services office, complete it, and mail or hand-deliver it. Phone or online is generally faster than mailing paper."
+          },
+          {
+            "step": 3,
+            "title": "Submit and respond to any requests for more information",
+            "description": "After submitting, the local DSS agency reviews the case. If disability must be formally determined and your parent does not already have SSI or SSDI, the case is routed to Virginia Disability Determination Services through DARS. Respond to any document requests quickly; missing documents are the most common cause of delays."
+          },
+          {
+            "step": 4,
+            "title": "Receive an eligibility decision",
+            "description": "Virginia does not publish a single ABD-specific processing deadline in its public materials. Cases requiring disability determination take longer than cases where disability is already documented through SSI or SSDI. Keep a copy of everything you submitted and note the date. If weeks pass without a response, call Cover Virginia at 1-833-522-5582 to check status."
+          }
+        ],
+        "processingTime": "Virginia's public materials do not state a single ABD-specific deadline. Standard Medicaid cases are generally processed faster than those requiring disability determination through DARS. Paper applications mailed to a local DSS office may take longer than online or phone applications.",
+        "waitlist": null,
+        "tip": "If your parent's income is above $1,004 per month, do not skip the application. The spenddown pathway counts ongoing medical bills against income, and many people with higher incomes still qualify once medical costs are factored in. Ask specifically about spenddown when you call.",
+        "urls": [
+          {
+            "label": "Apply online at CommonHelp",
+            "url": "https://commonhelp.virginia.gov/"
+          },
+          {
+            "label": "Cover Virginia program information",
+            "url": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (showing your parent's current monthly benefit amount)",
+        "Proof of Virginia residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Photo ID or birth certificate (to prove age and identity)",
+        "Social Security card, or documentation showing an application for a Social Security number is in progress",
+        "Proof of all current income sources: Social Security statements, pension or retirement statements, and any other monthly income",
+        "Current balances for all checking and savings accounts (Virginia reviews countable resources; bring the most recent statements available)",
+        "Health insurance cards if your parent has any existing coverage (Medicare, employer coverage, or other)",
+        "Medical records or a physician's letter documenting the disability and its expected duration, if disability has not already been established through SSI or SSDI",
+        "Spousal income and resource information if your parent is married (both are reviewed for most ABD pathways)",
+        "Investment account statements for any stocks, bonds, or similar accounts, if applicable",
+        "Life insurance policy documents, if applicable, since cash value may count as a resource",
+        "Documentation of medical bills already paid out of pocket, if applying through the spenddown pathway",
+        "Legal documentation such as power of attorney or guardianship papers, if you are applying on your parent's behalf"
+      ],
+      "contacts": [
+        {
+          "label": "Cover Virginia Call Center",
+          "phone": "1-833-522-5582",
+          "description": "The primary number to apply for ABD Medicaid by phone, ask eligibility questions, and check application status. TDD users: 1-888-221-1590.",
+          "hours": "Monday through Friday (hours not specified in official materials; call during business hours)"
+        },
+        {
+          "label": "Local Virginia Department of Social Services",
+          "phone": null,
+          "description": "Pick up or drop off paper applications and get in-person help. Find your parent's local office at www.dss.virginia.gov/localagency.",
+          "hours": "Varies by office"
+        },
+        {
+          "label": "Virginia Disability Determination Services (DARS)",
+          "phone": null,
+          "description": "Handles formal disability determinations for ABD applicants who are not already approved through SSI or SSDI. The local DSS office routes cases there automatically; you do not need to contact DARS separately.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's income is above $1,004 per month, do not assume they are ineligible. The spenddown pathway lets Medicaid count ongoing medical bills against income. This is worth pursuing if your parent has regular prescription costs, therapy visits, or other recurring medical expenses.",
+        "If your parent is already receiving SSI, they are treated as meeting the income test for a separate ABD category. Their Medicaid enrollment is often automatic or linked; confirm this with Cover Virginia if they are not already enrolled.",
+        "Disability determination through DARS is required if your parent has not already been approved for SSI or SSDI-type benefits. This step adds time to the process. Apply as early as possible and submit all medical documentation upfront to avoid back-and-forth requests.",
+        "If you are applying on behalf of your parent, bring documentation of your legal authority to do so, such as a power of attorney or guardianship order. Without it, the agency may require your parent to participate directly."
+      ],
+      "relatedPrograms": [
+        "Medicare Savings Programs (MSPs) in Virginia, which help pay Medicare premiums and cost-sharing for people who have both Medicare and limited income",
+        "Virginia Medicaid Waiver Programs, including the CCC Plus Waiver, which cover home-based and community-based services for people who qualify for nursing-facility-level care",
+        "Supplemental Security Income (SSI), which provides monthly cash and automatically links to Medicaid coverage for many older and disabled Virginians",
+        "PACE (Program of All-Inclusive Care for the Elderly), which coordinates all medical and long-term care under one team for eligible adults in participating Virginia regions"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Over the income limit? Spenddown may still get your parent covered.",
+          "body": "If your parent's monthly income is above $1,004 (single) or $1,363 (couple), they are not automatically disqualified. Virginia's spenddown pathway works like a deductible: once their medical bills reach a certain threshold each month, Medicaid kicks in for the remainder. This is especially relevant for parents with ongoing prescription costs, therapy, or specialist visits. Ask specifically about spenddown when you call Cover Virginia at 1-833-522-5582."
+        },
+        {
+          "type": "callout",
+          "title": "Different rules apply for nursing home or home-based waiver care.",
+          "body": "If your parent is in a nursing facility or receiving home-and-community-based waiver services, the income test is different from the standard 80% FPL limit. Virginia allows income up to 300% of the federal SSI benefit rate for institutionalized individuals or those receiving certain waiver services. If your parent needs facility or in-home care and you have been told they earn too much, ask the caseworker specifically about the institutional income rules."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a home. Does that disqualify them because of the $2,000 asset limit?",
+          "answer": "The $2,000 limit applies to countable resources, which are generally liquid or accessible assets like bank accounts, cash, and certain investments. A primary residence is typically not counted as a countable resource for purposes of meeting the asset test. Virginia's materials describe countable resources rather than every asset a person owns. Tell the caseworker that your parent owns their home and ask specifically whether it counts; in most cases it does not affect eligibility at the application stage."
+        },
+        {
+          "question": "My parent's income is $1,200 per month, which is above the limit. Should I still apply?",
+          "answer": "Yes. Virginia's spenddown pathway lets your parent qualify even if income exceeds $1,004 per month, by counting their medical bills against that income. If your parent regularly spends money on prescriptions, doctor visits, or other medical care, those costs can bring their countable income below the threshold. Apply and ask the caseworker to evaluate the spenddown option. Do not assume a rejection before the agency reviews the full picture."
+        },
+        {
+          "question": "My parent is not on SSI or SSDI. Can they still qualify as disabled?",
+          "answer": "Yes, but disability must be formally determined. If your parent has not previously been approved for SSI or SSDI, Virginia routes their case to Virginia Disability Determination Services through DARS. This step reviews medical evidence and applies Social Security disability standards: the condition must be expected to last at least 12 months or result in death and must prevent substantial gainful activity. Submit complete medical records with the application to avoid delays in this process."
+        },
+        {
+          "question": "Can I apply for my parent on their behalf?",
+          "answer": "Yes. If you have a power of attorney, are a legal guardian, or are an authorized representative, you can complete and submit the application on your parent's behalf. Bring documentation of that legal authority when you apply in person, or have it ready when you call Cover Virginia at 1-833-522-5582. Without it, the agency may require your parent to participate directly in the process."
+        },
+        {
+          "question": "Can my parent have ABD Medicaid and Medicare at the same time?",
+          "answer": "Yes, and having both is common for adults 65 and older. When a person has both Medicare and Medicaid, Medicare pays first and Medicaid covers costs that Medicare does not, such as certain copays, coinsurance, and services Medicare does not include. Virginia also has separate Medicare Savings Programs that help pay Medicare premiums and cost-sharing for people who qualify. Ask about both programs when you call."
+        },
+        {
+          "question": "What happens after my parent is enrolled and their income or health situation changes?",
+          "answer": "Enrollees are required to report changes in income, resources, and living situation. Virginia conducts periodic eligibility renewals, and the local DSS agency reviews whether your parent still qualifies. If your parent's income increases significantly or they move to a nursing facility, the applicable rules may change. Report changes promptly to Cover Virginia at 1-833-522-5582 to avoid overpayment issues or a gap in coverage."
+        },
+        {
+          "question": "Is it faster to apply online or by phone?",
+          "answer": "Online applications at commonhelp.virginia.gov and phone applications through Cover Virginia (1-833-522-5582) are generally faster than mailing a paper application to a local DSS office, because paper mail adds transit and processing time on both ends. For complex situations, such as a parent who needs a disability determination or has both income and asset questions, calling first lets you ask questions before committing to one approach."
+        },
+        {
+          "question": "My parent is married and lives with their spouse. Does the spouse's income and assets count?",
+          "answer": "Yes, for most ABD pathways, Virginia reviews both the applicant's and the spouse's income and resources. This is one of the most commonly missed pieces of the application. The income limit of $1,363 per month applies to a household of two. If the household's combined countable income or resources exceed the limits, the spenddown pathway or institutional rules may still apply. Be prepared to provide the spouse's financial information when you apply."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-833-522-5582",
+      "sourceUrl": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_2",
+          "from": 1363,
+          "to": 1463,
+          "source": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1004,
+          "to": 1084,
+          "source": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/medicaid-for-persons-who-are-aged-blind-or-disabled-abd/",
+          "severity": "medium",
+          "why": "draft fits a federal formula (100% SSI 2026); verified value fits none",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18335225582"
+          ],
+          "to": "18552428282",
+          "source": "https://coverva.dmas.virginia.gov/media/fmjfdqvy/fact-sheet-abd80-060125.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        }
+      ]
+    },
+    {
+      "id": "va-medicare-savings-programs",
+      "name": "Medicare Savings Programs (QMB, SLMB, QI)",
+      "shortName": "Medicare Savings Programs",
+      "tagline": "If your parent has Medicare and a limited income, Virginia may pay some or all of their Medicare premiums, deductibles, and copays automatically every month.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Virginia Department of Social Services local offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Cover Virginia / Virginia Medicaid",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on Medicare with a fixed income, they may be paying hundreds of dollars a month in premiums, deductibles, and copays that Virginia could be covering instead. Medicare Savings Programs (MSPs) are Virginia Medicaid benefits that pay a portion of your parent's Medicare costs, depending on how much income they have. There are three tiers: QMB (Qualified Medicare Beneficiary), SLMB (Specified Low-Income Medicare Beneficiary), and QI (Qualifying Individual). The lower the income, the more Virginia covers.\n\nQMB is the most valuable tier. It pays your parent's Medicare Part A premium, Part B premium, deductibles, coinsurance, and copayments for Medicare-covered services. SLMB and QI cover only the Part B premium (currently $185/month in 2025), but that still adds up to over $2,200 a year. Your parent does not need to be enrolled in full Medicaid to qualify. These programs exist specifically for people who have Medicare but struggle with its out-of-pocket costs.\n\nEligibility is based on income and assets, not age. If your parent has Medicare Part A, lives in Virginia, and has income and resources within the limits below, they likely qualify for one of these tiers. Apply any time of year; there is no enrollment window.",
+      "savingsRange": "Up to $2,220/year for Part B premium help alone (SLMB/QI); more for QMB, which also covers deductibles and copays (exact QMB savings depend on your parent's Medicare usage)",
+      "savingsSource": "Part B premium figure is based on the 2025 standard Medicare Part B premium of $185/month published by CMS (cms.gov). QMB additional savings depend on actual Medicare cost-sharing usage and cannot be stated as a fixed annual maximum.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must have Medicare Part A",
+          "Income below $1,325/month (single) for QMB, higher for SLMB and QI",
+          "Assets below $8,400 (single) or $12,600 (couple)",
+          "Virginia resident",
+          "Not already enrolled in full Medicaid"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1325
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1783
+          }
+        ],
+        "assetLimits": {
+          "individual": 8400,
+          "couple": 12600,
+          "countedAssets": [
+            "Bank accounts (checking and savings)",
+            "Cash on hand",
+            "Stocks, bonds, and similar financial resources",
+            "Other countable resources under Virginia Medicaid rules"
+          ],
+          "exemptAssets": [
+            "Primary home (if treated as primary residence under Medicaid rules)",
+            "One vehicle (in most Medicaid eligibility situations)",
+            "Other resources Virginia Medicaid excludes under its broader rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must have Medicare Part A",
+          "Must meet Virginia Medicaid residency requirements",
+          "QI is limited by available federal funding and is typically first-come, first-served each year",
+          "Income of both spouses is counted together"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at commonhelp.virginia.gov or by calling Cover Virginia at 1-855-242-8282; applications are accepted year-round.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need your parent's Medicare card (showing Part A enrollment), a Social Security award letter, any pension or retirement income statements, and recent bank or financial account information. Having these ready shortens the call or online session significantly."
+          },
+          {
+            "step": 2,
+            "title": "Apply online or by phone",
+            "description": "Online: go to commonhelp.virginia.gov and complete the Application for Health Coverage and Financial Assistance. By phone: call Cover Virginia at 1-855-242-8282 (TDD: 1-888-221-1590), Monday through Friday. A representative can take your parent's application over the phone and tell you which tier they likely qualify for."
+          },
+          {
+            "step": 3,
+            "title": "Or apply in person or by mail",
+            "description": "Visit your local Virginia Department of Social Services office to apply in person. To apply by mail, send a completed application to: Cardinal Care Correspondence Center, P.O. Box 1820, Richmond, VA 23218. In-person can be useful if your parent's situation is complex or documents need to be reviewed on the spot."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any follow-up requests promptly",
+            "description": "The eligibility worker may request additional documents after the initial application. Responding quickly reduces delays. If your parent qualifies, benefits are applied through Virginia Medicaid and reflected in how Medicare bills them going forward."
+          }
+        ],
+        "processingTime": "No single statewide processing time is published. Applications are processed through Virginia Medicaid eligibility systems. Call Cover Virginia at 1-855-242-8282 to ask about current timelines.",
+        "waitlist": "No waitlist for QMB or SLMB. QI depends on available federal funding each year and can reach a funding cutoff; apply as early in the calendar year as possible to secure a QI slot.",
+        "tip": "If your parent's income is above the QMB limit, do not stop there. Check the SLMB limit ($1,585/month for one person) and the QI limit ($1,781/month). Many families only look for one tier and miss the others.",
+        "urls": [
+          {
+            "label": "Apply online: CommonHelp Virginia",
+            "url": "https://www.commonhelp.virginia.gov"
+          },
+          {
+            "label": "Virginia DMAS: Other Programs and Guidelines",
+            "url": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card showing Part A enrollment",
+        "Most recent Social Security award letter (showing monthly benefit amount)",
+        "Proof of Virginia residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Pension or retirement income statements",
+        "Current balances for any checking or savings accounts (Virginia Medicaid will specify what period they need during the review)",
+        "Stocks, bonds, or investment account statements if applicable",
+        "Identification for the applicant (and spouse if married)",
+        "Citizenship or immigration documents if requested by the eligibility worker",
+        "Spouse's income documentation if your parent is married (both incomes are counted)"
+      ],
+      "contacts": [
+        {
+          "label": "Cover Virginia Call Center",
+          "phone": "1-855-242-8282",
+          "description": "Apply by phone, check eligibility, or ask questions about your parent's application. This is the primary application line for Virginia Medicaid, including Medicare Savings Programs.",
+          "hours": "Monday through Friday (call to confirm current hours)"
+        },
+        {
+          "label": "Cover Virginia TDD Line",
+          "phone": "1-888-221-1590",
+          "description": "TDD/TTY access for the Cover Virginia application line.",
+          "hours": "Same hours as the main line"
+        },
+        {
+          "label": "Local Virginia Department of Social Services",
+          "phone": null,
+          "description": "Apply in person at your parent's local DSS office. Find your local office at dss.virginia.gov/localva.",
+          "hours": "Varies by office"
+        }
+      ],
+      "applicationNotes": [
+        "QI slots are tied to available federal funding and do not roll over year to year. If your parent is near the QI income limit, apply early in the calendar year rather than waiting.",
+        "If your parent's income puts them above QMB but below SLMB or QI limits, they still qualify for Part B premium help. The $185/month Part B premium (2025) adds up to $2,220/year; SLMB and QI both cover it.",
+        "Both spouses' incomes are counted even if only one is applying. This surprises many couples. If your parents file jointly or share finances, gather both incomes before applying.",
+        "MSPs are not the same as full Medicaid. Your parent keeps their Medicare doctors and coverage. MSP simply pays what Medicare would otherwise charge your parent out of pocket."
+      ],
+      "relatedPrograms": [
+        "Virginia Extra Help (Low Income Subsidy) for Medicare Part D drug costs",
+        "Virginia Medicaid (for parents who may qualify for full coverage)",
+        "PACE (Program of All-Inclusive Care for the Elderly) in Virginia",
+        "SHIP Virginia (free Medicare counseling through the State Health Insurance Assistance Program)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Which tier covers what",
+          "description": "The three tiers have different income limits and cover different costs. QMB covers the most; QI covers the least but has the highest income limit.",
+          "tiers": [
+            {
+              "name": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimitSingle": 1325,
+              "incomeLimitCouple": 1783,
+              "covers": "Medicare Part A premium, Part B premium ($185/month in 2025), deductibles, coinsurance, and copayments for Medicare-covered services",
+              "note": "Most valuable tier. Covers Medicare cost-sharing beyond just premiums."
+            },
+            {
+              "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimitSingle": 1585,
+              "incomeLimitCouple": 2135,
+              "covers": "Medicare Part B premium only ($185/month in 2025)",
+              "note": "Does not cover deductibles or copays, but the premium savings alone are $2,220/year."
+            },
+            {
+              "name": "QI (Qualifying Individual)",
+              "incomeLimitSingle": 1781,
+              "incomeLimitCouple": 2400,
+              "covers": "Medicare Part B premium only, while federal funding is available",
+              "note": "Highest income limit but not guaranteed. Apply early in the year."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "Do not assume your parent earns too much",
+          "body": "QMB income limit: $1,325/month (single), $1,783/month (couple). SLMB limit: $1,585/month (single), $2,135/month (couple). QI limit: $1,781/month (single), $2,400/month (couple). If your parent earns more than the QMB threshold, check the next two tiers before giving up. Many families stop at QMB and leave premium savings unclaimed."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security check is $1,400/month. Do they qualify for any tier?",
+          "answer": "At $1,400/month for a single person, your parent is above the QMB limit ($1,325) but below the SLMB limit ($1,585). They would likely qualify for SLMB, which pays the Medicare Part B premium of $185/month in 2025. That is $2,220 back in their pocket each year. Apply at commonhelp.virginia.gov or call 1-855-242-8282 to confirm."
+        },
+        {
+          "question": "Both my parents are living. Does Virginia count both their incomes?",
+          "answer": "Yes. Virginia counts the income of both spouses even if only one is applying. Add both Social Security checks, pensions, and other income together, then compare that combined total to the two-person household limits: $1,783/month for QMB, $2,135 for SLMB, and $2,400 for QI. If the combined income is above all three limits, neither program will apply."
+        },
+        {
+          "question": "My parent owns their home. Will that count against the asset limit?",
+          "answer": "No. The primary home is exempt under Virginia Medicaid rules, so owning a home does not count toward the $8,400 individual or $12,600 couple asset limit. One vehicle is also generally exempt. What counts is cash, bank account balances, stocks, bonds, and similar financial resources. If your parent's countable assets are within those limits, the home is not a barrier."
+        },
+        {
+          "question": "What is the difference between QI and QMB in practical terms for my parent's medical bills?",
+          "answer": "Under QI, Virginia pays the Part B premium and nothing else. Your parent still owes deductibles and copays directly. Under QMB, providers are not allowed to bill your parent for Medicare cost-sharing at all: no deductible, no coinsurance, no copay on Medicare-covered services. If your parent has frequent doctor visits or hospital stays, QMB can save far more than premium help alone. Call 1-855-242-8282 to see which tier your parent qualifies for."
+        },
+        {
+          "question": "Is there an open enrollment window, or can I apply now?",
+          "answer": "You can apply any time of year for QMB and SLMB; there is no enrollment period. QI is the exception: it runs on federal funding that resets each year, and slots can run out. For QI, apply as early in the calendar year as possible. For all tiers, go to commonhelp.virginia.gov or call 1-855-242-8282."
+        },
+        {
+          "question": "Can I apply on my parent's behalf, or do they have to apply themselves?",
+          "answer": "A family member or authorized representative can apply on behalf of an elderly parent. On the CommonHelp online application, there is an option to indicate you are applying on someone else's behalf. If applying by phone, tell the Cover Virginia representative at 1-855-242-8282 that you are calling for your parent. You may need to provide your own contact information and confirm your relationship."
+        },
+        {
+          "question": "My parent already gets full Medicaid. Do they need to apply for MSP separately?",
+          "answer": "If your parent has full Virginia Medicaid, their Medicare cost-sharing is typically already covered through Medicaid, and they do not need a separate MSP application. MSPs are designed for people who have Medicare but do not qualify for full Medicaid. If you are unsure which coverage your parent has, call Cover Virginia at 1-855-242-8282 and ask them to confirm what is on file."
+        },
+        {
+          "question": "My parent was denied for one MSP tier. Can they still qualify for another?",
+          "answer": "Yes. If your parent was denied for QMB because their income was too high, they may still qualify for SLMB or QI. The three tiers have different income ceilings. Ask the eligibility worker to assess all three tiers at the same time, or reapply specifying the higher-income tiers. The application form is the same for all three."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "1-855-242-8282",
+      "sourceUrl": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 8400,
+          "to": 9950,
+          "source": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 12600,
+          "to": 14910,
+          "source": "https://coverva.dmas.virginia.gov/media/vkqlcwnt/fact-sheet-msps-021226-2.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:55.214Z"
+        }
+      ]
+    },
+    {
+      "id": "va-snap-food-benefits",
+      "name": "Supplemental Nutrition Assistance Program (SNAP)",
+      "shortName": "SNAP Food Benefits",
+      "tagline": "If your parent is on a fixed income in Virginia, they may qualify for up to $298/month in grocery benefits loaded directly onto a debit-style card.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Virginia Department of Social Services local offices",
+            "type": "service-area"
+          },
+          {
+            "name": "CommonHelp statewide application portal",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and living on Social Security, a pension, or a small retirement income, they may qualify for monthly grocery benefits through Virginia SNAP. Benefits are loaded onto an EBT card (an Electronic Benefits Transfer card, which works like a debit card at most grocery stores and many farmers markets). For a single-person household, the maximum monthly benefit is $298. For a two-person household, it goes up to $546.\n\nThe income rules are easier for older adults than most people realize. Households with at least one member age 60 or older only need to meet the net income limit, not the gross income limit. That means allowable deductions for medical costs, shelter expenses, and utilities can bring your parent's countable income down significantly, potentially qualifying them even if their gross income seems too high at first glance.\n\nApplying in Virginia takes one online form through CommonHelp at commonhelp.virginia.gov, or a phone call to 833-522-5582. If your parent owns their home, a car, and has retirement savings, they may still qualify: the home, most vehicles, and most retirement accounts do not count toward the asset limit.",
+      "savingsRange": "Up to $3,576/year for a one-person household (FY2026 maximum); up to $6,552/year for a two-person household",
+      "savingsSource": "Virginia DSS and USDA SNAP federal allotment table, FY2026 (Oct. 1, 2025 to Sept. 30, 2026). Figures represent the maximum monthly allotment multiplied by 12, not a typical or average benefit. Actual benefits vary by household size and net income.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Virginia resident",
+          "Net monthly income at or below $1,305 (1-person household) after deductions",
+          "Households with a member age 60+ only need to meet the net income test, not gross",
+          "Assets below $4,500 for households with an elderly or disabled member",
+          "Must buy and prepare food as a household"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1305
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1763
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2221
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2680
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 3138
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 3596
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 4055
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 4513
+          }
+        ],
+        "assetLimits": {
+          "individual": 4500,
+          "couple": 4500,
+          "countedAssets": [
+            "Cash on hand",
+            "Money in checking or savings accounts",
+            "Other countable liquid resources"
+          ],
+          "exemptAssets": [
+            "The home the household lives in",
+            "Most retirement accounts and certain retirement resources",
+            "Most vehicles used for household transportation",
+            "Certain other resources excluded under federal SNAP rules"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Virginia resident",
+          "Must be in a household that buys and prepares food together",
+          "Must meet work-related rules unless age 60 or older or disabled (most older adults are exempt from work requirements)",
+          "Must provide Social Security numbers for household members if available"
+        ],
+        "povertyLevelReference": "100% FPL for net income (households with elderly or disabled member); 130% FPL for gross income (standard households)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online at commonhelp.virginia.gov; if your parent needs help, call 833-522-5582 to apply by phone or get connected to the local Department of Social Services office.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's basic information",
+            "description": "Before you start, have your parent's Social Security number, proof of Virginia address (a utility bill or lease works), and their most recent income documents ready. You do not need everything at once to start the application, but having these speeds the process."
+          },
+          {
+            "step": 2,
+            "title": "Apply online through CommonHelp or by phone",
+            "description": "Go to commonhelp.virginia.gov and create an account to submit the combined TANF, SNAP, and Medical Assistance application. If online access is difficult, call 833-522-5582 or 855-635-4370 to apply by phone or get the paper application mailed to you."
+          },
+          {
+            "step": 3,
+            "title": "Submit supporting documents",
+            "description": "After submitting the application, the local Department of Social Services (DSS) office will contact you to provide documentation. You can upload documents through CommonHelp, mail them, fax them, or bring them in person to your local DSS office. Find your local office at dss.virginia.gov/localinfo/."
+          },
+          {
+            "step": 4,
+            "title": "Complete the interview",
+            "description": "Most SNAP applicants are required to complete an eligibility interview with the local DSS office. This is usually done by phone. A family member or authorized representative can participate on your parent's behalf if needed."
+          },
+          {
+            "step": 5,
+            "title": "Receive the EBT card",
+            "description": "If approved, your parent will receive a Virginia EBT card in the mail. Benefits are loaded monthly and can be used at most grocery stores, many pharmacies with food sections, and participating farmers markets. SNAP benefits cannot be used for alcohol, tobacco, vitamins, prepared hot foods, or non-food household items."
+          }
+        ],
+        "processingTime": "Virginia DSS does not publish a single statewide processing deadline for SNAP; processing times vary by local office. Federal law requires most SNAP applications to be processed within 30 days. Households in immediate financial hardship may request expedited (emergency) SNAP benefits, which must be issued within 7 days.",
+        "waitlist": null,
+        "tip": "When you apply, ask specifically about the medical expense deduction. If your parent pays out-of-pocket for Medicare premiums, prescriptions, or other medical costs, those expenses can reduce their countable net income and increase their benefit amount. Many older adults qualify for more than the minimum benefit once these deductions are applied.",
+        "urls": [
+          {
+            "label": "Apply online via CommonHelp",
+            "url": "https://commonhelp.virginia.gov/access/"
+          },
+          {
+            "label": "Virginia SNAP program page",
+            "url": "https://www.dss.virginia.gov/relief/food-assistance/snap/"
+          },
+          {
+            "label": "Find your local DSS office",
+            "url": "https://www.dss.virginia.gov/localinfo/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or Social Security number for your parent (and all household members if applying together)",
+        "Proof of Virginia residency: a current utility bill, lease agreement, or official mail showing your parent's name and address",
+        "Proof of current income: Social Security award letter, pension statement, or most recent bank deposit records showing regular income",
+        "Photo ID for your parent: driver's license, state ID, or passport",
+        "Proof of shelter costs: a recent rent receipt or mortgage statement, and a utility bill (electric, gas, or phone) if your parent pays utilities separately",
+        "Documentation of medical expenses paid out-of-pocket, if any: receipts, Medicare premium notices, or prescription cost records (these can increase the benefit amount for adults 60+)",
+        "Bank account information: the current balance of any checking or savings accounts (Virginia DSS may ask for this to verify countable resources against the $4,500 asset limit for elderly households)",
+        "Immigration or citizenship documents if your parent was not born in the United States"
+      ],
+      "contacts": [
+        {
+          "label": "Virginia DSS SNAP Application Line",
+          "phone": "833-522-5582",
+          "description": "Apply for SNAP, ask eligibility questions, or get connected to your local Department of Social Services office. This is the primary statewide line for new applications.",
+          "hours": "Contact Virginia DSS directly for current hours; hours may vary"
+        },
+        {
+          "label": "Virginia DSS Alternate Application Line",
+          "phone": "855-635-4370",
+          "description": "Alternate statewide number for SNAP applications and benefit questions.",
+          "hours": "Contact Virginia DSS directly for current hours"
+        },
+        {
+          "label": "CommonHelp Online Portal",
+          "phone": null,
+          "description": "Apply online at commonhelp.virginia.gov. Create an account, complete the application, and upload documents without calling.",
+          "hours": "Available 24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in immediate financial hardship and cannot afford food this week, ask specifically for expedited SNAP processing when you call or apply. Federal rules require Virginia to issue expedited benefits within 7 days for households that meet the emergency criteria.",
+        "A family member or trusted friend can apply on behalf of an elderly parent by serving as an authorized representative. You can designate this during the CommonHelp application or at the local DSS office.",
+        "Because income rules for households with a member age 60 or older use only the net income test, deductions for medical costs and shelter expenses matter a lot. Even if a first estimate of gross income looks too high, it is worth applying and listing all expenses so the caseworker can calculate the correct net figure.",
+        "Application processing and document follow-up is handled by local DSS offices, and response times can vary by county. If you have not heard back within two weeks of submitting, call your local DSS office directly to confirm receipt."
+      ],
+      "relatedPrograms": [
+        "Low Income Home Energy Assistance Program (LIHEAP) Virginia",
+        "Virginia Medicaid",
+        "Meals on Wheels Virginia (home-delivered meals for older adults)",
+        "Virginia Weatherization Assistance Program"
+      ],
+      "contentSections": [
+        {
+          "type": "stat-callout",
+          "heading": "What SNAP pays in Virginia (FY2026)",
+          "stats": [
+            {
+              "label": "1-person household (maximum)",
+              "value": "$298/month"
+            },
+            {
+              "label": "2-person household (maximum)",
+              "value": "$546/month"
+            },
+            {
+              "label": "Asset limit for households with a member 60+",
+              "value": "$4,500"
+            }
+          ],
+          "note": "Actual benefit amounts depend on household size and net income after deductions. Most older adults receive less than the maximum."
+        },
+        {
+          "type": "prose",
+          "heading": "The net income rule: why older adults often qualify even when gross income seems too high",
+          "body": "Most households applying for SNAP must pass two tests: a gross income test and a net income test. But if your parent is age 60 or older, Virginia only applies the net income test.\n\nNet income is gross income minus allowable deductions. For older adults, those deductions can include: a standard deduction applied to all households, a portion of shelter costs (rent or mortgage plus utilities) above a set threshold, and medical expenses exceeding $35/month that are paid out-of-pocket. Because many older adults have significant shelter and medical costs relative to income, their net income after deductions is often well below their gross Social Security or pension income.\n\nThis means your parent might look over the limit at first glance but qualify once deductions are calculated. It is always worth applying."
+        },
+        {
+          "type": "prose",
+          "heading": "What SNAP benefits can and cannot buy",
+          "body": "SNAP benefits are loaded monthly onto a Virginia EBT card and can be used at most grocery stores, many pharmacies that sell food, and participating farmers markets. Benefits can be used to buy breads, cereals, fruits, vegetables, meat, fish, poultry, dairy products, and seeds or plants that produce food.\n\nSNAP benefits cannot be used to buy alcohol, tobacco, vitamins or supplements, prepared hot foods sold for immediate eating, pet food, cleaning supplies, paper products, or other non-food household items."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's gross Social Security income is above the income limit. Does that automatically disqualify them?",
+          "answer": "Not necessarily. If your parent is age 60 or older, Virginia only applies the net income test, not the gross income test. After deductions for medical costs, rent or mortgage, and utilities, their countable net income may fall well below the $1,305/month limit for a one-person household. Apply and list all expenses so the caseworker can calculate the correct net figure."
+        },
+        {
+          "question": "My parent owns their home and has a retirement account. Do those count against the asset limit?",
+          "answer": "The home your parent lives in is fully exempt and does not count toward the asset limit. Most retirement accounts are also exempt under federal SNAP rules. The $4,500 asset limit for households with an elderly or disabled member applies primarily to cash on hand and money in checking or savings accounts. Your parent may still qualify even with significant home equity or retirement savings."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they cannot manage the application themselves?",
+          "answer": "Yes. You can serve as an authorized representative for your parent and apply through CommonHelp at commonhelp.virginia.gov, by phone at 833-522-5582, or in person at the local DSS office. You can also participate in the eligibility interview on their behalf. The application will ask you to identify yourself as the representative."
+        },
+        {
+          "question": "How long will it take to find out if my parent is approved?",
+          "answer": "Federal rules require most SNAP applications to be processed within 30 days of submission. Virginia does not publish a single statewide turnaround time, and actual processing speed varies by local DSS office. If your parent cannot afford food this week, ask for expedited SNAP processing when you apply: eligible households must receive benefits within 7 days."
+        },
+        {
+          "question": "Can my parent get SNAP while also receiving Medicaid or Medicare?",
+          "answer": "Yes. SNAP, Medicaid, and Medicare are separate programs with separate eligibility rules. Receiving one does not disqualify your parent from the others. In fact, if your parent already receives SSI (Supplemental Security Income), they may be automatically eligible for SNAP in some cases. Apply through CommonHelp or call 833-522-5582 and let the caseworker know about all current benefits."
+        },
+        {
+          "question": "What happens if my parent's income or living situation changes after they are enrolled?",
+          "answer": "Your parent (or you as their representative) is required to report certain changes to the local DSS office, such as a significant increase in income or a change in household size. You report changes through CommonHelp, by calling 833-522-5582, or by contacting the local DSS office directly. SNAP cases are also reviewed periodically through a recertification process; the local office will notify you when recertification is due."
+        },
+        {
+          "question": "My parent lives with me. Does my income count against them?",
+          "answer": "It depends on how your household is defined for SNAP purposes. SNAP counts the income of people who buy and prepare food together as one household. If you and your parent purchase and cook food together, your income is likely included in the household calculation, and the benefit would be based on a two-person household with both incomes combined. If you maintain completely separate food purchasing and preparation, your parent may be considered a separate one-person household. A caseworker can help clarify this based on your specific living arrangement."
+        },
+        {
+          "question": "Can my parent use SNAP at a farmers market or grocery delivery service?",
+          "answer": "Many Virginia farmers markets accept EBT cards, and some online grocery retailers (including certain Amazon and Walmart grocery delivery services) accept SNAP EBT for eligible food items. Availability varies by retailer and location. The USDA maintains a searchable list of SNAP-authorized retailers at fns.usda.gov. Delivery fees and tips cannot be paid with SNAP benefits, only the eligible food items themselves."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "833-522-5582",
+      "sourceUrl": "https://www.dss.virginia.gov/relief/food-assistance/snap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "va-pace-all-inclusive-care",
+      "name": "Program of All-Inclusive Care for the Elderly (PACE)",
+      "shortName": "PACE Care Program",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, PACE provides every medical and daily-living service they need through one coordinated team.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "local",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local PACE centers in Virginia's service areas",
+            "type": "service-area"
+          },
+          {
+            "name": "InnovAge Virginia PACE, Charlottesville",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs the level of care that would typically require a nursing home, but you and your parent want them to stay in their own home, PACE may be the most comprehensive option available in Virginia. The program covers primary care, specialist visits, hospital stays, prescription medications, physical and occupational therapy, adult day services, home care, dental, transportation, and more, all coordinated by a single care team. Your parent does not have to manage separate providers or insurance claims because PACE handles everything under one roof.\n\nPACE is not a cash benefit. It is a fully integrated service program financed through Medicare and Medicaid. For participants who qualify for Medicaid, there is typically no monthly premium. For participants who have Medicare but not Medicaid, a premium applies; and for those who have neither, private-pay enrollment is possible. The income and asset thresholds that govern Medicaid-funded PACE enrollment are tied to Virginia Medicaid rules, and the exact dollar figures can shift when the SSI payment standard changes, so they must be confirmed at the time of application.\n\nAs of early 2025, Virginia had 14 PACE programs operating across the state. PACE is not available everywhere in Virginia; your parent must live inside a participating provider's service area (called a catchment area) to enroll. The first step is confirming whether your parent's address falls within a covered area, then arranging the clinical assessment that determines whether they meet the nursing facility level of care standard that all PACE applicants must satisfy.",
+      "savingsRange": "",
+      "savingsSource": "Free service: PACE is a service delivery program, not a cash benefit. Medicaid-eligible participants pay no premium for covered services. Source: Virginia Department of Medical Assistance Services (DMAS), dmas.virginia.gov.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 55 or older",
+          "Needs nursing facility level of care (daily help with bathing, dressing, or medication management)",
+          "Lives inside a PACE provider's service area in Virginia",
+          "Meets Virginia Medicaid income and asset limits (if enrolling through Medicaid)",
+          "Able to live safely in the community with PACE support"
+        ],
+        "ageRequirement": "55+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet the Nursing Facility Level of Care standard. This means a clinical assessment, called the Uniform Assessment Instrument (UAI), confirms that your parent needs daily help with activities such as bathing, dressing, eating, or managing medications, at a level that would otherwise qualify them for nursing home admission. Meeting the age and income rules alone is not enough; this functional screening is the primary gatekeeper.",
+        "otherRequirements": [
+          "Must be at imminent risk of nursing facility placement without PACE services",
+          "Must live within a participating PACE provider's catchment area in Virginia",
+          "Must be able to live safely in the community with the support PACE provides",
+          "Must voluntarily enroll and agree to PACE terms and conditions",
+          "Eligibility is confirmed through a Long-Term Services and Supports (LTSS) screening using the UAI and required LTSS screening packet forms"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call a local Virginia PACE provider directly to start a screening conversation; the process involves a clinical assessment and Medicaid financial review that together typically take several weeks.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent's address is in a PACE service area",
+            "description": "Virginia had 14 PACE programs as of early 2025, but the program is not available everywhere. Visit the Virginia DMAS PACE page at dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/ or call the DMAS Member Services line at (804) 786-6145 to check whether your parent's home address falls inside a provider's catchment area. If it does not, PACE is not currently an option regardless of other eligibility."
+          },
+          {
+            "step": 2,
+            "title": "Contact the local PACE provider to request an intake conversation",
+            "description": "Once you confirm coverage, call the PACE center that serves your parent's area. For example, InnovAge Virginia PACE in Charlottesville can be reached at (434) 529-1300 (TTY 711). The intake coordinator will ask about your parent's medical needs, current living situation, and insurance coverage. This call is not an application; it is a screening to determine whether a full assessment makes sense."
+          },
+          {
+            "step": 3,
+            "title": "Complete the Long-Term Services and Supports (LTSS) screening and UAI assessment",
+            "description": "A trained assessor, usually from the local LTSS screening team, will schedule an in-person visit with your parent to complete the Uniform Assessment Instrument (UAI). This assessment documents your parent's functional needs, such as help with bathing, dressing, and medication management, and determines whether they meet the Nursing Facility Level of Care standard. Medical records that support the level-of-care need are helpful to have ready, but the UAI is the formal qualifying document; medical records alone do not substitute for it."
+          },
+          {
+            "step": 4,
+            "title": "Complete the Medicaid financial review (if applicable)",
+            "description": "If your parent is enrolling through Medicaid (or applying for Medicaid to cover PACE costs), a financial review of income and assets will be conducted alongside or shortly after the UAI. Gather income documents, asset statements, and identification before this step. The income limit is set at 300% of the current SSI payment standard; the exact dollar amount must be confirmed with the PACE intake team at the time of application because it changes when the SSI rate changes."
+          },
+          {
+            "step": 5,
+            "title": "Receive enrollment decision and choose your PACE center",
+            "description": "If your parent is found eligible clinically and financially, the PACE program will present an enrollment agreement. Read it carefully: once enrolled, PACE becomes the primary source of covered Medicare and Medicaid services. Your parent's current separate providers, specialists, and insurance arrangements will generally be replaced by the PACE care team. Enrollment is voluntary and can be disenrolled at any time."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard has been published. Timeline depends on how quickly the LTSS/UAI screening can be scheduled and whether a Medicaid financial determination is needed. Ask the local PACE intake team for a realistic estimate at your parent's first call.",
+        "waitlist": "No statewide waitlist policy has been identified. Availability depends on whether the local PACE program is accepting new enrollees. Ask the intake coordinator directly when you call.",
+        "tip": "If your parent is being discharged from a hospital or rehabilitation facility, tell the discharge planner that you are interested in PACE. Hospital-based social workers and discharge planners are often familiar with PACE enrollment and can help initiate the LTSS screening before your parent returns home.",
+        "urls": [
+          {
+            "label": "Virginia DMAS PACE Program Page",
+            "url": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card if your parent has one (Medicare enrollment is not required for PACE, but the card is useful for the intake coordinator to have on file)",
+        "Medicaid card or Medicaid case number if your parent is already enrolled in Virginia Medicaid",
+        "Proof of Virginia residence within the PACE service area (a utility bill, lease agreement, or state-issued document showing the home address)",
+        "Proof of age (birth certificate, passport, or other government-issued document showing date of birth)",
+        "Social Security card or documentation of Social Security number",
+        "Recent Social Security or SSI award letter showing current monthly benefit amount",
+        "Documentation of any other income sources (pension statements, retirement account distributions, VA benefit letters)",
+        "Current bank and savings account balances (the PACE intake team will advise on what period and format Virginia Medicaid requires at the time of your application)",
+        "Documentation of any other countable assets (CDs, investment or brokerage accounts, bonds)",
+        "Current list of all prescription medications with dosages and prescribing providers",
+        "Medical records or a physician's summary supporting the need for nursing facility level of care (helpful but not a substitute for the UAI assessment)",
+        "Completed or in-progress LTSS screening paperwork or UAI forms, if a screening has already been started",
+        "Legal authorization documents if a family member or representative is applying on behalf of the parent (power of attorney or legal guardianship paperwork)"
+      ],
+      "contacts": [
+        {
+          "label": "InnovAge Virginia PACE, Charlottesville",
+          "phone": "(434) 529-1300",
+          "description": "One of Virginia's 14 PACE providers. Call to ask whether your parent's address is in their service area and to begin the intake screening process. TTY users dial 711.",
+          "hours": "Call for current hours"
+        },
+        {
+          "label": "Virginia DMAS Member Services",
+          "phone": "(804) 786-6145",
+          "description": "Virginia Department of Medical Assistance Services. Can provide information about PACE program availability and Medicaid eligibility rules. Not the application door, but can direct you to the correct local PACE provider.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Virginia 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide information and referral line. Can help identify the PACE provider serving your parent's area if you are unsure who to call. This line transfers you to local resources; it does not process PACE applications.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "The most common reason families pursue PACE and then learn their parent cannot enroll is geography: if the home address falls outside every provider's catchment area, no other eligibility factor matters. Confirm the address first before gathering documents.",
+        "Once your parent enrolls in PACE, PACE becomes the sole source of their covered Medicare and Medicaid services. Existing relationships with outside specialists and primary care doctors will generally end. Ask the intake coordinator exactly which current providers can continue and which cannot before signing the enrollment agreement.",
+        "If your parent is in a hospital or short-term rehabilitation facility right now, do not wait until discharge to start the PACE inquiry. Discharge planners can often initiate the LTSS/UAI screening while your parent is still in the facility, which speeds up the transition.",
+        "Income and asset thresholds for Medicaid-funded PACE enrollment are tied to the SSI payment standard and can change annually. The figures must be confirmed with the PACE intake team at the time of application; do not rely on figures published in prior years."
+      ],
+      "relatedPrograms": [
+        "Virginia Medicaid HCBS Waiver (Commonwealth Coordinated Care Plus)",
+        "Virginia Adult Day Health Care Program",
+        "Virginia Insurance Counseling and Assistance Program (VICAP) for Medicare guidance",
+        "Virginia Area Agencies on Aging caregiver support services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What changes when your parent enrolls in PACE",
+          "body": "PACE is comprehensive by design, and that comprehensiveness comes with a trade-off. Once enrolled, PACE becomes the exclusive source of your parent's covered Medicare and Medicaid services. This means outside specialists, current primary care physicians, and separate insurance plans are generally replaced by the PACE interdisciplinary care team. For families where a parent has long-standing relationships with specific doctors, this is a significant decision. Ask the intake coordinator specifically which existing providers, if any, can be retained before enrollment is finalized."
+        },
+        {
+          "type": "prose",
+          "title": "What the nursing facility level of care requirement actually means",
+          "body": "Every PACE applicant in Virginia must meet the Nursing Facility Level of Care (NFLOC) standard. This is not a financial threshold; it is a clinical one. A trained assessor visits your parent at home and completes the Uniform Assessment Instrument (UAI), which evaluates whether your parent needs daily or frequent help with bathing, dressing, eating, toileting, transferring (moving from bed to chair, for example), medication management, or other personal care tasks at a level that would otherwise require nursing home care.\n\nMeeting this standard is the central gate for PACE enrollment. Age 55 and low income are necessary but not sufficient. If your parent's needs are significant but the assessor finds they do not yet meet the NFLOC threshold, PACE enrollment will be denied at that time. If your parent is borderline, having detailed medical records from their physician that document daily care needs can support the assessment, though the UAI itself is the formal qualifying document."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's doctor already handles their care. Why would they switch everything to PACE?",
+          "answer": "PACE replaces fragmented care across multiple providers with a single interdisciplinary team that handles primary care, specialists, medications, therapy, home care, and transportation together. For a parent who is frequently hospitalized, missing appointments because of transportation, or struggling to coordinate between several doctors, PACE can reduce those gaps significantly. The trade-off is real: your parent's existing outside providers will generally no longer be covered once PACE enrollment begins. This is a decision worth discussing with your parent's current physician before applying."
+        },
+        {
+          "question": "Does my parent have to be on Medicaid to enroll in PACE?",
+          "answer": "No. PACE has three enrollment pathways: Medicaid only, Medicare and Medicaid (dual eligible), or private pay. A person who has Medicare but not Medicaid can enroll and pay a monthly premium. A person who has neither Medicare nor Medicaid can enroll as a private-pay participant. If your parent is not on Medicaid but may qualify, the PACE intake team can help initiate a Medicaid application at the same time as the PACE enrollment process."
+        },
+        {
+          "question": "What are the income and asset limits for Medicaid-funded PACE enrollment?",
+          "answer": "Virginia sets the income limit at 300% of the current SSI payment standard for one person. Because the SSI payment standard changes over time, the exact dollar figure must be confirmed with the PACE intake team or Virginia DMAS at the time of your parent's application. Asset limits are also governed by the Virginia Medicaid State Plan and must be confirmed at the time of application. Do not rely on figures from prior years."
+        },
+        {
+          "question": "What if my parent's home address is not in a PACE service area?",
+          "answer": "If your parent's address falls outside every participating provider's catchment area in Virginia, your parent cannot enroll in PACE regardless of age, income, or medical need. Virginia had 14 PACE programs as of early 2025, and some providers were still expanding their service areas. It is worth calling the Virginia DMAS Member Services line at (804) 786-6145 or checking the DMAS PACE page to see whether coverage has expanded to your parent's area. If not, ask about Virginia Medicaid HCBS waivers as an alternative."
+        },
+        {
+          "question": "Can I apply for PACE on behalf of my parent, and what legal documents do I need?",
+          "answer": "Yes. A family member or designated representative can initiate the PACE inquiry and accompany the parent through the intake and assessment process. If your parent cannot speak on their own behalf, you will need a valid power of attorney or legal guardianship documentation to sign enrollment agreements and share medical information on their behalf. Bring those documents to the first intake meeting."
+        },
+        {
+          "question": "What happens if my parent's needs increase significantly after they enroll in PACE?",
+          "answer": "The PACE interdisciplinary team reassesses participants regularly and adjusts the care plan as needs change. If your parent eventually requires nursing facility care, PACE covers that too; participants do not lose their PACE coverage if they need a nursing home stay. The goal is to support your parent at whatever level of care is appropriate, including short-term inpatient care and respite."
+        },
+        {
+          "question": "Can my parent leave PACE if it is not working out?",
+          "answer": "Yes. PACE enrollment is voluntary and your parent can disenroll at any time. Once they disenroll, they return to standard Medicare and Medicaid coverage. The PACE center will provide written notice of what happens to services during the transition. Before disenrolling, it is worth calling the PACE intake coordinator to discuss whether a care plan adjustment could address the concern instead."
+        },
+        {
+          "question": "Can my parent apply for PACE and a Virginia Medicaid HCBS waiver at the same time?",
+          "answer": "Applying for both simultaneously is possible, but once your parent is enrolled in PACE, PACE becomes their exclusive source of covered Medicaid services, which means a separate waiver slot would no longer apply. In practice, families often use the Medicaid waiver application as a backup while pursuing PACE, in case their parent's address is not in a PACE service area or a slot is unavailable. Talk to the local Area Agency on Aging or call Virginia 2-1-1 to understand which option fits your parent's situation best."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(434) 529-1300",
+      "sourceUrl": "https://www.dmas.virginia.gov/for-members/benefits-and-services/other-programs-and-guidelines/pace/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8049775900",
+          "source": "https://www.dmas.virginia.gov/for-members/benefits-and-services/long-term-care/programs-and-initiatives/program-of-all-inclusive-care/",
+          "reason": "page also lists ours ((434) 529-1300)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
+    },
+    {
+      "id": "va-liheap-energy-assistance",
+      "name": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "shortName": "Energy Assistance",
+      "tagline": "If your parent is 60+ and on a fixed income in Virginia, they may qualify for help paying heating and cooling bills through a state program that covers energy crises too.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Virginia Department of Social Services Energy Assistance Program, 801 E. Main Street, Richmond, VA 23219",
+            "type": "service-area"
+          },
+          {
+            "name": "Local departments of social services across Virginia",
+            "type": "service-area"
+          },
+          {
+            "name": "Enterprise Customer Service Center / Public Inquiries: 855-635-4370 or 1-800-230-6977",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is struggling to pay heating or cooling bills in Virginia, the Energy Assistance Program (Virginia's LIHEAP) can help cover those costs directly. It is not one single benefit; it is three separate components, and your parent may qualify for more than one. Fuel Assistance helps pay winter heating bills. Crisis Assistance covers emergency energy needs, including threatened utility shutoffs. Cooling Assistance helps pay summer cooling costs for households that include someone age 60 or older, a person with a disability, or a child under 6.\n\nTo qualify, your parent's household gross income must be at or below 150% of the federal poverty level. That translates to roughly $1,956 per month for a one-person household. There is no asset limit; the program does not count savings, a home, or a car when screening eligibility. The main gates are income, Virginia residency, and having an actual heating or cooling expense in your parent's name.\n\nThis program is run through your parent's local department of social services, and application windows are seasonal with firm deadlines. Crisis Assistance closes March 31 each year, or earlier if funds run out. Because of that funding cap, applying as early as possible in the season is the most important thing a caregiver can do.",
+      "savingsRange": "",
+      "savingsSource": "No fixed dollar benefit amount was identified in official Virginia LIHEAP program materials. Assistance varies by component (Fuel, Crisis, or Cooling), household income, and local circumstances. The Virginia Department of Social Services Energy Assistance Program page at dss.virginia.gov/relief/ea/ does not publish a standard benefit amount.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Virginia resident applying in the county where they live",
+          "Gross monthly income at or below 150% of the federal poverty level (roughly $1,956/month for one person)",
+          "Must have a heating or cooling expense in their name",
+          "No asset limit",
+          "Cooling Assistance requires age 60+, a disability, or a child under 6 in the household"
+        ],
+        "ageRequirement": "60+ for Cooling Assistance; no stated age minimum for Fuel or Crisis Assistance",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1956
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4018
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must live in Virginia and apply at the local department of social services in the county where they live.",
+          "Must have a heating expense (for Fuel or Crisis Assistance) or a cooling expense (for Cooling Assistance) that is not fully included in their rent.",
+          "Households whose total heating cost is included in their rent are not eligible for Fuel Assistance.",
+          "People living in institutions, temporary shelters, or group homes with no direct heating expense are not eligible for Fuel Assistance.",
+          "People who live in only one room of a larger dwelling are not eligible for Fuel Assistance.",
+          "Cooling Assistance requires that the household include someone age 60 or older, a person with a disability, or a child under age 6."
+        ],
+        "povertyLevelReference": "150% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at commonhelp.virginia.gov, by phone at 855-635-4370, or in person at your parent's local Virginia department of social services; no single processing timeline is published statewide.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm which component your parent needs",
+            "description": "Decide whether your parent needs Fuel Assistance (heating bills), Crisis Assistance (emergency or shutoff threat), or Cooling Assistance (summer cooling). Each has its own application window. Crisis Assistance closes March 31 or when funds run out. Call 855-635-4370 to confirm what is currently open in your parent's county."
+          },
+          {
+            "step": 2,
+            "title": "Gather documents before applying",
+            "description": "Collect proof of identity, proof of Virginia residence, documentation of gross monthly income for every household member, and a recent heating or cooling bill showing the account in your parent's name. For Cooling Assistance, also bring documentation of age 60+, disability, or a child under 6 in the household."
+          },
+          {
+            "step": 3,
+            "title": "Apply online, by phone, or in person",
+            "description": "Online: go to commonhelp.virginia.gov and create or log in to an account to submit the Energy Assistance application. By phone: call the Enterprise Customer Service Center at 855-635-4370. In person: go to the local department of social services in the county where your parent lives. Find the local office at dss.virginia.gov/localDSS/."
+          },
+          {
+            "step": 4,
+            "title": "Submit all documents at the same time",
+            "description": "Missing documents are the most common reason applications stall. Bring or upload everything at once. If applying in person, ask the caseworker to confirm the application is complete before you leave."
+          },
+          {
+            "step": 5,
+            "title": "Follow up if your parent has a crisis",
+            "description": "If your parent has an active disconnection notice or a utility shutoff has already happened, tell the office immediately. Crisis Assistance is specifically designed for these situations and may be processed faster than a standard Fuel Assistance application."
+          }
+        ],
+        "processingTime": "No specific statewide processing timeline is published. Local processing speed varies by office and application volume. Crisis cases with active shutoff notices may be prioritized; confirm with your parent's local office.",
+        "waitlist": "No formal statewide waitlist exists, but Crisis Assistance funding is first-come, first-served and can close before March 31 if funds are depleted. Apply as early in the season as possible.",
+        "tip": "Application windows open and close on different dates in different counties. Call 855-635-4370 first to confirm your parent's county is currently accepting applications for the component they need before making the trip to the office.",
+        "urls": [
+          {
+            "label": "Apply Online (CommonHelp Virginia)",
+            "url": "https://commonhelp.virginia.gov/"
+          },
+          {
+            "label": "Virginia Energy Assistance Program Information",
+            "url": "https://dss.virginia.gov/relief/ea/"
+          },
+          {
+            "label": "Find Your Local DSS Office",
+            "url": "https://www.dss.virginia.gov/localDSS/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Valid government-issued photo ID for your parent (driver's license, state ID, or passport)",
+        "Proof of Virginia residence, such as a utility bill, lease agreement, or bank statement showing the current address",
+        "Most recent heating or cooling bill showing the account in your parent's name and the service address",
+        "Proof of gross monthly income for every person in the household: Social Security award letter, SSI letter, pension statement, or pay stubs",
+        "Social Security cards or documentation of Social Security numbers for all household members",
+        "Documentation of household composition: names and dates of birth for everyone living in the home",
+        "For Cooling Assistance: proof of age 60+ (birth certificate or ID), documentation of disability, or birth certificate for a child under 6 in the household",
+        "For Crisis Assistance: disconnection notice, shutoff notice, or repair estimate related to the heating or cooling emergency"
+      ],
+      "contacts": [
+        {
+          "label": "Virginia Energy Assistance Program (Enterprise Customer Service Center)",
+          "phone": "855-635-4370",
+          "description": "The primary line for the Virginia Energy Assistance Program. Call here to ask about open application windows in your parent's county, confirm eligibility, or get help with the application process.",
+          "hours": "Contact the office directly to confirm current hours; hours may vary by season and local office."
+        },
+        {
+          "label": "Virginia DSS Public Inquiries Line",
+          "phone": "800-230-6977",
+          "description": "Alternate public inquiries line for the Virginia Department of Social Services. Use this if the primary number is busy or if you need general program information.",
+          "hours": "Contact the office directly to confirm current hours."
+        }
+      ],
+      "applicationNotes": [
+        "Crisis Assistance applications can close before March 31 if funds run out statewide. If your parent has a heating emergency or disconnection notice, apply for Crisis Assistance immediately rather than waiting for a regular Fuel Assistance window.",
+        "If your parent's heating costs are bundled into their rent and not billed separately, they are not eligible for Fuel Assistance. They may still qualify for Cooling Assistance if the household includes someone age 60+ or a person with a disability.",
+        "Application dates are set locally within state-authorized seasonal windows, so the exact open and close dates differ by county. Always call your parent's local department of social services or 855-635-4370 before applying to confirm the window is open.",
+        "Your parent can apply for more than one component in the same season if they qualify. For example, a household that qualifies for Fuel Assistance may also qualify for Crisis Assistance if an emergency arises later in the winter."
+      ],
+      "relatedPrograms": [
+        "Virginia Weatherization Assistance Program (WAP)",
+        "Supplemental Nutrition Assistance Program (SNAP) for Virginia seniors",
+        "Virginia Medicaid and FAMIS Plus",
+        "Utility company low-income rate discount programs (contact your parent's utility provider directly)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Three programs, one application window: know which one your parent needs",
+          "body": "Fuel Assistance covers routine heating bills during winter. Crisis Assistance covers emergencies: active disconnection notices, shutoffs, or broken heating equipment. Cooling Assistance covers summer cooling costs, but only if someone in the household is age 60+, has a disability, or is a child under 6. Your parent may qualify for more than one. Each has its own deadline, and Crisis Assistance funding can end before March 31 if the state runs out of money."
+        },
+        {
+          "type": "prose",
+          "title": "Who is not eligible for Fuel Assistance",
+          "body": "Some households are specifically excluded from Fuel Assistance even if income qualifies. If your parent's total heating cost is included in their rent and not billed separately, they cannot receive Fuel Assistance for that expense. The same applies if your parent lives in an institution, a temporary shelter, or a group home where they pay no direct heating cost or only a nominal fee. People who live in a single room within a larger dwelling are also excluded. If any of these apply, call 855-635-4370 to ask about other components or related programs before assuming your parent is ineligible for everything."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent pays heat as part of their rent. Can they still get help?",
+          "answer": "Not for Fuel Assistance. Households whose total heating cost is included in rent are specifically excluded from that component. However, if your parent's household includes someone age 60+, a person with a disability, or a child under 6, they may still qualify for Cooling Assistance in the summer. Call 855-635-4370 to discuss what options remain."
+        },
+        {
+          "question": "My parent's heat was already shut off. Is it too late to apply?",
+          "answer": "No. Crisis Assistance is specifically designed for active emergencies, including shutoffs. Apply immediately through your parent's local department of social services or call 855-635-4370. Bring the shutoff notice with you. Crisis Assistance funding is capped and closes March 31 at the latest, so do not wait."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot get to the office?",
+          "answer": "Yes. You can apply online at commonhelp.virginia.gov on their behalf, or you can call 855-635-4370 to ask about phone or mail options. If applying in person, contact the local department of social services in your parent's county to ask what documentation is needed to act as their representative."
+        },
+        {
+          "question": "Does my parent's savings account or home value affect eligibility?",
+          "answer": "No. Virginia LIHEAP has no asset test. The program does not count savings, a home, a car, or any other assets when screening eligibility. The only financial screen is gross monthly income, which must be at or below 150% of the federal poverty level (roughly $1,956 per month for a single-person household)."
+        },
+        {
+          "question": "How much money will my parent actually receive?",
+          "answer": "Virginia does not publish a fixed benefit amount. The assistance your parent receives depends on which component they apply for, their household income, and local program circumstances. We were not able to verify a specific dollar range from official sources. Ask your parent's local department of social services for an estimate when you apply."
+        },
+        {
+          "question": "When does the application window open, and how do I know if it is still open?",
+          "answer": "Application windows are seasonal and set locally within state-authorized dates, so they differ by county and by component. The safest step is to call 855-635-4370 or your parent's local department of social services before applying. Crisis Assistance closes March 31 or when funds run out, whichever comes first."
+        },
+        {
+          "question": "Can my parent apply for Fuel Assistance and Cooling Assistance in the same year?",
+          "answer": "Yes, if they qualify for both. Fuel Assistance covers winter heating and Cooling Assistance covers summer cooling. Each has a separate application window and separate eligibility screening. If your parent's household includes someone age 60+, they meet the vulnerability requirement for Cooling Assistance. Apply for each during its respective open window."
+        },
+        {
+          "question": "My parent has a disability but is not yet 60. Do they still qualify?",
+          "answer": "Possibly. The income limit at 150% FPL applies regardless of age. For Cooling Assistance, a person with a disability in the household meets the vulnerability requirement even if no one is age 60+. For Fuel Assistance and Crisis Assistance, age is not a stated eligibility requirement; income and having a direct heating expense are the main screens. Call 855-635-4370 to confirm your parent's specific situation."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "855-635-4370",
+      "sourceUrl": "https://dss.virginia.gov/relief/ea/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "va-home-delivered-meals",
+      "name": "Virginia Home-Delivered Meals Program",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60+ and homebound in Virginia, they may qualify for free hot meals delivered to their door, with no income test and no asset test.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Virginia Department for the Aging / DARS nutrition program statewide contact: 804-662-9319",
+            "type": "service-area"
+          },
+          {
+            "name": "Virginia Aging Services Service Finder portal",
+            "type": "service-area"
+          },
+          {
+            "name": "Fairfax Area Agency on Aging / Fairfax County Family Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Loudoun County Nutrition Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Prince William Area Agency on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Arlington Aging and Disability Services Intake",
+            "type": "service-area"
+          },
+          {
+            "name": "Peninsula Agency on Aging / Senior Services of Southeastern Virginia",
+            "type": "service-area"
+          },
+          {
+            "name": "Encompass Community Supports (Culpeper, Fauquier, Madison, Orange, Rappahannock)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older, homebound, and struggling to prepare their own meals, Virginia's Home-Delivered Meals Program can arrange for nutritious meals to be brought directly to their home. There is no income test and no asset test. Eligibility is based on age, homebound status, and the inability to prepare meals, not on what your parent earns or owns.\n\nThe program is funded through the federal Older Americans Act and administered locally by Virginia's Area Agencies on Aging. In most areas, that means a hot meal delivered Monday through Friday. Some areas supplement with frozen or shelf-stable meals when daily hot delivery isn't possible. The program can also include nutrition screening, assessment, and counseling, services families often overlook when they're focused only on the meals themselves.\n\nBecause this program is locally run, the details vary by county: who delivers, how often, what format the meals come in, and whether a donation is requested. The first step is finding your local Area Agency on Aging, which you can do through the Virginia Aging Services Service Finder at vda.virginia.gov. From there, a local coordinator will walk you through intake.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The program is funded through the Older Americans Act and administered through Virginia's Area Agencies on Aging at no required cost to participants. Some local providers request a voluntary donation (Prince William, for example, suggests $1.50 per meal), but this is not a fee and does not affect eligibility.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Homebound or unable to easily leave home",
+          "Unable to prepare meals without assistance",
+          "No income limit",
+          "No asset limit"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must be homebound (meaning they cannot easily leave home due to physical or medical reasons) and must be unable to prepare their own meals or lack someone to help them do so. Some local programs also require that your parent cannot attend a congregate meal site. The local Area Agency on Aging will ask about these conditions during intake, usually by phone or home visit.",
+        "otherRequirements": [
+          "Must live in Virginia within the service area of a local Area Agency on Aging",
+          "In some counties, must be unable to attend a congregate meal site as an alternative",
+          "Some local programs also serve adults with disabilities under age 60 and spouses or caregivers of eligible recipients; eligibility varies by county"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Use the Virginia Aging Services Service Finder to locate your local Area Agency on Aging, then call them directly to start intake, which typically involves a brief phone screening or home visit.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local Area Agency on Aging",
+            "description": "Go to vda.virginia.gov and use the Service Finder to locate the Area Agency on Aging that covers your parent's county. Each AAA runs its own intake process. If you can't access the site, call the Virginia Department for Aging and Rehabilitative Services at 804-662-9319 and ask for the Home-Delivered Meals contact in your parent's area."
+          },
+          {
+            "step": 2,
+            "title": "Call the local AAA to start intake",
+            "description": "Contact your county's program directly. Fairfax: 703-324-5409 (TTY 711). Arlington: 703-228-1700. Loudoun: 703-771-5012 or 703-737-8034. Prince William: contact the Prince William Area Agency on Aging. Other counties: use the Service Finder to get the right number. The coordinator will ask about your parent's age, homebound status, and ability to prepare meals."
+          },
+          {
+            "step": 3,
+            "title": "Complete the intake screening",
+            "description": "Most programs do a phone screening first, followed by a home visit assessment for some providers (Encompass Community Supports, for example, requires a home visit before enrollment). Be ready to describe your parent's medical or physical reasons for being homebound and why they cannot prepare meals."
+          },
+          {
+            "step": 4,
+            "title": "Confirm delivery schedule and meal format",
+            "description": "Ask your local coordinator what meal format applies in your parent's area: hot meals Monday through Friday, frozen meals on a monthly delivery schedule, or shelf-stable backup meals. Delivery coverage depends on route availability in your parent's neighborhood, not just their county."
+          }
+        ],
+        "processingTime": "No statewide processing time is published. Local programs vary; some can begin delivery within days of a completed intake, while others require a home visit assessment first. Ask your local AAA for the expected timeline when you call.",
+        "waitlist": "No statewide waitlist policy exists. Availability depends on local provider capacity and delivery route coverage. Some areas may have waiting periods; ask your local AAA directly when you call.",
+        "tip": "When you call, mention any medical diagnoses or recent hospitalizations that affect your parent's mobility or ability to cook. This helps the coordinator document homebound status quickly and may speed up the assessment.",
+        "urls": [
+          {
+            "label": "Virginia Aging Services Service Finder",
+            "url": "https://vda.virginia.gov/service-finder"
+          },
+          {
+            "label": "Virginia DARS Home and Community Nutrition / Meals Program",
+            "url": "https://dars.virginia.gov/aging/home-community/nutrition-meals/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or driver's license showing your parent is 60 or older)",
+        "Brief description of why your parent is homebound (medical diagnoses, recent surgery, mobility limitations, or a doctor's note if available)",
+        "Information about why your parent cannot prepare their own meals and whether anyone in the household can help",
+        "Proof of Virginia residency in the local service area (a utility bill, lease, or piece of official mail with the home address)",
+        "If a home visit assessment is required by your local provider, be prepared to walk the assessor through your parent's daily routine and any physical or medical conditions"
+      ],
+      "contacts": [
+        {
+          "label": "Virginia DARS Aging Nutrition Program (Statewide)",
+          "phone": "804-662-9319",
+          "description": "Statewide contact for the Home-Delivered Meals program. Can direct you to your local Area Agency on Aging if you're unsure which county office to call.",
+          "hours": "Business hours, Monday through Friday"
+        },
+        {
+          "label": "Fairfax Area Agency on Aging",
+          "phone": "703-324-5409",
+          "description": "Home-Delivered Meals intake for Fairfax County residents. TTY: 711.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Arlington Aging and Disability Services Intake",
+          "phone": "703-228-1700",
+          "description": "Home-Delivered Meals intake for Arlington County residents. Can also be reached at arlaaa@arlingtonva.us or in person at 2100 Washington Blvd., 4th Floor, Arlington, VA 22204.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Loudoun County Nutrition Services",
+          "phone": "703-771-5012",
+          "description": "Home-Delivered Meals intake for Loudoun County residents. Alternate number: 703-737-8034.",
+          "hours": "Contact for current hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(703) 746-5999",
+          "description": "Number listed on alexandriava.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Some local programs also serve adults with disabilities under age 60 or the spouses and caregivers of enrolled participants. If your parent doesn't meet the age requirement but has a disability, ask your local AAA whether they have an expanded eligibility policy.",
+        "A donation may be requested at the door (Prince William suggests $1.50 per meal), but this is voluntary. Refusing to donate does not affect your parent's eligibility or continued service.",
+        "If your parent lives in a rural area or outside a standard delivery route, ask about frozen meals or shelf-stable backup meal options. Some providers, including Encompass Community Supports in Culpeper, Fauquier, Madison, Orange, and Rappahannock counties, deliver frozen meals on a monthly schedule rather than daily hot meals.",
+        "Beyond meals, your local AAA may also offer nutrition screening, assessment, and counseling through this same program. Ask about these services during intake; families often don't know to request them."
+      ],
+      "relatedPrograms": [
+        "Virginia Congregate Meals Program (senior center meals for adults who can leave home)",
+        "Virginia Medicaid EDCD Waiver (home and community-based services for Medicaid-eligible adults needing a nursing facility level of care)",
+        "Supplemental Nutrition Assistance Program (SNAP) in Virginia (monthly food benefit for eligible low-income households)",
+        "Virginia Caregiver Services through the Area Agencies on Aging (respite, support, and counseling for family caregivers)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No asset test.",
+          "body": "Unlike most government benefit programs, Virginia's Home-Delivered Meals program does not check your parent's income or savings. Eligibility is based on age (60+), homebound status, and the inability to prepare meals. A voluntary donation may be requested locally, but it does not affect whether your parent qualifies or continues to receive meals."
+        },
+        {
+          "type": "prose",
+          "title": "What varies by county",
+          "body": "Because the program is administered locally, the experience differs depending on where your parent lives. Fairfax and Arlington deliver hot meals Monday through Friday and use local intake lines. Loudoun County also delivers hot meals weekdays and provides frozen meals in areas outside the daily delivery route. Prince William provides emergency shelf-stable meals when hot delivery isn't possible and requests a suggested $1.50 donation per meal. Encompass Community Supports, which serves Culpeper, Fauquier, Madison, Orange, and Rappahannock counties, delivers frozen meals on a monthly schedule and requires a home visit assessment before enrollment. The statewide Service Finder at vda.virginia.gov will show you the exact provider for your parent's address."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent can walk but has trouble standing long enough to cook. Does that count as homebound?",
+          "answer": "Yes, homebound does not mean bedridden. If your parent has a medical or physical condition that makes it difficult or unsafe to prepare meals, that is the kind of situation this program is designed for. When you call your local Area Agency on Aging, describe the specific limitations (joint pain, recent surgery, fatigue from a chronic condition) so the intake coordinator can document it properly."
+        },
+        {
+          "question": "We live outside the city. Will hot meals actually reach my parent's address?",
+          "answer": "Delivery depends on route coverage in your parent's specific area, not just their county. In rural areas, some providers deliver frozen meals monthly instead of hot meals daily, and others offer shelf-stable backup meals when delivery isn't possible. Call your local Area Agency on Aging and ask specifically whether your parent's address is on an active delivery route before completing intake."
+        },
+        {
+          "question": "Can I apply for this program on behalf of my parent, or do they have to call themselves?",
+          "answer": "Family members can and often do initiate contact on behalf of a parent. When you call your local Area Agency on Aging, explain that you're calling for your parent and provide their name, address, age, and a description of why they are homebound and unable to cook. The coordinator will tell you if a separate call or in-person assessment with your parent is needed."
+        },
+        {
+          "question": "My parent is already getting SNAP. Can they get home-delivered meals at the same time?",
+          "answer": "Yes. SNAP and Home-Delivered Meals are separate programs with separate eligibility rules. SNAP provides a monthly benefit for groceries; this program delivers prepared meals to the door. Your parent can receive both at the same time. If your parent is not yet enrolled in SNAP, contact your local Department of Social Services or apply online at commonhelp.virginia.gov."
+        },
+        {
+          "question": "Is there a waitlist, and how long does it take to actually start receiving meals?",
+          "answer": "There is no statewide waitlist policy. Some local programs can begin delivery within days of a completed intake; others have waiting periods depending on route capacity and provider staffing. When you call your local Area Agency on Aging, ask directly: how long is the current wait in my parent's area? That is the most reliable way to get an honest answer."
+        },
+        {
+          "question": "What happens if my parent's health improves and they no longer need the meals?",
+          "answer": "You can notify your local Area Agency on Aging at any time to pause or end delivery. If your parent's condition changes later and they again need meals, you can contact the same local office to restart the process. There is no penalty for stopping service, and the program does not require a lock-in period."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "804-662-9319",
+      "sourceUrl": "https://dars.virginia.gov/aging/home-community/nutrition-meals/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8046629319",
+            "7033245409",
+            "7032281700",
+            "7037715012"
+          ],
+          "to": "(703) 746-5999",
+          "source": "https://www.alexandriava.gov/older-adult-services/program/nutrition-health",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "va-property-tax-exemption-elderly-disabled",
+      "name": "Virginia Property Tax Exemption for Elderly/Disabled",
+      "shortName": "Property Tax Relief",
+      "tagline": "If your parent is 65 or older and owns their home in Virginia, they may qualify for a partial or full exemption from their local property tax bill — potentially hundreds to thousands of dollars in annual savings.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Commissioner of the Revenue",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Department of Social Services in some localities",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Virginia law allows every county, city, and town to reduce or eliminate property taxes for homeowners who are 65 or older or permanently and totally disabled. If your parent owns and lives in their home, this could cut their annual property tax bill significantly. The exact amount depends entirely on where they live: each locality sets its own income limits, asset limits, and exemption percentages.\n\nThis is not one uniform statewide benefit. Each locality decides whether to offer the program at all, and sets its own rules. Chesterfield County allows total household income up to $65,400 and assets up to $514,000 (excluding the home). Spotsylvania County sets income at $68,000 or less and net worth below $250,000 (excluding the home and up to 10 acres). York County uses different thresholds depending on whether one or two people own the property. Your parent's county or city will have its own numbers.\n\nBecause rules vary so widely, the most important first step is looking up the specific ordinance for your parent's locality. Most applications go through the local Commissioner of the Revenue, and many require annual filing before a deadline that commonly falls around April 1 or June 30. Missing that deadline can mean waiting another full year.",
+      "savingsRange": "",
+      "savingsSource": "The dollar value of this exemption cannot be stated as a single figure. It depends on the local tax rate, the assessed value of your parent's home, and the specific exemption percentage set by the local ordinance. Virginia law does not publish a statewide savings figure. Contact your parent's local Commissioner of the Revenue for an estimate.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or permanently and totally disabled, if the local ordinance allows)",
+          "Must own and occupy the property as their sole dwelling",
+          "Income and asset limits set by the local county or city ordinance",
+          "Property must be in Virginia; program rules vary by locality",
+          "Annual application typically required; one-time approval does not guarantee renewal"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Financial accounts and savings",
+            "Investments and securities",
+            "Any assets specified by the local ordinance"
+          ],
+          "exemptAssets": [
+            "The primary residence (universally excluded)",
+            "Up to 10 acres of land in many localities (acreage limit varies)",
+            "Personal furnishings and household property in some localities (York County example)",
+            "Specific exclusions set by each local ordinance"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "The property must be owned by the applicant and used as their sole dwelling.",
+          "Jointly owned property may qualify on a prorated basis if at least one owner is 65 or older, or disabled if the local ordinance allows it.",
+          "The disability option exists only if the specific local ordinance includes permanently and totally disabled residents.",
+          "Some localities cap the acreage covered; land or structures beyond that limit may still be taxed.",
+          "Annual reapplication is commonly required before a local deadline, often April 1 or June 30."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply through your parent's local Commissioner of the Revenue (or, in some localities, the Department of Social Services) before the annual filing deadline, typically April 1 or June 30.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your parent's locality's program",
+            "description": "Search for '[County or City name] tax relief elderly disabled' along with 'Commissioner of the Revenue' to find the official local program page. Confirm the program exists, the income and asset limits, and the filing deadline. Not every Virginia locality has enacted this program."
+          },
+          {
+            "step": 2,
+            "title": "Download or request the local application form",
+            "description": "The form name varies by locality. It is commonly called 'Tax Relief for the Elderly and Disabled Application' or similar. Download it from the locality's official website or call the Commissioner of the Revenue's office to request a paper copy. York County example: call 757-890-3382."
+          },
+          {
+            "step": 3,
+            "title": "Gather documents",
+            "description": "You will need proof of age or disability, proof of ownership and occupancy, income documentation for all household members, and asset documentation. See the full document list below. Gather everything before submitting; incomplete applications are a common reason for delays."
+          },
+          {
+            "step": 4,
+            "title": "Submit the application before the local deadline",
+            "description": "Most localities require applications before April 1 or June 30 for the upcoming tax year. Submit in person, by mail, or online if the locality allows it. Confirm the accepted submission methods with the local office."
+          },
+          {
+            "step": 5,
+            "title": "Watch for annual renewal",
+            "description": "Approval one year does not automatically continue. Most localities require annual reapplication. Set a reminder each January to start the process again."
+          }
+        ],
+        "processingTime": "Varies by locality. The locality determines eligibility for the upcoming tax year after the filing deadline passes. Contact your parent's local Commissioner of the Revenue for a specific timeline.",
+        "waitlist": null,
+        "tip": "Call the local Commissioner of the Revenue before spending time on paperwork. Ask specifically: Does your locality offer this exemption? What are the income and asset limits? What is the filing deadline this year? A five-minute call can confirm whether your parent qualifies before you collect a single document.",
+        "urls": [
+          {
+            "label": "Virginia Code: Property Tax Exemption for Elderly and Disabled (Title 58.1, Chapter 32, Article 2)",
+            "url": "https://law.lis.virginia.gov/vacodefull/title58.1/chapter32/article2/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age: birth certificate, passport, or driver's license showing date of birth",
+        "Proof of property ownership: deed or current real estate tax bill in the applicant's name",
+        "Proof of occupancy as the sole dwelling: a current utility bill, voter registration, or other document showing the property address as the primary residence",
+        "Income documentation for all household members: Social Security award letter, pension or retirement income statements, and any other income sources",
+        "Asset documentation: current balances for checking, savings, and investment accounts (specific accounts and documentation requirements vary by locality; the local office will tell you exactly what they need)",
+        "If applying based on permanent and total disability: Social Security disability award letter or a physician's statement confirming permanent and total disability status",
+        "If the property is jointly owned: ownership documentation for all owners and, if one owner does not meet the age or disability requirement, clarification of ownership shares"
+      ],
+      "contacts": [
+        {
+          "label": "York County Commissioner of the Revenue",
+          "phone": "757-890-3382",
+          "description": "Handles tax relief applications for elderly and disabled residents in York County. Use this as a model for the type of office to contact in your parent's locality.",
+          "hours": "Contact office directly for current hours"
+        },
+        {
+          "label": "Virginia 2-1-1",
+          "phone": "2-1-1",
+          "description": "Can help you find the contact information for your parent's local Commissioner of the Revenue if you are not sure which office handles their area. This line provides referrals; it does not process tax relief applications.",
+          "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(804) 367-8031",
+          "description": "Number listed on tax.virginia.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's locality does not currently offer this exemption, there is no state-level fallback. Virginia law authorizes but does not require localities to participate. In that case, ask the local Commissioner of the Revenue whether any other tax deferral or freeze programs exist.",
+        "Jointly owned property can complicate the exemption. If one co-owner does not meet the age or disability requirement, the exemption may be prorated rather than applied to the full tax bill. Ask the local office how they calculate this before assuming full relief.",
+        "Missing the annual filing deadline typically means waiting until the next tax year. If your parent has not applied before, ask whether back-year relief is available. Some localities allow retroactive claims; most do not.",
+        "If your parent has recently moved into their home or changed ownership status (for example, after the death of a spouse), contact the Commissioner of the Revenue immediately. Ownership changes can reset eligibility or affect the prorated amount."
+      ],
+      "relatedPrograms": [
+        "Virginia Rent Relief Program (for renters who cannot benefit from property tax programs)",
+        "LIHEAP (Low Income Home Energy Assistance Program) in Virginia",
+        "Virginia Weatherization Assistance Program",
+        "Virginia Department for Aging and Rehabilitative Services (DARS) home modification programs"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is local, not statewide",
+          "body": "Virginia law gives every county, city, and town the option to offer this exemption — but each one sets its own income limits, asset limits, acreage caps, and deadlines. Chesterfield County's rules are not the same as Spotsylvania County's rules, and neither matches York County's. The only way to know what your parent qualifies for is to look up the specific ordinance for the locality where they own their home."
+        },
+        {
+          "type": "prose",
+          "title": "Local income and asset limit examples",
+          "body": "To give a sense of the range: Chesterfield County allows total household income under $65,400 and assets up to $514,000 excluding the home. Spotsylvania County sets income at $68,000 or less and net worth below $250,000, excluding the home and up to 10 acres. York County uses $59,650 for a single owner or $68,200 for two owners, with asset limits capped at $220,000 excluding the residence, furnishings, and up to 10 acres. Your parent's county will have its own numbers, which may be higher, lower, or structured differently. These figures are from current local ordinances and are subject to change; confirm directly with the local office."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent lives in one Virginia county but owns a second property in another. Which locality's program applies?",
+          "answer": "The exemption applies only to the property your parent owns and occupies as their sole dwelling. A second property, vacation home, or rental property does not qualify. Only the primary residence is eligible, and your parent must apply through the Commissioner of the Revenue in the county or city where that home is located."
+        },
+        {
+          "question": "My parent is under 65 but has a serious disability. Can they still apply?",
+          "answer": "Possibly. Virginia law allows localities to extend this exemption to residents who are permanently and totally disabled, regardless of age. But this option exists only if the specific local ordinance includes it. Call your parent's local Commissioner of the Revenue and ask directly whether disability qualifies without the age requirement in that locality."
+        },
+        {
+          "question": "My parent's home is owned jointly with a sibling who is not 65 and not disabled. Does the whole family lose the benefit?",
+          "answer": "Not necessarily. Virginia law allows the exemption to apply on a prorated basis when only one co-owner meets the age or disability requirement. In that case, your parent's share of the tax bill may be reduced while the other co-owner's share is not. The local Commissioner of the Revenue calculates the proration based on ownership percentages. Ask specifically how they handle joint ownership before assuming the exemption is unavailable."
+        },
+        {
+          "question": "My parent was approved last year. Do they need to apply again?",
+          "answer": "Yes, in most localities. Annual reapplication is commonly required, and approval one year does not carry over automatically. Missing the filing deadline, often around April 1 or June 30, typically means waiting until the next tax year. Contact the local Commissioner of the Revenue each January to confirm the current year's deadline and whether any information needs to be updated."
+        },
+        {
+          "question": "My parent's income is just over the limit listed on the county website. Is there any flexibility?",
+          "answer": "Generally no. The income limits are set by local ordinance, and the administering office applies them as written. Some localities use total household income (all members of the household combined), which can push a household over the limit if other adults live in the home. Confirm with the local office exactly how they define and calculate household income, since that definition can affect whether your parent qualifies."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot get to the office?",
+          "answer": "Most localities accept applications by mail, and some allow them online. If your parent has given you legal authority through a power of attorney, bring that document when submitting on their behalf. Call the local Commissioner of the Revenue to confirm what they accept and whether an authorized representative can sign the application. Do not assume in-person attendance is required before calling."
+        },
+        {
+          "question": "My parent's locality does not offer this exemption. Is there anything else available?",
+          "answer": "Virginia law authorizes but does not require localities to offer this program, so some areas genuinely do not have it. Ask the local Commissioner of the Revenue whether any other programs exist, such as a tax deferral option or a tax freeze for seniors. You can also call Virginia 2-1-1 to ask about other financial assistance programs that may help offset housing costs for older adults on fixed incomes."
+        },
+        {
+          "question": "How do I find the right office to call? The county website is confusing.",
+          "answer": "Search for '[your parent's county or city name] Commissioner of the Revenue' to find the official office. That office handles property tax administration in most Virginia localities. In some areas, the local Department of Social Services administers the elderly and disabled tax relief program instead. If you cannot find the right contact, call Virginia 2-1-1 and ask them to help you locate the correct local office."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "757-890-3382",
+      "sourceUrl": "https://law.lis.virginia.gov/vacodefull/title58.1/chapter32/article2/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "7578903382",
+            "211"
+          ],
+          "to": "(804) 367-8031",
+          "source": "https://www.tax.virginia.gov/contact-us",
+          "flaggedAt": "2026-10-06T12:29:55.214Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }

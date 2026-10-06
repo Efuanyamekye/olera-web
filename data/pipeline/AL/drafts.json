@@ -2,8 +2,8 @@
   "state": "AL",
   "stateName": "Alabama",
   "draftedAt": "2026-04-13T22:29:50.182Z",
-  "total": 16,
-  "successful": 16,
+  "total": 18,
+  "successful": 18,
   "programs": [
     {
       "id": "medicaid-elderly-disabled-waiver",
@@ -774,26 +774,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1729,
-          "to": 1305,
-          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2345,
-          "to": 1763,
-          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -1175,23 +1156,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-23",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "211",
-            "3342624300",
-            "2569991166",
-            "2563833832",
-            "2568519800"
-          ],
-          "to": "3342428972",
-          "source": "https://adeca.alabama.gov/wp-content/uploads/2025-WAP-State-Plan.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ship-medicare-counseling",
@@ -1927,6 +1892,12 @@
           "phone": "info@EastAlabamaAging.org",
           "description": "Email contact for East Alabama region legal services",
           "hours": "Email response times vary"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 456-4995",
+          "description": "Number listed on legalservicesalabama.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1966,7 +1937,24 @@
       "phone": "1-800-243-5463",
       "sourceUrl": "https://alabamaageline.gov/legal-assistance/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18002435463",
+            "18664563959",
+            "18667851798"
+          ],
+          "to": "(866) 456-4995",
+          "source": "https://legalservicesalabama.org/apply-for-services/",
+          "flaggedAt": "2026-10-06T12:17:45.405Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2645,26 +2633,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 65,
-          "to": 55,
-          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        },
-        {
-          "field": "income_1",
-          "from": 2982,
-          "to": 1292,
-          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "seniorx-prescription-assistance",
@@ -2803,6 +2772,531 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-06"
+    },
+    {
+      "id": "al-medicaid-aged-disabled",
+      "name": "Alabama Medicaid for Aged/Disabled",
+      "shortName": "AL Aged/Disabled Medicaid",
+      "tagline": "If your parent is 65 or older and living on a limited income in Alabama, Medicaid may cover home care services, medical costs Medicare won't touch, and the help they need to stay out of a nursing facility.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Alabama Medicaid 11 district offices for certain paper applications",
+            "type": "service-area"
+          },
+          {
+            "name": "Waiver agencies for Home and Community Based Waiver applications",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Alabama Medicaid for Aged/Disabled is not one program with one income limit. It is a set of pathways, and which one fits your parent depends on their income, their assets, and how much daily help they need. The two most relevant pathways for families in your situation are: standard aged/disabled Medicaid (tied to SSI rules, with a strict income limit of $1,014/month for one person) and the Elderly and Disabled (E&D) Waiver (with a higher income limit of $2,982/month, but requiring that your parent needs nursing-facility-level care and wants to remain at home).\n\nWhat these pathways can provide is significant. The waiver can arrange personal care attendants, homemaker services, adult day health, home-delivered meals, respite for family caregivers, home modifications, assistive technology, and personal emergency response systems. Standard aged/disabled Medicaid can cover Medicare cost-sharing and medical services Medicare does not. Together, they address the gap between what Medicare covers and what it takes to keep an aging parent safely at home.\n\nBecause the income and functional rules differ by pathway, many families are turned away from one pathway and eligible for another without ever knowing the second option existed. The sections below explain each pathway's rules clearly so you can figure out which door to knock on first.",
+      "savingsRange": "",
+      "savingsSource": "Free services: the program pays providers directly. No verified average dollar savings figure is available from Alabama Medicaid's published materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or disabled under SSI/Social Security rules)",
+          "Income below $1,014/month (standard pathway) or $2,982/month (E&D Waiver)",
+          "Countable assets below $2,000 for one person (standard pathway)",
+          "Alabama resident and U.S. citizen or qualifying immigration status",
+          "Waiver pathway also requires nursing-facility level of care and community residence"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Additional real property (not primary home)",
+            "Cash value of life insurance above exempt thresholds"
+          ],
+          "exemptAssets": [
+            "Primary home (while the applicant or spouse lives there)",
+            "One vehicle",
+            "Personal property and household goods",
+            "Irrevocable burial trusts and pre-need burial contracts"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For the E&D Waiver pathway, your parent must meet Nursing Facility Level of Care. This is a clinical assessment that evaluates whether they need daily assistance with bathing, dressing, medication management, or other activities of daily living at a level that would otherwise require placement in a nursing home. The assessment is conducted as part of the waiver application process.",
+        "otherRequirements": [
+          "Must be an Alabama resident",
+          "Must be a U.S. citizen or have satisfactory immigrant status",
+          "Applicants must apply for and accept all income they are entitled to, including Social Security, pensions, retirement benefits, and annuities",
+          "Disabled applicants under 65 must meet SSI or Social Security disability criteria",
+          "E&D Waiver applicants must be living in the community (not in a nursing facility) at the time of application"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "You can apply online through Alabama Medicaid's portal, submit a paper application to a district office, or contact the waiver agency directly if your parent needs home and community-based services.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify which pathway fits your parent",
+            "description": "Before applying, determine which pathway applies. If your parent's income is at or below $1,014/month and assets are at or below $2,000, start with the standard aged/disabled Medicaid application. If income is up to $2,982/month and your parent needs daily assistance to remain at home, apply for the Elderly and Disabled Waiver specifically through the waiver agency. Mixing up the pathways causes delays."
+          },
+          {
+            "step": 2,
+            "title": "Gather required documents",
+            "description": "Collect your parent's Social Security award letter, Social Security card, proof of Alabama residency, proof of citizenship or immigration status, verification of all monthly income (including pensions and retirement statements), and Medicare card if they have one. For the waiver, also gather medical records or physician documentation supporting the need for daily care."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application",
+            "description": "For standard aged/disabled Medicaid: apply online at https://eanddapplication.medicaid.alabama.gov/ or download the Joint Paper Application and mail or deliver it to one of Alabama Medicaid's 11 district offices. For the E&D Waiver: complete Form 206 and submit it through the waiver agency, not through the standard portal. Waiver applications go to the waiver agency for both medical and functional eligibility review."
+          },
+          {
+            "step": 4,
+            "title": "Respond to requests for information",
+            "description": "After submission, the Medicaid office or waiver agency may request additional documents. Reply quickly. Processing time is not officially published for either pathway, but delays most commonly occur when income verification or disability documentation is missing or incomplete."
+          },
+          {
+            "step": 5,
+            "title": "Complete the functional assessment for the waiver",
+            "description": "If applying for the E&D Waiver, a clinical reviewer will contact you to schedule an assessment of your parent's daily care needs. This assessment determines whether your parent meets Nursing Facility Level of Care. Your parent does not need to be in a nursing facility to qualify; the assessment measures whether that level of need exists."
+          }
+        ],
+        "processingTime": "Alabama Medicaid does not publish an official processing window for either pathway. Families should expect the timeline to depend on which pathway is being reviewed and how quickly verification documents are provided. Waiver cases also include a functional assessment step that adds time.",
+        "waitlist": "The E&D Waiver application process includes a functional eligibility review, but Alabama Medicaid's published materials do not specify a statewide waitlist duration. Ask the waiver agency directly when you contact them.",
+        "tip": "Apply for the pathway you think fits first, but ask the caseworker at the time of application whether your parent might qualify for the other pathway. Because income limits and functional rules differ, some families are eligible for a category they didn't know to request.",
+        "urls": [
+          {
+            "label": "Elderly and Disabled Online Application Portal",
+            "url": "https://eanddapplication.medicaid.alabama.gov/"
+          },
+          {
+            "label": "Alabama Medicaid General Apply Page",
+            "url": "https://medicaid.alabama.gov/content/3.0_Apply/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (showing current monthly benefit amount)",
+        "Social Security card",
+        "Proof of Alabama residency (utility bill, lease agreement, or state-issued document in your parent's name)",
+        "Medicare card, if your parent has Medicare",
+        "Proof of citizenship or qualifying immigration status (U.S. birth certificate or passport)",
+        "Proof of age (birth certificate or passport)",
+        "Pension or retirement benefit statements showing current monthly amounts",
+        "Annuity or disability benefit documentation if applicable",
+        "Current balances for any checking or savings accounts",
+        "Life insurance policy documents showing face value and any cash value",
+        "Documentation of any additional property owned beyond the primary home",
+        "Medical records or physician letter supporting daily care needs (required for E&D Waiver functional assessment)",
+        "Legal documents such as a power of attorney if a family member is applying on behalf of the parent",
+        "Form 206 completed and signed if applying for the Home and Community Based Waiver pathway"
+      ],
+      "contacts": [
+        {
+          "label": "Alabama Medicaid Aged/Disabled Application Line",
+          "phone": "(800) 362-1504",
+          "description": "Alabama Medicaid's main line for elderly and disabled program questions and application assistance. This is the line to call for standard aged/disabled Medicaid. For the E&D Waiver, ask the agent to direct you to the waiver agency.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Alabama 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide helpline that can help locate your nearest Alabama Medicaid district office or waiver agency. This line provides referrals; it does not process Medicaid applications.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "There are two different income limits in this program. If your parent was told they earn too much for Medicaid, ask specifically about the Elderly and Disabled Waiver, which has an income limit of $2,982/month, not $1,014/month.",
+        "Applicants are required to apply for and accept all income they are entitled to, including pensions, annuities, and retirement benefits. If your parent is not yet drawing a benefit they are eligible for, that can affect the application.",
+        "The waiver application goes to the waiver agency, not to a standard district office. Sending it to the wrong place causes processing delays. Confirm the correct submission address when you call.",
+        "If your parent is being discharged from a hospital or rehabilitation facility, the discharge planner may be able to help initiate a Medicaid application on-site. Ask before discharge."
+      ],
+      "relatedPrograms": [
+        "Alabama Medicare Savings Programs (help paying Medicare Part B premiums and cost-sharing)",
+        "Alabama SHIP (free Medicare counseling to understand how Medicaid and Medicare work together)",
+        "Alabama SNAP for Seniors (grocery assistance for parents with low income)",
+        "Alabama Lifespan Respite Coalition (respite support for family caregivers while a waiver application is pending)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "Two pathways, two different sets of rules",
+          "description": "This program has two distinct pathways. Knowing which one applies to your parent determines which income limit, which services, and which application process to follow.",
+          "tiers": [
+            {
+              "name": "Standard Aged/Disabled Medicaid (SSI-based)",
+              "incomeLimit": "$1,014/month (single person, 2026)",
+              "assetLimit": "$2,000 individual / $3,000 couple",
+              "functionalRequirement": "None beyond age or disability status",
+              "keyServices": "Medicare cost-sharing coverage, medical services Medicare does not cover, limited vision benefits (one eye exam and one pair of eyeglasses every two years)",
+              "applicationRoute": "Online portal or paper application to a district office"
+            },
+            {
+              "name": "Elderly and Disabled (E&D) Waiver",
+              "incomeLimit": "$2,982/month (2026)",
+              "assetLimit": "Program-specific; income and resource counting rules differ from the standard pathway",
+              "functionalRequirement": "Must meet Nursing Facility Level of Care (clinical assessment of daily care needs) and must live in the community",
+              "keyServices": "Personal care, homemaker services, adult day health with transportation, respite for family caregivers, home-delivered meals, home modifications, assistive technology, personal emergency response system, case management",
+              "applicationRoute": "Form 206 submitted through the waiver agency"
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "The income limit families most often miss",
+          "body": "The $1,014/month income limit is for standard aged/disabled Medicaid. The E&D Waiver allows income up to $2,982/month. If your parent was denied or told they earn too much, ask specifically about the waiver pathway before walking away."
+        },
+        {
+          "type": "prose",
+          "title": "What the E&D Waiver actually covers",
+          "body": "The waiver is designed to keep your parent at home instead of in a nursing facility. Services it can arrange include: personal care attendants for bathing, dressing, and daily tasks; homemaker help for cleaning and laundry; adult day health programs with transportation; skilled nursing visits at home; case management so one coordinator handles multiple services; home modifications such as ramp installation or grab bars; assistive technology and durable medical equipment; a personal emergency response system (installation and monthly monitoring); home-delivered meals; respite care so family caregivers can take a break; adult companion services; and pest control. Not every eligible person receives every service. The case manager works with your parent to build a care plan based on assessed needs."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income is $1,400/month. Does that disqualify them from everything?",
+          "answer": "Not necessarily. The standard aged/disabled Medicaid pathway has an income limit of $1,014/month, so your parent would not qualify there. But the E&D Waiver allows income up to $2,982/month. If your parent needs daily help with bathing, dressing, or medication management, apply for the waiver. Income above $1,014/month is not a barrier for that pathway."
+        },
+        {
+          "question": "Can my parent keep their home and still qualify?",
+          "answer": "Yes. The primary home is an exempt asset under Alabama's standard aged/disabled Medicaid rules. It does not count toward the $2,000 asset limit as long as your parent (or their spouse) lives there. You should confirm specific rules with the caseworker during the application, because Medicaid estate recovery may apply after the beneficiary passes."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't manage the paperwork themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of an elderly parent. If you have legal authority such as a power of attorney, bring that documentation when you apply. If no legal authority exists yet, the Medicaid office can explain what documentation is accepted. Call (800) 362-1504 to ask before the appointment."
+        },
+        {
+          "question": "How long does the waiver waitlist take?",
+          "answer": "Alabama Medicaid's published materials do not specify a statewide waitlist duration for the E&D Waiver. The honest answer is that we do not have a verified number from official sources. Ask the waiver agency directly when you contact them, because wait times can vary. Apply as early as possible; the clock often starts from the date of application, not the date you finally ask."
+        },
+        {
+          "question": "My parent already has Medicare. Do they still need to apply for Medicaid separately?",
+          "answer": "Yes. Medicare and Medicaid are separate programs with separate applications. Having Medicare does not automatically enroll your parent in Medicaid, and Medicaid does not require Medicare. If your parent has both, Medicaid can cover Medicare cost-sharing (premiums, deductibles, and copays) through the Medicare Savings Programs pathway, and the E&D Waiver can cover home care services Medicare does not pay for at all."
+        },
+        {
+          "question": "What happens if my parent's needs change after they are enrolled in the waiver?",
+          "answer": "The case manager assigned under the waiver is responsible for monitoring your parent's care plan and adjusting services as needs change. If your parent's condition worsens, contact the case manager to request a reassessment. Waiver services are not fixed; the care plan is revisited when circumstances change. You do not need to reapply from scratch."
+        },
+        {
+          "question": "Can my parent apply for the standard Medicaid pathway and the E&D Waiver at the same time?",
+          "answer": "You can pursue both, but they have different application routes. Standard aged/disabled Medicaid goes through the online portal at https://eanddapplication.medicaid.alabama.gov/ or a district office. The E&D Waiver requires Form 206 submitted through the waiver agency. Tell each office that you are also pursuing the other pathway. Income and resource rules differ between them, so your parent's eligibility may differ too."
+        },
+        {
+          "question": "Does Alabama Medicaid cover dental care for adults?",
+          "answer": "Alabama's published Medicaid materials do not broadly include adult dental coverage. What is listed is limited vision coverage: one full eye exam and one pair of eyeglasses every two years for eligible adults. If dental care is a priority, ask the caseworker specifically during the application, because coverage details can change and some managed care plans may differ."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "(800) 362-1504",
+      "sourceUrl": "https://medicaid.alabama.gov/content/3.0_Apply/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "al-snap-food-benefits",
+      "name": "Alabama SNAP (Food Assistance Program)",
+      "shortName": "Alabama SNAP",
+      "tagline": "If your parent is 60 or older and living on a fixed income in Alabama, they may qualify for monthly grocery money loaded onto an EBT card—no cash, no stigma, just food.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "County DHR offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Alabama Department of Human Resources Food Assistance Division, 50 North Ripley Street, Montgomery, AL 36130",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and their income is below $1,133/month (single person, net), they may qualify for Alabama SNAP. Benefits are loaded monthly onto an EBT card (a debit card that works at most grocery stores, Walmart, and some farmers markets). The card covers food only: fresh produce, meat, bread, dairy, and packaged groceries. It cannot be used for alcohol, tobacco, vitamins, or prepared hot meals.\n\nFor households where someone is 60 or older, Alabama waives the gross income test. That matters because Social Security, pensions, and other income often look too high on paper but come down significantly after deductions for medical expenses and shelter costs. The net income limit is what actually counts for your parent's household.\n\nThe benefit amount varies by household size and income; the federal formula sets it based on how much a household is expected to spend on food after accounting for their net income. Because the exact monthly amount depends on your parent's specific income and deductions, the only way to know what they'd receive is to apply or call their county DHR office.",
+      "savingsRange": "Benefit amount varies by household size and income. The maximum monthly benefit for a one-person household is $292 (federal FY2025 SNAP maximum for the contiguous United States). Your parent's actual benefit will be lower if they have any countable net income.",
+      "savingsSource": "USDA Food and Nutrition Service publishes maximum monthly SNAP allotments by household size for the contiguous United States. The $292 figure is the FY2025 maximum for a one-person household. Actual benefits are calculated individually based on net income.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60+ qualifies for relaxed income rules",
+          "Net monthly income below $1,133 (single person)",
+          "Assets below $4,250 for elderly or disabled households",
+          "Alabama resident applying in your home county",
+          "Not currently receiving SNAP in another state"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1133
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1526
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 1920
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2313
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 2706
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 3100
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 3493
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 3886
+          }
+        ],
+        "assetLimits": {
+          "individual": 4250,
+          "couple": 4250,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking accounts",
+            "Savings accounts",
+            "Stocks",
+            "Savings bonds",
+            "Lottery winnings of $4,250 or more",
+            "Gambling winnings of $4,250 or more"
+          ],
+          "exemptAssets": [
+            "The Alabama DHR source materials do not publish a complete exemption list. Your county DHR worker will tell you which assets are excluded during the interview."
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must apply at the DHR office in the county where your parent lives, not a statewide office",
+          "An interview is required as part of the application process",
+          "Certain information must be verified before approval",
+          "The gross income test does not apply if any household member is 60 or older or has a disability; only net income is tested in those cases"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at dhr.alabama.gov, by mail, fax, email, or in person at your parent's county DHR office; most cases are decided within 30 days.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your parent's county DHR office",
+            "description": "SNAP in Alabama is handled county by county. Go to dhr.alabama.gov to find the Food Assistance office in the county where your parent lives. Every county has a separate mailing address, fax number, and email for submitting applications."
+          },
+          {
+            "step": 2,
+            "title": "Submit the application",
+            "description": "Download Form 2116 (Food Assistance Application, Rev. 10/2025) from dhr.alabama.gov, or pick one up at the county office. You only need your parent's name, address, and signature to establish the filing date—you can submit an incomplete form and bring the rest to the interview. Submit by: online portal at dhr.alabama.gov, mail, fax, email, or in person at the county office."
+          },
+          {
+            "step": 3,
+            "title": "Complete the required interview",
+            "description": "Alabama requires an interview for all SNAP applicants. The county office will contact your parent (or you, if you are authorized to act on their behalf) to schedule it. Gather income documents, proof of identity, and expense information before the interview."
+          },
+          {
+            "step": 4,
+            "title": "Provide verification documents",
+            "description": "The county worker will tell you exactly what needs to be verified based on your parent's situation. Common items include proof of income, identity, household size, and living expenses. Submit everything as quickly as possible to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Receive the decision and EBT card",
+            "description": "Regular cases are decided within 30 days. If your parent qualifies for expedited processing (very low income and resources), the decision comes within 7 calendar days. Benefits are loaded to an EBT card, which works like a debit card at most Alabama grocery stores."
+          }
+        ],
+        "processingTime": "Up to 30 days for regular cases. 7 calendar days for expedited cases (households with very low income and resources who meet specific federal criteria).",
+        "waitlist": null,
+        "tip": "You do not need to complete the entire application before submitting it. Your parent's name, address, and signature are enough to lock in the filing date, which determines when benefits start if approved. Get the form in as soon as possible.",
+        "urls": [
+          {
+            "label": "Alabama DHR Food Assistance page",
+            "url": "https://dhr.alabama.gov/food-assistance/"
+          },
+          {
+            "label": "Alabama DHR main portal (online application)",
+            "url": "https://dhr.alabama.gov/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security card or another document showing your parent's Social Security number",
+        "Government-issued photo ID (driver's license, state ID, or passport)",
+        "Proof of Alabama residency in the county where you're applying (utility bill, lease agreement, or similar document)",
+        "Most recent Social Security benefit award letter showing monthly amount",
+        "Proof of any other income: pension statements, retirement account distributions, disability payments",
+        "Most recent rent or mortgage statement showing your parent's housing costs",
+        "Most recent utility bills (electric, gas, water) to document shelter expenses",
+        "Documentation of out-of-pocket medical expenses (medical bills, pharmacy receipts, health insurance premium statements), which can reduce countable net income for households with a member age 60 or older",
+        "Current balances for any checking or savings accounts (the county worker will ask during the interview; bring what you have)",
+        "Names, dates of birth, and Social Security numbers for all people living in the household"
+      ],
+      "contacts": [
+        {
+          "label": "Alabama DHR Food Assistance Division",
+          "phone": "(334) 242-1310",
+          "description": "State-level Food Assistance Division for Alabama DHR. For application help, contact your specific county DHR office directly; find it at dhr.alabama.gov.",
+          "hours": "Mon-Fri, regular business hours"
+        },
+        {
+          "label": "Alabama 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide helpline that can connect you to your local county DHR office and other food assistance resources. Use this if you are having trouble reaching your county office directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent's household income and liquid resources are very low (specific thresholds apply), they may qualify for expedited SNAP with a decision in 7 calendar days instead of 30. Ask the county worker about expedited status when you submit the application.",
+        "Households with a member age 60 or older are only tested against the net income limit, not the gross income limit. Social Security, pension, and other income often drops significantly after deductions for medical costs and shelter expenses. Do not assume your parent earns too much without running the net income calculation.",
+        "If your parent cannot visit the county office in person, you can apply on their behalf. Ask the county office about authorized representative procedures before the interview.",
+        "SNAP benefits cannot be used for prepared hot meals, alcohol, tobacco, vitamins, or non-food household items. The EBT card works only for eligible food purchases."
+      ],
+      "relatedPrograms": [
+        "Alabama LIHEAP (Low Income Home Energy Assistance Program)",
+        "Alabama Medicaid",
+        "Supplemental Security Income (SSI)",
+        "Alabama Senior Farmers Market Nutrition Program"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The net income rule: why your parent may qualify even if their income looks too high",
+          "body": "For households with a member age 60 or older, Alabama only checks net income, not gross income. Net income is what remains after deductions. Key deductions include a standard deduction applied to all households, an earned income deduction if any household member works, a deduction for excess shelter costs (rent or mortgage plus utilities above a certain threshold), and a medical expense deduction for costs above $35/month paid out of pocket by elderly or disabled household members. A parent with $1,400/month in Social Security and $200/month in Medicare premiums plus high rent could have a net income well below $1,133 after these deductions are applied. The county DHR worker calculates this during the interview."
+        },
+        {
+          "type": "callout",
+          "title": "Asset limit for households with a member age 60 or older: $4,250",
+          "body": "The standard SNAP resource limit is $2,750, but households with an elderly member (age 60+) or a disabled member have a higher limit of $4,250. Countable assets include cash, checking accounts, savings accounts, stocks, and savings bonds. The Alabama DHR source materials do not publish a full list of what is exempt. Your county DHR worker will walk through this during the interview."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent gets Social Security and a small pension. Does that mean they earn too much?",
+          "answer": "Not necessarily. For households with a member age 60 or older, only net income is tested, not gross. Alabama deducts medical expenses over $35/month, excess shelter costs, and other standard deductions from the gross income figure before comparing it to the limit. The net income limit for a single person is $1,133/month. The only way to know for sure is to have the county DHR worker run the calculation. It costs nothing to apply."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent?",
+          "answer": "Yes. Alabama allows authorized representatives to apply and act on behalf of a household member. Contact your parent's county DHR office before the interview to ask how to establish your authorization. You will likely need your parent's written permission."
+        },
+        {
+          "question": "My parent's savings account has $3,500 in it. Does that disqualify them?",
+          "answer": "No. The asset limit for households with a member age 60 or older is $4,250. A savings balance of $3,500 is below that threshold. If your parent also has a checking account, stocks, or savings bonds, add those balances together. The total countable assets must stay under $4,250."
+        },
+        {
+          "question": "How long will it take to get a decision after applying?",
+          "answer": "Regular cases are decided within 30 days. If your parent's household has very low income and resources and meets specific federal criteria, they may qualify for expedited processing with a decision in 7 calendar days. Ask the county worker about expedited status when you submit the application, not after."
+        },
+        {
+          "question": "Can my parent apply for SNAP and Medicaid at the same time?",
+          "answer": "Yes, and it often makes sense to do both at once. Alabama DHR handles both programs. Ask the county office for the combined application packet referenced in state materials, which covers multiple benefit programs. Qualifying for Medicaid does not automatically qualify your parent for SNAP, and vice versa, but applying together saves a second trip."
+        },
+        {
+          "question": "What if my parent moves to a different county in Alabama?",
+          "answer": "SNAP applications must be filed in the county where the household currently lives. If your parent moves, they will need to report the change to their current county DHR office and transfer their case to the new county. Benefits do not automatically follow a move."
+        },
+        {
+          "question": "What happens after my parent is approved? Do they have to reapply?",
+          "answer": "Yes. SNAP is not a permanent benefit. Alabama will set a certification period, after which your parent must renew. The county DHR office will notify your parent (or their authorized representative) before the certification period ends. Report changes in income, household size, or address to the county office promptly, because changes can affect the benefit amount."
+        },
+        {
+          "question": "My parent was denied. Can we appeal?",
+          "answer": "Yes. If Alabama DHR denies the application or reduces benefits, your parent has the right to request a fair hearing. The denial notice will explain the reason and the deadline for requesting a hearing. Contact the county DHR office or call Alabama DHR at (334) 242-1310 to start the appeal process."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "(334) 242-1310",
+      "sourceUrl": "https://dhr.alabama.gov/food-assistance/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dhr.alabama.gov/food-assistance/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "income_1",
+          "from": 1133,
+          "to": 1729,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2026/09/Form-DHR-FAP-2200-Rev-09.2026-.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1526,
+          "to": 2345,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2026/09/Form-DHR-FAP-2200-Rev-09.2026-.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://benefitscheckup.org/program/nutrition_al_snap_program",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://benefitscheckup.org/program/nutrition_al_snap_program",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8003820499",
+          "source": "https://dhr.alabama.gov/contact/",
+          "reason": "page also lists ours ((334) 242-1310)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -2888,5 +3382,5 @@
     ],
     "resourcesVsBenefits": "Alabama's benefit programs require income and asset limits, like the Medicaid waivers for home care or AESAP for food assistance. But five programs help any Alabama senior regardless of income: free Medicare counseling through SHIP, Meals on Wheels nutrition programs, legal services for seniors 60+, nursing home advocacy, and prescription drug assistance. Start with the free resources while you're applying for financial benefits."
   },
-  "factcheckedAt": "2026-10-02T07:33:05.611Z"
+  "factcheckedAt": "2026-10-06T12:17:45.405Z"
 }

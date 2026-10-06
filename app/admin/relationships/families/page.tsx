@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
 import { TABS, TAB_BLURB, matches, openWorkCount, type Tab } from "@/lib/seeker-touches/queues";
-import { ORIGIN_LABEL, consentWarning, detailLine, nextLine, problemLine, stateOf } from "@/lib/seeker-touches/present";
+import { ORIGIN_LABEL, checkLine, consentWarning, detailLine, handedAge, nextLine, problemLine, stateOf } from "@/lib/seeker-touches/present";
 
 /**
  * Relationships — care seekers.
@@ -35,6 +35,7 @@ const TAB_SENTENCE: Record<Tab, string> = {
   call: "are waiting on a call from us",
   follow: "need a follow-up",
   close: "have been tried three times",
+  check: "were handed to a provider and need a check-in",
   record: "say the provider never got back to them",
   reach: "have no working way to reach them",
   all: "have something open in this window",
@@ -247,7 +248,7 @@ function AdminSeekerRelationshipsInner() {
   }, [load]);
 
   const counts = useMemo(() => {
-    const c: Record<Tab, number> = { urgent: 0, reply: 0, letter: 0, help: 0, call: 0, follow: 0, close: 0, record: 0, reach: 0, all: 0, archived: 0 };
+    const c: Record<Tab, number> = { urgent: 0, reply: 0, letter: 0, help: 0, call: 0, follow: 0, close: 0, check: 0, record: 0, reach: 0, all: 0, archived: 0 };
     for (const r of rows ?? []) for (const t of TABS) if (matches(r, t.key)) c[t.key] += 1;
     return c;
   }, [rows]);
@@ -523,14 +524,17 @@ function AdminSeekerRelationshipsInner() {
       <div className="mt-2">
         {visible.map((r) => {
           const st = stateOf(r);
-          const problem = problemLine(r);
+          // In the provider check-in queue the row says who to ask, even when
+          // the family also has something more urgent (that has its own tab).
+          const checking = tab === "check" && !searching && Boolean(r.handed_to);
+          const problem = checking ? checkLine(r) : problemLine(r);
           const consent = consentWarning(r);
           const next = nextLine(r);
           // What you need to act without opening the row: the number on a
           // call, their own words on a reply.
           const showPhone =
             Boolean(r.phone) && (r.flags.includes("promise_owed") || r.flags.includes("tried_three") || r.flags.includes("unreachable"));
-          const said = r.flags.includes("awaiting_reply") ? r.last_inbound : null;
+          const said = !checking && r.flags.includes("awaiting_reply") ? r.last_inbound : null;
           // One line of context: where, what, where they came from, and the
           // number when a call is the job.
           const meta = [
@@ -583,7 +587,7 @@ function AdminSeekerRelationshipsInner() {
                   {consent && <span className="mt-1 block text-[12.5px] text-gray-400">{consent}</span>}
                 </span>
                 <span className="whitespace-nowrap pt-0.5 text-right text-[13px] text-gray-500">
-                  {st.age}
+                  {checking ? handedAge(r.handed_to!.at) : st.age}
                   {(st.tone === "act" || mixed) && (
                     <span className={`mt-0.5 block text-[12.5px] font-semibold ${st.tone === "act" ? "text-[#b54708]" : "text-gray-600"}`}>
                       {st.phrase}

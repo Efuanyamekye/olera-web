@@ -1,0 +1,144 @@
+{
+  "state": "UT",
+  "addedAt": "2026-10-06T06:36:20.620Z",
+  "dive": {
+    "state": "UT",
+    "stateName": "Utah",
+    "diveAt": "2026-10-06T06:34:59.027Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "New Choices Waiver",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No separate waiver income limit was identified in the gathered official sources. Eligibility is tied to Medicaid long-term care rules and waiver/medical criteria rather than a stand-alone New Choices Waiver income table in the materials reviewed.",
+          "asset_limits": "No waiver-specific asset table was identified in the gathered sources. Asset treatment likely follows Medicaid long-term care rules, but the exact countable/exempt asset rules were not available in the source set reviewed.",
+          "other_requirements": [
+            "Must be a Utah resident.",
+            "Must be age 65 or older, or age 18 through 64 and disabled under Social Security Act criteria in the waiver policy materials.",
+            "Must require the level of care provided in a nursing facility.",
+            "Must either be living in, or seeking to move from, an eligible institutional setting; the official page states people not currently living in one of the listed facility types are not eligible to apply.",
+            "There is a minimum length-of-stay requirement in each eligible facility type.",
+            "The program serves a limited number of individuals.",
+            "Most waiver slots are reserved for people residing in nursing facilities, hospitals, or other medical facilities (non-IMD).",
+            "Individuals can receive only the services they are assessed to need."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Home and community-based services for people who need nursing-facility level care. The reviewed official materials specifically mention case management, adult day care, non-medical transportation, assistive technology devices, supportive services in the home/apartment/family member's home/assisted living/community setting, personal budget assistance, and adult residential services in certified independent living facilities. A rate sheet also lists service payment amounts such as personal budget assistance at $4.72 per 15 minutes and adult residential services at $40.00 per day, but those are provider reimbursement rates rather than a beneficiary cash benefit.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Call the New Choices Waiver Program Office at 801-538-6155, option 6",
+            "Call toll-free at 800-662-9651, option 6",
+            "Email newchoiceswaiver@utah.gov",
+            "Fax 801-323-1586"
+          ],
+          "processing_time": "No fixed processing time was found in the reviewed sources. The program office handles intake and screening, and applications may involve a wait because the program has limited slots and a reservation structure.",
+          "waitlist": "Yes, effectively a limited-capacity program with reserved slots; the official materials say it serves a limited number of individuals and most available slots are reserved for people in institutions. Specific wait times by region were not found.",
+          "forms": [
+            "New Choices Waiver application (application can be requested from the program office; a specific form number was not identified in the gathered sources)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Utah residency",
+            "Medical/functional records showing nursing-facility level of care need",
+            "Information about the current facility setting and length of stay",
+            "Medicaid/financial information for long-term care eligibility review",
+            "Contact information and any discharge or placement planning documents if applying from an institution"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Utah, but application eligibility is restricted to people in qualifying institutional settings and there are minimum length-of-stay requirements. Most slots are reserved for institutional residents.",
+          "regional_variations": "The core eligibility rules are statewide. The main practical difference by region is provider availability and case management coverage, not benefit rules; one provider brochure specifically noted service in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties, but that is a provider footprint rather than a program limit.",
+          "offices_or_providers": [
+            "Utah DHHS New Choices Waiver Program Office",
+            "Case management agencies serving local counties",
+            "Roads To Independence case management services in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties"
+          ]
+        },
+        "official_source": "https://medicaid.utah.gov/ltc-2/nc/",
+        "gotchas": [
+          "This is not an open-door home-care waiver; people who are not already in one of the qualifying facility types cannot apply.",
+          "The program is capacity-limited, so qualifying medically does not guarantee immediate enrollment.",
+          "The waiver is aimed at moving people out of institutions into community settings, not giving a general cash allowance.",
+          "The services are only those the person is assessed to need; not everyone gets every possible waiver service.",
+          "Application intake is handled by the waiver office, and the application is not posted as a simple online form in the reviewed materials.",
+          "Phone staffing is limited to certain hours: 9:00 am–12:00 pm Monday, Wednesday, Thursday, and Friday."
+        ],
+        "data_shape_notes": "This program is institution-based and capacity-limited, with eligibility shaped by care setting, nursing-facility level-of-care need, and reserved slots rather than a simple income-only test.",
+        "_raw": "{\n  \"name\": \"New Choices Waiver\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No separate waiver income limit was identified in the gathered official sources. Eligibility is tied to Medicaid long-term care rules and waiver/medical criteria rather than a stand-alone New Choices Waiver income table in the materials reviewed.\",\n    \"asset_limits\": \"No waiver-specific asset table was identified in the gathered sources. Asset treatment likely follows Medicaid long-term care rules, but the exact countable/exempt asset rules were not available in the source set reviewed.\",\n    \"other_requirements\": [\n      \"Must be a Utah resident.\",\n      \"Must be age 65 or older, or age 18 through 64 and disabled under Social Security Act criteria in the waiver policy materials.\",\n      \"Must require the level of care provided in a nursing facility.\",\n      \"Must either be living in, or seeking to move from, an eligible institutional setting; the official page states people not currently living in one of the listed facility types are not eligible to apply.\",\n      \"There is a minimum length-of-stay requirement in each eligible facility type.\",\n      \"The program serves a limited number of individuals.\",\n      \"Most waiver slots are reserved for people residing in nursing facilities, hospitals, or other medical facilities (non-IMD).\",\n      \"Individuals can receive only the services they are assessed to need.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Home and community-based services for people who need nursing-facility level care. The reviewed official materials specifically mention case management, adult day care, non-medical transportation, assistive technology devices, supportive services in the home/apartment/family member's home/assisted living/community setting, personal budget assistance, and adult residential services in certified independent living facilities. A rate sheet also lists service payment amounts such as personal budget assistance at $4.72 per 15 minutes and adult residential services at $40.00 per day, but those are provider reimbursement rates rather than a beneficiary cash benefit.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the New Choices Waiver Program Office at 801-538-6155, option 6\",\n      \"Call toll-free at 800-662-9651, option 6\",\n      \"Email newchoiceswaiver@utah.gov\",\n      \"Fax 801-323-1586\"\n    ],\n    \"processing_time\": \"No fixed processing time was found in the reviewed sources. The program office handles intake and screening, and applications may involve a wait because the program has limited slots and a reservation structure.\",\n    \"waitlist\": \"Yes, effectively a limited-capacity program with reserved slots; the official materials say it serves a limited number of individuals and most available slots are reserved for people in institutions. Specific wait times by region were not found.\",\n    \"forms\": [\n      \"New Choices Waiver application (application can be requested from the program office; a specific form number was not identified in the gathered sources)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Utah residency\",\n      \"Medical/functional records showing nursing-facility level of care need\",\n      \"Information about the current facility setting and length of stay\",\n      \"Medicaid/financial information for long-term care eligibility review\",\n      \"Contact information and any discharge or placement planning documents if applying from an institution\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Utah, but application eligibility is restricted to people in qualifying institutional settings and there are minimum length-of-stay requirements. Most slots are reserved for institutional residents.\",\n    \"regional_variations\": \"The core eligibility rules are statewide. The main practical difference by region is provider availability and case management coverage, not benefit rules; one provider brochure specifically noted service in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties, but that is a provider footprint rather than a program limit.\",\n    \"offices_or_providers\": [\n      \"Utah DHHS New Choices Waiver Program Office\",\n      \"Case management agencies serving local counties\",\n      \"Roads To Independence case management services in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties\"\n    ]\n  },\n  \"official_source\": \"https://medicaid.utah.gov/ltc-2/nc/\",\n  \"gotchas\": [\n    \"This is not an open-door home-care waiver; people who are not already in one of the qualifying facility types cannot apply.\",\n    \"The program is capacity-limited, so qualifying medically does not guarantee immediate enrollment.\",\n    \"The waiver is aimed at moving people out of institutions into community settings, not giving a general cash allowance.\",\n    \"The services are only those the person is assessed to need; not everyone gets every possible waiver service.\",\n    \"Application intake is handled by the waiver office, and the application is not posted as a simple online form in the reviewed materials.\",\n    \"Phone staffing is limited to certain hours: 9:00 am–12:00 pm Monday, Wednesday, Thursday, and Friday.\"\n  ],\n  \"data_shape_notes\": \"This program is institution-based and capacity-limited, with eligibility shaped by care setting, nursing-facility level-of-care need, and reserved slots rather than a simple income-only test.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "UT",
+    "stateName": "Utah",
+    "classifiedAt": "2026-10-06T06:34:59.029Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "New Choices Waiver",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Utah DHHS New Choices Waiver Program Office",
+              "type": "service-area"
+            },
+            {
+              "name": "Case management agencies serving local counties",
+              "type": "service-area"
+            },
+            {
+              "name": "Roads To Independence case management services in Box Elder, Davis, Morgan, Salt Lake, and Weber Counties",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "UT",
+      "id": "ut-new-choices-waiver",
+      "name": "New Choices Waiver",
+      "legacyId": "new-choices-waiver",
+      "programType": "benefit"
+    }
+  ]
+}

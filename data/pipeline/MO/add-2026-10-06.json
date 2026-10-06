@@ -1,0 +1,243 @@
+{
+  "state": "MO",
+  "addedAt": "2026-10-06T06:23:20.278Z",
+  "dive": {
+    "state": "MO",
+    "stateName": "Missouri",
+    "diveAt": "2026-10-06T06:21:01.670Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Senior Home-Delivered Meals",
+        "eligibility": {
+          "age": 60,
+          "income_limits": null,
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a Missourian age 60 or older, or the spouse of someone age 60 or older.",
+            "Adults with disabilities may qualify in certain situations.",
+            "For the Medicaid/Aged and Disabled Waiver version of home-delivered meals, the person must be at least 63, have active Medicaid status, meet nursing facility level of care, and have the appropriate Medicaid Eligibility code.",
+            "For waiver-funded home-delivered meals, the person must be unable to prepare a balanced meal or otherwise need the service to meet care needs.",
+            "People living in a nursing facility, DHSS-licensed Residential Care Facility, or Assisted Living Facility are not eligible for the waiver-funded home-delivered meals service."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Home-delivered meals provided in the participant’s place of residence; meals may be hot or frozen depending on location. Under the Aged and Disabled Waiver, a participant may receive one or two meals per day, with each meal containing at least one-third of the recommended daily nutritional requirements.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call the Missouri Senior Resource Line at 1-800-235-5503",
+            "Contact your local Area Agency on Aging (AAA) through the Missouri Department of Health and Senior Services nutrition services page: https://health.mo.gov/partners-providers/area-agencies-aging/nutrition",
+            "For City of St. Louis residents, contact the St. Louis Area Agency on Aging senior nutrition program through the City of St. Louis senior services page"
+          ],
+          "processing_time": "Not stated statewide; access depends on local AAA availability and, for waiver services, DHSS/DSDS assessment and authorization after a home visit.",
+          "waitlist": "Not stated statewide. Availability can vary by local AAA and region.",
+          "forms": [],
+          "documents": [
+            "Proof of age",
+            "Proof of Medicaid status if applying for the waiver-funded service",
+            "Medical or functional information showing the person cannot prepare balanced meals or needs the service to meet care needs",
+            "Address and contact information",
+            "Any local AAA intake paperwork requested during screening"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available through local Area Agencies on Aging across Missouri; waiver-funded service has additional restrictions for Medicaid status, age 63+, and level-of-care requirements.",
+          "regional_variations": "Yes. Meal form, delivery method, and availability vary by AAA and local provider. Some locations offer hot meals, others frozen meals, and some areas also offer carryout meals. The City of St. Louis program has its own local rules and delivery window.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging (AAA) statewide",
+            "Missouri Senior Resource Line: 1-800-235-5503",
+            "St. Louis Area Agency on Aging"
+          ]
+        },
+        "official_source": "https://health.mo.gov/partners-providers/area-agencies-aging/nutrition",
+        "gotchas": [
+          "There is no single universal Missouri income limit for senior home-delivered meals in the sources reviewed; eligibility is mainly age- and need-based for the nutrition program.",
+          "The waiver-funded version is much narrower than the general senior nutrition program and requires Medicaid, age 63+, and nursing-facility level of care.",
+          "Meal delivery style is not uniform statewide; some areas deliver hot meals and others frozen meals.",
+          "The City of St. Louis has a separate local process and residency requirement for its senior nutrition program.",
+          "People in nursing facilities, Residential Care Facilities, or Assisted Living Facilities are excluded from the waiver-funded home-delivered meals benefit."
+        ],
+        "data_shape_notes": "This program is split into two overlapping but different structures: a general AAA nutrition service for adults 60+ (and some spouses/adults with disabilities) with no published statewide income test, and a Medicaid waiver-based home-delivered meals service with stricter age, Medicaid, and level-of-care rules.",
+        "_raw": "{\n  \"name\": \"Senior Home-Delivered Meals\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": null,\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a Missourian age 60 or older, or the spouse of someone age 60 or older.\",\n      \"Adults with disabilities may qualify in certain situations.\",\n      \"For the Medicaid/Aged and Disabled Waiver version of home-delivered meals, the person must be at least 63, have active Medicaid status, meet nursing facility level of care, and have the appropriate Medicaid Eligibility code.\",\n      \"For waiver-funded home-delivered meals, the person must be unable to prepare a balanced meal or otherwise need the service to meet care needs.\",\n      \"People living in a nursing facility, DHSS-licensed Residential Care Facility, or Assisted Living Facility are not eligible for the waiver-funded home-delivered meals service.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Home-delivered meals provided in the participant’s place of residence; meals may be hot or frozen depending on location. Under the Aged and Disabled Waiver, a participant may receive one or two meals per day, with each meal containing at least one-third of the recommended daily nutritional requirements.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the Missouri Senior Resource Line at 1-800-235-5503\",\n      \"Contact your local Area Agency on Aging (AAA) through the Missouri Department of Health and Senior Services nutrition services page: https://health.mo.gov/partners-providers/area-agencies-aging/nutrition\",\n      \"For City of St. Louis residents, contact the St. Louis Area Agency on Aging senior nutrition program through the City of St. Louis senior services page\"\n    ],\n    \"processing_time\": \"Not stated statewide; access depends on local AAA availability and, for waiver services, DHSS/DSDS assessment and authorization after a home visit.\",\n    \"waitlist\": \"Not stated statewide. Availability can vary by local AAA and region.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of Medicaid status if applying for the waiver-funded service\",\n      \"Medical or functional information showing the person cannot prepare balanced meals or needs the service to meet care needs\",\n      \"Address and contact information\",\n      \"Any local AAA intake paperwork requested during screening\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available through local Area Agencies on Aging across Missouri; waiver-funded service has additional restrictions for Medicaid status, age 63+, and level-of-care requirements.\",\n    \"regional_variations\": \"Yes. Meal form, delivery method, and availability vary by AAA and local provider. Some locations offer hot meals, others frozen meals, and some areas also offer carryout meals. The City of St. Louis program has its own local rules and delivery window.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging (AAA) statewide\",\n      \"Missouri Senior Resource Line: 1-800-235-5503\",\n      \"St. Louis Area Agency on Aging\"\n    ]\n  },\n  \"official_source\": \"https://health.mo.gov/partners-providers/area-agencies-aging/nutrition\",\n  \"gotchas\": [\n    \"There is no single universal Missouri income limit for senior home-delivered meals in the sources reviewed; eligibility is mainly age- and need-based for the nutrition program.\",\n    \"The waiver-funded version is much narrower than the general senior nutrition program and requires Medicaid, age 63+, and nursing-facility level of care.\",\n    \"Meal delivery style is not uniform statewide; some areas deliver hot meals and others frozen meals.\",\n    \"The City of St. Louis has a separate local process and residency requirement for its senior nutrition program.\",\n    \"People in nursing facilities, Residential Care Facilities, or Assisted Living Facilities are excluded from the waiver-funded home-delivered meals benefit.\"\n  ],\n  \"data_shape_notes\": \"This program is split into two overlapping but different structures: a general AAA nutrition service for adults 60+ (and some spouses/adults with disabilities) with no published statewide income test, and a Medicaid waiver-based home-delivered meals service with stricter age, Medicaid, and level-of-care rules.\"\n}"
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No income limit is listed for the Missouri National Family Caregiver Support Program. The state materials describe eligibility by caregiver relationship and care-recipient condition, not by household income. Some local agencies may give priority to low-income caregivers for certain services, but that is a priority rule, not a published statewide income cutoff.",
+          "asset_limits": "No asset limit is listed in the Missouri program materials reviewed.",
+          "other_requirements": [
+            "Caregiver must be an adult family member or other informal/unpaid caregiver aged 18 or older.",
+            "The person receiving care must be 60 or older and have difficulty performing activities of daily living independently.",
+            "Or the caregiver may be caring for a person of any age with Alzheimer’s disease or a related dementia.",
+            "Or the caregiver may be an older relative aged 55 or older caring for a child under 18.",
+            "Or the caregiver may be an older relative, including a parent, aged 55 or older caring for an adult with a disability aged 18-59.",
+            "Caregiver does not have to live in the same home or state as the care receiver, but must be regularly involved in providing care.",
+            "Services are delivered through local Area Agencies on Aging, so local availability can affect what a family actually receives."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The program can provide respite care, support groups, caregiver training, information and assistance, and supplies/assistive technology in some Missouri caregiver programs. For the core National Family Caregiver Support Program, Missouri describes assistance for informal/unpaid caregivers rather than a fixed cash amount. No statewide dollar cap or fixed hours-per-week entitlement is published in the reviewed materials. Some local programs may prioritize low-income caregivers or have region-specific service limits.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call the Missouri Senior Resource Line: 1-800-235-5503",
+            "Contact your local Area Agency on Aging",
+            "Use the Missouri Department of Health and Senior Services caregiver services pages to find local assistance"
+          ],
+          "processing_time": "No statewide processing-time standard was found in the reviewed Missouri materials. Timing appears to depend on the local Area Agency on Aging and service availability.",
+          "waitlist": "No statewide waitlist policy was published in the reviewed materials. Some local agencies may have limited capacity for respite or other services.",
+          "forms": [],
+          "documents": [
+            "Proof of caregiver relationship or role",
+            "Age of caregiver and care recipient",
+            "Information showing the care recipient’s age and condition",
+            "Any doctor or diagnosis documentation if dementia or disability-related services are requested",
+            "Household and contact information for the caregiver and care recipient",
+            "Notes on the level of care needed and what help is being provided"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Missouri program, but services are administered locally through Area Agencies on Aging, so actual service menus and availability vary by service area.",
+          "regional_variations": "Yes. Missouri routes families to their local Area Agency on Aging, and service lists, funding, and availability can differ by region. Some areas emphasize respite, some offer caregiver education, and some have dementia-specific support programs. Wait times and priority rules can also vary locally.",
+          "offices_or_providers": [
+            "Local Area Agencies on Aging in Missouri",
+            "Missouri Department of Health and Senior Services caregiver services program",
+            "Missouri Senior Resource Line"
+          ]
+        },
+        "official_source": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+        "gotchas": [
+          "This is not a single cash-benefit program; it is a network of support services delivered locally.",
+          "Families often expect income/asset rules, but the statewide caregiver program is primarily based on caregiver relationship and the care recipient’s age/condition.",
+          "Eligibility for different caregiver groups is not identical; older-relative caregivers and dementia caregivers fall under different pathways.",
+          "Actual services depend on the local Area Agency on Aging, so two Missouri families may get different support even if both qualify.",
+          "If the person needing care has Alzheimer’s or a related dementia, Missouri also has a separate dementia-focused caregiver support track with additional services.",
+          "Caregivers do not need to live with the care recipient, which families often miss."
+        ],
+        "data_shape_notes": "No income test was published statewide; eligibility is role- and condition-based. Benefits are locally administered services rather than a fixed statewide dollar amount, and regional variation is the key data feature.",
+        "_raw": "{\n  \"name\": \"Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No income limit is listed for the Missouri National Family Caregiver Support Program. The state materials describe eligibility by caregiver relationship and care-recipient condition, not by household income. Some local agencies may give priority to low-income caregivers for certain services, but that is a priority rule, not a published statewide income cutoff.\",\n    \"asset_limits\": \"No asset limit is listed in the Missouri program materials reviewed.\",\n    \"other_requirements\": [\n      \"Caregiver must be an adult family member or other informal/unpaid caregiver aged 18 or older.\",\n      \"The person receiving care must be 60 or older and have difficulty performing activities of daily living independently.\",\n      \"Or the caregiver may be caring for a person of any age with Alzheimer’s disease or a related dementia.\",\n      \"Or the caregiver may be an older relative aged 55 or older caring for a child under 18.\",\n      \"Or the caregiver may be an older relative, including a parent, aged 55 or older caring for an adult with a disability aged 18-59.\",\n      \"Caregiver does not have to live in the same home or state as the care receiver, but must be regularly involved in providing care.\",\n      \"Services are delivered through local Area Agencies on Aging, so local availability can affect what a family actually receives.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The program can provide respite care, support groups, caregiver training, information and assistance, and supplies/assistive technology in some Missouri caregiver programs. For the core National Family Caregiver Support Program, Missouri describes assistance for informal/unpaid caregivers rather than a fixed cash amount. No statewide dollar cap or fixed hours-per-week entitlement is published in the reviewed materials. Some local programs may prioritize low-income caregivers or have region-specific service limits.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the Missouri Senior Resource Line: 1-800-235-5503\",\n      \"Contact your local Area Agency on Aging\",\n      \"Use the Missouri Department of Health and Senior Services caregiver services pages to find local assistance\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was found in the reviewed Missouri materials. Timing appears to depend on the local Area Agency on Aging and service availability.\",\n    \"waitlist\": \"No statewide waitlist policy was published in the reviewed materials. Some local agencies may have limited capacity for respite or other services.\",\n    \"forms\": [],\n    \"documents\": [\n      \"Proof of caregiver relationship or role\",\n      \"Age of caregiver and care recipient\",\n      \"Information showing the care recipient’s age and condition\",\n      \"Any doctor or diagnosis documentation if dementia or disability-related services are requested\",\n      \"Household and contact information for the caregiver and care recipient\",\n      \"Notes on the level of care needed and what help is being provided\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Missouri program, but services are administered locally through Area Agencies on Aging, so actual service menus and availability vary by service area.\",\n    \"regional_variations\": \"Yes. Missouri routes families to their local Area Agency on Aging, and service lists, funding, and availability can differ by region. Some areas emphasize respite, some offer caregiver education, and some have dementia-specific support programs. Wait times and priority rules can also vary locally.\",\n    \"offices_or_providers\": [\n      \"Local Area Agencies on Aging in Missouri\",\n      \"Missouri Department of Health and Senior Services caregiver services program\",\n      \"Missouri Senior Resource Line\"\n    ]\n  },\n  \"official_source\": \"https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services\",\n  \"gotchas\": [\n    \"This is not a single cash-benefit program; it is a network of support services delivered locally.\",\n    \"Families often expect income/asset rules, but the statewide caregiver program is primarily based on caregiver relationship and the care recipient’s age/condition.\",\n    \"Eligibility for different caregiver groups is not identical; older-relative caregivers and dementia caregivers fall under different pathways.\",\n    \"Actual services depend on the local Area Agency on Aging, so two Missouri families may get different support even if both qualify.\",\n    \"If the person needing care has Alzheimer’s or a related dementia, Missouri also has a separate dementia-focused caregiver support track with additional services.\",\n    \"Caregivers do not need to live with the care recipient, which families often miss.\"\n  ],\n  \"data_shape_notes\": \"No income test was published statewide; eligibility is role- and condition-based. Benefits are locally administered services rather than a fixed statewide dollar amount, and regional variation is the key data feature.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "MO",
+    "stateName": "Missouri",
+    "classifiedAt": "2026-10-06T06:21:01.677Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 2
+    },
+    "complexitySummary": {
+      "medium": 1,
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Senior Home-Delivered Meals",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging (AAA) statewide",
+              "type": "service-area"
+            },
+            {
+              "name": "Missouri Senior Resource Line: 1-800-235-5503",
+              "type": "service-area"
+            },
+            {
+              "name": "St. Louis Area Agency on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": null,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Area Agencies on Aging in Missouri",
+              "type": "service-area"
+            },
+            {
+              "name": "Missouri Department of Health and Senior Services caregiver services program",
+              "type": "service-area"
+            },
+            {
+              "name": "Missouri Senior Resource Line",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "MO",
+      "id": "mo-senior-home-delivered-meals",
+      "name": "Senior Home-Delivered Meals",
+      "legacyId": "senior-home-delivered-meals",
+      "programType": "benefit"
+    },
+    {
+      "state": "MO",
+      "id": "mo-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "legacyId": "family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

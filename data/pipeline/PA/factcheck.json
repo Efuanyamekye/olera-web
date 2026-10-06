@@ -1,14 +1,14 @@
 {
   "state": "PA",
   "stateName": "Pennsylvania",
-  "checkedAt": "2026-10-04T00:53:36.830Z",
-  "total": 10,
+  "checkedAt": "2026-10-06T12:27:54.539Z",
+  "total": 14,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 7,
-  "highSeverityFlags": 2,
+  "programsWithFlags": 6,
+  "totalFlags": 10,
+  "highSeverityFlags": 6,
   "programs": [
     {
       "programId": "community-healthchoices-chc",
@@ -21,32 +21,27 @@
         "assets_couple": null,
         "phones": [
           "18775504227",
-          "211"
+          "211",
+          "8665504355"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": 21,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": null,
         "phone": "18448243655",
         "sources": {
-          "age": "https://www.pa.gov/services/dhs/apply-for-community-healthchoices",
-          "income": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "age": "https://www.pa.gov/agencies/dhs/resources/medicaid/chc",
+          "income": null,
           "assets": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
-          "phone": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts"
+          "phone": "https://www.pa.gov/agencies/dhs/resources/medicaid/chc"
         },
-        "notes": "CHC itself is not age-based for all seniors, but the senior pathway includes LIFE as an alternative for age 55+; the main CHC eligibility threshold is 21+. The official CHC eligibility PDF gives a $2,000 countable-resource limit for an individual; no authoritative couple-specific CHC countable-asset limit was found in the retrieved official sources."
+        "notes": "CHC is current as of 2026; senior pathway threshold is age 21+ for eligibility, with a LIFE alternative available at age 55+. No separate income test found in the retrieved official sources; asset limit shown for resource eligibility is $2,000 for an individual, but no couple limit was retrieved."
       },
       "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 21,
-          "verifiedValue": 55
-        },
         {
           "field": "assets_individual",
           "severity": "high",
@@ -59,12 +54,13 @@
           "severity": "medium",
           "draftValue": [
             "18775504227",
-            "211"
+            "211",
+            "8665504355"
           ],
           "verifiedValue": "18448243655"
         }
       ],
-      "notes": "CHC itself is not age-based for all seniors, but the senior pathway includes LIFE as an alternative for age 55+; the main CHC eligibility threshold is 21+. The official CHC eligibility PDF gives a $2,000 countable-resource limit for an individual; no authoritative couple-specific CHC countable-asset limit was found in the retrieved official sources."
+      "notes": "CHC is current as of 2026; senior pathway threshold is age 21+ for eligibility, with a LIFE alternative available at age 55+. No separate income test found in the retrieved official sources; asset limit shown for resource eligibility is $2,000 for an individual, but no couple limit was retrieved."
     },
     {
       "programId": "life-program",
@@ -76,7 +72,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "7177831550"
+          "7177831550",
+          "8775504227"
         ],
         "hasVerifiableFacts": true
       },
@@ -89,23 +86,14 @@
         "phone": "18775504227",
         "sources": {
           "age": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts"
+          "income": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
+          "assets": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
+          "phone": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life"
         },
-        "notes": "Current Pennsylvania LIFE program eligibility for seniors is age 55+; no authoritative current income or asset thresholds were found in the retrieved official sources."
+        "notes": "Current Pennsylvania LIFE eligibility is age 55+; no single official income/assets dollar threshold was found on the cited official page because financial eligibility is determined by the local County Assistance Office or private pay."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "7177831550"
-          ],
-          "verifiedValue": "18775504227"
-        }
-      ],
-      "notes": "Current Pennsylvania LIFE program eligibility for seniors is age 55+; no authoritative current income or asset thresholds were found in the retrieved official sources."
+      "flags": [],
+      "notes": "Current Pennsylvania LIFE eligibility is age 55+; no single official income/assets dollar threshold was found on the cited official page because financial eligibility is determined by the local County Assistance Office or private pay."
     },
     {
       "programId": "pace-prescription-assistance",
@@ -125,21 +113,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 14500,
+        "income_2": 17700,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002257223",
+        "phone": "18002257223",
         "sources": {
-          "age": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pace-program",
-          "income": null,
-          "assets": null,
+          "age": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
+          "income": "https://www.pasenategop.com/wp-content/uploads/2022/03/pace-pacenet.pdf",
+          "assets": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly",
           "phone": "https://www.pa.gov/services/aging/apply-for-the-pharmaceutical-assistance-contract-for-the-elderly"
         },
-        "notes": "PACE/PACENET is current and serves residents age 65+; no authoritative income or asset limits were found in the retrieved official sources."
+        "notes": "PACE remains active in Pennsylvania; current official state sources show age 65+ and the main help phone 1-800-225-7223. No authoritative asset test was found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "PACE/PACENET is current and serves residents age 65+; no authoritative income or asset limits were found in the retrieved official sources."
+      "notes": "PACE remains active in Pennsylvania; current official state sources show age 65+ and the main help phone 1-800-225-7223. No authoritative asset test was found in the retrieved official sources."
     },
     {
       "programId": "healthy-horizons-qmb-slmb-qi",
@@ -157,32 +145,36 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": 55,
         "income_1": 1350,
-        "income_2": 1824,
+        "income_2": 2184,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "8007837067",
+        "phone": "18665504355",
         "sources": {
           "age": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
-          "income": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
-          "assets": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
+          "income": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "assets": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
           "phone": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pa-medi-medicare-counseling"
         },
-        "notes": "Healthy Horizons is the older name used for Pennsylvania Medicare Savings Program pathways (QMB/SLMB/QI). Income and resource limits reflect the 2026 Medicare Savings Program figures surfaced in current Pennsylvania guidance; QI/SLMB/QMB use the same resource limit in current materials."
+        "notes": "Healthy Horizons is Pennsylvania’s Medicare Savings Program; age threshold is 55+ for the elderly pathway. Income and resource limits are for 2025/2026 posted on PA DHS/PA.gov; no separate senior-only asset limit found beyond the Medicare Savings Program resource limit."
       },
       "flags": [
         {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8665504355",
-            "8006927462"
-          ],
-          "verifiedValue": "8007837067"
+          "field": "age",
+          "severity": "high",
+          "draftValue": 65,
+          "verifiedValue": 55
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1824,
+          "verifiedValue": 2184,
+          "pctDiff": 16.5
         }
       ],
-      "notes": "Healthy Horizons is the older name used for Pennsylvania Medicare Savings Program pathways (QMB/SLMB/QI). Income and resource limits reflect the 2026 Medicare Savings Program figures surfaced in current Pennsylvania guidance; QI/SLMB/QMB use the same resource limit in current materials."
+      "notes": "Healthy Horizons is Pennsylvania’s Medicare Savings Program; age threshold is 55+ for the elderly pathway. Income and resource limits are for 2025/2026 posted on PA DHS/PA.gov; no separate senior-only asset limit found beyond the Medicare Savings Program resource limit."
     },
     {
       "programId": "snap-food-benefits",
@@ -207,16 +199,15 @@
         "assets_couple": null,
         "phone": "18006927462",
         "sources": {
-          "age": "https://www.pa.gov/agencies/dhs/resources/snap/snap-older-adults",
+          "age": "https://www.pa.gov/agencies/dhs/resources/snap",
           "income": "https://www.pa.gov/agencies/dhs/resources/snap/snap-income-limits",
           "assets": null,
-          "phone": "https://www.pa.gov/agencies/dhs/resources/snap",
-          "notes": "Pennsylvania SNAP is current; official DHS pages show age 60+ for older-adult pathway and 2025-2026 income limits. No official countable financial asset limit was found on the retrieved PA DHS pages."
+          "phone": "https://www.pa.gov/agencies/dhs/contact/helpful-phone-numbers"
         },
-        "notes": "Pennsylvania SNAP remains active; senior pathway uses age 60+ and official DHS pages do not show a countable asset test for SNAP."
+        "notes": "SNAP in Pennsylvania uses a senior pathway for households with a member age 60+; no current official countable asset limit was found in the retrieved Pennsylvania SNAP sources."
       },
       "flags": [],
-      "notes": "Pennsylvania SNAP remains active; senior pathway uses age 60+ and official DHS pages do not show a countable asset test for SNAP."
+      "notes": "SNAP in Pennsylvania uses a senior pathway for households with a member age 60+; no current official countable asset limit was found in the retrieved Pennsylvania SNAP sources."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -246,10 +237,10 @@
           "assets": null,
           "phone": "https://www.pa.gov/agencies/aging/aging-programs-and-services/pa-medi-medicare-counseling"
         },
-        "notes": "PA MEDI is Pennsylvania’s SHIP program for Medicare help; no age, income, or asset test was found for the senior pathway. Current statewide helpline is 1-800-783-7067."
+        "notes": "PA MEDI is Pennsylvania’s SHIP program; no age, income, or asset test found for the senior Medicare counseling pathway. Main helpline is 1-800-783-7067."
       },
       "flags": [],
-      "notes": "PA MEDI is Pennsylvania’s SHIP program for Medicare help; no age, income, or asset test was found for the senior pathway. Current statewide helpline is 1-800-783-7067."
+      "notes": "PA MEDI is Pennsylvania’s SHIP program; no age, income, or asset test found for the senior Medicare counseling pathway. Main helpline is 1-800-783-7067."
     },
     {
       "programId": "home-delivered-meals",
@@ -262,7 +253,8 @@
         "assets_couple": null,
         "phones": [
           "7177719610",
-          "8149461235"
+          "8149461235",
+          "7177831550"
         ],
         "hasVerifiableFacts": true
       },
@@ -272,14 +264,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7177806130",
+        "phone": "8004682433",
         "sources": {
           "age": "https://www.pa.gov/agencies/aging/aging-programs-and-services/meals-and-food-assistance",
           "income": null,
           "assets": null,
-          "phone": "https://www.dauphincounty.gov/government/human-services/area-agency-on-aging/services/Meals-on-Wheels"
+          "phone": "https://www.pa.gov/agencies/aging/aging-programs-and-services/meals-and-food-assistance"
         },
-        "notes": "Statewide Pennsylvania home-delivered meals for seniors are served through the Department of Aging at age 60+; no official statewide income or asset test was found. Program is still active in 2026."
+        "notes": "Statewide Pennsylvania home-delivered meals program for seniors age 60+; no income or asset test found in the official source."
       },
       "flags": [
         {
@@ -287,12 +279,13 @@
           "severity": "medium",
           "draftValue": [
             "7177719610",
-            "8149461235"
+            "8149461235",
+            "7177831550"
           ],
-          "verifiedValue": "7177806130"
+          "verifiedValue": "8004682433"
         }
       ],
-      "notes": "Statewide Pennsylvania home-delivered meals for seniors are served through the Department of Aging at age 60+; no official statewide income or asset test was found. Program is still active in 2026."
+      "notes": "Statewide Pennsylvania home-delivered meals program for seniors age 60+; no income or asset test found in the official source."
     },
     {
       "programId": "caregiver-support-program",
@@ -310,22 +303,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "7177831550",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
+          "age": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program",
+          "income": "https://www.pa.gov/agencies/aging/pa-carekit/caregiving-resources/financial-planning-and-paying-for-care",
+          "assets": "https://www.pa.gov/agencies/aging/pa-carekit/caregiving-resources/financial-planning-and-paying-for-care",
           "phone": "https://www.pa.gov/services/aging/apply-for-the-caregiver-support-program"
         },
-        "notes": "Official Pennsylvania Caregiver Support Program page directs applicants to call the Department of Aging at 717-783-1550 or contact the local AAA; no authoritative statewide age, income, or asset test was found for the senior caregiver pathway."
+        "notes": "Current Pennsylvania Caregiver Support Program is active; no income or asset test was found in the official statewide source for the senior caregiver pathway. Contact the Pennsylvania Department of Aging at 717-783-1550 or local AAA."
       },
       "flags": [],
-      "notes": "Official Pennsylvania Caregiver Support Program page directs applicants to call the Department of Aging at 717-783-1550 or contact the local AAA; no authoritative statewide age, income, or asset test was found for the senior caregiver pathway."
+      "notes": "Current Pennsylvania Caregiver Support Program is active; no income or asset test was found in the official statewide source for the senior caregiver pathway. Contact the Pennsylvania Department of Aging at 717-783-1550 or local AAA."
     },
     {
       "programId": "oplap-legal-assistance",
@@ -355,7 +348,7 @@
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/apply-for-the-older-pennsylvanians-legal-assistance-program"
         },
-        "notes": "Current Pennsylvania Department of Aging page states the program is open to residents age 60+; no income or asset test was found in the retrieved official source."
+        "notes": "Current PA.gov page says the program is open to Pennsylvania residents age 60 and older; no income or asset test was found on the official page."
       },
       "flags": [
         {
@@ -368,7 +361,7 @@
           "verifiedValue": "7177831550"
         }
       ],
-      "notes": "Current Pennsylvania Department of Aging page states the program is open to residents age 60+; no income or asset test was found in the retrieved official source."
+      "notes": "Current PA.gov page says the program is open to Pennsylvania residents age 60 and older; no income or asset test was found on the official page."
     },
     {
       "programId": "ltc-ombudsman",
@@ -398,10 +391,172 @@
           "assets": null,
           "phone": "https://www.pa.gov/services/aging/request-assistance-from-a-long-term-care-ombudsman"
         },
-        "notes": "No age, income, or asset eligibility tests found for the Pennsylvania Long-Term Care Ombudsman Program; program is a complaint-resolution/advocacy service for long-term care residents. Current state contact phone is 717-783-8975."
+        "notes": "No age, income, or asset eligibility test found; program is an advocacy/complaint-resolution service for long-term care residents and families. Phone verified from Pennsylvania official source."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility tests found for the Pennsylvania Long-Term Care Ombudsman Program; program is a complaint-resolution/advocacy service for long-term care residents. Current state contact phone is 717-783-8975."
+      "notes": "No age, income, or asset eligibility test found; program is an advocacy/complaint-resolution service for long-term care residents and families. Phone verified from Pennsylvania official source."
+    },
+    {
+      "programId": "pa-aged-blind-disabled-medicaid",
+      "programName": "Aged, Blind, and Disabled Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": 1835,
+        "income_2": 2489,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8006927462",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1016,
+        "income_2": 1524,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8665504355",
+        "sources": {
+          "age": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "income": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "assets": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "phone": "https://www.pa.gov/services/dhs/apply-for-medicaid-benefits"
+        },
+        "notes": "Current Pennsylvania Aged, Blind, and Disabled Medicaid (Medical Assistance) limits found on official PA DHS pages; no program rename or discontinuation indicated."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1835,
+          "verifiedValue": 1016,
+          "pctDiff": 44.6
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2489,
+          "verifiedValue": 1524,
+          "pctDiff": 38.8
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8006927462",
+            "211"
+          ],
+          "verifiedValue": "8665504355"
+        }
+      ],
+      "notes": "Current Pennsylvania Aged, Blind, and Disabled Medicaid (Medical Assistance) limits found on official PA DHS pages; no program rename or discontinuation indicated."
+    },
+    {
+      "programId": "pa-liheap-heating-assistance",
+      "programName": "LIHEAP",
+      "facts": {
+        "age": null,
+        "income_1": 1995,
+        "income_2": 2705,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18668577095",
+          "18665504355"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1995,
+        "income_2": 2705,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18668577095",
+        "sources": {
+          "age": null,
+          "income": "https://www.pa.gov/agencies/dhs/resources/liheap",
+          "assets": null,
+          "phone": "https://www.pa.gov/services/dhs/apply-for-the-low-income-home-energy-assistance-program-liheap"
+        },
+        "notes": "Current Pennsylvania LIHEAP uses a household income test at 150% of FPIG; no age or asset test found in authoritative current sources. Monthly values were converted from the official annual limits and rounded to the nearest integer."
+      },
+      "flags": [],
+      "notes": "Current Pennsylvania LIHEAP uses a household income test at 150% of FPIG; no age or asset test found in authoritative current sources. Monthly values were converted from the official annual limits and rounded to the nearest integer."
+    },
+    {
+      "programId": "pa-property-tax-rent-rebate",
+      "programName": "Property Tax/Rent Rebate Program",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18882229190"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 48110,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18882229190",
+        "sources": {
+          "age": "https://www.pa.gov/agencies/revenue/ptrr",
+          "income": "https://www.pa.gov/agencies/revenue/ptrr",
+          "assets": null,
+          "phone": "https://www.pa.gov/agencies/revenue/ptrr"
+        },
+        "notes": "Current Pennsylvania Property Tax/Rent Rebate Program (PTRR); no asset test found in current official guidance."
+      },
+      "flags": [],
+      "notes": "Current Pennsylvania Property Tax/Rent Rebate Program (PTRR); no asset test found in current official guidance."
+    },
+    {
+      "programId": "pa-state-ssi-supplement",
+      "programName": "State SSI Supplement",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18007721213",
+          "18007538827"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18007721213",
+        "sources": {
+          "age": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+          "income": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+          "assets": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+          "phone": "https://www.ssa.gov/pubs/EN-05-11150.pdf"
+        },
+        "notes": "Pennsylvania State SSI Supplement is administered through SSI; no separate Pennsylvania income or asset test was found in the retrieved authoritative source. Age is 65+ for the senior pathway."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 65
+        }
+      ],
+      "notes": "Pennsylvania State SSI Supplement is administered through SSI; no separate Pennsylvania income or asset test was found in the retrieved authoritative source. Age is 65+ for the senior pathway."
     }
   ]
 }

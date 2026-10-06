@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T01:16:14.194Z
+ * Last updated: 2026-10-06T12:32:15.036Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -195,15 +195,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "phone",
-          "from": [
-            "8778010044"
-          ],
-          "to": "8552590701",
-          "source": "https://www.tn.gov/tenncare/contact-us.html",
+          "field": "income_1",
+          "from": 1350,
+          "to": 1565,
+          "source": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2115,
+          "source": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
+          "severity": "medium",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
         }
       ]
     },
@@ -412,37 +419,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1330,
-          "to": 1729,
-          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1804,
-          "to": 2348,
-          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8663114287"
-          ],
-          "to": "8337728347",
-          "source": "https://www.tn.gov/humanservices/need-help-/tdhs-contact-us.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -625,7 +602,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://thda.org/help-for-homeowners/low-income-home-energy-assistance-program-liheap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-01"
+      "lastVerifiedDate": "2026-08-01",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6158152200",
+            "18002288432",
+            "8656912551"
+          ],
+          "to": "8002288423",
+          "source": "https://thda.org/help-for-homeowners/low-income-home-energy-assistance-program-liheap/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1085,10 +1077,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 55,
           "to": 60,
-          "source": "https://www.tn.gov/content/dam/tn/aging/documents/06_Helping_Caregivers.pdf",
+          "source": "https://www.tn.gov/disability-and-aging/disability-aging-programs/caregiving.html",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
         }
       ]
     },
@@ -1227,6 +1219,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(865) 691-2551",
           "description": "Anderson, Blount, Cocke, Grainger, Hamblen, Jefferson, Loudon, Monroe, Roane, Sevier counties - ext. 4347 for Renae Hawkins",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 224-5818",
+          "description": "Number listed on tn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1282,20 +1280,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7319895111",
             "8003726013",
             "7315874213",
             "8656912551"
           ],
-          "to": "6157415671",
-          "source": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "to": "(844) 224-5818",
+          "source": "https://www.tn.gov/workforce.html",
+          "flaggedAt": "2026-10-06T12:28:53.554Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1843,6 +1843,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "Contact local Area Agency",
           "description": "Find your regional Area Agency on Aging and Disability",
           "hours": "Varies by region"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 836-6678",
+          "description": "Number listed on tn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1880,19 +1886,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://tn.gov/disability-and-aging",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8656912551",
             "86569125514212",
             "86569125514216"
           ],
-          "to": "8668366678",
-          "source": "https://www.tn.gov/disability-and-aging/resource-directory/aaad.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "to": "(866) 836-6678",
+          "source": "https://www.tn.gov/disability-and-aging/about-us/contact-information/other-helpful-numbers.html",
+          "flaggedAt": "2026-10-06T12:28:53.554Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2040,6 +2048,232 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/disability-and-aging/disability-aging-programs/tn-ship.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "tn-tenncare-choices-ltss",
+      "name": "TennCare CHOICES in Long-Term Services and Supports",
+      "shortName": "TennCare CHOICES",
+      "tagline": "If your parent is 65+ and needs daily help with bathing, dressing, or meals, Tennessee may pay for a home care aide or nursing facility care through TennCare CHOICES.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agency on Aging and Disability (AAAD) offices, found by county map",
+            "type": "service-area"
+          },
+          {
+            "name": "TennCare health plans for current members: BlueCare, UnitedHealthcare Community Plan, and Wellpoint",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "TennCare CHOICES pays for long-term care services for older Tennesseans who need significant daily help but might otherwise have to enter a nursing home. If your parent is 65 or older and needs hands-on help with things like bathing, dressing, eating, or managing medications, and their income is below $2,901 per month (2025 limit), they may qualify for paid home care, personal care aides, and other daily living supports, all coordinated through TennCare.\n\nThe program has three groups. Group 1 covers nursing facility care for people who need it most. Group 2 keeps eligible people at home with care services instead of placing them in a facility. Group 3 supports people who don't yet meet the nursing-home standard but need enough help that without it they likely would. Your parent doesn't have to be in a crisis or already in a nursing home to qualify.\n\nHow you apply depends on whether your parent already has TennCare. If they do, you start with their TennCare health plan (the number is on their member card). If they don't have TennCare yet, you call the Area Agency on Aging and Disability line at 1-866-836-6678. Both paths lead to a medical assessment called a Pre Admission Evaluation, which determines which group your parent qualifies for.",
+      "savingsRange": "",
+      "savingsSource": "Free service: TennCare CHOICES covers the cost of qualifying long-term services and supports; there is no standard dollar savings figure published by TennCare for this program.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or 21+ with a physical disability)",
+          "Tennessee resident",
+          "Income generally below $2,901/month (2025)",
+          "Needs nursing-home level daily care (bathing, dressing, meals, medications)",
+          "Must pass a medical level-of-care assessment called the Pre Admission Evaluation"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Bank accounts",
+            "Non-primary real property",
+            "Other financial resources"
+          ],
+          "exemptAssets": [
+            "Primary home (subject to home equity limits; consult TennCare for current cap)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must need the level of care typically provided in a nursing home. This is determined through a clinical assessment called the Pre Admission Evaluation (PAE), which looks at whether your parent needs daily help with activities like bathing, dressing, eating, moving from bed to chair, toileting, managing medications, preparing meals, and handling money. Group 3 has a lower bar: your parent must need enough help that without it they would be at risk of needing a nursing home.",
+        "otherRequirements": [
+          "Must be a U.S. citizen, U.S. national, or otherwise eligible noncitizen",
+          "Must have a valid Social Security number or proof that one has been applied for (unless exempt)",
+          "Must not be in a penalty period for an uncompensated transfer of assets (giving away money or property can delay or block eligibility)",
+          "For home and community-based services, must be eligible for institutional Medicaid or be an SSI cash recipient"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "The first step depends on your parent's insurance status: call their TennCare health plan if they already have TennCare, or call 1-866-836-6678 if they don't, and a medical assessment will be scheduled.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find the right starting point",
+            "description": "Check your parent's TennCare status. If they already have TennCare, call the member number on their TennCare card. Their health plan (BlueCare, UnitedHealthcare Community Plan, or Wellpoint) will start the process. If they do not have TennCare, call the statewide Area Agency on Aging and Disability line at 1-866-836-6678 to reach your local AAAD office."
+          },
+          {
+            "step": 2,
+            "title": "Complete the medical level-of-care assessment (PAE)",
+            "description": "Both paths lead to a Pre Admission Evaluation (PAE), a clinical assessment that determines whether your parent needs nursing-home level care. A clinician will ask about your parent's ability to bathe, dress, eat, walk, manage medications, and handle daily tasks. This is required for all CHOICES groups. Gather medical records and a list of current medications before this appointment."
+          },
+          {
+            "step": 3,
+            "title": "Gather and submit financial documents",
+            "description": "TennCare will review income and assets to confirm Medicaid eligibility. Collect Social Security award letters, pension statements, bank account information, and property records. If your parent has transferred assets or given money away recently, mention this to the caseworker; it can affect eligibility."
+          },
+          {
+            "step": 4,
+            "title": "Receive a group placement decision",
+            "description": "After the PAE and financial review, your parent will be assigned to Group 1 (nursing facility care), Group 2 (home care in place of a facility), or Group 3 (home supports to prevent nursing-home placement). Services are then arranged through the TennCare health plan or the AAAD depending on your parent's route."
+          },
+          {
+            "step": 5,
+            "title": "If you need LTSS help during enrollment",
+            "description": "Current TennCare members can also reach the LTSS Help Desk at 1-877-224-0219 with questions about CHOICES during the process."
+          }
+        ],
+        "processingTime": "No single statewide processing timeline is published. Timing depends on how quickly the PAE medical review and financial eligibility review are completed, and on local AAAD and health plan capacity. Ask the office handling your application for an expected timeframe.",
+        "waitlist": "Official TennCare materials reviewed do not describe a universal statewide waitlist for all CHOICES applicants. Access depends on the group your parent qualifies for and available services. Ask your local AAAD or health plan about current availability in your area.",
+        "tip": "If your parent is being discharged from a hospital or rehab facility, tell the discharge planner you want to apply for TennCare CHOICES. Discharge planners can often initiate the PAE before your parent leaves the facility, which speeds up the process.",
+        "urls": [
+          {
+            "label": "TennCare CHOICES official program page",
+            "url": "https://www.tn.gov/tenncare/long-term-services-supports/choices.html"
+          },
+          {
+            "label": "Find your local AAAD office by county",
+            "url": "https://www.tn.gov/tenncare/long-term-services-supports/choices.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows monthly benefit amount)",
+        "Proof of Tennessee residency (utility bill, lease agreement, or state-issued ID showing current address)",
+        "Social Security card, or written proof that a Social Security number has been applied for if one has not yet been issued",
+        "Proof of U.S. citizenship or eligible immigration status (birth certificate, U.S. passport, or immigration documents)",
+        "Proof of age (birth certificate or passport)",
+        "Pension or retirement income statements showing current monthly amounts",
+        "Current bank account balances for any checking or savings accounts (TennCare's financial review will look at resources; the exact documentation period will be specified by the caseworker during intake)",
+        "Information on any other real property owned (address, estimated value, mortgage balance if applicable)",
+        "Medical records or physician documentation supporting the need for nursing-home level care",
+        "List of current medications and treating physicians (useful for the Pre Admission Evaluation)",
+        "Legal documents if a family member or representative is applying on the parent's behalf (power of attorney or legal guardianship papers)"
+      ],
+      "contacts": [
+        {
+          "label": "Area Agency on Aging and Disability (AAAD) Statewide Line",
+          "phone": "1-866-836-6678",
+          "description": "Call here if your parent does not yet have TennCare. Staff will connect you to your local AAAD office to begin the CHOICES application process.",
+          "hours": "Contact your local AAAD for hours; the statewide line routes to local offices."
+        },
+        {
+          "label": "TennCare LTSS Help Desk",
+          "phone": "1-877-224-0219",
+          "description": "For current TennCare members with questions about CHOICES enrollment or LTSS services. If your parent already has a TennCare card, also try the member number on that card for their specific health plan.",
+          "hours": "Contact TennCare for current hours."
+        },
+        {
+          "label": "BlueCare Tennessee (TennCare health plan)",
+          "phone": "1-888-747-8955",
+          "description": "If your parent is a BlueCare member, call their plan directly to start the CHOICES request.",
+          "hours": "Contact plan for current hours."
+        },
+        {
+          "label": "UnitedHealthcare Community Plan Tennessee (TennCare health plan)",
+          "phone": "1-800-690-1606",
+          "description": "If your parent is a UnitedHealthcare Community Plan member, call their plan directly to start the CHOICES request.",
+          "hours": "Contact plan for current hours."
+        }
+      ],
+      "applicationNotes": [
+        "How you apply depends entirely on whether your parent already has TennCare. Current TennCare members must go through their health plan (BlueCare, UnitedHealthcare Community Plan, or Wellpoint). People without TennCare start with the AAAD at 1-866-836-6678. Starting with the wrong door can delay your application.",
+        "If your parent has given away money, transferred property, or sold assets for less than fair market value in recent years, this can create a penalty period that delays CHOICES eligibility. Discuss any asset transfers with the caseworker before assuming they are ineligible.",
+        "Group 3 is easy to overlook. Your parent does not have to be at the point of needing a nursing home right now to qualify. If they need regular help to stay safely at home and that help isn't available, they may qualify for Group 3 supports.",
+        "The financial eligibility rules are tied to Medicaid long-term care rules, not a simple household-size income chart. The income limit is $2,901 per month (2025) for most applicants, but asset rules vary by Medicaid category. A caseworker must determine which category applies to your parent's situation."
+      ],
+      "relatedPrograms": [
+        "TennCare Medicaid (the base Medicaid program your parent may need to enroll in first)",
+        "Tennessee SHIP (State Health Insurance Assistance Program, for help understanding Medicare alongside Medicaid)",
+        "Tennessee Statewide Respite Coalition (for family caregiver relief while waiting for CHOICES services)",
+        "SSI (Supplemental Security Income, which can affect CHOICES financial eligibility)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "The three CHOICES groups: which one fits your parent",
+          "intro": "CHOICES places your parent in one of three groups based on their medical needs. The group determines what services they receive and in what setting.",
+          "tiers": [
+            {
+              "name": "Group 1",
+              "description": "Your parent needs nursing-home level care and is receiving it in a nursing facility. TennCare pays for the nursing home stay."
+            },
+            {
+              "name": "Group 2",
+              "description": "Your parent qualifies for nursing-home level care but wants to remain at home. TennCare pays for home care services, personal care aides, and other supports so they can avoid placement in a facility."
+            },
+            {
+              "name": "Group 3",
+              "description": "Your parent does not yet meet nursing-home level care, but needs enough regular help that without it they would be at risk of needing a nursing home. TennCare can provide home-based supports to prevent that outcome."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "title": "What CHOICES can pay for at home",
+          "body": "Depending on the group your parent qualifies for, CHOICES-covered services can include: personal care (help with bathing, dressing, grooming), home help (housework, laundry, meal preparation), medication management assistance, help with shopping and money management, and transfers (help moving from bed to chair or around the home). Services are arranged through your parent's TennCare health plan or AAAD after eligibility is confirmed."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent doesn't have TennCare yet. Do they have to enroll in Medicaid first before applying for CHOICES?",
+          "answer": "Yes. CHOICES is a TennCare Medicaid program, so your parent must be eligible for Medicaid to receive CHOICES services. If they don't have TennCare yet, call 1-866-836-6678 and the AAAD will help you apply for both TennCare and CHOICES together. The income limit for most CHOICES applicants is $2,901 per month (2025)."
+        },
+        {
+          "question": "My parent gave money to my sibling last year. Does that disqualify them?",
+          "answer": "It can. TennCare looks at whether your parent transferred assets for less than fair market value. If they did, a penalty period may apply, which can delay CHOICES eligibility. This is one of the most common reasons families run into problems. Tell the caseworker about any transfers before you assume your parent is ineligible; the details of how and when the transfer happened matter."
+        },
+        {
+          "question": "Can my parent keep living in their home if they enroll in CHOICES Group 2?",
+          "answer": "Yes. Group 2 is specifically designed for people who qualify for nursing-home level care but want to stay at home. CHOICES pays for home care services instead of nursing facility placement. Your parent's TennCare health plan will coordinate the services needed to support them safely at home."
+        },
+        {
+          "question": "My parent's income is Social Security only, about $1,800 per month. Do they meet the income test?",
+          "answer": "Most likely yes on the income test. The income limit for CHOICES home and community-based services is generally $2,901 per month (2025, based on 300% of the SSI Federal Benefit Rate). However, income is only one part of eligibility. Your parent also needs to pass the medical level-of-care assessment (the PAE) and meet asset rules. Call 1-866-836-6678 to have a caseworker review your parent's full situation."
+        },
+        {
+          "question": "How long will it take to start receiving services after applying?",
+          "answer": "TennCare does not publish a single statewide processing timeline for CHOICES. The process involves a medical assessment (the Pre Admission Evaluation) and a financial eligibility review, and timing depends on how quickly both are completed and on local office and health plan capacity. When you call to apply, ask the caseworker for a realistic estimate for your area."
+        },
+        {
+          "question": "Can I apply for CHOICES on behalf of my parent, or does my parent have to be the one to call?",
+          "answer": "Yes, a family member can apply on a parent's behalf. If you have power of attorney or legal guardianship, bring those documents to the process. Even without formal legal authority, you can make the initial call and gather information; the caseworker will confirm your parent's consent to share information. Call 1-866-836-6678 if your parent does not have TennCare, or their health plan member line if they do."
+        },
+        {
+          "question": "My parent is in Group 3 now. What happens if their needs get worse?",
+          "answer": "If your parent's condition changes and they begin to need nursing-home level care, they can be reassessed and potentially moved to Group 2 or Group 1. Contact their TennCare health plan or the LTSS Help Desk at 1-877-224-0219 to request a new Pre Admission Evaluation. You do not have to wait for an annual review if there is a significant change in their daily functioning."
+        },
+        {
+          "question": "Can my parent be on CHOICES and also use other TennCare benefits at the same time?",
+          "answer": "Yes. CHOICES is part of TennCare Medicaid, not a separate program. Enrolling in CHOICES does not replace your parent's other TennCare-covered services, such as physician visits or prescription coverage. Their TennCare health plan coordinates all covered services. If you are also helping your parent navigate Medicare, Tennessee SHIP (the State Health Insurance Assistance Program) provides free counseling to help the two programs work together."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "1-866-836-6678",
+      "sourceUrl": "https://www.tn.gov/tenncare/long-term-services-supports/choices.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

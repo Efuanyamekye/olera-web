@@ -2,8 +2,8 @@
   "state": "NE",
   "stateName": "Nebraska",
   "draftedAt": "2026-04-13T21:50:19.552Z",
-  "total": 17,
-  "successful": 17,
+  "total": 18,
+  "successful": 18,
   "programs": [
     {
       "id": "aged-disabled-hcbs-waiver",
@@ -385,7 +385,22 @@
       "sourceUrl": "https://dhhs.ne.gov/Pages/Medicaid-Provider-All-Inclusive-Care-for-the-Elderly.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-06"
+      "lastVerifiedDate": "2026-09-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4025126199",
+            "8448436364",
+            "8556327633"
+          ],
+          "to": "4029910330",
+          "source": "https://dhhs.ne.gov/licensure/Documents/HHARoster.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-program",
@@ -539,6 +554,12 @@
           "phone": null,
           "description": "In-person assistance and document submission - find locations at dhhs.ne.gov",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 632-7633",
+          "description": "Number listed on vas-nebraska.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -614,17 +635,19 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8003834278"
           ],
-          "to": "8556327633",
-          "source": "https://dhhs.ne.gov/pages/accessnebraska.aspx?id=2636",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(855) 632-7633",
+          "source": "https://www.vas-nebraska.org/medicare/",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -831,7 +854,27 @@
       "sourceUrl": "https://dhhs.ne.gov/pages/snap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 25000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/SNAP%20Program%20Standards.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 25000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/SNAP%20Program%20Standards.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1040,7 +1083,27 @@
       "phone": "(800) 383-4278",
       "sourceUrl": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1956,
+          "to": 1595,
+          "source": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2644,
+          "to": 2164,
+          "source": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1198,6 +1261,12 @@
           "phone": "2-1-1",
           "description": "Statewide helpline for weatherization and energy assistance referrals",
           "hours": "24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 253-2603",
+          "description": "Number listed on dwee.nebraska.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1259,37 +1328,21 @@
       "sourceUrl": "https://dee.nebraska.gov/sites/default/files/publications/22-044-Final_WX_Full_Policies_and_Procedures_Manual.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "income_1",
-          "from": 2672,
-          "to": 1958,
-          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3625,
-          "to": 2645,
-          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 150% FPL 2026",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024446666",
             "4023428232",
             "211"
           ],
-          "to": "8772532603",
+          "to": "(877) 253-2603",
           "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1499,6 +1552,12 @@
           "phone": "1-800-677-1116",
           "description": "National service to find your local Area Agency on Aging",
           "hours": "Mon-Fri 9am-8pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(402) 471-9147",
+          "description": "Number listed on cap.nebraska.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1551,18 +1610,20 @@
       "sourceUrl": "https://dhhs.ne.gov/Medicaid%20SUA/SUA-21-PI-02%20Home%20Delivered%20Meals.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024714619",
             "18006771116"
           ],
-          "to": "4022231376",
-          "source": "https://dhhs.ne.gov/pages/aging.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(402) 471-9147",
+          "source": "https://cap.nebraska.gov/agencies/1039",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1855,7 +1916,7 @@
       "contacts": [
         {
           "label": "National Able",
-          "phone": null,
+          "phone": "(855) 994-8300",
           "description": "Primary SCSEP provider in Nebraska",
           "hours": "Contact via website for local office hours"
         },
@@ -1914,23 +1975,26 @@
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": "2-1-1",
+      "phone": "(855) 994-8300",
       "sourceUrl": "https://www.nationalable.org/wp-content/uploads/2020/02/SCSEP_NebraskaHandbook_013120.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "5314278229",
-          "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(855) 994-8300",
+          "source": "https://www.nationalable.org/scsep/",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "legal-services-seniors-aaa",
@@ -2508,6 +2572,12 @@
           "phone": "2-1-1",
           "description": "Free helpline for all social services and local aging resources",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(402) 471-2307",
+          "description": "Number listed on dhhs.ne.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2570,18 +2640,20 @@
       "sourceUrl": "https://dhhs.ne.gov/pages/aging.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024714270",
             "211"
           ],
-          "to": "4024712307",
-          "source": "https://dhhs.ne.gov/pages/aging.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(402) 471-2307",
+          "source": "https://dhhs.ne.gov/Pages/Aging.aspx",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2890,26 +2962,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-31",
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 2000,
-          "to": 4000,
-          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 3000,
-          "to": 6000,
-          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ssad-aged-disabled-services",
@@ -3003,7 +3056,7 @@
       "contacts": [
         {
           "label": "Nebraska DHHS Local Offices",
-          "phone": null,
+          "phone": "(402) 471-3121",
           "description": "Contact your local DHHS office for SSAD applications and information",
           "hours": "Varies by location, search dhhs.ne.gov for local contacts"
         },
@@ -3071,24 +3124,254 @@
         "visualTone": "editorial"
       },
       "icon": "HandHeart",
-      "phone": null,
+      "phone": "(402) 471-3121",
       "sourceUrl": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "4024713121",
+          "to": "(402) 471-3121",
           "source": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
+    },
+    {
+      "id": "ne-family-caregiver-support-program",
+      "name": "Nebraska Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are caring unpaid for an aging parent or relative in Nebraska, this program can arrange respite breaks, care coordination, and practical support so you can keep caregiving without burning out.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Eastern Nebraska Office on Aging (ENOA) caregiver support program",
+            "type": "service-area"
+          },
+          {
+            "name": "Northeast Nebraska Area Agency on Aging caregiver support program",
+            "type": "service-area"
+          },
+          {
+            "name": "Other local Area Agencies on Aging across Nebraska administering the statewide caregiver support network",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are an adult family member caring unpaid for a parent or relative age 60 or older in Nebraska, this program exists specifically for you. It is not designed for the person you are caring for; it is designed to keep you from reaching the point where you cannot continue. The services it can arrange include scheduled respite care (paid time off from caregiving), a care manager who coordinates services, caregiver training and counseling, and limited supplemental supports such as transportation or minor home modifications.\n\nThe program has two main tracks. The first covers caregivers of adults age 60 or older and caregivers of people with Alzheimer's disease or a related dementia at any age. The second covers grandparents or older relatives age 55 or older who are raising a child under 18 or an adult age 18 to 59 with disabilities. You apply through your local Area Agency on Aging, not through a single statewide office, so the specific services available and how long you wait depend on where you live in Nebraska.\n\nThis is a service-based program, not a cash grant. The program does not write you a check; instead, a care manager works with you to identify what supports would help you stay in the caregiving role and then arranges or authorizes those services case by case. Financial screening may apply to some service tracks, particularly for respite care, but the caregiver does not face a simple income test across the board. Because eligibility rules differ by service type and local office, the most direct path forward is contacting your regional Area Agency on Aging to find out exactly what is available where you live.",
+      "savingsRange": "",
+      "savingsSource": "Free service: the program provides coordinated supports rather than cash payments. No statewide dollar cap or standard benefit amount was identified in Nebraska DHHS materials reviewed.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Caregiver must be an unpaid adult age 18 or older",
+          "Care recipient must be age 60+ or have Alzheimer's/related dementia (primary track)",
+          "Grandparent/relative track: caregiver age 55+, caring for a child under 18 or an adult age 18-59 with disabilities",
+          "For some respite services: household resources below $35,000 (single) or $50,000 (two or more)",
+          "Caregiving must be unpaid and provided in a non-institutional home setting"
+        ],
+        "ageRequirement": "18+ (caregiver); 55+ for grandparent/relative track",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 35000,
+          "couple": 50000,
+          "countedAssets": [
+            "Financial resources reviewed during eligibility for respite services; specific asset categories counted are not publicly detailed in reviewed sources"
+          ],
+          "exemptAssets": [
+            "Specific asset exemptions are not detailed in reviewed Nebraska DHHS sources; contact your local Area Agency on Aging for the full list"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Caregiving must be unpaid and informal, not paid employment",
+          "Care must be provided in a non-institutional setting, either in the caregiver's home or the care recipient's home",
+          "For respite eligibility, the caregiver must live in the same home as the care recipient or provide care there for at least 4 hours per day, 7 days per week",
+          "The care recipient must have special needs requiring ongoing assistance",
+          "For some respite service tracks, the care recipient's gross income minus allowable exclusions must be at or below 312% of the federal poverty level, adjusted for family size"
+        ],
+        "povertyLevelReference": "312% FPL (for some respite service tracks, applied to the care recipient's income)"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Contact your local Area Agency on Aging by phone or in person to start a caregiver assessment; there is no single statewide application form or phone number.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your local Area Agency on Aging",
+            "description": "Go to https://dhhs.ne.gov/Pages/Respite.aspx and use the contact information listed there to identify the Area Agency on Aging serving your county. Nebraska is divided into regional agencies, and yours is the only office that can start your application. If you cannot find the right office online, call 2-1-1 (Nebraska's statewide information line) and ask to be connected to your regional Area Agency on Aging."
+          },
+          {
+            "step": 2,
+            "title": "Call or visit your regional Area Agency on Aging",
+            "description": "Contact the office directly by phone or in person. Tell them you are an unpaid caregiver and want to apply for the Nebraska Family Caregiver Support Program. They will confirm which track applies to your situation: the older adult/Alzheimer's track or the grandparent/relative caregiver track. Ask at this point whether there is a current waitlist for respite or supplemental services in your area."
+          },
+          {
+            "step": 3,
+            "title": "Complete a caregiver assessment with a care manager",
+            "description": "Your local office will schedule a comprehensive assessment with a care manager. The care manager reviews the care recipient's age, diagnosis, and functional needs, your caregiving situation, and, for some service types, your household income and resources. Gather the documents listed on this page before the assessment to avoid delays."
+          },
+          {
+            "step": 4,
+            "title": "Receive a service plan",
+            "description": "Based on the assessment, the care manager develops a plan that may include respite care, care coordination, caregiver training, counseling, and limited supplemental supports such as transportation or home modifications. Each service is approved individually. Not every service is available in every region, so ask specifically what is funded in your area."
+          },
+          {
+            "step": 5,
+            "title": "Services begin; plan is reviewed over time",
+            "description": "Once approved, services are arranged through local providers. Your plan will be reviewed periodically. If your caregiving situation changes, contact your care manager promptly so the plan can be updated."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Processing depends on local staffing and how long the assessment takes to schedule and complete. Ask your Area Agency on Aging for a realistic timeline when you call.",
+        "waitlist": "No statewide waitlist policy is published. Because services are locally administered and funding is limited, wait times vary by region and service type. Ask your local Area Agency on Aging directly whether there is a current waitlist for the specific services you need.",
+        "tip": "When you call, ask two specific questions: Which track do I qualify for, and is there a waitlist for respite care in my county? The answers will tell you how quickly you can expect help and whether you need to explore other interim options.",
+        "urls": [
+          {
+            "label": "Nebraska DHHS Respite and Caregiver Support Page",
+            "url": "https://dhhs.ne.gov/Pages/Respite.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Care recipient's proof of age (birth certificate, Medicare card, or state-issued ID showing date of birth)",
+        "Your own photo ID showing you are age 18 or older (or 55 or older if applying under the grandparent/relative track)",
+        "Documentation of the care recipient's diagnosis or condition (doctor's letter, diagnosis records, or Alzheimer's/dementia documentation if applicable)",
+        "Proof of your relationship to the care recipient (such as a birth certificate, marriage certificate, or adoption documents showing family connection)",
+        "Household income information for the care recipient if financial screening applies to your service track (Social Security award letter, pension statements, or other income documentation)",
+        "Household resource information if financial screening applies (current balances for checking, savings, or other financial accounts; the specific documentation the local office requires will be confirmed during the assessment)",
+        "Names, dates of birth, and relationship information for all adults and children related by blood, marriage, or adoption living in the household",
+        "For the grandparent/relative track: documentation showing the child is under 18 or that the adult is age 18 to 59 with a disability"
+      ],
+      "contacts": [
+        {
+          "label": "Eastern Nebraska Office on Aging (ENOA) Caregiver Support",
+          "phone": "(402) 444-6536",
+          "description": "Serves Douglas, Sarpy, and surrounding counties in eastern Nebraska. Call to start a caregiver support assessment or ask about available services in your area.",
+          "hours": "Mon-Fri, business hours; call to confirm current hours"
+        },
+        {
+          "label": "Nebraska DHHS Respite and Caregiver Support (State Office)",
+          "phone": "(402) 471-2307",
+          "description": "Nebraska DHHS state aging services line. Can direct you to the correct local Area Agency on Aging if you are unsure which regional office serves your county.",
+          "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Nebraska 2-1-1",
+          "phone": "2-1-1",
+          "description": "Statewide information and referral line. Can connect you to your regional Area Agency on Aging if you cannot reach the offices above directly. This line does not administer the program itself.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Financial screening does not apply uniformly to all services. Some components, particularly respite care, involve a review of the care recipient's income and household resources. Other caregiver support services may not require financial documentation at all. Ask your Area Agency on Aging at the first call which services require financial screening for your specific situation.",
+        "Services and wait times differ by county. What is available in Omaha or Lincoln may not be available or may have a longer wait in more rural parts of Nebraska. If you are on a waitlist for respite, ask your care manager about any bridge options while you wait.",
+        "If the person you care for has Alzheimer's disease or a related dementia, they may qualify for caregiver support services regardless of their age. This is a separate basis for eligibility from the general age-60-or-older requirement.",
+        "If you are a grandparent or older relative age 55 or older who is the primary caregiver for a grandchild or a young adult with disabilities, make sure you tell the Area Agency on Aging this at the first call. The service plan and eligibility criteria differ from the older-adult caregiver track."
+      ],
+      "relatedPrograms": [
+        "Nebraska Medicaid Home and Community-Based Services (HCBS) Waivers",
+        "Nebraska Lifespan Respite Network",
+        "Older Americans Act Title III-B Supportive Services (delivered through local Area Agencies on Aging)",
+        "Nebraska Alzheimer's Disease Program"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This program is for you, not just for your parent.",
+          "body": "Most government programs for aging adults focus on the person receiving care. This program is specifically designed for the caregiver. If you are not holding up, the caregiving relationship breaks down. The goal of this program is to give you scheduled breaks, practical training, and coordinated support before you reach a crisis point."
+        },
+        {
+          "type": "prose",
+          "title": "Which track applies to your situation",
+          "body": "There are two main eligibility tracks.\n\nTrack 1 covers you if you are an unpaid adult family member or informal caregiver (age 18 or older) caring for someone who is either age 60 or older, or who has Alzheimer's disease or a related dementia at any age.\n\nTrack 2 covers you if you are age 55 or older and are the primary caregiver for a grandchild or other relative under age 18, or for an adult age 18 to 59 who has a disability.\n\nThe services available under each track overlap significantly, but the care manager will confirm which track applies before beginning the assessment. If your situation could fit either track, mention that when you call."
+        },
+        {
+          "type": "prose",
+          "title": "What the program actually provides",
+          "body": "The program does not write checks to caregivers. Instead, a care manager works with you to identify which of the following supports would help you continue caregiving, then arranges or authorizes them case by case:\n\nRespite care: Scheduled time away from caregiving, with a paid substitute caregiver covering for you. This is the most commonly requested service. For some respite services, the care recipient's income and household resources are reviewed to determine eligibility.\n\nCare management: A care manager helps coordinate your parent's services across providers so you are not doing that coordination alone.\n\nEducation and training: Classes or materials to help you manage specific caregiving tasks, including dementia care techniques, medication management, and stress reduction.\n\nCounseling and support: Individual or group counseling to help you manage the emotional demands of caregiving.\n\nSupplemental services: Limited practical supports that help you maintain the caregiving role, such as transportation assistance or minor home modifications. These are approved case by case and depend on local funding availability.\n\nNot every service is available in every county. Ask your Area Agency on Aging which specific services are funded in your area before the assessment."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent does not have a diagnosis yet. Can I still apply?",
+          "answer": "You can contact your Area Agency on Aging now and describe the situation. The eligibility requirement for the primary track is that the care recipient is age 60 or older or has Alzheimer's or a related dementia. If your parent is 60 or older, age alone may be enough to qualify regardless of a formal diagnosis. If age is not the basis, a formal diagnosis will likely be required for the Alzheimer's/dementia track. Ask your care manager what documentation they need at the assessment."
+        },
+        {
+          "question": "Does the program check my income or my parent's income?",
+          "answer": "There is no single income test that applies uniformly to all services under this program. For certain respite services, Nebraska reviews the care recipient's income (not the caregiver's income directly) and household resources. The income threshold for some respite services is 312% of the federal poverty level for the care recipient, and household resources above $35,000 for a single person or $50,000 for two or more people can affect eligibility for those specific services. For other caregiver support components, financial screening may not apply at all. Your care manager will tell you during the assessment which services require financial documentation for your situation."
+        },
+        {
+          "question": "Is there a waitlist? How long is it?",
+          "answer": "There is no statewide waitlist policy, and Nebraska DHHS does not publish a standard wait time. Because services are administered locally by Area Agencies on Aging, wait times depend entirely on regional funding, provider capacity, and current demand in your county. Some areas may have immediate availability; others may have a wait for respite specifically. Ask your Area Agency on Aging directly when you call: 'Is there a current waitlist for respite care in my county?' That is the only way to get an accurate answer for your location."
+        },
+        {
+          "question": "Can I apply for this program and Nebraska Medicaid HCBS waivers at the same time?",
+          "answer": "Yes. This program and Nebraska Medicaid's home and community-based services waivers serve different purposes and can be pursued simultaneously. This program supports the caregiver. Medicaid HCBS waivers provide services directly to the person who needs care. Your Area Agency on Aging care manager can help you identify whether your parent may also qualify for Medicaid waiver services and can often assist with that coordination."
+        },
+        {
+          "question": "What if my situation changes after I am enrolled?",
+          "answer": "Contact your care manager as soon as circumstances change. Your service plan is not permanent; it is reviewed periodically and can be updated. Changes that should prompt an immediate call include a hospitalization, a significant change in your parent's condition, a change in household composition, or a change in your own ability to provide care. Waiting until your scheduled review could delay getting the additional support you need."
+        },
+        {
+          "question": "I am a grandparent raising a grandchild. Is this program for me too?",
+          "answer": "Yes, if you are age 55 or older and are the primary caregiver for a grandchild under age 18, or for an adult grandchild or relative age 18 to 59 with a disability, you fall under the grandparent and older relative caregiver track. Tell the Area Agency on Aging this at your first call so they route you to the correct track and service options. The services available are similar to the older-adult track but the eligibility criteria differ."
+        },
+        {
+          "question": "My parent lives in a different county than I do. Which office do I contact?",
+          "answer": "For most service eligibility purposes, the relevant county is where the care is being provided, typically where your parent lives. Contact the Area Agency on Aging serving your parent's county to start the application. You can find the correct regional office through the Nebraska DHHS page at https://dhhs.ne.gov/Pages/Respite.aspx or by calling 2-1-1 and asking to be connected to the Area Agency on Aging for your parent's county."
+        },
+        {
+          "question": "Can someone else apply on my behalf if I am overwhelmed right now?",
+          "answer": "You can have a trusted family member or friend make the initial call to the Area Agency on Aging on your behalf to gather information and schedule the assessment. However, because you are the caregiver applying for support, you will likely need to participate in the actual assessment conversation with the care manager. Ask the Area Agency on Aging at the first call whether a family representative can accompany you or act on your behalf during the assessment process."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "(402) 471-2307",
+      "sourceUrl": "https://dhhs.ne.gov/Pages/Respite.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://respite.ne.gov/paying-respite",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8448436364",
+          "source": "https://dhhs.ne.gov/Pages/Aging-and-Disability-Resource-Center.aspx",
+          "reason": "page also lists ours ((402) 471-2307)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -3173,5 +3456,5 @@
     ],
     "resourcesVsBenefits": "Nebraska's programs fall into two categories: benefits that require qualification (like SNAP food assistance or Medicaid home care waivers based on income and medical need) and free resources available to all seniors regardless of income (like Nebraska SHIP Medicare counseling, Legal Services for Seniors, and Long-Term Care Ombudsman advocacy). Start with free resources to get expert guidance, then apply for qualified benefits your loved one may be eligible for."
   },
-  "factcheckedAt": "2026-10-02T07:41:52.600Z"
+  "factcheckedAt": "2026-10-06T12:25:17.317Z"
 }

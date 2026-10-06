@@ -1,0 +1,771 @@
+{
+  "state": "ND",
+  "addedAt": "2026-10-06T05:35:54.938Z",
+  "dive": {
+    "state": "ND",
+    "stateName": "North Dakota",
+    "diveAt": "2026-10-06T05:28:15.132Z",
+    "total": 6,
+    "parsed": 6,
+    "programs": [
+      {
+        "name": "Aged, Blind and Disabled (ABD) Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "North Dakota’s ABD Medicaid is for people who are age 65+, blind, or disabled under Social Security standards. Income is assessed monthly and must be within the state’s Medicaid income standard for the family size; North Dakota’s published ABD income levels are updated periodically. One state source says the decision is based on whether monthly income is within the current Medicaid income levels, and another indicates a 45-day decision timeline for applications. The search results do not provide a complete official 2026 household-size table from the state page itself, but a 2026 summary of North Dakota’s ABD levels reported $1,197/month for one person, $1,623 for two, $2,049 for three, and $2,475 for four, plus $426 for each additional person, effective April 1, 2026.",
+            "table": [
+              {
+                "household_size": 1,
+                "monthly_income_limit": "$1,197"
+              },
+              {
+                "household_size": 2,
+                "monthly_income_limit": "$1,623"
+              },
+              {
+                "household_size": 3,
+                "monthly_income_limit": "$2,049"
+              },
+              {
+                "household_size": 4,
+                "monthly_income_limit": "$2,475"
+              },
+              {
+                "household_size": "each additional person",
+                "monthly_income_limit": "+$426"
+              }
+            ],
+            "note": "North Dakota Medicaid eligibility pages state that income levels change each year and that applicants must meet the monthly income level for their family size."
+          },
+          "asset_limits": {
+            "summary": "Countable assets must be below the North Dakota Medicaid limit for aged, blind, or disabled applicants.",
+            "limits": {
+              "single_person": "$3,000",
+              "couple": "$6,000",
+              "additional_person": "+$25 per member of the unit above two"
+            },
+            "what_counts": [
+              "checking and savings accounts",
+              "certificates of deposit",
+              "stocks",
+              "bonds",
+              "other countable assets"
+            ],
+            "what_is_exempt": [
+              "The search results confirm some assets are excluded, but do not provide a full official exemption list on the retrieved pages.",
+              "For a complete exemption list, the North Dakota Medicaid policy manual is referenced in the search results."
+            ]
+          },
+          "other_requirements": [
+            "Must be a resident of North Dakota",
+            "Must be a U.S. citizen or qualified noncitizen",
+            "Must be age 65 or older, blind, or disabled using Social Security Administration standards",
+            "Must be within the state’s monthly income standard",
+            "Must have countable assets below the state limit",
+            "Proof of assets is required for people who are blind, disabled, or age 65 and older"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "ABD Medicaid provides Medicaid health coverage; the retrieved state sources do not list a dollar value, hour cap, or single fixed benefit package for all members. The program is the gateway to Medicaid coverage for older adults and people who are blind or disabled, and can also be the eligibility basis for related support such as Basic Care Assistance Program (BCAP).",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: North Dakota HHS self-service portal at the state's Medicaid application page",
+            "Paper form: Health Care Application for the Elderly and Disabled (SFN 958)",
+            "Mail: request and submit a paper application through the Customer Support Center or local human service zone office",
+            "Phone: Customer Support Center at (866) 614-6005 or 701-328-1000; 711 (TTY)",
+            "In person: human service zone office"
+          ],
+          "processing_time": "A decision is made within 45 days from the date the local Human Service Zone office or the Medical Services Division receives a paper or online application with electronic signature.",
+          "waitlist": null,
+          "forms": [
+            "Health Care Application for the Elderly and Disabled (SFN 958)",
+            "Application for Assistance for Medicaid (health care) coverage"
+          ],
+          "documents": [
+            "Proof of monthly income (pay stubs, tax return if self-employed, pension, disability payments, etc.)",
+            "Proof of assets (checking and savings statements, certificates of deposit, etc.)",
+            "Identity and residency documentation as needed for eligibility verification",
+            "Citizenship or qualified noncitizen documentation as needed",
+            "Any disability or blindness verification if not already clear from Social Security or program records"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide North Dakota Medicaid eligibility; no county-only restriction was identified in the retrieved sources.",
+          "regional_variations": "The core eligibility rules are statewide. Application handling is through local human service zone offices, so practical differences may show up in office access and local processing logistics rather than eligibility rules.",
+          "offices_or_providers": [
+            "North Dakota Human Service Zone offices",
+            "North Dakota Health and Human Services Customer Support Center"
+          ]
+        },
+        "official_source": "https://www.hhs.nd.gov/healthcare/medicaid",
+        "gotchas": [
+          "ABD Medicaid in North Dakota is not just age-based; applicants must also meet asset rules and monthly income rules.",
+          "Assets matter for people who are blind, disabled, or age 65 and older, even if they are not usually emphasized in expansion Medicaid programs.",
+          "The program uses a separate elderly/disabled paper application path (SFN 958), not just the general Medicaid application.",
+          "A Medicaid application and a service application can both be part of the process for related long-term-care-like services under state rules.",
+          "The state’s income standards change over time, so families should verify the current table before applying.",
+          "Proof of assets is specifically required for elderly, blind, or disabled applicants.",
+          "Basic Care Assistance Program coverage depends on first qualifying for North Dakota Medicaid, so ABD Medicaid is often the gatekeeper."
+        ],
+        "data_shape_notes": "This program is statewide and eligibility is shaped by age/disability status plus both income and asset tests. The main data structure is not household-based benefit scaling; it is a categorical Medicaid eligibility program with separate elderly/disabled application routing and a 45-day decision clock.",
+        "_raw": "{\n  \"name\": \"Aged, Blind and Disabled (ABD) Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"North Dakota’s ABD Medicaid is for people who are age 65+, blind, or disabled under Social Security standards. Income is assessed monthly and must be within the state’s Medicaid income standard for the family size; North Dakota’s published ABD income levels are updated periodically. One state source says the decision is based on whether monthly income is within the current Medicaid income levels, and another indicates a 45-day decision timeline for applications. The search results do not provide a complete official 2026 household-size table from the state page itself, but a 2026 summary of North Dakota’s ABD levels reported $1,197/month for one person, $1,623 for two, $2,049 for three, and $2,475 for four, plus $426 for each additional person, effective April 1, 2026.\",\n      \"table\": [\n        {\n          \"household_size\": 1,\n          \"monthly_income_limit\": \"$1,197\"\n        },\n        {\n          \"household_size\": 2,\n          \"monthly_income_limit\": \"$1,623\"\n        },\n        {\n          \"household_size\": 3,\n          \"monthly_income_limit\": \"$2,049\"\n        },\n        {\n          \"household_size\": 4,\n          \"monthly_income_limit\": \"$2,475\"\n        },\n        {\n          \"household_size\": \"each additional person\",\n          \"monthly_income_limit\": \"+$426\"\n        }\n      ],\n      \"note\": \"North Dakota Medicaid eligibility pages state that income levels change each year and that applicants must meet the monthly income level for their family size.\"\n    },\n    \"asset_limits\": {\n      \"summary\": \"Countable assets must be below the North Dakota Medicaid limit for aged, blind, or disabled applicants.\",\n      \"limits\": {\n        \"single_person\": \"$3,000\",\n        \"couple\": \"$6,000\",\n        \"additional_person\": \"+$25 per member of the unit above two\"\n      },\n      \"what_counts\": [\n        \"checking and savings accounts\",\n        \"certificates of deposit\",\n        \"stocks\",\n        \"bonds\",\n        \"other countable assets\"\n      ],\n      \"what_is_exempt\": [\n        \"The search results confirm some assets are excluded, but do not provide a full official exemption list on the retrieved pages.\",\n        \"For a complete exemption list, the North Dakota Medicaid policy manual is referenced in the search results.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a resident of North Dakota\",\n      \"Must be a U.S. citizen or qualified noncitizen\",\n      \"Must be age 65 or older, blind, or disabled using Social Security Administration standards\",\n      \"Must be within the state’s monthly income standard\",\n      \"Must have countable assets below the state limit\",\n      \"Proof of assets is required for people who are blind, disabled, or age 65 and older\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"ABD Medicaid provides Medicaid health coverage; the retrieved state sources do not list a dollar value, hour cap, or single fixed benefit package for all members. The program is the gateway to Medicaid coverage for older adults and people who are blind or disabled, and can also be the eligibility basis for related support such as Basic Care Assistance Program (BCAP).\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: North Dakota HHS self-service portal at the state's Medicaid application page\",\n      \"Paper form: Health Care Application for the Elderly and Disabled (SFN 958)\",\n      \"Mail: request and submit a paper application through the Customer Support Center or local human service zone office\",\n      \"Phone: Customer Support Center at (866) 614-6005 or 701-328-1000; 711 (TTY)\",\n      \"In person: human service zone office\"\n    ],\n    \"processing_time\": \"A decision is made within 45 days from the date the local Human Service Zone office or the Medical Services Division receives a paper or online application with electronic signature.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Health Care Application for the Elderly and Disabled (SFN 958)\",\n      \"Application for Assistance for Medicaid (health care) coverage\"\n    ],\n    \"documents\": [\n      \"Proof of monthly income (pay stubs, tax return if self-employed, pension, disability payments, etc.)\",\n      \"Proof of assets (checking and savings statements, certificates of deposit, etc.)\",\n      \"Identity and residency documentation as needed for eligibility verification\",\n      \"Citizenship or qualified noncitizen documentation as needed\",\n      \"Any disability or blindness verification if not already clear from Social Security or program records\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide North Dakota Medicaid eligibility; no county-only restriction was identified in the retrieved sources.\",\n    \"regional_variations\": \"The core eligibility rules are statewide. Application handling is through local human service zone offices, so practical differences may show up in office access and local processing logistics rather than eligibility rules.\",\n    \"offices_or_providers\": [\n      \"North Dakota Human Service Zone offices\",\n      \"North Dakota Health and Human Services Customer Support Center\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.nd.gov/healthcare/medicaid\",\n  \"gotchas\": [\n    \"ABD Medicaid in North Dakota is not just age-based; applicants must also meet asset rules and monthly income rules.\",\n    \"Assets matter for people who are blind, disabled, or age 65 and older, even if they are not usually emphasized in expansion Medicaid programs.\",\n    \"The program uses a separate elderly/disabled paper application path (SFN 958), not just the general Medicaid application.\",\n    \"A Medicaid application and a service application can both be part of the process for related long-term-care-like services under state rules.\",\n    \"The state’s income standards change over time, so families should verify the current table before applying.\",\n    \"Proof of assets is specifically required for elderly, blind, or disabled applicants.\",\n    \"Basic Care Assistance Program coverage depends on first qualifying for North Dakota Medicaid, so ABD Medicaid is often the gatekeeper.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide and eligibility is shaped by age/disability status plus both income and asset tests. The main data structure is not household-based benefit scaling; it is a categorical Medicaid eligibility program with separate elderly/disabled application routing and a 45-day decision clock.\"\n}"
+      },
+      {
+        "name": "Home and Community-Based Services (HCBS) Waiver",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "No separate waiver income table was found in the official HCBS waiver materials. The program is Medicaid-based, so financial eligibility follows North Dakota Medicaid rules rather than a stand-alone waiver income schedule. The waiver is for people who are on ND Medicaid, are age 65 or older, or are age 18-64 with a physical disability, and meet a nursing facility level of care but choose to receive services in the community.[5][13]",
+          "asset_limits": "No waiver-specific asset table was found in the official waiver pages reviewed. Asset and income treatment follow Medicaid eligibility rules for North Dakota rather than a separate HCBS-only standard.[5][13]",
+          "other_requirements": [
+            "Must be enrolled in North Dakota Medicaid.[5]",
+            "Must be age 65 or older, or age 18-64 with a physical disability based on Social Security Administration guidelines.[1][5]",
+            "Must meet nursing facility level of care screening.[1][5]",
+            "Must choose to receive services in the community instead of in a nursing facility.[1][5]",
+            "For the waiver application, the person must meet the waiver's target group for aged or disabled individuals; once someone turns 65, they are considered aged and remain eligible if all other criteria are met.[1]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "This waiver covers long-term services and supports that help an eligible person stay at home or in the community instead of entering a nursing facility. Specific services listed in official North Dakota materials include help with bathing, showering, toileting, dressing, transferring, taking medications, respite care, daily supportive services, housekeeping, laundry, meal preparation, rides to nonmedical destinations such as the grocery store or pharmacy, adult day care, adult residential care, HCBS care coordination, homemaker services, residential habilitation, supported employment, waiver personal care, adult foster care, chore services, community support services, community transition services, companionship services, emergency response, environmental modification, extended personal care, family personal care, home delivered meals, non-medical transportation, specialized equipment and supplies, supervision, and transitional living services.[5][8][13]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Call Aging and Disability Resource-LINK at 1-855-462-5465.[4][13]",
+            "Call North Dakota HCBS contacts at (701) 328-8930 or toll free (800) 755-8529.[9]",
+            "Apply through the North Dakota Department of Health and Human Services HCBS / Medicaid waivers pages online.[2][9][13]",
+            "Contact the local Human Service Zone for a paper application or in-person help.[12]",
+            "Use the North Dakota Navigators program for free application assistance at 1-800-233-1737.[12]"
+          ],
+          "processing_time": "No official statewide processing-time guarantee was found in the sources reviewed.",
+          "waitlist": "The official materials reviewed do not give a statewide waitlist length for the aged/disabled HCBS waiver. Eligibility is based on Medicaid, level-of-care, and service need; wait or access constraints may depend on local administration and available slots, but a specific queue length was not published in the sources reviewed.[1][5][13]",
+          "forms": [
+            "Health Care Application for the Elderly and Disabled (referenced by North Dakota waiver guidance).[12]",
+            "Application for 1915(c) HCBS Waiver: ND.0273.R06.07 (the state waiver application document).[1]"
+          ],
+          "documents": [
+            "Proof of age or disability status.",
+            "Medicaid information or proof of North Dakota Medicaid coverage.",
+            "Medical records or functional information showing nursing facility level of care.",
+            "Income and resource information for Medicaid eligibility review.",
+            "Identification and contact information.",
+            "Any current care plan, caregiver information, or list of in-home supports.",
+            "Information about the person’s current living arrangement and service needs."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide North Dakota program administered through the state Medicaid/Human Services system; eligibility is not limited to a single county in the sources reviewed.[5][13]",
+          "regional_variations": "The service itself is statewide, but application help, case management, providers, and local access can vary by Human Service Zone and local provider availability. The sources reviewed do not publish county-by-county wait times, but local office contacts and provider networks differ by region.[9][12][13]",
+          "offices_or_providers": [
+            "North Dakota Department of Health and Human Services, Adult and Aging Services, 1237 W. Divide Ave., Suite 6, Bismarck, ND 58501.[13]",
+            "Aging and Disability Resource-LINK.[13]",
+            "Local Human Service Zone offices.[12]"
+          ]
+        },
+        "official_source": "https://www.hhs.nd.gov/adults-and-aging/homecare",
+        "gotchas": [
+          "This is not a cash benefit; it is a package of services that helps someone avoid nursing facility placement.[5][13]",
+          "Being financially eligible for Medicaid is not enough by itself; the person also must meet nursing facility level of care and choose community-based services.[1][5]",
+          "Turning 65 changes how the person is categorized, but it does not automatically make them eligible without the other waiver criteria.[1]",
+          "Families often miss that application help can come from the Aging and Disability Resource-LINK, local Human Service Zone offices, or North Dakota Navigators—not only from the state office.[4][9][12][13]",
+          "The exact mix of supports can be individualized, so two people in the same waiver may receive very different services depending on need assessment and care planning.[5][8]"
+        ],
+        "data_shape_notes": "This program is a statewide Medicaid waiver with medical/functional eligibility, not a household-size benefit table program. The core structure is: Medicaid eligibility + age/disability category + nursing-facility level of care + community placement choice, then an individualized service package.[1][5][13]",
+        "_raw": "{\n  \"name\": \"Home and Community-Based Services (HCBS) Waiver\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"No separate waiver income table was found in the official HCBS waiver materials. The program is Medicaid-based, so financial eligibility follows North Dakota Medicaid rules rather than a stand-alone waiver income schedule. The waiver is for people who are on ND Medicaid, are age 65 or older, or are age 18-64 with a physical disability, and meet a nursing facility level of care but choose to receive services in the community.[5][13]\",\n    \"asset_limits\": \"No waiver-specific asset table was found in the official waiver pages reviewed. Asset and income treatment follow Medicaid eligibility rules for North Dakota rather than a separate HCBS-only standard.[5][13]\",\n    \"other_requirements\": [\n      \"Must be enrolled in North Dakota Medicaid.[5]\",\n      \"Must be age 65 or older, or age 18-64 with a physical disability based on Social Security Administration guidelines.[1][5]\",\n      \"Must meet nursing facility level of care screening.[1][5]\",\n      \"Must choose to receive services in the community instead of in a nursing facility.[1][5]\",\n      \"For the waiver application, the person must meet the waiver's target group for aged or disabled individuals; once someone turns 65, they are considered aged and remain eligible if all other criteria are met.[1]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"This waiver covers long-term services and supports that help an eligible person stay at home or in the community instead of entering a nursing facility. Specific services listed in official North Dakota materials include help with bathing, showering, toileting, dressing, transferring, taking medications, respite care, daily supportive services, housekeeping, laundry, meal preparation, rides to nonmedical destinations such as the grocery store or pharmacy, adult day care, adult residential care, HCBS care coordination, homemaker services, residential habilitation, supported employment, waiver personal care, adult foster care, chore services, community support services, community transition services, companionship services, emergency response, environmental modification, extended personal care, family personal care, home delivered meals, non-medical transportation, specialized equipment and supplies, supervision, and transitional living services.[5][8][13]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call Aging and Disability Resource-LINK at 1-855-462-5465.[4][13]\",\n      \"Call North Dakota HCBS contacts at (701) 328-8930 or toll free (800) 755-8529.[9]\",\n      \"Apply through the North Dakota Department of Health and Human Services HCBS / Medicaid waivers pages online.[2][9][13]\",\n      \"Contact the local Human Service Zone for a paper application or in-person help.[12]\",\n      \"Use the North Dakota Navigators program for free application assistance at 1-800-233-1737.[12]\"\n    ],\n    \"processing_time\": \"No official statewide processing-time guarantee was found in the sources reviewed.\",\n    \"waitlist\": \"The official materials reviewed do not give a statewide waitlist length for the aged/disabled HCBS waiver. Eligibility is based on Medicaid, level-of-care, and service need; wait or access constraints may depend on local administration and available slots, but a specific queue length was not published in the sources reviewed.[1][5][13]\",\n    \"forms\": [\n      \"Health Care Application for the Elderly and Disabled (referenced by North Dakota waiver guidance).[12]\",\n      \"Application for 1915(c) HCBS Waiver: ND.0273.R06.07 (the state waiver application document).[1]\"\n    ],\n    \"documents\": [\n      \"Proof of age or disability status.\",\n      \"Medicaid information or proof of North Dakota Medicaid coverage.\",\n      \"Medical records or functional information showing nursing facility level of care.\",\n      \"Income and resource information for Medicaid eligibility review.\",\n      \"Identification and contact information.\",\n      \"Any current care plan, caregiver information, or list of in-home supports.\",\n      \"Information about the person’s current living arrangement and service needs.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide North Dakota program administered through the state Medicaid/Human Services system; eligibility is not limited to a single county in the sources reviewed.[5][13]\",\n    \"regional_variations\": \"The service itself is statewide, but application help, case management, providers, and local access can vary by Human Service Zone and local provider availability. The sources reviewed do not publish county-by-county wait times, but local office contacts and provider networks differ by region.[9][12][13]\",\n    \"offices_or_providers\": [\n      \"North Dakota Department of Health and Human Services, Adult and Aging Services, 1237 W. Divide Ave., Suite 6, Bismarck, ND 58501.[13]\",\n      \"Aging and Disability Resource-LINK.[13]\",\n      \"Local Human Service Zone offices.[12]\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.nd.gov/adults-and-aging/homecare\",\n  \"gotchas\": [\n    \"This is not a cash benefit; it is a package of services that helps someone avoid nursing facility placement.[5][13]\",\n    \"Being financially eligible for Medicaid is not enough by itself; the person also must meet nursing facility level of care and choose community-based services.[1][5]\",\n    \"Turning 65 changes how the person is categorized, but it does not automatically make them eligible without the other waiver criteria.[1]\",\n    \"Families often miss that application help can come from the Aging and Disability Resource-LINK, local Human Service Zone offices, or North Dakota Navigators—not only from the state office.[4][9][12][13]\",\n    \"The exact mix of supports can be individualized, so two people in the same waiver may receive very different services depending on need assessment and care planning.[5][8]\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Medicaid waiver with medical/functional eligibility, not a household-size benefit table program. The core structure is: Medicaid eligibility + age/disability category + nursing-facility level of care + community placement choice, then an individualized service package.[1][5][13]\"\n}"
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "eligibility": {
+          "age": null,
+          "income_limits": {
+            "summary": "North Dakota uses monthly income limits for Medicare Savings Programs, with separate tiers for QMB, SLMB, and QI. The state source shows a Medicare Savings Program income limit table of $1,816 for a single person and $2,455 for a couple, and North Dakota materials indicate the program uses the federal MSP tiers under those caps.[1][4][9]",
+            "tier_table": [
+              {
+                "tier": "QMB (Qualified Medicare Beneficiary)",
+                "single_monthly_income": "Up to $1,350",
+                "couple_monthly_income": "Up to $1,824",
+                "what_it_covers": "Pays Medicare Part A and Part B premiums and Medicare cost-sharing.",
+                "source_basis": "North Dakota 2026 MSP guidance summarized in search results.[9]"
+              },
+              {
+                "tier": "SLMB (Specified Low-Income Medicare Beneficiary)",
+                "single_monthly_income": "Over $1,350 up to $1,616",
+                "couple_monthly_income": "Over $1,824 up to $2,184",
+                "what_it_covers": "Pays the Medicare Part B premium only.",
+                "source_basis": "North Dakota 2026 MSP guidance summarized in search results.[9]"
+              },
+              {
+                "tier": "QI (Qualifying Individual)",
+                "single_monthly_income": "Over $1,616 up to $1,816",
+                "couple_monthly_income": "Over $2,184 up to $2,455",
+                "what_it_covers": "Pays the Medicare Part B premium only; first-come, first-served.",
+                "source_basis": "North Dakota 2026 MSP guidance summarized in search results.[9]"
+              }
+            ],
+            "household_size_variation": "The available North Dakota figures in the search results are for single and couple households; North Dakota uses those two-person categories in its MSP asset and income references.[1][2][3][9]"
+          },
+          "asset_limits": {
+            "limit": "North Dakota ties MSP asset eligibility to the Medicare Part D Low Income Subsidy resource standard, which changes annually. For January 2026, the limits shown are $9,950 for one person and $14,910 for two people.[2][3][8]",
+            "what_counts": "Countable or non-excluded assets; North Dakota says eligibility exists only if the total value of all non-excluded assets is at or below the applicable limit.[2][8][13]",
+            "what_is_exempt": "The guidebook excerpt says not to include one vehicle, your home, clothing, or household goods when assessing savings and other assets.[13]",
+            "important_note": "North Dakota policy says eligibility may exist in a month when countable assets are within the limit for at least one day of the month.[2]"
+          },
+          "other_requirements": [
+            "Must be eligible for Medicare Part A, including premium-free Part A or premium Part A.[13]",
+            "Must be enrolled in Medicare and seeking help with Medicare costs rather than general Medicaid long-term-care coverage.[1][9]",
+            "QI is limited by available funding and can be first-come, first-served.[9]",
+            "North Dakota administers the program through county social services offices / Human Service Zone offices.[1][9]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Depending on tier, the program may pay Medicare Part A premiums, Part B premiums, annual deductibles, and coinsurance costs. QMB is the broadest tier and can pay Part A and Part B premiums plus Medicare cost-sharing; SLMB and QI pay the Part B premium only.[1][9]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Apply through your county social services office / Human Service Zone office.[1][9]",
+            "Use North Dakota HHS online application options for Medicaid and Medicare Savings Programs.[12]",
+            "Request help or an application by phone at 1-866-614-6005 or 701-328-1000 (TTY 711 is referenced in a North Dakota-related source).[9][14]"
+          ],
+          "processing_time": "No official processing-time estimate appeared in the gathered sources.",
+          "waitlist": "No waitlist is described for QMB or SLMB. QI is limited and first-come, first-served, so it can effectively function like a funding-limited program.[9]",
+          "forms": [
+            "No specific form number was identified in the gathered sources.",
+            "North Dakota HHS states that applicants can apply online for Medicare Savings programs through its general medical assistance application pathway.[12]"
+          ],
+          "documents": [
+            "Proof of Medicare Part A or Medicare enrollment.[13]",
+            "Proof of monthly income such as Social Security, pension, wages, veterans benefits, or similar income sources.[13]",
+            "Proof of savings and other assets, if requested.[13]",
+            "Information on vehicles, home ownership, and household resources, even though some items are excluded from the asset test.[13]",
+            "Identification and contact information for the applicant and spouse, if applicable."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide North Dakota program; applications are handled through county social services / Human Service Zone offices rather than a single centralized office.[1][9]",
+          "regional_variations": "No benefit differences by region were identified. The main variation is administrative: families apply through their local county office, and processing speed may differ by office, but no official regional wait-time breakdown was found.",
+          "offices_or_providers": [
+            "County social services offices / Human Service Zone offices across North Dakota.[1][9]",
+            "North Dakota Department of Health and Human Services online medical assistance application page.[12]"
+          ]
+        },
+        "official_source": "https://www.insurance.nd.gov/consumers/medicare/medicare-financial-assistance-programs",
+        "gotchas": [
+          "The program is not the same as full Medicaid; it is specifically help with Medicare premiums and, for QMB, Medicare cost-sharing.[1][9]",
+          "The asset limit changes annually because North Dakota ties it to the federal Medicare Part D Low Income Subsidy standard.[2][8][13]",
+          "QI is not guaranteed if funding runs out because it is first-come, first-served.[9]",
+          "Some resources are excluded, including the home, one vehicle, clothing, and household goods, so families should not assume all assets count.[13]",
+          "Eligibility can exist for a month if countable assets are within the limit for at least one day of that month.[2]",
+          "Families often miss that Medicare Part A eligibility is required before MSP can help.[13]"
+        ],
+        "data_shape_notes": "This program has tiered benefits and tiered income limits rather than one single standard. The asset test is tied to a separate federal resource benchmark that changes yearly, and one tier (QI) is funding-limited and first-come, first-served.[2][3][9]",
+        "_raw": "{\n  \"name\": \"Medicare Savings Programs\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": {\n      \"summary\": \"North Dakota uses monthly income limits for Medicare Savings Programs, with separate tiers for QMB, SLMB, and QI. The state source shows a Medicare Savings Program income limit table of $1,816 for a single person and $2,455 for a couple, and North Dakota materials indicate the program uses the federal MSP tiers under those caps.[1][4][9]\",\n      \"tier_table\": [\n        {\n          \"tier\": \"QMB (Qualified Medicare Beneficiary)\",\n          \"single_monthly_income\": \"Up to $1,350\",\n          \"couple_monthly_income\": \"Up to $1,824\",\n          \"what_it_covers\": \"Pays Medicare Part A and Part B premiums and Medicare cost-sharing.\",\n          \"source_basis\": \"North Dakota 2026 MSP guidance summarized in search results.[9]\"\n        },\n        {\n          \"tier\": \"SLMB (Specified Low-Income Medicare Beneficiary)\",\n          \"single_monthly_income\": \"Over $1,350 up to $1,616\",\n          \"couple_monthly_income\": \"Over $1,824 up to $2,184\",\n          \"what_it_covers\": \"Pays the Medicare Part B premium only.\",\n          \"source_basis\": \"North Dakota 2026 MSP guidance summarized in search results.[9]\"\n        },\n        {\n          \"tier\": \"QI (Qualifying Individual)\",\n          \"single_monthly_income\": \"Over $1,616 up to $1,816\",\n          \"couple_monthly_income\": \"Over $2,184 up to $2,455\",\n          \"what_it_covers\": \"Pays the Medicare Part B premium only; first-come, first-served.\",\n          \"source_basis\": \"North Dakota 2026 MSP guidance summarized in search results.[9]\"\n        }\n      ],\n      \"household_size_variation\": \"The available North Dakota figures in the search results are for single and couple households; North Dakota uses those two-person categories in its MSP asset and income references.[1][2][3][9]\"\n    },\n    \"asset_limits\": {\n      \"limit\": \"North Dakota ties MSP asset eligibility to the Medicare Part D Low Income Subsidy resource standard, which changes annually. For January 2026, the limits shown are $9,950 for one person and $14,910 for two people.[2][3][8]\",\n      \"what_counts\": \"Countable or non-excluded assets; North Dakota says eligibility exists only if the total value of all non-excluded assets is at or below the applicable limit.[2][8][13]\",\n      \"what_is_exempt\": \"The guidebook excerpt says not to include one vehicle, your home, clothing, or household goods when assessing savings and other assets.[13]\",\n      \"important_note\": \"North Dakota policy says eligibility may exist in a month when countable assets are within the limit for at least one day of the month.[2]\"\n    },\n    \"other_requirements\": [\n      \"Must be eligible for Medicare Part A, including premium-free Part A or premium Part A.[13]\",\n      \"Must be enrolled in Medicare and seeking help with Medicare costs rather than general Medicaid long-term-care coverage.[1][9]\",\n      \"QI is limited by available funding and can be first-come, first-served.[9]\",\n      \"North Dakota administers the program through county social services offices / Human Service Zone offices.[1][9]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Depending on tier, the program may pay Medicare Part A premiums, Part B premiums, annual deductibles, and coinsurance costs. QMB is the broadest tier and can pay Part A and Part B premiums plus Medicare cost-sharing; SLMB and QI pay the Part B premium only.[1][9]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through your county social services office / Human Service Zone office.[1][9]\",\n      \"Use North Dakota HHS online application options for Medicaid and Medicare Savings Programs.[12]\",\n      \"Request help or an application by phone at 1-866-614-6005 or 701-328-1000 (TTY 711 is referenced in a North Dakota-related source).[9][14]\"\n    ],\n    \"processing_time\": \"No official processing-time estimate appeared in the gathered sources.\",\n    \"waitlist\": \"No waitlist is described for QMB or SLMB. QI is limited and first-come, first-served, so it can effectively function like a funding-limited program.[9]\",\n    \"forms\": [\n      \"No specific form number was identified in the gathered sources.\",\n      \"North Dakota HHS states that applicants can apply online for Medicare Savings programs through its general medical assistance application pathway.[12]\"\n    ],\n    \"documents\": [\n      \"Proof of Medicare Part A or Medicare enrollment.[13]\",\n      \"Proof of monthly income such as Social Security, pension, wages, veterans benefits, or similar income sources.[13]\",\n      \"Proof of savings and other assets, if requested.[13]\",\n      \"Information on vehicles, home ownership, and household resources, even though some items are excluded from the asset test.[13]\",\n      \"Identification and contact information for the applicant and spouse, if applicable.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide North Dakota program; applications are handled through county social services / Human Service Zone offices rather than a single centralized office.[1][9]\",\n    \"regional_variations\": \"No benefit differences by region were identified. The main variation is administrative: families apply through their local county office, and processing speed may differ by office, but no official regional wait-time breakdown was found.\",\n    \"offices_or_providers\": [\n      \"County social services offices / Human Service Zone offices across North Dakota.[1][9]\",\n      \"North Dakota Department of Health and Human Services online medical assistance application page.[12]\"\n    ]\n  },\n  \"official_source\": \"https://www.insurance.nd.gov/consumers/medicare/medicare-financial-assistance-programs\",\n  \"gotchas\": [\n    \"The program is not the same as full Medicaid; it is specifically help with Medicare premiums and, for QMB, Medicare cost-sharing.[1][9]\",\n    \"The asset limit changes annually because North Dakota ties it to the federal Medicare Part D Low Income Subsidy standard.[2][8][13]\",\n    \"QI is not guaranteed if funding runs out because it is first-come, first-served.[9]\",\n    \"Some resources are excluded, including the home, one vehicle, clothing, and household goods, so families should not assume all assets count.[13]\",\n    \"Eligibility can exist for a month if countable assets are within the limit for at least one day of that month.[2]\",\n    \"Families often miss that Medicare Part A eligibility is required before MSP can help.[13]\"\n  ],\n  \"data_shape_notes\": \"This program has tiered benefits and tiered income limits rather than one single standard. The asset test is tied to a separate federal resource benchmark that changes yearly, and one tier (QI) is funding-limited and first-come, first-served.[2][3][9]\"\n}"
+      },
+      {
+        "name": "SNAP (Supplemental Nutrition Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "North Dakota SNAP is income-based and uses three standards: 200% gross income, 130% gross income, and 100% net income tests. For Oct. 1, 2026 through Sept. 30, 2027, the official income table is: 1 person: $2,660 gross / $1,729 gross / $1,330 net; 2 people: $3,608 / $2,345 / $1,804; 3 people: $4,554 / $2,960 / $2,227; 4 people: $5,500 / $3,575 / $2,750; 5 people: $6,448 / $4,191 / $3,224; 6 people: $7,394 / $4,806 / $3,697; 7 people: $8,340 / $5,421 / $4,170.[1] The state says households or individuals with low income may qualify, and eligible applicants ordinarily reside in North Dakota.[1][4] Some households may be eligible under special rules such as SSI/TANF households or broad-based categorical eligibility, which can change which income tests apply.[1][3][12]",
+          "asset_limits": "SNAP can include a resource test for some households under North Dakota rules, and policy materials note that households must pass the resource test after the gross-income test under regular rules.[2] The sources gathered do not provide a North Dakota dollar amount for the current resource limit, so that number should be verified in the current eligibility handbook before publishing.[2] What counts as resources and exemptions are not fully spelled out in the retrieved public pages, so the guide should avoid stating a dollar limit without confirming the current manual.[2][12]",
+          "other_requirements": [
+            "Ordinarily reside in North Dakota.[4]",
+            "Must meet financial and non-financial eligibility rules.[4]",
+            "Household members must disclose income and other eligibility facts during the application and interview process.[6][7]",
+            "Some applicants may be subject to work-related or reporting requirements depending on household status.[2][12]",
+            "A household generally must not be disqualified for failure to comply with SNAP rules if it wants the more favorable standards to apply.[3][12]"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "SNAP provides monthly food benefits loaded onto an Electronic Benefit Transfer card, which can be used to buy eligible food items. The official North Dakota brochure gives a maximum monthly allotment table; the retrieved excerpt only shows the first value explicitly: 1-person household = $298 effective Oct. 1, 2025 through Sept. 30, 2026, with higher amounts for larger households.[3] The program is specifically food assistance, not cash assistance, and benefits vary by household size, income, and allowable deductions.[1][3]",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.hhs.nd.gov/applyforhelp/snap or the Self-Service Portal at https://www.applyforhelp.nd.gov.[1][8][10]",
+            "Phone: contact the local Human Service Zone Office; North Dakota policy says callers must be given the option to apply by paper application, online, or through the Great Plains Food Bank.[6][7]",
+            "Paper/mail: complete a paper application and provide name, address, and signature.[6][7]",
+            "In person: Human Service Zone Office.[6][7]",
+            "Great Plains Food Bank application assistance route.[6][7]"
+          ],
+          "processing_time": "Non-expedited applications must be approved or denied within 30 days of filing; expedited cases must be issued within 7 days or by the first working day of the second month, depending on circumstances.[11][14]",
+          "waitlist": null,
+          "forms": [
+            "Application for Assistance (paper application referenced in state policy)",
+            "Self-Service Portal SNAP application/review",
+            "No specific public SNAP form number was found in the retrieved sources"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of North Dakota residency/household address",
+            "Social Security numbers for household members, if available",
+            "Proof of all household income such as wages, Social Security, SSI, pensions, veterans' benefits, child support, or other income",
+            "Proof of expenses that may affect the SNAP amount, especially for elderly or disabled household members",
+            "Bank statements or other resource information if requested",
+            "Any notices or verification requests from the agency"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "North Dakota SNAP is statewide and is administered through North Dakota Human Service Zone Offices, with applicants ordinarily required to reside in North Dakota.[4][6][7]",
+          "regional_variations": "The basic SNAP rules are statewide, but the local Human Service Zone Office you use can differ by county, and wait times or interview scheduling can vary by office. No formal regional benefit variation was identified in the retrieved sources.[6][7][11]",
+          "offices_or_providers": [
+            "North Dakota Human Service Zone Offices",
+            "North Dakota Health and Human Services Self-Service Portal",
+            "Great Plains Food Bank application assistance"
+          ]
+        },
+        "official_source": "https://www.hhs.nd.gov/applyforhelp/snap",
+        "gotchas": [
+          "Elderly applicants may qualify even with income above the basic 100% net test if deductions, especially medical deductions, bring countable income down; this is a common reason older adults qualify when families think they will not.[1][3]",
+          "SNAP is not cash assistance; it is food-only help through an EBT card.[3]",
+          "Income limits changed on Oct. 1, 2026, so older guides can be wrong very quickly.[1]",
+          "North Dakota uses the Self-Service Portal for online applications and case management, so families should save the tracking number after submitting.[8]",
+          "Applicants can apply before gathering every document, but missing verification can delay approval past the 30-day standard.[11][14]",
+          "Some households are treated differently under categorical eligibility rules, so a denial under one test does not always mean ineligibility under every test.[3][12]"
+        ],
+        "data_shape_notes": "SNAP is a statewide, means-tested food benefit with household-size-based monthly allotments and multiple income thresholds; older or disabled households can be affected by special deductions and categorical eligibility rules.",
+        "_raw": "{\n  \"name\": \"SNAP (Supplemental Nutrition Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"North Dakota SNAP is income-based and uses three standards: 200% gross income, 130% gross income, and 100% net income tests. For Oct. 1, 2026 through Sept. 30, 2027, the official income table is: 1 person: $2,660 gross / $1,729 gross / $1,330 net; 2 people: $3,608 / $2,345 / $1,804; 3 people: $4,554 / $2,960 / $2,227; 4 people: $5,500 / $3,575 / $2,750; 5 people: $6,448 / $4,191 / $3,224; 6 people: $7,394 / $4,806 / $3,697; 7 people: $8,340 / $5,421 / $4,170.[1] The state says households or individuals with low income may qualify, and eligible applicants ordinarily reside in North Dakota.[1][4] Some households may be eligible under special rules such as SSI/TANF households or broad-based categorical eligibility, which can change which income tests apply.[1][3][12]\",\n    \"asset_limits\": \"SNAP can include a resource test for some households under North Dakota rules, and policy materials note that households must pass the resource test after the gross-income test under regular rules.[2] The sources gathered do not provide a North Dakota dollar amount for the current resource limit, so that number should be verified in the current eligibility handbook before publishing.[2] What counts as resources and exemptions are not fully spelled out in the retrieved public pages, so the guide should avoid stating a dollar limit without confirming the current manual.[2][12]\",\n    \"other_requirements\": [\n      \"Ordinarily reside in North Dakota.[4]\",\n      \"Must meet financial and non-financial eligibility rules.[4]\",\n      \"Household members must disclose income and other eligibility facts during the application and interview process.[6][7]\",\n      \"Some applicants may be subject to work-related or reporting requirements depending on household status.[2][12]\",\n      \"A household generally must not be disqualified for failure to comply with SNAP rules if it wants the more favorable standards to apply.[3][12]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"SNAP provides monthly food benefits loaded onto an Electronic Benefit Transfer card, which can be used to buy eligible food items. The official North Dakota brochure gives a maximum monthly allotment table; the retrieved excerpt only shows the first value explicitly: 1-person household = $298 effective Oct. 1, 2025 through Sept. 30, 2026, with higher amounts for larger households.[3] The program is specifically food assistance, not cash assistance, and benefits vary by household size, income, and allowable deductions.[1][3]\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.hhs.nd.gov/applyforhelp/snap or the Self-Service Portal at https://www.applyforhelp.nd.gov.[1][8][10]\",\n      \"Phone: contact the local Human Service Zone Office; North Dakota policy says callers must be given the option to apply by paper application, online, or through the Great Plains Food Bank.[6][7]\",\n      \"Paper/mail: complete a paper application and provide name, address, and signature.[6][7]\",\n      \"In person: Human Service Zone Office.[6][7]\",\n      \"Great Plains Food Bank application assistance route.[6][7]\"\n    ],\n    \"processing_time\": \"Non-expedited applications must be approved or denied within 30 days of filing; expedited cases must be issued within 7 days or by the first working day of the second month, depending on circumstances.[11][14]\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Assistance (paper application referenced in state policy)\",\n      \"Self-Service Portal SNAP application/review\",\n      \"No specific public SNAP form number was found in the retrieved sources\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of North Dakota residency/household address\",\n      \"Social Security numbers for household members, if available\",\n      \"Proof of all household income such as wages, Social Security, SSI, pensions, veterans' benefits, child support, or other income\",\n      \"Proof of expenses that may affect the SNAP amount, especially for elderly or disabled household members\",\n      \"Bank statements or other resource information if requested\",\n      \"Any notices or verification requests from the agency\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"North Dakota SNAP is statewide and is administered through North Dakota Human Service Zone Offices, with applicants ordinarily required to reside in North Dakota.[4][6][7]\",\n    \"regional_variations\": \"The basic SNAP rules are statewide, but the local Human Service Zone Office you use can differ by county, and wait times or interview scheduling can vary by office. No formal regional benefit variation was identified in the retrieved sources.[6][7][11]\",\n    \"offices_or_providers\": [\n      \"North Dakota Human Service Zone Offices\",\n      \"North Dakota Health and Human Services Self-Service Portal\",\n      \"Great Plains Food Bank application assistance\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.nd.gov/applyforhelp/snap\",\n  \"gotchas\": [\n    \"Elderly applicants may qualify even with income above the basic 100% net test if deductions, especially medical deductions, bring countable income down; this is a common reason older adults qualify when families think they will not.[1][3]\",\n    \"SNAP is not cash assistance; it is food-only help through an EBT card.[3]\",\n    \"Income limits changed on Oct. 1, 2026, so older guides can be wrong very quickly.[1]\",\n    \"North Dakota uses the Self-Service Portal for online applications and case management, so families should save the tracking number after submitting.[8]\",\n    \"Applicants can apply before gathering every document, but missing verification can delay approval past the 30-day standard.[11][14]\",\n    \"Some households are treated differently under categorical eligibility rules, so a denial under one test does not always mean ineligibility under every test.[3][12]\"\n  ],\n  \"data_shape_notes\": \"SNAP is a statewide, means-tested food benefit with household-size-based monthly allotments and multiple income thresholds; older or disabled households can be affected by special deductions and categorical eligibility rules.\"\n}"
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Household income must be at or below 60% of North Dakota’s state median income. For the 2026–2027 heating season (Oct. 1, 2026 to Sept. 30, 2027), the monthly income limits are: 1 person $3,446; 2 $4,507; 3 $5,567; 4 $6,628; 5 $7,688; 6 $8,749; 7 $8,947; 8 $9,146; 9 $9,345; 10 $9,544; 11 $9,743; 12 $9,942. The state page does not show separate child-only or elderly-only income rules in the material gathered; all household income is counted.",
+          "asset_limits": "No asset limit was identified in the gathered North Dakota LIHEAP materials. The available materials focus on income and household energy need rather than bank accounts, vehicles, or other assets.",
+          "other_requirements": [
+            "Must be a North Dakota household applying for home energy assistance.",
+            "All household income is counted.",
+            "Applications can be submitted online, by mail, or through local human service zone offices.",
+            "If applying for help with the application, Community Options can assist."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "LIHEAP provides a payment toward home energy costs. North Dakota’s materials describe it as help with heating and other home energy costs, but the gathered sources do not list a fixed dollar benefit because the amount can vary by household and program year. The program also links LIHEAP clients to weatherization assistance, and LIHEAP clients are automatically eligible for Weatherization Assistance.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online at https://www.hhs.nd.gov/applyforhelp/liheap",
+            "Self-Service Portal (SSP) application process through the Apply for Help site",
+            "By mail using the LIHEAP application form",
+            "In person at a local human service zone office",
+            "Request an application be mailed to you",
+            "Help by phone from Community Options at 1-800-823-2417",
+            "Customer Support Center at 1-866-614-6005"
+          ],
+          "processing_time": "No exact processing-time standard was identified in the gathered sources.",
+          "waitlist": "No formal waitlist was identified in the gathered sources; availability depends on the annual LIHEAP funding cycle and application timing.",
+          "forms": [
+            "APPLICATION: LOW INCOME HOME ENERGY ASSISTANCE PROGRAM (LIHEAP) (SFN 00529)",
+            "LIHEAP application (same form referenced in the program brochure)"
+          ],
+          "documents": [
+            "Proof of household income for all household members",
+            "Information for all people living in the home",
+            "Heating/energy account or vendor information if available",
+            "Identification and contact information for the applicant",
+            "Any documents requested by the local office or portal prompts"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide North Dakota program; applications are handled through the North Dakota Human Service Zones / state Apply for Help system.",
+          "regional_variations": "The core eligibility rules are statewide, but application help and local handling may differ by human service zone office. The gathered sources did not identify different benefit formulas by region. Wait times may vary by local office workload, but no official regional wait-time table was identified.",
+          "offices_or_providers": [
+            "North Dakota Health and Human Services Apply for Help portal",
+            "Local human service zone offices",
+            "Community Options (application help and outreach)",
+            "Customer Support Center"
+          ]
+        },
+        "official_source": "https://www.hhs.nd.gov/applyforhelp/liheap",
+        "gotchas": [
+          "The income limit is the main gatekeeper; there is no separate elderly-only eligibility category in the sources gathered.",
+          "North Dakota counts all household income.",
+          "The benefit amount is not a flat statewide number in the sources gathered, so families should not assume every household gets the same payment.",
+          "LIHEAP application help is separate from the actual benefit; Community Options can help with the process, but the program is still administered through the state portal/local offices.",
+          "LIHEAP eligibility also opens the door to Weatherization Assistance, which is a different program with its own rules."
+        ],
+        "data_shape_notes": "This program is income-tested, statewide, and household-based. The key data structure is a household-size income table rather than a simple yes/no rule, and the application can be done multiple ways through the state portal or local offices.",
+        "_raw": "{\n  \"name\": \"LIHEAP (Low Income Home Energy Assistance Program)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Household income must be at or below 60% of North Dakota’s state median income. For the 2026–2027 heating season (Oct. 1, 2026 to Sept. 30, 2027), the monthly income limits are: 1 person $3,446; 2 $4,507; 3 $5,567; 4 $6,628; 5 $7,688; 6 $8,749; 7 $8,947; 8 $9,146; 9 $9,345; 10 $9,544; 11 $9,743; 12 $9,942. The state page does not show separate child-only or elderly-only income rules in the material gathered; all household income is counted.\",\n    \"asset_limits\": \"No asset limit was identified in the gathered North Dakota LIHEAP materials. The available materials focus on income and household energy need rather than bank accounts, vehicles, or other assets.\",\n    \"other_requirements\": [\n      \"Must be a North Dakota household applying for home energy assistance.\",\n      \"All household income is counted.\",\n      \"Applications can be submitted online, by mail, or through local human service zone offices.\",\n      \"If applying for help with the application, Community Options can assist.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"LIHEAP provides a payment toward home energy costs. North Dakota’s materials describe it as help with heating and other home energy costs, but the gathered sources do not list a fixed dollar benefit because the amount can vary by household and program year. The program also links LIHEAP clients to weatherization assistance, and LIHEAP clients are automatically eligible for Weatherization Assistance.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online at https://www.hhs.nd.gov/applyforhelp/liheap\",\n      \"Self-Service Portal (SSP) application process through the Apply for Help site\",\n      \"By mail using the LIHEAP application form\",\n      \"In person at a local human service zone office\",\n      \"Request an application be mailed to you\",\n      \"Help by phone from Community Options at 1-800-823-2417\",\n      \"Customer Support Center at 1-866-614-6005\"\n    ],\n    \"processing_time\": \"No exact processing-time standard was identified in the gathered sources.\",\n    \"waitlist\": \"No formal waitlist was identified in the gathered sources; availability depends on the annual LIHEAP funding cycle and application timing.\",\n    \"forms\": [\n      \"APPLICATION: LOW INCOME HOME ENERGY ASSISTANCE PROGRAM (LIHEAP) (SFN 00529)\",\n      \"LIHEAP application (same form referenced in the program brochure)\"\n    ],\n    \"documents\": [\n      \"Proof of household income for all household members\",\n      \"Information for all people living in the home\",\n      \"Heating/energy account or vendor information if available\",\n      \"Identification and contact information for the applicant\",\n      \"Any documents requested by the local office or portal prompts\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide North Dakota program; applications are handled through the North Dakota Human Service Zones / state Apply for Help system.\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but application help and local handling may differ by human service zone office. The gathered sources did not identify different benefit formulas by region. Wait times may vary by local office workload, but no official regional wait-time table was identified.\",\n    \"offices_or_providers\": [\n      \"North Dakota Health and Human Services Apply for Help portal\",\n      \"Local human service zone offices\",\n      \"Community Options (application help and outreach)\",\n      \"Customer Support Center\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.nd.gov/applyforhelp/liheap\",\n  \"gotchas\": [\n    \"The income limit is the main gatekeeper; there is no separate elderly-only eligibility category in the sources gathered.\",\n    \"North Dakota counts all household income.\",\n    \"The benefit amount is not a flat statewide number in the sources gathered, so families should not assume every household gets the same payment.\",\n    \"LIHEAP application help is separate from the actual benefit; Community Options can help with the process, but the program is still administered through the state portal/local offices.\",\n    \"LIHEAP eligibility also opens the door to Weatherization Assistance, which is a different program with its own rules.\"\n  ],\n  \"data_shape_notes\": \"This program is income-tested, statewide, and household-based. The key data structure is a household-size income table rather than a simple yes/no rule, and the application can be done multiple ways through the state portal or local offices.\"\n}"
+      },
+      {
+        "name": "Senior Dining Services (Home-Delivered Meals)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit was identified in the official North Dakota sources for home-delivered meals. Eligibility is based on age and functional need, not a financial means test.",
+          "asset_limits": "No asset limit was identified in the official North Dakota sources for home-delivered meals.",
+          "other_requirements": [
+            "Must be age 60 or older.",
+            "Must be homebound because of injury, illness, physical incapacity, mental or social conditions, or isolation.",
+            "Must be unable to prepare meals adequately for oneself.",
+            "Meals may also be available to a spouse of an eligible person regardless of age.",
+            "A disabled dependent child of any age who lives with an eligible participant may qualify if it is in the participant's best interest.",
+            "A registered congregate meal participant may receive home-delivered meals short-term for up to 30 days due to illness or a health condition.",
+            "Eligibility is determined through an assessment and home visit; initial determination can be made by telephone."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Nutritious home-delivered meals, typically hot or frozen depending on the provider. Meals are designed to meet nutrition standards and generally provide one-third of the Dietary Reference Intakes, with delivery commonly five days per week in the state plan. Some local providers specify delivery Monday through Friday, with weekly delivery outside city limits, and may require at least 3 delivery days per week.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Apply through the local Older Americans Act nutrition provider serving the area",
+            "Phone assessment followed by required in-person home assessment",
+            "Contact county/community senior service organizations that administer meal delivery locally"
+          ],
+          "processing_time": "Initial eligibility may be determined by telephone, but an in-person assessment must be completed prior to or within 10 working days after meal delivery begins. Some state policy documents also require a home visit and registration form within two weeks of beginning service.",
+          "waitlist": "No statewide waitlist policy was identified in the official sources. Availability may depend on the local provider and service area.",
+          "forms": [
+            "Home-Delivered Meal Program Registration form",
+            "SAMS Home-Delivered Meal Program Registration form",
+            "SAMS Outreach/HDM Assessment form",
+            "web-based SAMS Outreach/HDM Assessment form"
+          ],
+          "documents": [
+            "Proof of age if requested",
+            "Basic household and contact information",
+            "Information needed for the home-delivered meal assessment",
+            "Details about disability, isolation, or functional limitations",
+            "Any nutrition or medical restrictions the provider asks about"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide program, but actual service is delivered through local contracted providers and availability depends on the county or service area.",
+          "regional_variations": "Yes. Delivery schedules, meal type, minimum service days, and provider rules vary by local agency. Examples from official and provider sources include Monday-Friday delivery in some areas, weekly outside city limits, and requirements to receive meals at least 3 days per week.",
+          "offices_or_providers": [
+            "Local Older Americans Act nutrition providers",
+            "County senior service agencies and councils on aging",
+            "AgeWellND in Burleigh County",
+            "Local community organizations such as county councils on aging"
+          ]
+        },
+        "official_source": "https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm",
+        "gotchas": [
+          "This is not a cash benefit; it is a meal service delivered in kind.",
+          "The main eligibility test is functional need and homebound status, not income.",
+          "An initial phone screening is not enough; an in-person assessment still has to happen quickly after service starts.",
+          "Rules are not identical everywhere in North Dakota because local providers run the program under state and federal standards.",
+          "A person may qualify even if they do not eat all of the meal, because eligibility is based on the nutritional content of the meal, not the amount consumed.",
+          "Some providers require fixed delivery days and a minimum number of delivery days per week.",
+          "Spouses can qualify even if under age 60, but under-60 nonspouses generally are limited unless needed to avoid depriving an eligible client of a meal."
+        ],
+        "data_shape_notes": "This program is statewide but locally administered, with eligibility based on age plus homebound/functional criteria rather than income or assets. The benefit is a service, not a payment, and operational details such as delivery frequency, meal form, and intake process vary by region and provider.",
+        "_raw": "{\n  \"name\": \"Senior Dining Services (Home-Delivered Meals)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit was identified in the official North Dakota sources for home-delivered meals. Eligibility is based on age and functional need, not a financial means test.\",\n    \"asset_limits\": \"No asset limit was identified in the official North Dakota sources for home-delivered meals.\",\n    \"other_requirements\": [\n      \"Must be age 60 or older.\",\n      \"Must be homebound because of injury, illness, physical incapacity, mental or social conditions, or isolation.\",\n      \"Must be unable to prepare meals adequately for oneself.\",\n      \"Meals may also be available to a spouse of an eligible person regardless of age.\",\n      \"A disabled dependent child of any age who lives with an eligible participant may qualify if it is in the participant's best interest.\",\n      \"A registered congregate meal participant may receive home-delivered meals short-term for up to 30 days due to illness or a health condition.\",\n      \"Eligibility is determined through an assessment and home visit; initial determination can be made by telephone.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Nutritious home-delivered meals, typically hot or frozen depending on the provider. Meals are designed to meet nutrition standards and generally provide one-third of the Dietary Reference Intakes, with delivery commonly five days per week in the state plan. Some local providers specify delivery Monday through Friday, with weekly delivery outside city limits, and may require at least 3 delivery days per week.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through the local Older Americans Act nutrition provider serving the area\",\n      \"Phone assessment followed by required in-person home assessment\",\n      \"Contact county/community senior service organizations that administer meal delivery locally\"\n    ],\n    \"processing_time\": \"Initial eligibility may be determined by telephone, but an in-person assessment must be completed prior to or within 10 working days after meal delivery begins. Some state policy documents also require a home visit and registration form within two weeks of beginning service.\",\n    \"waitlist\": \"No statewide waitlist policy was identified in the official sources. Availability may depend on the local provider and service area.\",\n    \"forms\": [\n      \"Home-Delivered Meal Program Registration form\",\n      \"SAMS Home-Delivered Meal Program Registration form\",\n      \"SAMS Outreach/HDM Assessment form\",\n      \"web-based SAMS Outreach/HDM Assessment form\"\n    ],\n    \"documents\": [\n      \"Proof of age if requested\",\n      \"Basic household and contact information\",\n      \"Information needed for the home-delivered meal assessment\",\n      \"Details about disability, isolation, or functional limitations\",\n      \"Any nutrition or medical restrictions the provider asks about\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide program, but actual service is delivered through local contracted providers and availability depends on the county or service area.\",\n    \"regional_variations\": \"Yes. Delivery schedules, meal type, minimum service days, and provider rules vary by local agency. Examples from official and provider sources include Monday-Friday delivery in some areas, weekly outside city limits, and requirements to receive meals at least 3 days per week.\",\n    \"offices_or_providers\": [\n      \"Local Older Americans Act nutrition providers\",\n      \"County senior service agencies and councils on aging\",\n      \"AgeWellND in Burleigh County\",\n      \"Local community organizations such as county councils on aging\"\n    ]\n  },\n  \"official_source\": \"https://www.nd.gov/dhs/policymanuals/65025/Content/650_25_60_05.htm\",\n  \"gotchas\": [\n    \"This is not a cash benefit; it is a meal service delivered in kind.\",\n    \"The main eligibility test is functional need and homebound status, not income.\",\n    \"An initial phone screening is not enough; an in-person assessment still has to happen quickly after service starts.\",\n    \"Rules are not identical everywhere in North Dakota because local providers run the program under state and federal standards.\",\n    \"A person may qualify even if they do not eat all of the meal, because eligibility is based on the nutritional content of the meal, not the amount consumed.\",\n    \"Some providers require fixed delivery days and a minimum number of delivery days per week.\",\n    \"Spouses can qualify even if under age 60, but under-60 nonspouses generally are limited unless needed to avoid depriving an eligible client of a meal.\"\n  ],\n  \"data_shape_notes\": \"This program is statewide but locally administered, with eligibility based on age plus homebound/functional criteria rather than income or assets. The benefit is a service, not a payment, and operational details such as delivery frequency, meal form, and intake process vary by region and provider.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "ND",
+    "stateName": "North Dakota",
+    "classifiedAt": "2026-10-06T05:28:15.191Z",
+    "total": 6,
+    "typeSummary": {
+      "benefit": 6
+    },
+    "scopeSummary": {
+      "state": 3,
+      "federal": 3
+    },
+    "complexitySummary": {
+      "deep": 6
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind and Disabled (ABD) Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "North Dakota Human Service Zone offices",
+              "type": "service-area"
+            },
+            {
+              "name": "North Dakota Health and Human Services Customer Support Center",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Home and Community-Based Services (HCBS) Waiver",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "North Dakota Department of Health and Human Services, Adult and Aging Services, 1237 W. Divide Ave., Suite 6, Bismarck, ND 58501.[13]",
+              "type": "service-area"
+            },
+            {
+              "name": "Aging and Disability Resource-LINK.[13]",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Human Service Zone offices.[12]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Medicare Savings Programs",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "County social services offices / Human Service Zone offices across North Dakota.[1][9]",
+              "type": "service-area"
+            },
+            {
+              "name": "North Dakota Department of Health and Human Services online medical assistance application page.[12]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "SNAP (Supplemental Nutrition Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "North Dakota Human Service Zone Offices",
+              "type": "service-area"
+            },
+            {
+              "name": "North Dakota Health and Human Services Self-Service Portal",
+              "type": "service-area"
+            },
+            {
+              "name": "Great Plains Food Bank application assistance",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "North Dakota Health and Human Services Apply for Help portal",
+              "type": "service-area"
+            },
+            {
+              "name": "Local human service zone offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Community Options (application help and outreach)",
+              "type": "service-area"
+            },
+            {
+              "name": "Customer Support Center",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Senior Dining Services (Home-Delivered Meals)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Older Americans Act nutrition providers",
+              "type": "service-area"
+            },
+            {
+              "name": "County senior service agencies and councils on aging",
+              "type": "service-area"
+            },
+            {
+              "name": "AgeWellND in Burleigh County",
+              "type": "service-area"
+            },
+            {
+              "name": "Local community organizations such as county councils on aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "ND",
+      "id": "nd-abd-medicaid",
+      "name": "Aged, Blind and Disabled (ABD) Medicaid",
+      "legacyId": "aged-blind-and-disabled-abd-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "ND",
+      "id": "nd-hcbs-waiver",
+      "name": "Home and Community-Based Services (HCBS) Waiver",
+      "legacyId": "home-and-community-based-services-hcbs-waiver",
+      "programType": "benefit"
+    },
+    {
+      "state": "ND",
+      "id": "nd-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "legacyId": "medicare-savings-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "ND",
+      "id": "nd-snap-food-benefits",
+      "name": "SNAP (Supplemental Nutrition Assistance Program)",
+      "legacyId": "snap-supplemental-nutrition-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "ND",
+      "id": "nd-liheap-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "legacyId": "liheap-low-income-home-energy-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "ND",
+      "id": "nd-senior-dining-home-delivered-meals",
+      "name": "Senior Dining Services (Home-Delivered Meals)",
+      "legacyId": "senior-dining-services-home-delivered-meals",
+      "programType": "benefit"
+    }
+  ]
+}

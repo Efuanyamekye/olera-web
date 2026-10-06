@@ -428,7 +428,7 @@ const DOSSIER_SCHEMA = {
           type: "string",
           enum: [
             "question_to_claim_conversion", "question_inventory_health", "provider_contactability",
-            "traffic_by_page_family", "revenue_by_product", "support_backlog_composition", "benefits_finder_weekly", "none",
+            "traffic_by_page_family", "revenue_by_product", "support_backlog_composition", "benefits_finder_weekly", "directory_health", "none",
           ],
         },
         question: { type: "string", maxLength: 350 },

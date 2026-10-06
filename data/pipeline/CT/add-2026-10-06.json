@@ -1,0 +1,719 @@
+{
+  "state": "CT",
+  "addedAt": "2026-10-06T05:37:40.264Z",
+  "dive": {
+    "state": "CT",
+    "stateName": "Connecticut",
+    "diveAt": "2026-10-06T05:30:32.070Z",
+    "total": 6,
+    "parsed": 6,
+    "programs": [
+      {
+        "name": "Medicare Savings Program (QMB/SLMB/QI)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "effective_period": "2026 (as reflected in Connecticut sources gathered)",
+            "single": {
+              "QMB": "$2,807/month",
+              "SLMB": "$3,073/month",
+              "QI": "$3,272/month"
+            },
+            "couple": {
+              "QMB": "$3,806/month",
+              "SLMB": "$4,166/month",
+              "QI": "$4,437/month"
+            },
+            "notes": [
+              "Connecticut’s Medicare Savings Program uses monthly income limits that change over time.",
+              "The program is tied to Medicare Part A or Medicare eligibility and Connecticut residency.",
+              "Some Connecticut materials also describe the program as available to people who are 65 or older and eligible for Medicare Part A."
+            ]
+          },
+          "asset_limits": {
+            "limit": null,
+            "what_counts": "The gathered Connecticut sources did not provide a current asset/resource limit for MSP in the material retrieved.",
+            "what_is_exempt": "The gathered Connecticut sources did not provide an exemption list in the material retrieved.",
+            "notes": [
+              "Some Medicare Savings Programs in other states have no asset test; the Connecticut sources retrieved here were not explicit enough to state that for all MSP tiers with confidence."
+            ]
+          },
+          "other_requirements": [
+            "Must be a Connecticut resident.",
+            "Must be enrolled in or eligible for Medicare Part A.",
+            "Must have income below the applicable program limit.",
+            "Citizenship/legal status rules apply for Medicare enrollment; one Connecticut legal aid source describes U.S. citizenship or lawful permanent residency for at least 5 years as part of Medicare eligibility."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "QMB pays Medicare Part A and Part B premiums and Medicare deductibles and coinsurance. SLMB pays the Medicare Part B premium. QI pays the Medicare Part B premium only.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through Connecticut DSS ConneCT: https://www.connect.ct.gov",
+            "Using the Medicare Savings Program application form W-1QMB",
+            "In person at a Connecticut DSS office",
+            "For Medicare Savings Program only, submit the Medicare Savings Programs Application/Redetermination packet"
+          ],
+          "processing_time": "A specific statewide processing time was not stated in the gathered Connecticut sources.",
+          "waitlist": "No waitlist was identified in the gathered Connecticut sources.",
+          "forms": [
+            "W-1QMB Medicare Savings Program Application",
+            "W-1QMBS Formulario de Renovación de programas de ahorro de Medicare"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Connecticut residency",
+            "Medicare card or Medicare number",
+            "Proof of income such as Social Security, pension, wages, disability benefits, alimony, rental income, interest, or dividends",
+            "Bank statements or other financial records if requested by DSS",
+            "Any DSS notices or renewal paperwork already received"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Connecticut through DSS; no county restriction was identified.",
+          "regional_variations": "The program is statewide and the benefit structure is uniform. The only likely variation is administrative handling by local DSS offices, not eligibility rules or benefit levels.",
+          "offices_or_providers": [
+            "Connecticut Department of Social Services offices",
+            "Connecticut DSS ConneCT online portal"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/apply",
+        "gotchas": [
+          "Families often confuse MSP with full Medicaid; MSP is mainly a Medicare cost-help program, not long-term care coverage.",
+          "QMB is the strongest tier because it covers premiums plus Medicare deductibles and coinsurance; SLMB and QI only cover the Part B premium.",
+          "Income limits differ by tier and are lower for QMB than SLMB than QI.",
+          "The benefit depends on income level, so picking the right tier matters.",
+          "Applicants should use the current yearly income chart because the dollar limits change."
+        ],
+        "data_shape_notes": "This program is tiered by income and benefit level: QMB, SLMB, and QI each have different monthly income limits and different Medicare costs covered. It is statewide, tied to Medicare eligibility, and administered through Connecticut DSS.",
+        "_raw": "{\n  \"name\": \"Medicare Savings Program (QMB/SLMB/QI)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"effective_period\": \"2026 (as reflected in Connecticut sources gathered)\",\n      \"single\": {\n        \"QMB\": \"$2,807/month\",\n        \"SLMB\": \"$3,073/month\",\n        \"QI\": \"$3,272/month\"\n      },\n      \"couple\": {\n        \"QMB\": \"$3,806/month\",\n        \"SLMB\": \"$4,166/month\",\n        \"QI\": \"$4,437/month\"\n      },\n      \"notes\": [\n        \"Connecticut’s Medicare Savings Program uses monthly income limits that change over time.\",\n        \"The program is tied to Medicare Part A or Medicare eligibility and Connecticut residency.\",\n        \"Some Connecticut materials also describe the program as available to people who are 65 or older and eligible for Medicare Part A.\"\n      ]\n    },\n    \"asset_limits\": {\n      \"limit\": null,\n      \"what_counts\": \"The gathered Connecticut sources did not provide a current asset/resource limit for MSP in the material retrieved.\",\n      \"what_is_exempt\": \"The gathered Connecticut sources did not provide an exemption list in the material retrieved.\",\n      \"notes\": [\n        \"Some Medicare Savings Programs in other states have no asset test; the Connecticut sources retrieved here were not explicit enough to state that for all MSP tiers with confidence.\"\n      ]\n    },\n    \"other_requirements\": [\n      \"Must be a Connecticut resident.\",\n      \"Must be enrolled in or eligible for Medicare Part A.\",\n      \"Must have income below the applicable program limit.\",\n      \"Citizenship/legal status rules apply for Medicare enrollment; one Connecticut legal aid source describes U.S. citizenship or lawful permanent residency for at least 5 years as part of Medicare eligibility.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"QMB pays Medicare Part A and Part B premiums and Medicare deductibles and coinsurance. SLMB pays the Medicare Part B premium. QI pays the Medicare Part B premium only.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Connecticut DSS ConneCT: https://www.connect.ct.gov\",\n      \"Using the Medicare Savings Program application form W-1QMB\",\n      \"In person at a Connecticut DSS office\",\n      \"For Medicare Savings Program only, submit the Medicare Savings Programs Application/Redetermination packet\"\n    ],\n    \"processing_time\": \"A specific statewide processing time was not stated in the gathered Connecticut sources.\",\n    \"waitlist\": \"No waitlist was identified in the gathered Connecticut sources.\",\n    \"forms\": [\n      \"W-1QMB Medicare Savings Program Application\",\n      \"W-1QMBS Formulario de Renovación de programas de ahorro de Medicare\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Connecticut residency\",\n      \"Medicare card or Medicare number\",\n      \"Proof of income such as Social Security, pension, wages, disability benefits, alimony, rental income, interest, or dividends\",\n      \"Bank statements or other financial records if requested by DSS\",\n      \"Any DSS notices or renewal paperwork already received\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Connecticut through DSS; no county restriction was identified.\",\n    \"regional_variations\": \"The program is statewide and the benefit structure is uniform. The only likely variation is administrative handling by local DSS offices, not eligibility rules or benefit levels.\",\n    \"offices_or_providers\": [\n      \"Connecticut Department of Social Services offices\",\n      \"Connecticut DSS ConneCT online portal\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/apply\",\n  \"gotchas\": [\n    \"Families often confuse MSP with full Medicaid; MSP is mainly a Medicare cost-help program, not long-term care coverage.\",\n    \"QMB is the strongest tier because it covers premiums plus Medicare deductibles and coinsurance; SLMB and QI only cover the Part B premium.\",\n    \"Income limits differ by tier and are lower for QMB than SLMB than QI.\",\n    \"The benefit depends on income level, so picking the right tier matters.\",\n    \"Applicants should use the current yearly income chart because the dollar limits change.\"\n  ],\n  \"data_shape_notes\": \"This program is tiered by income and benefit level: QMB, SLMB, and QI each have different monthly income limits and different Medicare costs covered. It is statewide, tied to Medicare eligibility, and administered through Connecticut DSS.\"\n}"
+      },
+      {
+        "name": "Connecticut State SSI Supplement",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "The program is for people who are age 65+, blind, or disabled, but for an elderly loved one the key age test is 65 or older. Connecticut says the income limit is three times the current maximum SSI amount per eligible person, but also explains that most community-living applicants must have income below specific monthly limits.",
+            "community_living_limits": {
+              "single": "$1,054 per month",
+              "couple": "$1,710 per month combined"
+            },
+            "boarding_home_or_rch": "If the person lives in a boarding home or residential care home, the income limit is higher because DSS counts the monthly boarding home or RCH costs when determining eligibility.",
+            "how_income_is_counted": "DSS compares countable monthly income against monthly needs and applies allowable deductions before deciding eligibility."
+          },
+          "asset_limits": {
+            "single_or_unmarried": "$1,600",
+            "married_couple": "$2,400",
+            "what_counts": "Liquid assets are counted. Connecticut says applicants must not have transferred assets to qualify for assistance.",
+            "what_is_exempt": "The source gathered does not provide a full exemption list. It specifically identifies liquid assets as the relevant limit and does not spell out all excluded resources in the fetched material."
+          },
+          "other_requirements": [
+            "Must live in Connecticut.",
+            "Must be a U.S. citizen or eligible non-citizen.",
+            "Must have another source of income to supplement, such as Social Security, Supplemental Security Income (SSI), or veterans benefits.",
+            "Must be age 65 or older for the elderly pathway, or otherwise meet blind/disability rules if not applying as an older adult.",
+            "Must not have transferred assets to qualify."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Cash assistance that supplements other income so the person can meet the state’s standard of living. The amount is determined case by case by comparing income and needs; the source gathered does not provide a single fixed benefit dollar amount for all recipients.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online application through Connecticut DSS / Connect portal",
+            "Phone assistance via 1-855-626-6632 (1-855-6-CONNECT)",
+            "In-person through DSS regional offices",
+            "Mail a printed application form to DSS"
+          ],
+          "processing_time": "The source gathered does not give a formal processing-time standard for this specific benefit.",
+          "waitlist": null,
+          "forms": [
+            "Application for Benefits form"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of Connecticut residency",
+            "Proof of income, including Social Security, SSI, VA, or other income sources",
+            "Proof of assets/resources, especially liquid assets",
+            "Immigration/citizenship documents if needed",
+            "Information about living arrangement, such as community living, boarding home, or residential care home",
+            "Any documentation showing medical/disability status if applying under a non-age category"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Connecticut; the state materials do not indicate county-based eligibility restrictions.",
+          "regional_variations": "The benefit rules are statewide, but income treatment can differ depending on living arrangement, especially for people in a boarding home or residential care home. The source gathered does not identify county-by-county differences in payment amounts or processing.",
+          "offices_or_providers": [
+            "Connecticut Department of Social Services regional offices",
+            "Connecticut DSS central office, 55 Farmington Ave., Hartford, CT 06105"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/dss/knowledge-base/articles/cash-assistance/state-supplement-cash-assistance",
+        "gotchas": [
+          "This is cash assistance, not health coverage or in-home care.",
+          "Applicants usually need to already have another income source; this program supplements income rather than replacing it.",
+          "The income test is not just one flat number for everyone; living arrangement affects the limit.",
+          "The asset limit is very low, so even modest liquid savings can disqualify someone.",
+          "Asset transfers can make someone ineligible.",
+          "People often confuse this with federal SSI, but Connecticut’s State Supplement is a separate state-administered cash supplement."
+        ],
+        "data_shape_notes": "Benefit eligibility is driven by age/disability status, low income, and very low liquid-asset limits; the key variation is living arrangement, which can change the income standard.",
+        "_raw": "{\n  \"name\": \"Connecticut State SSI Supplement\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"The program is for people who are age 65+, blind, or disabled, but for an elderly loved one the key age test is 65 or older. Connecticut says the income limit is three times the current maximum SSI amount per eligible person, but also explains that most community-living applicants must have income below specific monthly limits.\",\n      \"community_living_limits\": {\n        \"single\": \"$1,054 per month\",\n        \"couple\": \"$1,710 per month combined\"\n      },\n      \"boarding_home_or_rch\": \"If the person lives in a boarding home or residential care home, the income limit is higher because DSS counts the monthly boarding home or RCH costs when determining eligibility.\",\n      \"how_income_is_counted\": \"DSS compares countable monthly income against monthly needs and applies allowable deductions before deciding eligibility.\"\n    },\n    \"asset_limits\": {\n      \"single_or_unmarried\": \"$1,600\",\n      \"married_couple\": \"$2,400\",\n      \"what_counts\": \"Liquid assets are counted. Connecticut says applicants must not have transferred assets to qualify for assistance.\",\n      \"what_is_exempt\": \"The source gathered does not provide a full exemption list. It specifically identifies liquid assets as the relevant limit and does not spell out all excluded resources in the fetched material.\"\n    },\n    \"other_requirements\": [\n      \"Must live in Connecticut.\",\n      \"Must be a U.S. citizen or eligible non-citizen.\",\n      \"Must have another source of income to supplement, such as Social Security, Supplemental Security Income (SSI), or veterans benefits.\",\n      \"Must be age 65 or older for the elderly pathway, or otherwise meet blind/disability rules if not applying as an older adult.\",\n      \"Must not have transferred assets to qualify.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Cash assistance that supplements other income so the person can meet the state’s standard of living. The amount is determined case by case by comparing income and needs; the source gathered does not provide a single fixed benefit dollar amount for all recipients.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application through Connecticut DSS / Connect portal\",\n      \"Phone assistance via 1-855-626-6632 (1-855-6-CONNECT)\",\n      \"In-person through DSS regional offices\",\n      \"Mail a printed application form to DSS\"\n    ],\n    \"processing_time\": \"The source gathered does not give a formal processing-time standard for this specific benefit.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Application for Benefits form\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of Connecticut residency\",\n      \"Proof of income, including Social Security, SSI, VA, or other income sources\",\n      \"Proof of assets/resources, especially liquid assets\",\n      \"Immigration/citizenship documents if needed\",\n      \"Information about living arrangement, such as community living, boarding home, or residential care home\",\n      \"Any documentation showing medical/disability status if applying under a non-age category\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Connecticut; the state materials do not indicate county-based eligibility restrictions.\",\n    \"regional_variations\": \"The benefit rules are statewide, but income treatment can differ depending on living arrangement, especially for people in a boarding home or residential care home. The source gathered does not identify county-by-county differences in payment amounts or processing.\",\n    \"offices_or_providers\": [\n      \"Connecticut Department of Social Services regional offices\",\n      \"Connecticut DSS central office, 55 Farmington Ave., Hartford, CT 06105\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/dss/knowledge-base/articles/cash-assistance/state-supplement-cash-assistance\",\n  \"gotchas\": [\n    \"This is cash assistance, not health coverage or in-home care.\",\n    \"Applicants usually need to already have another income source; this program supplements income rather than replacing it.\",\n    \"The income test is not just one flat number for everyone; living arrangement affects the limit.\",\n    \"The asset limit is very low, so even modest liquid savings can disqualify someone.\",\n    \"Asset transfers can make someone ineligible.\",\n    \"People often confuse this with federal SSI, but Connecticut’s State Supplement is a separate state-administered cash supplement.\"\n  ],\n  \"data_shape_notes\": \"Benefit eligibility is driven by age/disability status, low income, and very low liquid-asset limits; the key variation is living arrangement, which can change the income standard.\"\n}"
+      },
+      {
+        "name": "Connecticut Property Tax Relief for Seniors",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "For the state Circuit Breaker homeowner program, income must not exceed the statutory limit; one official Connecticut source page states eligibility exists for annual incomes up to $34,100 for single people and $41,600 for married couples, while other local municipal pages tied to the same state program show updated local thresholds of $46,300 for single/widowed applicants and $56,500 for married couples for 2025 income. The safest family rule is to check the current filing year’s town assessor notice because Connecticut municipalities may publish the applicable income limit for that year.",
+          "asset_limits": "No asset limit was identified in the official state program summary. The program is based on age, residency/ownership, disability status for non-senior applicants, and income. The benefit applies to an owned and occupied home or life-use property, not liquid assets. Primary exemptions/what is not counted were not clearly listed in the state summary reviewed.",
+          "other_requirements": [
+            "Must be a Connecticut resident and own and occupy the property as a home, or have life use of the property.",
+            "Application is through the municipal assessor’s office, not a state benefits office.",
+            "A spouse may qualify through the household income/age rules for the local filing year.",
+            "Some towns require proof such as SSA-1099 and a federal tax return if filed.",
+            "Application window is generally February 1 through May 15.",
+            "Some local programs require the applicant to be 65 by December 31 of the prior year."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "A property tax credit against local real estate taxes. The official state program summary says the credit may be up to $1,250 for married couples and $1,000 for single persons. Some towns also advertise local supplements, such as a $1,000 credit for eligible homeowners and $1,500 for four-family homes in Hartford, or a sliding-scale credit from $312 to $2,600 in Trumbull.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "In person at the municipal assessor’s office",
+            "By mail in towns that accept mailed submissions",
+            "By email in some municipalities that explicitly allow it",
+            "Town assessor office websites or senior centers in some municipalities"
+          ],
+          "processing_time": "Not stated uniformly at the state level. Timing depends on the town assessor’s office and local filing period; many towns process applications during the February 1 to May 15 filing window and apply the credit to the annual property tax bill.",
+          "waitlist": null,
+          "forms": [
+            "Municipal assessor application for Elderly/Disabled (Circuit Breaker) Tax Relief",
+            "Connecticut homeowner elderly/disabled tax relief application as provided by the town assessor"
+          ],
+          "documents": [
+            "Federal income tax return, if filed",
+            "SSA-1099 showing Social Security income",
+            "Proof of age for applicant and, where needed, spouse",
+            "Proof of Connecticut residency and property ownership or life use",
+            "Proof of disability if applying under disability rules rather than age rules",
+            "Any statements of other income sources if no federal return was filed"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide, but administered locally by each municipal assessor. Some towns offer supplemental local relief on top of the state program.",
+          "regional_variations": "Yes. The state Circuit Breaker is statewide, but towns can differ in filing process, accepted submission methods, office location, deadlines for mail vs. in-person filings, local income thresholds shown on town websites, and whether they offer additional municipal tax credits or freezes.",
+          "offices_or_providers": [
+            "Municipal Assessor’s Office in the applicant’s town",
+            "Town senior center in some municipalities",
+            "Office of Policy and Management contact for state program questions"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
+        "gotchas": [
+          "This is a property tax credit, not a cash payment.",
+          "Families must apply through the town assessor, and missing the annual filing window can mean losing the benefit for that tax year.",
+          "The income limit can be confusing because towns may publish different figures tied to the current filing year; always check the local assessor notice for the exact year.",
+          "The benefit amount is capped and generally much smaller than full tax relief for higher-tax towns.",
+          "Many towns require a new application or renewal on a two-year cycle or each filing period.",
+          "Proof of income matters even if the senior does not file a tax return; alternative income documentation is often required.",
+          "Some towns have their own extra senior tax relief programs, so the family should not stop after checking only the state program."
+        ],
+        "data_shape_notes": "Statewide program with local administration, fixed application window, income-based sliding benefit, and town-by-town variations in procedures and supplemental credits.",
+        "_raw": "{\n  \"name\": \"Connecticut Property Tax Relief for Seniors\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"For the state Circuit Breaker homeowner program, income must not exceed the statutory limit; one official Connecticut source page states eligibility exists for annual incomes up to $34,100 for single people and $41,600 for married couples, while other local municipal pages tied to the same state program show updated local thresholds of $46,300 for single/widowed applicants and $56,500 for married couples for 2025 income. The safest family rule is to check the current filing year’s town assessor notice because Connecticut municipalities may publish the applicable income limit for that year.\",\n    \"asset_limits\": \"No asset limit was identified in the official state program summary. The program is based on age, residency/ownership, disability status for non-senior applicants, and income. The benefit applies to an owned and occupied home or life-use property, not liquid assets. Primary exemptions/what is not counted were not clearly listed in the state summary reviewed.\",\n    \"other_requirements\": [\n      \"Must be a Connecticut resident and own and occupy the property as a home, or have life use of the property.\",\n      \"Application is through the municipal assessor’s office, not a state benefits office.\",\n      \"A spouse may qualify through the household income/age rules for the local filing year.\",\n      \"Some towns require proof such as SSA-1099 and a federal tax return if filed.\",\n      \"Application window is generally February 1 through May 15.\",\n      \"Some local programs require the applicant to be 65 by December 31 of the prior year.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"A property tax credit against local real estate taxes. The official state program summary says the credit may be up to $1,250 for married couples and $1,000 for single persons. Some towns also advertise local supplements, such as a $1,000 credit for eligible homeowners and $1,500 for four-family homes in Hartford, or a sliding-scale credit from $312 to $2,600 in Trumbull.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"In person at the municipal assessor’s office\",\n      \"By mail in towns that accept mailed submissions\",\n      \"By email in some municipalities that explicitly allow it\",\n      \"Town assessor office websites or senior centers in some municipalities\"\n    ],\n    \"processing_time\": \"Not stated uniformly at the state level. Timing depends on the town assessor’s office and local filing period; many towns process applications during the February 1 to May 15 filing window and apply the credit to the annual property tax bill.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Municipal assessor application for Elderly/Disabled (Circuit Breaker) Tax Relief\",\n      \"Connecticut homeowner elderly/disabled tax relief application as provided by the town assessor\"\n    ],\n    \"documents\": [\n      \"Federal income tax return, if filed\",\n      \"SSA-1099 showing Social Security income\",\n      \"Proof of age for applicant and, where needed, spouse\",\n      \"Proof of Connecticut residency and property ownership or life use\",\n      \"Proof of disability if applying under disability rules rather than age rules\",\n      \"Any statements of other income sources if no federal return was filed\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide, but administered locally by each municipal assessor. Some towns offer supplemental local relief on top of the state program.\",\n    \"regional_variations\": \"Yes. The state Circuit Breaker is statewide, but towns can differ in filing process, accepted submission methods, office location, deadlines for mail vs. in-person filings, local income thresholds shown on town websites, and whether they offer additional municipal tax credits or freezes.\",\n    \"offices_or_providers\": [\n      \"Municipal Assessor’s Office in the applicant’s town\",\n      \"Town senior center in some municipalities\",\n      \"Office of Policy and Management contact for state program questions\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program\",\n  \"gotchas\": [\n    \"This is a property tax credit, not a cash payment.\",\n    \"Families must apply through the town assessor, and missing the annual filing window can mean losing the benefit for that tax year.\",\n    \"The income limit can be confusing because towns may publish different figures tied to the current filing year; always check the local assessor notice for the exact year.\",\n    \"The benefit amount is capped and generally much smaller than full tax relief for higher-tax towns.\",\n    \"Many towns require a new application or renewal on a two-year cycle or each filing period.\",\n    \"Proof of income matters even if the senior does not file a tax return; alternative income documentation is often required.\",\n    \"Some towns have their own extra senior tax relief programs, so the family should not stop after checking only the state program.\"\n  ],\n  \"data_shape_notes\": \"Statewide program with local administration, fixed application window, income-based sliding benefit, and town-by-town variations in procedures and supplemental credits.\"\n}"
+      },
+      {
+        "name": "ConnPace (Connecticut Pharmaceutical Assistance)",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "single": "$25,100 annual income",
+            "married_or_couple": "$33,800 annual income",
+            "notes": [
+              "Income limits are adjusted annually for Social Security COLA/inflation.",
+              "Older secondary sources show prior or alternate thresholds; the most current official-style figures found in the gathered materials are $25,100 single and $33,800 married."
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Must be a Connecticut resident for at least 183 days / six months before applying.",
+            "Must be age 65 or older, or under 65 with a disability in some materials; however, the gathered official-style consumer guide emphasizes elderly eligibility and Medicare-related coordination.",
+            "Must generally not have other prescription coverage that pays at least part of the cost of all prescriptions.",
+            "Medicare-eligible participants must enroll in a Medicare Part D plan.",
+            "Must pay the annual ConnPACE registration fee.",
+            "Must have prescription drug coverage limitations consistent with the program rules; some drugs are excluded."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Helps pay for most prescription medicines, including insulin and insulin syringes. Participant pays an annual registration fee and a pharmacy copayment. The gathered materials state a $45 annual registration fee and a maximum pharmacy copay of $16.25 per prescription. With Medicare Part D coordination, ConnPACE can help keep out-of-pocket costs capped according to program rules; one summary notes that covered drugs should not exceed the ConnPACE copay structure, and another notes certain combinations with Extra Help can reduce costs further.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Call 1-800-423-5026",
+            "Apply using the ConnPACE application materials referenced by Connecticut DSS / ConnPACE",
+            "Visit the ConnPACE website referenced in older materials: http://www.connpace.com/"
+          ],
+          "processing_time": "Not clearly stated in the gathered materials.",
+          "waitlist": null,
+          "forms": [
+            "ConnPACE Application for Enrollment",
+            "ConnPACE enrollment/registration materials"
+          ],
+          "documents": [
+            "Proof of Connecticut residency",
+            "Proof of age or disability status",
+            "Proof of income",
+            "Medicare card and Part D plan information if applicable",
+            "Information about current prescription coverage",
+            "Identity information for the applicant and spouse if married"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Connecticut only; applicant must have lived in Connecticut for at least six months before applying.",
+          "regional_variations": null,
+          "offices_or_providers": [
+            "Connecticut Department of Social Services / ConnPACE program administration",
+            "Local senior centers may distribute application information, but the program itself is statewide"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf",
+        "gotchas": [
+          "This is prescription assistance, not broad medical coverage.",
+          "Medicare-eligible people generally must join a Part D plan; ConnPACE coordinates with Part D rather than replacing it.",
+          "There is an annual fee plus per-prescription copay, so the program does not make prescriptions free.",
+          "Some drugs are excluded, and brand/generic coverage can depend on the specific drug and Part D formulary rules.",
+          "Out-of-state purchases, including mail order, are not covered in the gathered materials.",
+          "Income limits have changed over time, so families should confirm the current year’s figure before applying."
+        ],
+        "data_shape_notes": "Fixed statewide prescription-assistance benefit with annual fee and per-prescription copay; eligibility is centered on Connecticut residency, age/disability status, income, and coordination with Medicare Part D.",
+        "_raw": "{\n  \"name\": \"ConnPace (Connecticut Pharmaceutical Assistance)\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"single\": \"$25,100 annual income\",\n      \"married_or_couple\": \"$33,800 annual income\",\n      \"notes\": [\n        \"Income limits are adjusted annually for Social Security COLA/inflation.\",\n        \"Older secondary sources show prior or alternate thresholds; the most current official-style figures found in the gathered materials are $25,100 single and $33,800 married.\"\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Must be a Connecticut resident for at least 183 days / six months before applying.\",\n      \"Must be age 65 or older, or under 65 with a disability in some materials; however, the gathered official-style consumer guide emphasizes elderly eligibility and Medicare-related coordination.\",\n      \"Must generally not have other prescription coverage that pays at least part of the cost of all prescriptions.\",\n      \"Medicare-eligible participants must enroll in a Medicare Part D plan.\",\n      \"Must pay the annual ConnPACE registration fee.\",\n      \"Must have prescription drug coverage limitations consistent with the program rules; some drugs are excluded.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Helps pay for most prescription medicines, including insulin and insulin syringes. Participant pays an annual registration fee and a pharmacy copayment. The gathered materials state a $45 annual registration fee and a maximum pharmacy copay of $16.25 per prescription. With Medicare Part D coordination, ConnPACE can help keep out-of-pocket costs capped according to program rules; one summary notes that covered drugs should not exceed the ConnPACE copay structure, and another notes certain combinations with Extra Help can reduce costs further.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call 1-800-423-5026\",\n      \"Apply using the ConnPACE application materials referenced by Connecticut DSS / ConnPACE\",\n      \"Visit the ConnPACE website referenced in older materials: http://www.connpace.com/\"\n    ],\n    \"processing_time\": \"Not clearly stated in the gathered materials.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"ConnPACE Application for Enrollment\",\n      \"ConnPACE enrollment/registration materials\"\n    ],\n    \"documents\": [\n      \"Proof of Connecticut residency\",\n      \"Proof of age or disability status\",\n      \"Proof of income\",\n      \"Medicare card and Part D plan information if applicable\",\n      \"Information about current prescription coverage\",\n      \"Identity information for the applicant and spouse if married\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Connecticut only; applicant must have lived in Connecticut for at least six months before applying.\",\n    \"regional_variations\": null,\n    \"offices_or_providers\": [\n      \"Connecticut Department of Social Services / ConnPACE program administration\",\n      \"Local senior centers may distribute application information, but the program itself is statewide\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf\",\n  \"gotchas\": [\n    \"This is prescription assistance, not broad medical coverage.\",\n    \"Medicare-eligible people generally must join a Part D plan; ConnPACE coordinates with Part D rather than replacing it.\",\n    \"There is an annual fee plus per-prescription copay, so the program does not make prescriptions free.\",\n    \"Some drugs are excluded, and brand/generic coverage can depend on the specific drug and Part D formulary rules.\",\n    \"Out-of-state purchases, including mail order, are not covered in the gathered materials.\",\n    \"Income limits have changed over time, so families should confirm the current year’s figure before applying.\"\n  ],\n  \"data_shape_notes\": \"Fixed statewide prescription-assistance benefit with annual fee and per-prescription copay; eligibility is centered on Connecticut residency, age/disability status, income, and coordination with Medicare Part D.\"\n}"
+      },
+      {
+        "name": "National Family Caregiver Support Program (Connecticut)",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No income limit for caregiver eligibility was identified in the official Connecticut materials reviewed. Connecticut’s official guidance says caregiver income is used to identify other support sources, but it is not the determining factor of eligibility. The program instead uses the care recipient’s circumstances and the caregiver relationship.[10]",
+          "asset_limits": "No asset limit was identified in the official Connecticut materials reviewed.",
+          "other_requirements": [
+            "There must be both a caregiver and a care recipient.",
+            "The care recipient must be a Connecticut resident living in the community.[11]",
+            "Eligible caregiver categories in Connecticut include: age 18+ caring for someone age 60+; age 18+ caring for someone with Alzheimer’s disease or a related disorder; age 55+ caring for a child under 18 as a grandparent/relative caregiver; or age 55+ caring for an adult age 18-59 with a disability.[1][11]",
+            "One Connecticut Area Agency on Aging may also use a care-needs screen for services, with at least one requirement that the care recipient needs assistance with at least two activities of daily living or has a cognitive/mental impairment requiring substantial supervision.[3]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Connecticut’s program provides information and assistance, referrals, caregiver counseling, training, support groups, respite care, and supplemental services to support unpaid family caregivers. Official state materials also describe short-term respite in the home and help connecting caregivers to local services.[5][6][13] One Connecticut area agency states caregivers may receive up to $3,500 in services per grant year, subject to needs and available funding, and that cost-share may be requested.[14]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call 1-800-994-9422 to be connected to the local Area Agency on Aging.[1][2][8]",
+            "Use your local Connecticut Area Agency on Aging office; the state directs applicants to apply through the local AAA.[1][8][13]",
+            "Local AAA phone contacts listed in state materials include Senior Resources/Eastern CT 860-887-3561, North Central Area Agency on Aging 860-724-6443, Agency on Aging of South Central CT 203-785-8533, and Western CT Area Agency on Aging 203-757-5449.[2]"
+          ],
+          "processing_time": "No statewide official processing-time standard was identified in the official materials reviewed.",
+          "waitlist": "No statewide waitlist policy was identified. Availability may depend on local Area Agency on Aging funding and service capacity.[14]",
+          "forms": [
+            "Caregiver Services Application / Application Cover Sheet used by Connecticut caregiver support programs, including NFCSP.[10]"
+          ],
+          "documents": [
+            "Information about the caregiver and care recipient.",
+            "Care recipient age and Connecticut residency.",
+            "Description of the care being provided and why support is needed.",
+            "Income information for the care recipient if the local AAA requests a cost-share determination or to identify other support sources.[9][10]",
+            "Any documentation related to Alzheimer’s disease, disability, or caregiving relationship if the local AAA asks for it."
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Administered statewide in Connecticut through the state aging agency and the five Area Agencies on Aging; eligibility and service availability run through the local AAA serving the applicant’s region.[1][12][13]",
+          "regional_variations": "Yes. Applicants are routed to their local Area Agency on Aging, and local agencies can differ in contact process, cost-share practices, service availability, and service caps. One Connecticut AAA publicly states a $3,500 annual service cap, which suggests regional implementation can differ.[2][14]",
+          "offices_or_providers": [
+            "Senior Resources/Eastern CT Area Agency on Aging",
+            "North Central Area Agency on Aging",
+            "Agency on Aging of South Central Connecticut",
+            "Western Connecticut Area Agency on Aging"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program",
+        "gotchas": [
+          "This is not a cash benefit for the caregiver; it is a service/support program administered through local Area Agencies on Aging.[13]",
+          "The caregiver’s income is not the main eligibility test in Connecticut; the care recipient’s status and the caregiving relationship matter more.[10]",
+          "There is no single uniform statewide dollar amount for all participants; local Area Agencies on Aging may set cost-share expectations and service caps differently.[9][14]",
+          "Families often overlook that the program can cover more than elder care; Connecticut also includes grandparent/relative caregivers and some caregivers of adults with disabilities.[1][11]",
+          "The first step is not a centralized online application; Connecticut directs families to call the statewide number or the local AAA for intake.[1][2][8]"
+        ],
+        "data_shape_notes": "This program is region-administered rather than a single uniform statewide benefit, with eligibility centered on caregiver relationship and care-recipient circumstances, and service amounts that can vary by local AAA and available funding.",
+        "_raw": "{\n  \"name\": \"National Family Caregiver Support Program (Connecticut)\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No income limit for caregiver eligibility was identified in the official Connecticut materials reviewed. Connecticut’s official guidance says caregiver income is used to identify other support sources, but it is not the determining factor of eligibility. The program instead uses the care recipient’s circumstances and the caregiver relationship.[10]\",\n    \"asset_limits\": \"No asset limit was identified in the official Connecticut materials reviewed.\",\n    \"other_requirements\": [\n      \"There must be both a caregiver and a care recipient.\",\n      \"The care recipient must be a Connecticut resident living in the community.[11]\",\n      \"Eligible caregiver categories in Connecticut include: age 18+ caring for someone age 60+; age 18+ caring for someone with Alzheimer’s disease or a related disorder; age 55+ caring for a child under 18 as a grandparent/relative caregiver; or age 55+ caring for an adult age 18-59 with a disability.[1][11]\",\n      \"One Connecticut Area Agency on Aging may also use a care-needs screen for services, with at least one requirement that the care recipient needs assistance with at least two activities of daily living or has a cognitive/mental impairment requiring substantial supervision.[3]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Connecticut’s program provides information and assistance, referrals, caregiver counseling, training, support groups, respite care, and supplemental services to support unpaid family caregivers. Official state materials also describe short-term respite in the home and help connecting caregivers to local services.[5][6][13] One Connecticut area agency states caregivers may receive up to $3,500 in services per grant year, subject to needs and available funding, and that cost-share may be requested.[14]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call 1-800-994-9422 to be connected to the local Area Agency on Aging.[1][2][8]\",\n      \"Use your local Connecticut Area Agency on Aging office; the state directs applicants to apply through the local AAA.[1][8][13]\",\n      \"Local AAA phone contacts listed in state materials include Senior Resources/Eastern CT 860-887-3561, North Central Area Agency on Aging 860-724-6443, Agency on Aging of South Central CT 203-785-8533, and Western CT Area Agency on Aging 203-757-5449.[2]\"\n    ],\n    \"processing_time\": \"No statewide official processing-time standard was identified in the official materials reviewed.\",\n    \"waitlist\": \"No statewide waitlist policy was identified. Availability may depend on local Area Agency on Aging funding and service capacity.[14]\",\n    \"forms\": [\n      \"Caregiver Services Application / Application Cover Sheet used by Connecticut caregiver support programs, including NFCSP.[10]\"\n    ],\n    \"documents\": [\n      \"Information about the caregiver and care recipient.\",\n      \"Care recipient age and Connecticut residency.\",\n      \"Description of the care being provided and why support is needed.\",\n      \"Income information for the care recipient if the local AAA requests a cost-share determination or to identify other support sources.[9][10]\",\n      \"Any documentation related to Alzheimer’s disease, disability, or caregiving relationship if the local AAA asks for it.\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Administered statewide in Connecticut through the state aging agency and the five Area Agencies on Aging; eligibility and service availability run through the local AAA serving the applicant’s region.[1][12][13]\",\n    \"regional_variations\": \"Yes. Applicants are routed to their local Area Agency on Aging, and local agencies can differ in contact process, cost-share practices, service availability, and service caps. One Connecticut AAA publicly states a $3,500 annual service cap, which suggests regional implementation can differ.[2][14]\",\n    \"offices_or_providers\": [\n      \"Senior Resources/Eastern CT Area Agency on Aging\",\n      \"North Central Area Agency on Aging\",\n      \"Agency on Aging of South Central Connecticut\",\n      \"Western Connecticut Area Agency on Aging\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program\",\n  \"gotchas\": [\n    \"This is not a cash benefit for the caregiver; it is a service/support program administered through local Area Agencies on Aging.[13]\",\n    \"The caregiver’s income is not the main eligibility test in Connecticut; the care recipient’s status and the caregiving relationship matter more.[10]\",\n    \"There is no single uniform statewide dollar amount for all participants; local Area Agencies on Aging may set cost-share expectations and service caps differently.[9][14]\",\n    \"Families often overlook that the program can cover more than elder care; Connecticut also includes grandparent/relative caregivers and some caregivers of adults with disabilities.[1][11]\",\n    \"The first step is not a centralized online application; Connecticut directs families to call the statewide number or the local AAA for intake.[1][2][8]\"\n  ],\n  \"data_shape_notes\": \"This program is region-administered rather than a single uniform statewide benefit, with eligibility centered on caregiver relationship and care-recipient circumstances, and service amounts that can vary by local AAA and available funding.\"\n}"
+      },
+      {
+        "name": "Connecticut Home-Delivered Meals Program",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "No income limit for the Connecticut Senior Nutrition Program / Meals on Wheels. The state says there is no income or asset limit to participate, but when demand exceeds funding, priority goes to people with the greatest social and economic need[6].",
+          "asset_limits": "No asset limit for the Senior Nutrition Program. The state guidance says there is no asset limit, and no asset test is used for eligibility[6].",
+          "other_requirements": [
+            "Must be age 60 or older, or a spouse of an eligible participant; some local programs also serve certain younger adults with disabilities[6][8].",
+            "Must be unable to attend a Senior Community Café / congregate meal site to qualify for home-delivered meals through the Elderly Nutrition Program[8].",
+            "Home-delivered meals are generally for people who are unable to prepare or obtain nourishing meals on their own[1][2][4].",
+            "A program staff member screens each participant and asks questions about nutritional health, activity level, and priority group[6].",
+            "Some local provider programs also describe eligibility as homebound and unable to shop, prepare meals, travel to a meal site, or drive[2][5]."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Prepared hot, cold, or frozen meals are delivered to the home. State regulations describe reimbursement for the Connecticut Home Care Program for one or two meals per day, and say payment is not available for more than two meals a day[1][4]. Local providers may deliver one to seven days per week depending on need[5].",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Apply through the local Area Agency on Aging / nutrition provider serving the person’s region[2][5][9]",
+            "Call the local provider directly for referral and screening[5][9]",
+            "Use the My Place CT senior nutrition information site to identify local meal services[2][8]",
+            "Call 211 Connecticut for referral help and local site information[10]"
+          ],
+          "processing_time": "No single statewide processing time is stated. Participants are screened by program staff, and if demand exceeds funding, meal services may be reduced or a waitlist may be used[6].",
+          "waitlist": "Possible when demand exceeds available funding. The state says people with the greatest social and economic need get priority, meal services may be reduced, and a waitlist may be required[6].",
+          "forms": [
+            "Registration form for the Elderly Nutrition Program[8]",
+            "Assessment completed for home-delivered meals[8]"
+          ],
+          "documents": [
+            "Completed registration information[8]",
+            "Information needed for the intake assessment, including age, living situation, ability to travel, and nutritional/functional needs[6][8]",
+            "Any local provider referral details if applying through a specific agency[5][9]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide in Connecticut, but service is delivered through local providers and Area Agencies on Aging rather than a single statewide office[2][5][9].",
+          "regional_variations": "Yes. Eligibility rules are statewide, but the actual provider, delivery schedule, and wait times vary by region. Local agencies may offer different meal cadences, and some areas list specific providers for local residents[5][9].",
+          "offices_or_providers": [
+            "My Place CT senior nutrition resource directory[2][8]",
+            "WCAAA / local Meals on Wheels service[5]",
+            "LifeBridge Community Services for New Haven area residents[9]",
+            "TEAM, Inc. for Valley residents[9]"
+          ]
+        },
+        "official_source": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
+        "gotchas": [
+          "There is no income test or asset test, so families often assume they must qualify financially when they do not[6].",
+          "Being eligible does not guarantee immediate service; funding limits can create reduced service levels or waitlists[6].",
+          "Home-delivered meals are not a general food benefit; they are tied to inability to attend a senior café or prepare/obtain meals safely[1][2][8].",
+          "Some local programs describe delivery as one to seven days per week, so meal frequency depends on the local provider and assessed need[5].",
+          "The state home-care regulation limits reimbursement to no more than two meals per day under the Connecticut Home Care Program[1][4].",
+          "Families should contact the local provider or Area Agency on Aging directly because Connecticut uses a local delivery network rather than one central application office[5][9]."
+        ],
+        "data_shape_notes": "This program has a statewide eligibility framework with no income or asset limit, but actual access is regional and provider-based. The main variables are screening/priority status, local provider capacity, and whether the person can attend congregate meals.",
+        "_raw": "{\n  \"name\": \"Connecticut Home-Delivered Meals Program\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"No income limit for the Connecticut Senior Nutrition Program / Meals on Wheels. The state says there is no income or asset limit to participate, but when demand exceeds funding, priority goes to people with the greatest social and economic need[6].\",\n    \"asset_limits\": \"No asset limit for the Senior Nutrition Program. The state guidance says there is no asset limit, and no asset test is used for eligibility[6].\",\n    \"other_requirements\": [\n      \"Must be age 60 or older, or a spouse of an eligible participant; some local programs also serve certain younger adults with disabilities[6][8].\",\n      \"Must be unable to attend a Senior Community Café / congregate meal site to qualify for home-delivered meals through the Elderly Nutrition Program[8].\",\n      \"Home-delivered meals are generally for people who are unable to prepare or obtain nourishing meals on their own[1][2][4].\",\n      \"A program staff member screens each participant and asks questions about nutritional health, activity level, and priority group[6].\",\n      \"Some local provider programs also describe eligibility as homebound and unable to shop, prepare meals, travel to a meal site, or drive[2][5].\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Prepared hot, cold, or frozen meals are delivered to the home. State regulations describe reimbursement for the Connecticut Home Care Program for one or two meals per day, and say payment is not available for more than two meals a day[1][4]. Local providers may deliver one to seven days per week depending on need[5].\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Apply through the local Area Agency on Aging / nutrition provider serving the person’s region[2][5][9]\",\n      \"Call the local provider directly for referral and screening[5][9]\",\n      \"Use the My Place CT senior nutrition information site to identify local meal services[2][8]\",\n      \"Call 211 Connecticut for referral help and local site information[10]\"\n    ],\n    \"processing_time\": \"No single statewide processing time is stated. Participants are screened by program staff, and if demand exceeds funding, meal services may be reduced or a waitlist may be used[6].\",\n    \"waitlist\": \"Possible when demand exceeds available funding. The state says people with the greatest social and economic need get priority, meal services may be reduced, and a waitlist may be required[6].\",\n    \"forms\": [\n      \"Registration form for the Elderly Nutrition Program[8]\",\n      \"Assessment completed for home-delivered meals[8]\"\n    ],\n    \"documents\": [\n      \"Completed registration information[8]\",\n      \"Information needed for the intake assessment, including age, living situation, ability to travel, and nutritional/functional needs[6][8]\",\n      \"Any local provider referral details if applying through a specific agency[5][9]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide in Connecticut, but service is delivered through local providers and Area Agencies on Aging rather than a single statewide office[2][5][9].\",\n    \"regional_variations\": \"Yes. Eligibility rules are statewide, but the actual provider, delivery schedule, and wait times vary by region. Local agencies may offer different meal cadences, and some areas list specific providers for local residents[5][9].\",\n    \"offices_or_providers\": [\n      \"My Place CT senior nutrition resource directory[2][8]\",\n      \"WCAAA / local Meals on Wheels service[5]\",\n      \"LifeBridge Community Services for New Haven area residents[9]\",\n      \"TEAM, Inc. for Valley residents[9]\"\n    ]\n  },\n  \"official_source\": \"https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program\",\n  \"gotchas\": [\n    \"There is no income test or asset test, so families often assume they must qualify financially when they do not[6].\",\n    \"Being eligible does not guarantee immediate service; funding limits can create reduced service levels or waitlists[6].\",\n    \"Home-delivered meals are not a general food benefit; they are tied to inability to attend a senior café or prepare/obtain meals safely[1][2][8].\",\n    \"Some local programs describe delivery as one to seven days per week, so meal frequency depends on the local provider and assessed need[5].\",\n    \"The state home-care regulation limits reimbursement to no more than two meals per day under the Connecticut Home Care Program[1][4].\",\n    \"Families should contact the local provider or Area Agency on Aging directly because Connecticut uses a local delivery network rather than one central application office[5][9].\"\n  ],\n  \"data_shape_notes\": \"This program has a statewide eligibility framework with no income or asset limit, but actual access is regional and provider-based. The main variables are screening/priority status, local provider capacity, and whether the person can attend congregate meals.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "CT",
+    "stateName": "Connecticut",
+    "classifiedAt": "2026-10-06T05:30:32.078Z",
+    "total": 6,
+    "typeSummary": {
+      "benefit": 6
+    },
+    "scopeSummary": {
+      "federal": 1,
+      "state": 5
+    },
+    "complexitySummary": {
+      "deep": 2,
+      "medium": 4
+    },
+    "programs": [
+      {
+        "name": "Medicare Savings Program (QMB/SLMB/QI)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Connecticut Department of Social Services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Connecticut DSS ConneCT online portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Connecticut State SSI Supplement",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Connecticut Department of Social Services regional offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Connecticut DSS central office, 55 Farmington Ave., Hartford, CT 06105",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Connecticut Property Tax Relief for Seniors",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Municipal Assessor’s Office in the applicant’s town",
+              "type": "service-area"
+            },
+            {
+              "name": "Town senior center in some municipalities",
+              "type": "service-area"
+            },
+            {
+              "name": "Office of Policy and Management contact for state program questions",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "ConnPace (Connecticut Pharmaceutical Assistance)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Connecticut Department of Social Services / ConnPACE program administration",
+              "type": "service-area"
+            },
+            {
+              "name": "Local senior centers may distribute application information, but the program itself is statewide",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": false,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "National Family Caregiver Support Program (Connecticut)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Senior Resources/Eastern CT Area Agency on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "North Central Area Agency on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Agency on Aging of South Central Connecticut",
+              "type": "service-area"
+            },
+            {
+              "name": "Western Connecticut Area Agency on Aging",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Connecticut Home-Delivered Meals Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "My Place CT senior nutrition resource directory[2][8]",
+              "type": "service-area"
+            },
+            {
+              "name": "WCAAA / local Meals on Wheels service[5]",
+              "type": "service-area"
+            },
+            {
+              "name": "LifeBridge Community Services for New Haven area residents[9]",
+              "type": "service-area"
+            },
+            {
+              "name": "TEAM, Inc. for Valley residents[9]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "CT",
+      "id": "ct-medicare-savings-program",
+      "name": "Medicare Savings Program (QMB/SLMB/QI)",
+      "legacyId": "medicare-savings-program-qmb-slmb-qi",
+      "programType": "benefit"
+    },
+    {
+      "state": "CT",
+      "id": "ct-state-ssi-supplement",
+      "name": "Connecticut State SSI Supplement",
+      "legacyId": "connecticut-state-ssi-supplement",
+      "programType": "benefit"
+    },
+    {
+      "state": "CT",
+      "id": "ct-property-tax-relief-seniors",
+      "name": "Connecticut Property Tax Relief for Seniors",
+      "legacyId": "connecticut-property-tax-relief-for-seniors",
+      "programType": "benefit"
+    },
+    {
+      "state": "CT",
+      "id": "ct-connpace-prescription-assistance",
+      "name": "ConnPace (Connecticut Pharmaceutical Assistance)",
+      "legacyId": "connpace-connecticut-pharmaceutical-assistance",
+      "programType": "benefit"
+    },
+    {
+      "state": "CT",
+      "id": "ct-national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program (Connecticut)",
+      "legacyId": "national-family-caregiver-support-program-connecticut",
+      "programType": "benefit"
+    },
+    {
+      "state": "CT",
+      "id": "ct-home-delivered-meals",
+      "name": "Connecticut Home-Delivered Meals Program",
+      "legacyId": "connecticut-home-delivered-meals-program",
+      "programType": "benefit"
+    }
+  ]
+}

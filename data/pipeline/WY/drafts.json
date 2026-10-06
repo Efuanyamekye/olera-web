@@ -2,8 +2,8 @@
   "state": "WY",
   "stateName": "Wyoming",
   "draftedAt": "2026-04-13T21:50:19.573Z",
-  "total": 4,
-  "successful": 4,
+  "total": 9,
+  "successful": 9,
   "programs": [
     {
       "id": "state-parks-senior-discounts",
@@ -153,7 +153,7 @@
           "source": "https://wyoparks.wyo.gov/index.php/learn/contact",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         }
       ]
     },
@@ -496,31 +496,19 @@
           "field": "assets_individual",
           "from": 29950,
           "to": 25000,
-          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "source": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         },
         {
           "field": "assets_couple",
           "from": 59900,
-          "to": 25000,
-          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "to": 50000,
+          "source": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "3077777320",
-            "211"
-          ],
-          "to": "8669898901",
-          "source": "https://wyotax.org/wp-content/uploads/2020/07/Current-Property-Tax-Assistance-Programs-2013.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         }
       ]
     },
@@ -614,7 +602,7 @@
       "contentSections": [],
       "faqs": [],
       "sourceUrl": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/",
-      "lastVerifiedDate": "2026-10-02",
+      "lastVerifiedDate": "2026-10-06",
       "reviewedBy": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-02",
@@ -625,7 +613,1161 @@
         "hasLocationFinder": true,
         "hasDocumentChecklist": true,
         "visualTone": "warm"
-      }
+      },
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "3077778566",
+          "source": "https://www.wyocourts.gov/legal-help-by-topic/temporary-guardianship-of-a-minor/",
+          "reason": "page also lists ours ((800) 442-2766)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
+    },
+    {
+      "id": "wy-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "shortName": "Wyoming ABD Medicaid",
+      "tagline": "If your parent is 65 or older, blind, or disabled and living in Wyoming, this program can cover doctor visits, prescriptions, nursing home care, and home-based services at little or no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wyoming Department of Health Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Wyoming's Aged, Blind, and Disabled (ABD) Medicaid pays for medical care that Medicare either doesn't cover or only partially covers: doctor visits, hospital stays, prescriptions, behavioral health, dental (two preventive and two emergency visits per year), long-term nursing facility care, and home and community-based services that let your parent stay out of a facility. If your parent is already on Supplemental Security Income (SSI), they likely qualify automatically. If they're not on SSI but are 65 or older, blind, or disabled with limited income and assets, they may still qualify through one of several ABD pathways.\n\nThis is not a single program with one income limit. Wyoming runs multiple ABD coverage groups with different eligibility rules. The main divide is between SSI-related eligibility (which follows federal SSI income and resource standards) and institutional or waiver-related eligibility (which generally allows income up to 300% of the Federal Benefit Rate, a higher threshold designed for people who need nursing home or home-based care). Which pathway fits your parent determines what limits apply, so the first step is identifying the right category before comparing numbers.\n\nRoutine vision care is not covered except to treat an eye disease or injury. Dental coverage exists but is capped. Beyond those limits, this program covers a broad range of medical and long-term care services, and for many families it is the most important coverage their parent can hold. Apply as soon as you think your parent may qualify; the state does not automatically enroll people who are eligible.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays covered medical and long-term care costs directly to providers. The value depends on the services your parent uses and cannot be stated as a single dollar figure.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, OR blind or disabled at any age",
+          "Wyoming resident and U.S. citizen or qualifying immigrant (5-year residency required)",
+          "Income at or below SSI-related limits for standard ABD, or up to 300% of the Federal Benefit Rate for nursing facility or waiver coverage",
+          "Must meet resource limits for the applicable ABD coverage group",
+          "For nursing home or home-based waiver coverage: must also meet a clinical level-of-care requirement"
+        ],
+        "ageRequirement": "65+ (or blind or disabled at any age)",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Additional real property beyond the primary home",
+            "Non-exempt vehicles"
+          ],
+          "exemptAssets": [
+            "Primary home (exemptions and conditions apply; see Wyoming Medicaid eligibility manual)",
+            "One vehicle (conditions apply)",
+            "Household goods and personal property",
+            "Irrevocable burial trusts and prepaid burial contracts",
+            "Other exemptions as defined in Wyoming's eligibility manual"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "For nursing facility coverage or Home and Community Based Services (HCBS) waiver coverage, your parent must meet a Nursing Facility Level of Care. This is a clinical assessment that determines whether your parent needs daily help with activities like bathing, dressing, medication management, or other personal care tasks. Meeting the income limit alone is not enough for these pathways; the level-of-care assessment is a separate requirement.",
+        "otherRequirements": [
+          "Must be a Wyoming resident",
+          "Must be a U.S. citizen or a lawful permanent resident who has lived in the U.S. for at least five years",
+          "Disability must be established by the Social Security Administration (SSA) or determined by the Wyoming Department of Health using SSA standards",
+          "Some ABD groups are tied to SSI eligibility or to loss of SSI due to specific circumstances such as Social Security cost-of-living increases or widow/widower benefit changes"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at wesystem.wyo.gov, by phone at 1-855-294-2127, or by mailing a paper application to the Wyoming Department of Health Customer Service Center; processing time is not publicly stated but disability determinations can extend the timeline.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify which ABD pathway fits your parent",
+            "description": "Before you apply, figure out whether your parent is already on SSI, is applying for nursing home or waiver-based coverage, or is seeking standard aged or disabled Medicaid. The income and resource rules differ by pathway. If you are unsure, call 1-855-294-2127 and describe your parent's situation; the representative can tell you which coverage group to apply under."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents",
+            "description": "Collect the documents listed in the checklist below before you start the application. Missing documents are the most common reason applications are delayed. Having everything ready before you begin will speed up the process."
+          },
+          {
+            "step": 3,
+            "title": "Submit your application",
+            "description": "Online: go to wesystem.wyo.gov and complete the Wyoming Medicaid Application. By phone: call 1-855-294-2127 (TTY/TDD: 1-855-329-5204), Monday through Friday. By mail or in person: mail a completed paper application to Wyoming Department of Health, Customer Service Center, 3001 E. Pershing Blvd., Suite 125, Cheyenne, WY 82001. Paper applications can also be dropped off in person at that address."
+          },
+          {
+            "step": 4,
+            "title": "Disability determination (if needed)",
+            "description": "If your parent's disability has not already been established by the Social Security Administration, the Wyoming Department of Health will conduct its own disability determination. This requires medical records and supporting evidence of your parent's condition. Gather medical records, physician statements, and any existing SSA decisions before applying to avoid delays."
+          },
+          {
+            "step": 5,
+            "title": "Level-of-care assessment (for nursing home or waiver coverage)",
+            "description": "If your parent is applying for nursing facility coverage or HCBS waiver services, a separate clinical assessment of their care needs will be required. A state assessor will evaluate whether your parent meets the Nursing Facility Level of Care standard. This happens after the application is submitted; the Department will contact you to schedule it."
+          },
+          {
+            "step": 6,
+            "title": "Respond promptly to any requests",
+            "description": "If the Department asks for additional documents or information, respond as quickly as possible. Delays in responding pause your application. Keep copies of everything you submit."
+          }
+        ],
+        "processingTime": "Not published by Wyoming for standard ABD applications. Applications requiring a state disability determination or level-of-care assessment will take longer than applications for people already on SSI. Contact 1-855-294-2127 to ask about your specific case.",
+        "waitlist": "No statewide ABD Medicaid waitlist was identified in the official materials reviewed. However, some Home and Community Based Services (HCBS) waiver programs have separate administration and level-of-care requirements that can affect access. Ask specifically about waiver availability when you call.",
+        "tip": "If your parent is already receiving SSI from the Social Security Administration, ask the Department whether automatic enrollment applies; SSI recipients may qualify for Medicaid without a separate full application in some cases.",
+        "urls": [
+          {
+            "label": "Apply online at WESystem",
+            "url": "https://www.wesystem.wyo.gov/"
+          },
+          {
+            "label": "Wyoming Medicaid Programs and Eligibility",
+            "url": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter or SSI determination letter (most recent)",
+        "Proof of Wyoming residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of U.S. citizenship or qualifying immigrant status (U.S. passport, birth certificate, or naturalization certificate; for immigrants, green card and proof of five years of U.S. residency)",
+        "Social Security card or record of Social Security number for your parent",
+        "Proof of age (birth certificate or passport)",
+        "Proof of disability or blindness if not already established by the Social Security Administration (physician statements, medical records, prior SSA decisions)",
+        "Recent income statements for all income sources (Social Security benefit letter, pension statements, annuity statements, any employment income records)",
+        "Current balances for all checking and savings accounts (the state will ask for account information; bring recent bank statements or be prepared to state current balances)",
+        "Life insurance policy documents showing face value and cash surrender value",
+        "Deeds or tax statements for any real property beyond your parent's primary home",
+        "Vehicle title and registration for any vehicles owned",
+        "Prepaid burial contracts or irrevocable burial trust documents if they exist",
+        "Medicare card if your parent has Medicare (Parts A and/or B), as this affects coordination of benefits",
+        "Any other health insurance cards or policy information",
+        "Legal documents if a family member or authorized representative is applying on behalf of your parent (power of attorney, guardianship order, or representative authorization)"
+      ],
+      "contacts": [
+        {
+          "label": "Wyoming Medicaid Customer Service Center",
+          "phone": "1-855-294-2127",
+          "description": "Apply for ABD Medicaid, ask eligibility questions, and get help identifying which coverage pathway fits your parent's situation.",
+          "hours": "Monday through Friday (specific hours not published; call during business hours)"
+        },
+        {
+          "label": "TTY/TDD Line (for hearing impaired)",
+          "phone": "1-855-329-5204",
+          "description": "Same services as the main line, accessible for callers using TTY or TDD devices.",
+          "hours": "Monday through Friday (specific hours not published)"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is in a hospital or skilled nursing facility right now, start the application before discharge. Hospital discharge planners can often help initiate the process, and coverage in some cases can be backdated to the date of application or earlier.",
+        "There are multiple ABD coverage groups with different income and resource rules. Do not assume your parent doesn't qualify based on one income figure without confirming which pathway applies. Call 1-855-294-2127 and describe the full situation before concluding they are ineligible.",
+        "If your parent's disability has not been determined by SSA, the state will need to make its own determination using SSA standards. Submitting complete medical records upfront is the single most effective way to avoid a long delay.",
+        "For waiver-based home care coverage, income eligibility alone is not enough. The level-of-care assessment is a separate clinical step. Families sometimes assume approval of the financial application means approval for home-based services; ask explicitly about both tracks."
+      ],
+      "relatedPrograms": [
+        "Wyoming Home and Community Based Services (HCBS) Waivers",
+        "Supplemental Security Income (SSI)",
+        "Wyoming's Nursing Facility Medicaid Coverage",
+        "Medicare Savings Programs (for help with Medicare premiums and cost-sharing)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two different income rules: which one applies to your parent?",
+          "body": "SSI-related ABD: Applies to people who receive SSI or who qualify under federal SSI income and resource standards. This is the baseline pathway for aged, blind, or disabled individuals not seeking institutional or waiver-based care.\n\nInstitutional or waiver-related ABD: Applies to people who need nursing facility care or Home and Community Based Services through a waiver. Income can be higher under this pathway, generally up to 300% of the Federal Benefit Rate. A clinical level-of-care assessment is also required. If your parent's income is too high for SSI-related eligibility, they may still qualify under this track."
+        },
+        {
+          "type": "callout",
+          "title": "What ABD Medicaid does and does not cover",
+          "body": "Covered: Doctor visits, outpatient and inpatient hospital care, prescriptions, behavioral health, non-emergency medical transportation, screenings, two preventive dental visits per year, two emergency dental visits per year, nursing facility care, and home and community-based waiver services.\n\nNot covered: Routine vision care (glasses, routine exams). Vision coverage is limited to treatment of an eye disease or injury. Dental coverage is capped at the visit limits above, not unlimited.\n\nIf your parent also has Medicare, ABD Medicaid often acts as secondary coverage, paying costs Medicare leaves behind such as copays and deductibles."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns their home. Does that disqualify them?",
+          "answer": "The primary home is generally exempt from the resource count under Wyoming ABD Medicaid, meaning it is not counted against your parent when the state evaluates their assets. However, exemption conditions apply, and the state's eligibility manual contains the controlling rules. Call 1-855-294-2127 or consult Wyoming's Medicaid eligibility manual at health.wyo.gov to confirm how the home is treated for your parent's specific coverage group. For nursing facility coverage, there are also estate recovery rules that may apply after your parent's death; ask about those separately."
+        },
+        {
+          "question": "My parent's income is too high for SSI. Does that mean they can't get ABD Medicaid at all?",
+          "answer": "Not necessarily. Wyoming has a separate ABD pathway for people who need nursing facility care or Home and Community Based Services through a waiver, and that pathway allows income up to 300% of the Federal Benefit Rate, which is higher than the SSI income limit. If your parent needs significant daily care, they may qualify under this institutional or waiver track even if standard SSI-related Medicaid is out of reach. Call 1-855-294-2127 and ask specifically about the institutional or HCBS waiver pathway."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they can't do it themselves?",
+          "answer": "Yes. A family member, legal guardian, or authorized representative can apply on your parent's behalf. You will need documentation showing your authority to act for them, such as a power of attorney, guardianship order, or a signed representative authorization form. Submit that documentation along with the application. If you're unsure which document you need, call 1-855-294-2127 before you apply."
+        },
+        {
+          "question": "How is disability determined if my parent has never applied for SSI or Social Security disability?",
+          "answer": "If the Social Security Administration has not already made a disability determination for your parent, the Wyoming Department of Health will evaluate disability using SSA's standards. This requires medical records, physician documentation, and evidence of your parent's functional limitations. The process takes additional time beyond the standard financial eligibility review. Submit complete medical documentation when you apply to avoid back-and-forth delays."
+        },
+        {
+          "question": "Can my parent get both Medicare and ABD Medicaid at the same time?",
+          "answer": "Yes. People who have both are called dual eligibles. When your parent has Medicare, ABD Medicaid typically acts as secondary coverage, paying costs Medicare doesn't cover such as deductibles, copays, and some services Medicare excludes. If your parent qualifies for both, a Medicare Savings Program may also help pay Medicare premiums; ask about those programs at the same time you apply for ABD Medicaid."
+        },
+        {
+          "question": "What happens if my parent's income or health status changes after they're enrolled?",
+          "answer": "Wyoming requires enrollees to report changes in income, resources, living situation, or health status. The state conducts periodic redeterminations to confirm continued eligibility. If your parent's condition worsens and they now need nursing facility or waiver-level care, contact 1-855-294-2127 to discuss whether a different ABD coverage group or a level-of-care assessment is appropriate. Changes in income or assets can affect which pathway they qualify under."
+        },
+        {
+          "question": "Is there a waitlist for ABD Medicaid itself?",
+          "answer": "No statewide waitlist for ABD Medicaid was identified in official Wyoming materials. However, specific Home and Community Based Services waiver programs have their own administration and may have access limitations based on provider availability and level-of-care determinations. When you apply, ask specifically whether the particular waiver services your parent needs have any waiting period or availability constraints."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and a Medicare Savings Program at the same time?",
+          "answer": "Yes, and it is worth doing both at once. Medicare Savings Programs help pay Medicare Part A and Part B premiums, deductibles, and copays. ABD Medicaid covers a broader range of services. Applying for both at the same time through Wyoming's Customer Service Center at 1-855-294-2127 or at wesystem.wyo.gov can help your parent maximize coverage without duplicating the paperwork effort."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-855-294-2127",
+      "sourceUrl": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wy-community-choice-waiver",
+      "name": "Community Choice Waiver (CCW)",
+      "shortName": "CCW Home Care",
+      "tagline": "If your parent needs nursing-home-level care but wants to stay home, Wyoming's CCW program can pay for the support that makes that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Benefits and Eligibility Specialist offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Chosen case management agency",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Wyoming's Community Choice Waiver (CCW) is a Medicaid program that pays for home and community-based services so your parent can get nursing-home-level care without moving into a nursing facility. If a trained public health nurse has determined your parent needs daily help with things like bathing, dressing, or medication management, CCW can cover services including personal care aides, home-delivered meals, adult day programs, respite for you as a caregiver, skilled nursing visits, assistive technology, and home modifications.\n\nThis is not a cash benefit. CCW covers a specific menu of services coordinated through a case management agency your parent chooses after enrollment. That agency becomes the central point of contact for arranging and adjusting care over time, so your parent is not left managing multiple providers alone.\n\nCCW is open statewide to Wyoming residents age 65 and older, and to adults ages 19 to 64 with a verified disability. To qualify, your parent must meet Wyoming Medicaid financial eligibility requirements and pass a functional assessment (called the LT-101) confirming they need nursing facility level of care. The financial threshold is set at 300% of the Federal Benefit Rate; the dollar amount changes each year, so verifying the current limit directly with Wyoming's Benefits and Eligibility Specialist for your area is essential.",
+      "savingsRange": "",
+      "savingsSource": "Free service: CCW covers home and community-based services at no premium cost to eligible Medicaid recipients. Dollar value varies by the services authorized in the individual care plan; Wyoming Department of Health does not publish a universal per-person cap.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+, or age 19-64 with a verified disability",
+          "Wyoming Medicaid financial eligibility required",
+          "Income generally at or below 300% of the Federal Benefit Rate",
+          "Must need nursing facility level of care (assessed via LT-101 tool)",
+          "Wyoming resident receiving services in the state"
+        ],
+        "ageRequirement": "65+ (or 19-64 with verified disability)",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings accounts",
+            "Investments and brokerage accounts",
+            "Additional real property beyond the primary home",
+            "Cash value of life insurance above exempt thresholds"
+          ],
+          "exemptAssets": [
+            "Primary home (primary residence, conditions apply)",
+            "One vehicle",
+            "Household goods and personal belongings"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must be assessed by a trained Wyoming public health nurse using the LT-101 tool. The assessment determines whether they need nursing facility level of care, meaning they require substantial daily help with activities like bathing, dressing, eating, mobility, or medication management. This assessment must happen before enrollment and is repeated at least once a year.",
+        "otherRequirements": [
+          "Must be a Wyoming resident who will receive services in Wyoming",
+          "Must be enrolled in Wyoming Medicaid, or complete a Medicaid application alongside the CCW application",
+          "Ages 19-64: disability must be verified by Social Security Administration determination or by the Wyoming Department of Health using SSA criteria",
+          "Must select a case management agency after starting the application process"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Start by calling 307-630-4729 to reach a CCW Benefits and Eligibility Specialist, who will screen your parent for Medicaid financial eligibility and schedule the LT-101 nursing-level-of-care assessment. Processing time varies by county and case management availability.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call to start the screening",
+            "description": "Call 307-630-4729 to reach a Benefits and Eligibility Specialist in your area. Tell them you are applying for the Community Choice Waiver. They will ask basic questions about your parent's age, income, and care needs to determine if a full application makes sense."
+          },
+          {
+            "step": 2,
+            "title": "Complete the CCW application and, if needed, a Medicaid application",
+            "description": "Download the CCW Application (available in English, Spanish, and Braille, dated 7/2026) from the Wyoming Department of Health HCBS Document Library at https://health.wyo.gov/healthcarefin/hcbs/document-library/. If your parent is not already enrolled in Wyoming Medicaid, you must also complete a Wyoming Medicaid application at the same time. Both can be mailed to: Wyoming Department of Health, 122 West 25th Street, 4 West, Cheyenne, WY 82002."
+          },
+          {
+            "step": 3,
+            "title": "Complete the LT-101 nursing facility level of care assessment",
+            "description": "A trained Wyoming public health nurse will conduct the LT-101 assessment to determine whether your parent meets nursing facility level of care. This is a clinical review of whether your parent needs substantial daily help with tasks like bathing, dressing, or medication management. Your parent cannot be enrolled in CCW without passing this assessment."
+          },
+          {
+            "step": 4,
+            "title": "Medicaid financial eligibility review",
+            "description": "Wyoming's Medicaid office will review your parent's income and countable resources against the CCW financial eligibility criteria. Income must generally be at or below 300% of the Federal Benefit Rate. Have income documents and asset information ready. The specialist will tell you exactly what is needed based on your parent's situation."
+          },
+          {
+            "step": 5,
+            "title": "Choose a case management agency",
+            "description": "If your parent is approved, they will need to select a case management agency. That agency becomes the coordinator for all CCW services, including scheduling personal care aides, home-delivered meals, transportation, respite, and any other services in the authorized care plan. Ask the Benefits and Eligibility Specialist which agencies serve your parent's county."
+          },
+          {
+            "step": 6,
+            "title": "Care plan is developed and services begin",
+            "description": "The case manager works with your parent and your family to build an individualized care plan based on the LT-101 results and your parent's goals. Services authorized in the plan then begin through contracted providers. Level of care is reassessed at least annually."
+          }
+        ],
+        "processingTime": "No official statewide processing-time benchmark is published by Wyoming. Timing depends on Medicaid financial review, LT-101 scheduling, and case management agency availability, all of which vary by county. Ask the Benefits and Eligibility Specialist when you call what to expect in your area.",
+        "waitlist": "No formal statewide waitlist is described in current Wyoming Department of Health materials. However, access can be limited by local staff and case management agency capacity. Ask the specialist for your area about current availability.",
+        "tip": "If your parent is not yet on Wyoming Medicaid, submit the Medicaid application at the same time as the CCW application. Submitting them separately can significantly delay the process.",
+        "urls": [
+          {
+            "label": "Wyoming HCBS Program Page",
+            "url": "https://health.wyo.gov/healthcarefin/hcbs/"
+          },
+          {
+            "label": "HCBS Document Library (CCW Application and Fact Sheet)",
+            "url": "https://health.wyo.gov/healthcarefin/hcbs/document-library/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed and signed CCW Application form (7/2026 version, available at https://health.wyo.gov/healthcarefin/hcbs/document-library/)",
+        "Proof of Wyoming residency (utility bill, lease, or state-issued document with current address)",
+        "Proof of age (birth certificate, passport, or state-issued ID)",
+        "Wyoming Medicaid application, if your parent is not already enrolled in Wyoming Medicaid",
+        "Social Security award letter or other income statements showing current monthly income",
+        "Current balances for any checking or savings accounts (Wyoming Medicaid conducts a Medicaid-style resource review; the specialist will tell you exactly what period or statements are required based on your parent's case)",
+        "Medical records or physician documentation supporting that your parent needs nursing facility level of care",
+        "Social Security Administration disability determination letter, for applicants ages 19 to 64",
+        "Documentation of any other income sources (pension statements, annuity payments, VA benefit letters)",
+        "Property documents for any real estate other than the primary home (deeds, tax statements)",
+        "Legal guardianship, power of attorney, or representative paperwork if someone other than your parent is signing the application"
+      ],
+      "contacts": [
+        {
+          "label": "CCW Benefits and Eligibility Specialist (intake line)",
+          "phone": "(307) 630-4729",
+          "description": "The starting point for CCW applications in Wyoming. Call to screen for eligibility, ask questions about the LT-101 assessment, and find out which specialist and case management agencies serve your parent's county.",
+          "hours": "Contact the Wyoming Department of Health for current hours; state agency hours are typically Mon-Fri during business hours MT"
+        },
+        {
+          "label": "Wyoming Department of Health, HCBS Program",
+          "phone": null,
+          "description": "Oversees the Community Choice Waiver statewide. Mailing address for paper applications: 122 West 25th Street, 4 West, Cheyenne, WY 82002. Full program information at https://health.wyo.gov/healthcarefin/hcbs/.",
+          "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 510-0280",
+          "description": "Number listed on health.wyo.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "Your parent must qualify for two separate things: Wyoming Medicaid financial eligibility AND nursing facility level of care via the LT-101 assessment. Families often focus on income and miss the LT-101 step, which causes delays.",
+        "If your parent is currently in a hospital or short-term rehab facility, you can begin the CCW application process before discharge. Ask the facility's social worker or discharge planner about connecting with a Benefits and Eligibility Specialist.",
+        "The income threshold is 300% of the Federal Benefit Rate. This dollar amount changes each year; do not rely on figures from previous years or unofficial websites. Confirm the current limit directly when you call 307-630-4729.",
+        "CCW pays for services through a case management agency, not as cash to your family. Families sometimes expect reimbursement; the program works by authorizing specific providers to deliver specific services listed in the care plan."
+      ],
+      "relatedPrograms": [
+        "Wyoming Medicaid (required as the financial eligibility base for CCW)",
+        "Assisted Living Waiver (ALW) for Wyoming residents whose care needs are best met in an assisted living setting",
+        "Big Horn Basin Developmental Services and other regional developmental disability services for adults under 65",
+        "Wyoming Home Services Program (for lower-level home care needs that may not require nursing facility level of care)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What CCW actually pays for",
+          "body": "CCW is not a cash program. It pays directly for services your parent's case manager authorizes in the care plan. Covered services include: personal support services (help with bathing, dressing, meals), home health aide visits, skilled nursing visits, adult day programs, home-delivered meals, non-medical transportation, companion services, respite care (giving you a break as a caregiver), assistive technology, home modifications (ramps, grab bars, widened doorways), personal emergency response systems (PERS), and case management itself. The specific services and hours your parent receives depend on what the LT-101 assessment shows and what the care plan authorizes."
+        },
+        {
+          "type": "prose",
+          "title": "The two gates every applicant must pass",
+          "body": "CCW has two separate eligibility gates, and your parent must clear both.\n\nGate 1 is financial: your parent must qualify for Wyoming Medicaid. Income must generally be at or below 300% of the Federal Benefit Rate (the exact dollar amount changes annually). Countable resources are reviewed under Medicaid-style rules. Assets like the primary home and one vehicle are typically exempt, but the full asset review happens during Medicaid enrollment.\n\nGate 2 is functional: a trained public health nurse must assess your parent using Wyoming's LT-101 tool and determine that your parent needs nursing facility level of care. This means your parent requires substantial daily assistance with tasks like bathing, dressing, eating, moving around, or managing medications. If your parent does not pass the LT-101, they are not eligible for CCW regardless of income.\n\nBoth gates must be cleared before services begin, and the functional assessment is repeated at least every year."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent wants to stay in their home. Does CCW actually make that possible, or does it require moving somewhere?",
+          "answer": "CCW is specifically designed to help people stay in their homes or in community settings instead of moving to a nursing facility. Covered services like personal care aides, home modifications, home-delivered meals, and skilled nursing visits all come to where your parent lives. Some participants also use adult day programs while continuing to live at home. If your parent's care needs eventually exceed what can be safely provided at home, the case manager will talk with your family about other options."
+        },
+        {
+          "question": "My parent is already in a nursing facility. Can they use CCW to move back home?",
+          "answer": "Yes. CCW includes Transition Intensive Case Management and Transition Setup Services specifically to help people move out of nursing facilities and back into the community. If your parent is currently in a facility, ask the facility's social worker to connect you with a Wyoming CCW Benefits and Eligibility Specialist, or call 307-630-4729 directly. The transition services can help fund setup costs like first-month deposits and basic household items."
+        },
+        {
+          "question": "Can I, as the caregiver, get any help through CCW, or is everything for my parent?",
+          "answer": "CCW includes respite care, which is a service designed to give family caregivers a break. Respite allows another trained caregiver to step in so you can rest, handle other responsibilities, or simply take time for yourself. Companion services are also covered. Speak with the case manager about including respite in your parent's care plan."
+        },
+        {
+          "question": "What happens if my parent's health declines after they are enrolled? Does coverage change?",
+          "answer": "The LT-101 level of care assessment is repeated at least once a year, and the care plan can be updated more frequently if your parent's needs change significantly. You can contact the case management agency at any time to request a reassessment or modification to the care plan. If your parent's needs eventually exceed what CCW can cover in the community, the case manager will discuss nursing facility placement and Medicaid coverage for that setting."
+        },
+        {
+          "question": "My parent is 58 years old with a serious disability. Can they still qualify?",
+          "answer": "CCW is open to adults ages 19 to 64 with a qualifying disability, in addition to adults 65 and older. For ages 19 to 64, the disability must be verified either through a Social Security Administration disability determination letter or through a Wyoming Department of Health review using SSA criteria. If your parent does not yet have an SSA determination, you can still start the CCW application process while that documentation is being gathered."
+        },
+        {
+          "question": "Can I apply for CCW and Wyoming Medicaid at the same time, or do I have to get Medicaid first?",
+          "answer": "You should apply for both at the same time. The CCW Application and the Wyoming Medicaid application can be submitted together. Submitting them separately slows things down because CCW eligibility cannot be finalized until Medicaid financial eligibility is confirmed. Download both forms from the HCBS Document Library at https://health.wyo.gov/healthcarefin/hcbs/document-library/ and submit them together."
+        },
+        {
+          "question": "How long will it take before my parent actually starts receiving services?",
+          "answer": "Wyoming does not publish an official statewide processing-time target for CCW. Timing depends on how quickly the Medicaid financial review is completed, when the LT-101 assessment can be scheduled, and how soon a case management agency can begin developing the care plan. These factors vary by county. When you call 307-630-4729, ask the Benefits and Eligibility Specialist what the current typical timeframe is in your area."
+        },
+        {
+          "question": "Will CCW pay a family member to provide care, or only outside providers?",
+          "answer": "CCW benefits are paid to authorized service providers through the case management structure, not directly to family members in most circumstances. Whether a family member can be hired as a paid provider under certain CCW service categories depends on program rules and case manager guidance. Ask your case management agency specifically about this when selecting your care plan options; the answer depends on the service type and your parent's situation."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(307) 630-4729",
+      "sourceUrl": "https://health.wyo.gov/healthcarefin/hcbs/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "3076304729"
+          ],
+          "to": "(800) 510-0280",
+          "source": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+          "flaggedAt": "2026-10-06T12:31:44.063Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "wy-medicare-savings-programs",
+      "name": "Medicare Savings Programs",
+      "shortName": "Medicare Savings",
+      "tagline": "Wyoming pays your parent's Medicare premiums and out-of-pocket costs if their income is below about $1,800/month.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Wyoming Department of Family Services field offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Wyoming Department of Health Customer Service Center",
+            "type": "service-area"
+          },
+          {
+            "name": "Long Term Care Unit for LTC-related applications",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is on Medicare and their monthly income is below roughly $1,800 (single person), Wyoming may pay some or all of their Medicare costs. Depending on income, that means the state covers their Part B premium ($185/month in 2025), and at the highest level of help, also their deductibles, copayments, and coinsurance. That is real money: the Part B premium alone adds up to over $2,200 a year.\n\nWyoming runs three tiers of this benefit. The lowest-income tier (QMB) pays the most: it covers premiums plus out-of-pocket cost-sharing. The middle tier (SLMB) and top tier (QI) both pay only the Part B premium. Which tier your parent qualifies for depends on their countable income, which is not always the same as their gross income. Some income is excluded by rule.\n\nThis program is often missed because families assume Medicare covers everything, or because the three-tier structure is confusing. It does not require your parent to give up their current doctors. Enrollment runs through Wyoming's Medicaid office, not Medicare itself.",
+      "savingsRange": "Up to $2,220/year in Part B premium coverage for SLMB and QI enrollees (based on the 2025 Part B standard premium of $185/month); QMB enrollees save more because deductibles, copayments, and coinsurance are also covered, but the total QMB savings depend on your parent's actual Medicare utilization and cannot be stated as a fixed ceiling.",
+      "savingsSource": "Part B premium figure from CMS (cms.gov); QMB coverage of cost-sharing from Medicare.gov and CMS MSP guidance. Total QMB savings vary by individual use of Medicare services.",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Must be enrolled in Medicare (Part A or Part B)",
+          "Income at or below the limit for at least one of three tiers",
+          "QMB: income at or below $1,330/month (single) or $1,804/month (couple)",
+          "SLMB: income at or below $1,596/month (single) or $2,164/month (couple)",
+          "QI: income at or below $1,796/month (single) or $2,435/month (couple)",
+          "Must meet a separate asset (resource) limit"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1330
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1804
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Bank accounts and other countable cash resources",
+            "Other resources counted under Social Security Administration MSP rules"
+          ],
+          "exemptAssets": [
+            "Wyoming's official sources did not publish the full exempt-resource list on the pages retrieved. Verify the current treatment of your parent's home, one vehicle, and personal property with the application worker before applying."
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be entitled to Medicare (Part A or Part B)",
+          "Must meet the countable income limit for at least one tier (QMB, SLMB, or QI)",
+          "Must meet the applicable resource (asset) standard for the tier",
+          "Must reside in Wyoming"
+        ],
+        "povertyLevelReference": "QMB: 100% FPL; SLMB: 120% FPL; QI: 135% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply by phone, online through Wyoming's benefit system, or in person at a Department of Family Services office; no processing time is posted officially.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Check which tier fits your parent's income",
+            "description": "Compare your parent's countable monthly income to the three income limits: QMB ($1,330 single / $1,804 couple), SLMB ($1,596 single / $2,164 couple), QI ($1,796 single / $2,435 couple). Countable income is not always the same as gross income. Social Security, pension, and wages are counted; some deductions apply. If you are unsure, the application worker will calculate it. This step just helps you know which tier to mention when you call."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before you contact the office",
+            "description": "Have your parent's Medicare card, most recent Social Security award letter, and a current bank statement ready before you call or apply online. A complete submission avoids the most common reason applications stall."
+          },
+          {
+            "step": 3,
+            "title": "Apply: choose your method",
+            "description": "Phone: call 855-294-2127 to apply with assistance or request a paper application. If your parent is also applying for long-term care services, call the Long Term Care Unit at 855-203-2936 instead. Online: start through the Wyoming Department of Health application system at health.wyo.gov. In person: pick up and submit an application at any Wyoming Department of Family Services field office. Mail or fax: call 855-294-2127 and ask to have an application mailed or faxed to you."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to any follow-up requests",
+            "description": "The office may request additional documents after reviewing your application. Respond as quickly as possible. Wyoming has not published a standard processing timeline, so checking in by phone is reasonable if you have not heard back within 30 days."
+          },
+          {
+            "step": 5,
+            "title": "Once approved, confirm with Social Security",
+            "description": "Wyoming sends your approval information to the Social Security Administration, which adjusts your parent's Part B premium billing. Confirm the premium is no longer being deducted from their Social Security check about 60 days after approval. If it still appears, call Social Security at 800-772-1213."
+          }
+        ],
+        "processingTime": "Not published by Wyoming on official program pages. Check in by phone if you have not received a decision within 30 days.",
+        "waitlist": null,
+        "tip": "QI is the most commonly missed tier because its income limit is higher than SLMB. If your parent was told they do not qualify, ask the worker to screen for QI specifically. It pays the same Part B premium benefit as SLMB.",
+        "urls": [
+          {
+            "label": "Wyoming Medicaid Income Requirements (official MSP eligibility page)",
+            "url": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/medicaid-income-requirements/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Medicare card (shows enrollment in Part A and/or Part B)",
+        "Most recent Social Security award letter (shows monthly benefit amount)",
+        "Current bank statement showing the balance of any checking or savings accounts",
+        "Pension or retirement income statements if applicable",
+        "Proof of Wyoming residency if requested by the worker (utility bill, lease, or state-issued document)",
+        "Photo ID for the applicant",
+        "Social Security card for the applicant and spouse if applicable",
+        "Proof of any other monthly income (wages, rental income, annuity statements)"
+      ],
+      "contacts": [
+        {
+          "label": "Wyoming Department of Health Customer Service Center",
+          "phone": "855-294-2127",
+          "description": "Apply for Medicare Savings Programs, ask eligibility questions, or request a paper application by mail or fax",
+          "hours": "Contact the office to confirm current hours"
+        },
+        {
+          "label": "Long Term Care Unit (LTC-related applications only)",
+          "phone": "855-203-2936",
+          "description": "Use this line only when applying for Medicare Savings Programs in connection with long-term care services",
+          "hours": "Contact the office to confirm current hours"
+        },
+        {
+          "label": "Social Security Administration (post-approval premium questions)",
+          "phone": "800-772-1213",
+          "description": "Call after your parent's MSP is approved to confirm their Part B premium has been adjusted; also call if the premium is still being deducted after 60 days",
+          "hours": "Mon-Fri 8am-7pm local time"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is also applying for Medicaid or long-term care services, use the Long Term Care Unit line (855-203-2936) rather than the general Customer Service Center. The process is coordinated differently.",
+        "QI enrollment is funded through a federal appropriation that is renewed annually. In years when funding runs short, new QI enrollments can be paused even for eligible applicants. Apply as early in the calendar year as possible if your parent is in the QI income range.",
+        "Wyoming uses countable income, not gross income. Certain income sources may be partially or fully excluded from the calculation. Do not assume your parent is ineligible based on their total Social Security check without asking a worker to run the actual countable income figure.",
+        "If your parent is enrolled in both Medicare and a Medicare Advantage plan, QMB status still protects them from most out-of-pocket costs. Remind providers of the QMB status at every visit; providers cannot legally bill QMB enrollees for Medicare cost-sharing."
+      ],
+      "relatedPrograms": [
+        "Wyoming Medicaid (full coverage for people who qualify at lower income levels)",
+        "Extra Help / Low Income Subsidy (federal program that reduces Medicare Part D drug costs, often paired with MSP)",
+        "Wyoming SHIP (State Health Insurance Assistance Program, free Medicare counseling)",
+        "Wyoming LIEAP (Low Income Energy Assistance Program, for utility costs)"
+      ],
+      "contentSections": [
+        {
+          "type": "tier-comparison",
+          "title": "What each tier actually pays",
+          "description": "The three tiers have the same application process but very different benefits. QMB is worth significantly more.",
+          "rows": [
+            {
+              "tier": "QMB (Qualified Medicare Beneficiary)",
+              "incomeLimit": "$1,330/month (single) | $1,804/month (couple)",
+              "fplBand": "100% FPL",
+              "whatItPays": "Medicare Part A premium (if applicable), Part B premium, AND Medicare deductibles, coinsurance, and copayments"
+            },
+            {
+              "tier": "SLMB (Specified Low-Income Medicare Beneficiary)",
+              "incomeLimit": "$1,596/month (single) | $2,164/month (couple)",
+              "fplBand": "120% FPL",
+              "whatItPays": "Medicare Part B premium only"
+            },
+            {
+              "tier": "QI (Qualifying Individual)",
+              "incomeLimit": "$1,796/month (single) | $2,435/month (couple)",
+              "fplBand": "135% FPL",
+              "whatItPays": "Medicare Part B premium only; funding is congressionally capped and renewed annually"
+            }
+          ]
+        },
+        {
+          "type": "stat-callout",
+          "title": "Key numbers at a glance",
+          "stats": [
+            {
+              "label": "Part B premium covered for SLMB and QI enrollees",
+              "value": "$185/month (2025)"
+            },
+            {
+              "label": "Highest single-person income limit (QI tier)",
+              "value": "$1,796/month"
+            },
+            {
+              "label": "QMB benefit",
+              "value": "Premiums + all Medicare cost-sharing"
+            }
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already has Medicare. Do they have to change their plan or doctors to get this benefit?",
+          "answer": "No. Medicare Savings Programs pay costs within your parent's existing Medicare coverage. They keep their current Medicare card, their current doctors, and any Medicare Advantage or supplement plan they already have. This is a payment program, not a new insurance plan."
+        },
+        {
+          "question": "My parent's Social Security check is $1,600/month. Does that automatically disqualify them from QMB?",
+          "answer": "Not necessarily. Wyoming uses countable income, not simply the gross Social Security amount. Some income is excluded under Social Security Administration rules before the comparison to the limit is made. Ask the application worker to calculate countable income before assuming your parent is over the QMB limit of $1,330/month. They may still qualify for SLMB ($1,596 limit) or QI ($1,796 limit)."
+        },
+        {
+          "question": "What is the asset limit and does my parent's house count against it?",
+          "answer": "Wyoming applies a resource (asset) limit tied to Social Security Administration rules and adjusted annually. The official Wyoming program pages did not publish the full list of exempt assets in the materials we reviewed. Before applying, ask the application worker whether your parent's home, vehicle, and personal property are exempt. Do not assume your parent is ineligible because of assets without getting the worker's assessment first."
+        },
+        {
+          "question": "My parent already tried to get SLMB and was told their income is too high. Should they try again for QI?",
+          "answer": "Yes. QI's income limit ($1,796/month for a single person) is $200 higher than SLMB's. It is the most commonly overlooked tier. Ask the worker specifically to screen for QI. The benefit is the same as SLMB (Part B premium paid), and the application is identical. Note that QI funding is capped federally and renewed each year, so applying early in the calendar year improves chances."
+        },
+        {
+          "question": "Can I apply for Medicare Savings Programs and Extra Help (the Part D drug subsidy) at the same time?",
+          "answer": "Yes, and you should. QMB, SLMB, and QI enrollment automatically qualifies your parent for Extra Help, which reduces their Medicare Part D prescription drug costs. You do not need a separate application for Extra Help once MSP is approved. Social Security applies it automatically. If your parent is not yet on MSP, apply for Extra Help directly through Social Security at 800-772-1213 while the MSP application is pending."
+        },
+        {
+          "question": "A provider billed my parent even though they are enrolled in QMB. Is that allowed?",
+          "answer": "No. Federal law prohibits providers who accept Medicare from billing QMB enrollees for Medicare deductibles, coinsurance, or copayments. If a bill arrives, remind the provider of your parent's QMB status in writing. If the provider continues billing, you can file a complaint through your State Medical Assistance office or call Medicare at 800-MEDICARE (800-633-4227)."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they cannot manage the paperwork themselves?",
+          "answer": "Yes. A family member, legal representative, or authorized representative can apply on behalf of a Medicare beneficiary. Tell the application worker at the start of the call that you are applying as the representative. You may need to provide your own ID and contact information in addition to your parent's documents."
+        },
+        {
+          "question": "How do we know if approval actually goes through and the premium gets removed?",
+          "answer": "After Wyoming approves the application, the state sends the information to the Social Security Administration, which adjusts the Part B premium deduction from your parent's Social Security check. This adjustment can take up to 60 days. Check the next two Social Security deposit amounts. If the premium is still being deducted after 60 days, call Social Security at 800-772-1213 and reference the MSP approval."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "855-294-2127",
+      "sourceUrl": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/medicaid-income-requirements/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "wy-snap-food-benefits",
+      "name": "Supplemental Nutrition Assistance Program (SNAP)",
+      "shortName": "SNAP Food Benefits",
+      "tagline": "If your parent is 60+ and living on a fixed income in Wyoming, they may qualify for up to $306/month toward groceries loaded onto a debit-style card.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Local Wyoming Department of Family Services offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Wyoming DFS SNAP unit via snappowerservice@wyo.gov",
+            "type": "service-area"
+          },
+          {
+            "name": "Wyoming DFS state SNAP page",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and struggling to afford groceries on a fixed income, Wyoming SNAP may help. Benefits are loaded monthly onto an EBT card (a debit card that works at most grocery stores and many farmers markets), with maximums of $306/month for a single person and $562/month for a two-person household, for the period October 1, 2026 through September 30, 2027. The actual amount depends on your parent's household size, income, and certain deductions.\n\nWyoming gives households with an elderly or disabled member a higher income threshold than it gives working-age households. That matters if your parent's gross monthly income is between $1,730 and $2,195 for a one-person household: a working-age applicant would be denied, but your parent may still qualify. Even if gross income is under that limit, Wyoming also applies a net-income test after deductions, including a deduction for out-of-pocket medical expenses that many families miss.\n\nApplying in Wyoming is not a single online click. The process involves submitting a paper or email application, then scheduling a phone or in-person interview with a benefit specialist at your local Department of Family Services (DFS) office. An asset test also applies, though the exact dollar threshold was not published in the official sources retrieved; you will need to confirm the current counted-resource limit with DFS before applying. The sections below walk through income rules, documents, and how to start.",
+      "savingsRange": "Up to $3,672/year for a one-person household (FY2026-27 maximum; actual benefit depends on income, household size, and deductions)",
+      "savingsSource": "Wyoming DFS SNAP published maximum monthly allotment of $306 for a one-person household, effective October 1, 2026 through September 30, 2027, per https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/",
+      "savingsVerified": true,
+      "structuredEligibility": {
+        "summary": [
+          "Wyoming resident",
+          "Gross monthly income at or below $2,195 (1-person household with elderly/disabled member, FY2026-27)",
+          "Net monthly income at or below $1,330 (1-person household, after deductions)",
+          "Must pass an asset/resource test (exact limit: verify with DFS)",
+          "Must complete an application interview with DFS"
+        ],
+        "ageRequirement": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2195
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2976
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 3757
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 4538
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 5319
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 6100
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 6881
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 7662
+          },
+          {
+            "householdSize": 9,
+            "monthlyLimit": 8443
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Other liquid resources"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "Most retirement accounts (verify with DFS)"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a Wyoming resident and apply through Wyoming DFS",
+          "Must cooperate with the application interview (phone or in-person) after submitting the form",
+          "Must provide verification documents requested during the interview",
+          "Households with an elderly or disabled member use the 165% gross-income threshold shown above, but still must meet the separate net-income test (at or below $1,330/month for a one-person household) after deductions",
+          "Asset test applies; exact current dollar limit not published in retrieved official sources; confirm with local DFS before applying"
+        ],
+        "povertyLevelReference": "165% FPL (gross) for households with an elderly or disabled member; 130% FPL (gross) for all other households; 100% FPL (net) for all households"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Submit form DFS 100 by email, mail, fax, or in person at your local DFS office, then complete a phone or in-person interview scheduled by a benefit specialist.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Download or request form DFS 100",
+            "description": "Get the Application for Benefits (form DFS 100) from the Wyoming DFS SNAP page at https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/ or pick one up at your local DFS office. A Spanish-language version (DFS 100S) is also available."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents before submitting",
+            "description": "Collect proof of identity, Wyoming residency, income (Social Security award letter, pension statements), shelter costs (rent, mortgage, utility bills), and any out-of-pocket medical expense records for your parent. Having these ready prevents delays after the interview is scheduled."
+          },
+          {
+            "step": 3,
+            "title": "Submit the completed application",
+            "description": "You have four options: email to snappowerservice@wyo.gov, mail or fax to your local DFS office, or deliver it in person. Find your local office at https://dfs.wyo.gov/about-dfs/locations/."
+          },
+          {
+            "step": 4,
+            "title": "Complete the interview with a DFS benefit specialist",
+            "description": "After DFS receives your application, a benefit specialist will contact your household to schedule a phone or face-to-face interview. Answer calls from DFS promptly; a missed interview can delay or close the application. During the interview, the specialist will ask about income, household composition, assets, and expenses."
+          },
+          {
+            "step": 5,
+            "title": "Provide any additional documents requested",
+            "description": "The specialist may ask for documents you did not initially submit. Send these as quickly as possible to avoid processing delays. Ask specifically whether your parent's out-of-pocket medical expenses qualify for a deduction; this can both help eligibility and increase the monthly benefit."
+          },
+          {
+            "step": 6,
+            "title": "Receive your EBT card and benefit notice",
+            "description": "If approved, your parent will receive an EBT card and a notice showing the monthly benefit amount. Benefits are loaded on a set date each month and can be used at authorized grocery stores and many farmers markets across Wyoming."
+          }
+        ],
+        "processingTime": "Not specified in official sources; depends on interview scheduling and document verification at the local DFS office. Follow up with your local office if you have not heard back within two weeks of submitting the application.",
+        "waitlist": null,
+        "tip": "Claim the medical-expense deduction. Many families skip it. If your parent pays out-of-pocket for doctor visits, prescriptions, dental care, or medical equipment, those costs can reduce countable net income and increase the monthly benefit amount. Ask the benefit specialist about this during the interview.",
+        "urls": [
+          {
+            "label": "Wyoming DFS SNAP Program Page",
+            "url": "https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/"
+          },
+          {
+            "label": "Wyoming DFS Office Locations",
+            "url": "https://dfs.wyo.gov/about-dfs/locations/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Valid government-issued photo ID for your parent (driver's license, state ID, or passport)",
+        "Proof of Wyoming residency (utility bill, lease agreement, or official mail showing current address)",
+        "Most recent Social Security award letter showing monthly benefit amount",
+        "Pension or retirement income statements showing current monthly income",
+        "Most recent rent, mortgage, or property tax statement showing shelter costs",
+        "Most recent utility bills (electric, gas, water) in your parent's name",
+        "Social Security card or documentation of Social Security number for each household member",
+        "Records of out-of-pocket medical expenses your parent paid (prescription receipts, Medicare Part B premium deduction, doctor bill receipts, medical equipment costs)",
+        "Current balances for any checking or savings accounts (exact months or statements DFS will require should be confirmed with your local office at the time of application)",
+        "Documentation of any other income sources (rental income, dividends, veterans benefits, wages)"
+      ],
+      "contacts": [
+        {
+          "label": "Wyoming DFS SNAP Unit (Email Application)",
+          "phone": "(307) 777-7564",
+          "description": "Submit your completed DFS 100 application by email and direct SNAP questions to this unit. This is the statewide SNAP intake email.",
+          "hours": "Contact your local DFS office for response time expectations"
+        },
+        {
+          "label": "Local Wyoming DFS Office (In-Person or Phone)",
+          "phone": null,
+          "description": "Your local DFS office schedules interviews, collects documents, and processes your application. Find your office and its direct number at https://dfs.wyo.gov/about-dfs/locations/.",
+          "hours": "Varies by office; check the locations page"
+        },
+        {
+          "label": "Wyoming 2-1-1",
+          "phone": "2-1-1",
+          "description": "A general helpline that can help you find your local DFS office number if you cannot locate it online. 2-1-1 does not process SNAP applications directly; it refers you to the right office.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "Wyoming does not appear to use Broad-Based Categorical Eligibility, which means an asset test applies even for households with elderly or disabled members. Confirm the current counted-resource dollar limit with your local DFS office before applying, because the exact figure was not published in the official sources we reviewed.",
+        "If your parent has an urgent food need, ask the DFS benefit specialist about expedited processing. Federal rules require expedited SNAP benefits within 7 days for households with very low income or resources; ask whether your parent qualifies when you call.",
+        "The medical-expense deduction is available to households with a member age 60 or older or who is disabled. Out-of-pocket costs for prescriptions, doctor visits, dental care, and medical equipment can reduce countable net income, which can both establish eligibility and increase the monthly benefit. Many families do not claim this deduction.",
+        "Answer all calls from DFS after submitting the application. The interview cannot be completed without your response, and an unanswered interview request can result in the application being closed."
+      ],
+      "relatedPrograms": [
+        "Wyoming Low Income Energy Assistance Program (LIEAP)",
+        "Wyoming Weatherization Assistance Program",
+        "Medicare Savings Programs (help with Medicare premiums for low-income seniors)",
+        "Wyoming Medicaid"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The income rule that matters most for older adults",
+          "body": "Wyoming has two gross-income thresholds. For working-age households, the limit is 130% of the federal poverty level ($1,729/month for one person in FY2026-27). For households with a member who is 60 or older or disabled, the limit rises to 165% of poverty ($2,195/month for one person). This higher threshold is why your parent may qualify even if a neighbor of the same household size was denied. Both groups must also pass the net-income test ($1,330/month for one person), which is calculated after deductions including the medical-expense deduction described above."
+        },
+        {
+          "type": "prose",
+          "title": "What SNAP benefits can and cannot buy",
+          "body": "EBT benefits pay for most grocery store food items: fruits, vegetables, meat, poultry, fish, dairy, bread, cereals, and non-alcoholic beverages. They also cover seeds and plants that produce food. They cannot be used for alcohol, tobacco, vitamins and supplements sold separately, hot prepared foods, or non-food household items. Most major grocery chains in Wyoming accept EBT. Many farmers markets do as well; look for the EBT sign or ask the vendor."
+        },
+        {
+          "type": "prose",
+          "title": "The asset test: what we know and what you need to confirm",
+          "body": "Wyoming SNAP applies a resource test that counts liquid assets like cash and bank account balances. The primary home is excluded. Most retirement accounts are also excluded, but you should confirm this with DFS for your parent's specific account types. Because the official sources we reviewed did not publish the exact current dollar asset limit, we cannot state it here. Before your parent applies, call your local DFS office and ask: 'What is the current countable resource limit for a household with an elderly member, and what accounts or assets do you count?' That one question will tell you whether an asset issue exists before you invest time in the full application."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security check is just over $1,729/month. Does that automatically disqualify them?",
+          "answer": "Not necessarily. Wyoming uses a higher gross-income threshold of $2,195/month for households with a member who is 60 or older or disabled. If your parent's income is between $1,730 and $2,195, they may still qualify under the elderly/disabled rule. They also must pass a separate net-income test at $1,330/month, but that is calculated after deductions including medical expenses, which can meaningfully lower the counted figure."
+        },
+        {
+          "question": "Can I apply for SNAP on behalf of my elderly parent if they cannot manage the process themselves?",
+          "answer": "Yes. An authorized representative can complete and submit the application on your parent's behalf. Inform the DFS benefit specialist during the interview that you are acting as the authorized representative. DFS may ask for written confirmation of that arrangement. The interview can often be conducted by phone, which makes it more manageable for a caregiver coordinating from a distance."
+        },
+        {
+          "question": "My parent owns their home and has a small savings account. Will the asset test disqualify them?",
+          "answer": "The primary home is excluded from the SNAP resource count. A savings account balance is generally counted. Because the official Wyoming DFS sources we reviewed did not publish the exact current asset limit, we cannot give you a precise number to compare against. Call your local DFS office before applying and ask for the current countable-resource limit for a household with an elderly or disabled member. That answer takes about two minutes to get and tells you whether the savings account is a problem."
+        },
+        {
+          "question": "My parent pays a lot out of pocket for prescriptions and doctor visits. Does that help with SNAP?",
+          "answer": "Yes. Federal SNAP rules allow a medical-expense deduction for households with a member who is 60 or older or disabled. Out-of-pocket costs for prescriptions, doctor visits, dental care, vision, and medical equipment can be deducted when calculating net income. This deduction is one of the most commonly missed by families. Bring documentation of those costs to the interview and ask the benefit specialist to apply the deduction."
+        },
+        {
+          "question": "How long will it take to get a decision after we apply?",
+          "answer": "The official Wyoming DFS sources we reviewed did not state a standard statewide processing-time guarantee. Processing depends on how quickly the interview is scheduled and how fast documents are verified at the local office. If your parent has an urgent food need (very low income or resources), ask about expedited processing when you contact DFS; federal rules require expedited benefits within 7 days for qualifying households. For everyone else, follow up with your local office if you have not heard back within two weeks of submitting the application."
+        },
+        {
+          "question": "Can my parent receive SNAP and LIEAP (energy assistance) at the same time?",
+          "answer": "Yes. SNAP and Wyoming's Low Income Energy Assistance Program (LIEAP) are separate programs with separate eligibility rules. Receiving one does not disqualify your parent from the other. Many low-income older adults qualify for both. Apply for each through its own process: SNAP through DFS, and LIEAP through the Wyoming Department of Family Services energy assistance program."
+        },
+        {
+          "question": "What happens to my parent's benefit if their income or household situation changes?",
+          "answer": "Your parent is required to report certain changes to DFS, such as a significant change in income or household size. Benefit amounts are recalculated when changes are reported or when DFS conducts a periodic renewal. If income drops, benefits may increase. If income rises above the limit, benefits stop. Ask DFS at the interview how often recertification is required and what changes must be reported promptly."
+        },
+        {
+          "question": "Can my parent use SNAP benefits at farmers markets or only at grocery stores?",
+          "answer": "Many Wyoming farmers markets accept EBT, but not all. Look for an EBT sign at the market or ask a vendor before assuming. Major grocery chains statewide accept EBT. Benefits cannot be used for hot prepared foods, alcohol, tobacco, or non-food items regardless of where your parent shops."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "BowlFood",
+      "phone": "(307) 777-7564",
+      "sourceUrl": "https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "(307) 777-7564",
+          "source": "https://dfs.wyo.gov/assistance-programs/food-assistance/",
+          "flaggedAt": "2026-10-06T12:31:44.063Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
+    },
+    {
+      "id": "wy-home-delivered-meals",
+      "name": "Home-Delivered Meals",
+      "shortName": "Meals to Your Door",
+      "tagline": "If your parent is 60+ and can't easily prepare their own meals, Wyoming may deliver nutritious meals directly to their home at no cost, regardless of income.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Wyoming Department of Health Aging Division / Community Living Section",
+            "type": "service-area"
+          },
+          {
+            "name": "Local county aging services providers shown on the county service-area map",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Wyoming's Home-Delivered Meals program sends meals directly to your parent's home if they are 60 or older and cannot easily prepare food themselves. This is not an income-based program: there is no financial means test. What matters is your parent's age, their functional need, and whether they are homebound or otherwise unable to get to a group meal site.\n\nThe program typically delivers meals five days a week. In some rural parts of Wyoming, daily delivery is not always possible, and a reduced schedule may be approved. Meals may be hot, cold, frozen, canned, or supplemental foods depending on the county provider. This is a free service. Some providers may ask for a voluntary contribution, but payment is never required and is never a condition of receiving meals.\n\nBecause the program is run county by county through local aging services providers, who you call and how quickly you get started depends on where your parent lives. The first step is finding the right local contact, which you can do through the Wyoming Department of Health's county service-area map.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Unable to prepare their own meals, or no other meal support in place",
+          "Homebound or unable to travel to a congregate meal site",
+          "Must complete a local needs assessment (the AGNES evaluation tool)",
+          "No income or asset test"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must complete the Division-approved AGNES evaluation (a structured assessment of their nutritional risk, ability to prepare food, and homebound status). This is how the local provider determines need, not income.",
+        "otherRequirements": [
+          "Must be unable to prepare meals or lack another meal support service at home or in the community",
+          "Must be homebound or unable to attend a congregate meal site; geographically isolated older adults in rural Wyoming are also considered",
+          "Priority for services may be given based on greatest social and economic need and nutritional risk",
+          "In some rural areas, a reduced meal frequency (fewer than five days per week) may be approved if daily delivery is not feasible"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call your county's local aging services provider or the Wyoming Department of Health Aging Division at (307) 777-5048 to start a needs assessment; processing time varies by county.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Find your county's local provider",
+            "description": "Go to the Wyoming Department of Health county service-area map at https://health.wyo.gov/aging/communityliving/service-area-maps/ to find the aging services provider that covers your parent's county. Each county has its own contact and intake process."
+          },
+          {
+            "step": 2,
+            "title": "Call the local provider or the state program line",
+            "description": "Contact your county provider directly, or call the Wyoming Department of Health Aging Division nutrition program manager at (307) 777-5048 if you need help identifying the right local contact."
+          },
+          {
+            "step": 3,
+            "title": "Complete the AGNES assessment",
+            "description": "The local provider will schedule a needs assessment using the Division-approved AGNES evaluation tool. This looks at your parent's nutritional risk, ability to prepare food, and homebound status. Have basic information ready: your parent's age, current living situation, and any medical or functional limitations that affect meal preparation."
+          },
+          {
+            "step": 4,
+            "title": "Confirm enrollment and delivery schedule",
+            "description": "Once the assessment is complete and your parent qualifies, the local provider will confirm the delivery schedule. In most of Wyoming this is five days per week. If your parent lives in a rural area, ask specifically about delivery frequency, since a reduced schedule may apply."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Timing depends on the local county provider's assessment schedule and current capacity.",
+        "waitlist": "No formal statewide waitlist policy was identified in official Wyoming materials. Availability and any delays vary by county and local provider capacity. Ask your local provider directly about current wait times when you call.",
+        "tip": "When you call, mention any medical conditions or recent hospital stays that affect your parent's ability to cook. This information is relevant to the AGNES assessment and may affect priority placement.",
+        "urls": [
+          {
+            "label": "Wyoming Nutrition Services Program page",
+            "url": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/"
+          },
+          {
+            "label": "County service-area map (find your local provider)",
+            "url": "https://health.wyo.gov/aging/communityliving/service-area-maps/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or driver's license)",
+        "Information about your parent's current living situation and ability to prepare meals (you can describe this by phone; no formal document required initially)",
+        "Any relevant medical or functional information that affects meal preparation (a doctor's note or discharge summary is helpful but may not be required)",
+        "Contact information: your parent's home address, phone number, and any caregiver or emergency contact details"
+      ],
+      "contacts": [
+        {
+          "label": "Wyoming Department of Health Aging Division, Nutrition Program",
+          "phone": "(307) 777-5048",
+          "description": "Reach the state nutrition program manager to get connected to your county's local provider or to ask questions about eligibility and the AGNES assessment process.",
+          "hours": "Business hours, Monday through Friday"
+        },
+        {
+          "label": "Local county aging services provider (via service-area map)",
+          "phone": null,
+          "description": "Your county's local provider handles intake, assessments, and meal delivery. Find the direct number for your county at https://health.wyo.gov/aging/communityliving/service-area-maps/. This is the office that can actually start your parent's enrollment.",
+          "hours": "Varies by county provider"
+        }
+      ],
+      "applicationNotes": [
+        "Because each county runs its own intake process, wait times and delivery frequency can differ significantly depending on where your parent lives. Always ask the local provider about current capacity when you first call.",
+        "If your parent lives in a rural area, ask specifically whether five-day-per-week delivery is available in their location. A reduced schedule may be the only option, and it is worth knowing this upfront before enrollment."
+      ],
+      "relatedPrograms": [
+        "Congregate Meals (Wyoming Title III-C1, group meal sites for seniors who can leave home)",
+        "Wyoming Home and Community-Based Services (HCBS) Waiver (broader in-home support for older adults)",
+        "Wyoming SNAP Food Benefits (grocery assistance for eligible low-income older adults)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No income test. No asset test.",
+          "body": "Many families assume their parent earns too much or owns too much to qualify. Wyoming's Home-Delivered Meals program is funded under the Older Americans Act and does not use income or assets as eligibility criteria. Age and functional need are the only gates. Source: https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/"
+        },
+        {
+          "type": "prose",
+          "title": "What kinds of meals are delivered?",
+          "body": "Meals are not always hot. Depending on your county's provider and delivery model, your parent may receive hot meals, cold meals, frozen meals, canned goods, fresh food, or supplemental nutrition products. The format depends on what the local provider operates. Ask when you call what format is standard in your county."
+        },
+        {
+          "type": "prose",
+          "title": "Rural Wyoming: what to expect",
+          "body": "Wyoming's official program materials acknowledge that five-day-per-week delivery is standard, but that a lesser frequency may be approved in rural areas where daily delivery is not feasible. If your parent lives in a sparsely populated county, delivery may come two or three times per week rather than daily. Ask the local provider what the actual schedule looks like for your parent's address before you complete the AGNES assessment."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent has retirement income and owns their home. Do they still qualify?",
+          "answer": "Yes. Wyoming's Home-Delivered Meals program has no income limit and no asset limit. Eligibility is based on age (60+), the inability to prepare meals, and homebound status. Your parent's retirement income and home ownership are not factors in the decision."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't make calls themselves?",
+          "answer": "Yes. Family members and caregivers routinely initiate contact on behalf of an older parent. Call (307) 777-5048 or reach your county provider through the service-area map at https://health.wyo.gov/aging/communityliving/service-area-maps/. You will want to have your parent's basic information ready, including their address, age, and a description of their functional limitations."
+        },
+        {
+          "question": "How long will it take to start receiving meals after we apply?",
+          "answer": "Wyoming does not publish a statewide processing-time standard. The timeline depends on your county provider's assessment schedule and current capacity. Some counties may start delivery within days of the AGNES assessment; others may take longer. Ask the local provider directly when you call: 'How quickly can you schedule the assessment, and how long after that before delivery starts?'"
+        },
+        {
+          "question": "What if my parent's condition changes after they're enrolled?",
+          "answer": "Notify the local county provider if your parent's living situation, health, or ability to prepare meals changes significantly. The AGNES tool is used for the initial assessment, but providers can conduct follow-up evaluations. Changes in need may affect delivery frequency or the type of meals provided."
+        },
+        {
+          "question": "Will my parent be charged for the meals?",
+          "answer": "No. This is a free service. Some local providers may offer the option to make a voluntary contribution, but payment is never required and cannot be used as a condition for receiving or continuing meals. If any provider suggests otherwise, contact the Wyoming Department of Health Aging Division at (307) 777-5048."
+        },
+        {
+          "question": "My parent lives in a very rural county. Will they actually get meals delivered?",
+          "answer": "The program is available statewide, but delivery frequency in rural areas may be lower than the standard five days per week. Wyoming's official materials state that a reduced frequency can be approved when daily delivery is not feasible. Contact your county provider through the service-area map at https://health.wyo.gov/aging/communityliving/service-area-maps/ and ask specifically what delivery looks like at your parent's address."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "(307) 777-5048",
+      "sourceUrl": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8004422766",
+          "source": "https://health.wyo.gov/aging/communityliving/public_resources/",
+          "reason": "page also lists ours ((307) 777-5048)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -677,5 +1819,5 @@
     ],
     "resourcesVsBenefits": "Wyoming's programs are primarily qualification-based benefits that require income limits or age requirements. The Low Income Energy Assistance Program and Tax Refund for Elderly & Disabled both have income requirements and provide direct financial assistance. Wyoming State Parks Senior Discounts are available to all residents 62+ regardless of income, providing immediate savings on recreation fees across the state."
   },
-  "factcheckedAt": "2026-10-02T07:48:40.673Z"
+  "factcheckedAt": "2026-10-06T12:31:44.063Z"
 }

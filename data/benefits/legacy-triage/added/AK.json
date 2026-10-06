@@ -1,0 +1,16 @@
+[
+  {
+    "state": "AK",
+    "id": "ak-alaskans-living-independently-waiver",
+    "name": "Alaskans Living Independently Waiver (ALI)",
+    "legacyId": "alaskans-living-independently-waiver-ali",
+    "programType": "benefit"
+  },
+  {
+    "state": "AK",
+    "id": "ak-senior-property-tax-exemption",
+    "name": "Senior Property Tax Exemption",
+    "legacyId": "senior-property-tax-exemption",
+    "programType": "benefit"
+  }
+]

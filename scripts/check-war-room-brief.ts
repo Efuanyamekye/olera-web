@@ -184,6 +184,7 @@ assert.deepEqual(priorityLines, [
 // "What moved".
 {
   assert.equal(priorityFor("Benefits Finder"), "benefits");
+  assert.equal(priorityFor("Directory"), "providers");
   const headline = "79 families finished the Benefits Finder in the last 7 days, 90 the week before. 61 first-step letters and 113 check-ins went out.";
   const lines = buildPriorityLines({
     payingProviders: 1, openCampaigns: 20, renewal: null, providerEmailsWaiting: 0, inboxItemsWaiting: 0, since: "Oct 5",

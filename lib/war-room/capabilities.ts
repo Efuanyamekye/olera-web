@@ -37,6 +37,18 @@ const CAPABILITIES: Array<{
     paths: ["lib/growth/collector.server.ts", "app/api/admin/organic-growth/pages/route.ts", "app/admin/organic-growth/page.tsx"],
   },
   {
+    id: "directory-curation-tooling",
+    label: "Provider directory curation tooling",
+    detail: "A documented periodic data sweep (/data-sweep: category definitions, runbook, free DB-wide out-of-scope signal scan, two-pass LLM verify under a cost ceiling; run Apr and Jun 2026), three-tier fuzzy dedupe (/dedupe, soft-deletes keeping the best record), an image classifier that scores quality and picks hero images, dead image-host filtering, and R2 re-hosting already exist. Propose running or extending them, never rebuilding them.",
+    paths: [".claude/commands/data-sweep.md", "docs/data-sweep-runbook.md", "scripts/scan-out-of-scope-signals.js", ".claude/commands/dedupe.md", "scripts/dedup-database.js", "scripts/classify-provider-images.mjs", "lib/images/dead-hosts.ts", "docs/CAPABILITIES-INDEX.md"],
+  },
+  {
+    id: "directory-health-ledger",
+    label: "Directory health: Google status, renames, ledger",
+    detail: "Google business status and name are read on ~10,000 providers a month at $0 (free Places Pro tier on the 15th, plus the review refresh on the 1st). Permanently closed providers are archived on Google's word (reversible soft delete), cosmetic renames applied, temporary closures and substantive renames flagged. Every action is in provider_health_actions with an undo, shown at /admin/directory/health and read by the directory_health probe.",
+    paths: ["lib/providers/directory-health.ts", "lib/providers/directory-health.server.ts", "app/api/cron/directory-status/route.ts", "app/admin/directory/health/page.tsx"],
+  },
+  {
     id: "provider-directory",
     label: "Provider directory and identity system",
     detail: "Olera has provider search, directory hydration, identity resolution, ownership, claims, verification, reviews, and provider-page rendering across directory and claimed-provider records.",

@@ -1,0 +1,258 @@
+{
+  "state": "WA",
+  "addedAt": "2026-10-06T06:26:12.668Z",
+  "dive": {
+    "state": "WA",
+    "stateName": "Washington",
+    "diveAt": "2026-10-06T06:23:31.093Z",
+    "total": 2,
+    "parsed": 2,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "Washington Apple Health for the aged, blind, or disabled uses SSI-based income and resource limits for the categorical needy pathway, and the state says the limits differ for a single person and a married couple; income limits change each January.[1][5][14]",
+            "single_person_2026": "$994/month[13][15]",
+            "married_couple_2026": "$1,491/month combined[13][15]",
+            "notes": "Some Washington materials describe the same program using the SSI standard and note that medically needy and other pathways may exist above the categorical-needy income limit.[12][14]"
+          },
+          "asset_limits": {
+            "single_person_2026": "$2,000[6][13][15]",
+            "married_couple_2026": "$3,000 combined[13][15]",
+            "counts_as_resources": "Cash, bank accounts, stocks, bonds, and other countable liquid resources are generally included in the resource test for ABD Medicaid.[1][2][14]",
+            "exempt_assets": "Washington notes that the program follows SSI-style resource rules; common exemptions typically include a primary home and one vehicle, but the precise list should be verified against the current DSHS/Apple Health resource rules because exemptions can change by case type and program path.[1][2][14]",
+            "notes": "Washington’s ABD health coverage page says income and resource limits are different for single individuals and married couples and are updated annually.[1][5]"
+          },
+          "other_requirements": [
+            "Must live in Washington state.[2][5][12]",
+            "Must be age 65 or older, blind, or disabled.[1][2][5]",
+            "For disability-based eligibility, the disability must meet Social Security Administration/DSHS standards; DSHS states the person must have a condition that stops work for at least 12 months in a row for the ABD program description.[2][14]",
+            "Must meet citizenship or qualified noncitizen rules for Medicaid programs in Washington.[7][12]",
+            "Must meet both income and resource limits for the categorical-needy ABD pathway.[1][5][14]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Washington Apple Health (Medicaid) coverage for doctor visits, hospital care, prescription drugs, lab and imaging services, preventive care, and other medically necessary covered services; it may also help pay Medicare premiums and medical expenses for some people who qualify.[5][8][14]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online: washingtonconnection.org[8]",
+            "Paper application: Form 18-005, classic health care application[8]",
+            "Mail: DSHS Community Services Division, P.O. Box 11699, Tacoma, WA 98411-6699[8]",
+            "In person: local Community Services Office / DSHS office[1][8]",
+            "Phone: Washington Community Services Offices listed by DSHS for help with Health Care Coverage for the Aged, Blind or Disabled[1]"
+          ],
+          "processing_time": "Within 30 calendar days for most Medicaid applications; up to 45 calendar days for ABD cash assistance or a referral to the Housing and Essential Needs (HEN) program, unless there is good cause for delay.[9]",
+          "waitlist": "No waitlist is described for ABD Medicaid coverage itself; however, if the person needs long-term services and supports, Washington’s long-term-care system is administered separately by ALTSA and may involve different placement or service processes.[10][11]",
+          "forms": [
+            "Form 18-005 (Classic Health Care Application)[8]"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Washington residency",
+            "Proof of age, blindness, or disability",
+            "Social Security number",
+            "Proof of income such as Social Security, pensions, wages, or retirement accounts",
+            "Proof of resources such as bank statements and account balances",
+            "Citizenship or immigration status documents, if applicable",
+            "Medicare card and other health insurance information, if applicable"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Washington; no county-only restriction was identified for ABD Medicaid coverage itself.[1][2][5]",
+          "regional_variations": "The basic eligibility rules are statewide, but local Community Services Offices may differ in appointment availability, and long-term services and supports are administered through state programs that can vary by local provider network and care setting.[1][10][11]",
+          "offices_or_providers": [
+            "Washington Department of Social and Health Services Community Services Offices[1]"
+          ]
+        },
+        "official_source": "https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled",
+        "gotchas": [
+          "ABD Medicaid is not the same thing as the ABD cash-assistance program; the Medicaid page and the cash-assistance page are separate programs with different purposes.[1][2]",
+          "The income limit is strict for the categorical-needy pathway, but Washington also references medically needy and other pathways for some people above the standard limit.[7][12][14]",
+          "Income and resource standards change annually, so older charts can be outdated by January.[1][5]",
+          "HWD (Hearing and Working Disabled) is a different Washington Apple Health pathway with no asset test and no upper income limit; families often confuse it with ABD Medicaid.[14]",
+          "A new application may not be required if an active ABD Medicaid client later needs long-term services and supports and the case record already supports institutional eligibility.[11]"
+        ],
+        "data_shape_notes": "This program uses an age/blindness/disability gateway plus SSI-style income and resource limits; the main structure is a fixed statewide eligibility test rather than household-size-based benefit scaling.[1][2][14]",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"Washington Apple Health for the aged, blind, or disabled uses SSI-based income and resource limits for the categorical needy pathway, and the state says the limits differ for a single person and a married couple; income limits change each January.[1][5][14]\",\n      \"single_person_2026\": \"$994/month[13][15]\",\n      \"married_couple_2026\": \"$1,491/month combined[13][15]\",\n      \"notes\": \"Some Washington materials describe the same program using the SSI standard and note that medically needy and other pathways may exist above the categorical-needy income limit.[12][14]\"\n    },\n    \"asset_limits\": {\n      \"single_person_2026\": \"$2,000[6][13][15]\",\n      \"married_couple_2026\": \"$3,000 combined[13][15]\",\n      \"counts_as_resources\": \"Cash, bank accounts, stocks, bonds, and other countable liquid resources are generally included in the resource test for ABD Medicaid.[1][2][14]\",\n      \"exempt_assets\": \"Washington notes that the program follows SSI-style resource rules; common exemptions typically include a primary home and one vehicle, but the precise list should be verified against the current DSHS/Apple Health resource rules because exemptions can change by case type and program path.[1][2][14]\",\n      \"notes\": \"Washington’s ABD health coverage page says income and resource limits are different for single individuals and married couples and are updated annually.[1][5]\"\n    },\n    \"other_requirements\": [\n      \"Must live in Washington state.[2][5][12]\",\n      \"Must be age 65 or older, blind, or disabled.[1][2][5]\",\n      \"For disability-based eligibility, the disability must meet Social Security Administration/DSHS standards; DSHS states the person must have a condition that stops work for at least 12 months in a row for the ABD program description.[2][14]\",\n      \"Must meet citizenship or qualified noncitizen rules for Medicaid programs in Washington.[7][12]\",\n      \"Must meet both income and resource limits for the categorical-needy ABD pathway.[1][5][14]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Washington Apple Health (Medicaid) coverage for doctor visits, hospital care, prescription drugs, lab and imaging services, preventive care, and other medically necessary covered services; it may also help pay Medicare premiums and medical expenses for some people who qualify.[5][8][14]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: washingtonconnection.org[8]\",\n      \"Paper application: Form 18-005, classic health care application[8]\",\n      \"Mail: DSHS Community Services Division, P.O. Box 11699, Tacoma, WA 98411-6699[8]\",\n      \"In person: local Community Services Office / DSHS office[1][8]\",\n      \"Phone: Washington Community Services Offices listed by DSHS for help with Health Care Coverage for the Aged, Blind or Disabled[1]\"\n    ],\n    \"processing_time\": \"Within 30 calendar days for most Medicaid applications; up to 45 calendar days for ABD cash assistance or a referral to the Housing and Essential Needs (HEN) program, unless there is good cause for delay.[9]\",\n    \"waitlist\": \"No waitlist is described for ABD Medicaid coverage itself; however, if the person needs long-term services and supports, Washington’s long-term-care system is administered separately by ALTSA and may involve different placement or service processes.[10][11]\",\n    \"forms\": [\n      \"Form 18-005 (Classic Health Care Application)[8]\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Washington residency\",\n      \"Proof of age, blindness, or disability\",\n      \"Social Security number\",\n      \"Proof of income such as Social Security, pensions, wages, or retirement accounts\",\n      \"Proof of resources such as bank statements and account balances\",\n      \"Citizenship or immigration status documents, if applicable\",\n      \"Medicare card and other health insurance information, if applicable\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Washington; no county-only restriction was identified for ABD Medicaid coverage itself.[1][2][5]\",\n    \"regional_variations\": \"The basic eligibility rules are statewide, but local Community Services Offices may differ in appointment availability, and long-term services and supports are administered through state programs that can vary by local provider network and care setting.[1][10][11]\",\n    \"offices_or_providers\": [\n      \"Washington Department of Social and Health Services Community Services Offices[1]\"\n    ]\n  },\n  \"official_source\": \"https://www.dshs.wa.gov/family-food-and-housing-services/community-services-offices/health-care-coverage-aged-blind-or-disabled\",\n  \"gotchas\": [\n    \"ABD Medicaid is not the same thing as the ABD cash-assistance program; the Medicaid page and the cash-assistance page are separate programs with different purposes.[1][2]\",\n    \"The income limit is strict for the categorical-needy pathway, but Washington also references medically needy and other pathways for some people above the standard limit.[7][12][14]\",\n    \"Income and resource standards change annually, so older charts can be outdated by January.[1][5]\",\n    \"HWD (Hearing and Working Disabled) is a different Washington Apple Health pathway with no asset test and no upper income limit; families often confuse it with ABD Medicaid.[14]\",\n    \"A new application may not be required if an active ABD Medicaid client later needs long-term services and supports and the case record already supports institutional eligibility.[11]\"\n  ],\n  \"data_shape_notes\": \"This program uses an age/blindness/disability gateway plus SSI-style income and resource limits; the main structure is a fixed statewide eligibility test rather than household-size-based benefit scaling.[1][2][14]\"\n}"
+      },
+      {
+        "name": "Tailored Supports for Older Adults",
+        "eligibility": {
+          "age": 55,
+          "income_limits": "Income limits are not publicly listed as a simple household-size table in the source material. Instead, eligibility is tied to Washington Apple Health long-term services and supports financial rules, and the person must meet the program's income requirements under WAC 182-513-1635. The clearest publicly available summary says the person must not currently be eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid. This is a needs-based Medicaid-related program, so the practical test is whether the person fits the program’s LTSS financial rules rather than a standard monthly-income chart.",
+          "asset_limits": "The person must have countable resources within the program limits under WAC 182-513-1640. The exact dollar limit is not stated in the gathered sources. The rule distinguishes countable resources from exempt resources, but the specific exemption list and dollar cap are not spelled out in the available excerpts. Families should expect Medicaid-style resource review, not a no-asset-test program.",
+          "other_requirements": [
+            "Must be age 55 or older",
+            "Must live at home or in another person’s home, not in a licensed residential or institutional setting",
+            "Must be assessed as meeting nursing facility level of care",
+            "Must be a U.S. citizen, U.S. national, qualifying American Indian born abroad, or qualified alien who has met or is exempt from the five-year bar",
+            "Must provide a valid Social Security number",
+            "Must have an eligible unpaid caregiver, or if there is no unpaid caregiver, meet the separate criteria for people without one",
+            "Must not currently be eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Provides support services for the older adult and/or unpaid caregiver. Specific services identified in the sources include respite care, personal care for people without an unpaid caregiver, nurse delegation, home-delivered meals, housekeeping and errands, medical equipment and supplies such as bath benches and incontinence supplies, caregiver training and education, support groups, counseling, and other caregiver-helping items such as mental health counseling or massage therapy. The program description does not give a fixed dollar amount or a fixed hours-per-week benefit cap in the gathered material.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.washingtonconnection.org",
+            "By using the Washington Apple Health application for TSOA",
+            "Through local Washington aging/disability resource offices or caregiver-support providers that handle screening and enrollment assistance"
+          ],
+          "processing_time": "No single statewide processing-time guarantee was identified in the gathered sources. Some areas report enrollment pauses and waitlists, so timing can vary by region and availability.",
+          "waitlist": "Yes, some regions have an enrollment pause and waitlist for MAC/TSOA. At least one regional resource center directs applicants to a specific waitlist FAQ, indicating that access may be temporarily capped in some areas.",
+          "forms": [
+            "Application for Tailored Supports for Older Adults (TSOA)",
+            "Washington Apple Health Application for Tailored Supports for Older Adults (TSOA) program"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of identity and immigration/citizenship status",
+            "Social Security number",
+            "Proof of where the person lives",
+            "Income information",
+            "Resource/asset information",
+            "Caregiver information if there is an unpaid caregiver",
+            "Information needed for the functional assessment of nursing-facility level of care"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Washington State only; the person must live in Washington and at home or in another person's home rather than a licensed facility.",
+          "regional_variations": "Yes. The underlying program is statewide, but access and administration can differ by region because local providers, area agencies, and aging/disability resource networks handle screening and application help. Some regions may have waitlists or enrollment pauses while others may not. Service coordination and provider availability can also differ locally.",
+          "offices_or_providers": [
+            "Washington Connection online application portal",
+            "Local aging and disability resource offices",
+            "County/region caregiver-support agencies and enrollment partners"
+          ]
+        },
+        "official_source": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/tailored-supports-older-adults-tsoa",
+        "gotchas": [
+          "This is not a universal caregiver grant; it is a Medicaid-related LTSS program with financial and functional eligibility rules.",
+          "The older adult must meet nursing-facility level of care, which is stricter than simply needing some help at home.",
+          "A person can qualify even without an unpaid family caregiver, but the service mix changes.",
+          "People already eligible for CN or ABP Medicaid are excluded.",
+          "Some regions have enrollment pauses or waitlists, so being eligible does not always mean immediate entry.",
+          "The program is designed to support unpaid caregivers and delay Medicaid-funded institutional care, so families often miss it when looking only for direct-homecare programs."
+        ],
+        "data_shape_notes": "This program is a statewide Washington LTSS benefit with dual pathways: one for a person with an unpaid caregiver and one for a person without one. Eligibility is based on age, residence, function, citizenship/immigration status, resources, and income, but the publicly available materials do not provide a simple household-size income table or a fixed cash benefit amount.",
+        "_raw": "{\n  \"name\": \"Tailored Supports for Older Adults\",\n  \"eligibility\": {\n    \"age\": 55,\n    \"income_limits\": \"Income limits are not publicly listed as a simple household-size table in the source material. Instead, eligibility is tied to Washington Apple Health long-term services and supports financial rules, and the person must meet the program's income requirements under WAC 182-513-1635. The clearest publicly available summary says the person must not currently be eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid. This is a needs-based Medicaid-related program, so the practical test is whether the person fits the program’s LTSS financial rules rather than a standard monthly-income chart.\",\n    \"asset_limits\": \"The person must have countable resources within the program limits under WAC 182-513-1640. The exact dollar limit is not stated in the gathered sources. The rule distinguishes countable resources from exempt resources, but the specific exemption list and dollar cap are not spelled out in the available excerpts. Families should expect Medicaid-style resource review, not a no-asset-test program.\",\n    \"other_requirements\": [\n      \"Must be age 55 or older\",\n      \"Must live at home or in another person’s home, not in a licensed residential or institutional setting\",\n      \"Must be assessed as meeting nursing facility level of care\",\n      \"Must be a U.S. citizen, U.S. national, qualifying American Indian born abroad, or qualified alien who has met or is exempt from the five-year bar\",\n      \"Must provide a valid Social Security number\",\n      \"Must have an eligible unpaid caregiver, or if there is no unpaid caregiver, meet the separate criteria for people without one\",\n      \"Must not currently be eligible for Categorically Needy (CN) or Alternative Benefit Plan (ABP) Medicaid\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Provides support services for the older adult and/or unpaid caregiver. Specific services identified in the sources include respite care, personal care for people without an unpaid caregiver, nurse delegation, home-delivered meals, housekeeping and errands, medical equipment and supplies such as bath benches and incontinence supplies, caregiver training and education, support groups, counseling, and other caregiver-helping items such as mental health counseling or massage therapy. The program description does not give a fixed dollar amount or a fixed hours-per-week benefit cap in the gathered material.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.washingtonconnection.org\",\n      \"By using the Washington Apple Health application for TSOA\",\n      \"Through local Washington aging/disability resource offices or caregiver-support providers that handle screening and enrollment assistance\"\n    ],\n    \"processing_time\": \"No single statewide processing-time guarantee was identified in the gathered sources. Some areas report enrollment pauses and waitlists, so timing can vary by region and availability.\",\n    \"waitlist\": \"Yes, some regions have an enrollment pause and waitlist for MAC/TSOA. At least one regional resource center directs applicants to a specific waitlist FAQ, indicating that access may be temporarily capped in some areas.\",\n    \"forms\": [\n      \"Application for Tailored Supports for Older Adults (TSOA)\",\n      \"Washington Apple Health Application for Tailored Supports for Older Adults (TSOA) program\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of identity and immigration/citizenship status\",\n      \"Social Security number\",\n      \"Proof of where the person lives\",\n      \"Income information\",\n      \"Resource/asset information\",\n      \"Caregiver information if there is an unpaid caregiver\",\n      \"Information needed for the functional assessment of nursing-facility level of care\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Washington State only; the person must live in Washington and at home or in another person's home rather than a licensed facility.\",\n    \"regional_variations\": \"Yes. The underlying program is statewide, but access and administration can differ by region because local providers, area agencies, and aging/disability resource networks handle screening and application help. Some regions may have waitlists or enrollment pauses while others may not. Service coordination and provider availability can also differ locally.\",\n    \"offices_or_providers\": [\n      \"Washington Connection online application portal\",\n      \"Local aging and disability resource offices\",\n      \"County/region caregiver-support agencies and enrollment partners\"\n    ]\n  },\n  \"official_source\": \"https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/tailored-supports-older-adults-tsoa\",\n  \"gotchas\": [\n    \"This is not a universal caregiver grant; it is a Medicaid-related LTSS program with financial and functional eligibility rules.\",\n    \"The older adult must meet nursing-facility level of care, which is stricter than simply needing some help at home.\",\n    \"A person can qualify even without an unpaid family caregiver, but the service mix changes.\",\n    \"People already eligible for CN or ABP Medicaid are excluded.\",\n    \"Some regions have enrollment pauses or waitlists, so being eligible does not always mean immediate entry.\",\n    \"The program is designed to support unpaid caregivers and delay Medicaid-funded institutional care, so families often miss it when looking only for direct-homecare programs.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Washington LTSS benefit with dual pathways: one for a person with an unpaid caregiver and one for a person without one. Eligibility is based on age, residence, function, citizenship/immigration status, resources, and income, but the publicly available materials do not provide a simple household-size income table or a fixed cash benefit amount.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "WA",
+    "stateName": "Washington",
+    "classifiedAt": "2026-10-06T06:23:31.098Z",
+    "total": 2,
+    "typeSummary": {
+      "benefit": 2
+    },
+    "scopeSummary": {
+      "state": 2
+    },
+    "complexitySummary": {
+      "deep": 2
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Washington Department of Social and Health Services Community Services Offices[1]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Tailored Supports for Older Adults",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Washington Connection online application portal",
+              "type": "service-area"
+            },
+            {
+              "name": "Local aging and disability resource offices",
+              "type": "service-area"
+            },
+            {
+              "name": "County/region caregiver-support agencies and enrollment partners",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "WA",
+      "id": "wa-abd-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    },
+    {
+      "state": "WA",
+      "id": "wa-tailored-supports-older-adults",
+      "name": "Tailored Supports for Older Adults",
+      "legacyId": "tailored-supports-for-older-adults",
+      "programType": "benefit"
+    }
+  ]
+}

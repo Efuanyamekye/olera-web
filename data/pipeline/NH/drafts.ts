@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.787Z
+ * Last updated: 2026-10-06T09:18:23.564Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -198,29 +198,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 7500,
-          "to": 2000,
-          "source": "https://www.medicaid.gov/medicaid/spa/downloads/NH-26-0001.pdf",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8008523345",
-            "8003182596"
-          ],
-          "to": "8442753447",
-          "source": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents/2021-11/bfa-77c.pdf",
-          "severity": "medium",
-          "why": "source dated 2021",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
-        }
-      ],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -420,7 +398,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/NH",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },
@@ -576,7 +554,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.nhpace.org/do-i-qualify/",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },
@@ -782,37 +760,37 @@ export const drafts: PipelineStateDrafts = {
           "field": "income_1",
           "from": 1660,
           "to": 1330,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-specified-low-income-medicare-beneficiaries-slmbs/",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         },
         {
           "field": "income_2",
           "from": 2239,
           "to": 1803,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-specified-low-income-medicare-beneficiaries-slmbs/",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         },
         {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-specified-low-income-medicare-beneficiaries-slmbs/",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-specified-low-income-medicare-beneficiaries-slmbs/",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ],
       "appliedCorrections": [
@@ -1073,20 +1051,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8773477627",
-            "211"
-          ],
-          "to": "18442753447",
-          "source": "https://www.dhhs.nh.gov/programs-services/food-meals-assistance/supplemental-nutrition-assistance-program-snap",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
-        }
-      ],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1330,10 +1295,10 @@ export const drafts: PipelineStateDrafts = {
             "211"
           ],
           "to": "6032713670",
-          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "source": "https://liheapch.acf.hhs.gov/profiles/NH.htm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },
@@ -2014,7 +1979,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/inline-documents/sonh/rfa-2024-dltss-03-adrcs-app-e-appendix-e-nhfcsp-program-operations.pdf",
+          "severity": "high",
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -2187,11 +2162,11 @@ export const drafts: PipelineStateDrafts = {
             "8778725627",
             "211"
           ],
-          "to": "6032064400",
-          "source": "https://operationable.net/scsep-new-hampshire-residents/",
+          "to": "6032232305",
+          "source": "https://www.nheconomy.com/getmedia/d82f1b8c-d99e-49a8-9f1d-0db1f9267551/2025-SNAP-E-T-State-Plan.pdf",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },
@@ -2317,7 +2292,17 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-888-353-9944",
       "sourceUrl": "https://www.603legalaid.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-10-05",
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "18005623174",
+          "source": "https://www.nhla.org/contact-us",
+          "reason": "page also lists ours ((888) 353-9944, (800) 639-5290)",
+          "dismissedAt": "2026-10-05"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2644,34 +2629,13 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
-          "field": "age",
-          "from": 18,
-          "to": 60,
-          "source": "https://www.gc.nh.gov/LBA/Budget/House_Finance_Division_III/3-8-21/Final_for_DLTSS_DIV_III.pdf",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
-        },
-        {
           "field": "income_1",
           "from": 2901,
           "to": 1646,
           "source": "https://www.gc.nh.gov/rules/state_agencies/he-e500.html",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8666349412",
-            "211"
-          ],
-          "to": "8003511888",
-          "source": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/final-draft-2024-2027-nh-state-plan-on-aging.pdf",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },
@@ -2998,10 +2962,10 @@ export const drafts: PipelineStateDrafts = {
             "18666349412"
           ],
           "to": "6032253295",
-          "source": "https://www.strathamnh.gov/Documents/Departments/Parks%20and%20Recreation/Senior%20Services/stratham_seniorresourceguide_final.pdf?t=202512231130030",
+          "source": "https://capbm.org/Senior-Companion",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:51:28.671Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-05T18:18:06.962Z"
         }
       ]
     },

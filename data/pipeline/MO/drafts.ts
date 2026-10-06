@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.917Z
+ * Last updated: 2026-10-06T12:32:15.352Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -250,40 +250,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 1131,
-          "to": 860,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
-          "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1533,
-          "to": 1166,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
-          "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
-        },
-        {
           "field": "assets_individual",
           "from": 6220.5,
-          "to": 3000,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "to": 5035,
+          "source": "https://dss.mo.gov/employment-training-provider-portal/docs/MHABD-Program-Overview.pdf",
           "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_couple",
           "from": 12441,
-          "to": 6000,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "to": 10070,
+          "source": "https://dss.mo.gov/employment-training-provider-portal/docs/MHABD-Program-Overview.pdf",
           "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -1105,20 +1087,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1632,
+          "to": 1696,
           "source": "https://dss.mo.gov/benefit-program-income-limits",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2215,
+          "to": 2296,
           "source": "https://dss.mo.gov/benefit-program-income-limits",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_individual",
@@ -1127,7 +1109,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_couple",
@@ -1136,7 +1118,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -1553,15 +1535,33 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
+          "field": "income_1",
+          "from": 2152,
+          "to": 2640,
+          "source": "https://www.daeoc.com/weatherization-dept",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2913,
+          "to": 3607,
+          "source": "https://www.daeoc.com/weatherization-dept",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        },
+        {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "5737512254",
+          "to": "5737513443",
           "source": "https://dnr.mo.gov/energy/weatherization/low-income-assistance",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -2635,19 +2635,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "income_1",
           "from": 1276,
           "to": 1805,
-          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "income_2",
           "from": 1711,
           "to": 2428,
-          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "phone",
@@ -2656,10 +2656,10 @@ export const drafts: PipelineStateDrafts = {
             "1800"
           ],
           "to": "8003751406",
-          "source": "https://dss.mo.gov/mhd/morx-pharmacist-faqs",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -2830,10 +2830,10 @@ export const drafts: PipelineStateDrafts = {
             "6362070847"
           ],
           "to": "5737513505",
-          "source": "https://dor.mo.gov/personal/ptc/",
+          "source": "https://www.stlouis-mo.gov/government/departments/human-services/aging-services/property-tax-credit.cfm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -3190,12 +3190,395 @@ export const drafts: PipelineStateDrafts = {
             "5737516400"
           ],
           "to": "8002355503",
-          "source": "https://health.mo.gov/sites/health/files/media/pdf/2026/02/Programs%20and%20Services%20Directory.pdf",
+          "source": "https://health.mo.gov/seniors/pdf/program-info.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
+    },
+    {
+      "id": "mo-senior-home-delivered-meals",
+      "name": "Senior Home-Delivered Meals",
+      "shortName": "Home-Delivered Meals",
+      "tagline": "If your parent is 60 or older and struggling to cook, Missouri will deliver nutritious meals to their door at no required cost through their local Area Agency on Aging.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging (AAA) statewide",
+            "type": "service-area"
+          },
+          {
+            "name": "Missouri Senior Resource Line: 1-800-235-5503",
+            "type": "service-area"
+          },
+          {
+            "name": "St. Louis Area Agency on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your aging parent has trouble cooking a balanced meal, whether because of mobility issues, a recent hospitalization, or just the fatigue that comes with getting older, Missouri's Senior Home-Delivered Meals program can send nutritious meals directly to their home. Any Missourian age 60 or older can be referred for this service. There is no statewide income test. Eligibility is primarily based on age and need.\n\nDelivery is handled by your parent's local Area Agency on Aging (AAA), and the format varies by region: some areas deliver hot meals daily, others deliver frozen meals on a weekly or bi-weekly basis, and some offer carryout options. Because each AAA runs its own program, wait times and meal types are not uniform across the state.\n\nThere is a second, narrower version of this benefit for people who have Medicaid and need a higher level of support. That version, funded through Missouri's Aged and Disabled Waiver, has stricter requirements: the person must be at least 63, have active Medicaid, and meet nursing facility level of care (a clinical assessment of whether your parent needs daily help with bathing, dressing, or medication management). If your parent does not meet those criteria, the general AAA nutrition program is likely the right starting point.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older (or spouse of someone 60+)",
+          "Missouri resident",
+          "Unable to prepare balanced meals or needs support to meet care needs",
+          "No statewide income or asset test for the general program",
+          "Waiver-funded version requires Medicaid, age 63+, and nursing facility level of care"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "For the general AAA program, the person must be unable to prepare a balanced meal or otherwise need the service to meet their care needs. For the Medicaid Aged and Disabled Waiver version, the person must meet nursing facility level of care: a formal clinical assessment confirming they need daily help with activities such as bathing, dressing, or medication management.",
+        "otherRequirements": [
+          "Must be a Missouri resident",
+          "Spouses of eligible individuals may also qualify even if the spouse is under 60",
+          "Adults with disabilities may qualify in certain situations through the general AAA program",
+          "For the Aged and Disabled Waiver version: must be at least 63, have active Medicaid with the appropriate Medicaid Eligibility code, and meet nursing facility level of care",
+          "People living in a nursing facility, DHSS-licensed Residential Care Facility, or Assisted Living Facility are not eligible for the waiver-funded home-delivered meals service"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call 1-800-235-5503 to reach the Missouri Senior Resource Line, which will connect you to your parent's local Area Agency on Aging to start the screening process.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Missouri Senior Resource Line",
+            "description": "Call 1-800-235-5503. Tell them you are looking for home-delivered meals for your parent. They will identify the local Area Agency on Aging (AAA) that serves your parent's county and either transfer you or provide that office's direct contact."
+          },
+          {
+            "step": 2,
+            "title": "Complete the local AAA intake screening",
+            "description": "Your parent's local AAA will ask about age, address, and whether your parent has difficulty preparing meals. Have your parent's date of birth and address ready. The AAA may also ask about any medical conditions that affect cooking ability."
+          },
+          {
+            "step": 3,
+            "title": "Provide documentation if requested",
+            "description": "For the general program, you will typically need proof of age and contact information. If applying for the Medicaid Aged and Disabled Waiver version, also have proof of Medicaid status and any medical or functional information showing your parent cannot prepare balanced meals."
+          },
+          {
+            "step": 4,
+            "title": "For waiver-funded meals, schedule a home visit",
+            "description": "If your parent may qualify for the Medicaid waiver-funded version, a DHSS or DSDS representative will schedule a home visit to conduct a level-of-care assessment. This assessment determines whether your parent meets nursing facility level of care."
+          },
+          {
+            "step": 5,
+            "title": "Confirm delivery schedule and meal format",
+            "description": "Once approved, the local AAA or provider will confirm whether your parent will receive hot or frozen meals, the delivery frequency, and any voluntary contribution requested. Delivery format varies by region."
+          }
+        ],
+        "processingTime": "Processing time is not published statewide. For the general AAA nutrition program, access depends on local availability and capacity. For the waiver-funded version, processing includes a DHSS or DSDS assessment and authorization after a home visit, which adds time. Ask your local AAA for their current timeline when you call.",
+        "waitlist": "Waitlist availability is not stated statewide. Availability varies by local AAA and region. Ask your local AAA directly about current wait times when you call.",
+        "tip": "If your parent was recently discharged from a hospital or rehabilitation facility, mention that when you call. Some AAAs can prioritize recently discharged individuals who are at nutritional risk.",
+        "urls": [
+          {
+            "label": "Missouri AAA Nutrition Services (DHSS)",
+            "url": "https://health.mo.gov/partners-providers/area-agencies-aging/nutrition"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or Missouri driver's license)",
+        "Parent's current home address and phone number",
+        "Brief description or documentation of why your parent cannot prepare balanced meals (a doctor's note or discharge summary works if available, though not always required for the general program)",
+        "Proof of Medicaid status, such as a Medicaid ID card or award letter, if applying for the Aged and Disabled Waiver version",
+        "Any medical or functional assessment records showing nursing facility level of care, if applying for the waiver-funded version",
+        "Any local AAA intake paperwork requested during the screening call"
+      ],
+      "contacts": [
+        {
+          "label": "Missouri Senior Resource Line",
+          "phone": "1-800-235-5503",
+          "description": "The starting point for home-delivered meals statewide. Staff will connect you to your parent's local Area Agency on Aging, which handles screening and enrollment.",
+          "hours": "Contact the line directly to confirm current hours"
+        },
+        {
+          "label": "St. Louis Area Agency on Aging (City of St. Louis residents)",
+          "phone": null,
+          "description": "City of St. Louis residents should contact the St. Louis Area Agency on Aging directly through the City of St. Louis senior services page, as the local process and delivery windows differ from the rest of the state.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent lives in the City of St. Louis, the local process is separate from the rest of Missouri. The St. Louis Area Agency on Aging has its own intake procedure and delivery schedule. Do not assume the statewide process applies.",
+        "Meal format is not uniform: some areas deliver hot meals daily, others deliver frozen meals weekly or bi-weekly. Ask your local AAA what format is available in your parent's area before setting expectations with your parent.",
+        "People living in a nursing facility, a DHSS-licensed Residential Care Facility, or an Assisted Living Facility are not eligible for the waiver-funded version of home-delivered meals. If your parent is in one of these settings, ask the facility about their internal nutrition services instead.",
+        "If you are pursuing the Medicaid Aged and Disabled Waiver version, your parent must be at least 63 (not just 60), must have active Medicaid, and must pass a nursing facility level-of-care assessment. If your parent does not yet have Medicaid, consider applying for that first."
+      ],
+      "relatedPrograms": [
+        "Missouri Medicaid Aged and Disabled Waiver (home and community-based services)",
+        "Congregate Meals at Senior Centers (for parents who can leave home and prefer group settings)",
+        "Missouri SNAP (Supplemental Nutrition Assistance Program, for help with grocery costs)",
+        "Missouri PACE (Program of All-inclusive Care for the Elderly, for parents needing comprehensive coordinated care)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Two versions of this program: know which one fits your parent",
+          "body": "The general AAA nutrition program is available to any Missourian 60 or older who has trouble preparing balanced meals. No income test, no Medicaid required. The Medicaid Aged and Disabled Waiver version is narrower: your parent must be 63 or older, have active Medicaid, and pass a nursing facility level-of-care assessment. If your parent does not meet the waiver criteria, the general program is still an option. Start with the Senior Resource Line at 1-800-235-5503 and they will help determine which path applies."
+        },
+        {
+          "type": "prose",
+          "title": "What meals actually look like",
+          "body": "Each meal delivered through the Medicaid waiver program must contain at least one-third of the recommended daily nutritional requirements. Under the waiver, a participant may receive one or two meals per day. For the general AAA nutrition program, meal content and frequency follow local AAA standards, which vary by provider. Some areas deliver hot meals; others deliver frozen meals that your parent reheats at home. Ask your local AAA specifically about meal format, delivery days, and whether there is a voluntary contribution requested."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent is only 61 and on Medicaid. Do they qualify for the waiver-funded version?",
+          "answer": "No. The Medicaid Aged and Disabled Waiver version requires the person to be at least 63, not just 60. However, your parent likely qualifies for the general AAA nutrition program, which starts at age 60 and does not require Medicaid. Call 1-800-235-5503 to get connected to your local Area Agency on Aging."
+        },
+        {
+          "question": "My parent lives in an assisted living facility. Can they still get home-delivered meals?",
+          "answer": "Not through the waiver-funded service. People living in a nursing facility, DHSS-licensed Residential Care Facility, or Assisted Living Facility are specifically excluded from the waiver-funded home-delivered meals benefit. Check with the facility directly about what nutrition services they provide as part of their care."
+        },
+        {
+          "question": "Is there a cost? Will my parent have to pay?",
+          "answer": "The program does not charge a required fee. Some local AAAs request a voluntary contribution toward the cost of meals, but your parent cannot be denied service for not contributing. There is no statewide income test for the general program. Ask your local AAA whether they request a voluntary contribution and what amount they suggest."
+        },
+        {
+          "question": "How long will it take before meals start arriving?",
+          "answer": "Processing time is not published statewide and varies by local AAA. For the general nutrition program, it depends on local capacity and any current waitlist. For the Medicaid waiver version, a home visit and level-of-care assessment must happen before authorization, which adds time. Ask your local AAA directly for their current timeline when you call 1-800-235-5503."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot make the call themselves?",
+          "answer": "Yes. Family members, caregivers, or legal representatives can initiate the process on behalf of an aging parent. When you call 1-800-235-5503, explain your relationship to the person and that you are calling on their behalf. The AAA intake staff will guide you through what they need."
+        },
+        {
+          "question": "My parent's health has changed since they enrolled. Will their meal frequency be reassessed?",
+          "answer": "For the waiver-funded version, the level-of-care assessment is reviewed periodically by DHSS or DSDS. If your parent's condition changes significantly, contact your local AAA to request a reassessment. Under the waiver, participants can receive one or two meals per day depending on their assessed needs. Let the AAA know if your parent's ability to prepare food has gotten worse or better."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "BowlFood",
+      "phone": "1-800-235-5503",
+      "sourceUrl": "https://health.mo.gov/partners-providers/area-agencies-aging/nutrition",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "mo-family-caregiver-support-program",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you're caring for a parent or relative in Missouri, this program can provide respite breaks, training, supplies, and support groups at no cost to you.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Area Agencies on Aging in Missouri",
+            "type": "service-area"
+          },
+          {
+            "name": "Missouri Department of Health and Senior Services caregiver services program",
+            "type": "service-area"
+          },
+          {
+            "name": "Missouri Senior Resource Line",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are an adult helping an aging parent or relative stay safe at home, Missouri's Family Caregiver Support Program exists specifically for you. The program is not for your parent; it is for you as the caregiver. It can connect you with respite care (temporary relief so you can rest), caregiver training, support groups, and in some areas, supplies or assistive devices. There is no income test to qualify statewide.\n\nEligibility is based on your role and your parent's condition, not your household finances. You qualify if you are 18 or older and are regularly helping someone who is 60 or older with daily activities. You also qualify if you are caring for a person of any age with Alzheimer's disease or a related dementia. Grandparents and older relatives aged 55 or older who are raising grandchildren or caring for an adult with a disability have their own pathway into the program.\n\nBecause the program is administered locally through Missouri's Area Agencies on Aging, the exact services available to you depend on where you live. Two families in different parts of Missouri may receive different support, and some services may have limited capacity. Calling your local agency is the only way to know what is available in your area right now.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The Missouri Family Caregiver Support Program provides no-cost services rather than cash payments. No statewide dollar amount or fixed service hours are published in official Missouri program materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Caregiver must be 18 or older",
+          "Caring for someone 60+ with difficulty managing daily activities",
+          "OR caring for a person of any age with Alzheimer's or related dementia",
+          "OR a relative aged 55+ raising a grandchild under 18",
+          "No statewide income or asset test"
+        ],
+        "ageRequirement": "18+ (caregiver); 55+ for grandparent/older-relative pathways",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Caregiver must be an informal, unpaid family member or other unpaid caregiver.",
+          "The person receiving care must be 60 or older and have difficulty performing activities of daily living (such as bathing, dressing, managing medications, or preparing meals) without help.",
+          "If the care recipient has Alzheimer's disease or a related dementia, there is no age minimum for the care recipient.",
+          "Caregivers aged 55 or older who are raising a grandchild or other relative under 18 qualify through a separate older-relative pathway.",
+          "Caregivers aged 55 or older caring for an adult relative with a disability aged 18 to 59 also qualify through the older-relative pathway.",
+          "You do not need to live with the person you are caring for, but you must be regularly involved in their care.",
+          "Services are delivered through local Area Agencies on Aging; what is available to you depends on your service region."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Missouri Senior Resource Line at 1-800-235-5503 to be connected with your local Area Agency on Aging, which will screen your eligibility and explain what services are available in your area.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Missouri Senior Resource Line",
+            "description": "Call 1-800-235-5503. Tell them you are a family caregiver looking for support services. They will ask for your zip code and connect you to your local Area Agency on Aging. You do not need an appointment to make this call."
+          },
+          {
+            "step": 2,
+            "title": "Talk through your situation with your local agency",
+            "description": "Your local Area Agency on Aging will ask about your caregiving role, the age and condition of the person you are caring for, and what kind of help you need most. Be specific: mention if you are burned out and need respite breaks, if you want training on dementia care, or if you need supplies. This conversation shapes what services they offer you."
+          },
+          {
+            "step": 3,
+            "title": "Gather basic documentation",
+            "description": "Your agency may ask you to confirm the care recipient's age and condition and your relationship to them. If Alzheimer's or another dementia is involved, having a diagnosis document on hand can speed things up. Not all agencies require paperwork upfront; ask what they need before your follow-up appointment."
+          },
+          {
+            "step": 4,
+            "title": "Complete any local enrollment steps",
+            "description": "Some Area Agencies on Aging handle enrollment by phone; others may schedule a brief in-home visit or needs assessment. The specific process varies by region. Ask your local agency what to expect so you are not surprised by the timeline."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard is published. Timing depends on your local Area Agency on Aging and current service availability in your region.",
+        "waitlist": "No statewide waitlist policy is published. Some local agencies have limited capacity for respite and other services, which can mean a wait. Ask your local agency directly when you call.",
+        "tip": "When you call, say the words 'caregiver support' specifically. Some agencies have separate intake tracks for caregivers versus care recipients, and identifying yourself as the caregiver up front helps them route you correctly.",
+        "urls": [
+          {
+            "label": "Missouri DHSS Caregiver Services page",
+            "url": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your name and contact information, and the name and contact information of the person you are caring for",
+        "Age of the person receiving care (a birth certificate, Medicare card, or state ID works)",
+        "A brief description of the care you provide and how often you provide it",
+        "Proof of Alzheimer's or dementia diagnosis if you are applying through the dementia caregiver pathway (a doctor's letter or diagnosis summary is sufficient)",
+        "Documentation of any disability diagnosis if you are an older relative caring for an adult with a disability aged 18 to 59",
+        "Your own age documentation if you are applying through the older-relative pathway (age 55 or older caring for a grandchild or adult with a disability)"
+      ],
+      "contacts": [
+        {
+          "label": "Missouri Senior Resource Line",
+          "phone": "1-800-235-5503",
+          "description": "The statewide entry point for caregiver support services. Call here first. Staff will connect you to your local Area Agency on Aging, which handles enrollment and service delivery.",
+          "hours": "Contact your local Area Agency on Aging for hours; the Senior Resource Line routes you to local staff."
+        },
+        {
+          "label": "Missouri Department of Health and Senior Services",
+          "phone": "573-751-6400",
+          "description": "The state agency overseeing the program. Use this number for questions about program policy or if you cannot reach your local agency through the Senior Resource Line.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        }
+      ],
+      "applicationNotes": [
+        "If the person you are caring for has Alzheimer's disease or a related dementia, mention that immediately when you call. Missouri has a separate dementia-focused caregiver support track that may offer additional or different services beyond the core program.",
+        "You do not need to live with your parent or relative to qualify. Caregivers who provide regular help from a distance are eligible. Tell the agency how your care is structured so they can assess your situation accurately.",
+        "Service availability varies significantly by region. If your local agency has a waitlist for respite or another service you need urgently, ask whether any adjacent service areas have openings or whether an emergency provision exists.",
+        "Some local Area Agencies on Aging give priority to low-income caregivers when services are limited. This is not a published statewide income cutoff, but it can affect how quickly you receive services if your agency has a waitlist."
+      ],
+      "relatedPrograms": [
+        "Missouri Alzheimer's Disease and Related Dementia State Plan programs",
+        "Missouri Medicaid Home and Community-Based Services (HCBS) waivers",
+        "Older Americans Act Title III-B Supportive Services (meals, transportation, homemaker help for your parent)",
+        "Missouri LIHEAP (Low Income Home Energy Assistance Program) if energy costs are a secondary burden"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "There is no income test for this program.",
+          "body": "Missouri's Family Caregiver Support Program does not have a published statewide income limit. Eligibility is based on your caregiving role and your parent's age or condition. You are not asked to prove financial need to receive services."
+        },
+        {
+          "type": "prose",
+          "title": "What services can you actually receive?",
+          "body": "The program can provide respite care (temporary relief so you can take a break, whether for a few hours or longer), caregiver training on topics like managing dementia behaviors or preventing falls, support groups where you can connect with other caregivers, information and assistance finding other local resources, and in some Missouri regions, supplies or assistive technology to help with caregiving at home.\n\nWhat is available to you depends entirely on your local Area Agency on Aging. There is no statewide fixed number of hours or dollar amount. Some regions emphasize respite; others run robust caregiver education programs or dementia-specific support. The only way to know what your region offers is to call 1-800-235-5503."
+        },
+        {
+          "type": "prose",
+          "title": "Which caregiver pathway applies to you?",
+          "body": "There are three distinct pathways into this program. First: you are any adult 18 or older caring for someone who is 60 or older and needs help with daily activities. Second: you are any adult 18 or older caring for a person of any age who has Alzheimer's disease or a related dementia. Third: you are an older relative aged 55 or older who is raising a grandchild or other relative under 18, or caring for an adult relative with a disability between the ages of 18 and 59.\n\nEach pathway has slightly different eligibility rules. When you call, describe your specific situation so the agency can place you in the right category."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does my income affect whether I can get services?",
+          "answer": "There is no statewide income limit for Missouri's Family Caregiver Support Program. Eligibility is based on your caregiving role and the age or condition of the person you care for. Some local Area Agencies on Aging may give priority to lower-income caregivers if they have limited service capacity, but that is a priority rule for managing a waitlist, not a hard cutoff. Income alone cannot disqualify you."
+        },
+        {
+          "question": "Can I qualify if I don't live with my parent?",
+          "answer": "Yes. You do not need to live with the person you are caring for. The requirement is that you are regularly involved in providing care. Caregivers who help from a distance, whether by coordinating appointments, managing medications remotely, or visiting regularly, can qualify. Tell your local Area Agency on Aging exactly how you provide care."
+        },
+        {
+          "question": "My parent has dementia but is younger than 60. Can I still get help?",
+          "answer": "Yes. If the person you are caring for has Alzheimer's disease or a related dementia, there is no age minimum for the care recipient. You can access Missouri's caregiver support program regardless of your parent's age. Mention the dementia diagnosis specifically when you call 1-800-235-5503, because Missouri has a separate dementia-focused caregiver support track with additional services."
+        },
+        {
+          "question": "How long will I wait for respite care after I apply?",
+          "answer": "There is no statewide published waitlist timeline. Wait times depend entirely on your local Area Agency on Aging and current service capacity. Some areas have immediate openings; others have waitlists. Ask your local agency directly when you call: 'Is there currently a wait for respite services, and how long is it?' That is the only honest answer available."
+        },
+        {
+          "question": "I am raising my grandchild. Is this program available to me?",
+          "answer": "Yes, if you are 55 or older and are raising a grandchild or other relative under 18. This is the older-relative caregiver pathway under the program. Call 1-800-235-5503 and explain that you are an older relative providing care for a grandchild. The agency will confirm whether you qualify under this pathway and what services are available in your region."
+        },
+        {
+          "question": "Can I use this program at the same time as other Medicaid or senior services?",
+          "answer": "Yes. This program is not means-tested and does not affect your parent's Medicaid eligibility or other benefit programs. It is designed to support you as the caregiver, not to replace other services. Many families use this program alongside Meals on Wheels, Medicaid home and community-based services, or other Older Americans Act programs. Ask your local Area Agency on Aging about coordinating services."
+        },
+        {
+          "question": "What if the services my region offers don't match what I actually need?",
+          "answer": "Ask your local Area Agency on Aging whether other services exist that they did not mention, and whether they can refer you to other programs. Agencies vary significantly in what they offer. If your region has a limited menu, the agency may be able to connect you to a neighboring service area or to state-level dementia or disability programs that fill the gap."
+        },
+        {
+          "question": "What happens if my situation changes after I start receiving services?",
+          "answer": "Contact your local Area Agency on Aging to report changes in the care recipient's condition, your caregiving situation, or the level of help you need. Services can often be adjusted. If the person you care for moves into a facility or passes away, notify the agency so your case can be updated. There is no published statewide reassessment schedule; your local agency sets that process."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "1-800-235-5503",
+      "sourceUrl": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "5735264542",
+          "source": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+          "reason": "page also lists ours ((800) 235-5503)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -1,0 +1,516 @@
+{
+  "state": "TX",
+  "addedAt": "2026-10-06T06:00:58.824Z",
+  "dive": {
+    "state": "TX",
+    "stateName": "Texas",
+    "diveAt": "2026-10-06T05:55:05.872Z",
+    "total": 4,
+    "parsed": 4,
+    "programs": [
+      {
+        "name": "Texas Medicaid for the Elderly and People with Disabilities",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "Texas MEPD covers people who are aged, blind, or disabled and who meet the income and resource limits for the specific Medicaid pathway. A person is considered aged at 65 or older. For some MEPD pathways, such as SSI-linked coverage, the person must be receiving SSI or be deemed to be receiving SSI. For other pathways, Texas uses MEPD-specific financial rules and may require a separate Medicaid application rather than SSI. The gathered source material confirms that income/resource limits exist and that the exact limits depend on the specific MEPD program category, but it does not provide a full current dollar-by-household-size table in the retrieved material.",
+          "asset_limits": "Asset/resource limits apply for MEPD pathways. The retrieved materials confirm that applicants must meet resource limits, but they do not include a full current dollar table. The handbook framework indicates Texas evaluates resources as part of financial eligibility and excludes certain property under program rules, but the exact countable vs. exempt asset list was not fully captured in the retrieved snippets.",
+          "other_requirements": [
+            "Must be aged, blind, or disabled.",
+            "Must be a Texas resident.",
+            "Must be a U.S. citizen or eligible non-citizen.",
+            "Must meet the income and resource limits for the specific coverage group.",
+            "Must meet any program-specific rules for the category being requested.",
+            "For disability-based eligibility, HHSC may complete a disability determination using medical, education, and work history if the person is not already receiving a disability benefit.",
+            "Some people file through SSI with the Social Security Administration; others file with HHSC depending on income and category."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Health coverage and medical/supportive services for aged, blind, and disabled people, including Medicaid coverage and Medicare cost-sharing assistance in some cases. The program can cover medical and supportive services, institutional care, community-based health-related care, and Medicare cost-sharing assistance. Specific services can include nursing facility care, home and community-based waiver services, and other Medicaid-covered long-term services depending on the eligibility group. The retrieved sources did not provide a single fixed dollar value because benefits are service-based and vary by coverage group.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online: https://www.yourtexasbenefits.com/",
+            "Phone: 2-1-1",
+            "Mail: paper application to HHSC",
+            "In-person: local HHSC benefits office or community partner",
+            "Fax: available for some applications"
+          ],
+          "processing_time": "The retrieved material confirms that HHSC makes an eligibility determination after receiving the application and proof documents, but it does not provide a single statewide processing-time guarantee for this specific program in the captured sources.",
+          "waitlist": "No statewide Medicaid eligibility waitlist was identified in the retrieved sources. Some related waiver services that people access through the broader MEPD system can have program-specific service availability rules, but the core Medicaid eligibility program itself is not described as having a waitlist in the retrieved material.",
+          "forms": [
+            "Form H1200, Medicaid for the Elderly and People with Disabilities Application for Assistance",
+            "Form H1200-MBI, Medicaid Buy-In Application for Benefits",
+            "Form H1205, Texas Streamlined Application (used for some benefits, but the source notes a separate application is used for elderly or disabled health care benefits)"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Texas residency",
+            "Proof of U.S. citizenship or eligible immigration status",
+            "Income records such as Social Security award letters, pension statements, pay stubs, or bank deposit statements",
+            "Resource records such as bank statements, deeds, vehicle information, life insurance information, and retirement account statements",
+            "Medical records if disability must be established",
+            "Work history and education history if HHSC must make a disability determination",
+            "Any Medicare information, if the person has Medicare",
+            "Proof of guardianship or authorization if someone applies on the person’s behalf"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Texas Medicaid program; eligibility is not county-restricted. Regional differences mainly affect local office access, community partner availability, and managed-care/service delivery geography rather than the eligibility rules themselves.",
+          "regional_variations": "Eligibility rules are statewide, but application access can vary by local HHSC office, community partner availability, and provider networks. Service delivery for long-term care or managed-care services may differ by region and provider availability, even though the Medicaid eligibility framework is statewide.",
+          "offices_or_providers": [
+            "Texas Health and Human Services Commission local benefits offices",
+            "Community partner sites",
+            "YourTexasBenefits.com",
+            "2-1-1 Texas"
+          ]
+        },
+        "official_source": "https://www.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook",
+        "gotchas": [
+          "This is not one single benefit package; it is a Medicaid eligibility umbrella for several aged/blind/disabled coverage groups, so the exact rules can differ by pathway.",
+          "Some people must apply through SSI with Social Security, while others apply through HHSC with Form H1200.",
+          "The program is service-based, not cash-based, so there is no simple monthly benefit amount.",
+          "Disability may need to be proven by HHSC if the person is not already getting a qualifying disability benefit.",
+          "People often confuse the core Medicaid category with Medicaid waivers or Medicare Savings Programs; those are related but not identical.",
+          "Income and resource limits are central, but the exact current dollar thresholds were not fully captured in the retrieved materials.",
+          "A person may qualify for one Medicaid pathway but not another, especially if they are near SSI or waiver thresholds."
+        ],
+        "data_shape_notes": "This program is a statewide Medicaid eligibility umbrella with multiple coverage groups, different application pathways, and benefit packages that vary by category rather than by household size. The key data shape is eligibility-by-category, not a single fixed benefit amount or county-based program.",
+        "_raw": "{\n  \"name\": \"Texas Medicaid for the Elderly and People with Disabilities\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"Texas MEPD covers people who are aged, blind, or disabled and who meet the income and resource limits for the specific Medicaid pathway. A person is considered aged at 65 or older. For some MEPD pathways, such as SSI-linked coverage, the person must be receiving SSI or be deemed to be receiving SSI. For other pathways, Texas uses MEPD-specific financial rules and may require a separate Medicaid application rather than SSI. The gathered source material confirms that income/resource limits exist and that the exact limits depend on the specific MEPD program category, but it does not provide a full current dollar-by-household-size table in the retrieved material.\",\n    \"asset_limits\": \"Asset/resource limits apply for MEPD pathways. The retrieved materials confirm that applicants must meet resource limits, but they do not include a full current dollar table. The handbook framework indicates Texas evaluates resources as part of financial eligibility and excludes certain property under program rules, but the exact countable vs. exempt asset list was not fully captured in the retrieved snippets.\",\n    \"other_requirements\": [\n      \"Must be aged, blind, or disabled.\",\n      \"Must be a Texas resident.\",\n      \"Must be a U.S. citizen or eligible non-citizen.\",\n      \"Must meet the income and resource limits for the specific coverage group.\",\n      \"Must meet any program-specific rules for the category being requested.\",\n      \"For disability-based eligibility, HHSC may complete a disability determination using medical, education, and work history if the person is not already receiving a disability benefit.\",\n      \"Some people file through SSI with the Social Security Administration; others file with HHSC depending on income and category.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Health coverage and medical/supportive services for aged, blind, and disabled people, including Medicaid coverage and Medicare cost-sharing assistance in some cases. The program can cover medical and supportive services, institutional care, community-based health-related care, and Medicare cost-sharing assistance. Specific services can include nursing facility care, home and community-based waiver services, and other Medicaid-covered long-term services depending on the eligibility group. The retrieved sources did not provide a single fixed dollar value because benefits are service-based and vary by coverage group.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://www.yourtexasbenefits.com/\",\n      \"Phone: 2-1-1\",\n      \"Mail: paper application to HHSC\",\n      \"In-person: local HHSC benefits office or community partner\",\n      \"Fax: available for some applications\"\n    ],\n    \"processing_time\": \"The retrieved material confirms that HHSC makes an eligibility determination after receiving the application and proof documents, but it does not provide a single statewide processing-time guarantee for this specific program in the captured sources.\",\n    \"waitlist\": \"No statewide Medicaid eligibility waitlist was identified in the retrieved sources. Some related waiver services that people access through the broader MEPD system can have program-specific service availability rules, but the core Medicaid eligibility program itself is not described as having a waitlist in the retrieved material.\",\n    \"forms\": [\n      \"Form H1200, Medicaid for the Elderly and People with Disabilities Application for Assistance\",\n      \"Form H1200-MBI, Medicaid Buy-In Application for Benefits\",\n      \"Form H1205, Texas Streamlined Application (used for some benefits, but the source notes a separate application is used for elderly or disabled health care benefits)\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Texas residency\",\n      \"Proof of U.S. citizenship or eligible immigration status\",\n      \"Income records such as Social Security award letters, pension statements, pay stubs, or bank deposit statements\",\n      \"Resource records such as bank statements, deeds, vehicle information, life insurance information, and retirement account statements\",\n      \"Medical records if disability must be established\",\n      \"Work history and education history if HHSC must make a disability determination\",\n      \"Any Medicare information, if the person has Medicare\",\n      \"Proof of guardianship or authorization if someone applies on the person’s behalf\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Texas Medicaid program; eligibility is not county-restricted. Regional differences mainly affect local office access, community partner availability, and managed-care/service delivery geography rather than the eligibility rules themselves.\",\n    \"regional_variations\": \"Eligibility rules are statewide, but application access can vary by local HHSC office, community partner availability, and provider networks. Service delivery for long-term care or managed-care services may differ by region and provider availability, even though the Medicaid eligibility framework is statewide.\",\n    \"offices_or_providers\": [\n      \"Texas Health and Human Services Commission local benefits offices\",\n      \"Community partner sites\",\n      \"YourTexasBenefits.com\",\n      \"2-1-1 Texas\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook\",\n  \"gotchas\": [\n    \"This is not one single benefit package; it is a Medicaid eligibility umbrella for several aged/blind/disabled coverage groups, so the exact rules can differ by pathway.\",\n    \"Some people must apply through SSI with Social Security, while others apply through HHSC with Form H1200.\",\n    \"The program is service-based, not cash-based, so there is no simple monthly benefit amount.\",\n    \"Disability may need to be proven by HHSC if the person is not already getting a qualifying disability benefit.\",\n    \"People often confuse the core Medicaid category with Medicaid waivers or Medicare Savings Programs; those are related but not identical.\",\n    \"Income and resource limits are central, but the exact current dollar thresholds were not fully captured in the retrieved materials.\",\n    \"A person may qualify for one Medicaid pathway but not another, especially if they are near SSI or waiver thresholds.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide Medicaid eligibility umbrella with multiple coverage groups, different application pathways, and benefit packages that vary by category rather than by household size. The key data shape is eligibility-by-category, not a single fixed benefit amount or county-based program.\"\n}"
+      },
+      {
+        "name": "Primary Home Care (Community Care)",
+        "eligibility": {
+          "age": 21,
+          "income_limits": {
+            "summary": "This program is for adults age 21+ who are Medicaid eligible in the community, or who qualify under Section 1929(b)(2)(B) of the Social Security Act. The most specific dollar figures surfaced for this program are $2,829/month for a single person and $5,658/month for a married couple in the rights-and-responsibilities notice; a separate Texas rule for community care services also shows a community-care income ceiling of $1,302/month and a resource limit of $5,000, but that appears to be a broader community-care rule and should be reconciled against the specific PHC/CAS eligibility notice before relying on it.",
+            "table": [
+              {
+                "household": "Single",
+                "monthly_income_limit": "$2,829",
+                "source_context": "PHC/CAS rights and responsibilities notice"
+              },
+              {
+                "household": "Married",
+                "monthly_income_limit": "$5,658",
+                "source_context": "PHC/CAS rights and responsibilities notice"
+              }
+            ]
+          },
+          "asset_limits": {
+            "summary": "The PHC/CAS notice says resources must not exceed $2,000 for a single person and $3,000 for a married person. A separate Texas community-care rule snippet shows a $5,000 resource limit for community care services generally, so families should verify which resource standard the local HHSC/CCSE office is using for the specific pathway being screened.",
+            "limits": [
+              {
+                "household": "Single",
+                "resource_limit": "$2,000"
+              },
+              {
+                "household": "Married",
+                "resource_limit": "$3,000"
+              }
+            ],
+            "what_counts": "The surfaced sources do not give a full asset-counting/exempt-asset schedule for PHC specifically.",
+            "what_is_exempt": "Not specified in the surfaced sources; treat this as needing local HHSC confirmation."
+          },
+          "other_requirements": [
+            "Must have a practitioner's statement of medical need.",
+            "Must have a functional impairment score of at least 24.",
+            "Must need help with at least one personal care task such as bathing, feeding, meal preparation, toileting, transferring, or medication reminders.",
+            "Must need help with activities of daily living.",
+            "Must need at least 6 hours of service per week, unless an exception applies.",
+            "If needing fewer than 6 hours per week, the person may still qualify if the service is needed for caregiver respite, if they live with someone who also receives certain attendant-care services, if they receive one of the listed qualifying services/benefits, or if other rule-based exceptions are met.",
+            "Must reside in a community setting, not in a hospital, nursing facility, ICF, assisted living facility, foster care setting, jail/prison, state school, or state hospital.",
+            "PHC is not available to individuals under 21 with full Medicaid benefits; those cases are routed through CAS screening instead."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Non-technical, non-skilled, in-home attendant/personal assistance services for help with personal care tasks and activities of daily living. The program is delivered as attendant support rather than cash. A client with priority status may receive no more than 42 hours per week; a client without priority status may receive no more than 50 hours per week.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Contact the local HHSC Community Care for the Aged and Disabled (CCSE) office / local area agency for intake and screening.",
+            "Use the Texas HHSC community-care handbook and local office referrals to start screening.",
+            "For provider-side participation information, HHSC lists the PHC provider page at the official HHSC provider site."
+          ],
+          "processing_time": "Not specified in the surfaced official materials. The key operational reality is that eligibility depends on CCSE screening, and service access can be immediate or delayed depending on local provider capacity and priority status.",
+          "waitlist": "A formal statewide PHC waitlist was not identified in the surfaced sources; practical access may still be delayed locally because of provider availability and priority handling.",
+          "forms": [
+            "Attachment 2307-A, Family Care, Community Attendant Services and Primary Home Care Rights and Responsibilities",
+            "Practitioner's statement of medical need (exact form title not surfaced in the retrieved results)"
+          ],
+          "documents": [
+            "Proof of Medicaid eligibility, if already enrolled",
+            "Income documentation",
+            "Resource/asset information",
+            "Practitioner's statement of medical need",
+            "Information about help needed with personal care tasks and ADLs",
+            "Identification and household information",
+            "Any current service or benefit information relevant to the 6-hour-per-week exception screening"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Texas for eligible adults, but the applicant must live in a community setting and not in an excluded institutional or correctional setting.",
+          "regional_variations": "The core eligibility rules are statewide, but actual access can vary by local CCSE office, local provider capacity, and whether the person is screened as priority status. The surfaced materials do not provide a county-by-county table of differences.",
+          "offices_or_providers": [
+            "Local HHSC CCSE offices",
+            "HHSC-contracted PHC providers"
+          ]
+        },
+        "official_source": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
+        "gotchas": [
+          "PHC is not a general home-care benefit for everyone; it is tied to Medicaid/community-care eligibility plus a medical and functional need test.",
+          "The functional score threshold matters: a practitioner note alone is not enough.",
+          "The six-hours-per-week rule is a common trap; people with lower assessed need may still qualify only through specific exceptions.",
+          "Age 21 is a key cutoff: people under 21 with full Medicaid benefits are not routed through PHC the same way.",
+          "Priority status affects the maximum weekly hours available.",
+          "Two different dollar-limit sets surfaced in the available materials, so families should confirm the exact income/resource test with the local HHSC office before assuming they qualify or do not qualify."
+        ],
+        "data_shape_notes": "This program is not a simple income-only benefit. It is a Medicaid-linked, medically justified attendant-care service with both financial screening and a functional-assessment threshold, plus a weekly-hours cap that can vary by priority status.",
+        "_raw": "{\n  \"name\": \"Primary Home Care (Community Care)\",\n  \"eligibility\": {\n    \"age\": 21,\n    \"income_limits\": {\n      \"summary\": \"This program is for adults age 21+ who are Medicaid eligible in the community, or who qualify under Section 1929(b)(2)(B) of the Social Security Act. The most specific dollar figures surfaced for this program are $2,829/month for a single person and $5,658/month for a married couple in the rights-and-responsibilities notice; a separate Texas rule for community care services also shows a community-care income ceiling of $1,302/month and a resource limit of $5,000, but that appears to be a broader community-care rule and should be reconciled against the specific PHC/CAS eligibility notice before relying on it.\",\n      \"table\": [\n        {\n          \"household\": \"Single\",\n          \"monthly_income_limit\": \"$2,829\",\n          \"source_context\": \"PHC/CAS rights and responsibilities notice\"\n        },\n        {\n          \"household\": \"Married\",\n          \"monthly_income_limit\": \"$5,658\",\n          \"source_context\": \"PHC/CAS rights and responsibilities notice\"\n        }\n      ]\n    },\n    \"asset_limits\": {\n      \"summary\": \"The PHC/CAS notice says resources must not exceed $2,000 for a single person and $3,000 for a married person. A separate Texas community-care rule snippet shows a $5,000 resource limit for community care services generally, so families should verify which resource standard the local HHSC/CCSE office is using for the specific pathway being screened.\",\n      \"limits\": [\n        {\n          \"household\": \"Single\",\n          \"resource_limit\": \"$2,000\"\n        },\n        {\n          \"household\": \"Married\",\n          \"resource_limit\": \"$3,000\"\n        }\n      ],\n      \"what_counts\": \"The surfaced sources do not give a full asset-counting/exempt-asset schedule for PHC specifically.\",\n      \"what_is_exempt\": \"Not specified in the surfaced sources; treat this as needing local HHSC confirmation.\"\n    },\n    \"other_requirements\": [\n      \"Must have a practitioner's statement of medical need.\",\n      \"Must have a functional impairment score of at least 24.\",\n      \"Must need help with at least one personal care task such as bathing, feeding, meal preparation, toileting, transferring, or medication reminders.\",\n      \"Must need help with activities of daily living.\",\n      \"Must need at least 6 hours of service per week, unless an exception applies.\",\n      \"If needing fewer than 6 hours per week, the person may still qualify if the service is needed for caregiver respite, if they live with someone who also receives certain attendant-care services, if they receive one of the listed qualifying services/benefits, or if other rule-based exceptions are met.\",\n      \"Must reside in a community setting, not in a hospital, nursing facility, ICF, assisted living facility, foster care setting, jail/prison, state school, or state hospital.\",\n      \"PHC is not available to individuals under 21 with full Medicaid benefits; those cases are routed through CAS screening instead.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Non-technical, non-skilled, in-home attendant/personal assistance services for help with personal care tasks and activities of daily living. The program is delivered as attendant support rather than cash. A client with priority status may receive no more than 42 hours per week; a client without priority status may receive no more than 50 hours per week.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Contact the local HHSC Community Care for the Aged and Disabled (CCSE) office / local area agency for intake and screening.\",\n      \"Use the Texas HHSC community-care handbook and local office referrals to start screening.\",\n      \"For provider-side participation information, HHSC lists the PHC provider page at the official HHSC provider site.\"\n    ],\n    \"processing_time\": \"Not specified in the surfaced official materials. The key operational reality is that eligibility depends on CCSE screening, and service access can be immediate or delayed depending on local provider capacity and priority status.\",\n    \"waitlist\": \"A formal statewide PHC waitlist was not identified in the surfaced sources; practical access may still be delayed locally because of provider availability and priority handling.\",\n    \"forms\": [\n      \"Attachment 2307-A, Family Care, Community Attendant Services and Primary Home Care Rights and Responsibilities\",\n      \"Practitioner's statement of medical need (exact form title not surfaced in the retrieved results)\"\n    ],\n    \"documents\": [\n      \"Proof of Medicaid eligibility, if already enrolled\",\n      \"Income documentation\",\n      \"Resource/asset information\",\n      \"Practitioner's statement of medical need\",\n      \"Information about help needed with personal care tasks and ADLs\",\n      \"Identification and household information\",\n      \"Any current service or benefit information relevant to the 6-hour-per-week exception screening\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Texas for eligible adults, but the applicant must live in a community setting and not in an excluded institutional or correctional setting.\",\n    \"regional_variations\": \"The core eligibility rules are statewide, but actual access can vary by local CCSE office, local provider capacity, and whether the person is screened as priority status. The surfaced materials do not provide a county-by-county table of differences.\",\n    \"offices_or_providers\": [\n      \"Local HHSC CCSE offices\",\n      \"HHSC-contracted PHC providers\"\n    ]\n  },\n  \"official_source\": \"https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services\",\n  \"gotchas\": [\n    \"PHC is not a general home-care benefit for everyone; it is tied to Medicaid/community-care eligibility plus a medical and functional need test.\",\n    \"The functional score threshold matters: a practitioner note alone is not enough.\",\n    \"The six-hours-per-week rule is a common trap; people with lower assessed need may still qualify only through specific exceptions.\",\n    \"Age 21 is a key cutoff: people under 21 with full Medicaid benefits are not routed through PHC the same way.\",\n    \"Priority status affects the maximum weekly hours available.\",\n    \"Two different dollar-limit sets surfaced in the available materials, so families should confirm the exact income/resource test with the local HHSC office before assuming they qualify or do not qualify.\"\n  ],\n  \"data_shape_notes\": \"This program is not a simple income-only benefit. It is a Medicaid-linked, medically justified attendant-care service with both financial screening and a functional-assessment threshold, plus a weekly-hours cap that can vary by priority status.\"\n}"
+      },
+      {
+        "name": "Texas Respite Care Services",
+        "eligibility": {
+          "age": null,
+          "income_limits": "No single statewide income-limit table applies across all Texas respite programs. Texas respite is delivered through multiple programs with different rules: some are Medicaid waiver services with no separate income table for respite itself because eligibility follows the underlying Medicaid waiver; others are caregiver support or voucher programs that do not publish a standard income test in the available official guidance.",
+          "asset_limits": "No universal asset limit is published for Texas respite care as a standalone service in the available official sources. For waiver-based respite, asset rules follow the underlying Medicaid program rather than a respite-specific asset test. For caregiver voucher-style respite, the available guidance does not specify an asset test. Exemptions and counted assets therefore depend on the specific program used.",
+          "other_requirements": [
+            "The person needing care must generally live in their own home or with relatives/other individuals, not in adult foster care or assisted living, for STAR+PLUS respite.",
+            "The member must meet all underlying program eligibility criteria for the program that authorizes respite.",
+            "A primary caregiver must need relief on an emergency or planned short-term basis.",
+            "For STAR+PLUS waiver respite, the service must be authorized on Form H1700-1, Individual Service Plan.",
+            "For Texas Lifespan Respite Care Program services, respite is targeted to family caregivers of a person of any age with a chronic health condition or disability.",
+            "For respite voucher services under Texas rules, the caregiver must fit a qualifying caregiver category, such as an adult caregiver of a person 60+ who needs help with at least two ADLs or supervision, or a 55+ grandparent/relative caring for a child or person with a disability.",
+            "A person paid to provide caregiving services for the same individual is not eligible for respite voucher services for that same individual."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Short-term respite care that can be provided in the home or out of the home, with coverage varying by program. STAR+PLUS respite is planned or emergency short-term relief for the unpaid primary caregiver and is limited to 30 days per year. Texas Lifespan Respite describes brief relief or rest and says services may be in-home or out-of-home. Respite voucher programs provide funds to help families obtain respite care, but the official amount is not stated in the available guidance.",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Call the local Aging and Disability Resource Center (ADRC): 1-855-YES-ADRC (1-855-937-2372)",
+            "Use the Texas respite services search portal: https://respite.hhs.state.tx.us/RespiteProvider/respite/respiteSearch.xhtml",
+            "Contact the local Area Agency on Aging (AAA) for voucher-based respite applications",
+            "Use the Texas Lifespan Respite Care Program information page: https://apps.hhs.texas.gov/taketimetexas/about.html"
+          ],
+          "processing_time": "No single statewide processing-time standard was published in the available official sources. Timing depends on the specific program, local ADRC/AAA, and funding availability.",
+          "waitlist": "A waitlist may exist in some local or funded programs because service availability and duration vary based on funding source and local circumstances. No statewide waitlist rule or timeline was published in the available official sources.",
+          "forms": [
+            "Form H1700-1, Individual Service Plan"
+          ],
+          "documents": [
+            "Proof of the care recipient’s living arrangement",
+            "Information showing the primary caregiver needs relief",
+            "Medicaid or other program eligibility information if applying through a waiver-based program",
+            "Basic identification information for the caregiver and care recipient",
+            "Medical or functional information showing the care recipient’s needs",
+            "Any forms required by the local AAA or ADRC"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Program access is statewide, but service availability is local and can depend on the ADRC, AAA, waiver program, and provider network in the county or region.",
+          "regional_variations": "Yes. Texas respite differs by region because local ADRCs, AAAs, and providers determine what respite options exist, whether vouchers are available, and how long families wait. The respite provider search tool indicates provider availability is location-based.",
+          "offices_or_providers": [
+            "Local Aging and Disability Resource Center (ADRC)",
+            "Local Area Agency on Aging (AAA)",
+            "Local respite providers listed through the Texas respite search portal"
+          ]
+        },
+        "official_source": "https://apps.hhs.texas.gov/taketimetexas/about.html",
+        "gotchas": [
+          "Texas respite is not one single program; families often have to match the caregiver situation to the correct funding stream.",
+          "The biggest distinction is whether respite is through a Medicaid waiver, a lifespan respite program, or a local AAA voucher program.",
+          "Being eligible for respite services usually depends more on the care recipient’s functional/care situation than on the caregiver alone.",
+          "Some respite is only available if the person already qualifies for an underlying waiver or local aging-service program.",
+          "Not every setting qualifies: adult foster care and assisted living can make a person ineligible for certain respite services.",
+          "Funding and provider availability vary by region, so a family in one county may get help faster than a family in another.",
+          "Voucher-based respite may be available only through local AAA processes and may not be open everywhere in the same way."
+        ],
+        "data_shape_notes": "Texas respite care is fragmented across multiple program types: waiver-based service with functional eligibility, caregiver-support/voucher programs tied to age and caregiver relationship, and local provider networks. Benefits and access vary by region and funding source rather than by a single statewide dollar limit.",
+        "_raw": "{\n  \"name\": \"Texas Respite Care Services\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"No single statewide income-limit table applies across all Texas respite programs. Texas respite is delivered through multiple programs with different rules: some are Medicaid waiver services with no separate income table for respite itself because eligibility follows the underlying Medicaid waiver; others are caregiver support or voucher programs that do not publish a standard income test in the available official guidance.\",\n    \"asset_limits\": \"No universal asset limit is published for Texas respite care as a standalone service in the available official sources. For waiver-based respite, asset rules follow the underlying Medicaid program rather than a respite-specific asset test. For caregiver voucher-style respite, the available guidance does not specify an asset test. Exemptions and counted assets therefore depend on the specific program used.\",\n    \"other_requirements\": [\n      \"The person needing care must generally live in their own home or with relatives/other individuals, not in adult foster care or assisted living, for STAR+PLUS respite.\",\n      \"The member must meet all underlying program eligibility criteria for the program that authorizes respite.\",\n      \"A primary caregiver must need relief on an emergency or planned short-term basis.\",\n      \"For STAR+PLUS waiver respite, the service must be authorized on Form H1700-1, Individual Service Plan.\",\n      \"For Texas Lifespan Respite Care Program services, respite is targeted to family caregivers of a person of any age with a chronic health condition or disability.\",\n      \"For respite voucher services under Texas rules, the caregiver must fit a qualifying caregiver category, such as an adult caregiver of a person 60+ who needs help with at least two ADLs or supervision, or a 55+ grandparent/relative caring for a child or person with a disability.\",\n      \"A person paid to provide caregiving services for the same individual is not eligible for respite voucher services for that same individual.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Short-term respite care that can be provided in the home or out of the home, with coverage varying by program. STAR+PLUS respite is planned or emergency short-term relief for the unpaid primary caregiver and is limited to 30 days per year. Texas Lifespan Respite describes brief relief or rest and says services may be in-home or out-of-home. Respite voucher programs provide funds to help families obtain respite care, but the official amount is not stated in the available guidance.\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call the local Aging and Disability Resource Center (ADRC): 1-855-YES-ADRC (1-855-937-2372)\",\n      \"Use the Texas respite services search portal: https://respite.hhs.state.tx.us/RespiteProvider/respite/respiteSearch.xhtml\",\n      \"Contact the local Area Agency on Aging (AAA) for voucher-based respite applications\",\n      \"Use the Texas Lifespan Respite Care Program information page: https://apps.hhs.texas.gov/taketimetexas/about.html\"\n    ],\n    \"processing_time\": \"No single statewide processing-time standard was published in the available official sources. Timing depends on the specific program, local ADRC/AAA, and funding availability.\",\n    \"waitlist\": \"A waitlist may exist in some local or funded programs because service availability and duration vary based on funding source and local circumstances. No statewide waitlist rule or timeline was published in the available official sources.\",\n    \"forms\": [\n      \"Form H1700-1, Individual Service Plan\"\n    ],\n    \"documents\": [\n      \"Proof of the care recipient’s living arrangement\",\n      \"Information showing the primary caregiver needs relief\",\n      \"Medicaid or other program eligibility information if applying through a waiver-based program\",\n      \"Basic identification information for the caregiver and care recipient\",\n      \"Medical or functional information showing the care recipient’s needs\",\n      \"Any forms required by the local AAA or ADRC\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Program access is statewide, but service availability is local and can depend on the ADRC, AAA, waiver program, and provider network in the county or region.\",\n    \"regional_variations\": \"Yes. Texas respite differs by region because local ADRCs, AAAs, and providers determine what respite options exist, whether vouchers are available, and how long families wait. The respite provider search tool indicates provider availability is location-based.\",\n    \"offices_or_providers\": [\n      \"Local Aging and Disability Resource Center (ADRC)\",\n      \"Local Area Agency on Aging (AAA)\",\n      \"Local respite providers listed through the Texas respite search portal\"\n    ]\n  },\n  \"official_source\": \"https://apps.hhs.texas.gov/taketimetexas/about.html\",\n  \"gotchas\": [\n    \"Texas respite is not one single program; families often have to match the caregiver situation to the correct funding stream.\",\n    \"The biggest distinction is whether respite is through a Medicaid waiver, a lifespan respite program, or a local AAA voucher program.\",\n    \"Being eligible for respite services usually depends more on the care recipient’s functional/care situation than on the caregiver alone.\",\n    \"Some respite is only available if the person already qualifies for an underlying waiver or local aging-service program.\",\n    \"Not every setting qualifies: adult foster care and assisted living can make a person ineligible for certain respite services.\",\n    \"Funding and provider availability vary by region, so a family in one county may get help faster than a family in another.\",\n    \"Voucher-based respite may be available only through local AAA processes and may not be open everywhere in the same way.\"\n  ],\n  \"data_shape_notes\": \"Texas respite care is fragmented across multiple program types: waiver-based service with functional eligibility, caregiver-support/voucher programs tied to age and caregiver relationship, and local provider networks. Benefits and access vary by region and funding source rather than by a single statewide dollar limit.\"\n}"
+      },
+      {
+        "name": "Community Attendant Services (CAS)",
+        "eligibility": {
+          "age": null,
+          "income_limits": "Texas CAS is for people who are not Medicaid-eligible and whose monthly income is within 300% of the Supplemental Security Income (SSI) federal benefit rate. One source gives the 2026 figures as $2,982/month for a single applicant and $5,964/month for a couple when both spouses are applicants. The official handbook says financial eligibility is determined through Medicaid for the Elderly and People with Disabilities (MEPD) and TIERS, and CAS uses the SSI-based cap rather than a household-size sliding table.",
+          "asset_limits": "Countable resources are limited to no more than $2,000 for an individual or $3,000 for a couple. The sources reviewed did not provide a detailed exempt-assets list for CAS specifically, but the program follows standard Medicaid/MEPD counting rules for eligibility review. Typical exempt items under Medicaid-style rules often include a primary home, one vehicle, personal belongings, and certain burial arrangements, but the exact treatment should be confirmed through the MEPD determination process.",
+          "other_requirements": [
+            "Must be a Texas resident and live in the community, not an institution.",
+            "Must not be eligible for Medicaid when applying for CAS.",
+            "Must have a practitioner’s statement of medical need.",
+            "Must have a functional limitation in performing at least one personal care task because of a medical condition.",
+            "Must have unmet need for home management and personal care.",
+            "Must meet the program’s functional assessment standard; one source describes a Form 2060 score of at least 24.",
+            "Applicants under 21 may qualify, but they must still meet all medical, financial, functional, and unmet-need criteria.",
+            "Adults and children can be eligible; there is no strict age cutoff for CAS itself."
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "Non-technical, medically related in-home attendant services. The program provides help with personal care tasks and activities of daily living such as bathing, dressing, grooming, toileting, eating, walking/transferring, meal preparation, shopping, and housekeeping. One official process guide indicates an applicant must require at least 6 hours of care, with exceptions listed in policy. Services are authorized through the regional nurse and initiated with Form 2101.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Call 855-937-2372 to contact a local HHS office and request Community Attendant Services.",
+            "Apply through your local Texas Health and Human Services office for Community Care Services Eligibility (CCSE) intake.",
+            "Submit Form H1200, Application for Assistance – Your Texas Benefits, or Form H1200-EZ, Application for Assistance – Aged and Disabled, when a financial eligibility determination is needed.",
+            "Use the Your Texas Benefits route if the household is not already receiving HHSC services and is not already SSI-verified."
+          ],
+          "processing_time": "No single statewide processing time was stated in the sources reviewed. Eligibility requires both a functional assessment and a financial determination, and the official process shows regional nurse review and authorization before services begin, so timing can vary by local office and case complexity.",
+          "waitlist": "CAS appears to be an entitlement/service available to eligible people rather than a capped waiver slot program; one source states there is never a waitlist (interest list). However, local intake, assessment, and authorization timing can still affect when services begin.",
+          "forms": [
+            "Form H1200 – Application for Assistance – Your Texas Benefits",
+            "Form H1200-EZ – Application for Assistance – Aged and Disabled",
+            "Form 2060 – used in the functional assessment process",
+            "Form 2101 – authorization to initiate CAS services"
+          ],
+          "documents": [
+            "Proof of Texas residency",
+            "Proof of identity",
+            "Proof of income",
+            "Proof of resources/assets",
+            "Medical records or a practitioner’s statement showing medical need",
+            "Information about daily care needs and functional limitations",
+            "Medicaid or SSI information if already available"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Texas program; eligibility and service authorization are handled through local HHSC/CCSE offices.",
+          "regional_variations": "The program rules are statewide, but intake, assessment scheduling, provider availability, and start times can vary by region because services are managed locally. The official process references a regional nurse who sends the authorization to start services.",
+          "offices_or_providers": [
+            "Local Texas Health and Human Services offices",
+            "Regional nurse / CCSE staff involved in assessment and authorization"
+          ]
+        },
+        "official_source": "https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
+        "gotchas": [
+          "CAS is not the same as a private-duty caregiver or general home health; it is a Medicaid state plan personal attendant benefit with specific financial and functional rules.",
+          "A person can be medically needy but still fail CAS if they are Medicaid-eligible in the wrong category, exceed the resource cap, or lack the required functional limitation.",
+          "Families often miss that a doctor/practitioner statement is required, not just a general need for help.",
+          "The program is not just for seniors; adults and children can qualify.",
+          "An applicant may not need to be on SSI, but financial eligibility is still reviewed through MEPD unless the person already has categorical financial verification.",
+          "Being eligible does not automatically mean immediate services; local assessment and authorization still have to happen."
+        ],
+        "data_shape_notes": "CAS is unusual because it is a statewide Texas Medicaid state plan attendant-service program with no age cap, no capped enrollment waitlist, and eligibility that turns on both a Medicaid-style financial test and a functional-needs assessment rather than household-size-based benefit levels.",
+        "_raw": "{\n  \"name\": \"Community Attendant Services (CAS)\",\n  \"eligibility\": {\n    \"age\": null,\n    \"income_limits\": \"Texas CAS is for people who are not Medicaid-eligible and whose monthly income is within 300% of the Supplemental Security Income (SSI) federal benefit rate. One source gives the 2026 figures as $2,982/month for a single applicant and $5,964/month for a couple when both spouses are applicants. The official handbook says financial eligibility is determined through Medicaid for the Elderly and People with Disabilities (MEPD) and TIERS, and CAS uses the SSI-based cap rather than a household-size sliding table.\",\n    \"asset_limits\": \"Countable resources are limited to no more than $2,000 for an individual or $3,000 for a couple. The sources reviewed did not provide a detailed exempt-assets list for CAS specifically, but the program follows standard Medicaid/MEPD counting rules for eligibility review. Typical exempt items under Medicaid-style rules often include a primary home, one vehicle, personal belongings, and certain burial arrangements, but the exact treatment should be confirmed through the MEPD determination process.\",\n    \"other_requirements\": [\n      \"Must be a Texas resident and live in the community, not an institution.\",\n      \"Must not be eligible for Medicaid when applying for CAS.\",\n      \"Must have a practitioner’s statement of medical need.\",\n      \"Must have a functional limitation in performing at least one personal care task because of a medical condition.\",\n      \"Must have unmet need for home management and personal care.\",\n      \"Must meet the program’s functional assessment standard; one source describes a Form 2060 score of at least 24.\",\n      \"Applicants under 21 may qualify, but they must still meet all medical, financial, functional, and unmet-need criteria.\",\n      \"Adults and children can be eligible; there is no strict age cutoff for CAS itself.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"Non-technical, medically related in-home attendant services. The program provides help with personal care tasks and activities of daily living such as bathing, dressing, grooming, toileting, eating, walking/transferring, meal preparation, shopping, and housekeeping. One official process guide indicates an applicant must require at least 6 hours of care, with exceptions listed in policy. Services are authorized through the regional nurse and initiated with Form 2101.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Call 855-937-2372 to contact a local HHS office and request Community Attendant Services.\",\n      \"Apply through your local Texas Health and Human Services office for Community Care Services Eligibility (CCSE) intake.\",\n      \"Submit Form H1200, Application for Assistance – Your Texas Benefits, or Form H1200-EZ, Application for Assistance – Aged and Disabled, when a financial eligibility determination is needed.\",\n      \"Use the Your Texas Benefits route if the household is not already receiving HHSC services and is not already SSI-verified.\"\n    ],\n    \"processing_time\": \"No single statewide processing time was stated in the sources reviewed. Eligibility requires both a functional assessment and a financial determination, and the official process shows regional nurse review and authorization before services begin, so timing can vary by local office and case complexity.\",\n    \"waitlist\": \"CAS appears to be an entitlement/service available to eligible people rather than a capped waiver slot program; one source states there is never a waitlist (interest list). However, local intake, assessment, and authorization timing can still affect when services begin.\",\n    \"forms\": [\n      \"Form H1200 – Application for Assistance – Your Texas Benefits\",\n      \"Form H1200-EZ – Application for Assistance – Aged and Disabled\",\n      \"Form 2060 – used in the functional assessment process\",\n      \"Form 2101 – authorization to initiate CAS services\"\n    ],\n    \"documents\": [\n      \"Proof of Texas residency\",\n      \"Proof of identity\",\n      \"Proof of income\",\n      \"Proof of resources/assets\",\n      \"Medical records or a practitioner’s statement showing medical need\",\n      \"Information about daily care needs and functional limitations\",\n      \"Medicaid or SSI information if already available\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Texas program; eligibility and service authorization are handled through local HHSC/CCSE offices.\",\n    \"regional_variations\": \"The program rules are statewide, but intake, assessment scheduling, provider availability, and start times can vary by region because services are managed locally. The official process references a regional nurse who sends the authorization to start services.\",\n    \"offices_or_providers\": [\n      \"Local Texas Health and Human Services offices\",\n      \"Regional nurse / CCSE staff involved in assessment and authorization\"\n    ]\n  },\n  \"official_source\": \"https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services\",\n  \"gotchas\": [\n    \"CAS is not the same as a private-duty caregiver or general home health; it is a Medicaid state plan personal attendant benefit with specific financial and functional rules.\",\n    \"A person can be medically needy but still fail CAS if they are Medicaid-eligible in the wrong category, exceed the resource cap, or lack the required functional limitation.\",\n    \"Families often miss that a doctor/practitioner statement is required, not just a general need for help.\",\n    \"The program is not just for seniors; adults and children can qualify.\",\n    \"An applicant may not need to be on SSI, but financial eligibility is still reviewed through MEPD unless the person already has categorical financial verification.\",\n    \"Being eligible does not automatically mean immediate services; local assessment and authorization still have to happen.\"\n  ],\n  \"data_shape_notes\": \"CAS is unusual because it is a statewide Texas Medicaid state plan attendant-service program with no age cap, no capped enrollment waitlist, and eligibility that turns on both a Medicaid-style financial test and a functional-needs assessment rather than household-size-based benefit levels.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "TX",
+    "stateName": "Texas",
+    "classifiedAt": "2026-10-06T05:55:05.879Z",
+    "total": 4,
+    "typeSummary": {
+      "benefit": 4
+    },
+    "scopeSummary": {
+      "state": 4
+    },
+    "complexitySummary": {
+      "deep": 3,
+      "medium": 1
+    },
+    "programs": [
+      {
+        "name": "Texas Medicaid for the Elderly and People with Disabilities",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Texas Health and Human Services Commission local benefits offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Community partner sites",
+              "type": "service-area"
+            },
+            {
+              "name": "YourTexasBenefits.com",
+              "type": "service-area"
+            },
+            {
+              "name": "2-1-1 Texas",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Primary Home Care (Community Care)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local HHSC CCSE offices",
+              "type": "service-area"
+            },
+            {
+              "name": "HHSC-contracted PHC providers",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Texas Respite Care Services",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Aging and Disability Resource Center (ADRC)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Area Agency on Aging (AAA)",
+              "type": "service-area"
+            },
+            {
+              "name": "Local respite providers listed through the Texas respite search portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "medium",
+        "recommendedSections": [
+          "prose",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": false,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Community Attendant Services (CAS)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Texas Health and Human Services offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Regional nurse / CCSE staff involved in assessment and authorization",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "TX",
+      "id": "tx-medicaid-elderly-disabilities",
+      "name": "Texas Medicaid for the Elderly and People with Disabilities",
+      "legacyId": "texas-medicaid-for-the-elderly-and-people-with-disabilities",
+      "programType": "benefit"
+    },
+    {
+      "state": "TX",
+      "id": "tx-primary-home-care-community-care",
+      "name": "Primary Home Care (Community Care)",
+      "legacyId": "primary-home-care-community-care",
+      "programType": "benefit"
+    },
+    {
+      "state": "TX",
+      "id": "tx-respite-care-services",
+      "name": "Texas Respite Care Services",
+      "legacyId": "texas-respite-care-services",
+      "programType": "benefit"
+    },
+    {
+      "state": "TX",
+      "id": "tx-community-attendant-services",
+      "name": "Community Attendant Services (CAS)",
+      "legacyId": null,
+      "programType": "benefit"
+    }
+  ]
+}

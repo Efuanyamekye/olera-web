@@ -1,13 +1,13 @@
 {
   "state": "DE",
   "stateName": "Delaware",
-  "checkedAt": "2026-10-02T07:35:04.265Z",
-  "total": 13,
+  "checkedAt": "2026-10-06T12:19:41.408Z",
+  "total": 14,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 7,
-  "totalFlags": 10,
+  "programsWithFlags": 10,
+  "totalFlags": 12,
   "highSeverityFlags": 3,
   "programs": [
     {
@@ -27,22 +27,29 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 3000,
-        "phone": "8009969969",
+        "assets_couple": null,
+        "phone": "18009969969",
         "sources": {
-          "age": "https://dhss.delaware.gov/dmma/home/medicaid/dshp-plus/",
+          "age": "https://dhss.delaware.gov/services/diamond-state-health-plan-plus/",
           "income": null,
-          "assets": "https://www.assistedliving.org/wp-content/uploads/2022/09/reAL-3398245-state-resource-pages-delaware.pdf",
+          "assets": "https://www.payingforseniorcare.com/delaware/medicaid-waivers/diamond-state-health-plan",
           "phone": "https://dhss.delaware.gov/wp-content/uploads/sites/9/dmma/pdf/dshpplus_trifoldbrochure.pdf"
         },
-        "notes": "DSHP-Plus is Delaware’s current managed long-term care program for elderly or physically disabled residents. An authoritative current source for the senior-specific age threshold and main phone was found; a current authoritative source for the exact financial asset limit was not directly retrievable in the gathered results, so the asset values are supported here by a current secondary guide citing official Medicaid rules."
+        "notes": "DSHP-Plus is the senior/disabled long-term care Medicaid pathway; the current official page describes eligibility for elderly or physically disabled residents, but the age threshold is not stated on the page. The $2,000 asset limit is reported by a current secondary source citing Delaware Medicaid rules; no separate current official asset URL was retrievable here. Income values were not reliably retrievable from an official current source, so they are null."
       },
-      "flags": [],
-      "notes": "DSHP-Plus is Delaware’s current managed long-term care program for elderly or physically disabled residents. An authoritative current source for the senior-specific age threshold and main phone was found; a current authoritative source for the exact financial asset limit was not directly retrievable in the gathered results, so the asset values are supported here by a current secondary guide citing official Medicaid rules."
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 65,
+          "verifiedValue": 55
+        }
+      ],
+      "notes": "DSHP-Plus is the senior/disabled long-term care Medicaid pathway; the current official page describes eligibility for elderly or physically disabled residents, but the age threshold is not stated on the page. The $2,000 asset limit is reported by a current secondary source citing Delaware Medicaid rules; no separate current official asset URL was retrievable here. Income values were not reliably retrievable from an official current source, so they are null."
     },
     {
       "programId": "dsaapd-waivers",
@@ -60,29 +67,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002239074",
+        "phone": "8002239074",
         "sources": {
-          "age": "https://dhss.delaware.gov/dsaapd/",
-          "income": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/in-home-support-to-help-you-live-independently/",
-          "assets": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/in-home-support-to-help-you-live-independently/",
-          "phone": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/in-home-support-to-help-you-live-independently/"
+          "age": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/in-home-support-to-help-you-live-independently/",
+          "income": null,
+          "assets": null,
+          "phone": "https://dhss.delaware.gov/dsaapd/contact/"
         },
-        "notes": "Current official Delaware DSAAPD/ADRC page points seniors to the 24/7 ADRC; no income or asset test was found on the retrieved official source."
+        "notes": "Current official Delaware DHSS pages show the senior pathway age as 60+; no income or asset test was found for this program in the retrieved sources."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 60,
-          "verifiedValue": 55
-        }
-      ],
-      "notes": "Current official Delaware DSAAPD/ADRC page points seniors to the 24/7 ADRC; no income or asset test was found on the retrieved official source."
+      "flags": [],
+      "notes": "Current official Delaware DHSS pages show the senior pathway age as 60+; no income or asset test was found for this program in the retrieved sources."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -106,14 +106,14 @@
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "18669408963",
+        "phone": "3022559040",
         "sources": {
           "age": "https://dhss.delaware.gov/dmma/home/medicaid/long-term-care-medicaid-programs/pace/",
           "income": "https://dhss.delaware.gov/wp-content/uploads/sites/2/2026/06/Program-Information-Rights-and-Responsibilities-English.pdf",
           "assets": "https://dhss.delaware.gov/wp-content/uploads/sites/2/2026/06/Program-Information-Rights-and-Responsibilities-English.pdf",
-          "phone": "https://dhss.delaware.gov/wp-content/uploads/sites/2/2026/06/Program-Information-Rights-and-Responsibilities-English.pdf"
+          "phone": "https://dhss.delaware.gov/dmma/home/medicaid/long-term-care-medicaid-programs/pace/"
         },
-        "notes": "Current Delaware PACE eligibility appears active; no separate age-based senior threshold beyond 55 was found. Income/resource limits are stated in the 2026 DHSS program information PDF."
+        "notes": "Delaware PACE is current in 2026; official DHSS materials list age 55+, income below 250% SSI standard, and resources below $2,000 individual/$3,000 married couple."
       },
       "flags": [
         {
@@ -124,10 +124,10 @@
             "3028653565",
             "18002239074"
           ],
-          "verifiedValue": "18669408963"
+          "verifiedValue": "3022559040"
         }
       ],
-      "notes": "Current Delaware PACE eligibility appears active; no separate age-based senior threshold beyond 55 was found. Income/resource limits are stated in the 2026 DHSS program information PDF."
+      "notes": "Delaware PACE is current in 2026; official DHSS materials list age 55+, income below 250% SSI standard, and resources below $2,000 individual/$3,000 married couple."
     },
     {
       "programId": "qmb-slmb-medicare-help",
@@ -140,7 +140,8 @@
         "assets_couple": null,
         "phones": [
           "8008529089",
-          "211"
+          "211",
+          "8668437212"
         ],
         "hasVerifiableFacts": true
       },
@@ -152,12 +153,12 @@
         "assets_couple": null,
         "phone": "8668437212",
         "sources": {
-          "age": "https://dhss.delaware.gov/dmma/home/qmb/",
+          "age": null,
           "income": "https://dhss.delaware.gov/dmma/home/income-limits/",
           "assets": "https://dhss.delaware.gov/dmma/home/qmb/",
           "phone": "https://medicaid.gov/about-us/where-can-people-get-help-medicaid-chip"
         },
-        "notes": "Delaware QMB and SLMB are current Medicare Savings Program pathways; no age minimum is listed because these programs are tied to Medicare eligibility, not a separate age test. Delaware’s official income-limits page shows 2026 monthly limits for QMB/SLMB; QMB assets are not considered, and no separate SLMB asset test was found in the official source."
+        "notes": "Delaware QMB and SLMB have no asset/resource test; age is not a separate eligibility criterion beyond Medicare status, so no age value applies."
       },
       "flags": [
         {
@@ -173,18 +174,9 @@
           "draftValue": 2135,
           "verifiedValue": 1804,
           "pctDiff": 15.5
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8008529089",
-            "211"
-          ],
-          "verifiedValue": "8668437212"
         }
       ],
-      "notes": "Delaware QMB and SLMB are current Medicare Savings Program pathways; no age minimum is listed because these programs are tied to Medicare eligibility, not a separate age test. Delaware’s official income-limits page shows 2026 monthly limits for QMB/SLMB; QMB assets are not considered, and no separate SLMB asset test was found in the official source."
+      "notes": "Delaware QMB and SLMB have no asset/resource test; age is not a separate eligibility criterion beyond Medicare status, so no age value applies."
     },
     {
       "programId": "snap-food-benefits",
@@ -205,21 +197,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2610,
-        "income_2": 3526,
+        "income_1": 2660,
+        "income_2": 3608,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18668437212",
+        "phone": "8005269099",
         "sources": {
           "age": null,
           "income": "https://dhss.delaware.gov/dss/division-of-social-services/snap/",
           "assets": null,
           "phone": "https://dhss.delaware.gov/dss/division-of-social-services/snap/"
         },
-        "notes": "SNAP does not have a senior-specific minimum age; the Delaware source lists current FY2026 income limits and directs applicants to ASSIST or DSS offices. No authoritative asset-limit page was retrieved, and SNAP generally has no asset test for many Delaware households under current broad-based categorical eligibility."
+        "notes": "SNAP has no senior-specific minimum age test; Delaware lists current 200% FPL monthly income limits and a main customer service number. No asset limit source was found in the retrieved official source."
       },
-      "flags": [],
-      "notes": "SNAP does not have a senior-specific minimum age; the Delaware source lists current FY2026 income limits and directs applicants to ASSIST or DSS offices. No authoritative asset-limit page was retrieved, and SNAP generally has no asset test for many Delaware households under current broad-based categorical eligibility."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8668437212",
+            "211",
+            "3022559040",
+            "8778234369"
+          ],
+          "verifiedValue": "8005269099"
+        }
+      ],
+      "notes": "SNAP has no senior-specific minimum age test; Delaware lists current 200% FPL monthly income limits and a main customer service number. No asset limit source was found in the retrieved official source."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -238,21 +242,31 @@
       },
       "verified": {
         "age": null,
-        "income_1": 3280,
+        "income_1": 3279,
         "income_2": 4287,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3022559875",
+        "phone": "3022559040",
         "sources": {
-          "age": null,
-          "income": "https://dhss.delaware.gov/dss/division-of-social-services/utility-assistance/",
+          "age": "https://www.liheap.org/directory",
+          "income": "https://daycarecalc.com/energy-assistance/delaware",
           "assets": null,
-          "phone": "https://dhss.delaware.gov/dss/division-of-social-services/utility-assistance/"
+          "phone": "https://dhss.delaware.gov/services/liheap-heating-and-cooling-assistance/"
         },
-        "notes": "LIHEAP in Delaware is current and administered as Delaware Energy Assistance Program/LIHEAP through DHSS; the official page states eligibility is based on income at 60% of State Median Income and provides a contact number, but it does not publish an age test or asset test on the retrieved official page."
+        "notes": "Delaware LIHEAP appears to use 60% of State Median Income for eligibility; no asset test source was found. Senior preference/priority exists, but no separate senior-only income standard was found."
       },
-      "flags": [],
-      "notes": "LIHEAP in Delaware is current and administered as Delaware Energy Assistance Program/LIHEAP through DHSS; the official page states eligibility is based on income at 60% of State Median Income and provides a contact number, but it does not publish an age test or asset test on the retrieved official page."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3022559875",
+            "211"
+          ],
+          "verifiedValue": "3022559040"
+        }
+      ],
+      "notes": "Delaware LIHEAP appears to use 60% of State Median Income for eligibility; no asset test source was found. Senior preference/priority exists, but no separate senior-only income standard was found."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -271,25 +285,25 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2658,
+        "income_1": 2660,
         "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3027353480",
+        "phone": "3025046111",
         "sources": {
           "age": null,
           "income": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/",
           "assets": null,
-          "phone": "https://dnrec.delaware.gov/contacts/"
+          "phone": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/"
         },
-        "notes": "No age or asset test found for Delaware WAP. Income limits on the official DNREC page are annual; converted to monthly by dividing by 12 and rounding: household of 1 = $31,920/12 = $2,660, but the page also appears to reflect a 2026 table; household of 2 = $43,280/12 = $3,607. Official main help number listed by DNREC is 302-735-3480."
+        "notes": "Current Delaware WAP eligibility uses annual income at or below 200% of federal poverty level; no age or asset test found. Monthly figures are annual amounts divided by 12 and rounded: 1 person $31,920/12 = $2,660; 2 persons $43,280/12 = $3,607."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "medium",
           "draftValue": 2510,
-          "verifiedValue": 2658,
+          "verifiedValue": 2660,
           "pctDiff": 5.6
         },
         {
@@ -300,7 +314,7 @@
           "pctDiff": 5.5
         }
       ],
-      "notes": "No age or asset test found for Delaware WAP. Income limits on the official DNREC page are annual; converted to monthly by dividing by 12 and rounding: household of 1 = $31,920/12 = $2,660, but the page also appears to reflect a 2026 table; household of 2 = $43,280/12 = $3,607. Official main help number listed by DNREC is 302-735-3480."
+      "notes": "Current Delaware WAP eligibility uses annual income at or below 200% of federal poverty level; no age or asset test found. Monthly figures are annual amounts divided by 12 and rounded: 1 person $31,920/12 = $2,660; 2 persons $43,280/12 = $3,607."
     },
     {
       "programId": "senior-medicare-patrol",
@@ -329,7 +343,7 @@
           "assets": null,
           "phone": "https://dhss.delaware.gov/dsaapd/services/delaware-senior-medicare-patrol-program/"
         },
-        "notes": "Delaware Senior Medicare Patrol is not an eligibility-tested benefit; no age/income/assets rules found for the senior pathway. Official statewide contact is 1-800-223-9074."
+        "notes": "No age, income, or asset test found for Delaware Senior Medicare Patrol; official help line listed statewide as 1-800-223-9074, with county numbers also shown on Delaware DHSS pages."
       },
       "flags": [
         {
@@ -341,7 +355,7 @@
           "verifiedValue": "8002239074"
         }
       ],
-      "notes": "Delaware Senior Medicare Patrol is not an eligibility-tested benefit; no age/income/assets rules found for the senior pathway. Official statewide contact is 1-800-223-9074."
+      "notes": "No age, income, or asset test found for Delaware Senior Medicare Patrol; official help line listed statewide as 1-800-223-9074, with county numbers also shown on Delaware DHSS pages."
     },
     {
       "programId": "home-delivered-meals",
@@ -366,17 +380,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3024213734",
+        "phone": "3022559040",
         "sources": {
           "age": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/home-delivered-meals/",
-          "income": null,
-          "assets": null,
+          "income": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/home-delivered-meals/",
+          "assets": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/home-delivered-meals/",
           "phone": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/home-delivered-meals/"
         },
-        "notes": "Current Delaware DHSS home delivered meals eligibility for seniors is age 60+; no income or asset test was found for the senior pathway. Contact phone listed by DHSS for New Castle County provider City Fare Meals on Wheels."
+        "notes": "Current Delaware DHSS guidance says seniors qualify at age 60+; meals are provided based on need, not income, and no asset test is listed."
       },
-      "flags": [],
-      "notes": "Current Delaware DHSS home delivered meals eligibility for seniors is age 60+; no income or asset test was found for the senior pathway. Contact phone listed by DHSS for New Castle County provider City Fare Meals on Wheels."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3024213734",
+            "3022930008",
+            "3027341200",
+            "211"
+          ],
+          "verifiedValue": "3022559040"
+        }
+      ],
+      "notes": "Current Delaware DHSS guidance says seniors qualify at age 60+; meals are provided based on need, not income, and no asset test is listed."
     },
     {
       "programId": "scsep-employment",
@@ -395,31 +421,21 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 125,
+        "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3027813568",
+        "phone": "3022523211",
         "sources": {
-          "age": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/employment-programs/",
-          "income": "https://laborfiles.delaware.gov/main/det/one-stop/FS-3_SenEmp.pdf",
+          "age": "https://dhss.delaware.gov/dsaapd/employment/",
+          "income": null,
           "assets": null,
-          "phone": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611"
+          "phone": "https://dhss.delaware.gov/dsaapd/employment/"
         },
-        "notes": "SCSEP is active in Delaware; no asset test found in current authoritative sources. Income limit is 125% of poverty level."
+        "notes": "Current Delaware SCSEP eligibility is age 55+; no asset test found in authoritative current sources; official Delaware contact listed for New Castle County enrollment/help is used as the main phone."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "3022523211",
-            "211"
-          ],
-          "verifiedValue": "3027813568"
-        }
-      ],
-      "notes": "SCSEP is active in Delaware; no asset test found in current authoritative sources. Income limit is 125% of poverty level."
+      "flags": [],
+      "notes": "Current Delaware SCSEP eligibility is age 55+; no asset test found in authoritative current sources; official Delaware contact listed for New Castle County enrollment/help is used as the main phone."
     },
     {
       "programId": "legal-aid-seniors",
@@ -447,14 +463,14 @@
         "phone": "3025750660",
         "sources": {
           "age": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/legal-services/",
-          "income": "https://www.declasi.org/elder-law-program/",
-          "assets": "https://www.declasi.org/elder-law-program/",
-          "phone": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/legal-services/"
+          "income": null,
+          "assets": null,
+          "phone": "https://courts.delaware.gov/help/legalassistance.aspx"
         },
-        "notes": "Current Delaware senior legal aid is the Elder Law/Legal Services Program for residents age 60+; no income or asset test is stated for the senior pathway."
+        "notes": "Current senior pathway appears to be Delaware Legal Services / CLASI elder legal services for age 60+; no income or asset test found in authoritative sources."
       },
       "flags": [],
-      "notes": "Current Delaware senior legal aid is the Elder Law/Legal Services Program for residents age 60+; no income or asset test is stated for the senior pathway."
+      "notes": "Current senior pathway appears to be Delaware Legal Services / CLASI elder legal services for age 60+; no income or asset test found in authoritative sources."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -484,7 +500,7 @@
           "assets": null,
           "phone": "https://dhss.delaware.gov/office-of-the-secretary/long-term-care-ombudsman-program/"
         },
-        "notes": "No age, income, or asset eligibility test found for this ombudsman program; official Delaware source lists the hotline as 1-855-773-1002."
+        "notes": "No age, income, or asset eligibility test found for Delaware Long-Term Care Ombudsman Program; program appears to be a rights/advocacy service for long-term care residents rather than a means-tested benefit."
       },
       "flags": [
         {
@@ -497,7 +513,7 @@
           "verifiedValue": "18557731002"
         }
       ],
-      "notes": "No age, income, or asset eligibility test found for this ombudsman program; official Delaware source lists the hotline as 1-855-773-1002."
+      "notes": "No age, income, or asset eligibility test found for Delaware Long-Term Care Ombudsman Program; program appears to be a rights/advocacy service for long-term care residents rather than a means-tested benefit."
     },
     {
       "programId": "family-caregiver-support",
@@ -519,17 +535,62 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002239074",
+        "phone": "18002239074",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/support-for-caregivers/"
+          "phone": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/contact-dsaapd/"
         },
-        "notes": "No authoritative age, income, or asset test was found for this caregiver support pathway; current official Delaware source lists the ADRC/caregiver help line as 1-800-223-9074."
+        "notes": "No income, asset, or age test found for this caregiver support program; official contact/help number is 1-800-223-9074."
       },
       "flags": [],
-      "notes": "No authoritative age, income, or asset test was found for this caregiver support pathway; current official Delaware source lists the ADRC/caregiver help line as 1-800-223-9074."
+      "notes": "No income, asset, or age test found for this caregiver support program; official contact/help number is 1-800-223-9074."
+    },
+    {
+      "programId": "de-medicaid-aged-blind-disabled",
+      "programName": "Regular Medicaid / Aged Blind and Disabled",
+      "facts": {
+        "age": 65,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "18003722022",
+          "3022559500",
+          "3022559040"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8668437212",
+        "sources": {
+          "age": "https://dhss.delaware.gov/dmma/home/medicaid/faq/",
+          "income": "https://www.medicaidplanningassistance.org/medicaid-eligibility-delaware/",
+          "assets": "https://regulations.delaware.gov/AdminCode/title16/Department%20of%20Health%20and%20Social%20Services/Division%20of%20Social%20Services/Delaware%20Social%20Services%20Manual/17000.shtml",
+          "phone": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip"
+        },
+        "notes": "Delaware regular Medicaid/ABD appears to have no senior-specific minimum age test; eligibility is based on aged, blind, or disabled status, and Delaware reports no resource test for regular Medicaid except long-term care/SSI-related programs."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18003722022",
+            "3022559500",
+            "3022559040"
+          ],
+          "verifiedValue": "8668437212"
+        }
+      ],
+      "notes": "Delaware regular Medicaid/ABD appears to have no senior-specific minimum age test; eligibility is based on aged, blind, or disabled status, and Delaware reports no resource test for regular Medicaid except long-term care/SSI-related programs."
     }
   ]
 }

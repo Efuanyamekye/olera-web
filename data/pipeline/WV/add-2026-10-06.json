@@ -1,0 +1,173 @@
+{
+  "state": "WV",
+  "addedAt": "2026-10-06T06:37:05.851Z",
+  "dive": {
+    "state": "WV",
+    "stateName": "West Virginia",
+    "diveAt": "2026-10-06T06:35:37.679Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "summary": "West Virginia’s ABD Medicaid has two practical paths: regular SSI-related ABD eligibility and medically needy/spend-down coverage for people whose income is above the regular limit.[1][5][8]",
+            "regular_eligibility_limit": {
+              "single": "$994/month in 2026 for SSI-related ABD coverage.[10][15]",
+              "couple": "$1,491/month in 2026 for SSI-related ABD coverage.[10][15]",
+              "notes": "These figures are reflected in West Virginia ABD eligibility summaries and KFF state data; the state also notes that SSI income beneficiaries are automatically eligible for Medicaid coverage.[1][10][15]"
+            },
+            "medically_needy_or_spend_down": {
+              "summary": "If income is above the regular limit, aged/blind/disabled applicants may still qualify by spending down to the medically needy income level using incurred medical expenses.[5][8]",
+              "amount": "West Virginia’s long-term care/ABD materials describe a 300% SSI-based threshold of $2,901/month effective January 2025 for certain long-term-care coverage, with the medically needy route available when monthly nursing care costs exceed the Medically Needy Income Limit and all other requirements are met.[8]",
+              "notes": "The exact spend-down threshold can vary by coverage type; ABD coverage for community medical care and long-term-care coverage are not identical, so families need to check the specific category being pursued.[5][8]"
+            }
+          },
+          "asset_limits": {
+            "summary": "ABD Medicaid is asset-tested unless the person is automatically eligible through SSI-related rules.[5][8]",
+            "limits": {
+              "single": "$2,000 countable assets.[5][8]",
+              "couple": "$3,000 countable assets.[5][8]"
+            },
+            "what_counts": [
+              "Cash, bank accounts, and other liquid resources are generally countable under Medicaid asset rules.",
+              "Vehicles, a home, and certain burial-related resources may be exempt depending on Medicaid rules and how they are titled."
+            ],
+            "what_is_exempt": [
+              "The home may be exempt if it is the applicant’s principal residence and equity rules are satisfied.",
+              "One vehicle is commonly exempt under Medicaid rules.",
+              "Certain personal belongings and some burial funds/arrangements may be exempt."
+            ],
+            "notes": "The sources confirm the dollar limits but do not spell out every exemption in the ABD summary pages, so the exact exempt-resource list is governed by West Virginia Medicaid resource rules in the eligibility manual.[5][8]"
+          },
+          "other_requirements": [
+            "Must be aged, blind, or disabled.[1][3][5][10]",
+            "Must meet West Virginia Medicaid financial eligibility rules for the coverage category sought.[1][5][8]",
+            "Some applicants must also meet functional/medical criteria if applying for long-term-care or waiver-style services rather than basic coverage.[8]",
+            "SSI beneficiaries are automatically eligible for Medicaid coverage and do not need to apply through the county office for that coverage path.[1]",
+            "Eligibility is determined by West Virginia Department of Human Services/DoHS workers in county offices.[1][13]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "This program is Medicaid health coverage for aged, blind, or disabled people. It covers routine medical care such as physician visits, prescription drugs, emergency room care, and short-term hospital stays; in long-term-care pathways it can also pay for nursing home care and, for eligible people, in-home care that meets a nursing-home level of care.[8][10]",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online through WV PATH / West Virginia Medicaid application portal.[10][9]",
+            "By phone through the Customer Service Center at 877-716-1212.[10]",
+            "In person at a local county Department of Health and Human Resources/DoHS office.[1][10]",
+            "By paper application using the Application for Adult Medicaid (DFA-MA-1).[2]"
+          ],
+          "processing_time": "No exact statewide processing-time guarantee was identified in the gathered sources. Eligibility is handled by county offices, so timing can vary by office workload and by whether the case needs disability, medical, or long-term-care review.[1][13]",
+          "waitlist": "For basic ABD Medicaid, no waitlist is indicated; Medicaid is an entitlement if eligibility is met.[10] Long-term-care or waiver-related services may involve different eligibility or service-authority rules, but the gathered sources did not show a county-specific ABD waitlist.",
+          "forms": [
+            "DFA-MA-1 Application for Adult Medicaid[2]",
+            "Healthcare Application for Individual (for one person) / WV PATH application route[9]"
+          ],
+          "documents": [
+            "Proof of identity and West Virginia residency",
+            "Proof of age or disability/blindness status",
+            "Income proof such as Social Security, pension, wages, or benefit award letters",
+            "Bank statements and other asset/resource records",
+            "Mortgage, rent, utility, and insurance information if asked",
+            "Medical bills and receipts if pursuing spend-down or medically needy eligibility",
+            "Information about Medicare or other health coverage",
+            "Spouse information if married, because spousal rules can affect eligibility and allowances"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Statewide Medicaid coverage, administered through county offices; no county-only restriction was identified for ABD Medicaid itself.[1][13]",
+          "regional_variations": "The core ABD Medicaid rules are statewide, but application handling, case processing speed, and local office practice can vary by county office.[1][13]",
+          "offices_or_providers": [
+            "Local county Department of Health and Human Resources/DoHS offices",
+            "WV Bureau for Medical Services statewide Medicaid administration",
+            "WV PATH online application portal"
+          ]
+        },
+        "official_source": "https://dhhr.wv.gov/bms/BMSPUB/Documents/Guide%20to%20Medicaid%202025.pdf",
+        "gotchas": [
+          "People often confuse regular ABD Medicaid with long-term-care Medicaid; the financial rules can differ, especially for nursing-home or in-home care pathways.[5][8]",
+          "A person may be automatically eligible through SSI, which means no separate county-office application is needed for that Medicaid path.[1]",
+          "If income is above the standard limit, spend-down may still make someone eligible, but only after medical expenses are applied correctly and the case is evaluated under the right coverage category.[5][8]",
+          "Asset limits still matter even when income is low; families often overlook bank accounts, CDs, and jointly held resources.[5][8]",
+          "The state uses county offices for eligibility decisions, so two families can experience different turnaround times depending on office workload.[1][13]",
+          "The Medicaid category matters: basic ABD coverage, medically needy coverage, and long-term-care coverage are related but not identical programs.[5][8]"
+        ],
+        "data_shape_notes": "This program is state Medicaid coverage with fixed income and asset limits for ABD eligibility, plus a separate spend-down path for people over the income limit; it is not household-size tiered like SNAP, but married-couple rules and long-term-care subcategories change the financial test.[5][8][10]",
+        "_raw": "{\n  \"name\": \"Aged, Blind, and Disabled Medicaid\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"summary\": \"West Virginia’s ABD Medicaid has two practical paths: regular SSI-related ABD eligibility and medically needy/spend-down coverage for people whose income is above the regular limit.[1][5][8]\",\n      \"regular_eligibility_limit\": {\n        \"single\": \"$994/month in 2026 for SSI-related ABD coverage.[10][15]\",\n        \"couple\": \"$1,491/month in 2026 for SSI-related ABD coverage.[10][15]\",\n        \"notes\": \"These figures are reflected in West Virginia ABD eligibility summaries and KFF state data; the state also notes that SSI income beneficiaries are automatically eligible for Medicaid coverage.[1][10][15]\"\n      },\n      \"medically_needy_or_spend_down\": {\n        \"summary\": \"If income is above the regular limit, aged/blind/disabled applicants may still qualify by spending down to the medically needy income level using incurred medical expenses.[5][8]\",\n        \"amount\": \"West Virginia’s long-term care/ABD materials describe a 300% SSI-based threshold of $2,901/month effective January 2025 for certain long-term-care coverage, with the medically needy route available when monthly nursing care costs exceed the Medically Needy Income Limit and all other requirements are met.[8]\",\n        \"notes\": \"The exact spend-down threshold can vary by coverage type; ABD coverage for community medical care and long-term-care coverage are not identical, so families need to check the specific category being pursued.[5][8]\"\n      }\n    },\n    \"asset_limits\": {\n      \"summary\": \"ABD Medicaid is asset-tested unless the person is automatically eligible through SSI-related rules.[5][8]\",\n      \"limits\": {\n        \"single\": \"$2,000 countable assets.[5][8]\",\n        \"couple\": \"$3,000 countable assets.[5][8]\"\n      },\n      \"what_counts\": [\n        \"Cash, bank accounts, and other liquid resources are generally countable under Medicaid asset rules.\",\n        \"Vehicles, a home, and certain burial-related resources may be exempt depending on Medicaid rules and how they are titled.\"\n      ],\n      \"what_is_exempt\": [\n        \"The home may be exempt if it is the applicant’s principal residence and equity rules are satisfied.\",\n        \"One vehicle is commonly exempt under Medicaid rules.\",\n        \"Certain personal belongings and some burial funds/arrangements may be exempt.\"\n      ],\n      \"notes\": \"The sources confirm the dollar limits but do not spell out every exemption in the ABD summary pages, so the exact exempt-resource list is governed by West Virginia Medicaid resource rules in the eligibility manual.[5][8]\"\n    },\n    \"other_requirements\": [\n      \"Must be aged, blind, or disabled.[1][3][5][10]\",\n      \"Must meet West Virginia Medicaid financial eligibility rules for the coverage category sought.[1][5][8]\",\n      \"Some applicants must also meet functional/medical criteria if applying for long-term-care or waiver-style services rather than basic coverage.[8]\",\n      \"SSI beneficiaries are automatically eligible for Medicaid coverage and do not need to apply through the county office for that coverage path.[1]\",\n      \"Eligibility is determined by West Virginia Department of Human Services/DoHS workers in county offices.[1][13]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"This program is Medicaid health coverage for aged, blind, or disabled people. It covers routine medical care such as physician visits, prescription drugs, emergency room care, and short-term hospital stays; in long-term-care pathways it can also pay for nursing home care and, for eligible people, in-home care that meets a nursing-home level of care.[8][10]\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through WV PATH / West Virginia Medicaid application portal.[10][9]\",\n      \"By phone through the Customer Service Center at 877-716-1212.[10]\",\n      \"In person at a local county Department of Health and Human Resources/DoHS office.[1][10]\",\n      \"By paper application using the Application for Adult Medicaid (DFA-MA-1).[2]\"\n    ],\n    \"processing_time\": \"No exact statewide processing-time guarantee was identified in the gathered sources. Eligibility is handled by county offices, so timing can vary by office workload and by whether the case needs disability, medical, or long-term-care review.[1][13]\",\n    \"waitlist\": \"For basic ABD Medicaid, no waitlist is indicated; Medicaid is an entitlement if eligibility is met.[10] Long-term-care or waiver-related services may involve different eligibility or service-authority rules, but the gathered sources did not show a county-specific ABD waitlist.\",\n    \"forms\": [\n      \"DFA-MA-1 Application for Adult Medicaid[2]\",\n      \"Healthcare Application for Individual (for one person) / WV PATH application route[9]\"\n    ],\n    \"documents\": [\n      \"Proof of identity and West Virginia residency\",\n      \"Proof of age or disability/blindness status\",\n      \"Income proof such as Social Security, pension, wages, or benefit award letters\",\n      \"Bank statements and other asset/resource records\",\n      \"Mortgage, rent, utility, and insurance information if asked\",\n      \"Medical bills and receipts if pursuing spend-down or medically needy eligibility\",\n      \"Information about Medicare or other health coverage\",\n      \"Spouse information if married, because spousal rules can affect eligibility and allowances\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Statewide Medicaid coverage, administered through county offices; no county-only restriction was identified for ABD Medicaid itself.[1][13]\",\n    \"regional_variations\": \"The core ABD Medicaid rules are statewide, but application handling, case processing speed, and local office practice can vary by county office.[1][13]\",\n    \"offices_or_providers\": [\n      \"Local county Department of Health and Human Resources/DoHS offices\",\n      \"WV Bureau for Medical Services statewide Medicaid administration\",\n      \"WV PATH online application portal\"\n    ]\n  },\n  \"official_source\": \"https://dhhr.wv.gov/bms/BMSPUB/Documents/Guide%20to%20Medicaid%202025.pdf\",\n  \"gotchas\": [\n    \"People often confuse regular ABD Medicaid with long-term-care Medicaid; the financial rules can differ, especially for nursing-home or in-home care pathways.[5][8]\",\n    \"A person may be automatically eligible through SSI, which means no separate county-office application is needed for that Medicaid path.[1]\",\n    \"If income is above the standard limit, spend-down may still make someone eligible, but only after medical expenses are applied correctly and the case is evaluated under the right coverage category.[5][8]\",\n    \"Asset limits still matter even when income is low; families often overlook bank accounts, CDs, and jointly held resources.[5][8]\",\n    \"The state uses county offices for eligibility decisions, so two families can experience different turnaround times depending on office workload.[1][13]\",\n    \"The Medicaid category matters: basic ABD coverage, medically needy coverage, and long-term-care coverage are related but not identical programs.[5][8]\"\n  ],\n  \"data_shape_notes\": \"This program is state Medicaid coverage with fixed income and asset limits for ABD eligibility, plus a separate spend-down path for people over the income limit; it is not household-size tiered like SNAP, but married-couple rules and long-term-care subcategories change the financial test.[5][8][10]\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "WV",
+    "stateName": "West Virginia",
+    "classifiedAt": "2026-10-06T06:35:37.684Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Aged, Blind, and Disabled Medicaid",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local county Department of Health and Human Resources/DoHS offices",
+              "type": "service-area"
+            },
+            {
+              "name": "WV Bureau for Medical Services statewide Medicaid administration",
+              "type": "service-area"
+            },
+            {
+              "name": "WV PATH online application portal",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "WV",
+      "id": "wv-aged-blind-disabled-medicaid",
+      "name": "Aged, Blind, and Disabled Medicaid",
+      "legacyId": "aged-blind-and-disabled-medicaid",
+      "programType": "benefit"
+    }
+  ]
+}

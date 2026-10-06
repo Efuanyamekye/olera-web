@@ -91,7 +91,7 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Overdue", tone: "act", age: `was due ${r.open_action.due}` };
   }
   if (r.flags.includes("promise_owed")) {
-    return { phrase: "Owed a call", tone: "act", age };
+    return { phrase: r.city_lead_id ? "Owed a call" : "Call them", tone: "act", age };
   }
   if (r.flags.includes("tried_three")) {
     return { phrase: "Close out", tone: "warn", age };
@@ -113,6 +113,9 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     const n = r.outcome ? Math.floor((Date.now() - new Date(r.outcome.at).getTime()) / 86_400_000) : null;
     const said = n === null ? quiet : n <= 0 ? "said so today" : `said so ${days(n)} ago`;
     return { phrase: "Provider never replied", tone: "act", age: said };
+  }
+  if (r.flags.includes("check_provider") && r.handed_to) {
+    return { phrase: "Check with provider", tone: "warn", age: handedAge(r.handed_to.at) };
   }
   if (r.episode.state === "closed") {
     // The reason goes in the small line. "Closed — no connection formed" is 29
@@ -224,10 +227,16 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
   }
 
   if (r.flags.includes("tried_three")) {
-    return `Called ${r.missed_calls} times, never reached. Send one last text or email, then archive as Never answered.`;
+    return `Called ${r.missed_calls} times, never reached. Text them twice on different days, then archive as Never answered.`;
   }
 
+
   if (r.flags.includes("promise_owed")) {
+    // A provider-page family was never promised anything: they asked a
+    // provider, and we call to check that provider is looking after them.
+    if (!r.city_lead_id) {
+      return `Asked ${r.providers[0]?.name ?? "a provider"} about care. Call to check they're being looked after.`;
+    }
     if (r.reach.note) return `Promised a call. ${capitalise(r.reach.note)}.`;
     return "Promised a call, still not reached.";
   }
@@ -240,11 +249,29 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
     return "Told us the provider never got back to them.";
   }
 
+  if (r.flags.includes("check_provider")) return checkLine(r);
+
   if (r.benefits?.letter_to_read) {
     return r.benefits.letter_reason ? `Letter waiting for your read: ${r.benefits.letter_reason}.` : "Letter waiting for your read.";
   }
 
   return null;
+}
+
+/**
+ * The Check with the provider queue's own line. A family in that queue often
+ * carries a more urgent flag too (a call we owe them), and the row normally
+ * shows the most urgent thing, so without this five of the first nine rows
+ * never named the provider to ask. Inside that queue, the queue's question wins.
+ */
+export function checkLine(r: SeekerRelationshipRow): string | null {
+  if (!r.handed_to) return null;
+  return `With ${r.handed_to.name} since ${shortEt(r.handed_to.at)}. Ask them how it went and log what they said.`;
+}
+
+export function handedAge(at: string): string {
+  const n = Math.floor((Date.now() - new Date(at).getTime()) / 86_400_000);
+  return `handed over ${days(n)} ago`;
 }
 
 function shortEt(iso: string): string {

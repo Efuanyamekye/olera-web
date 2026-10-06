@@ -2,8 +2,8 @@
   "state": "AZ",
   "stateName": "Arizona",
   "draftedAt": "2026-04-13T22:29:50.185Z",
-  "total": 10,
-  "successful": 11,
+  "total": 12,
+  "successful": 12,
   "programs": [
     {
       "id": "ahcccs-altcs",
@@ -390,16 +390,25 @@
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
+          "field": "assets_couple",
+          "from": 2000,
+          "to": 4000,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
           "field": "phone",
           "from": [
             "18554327587",
             "211"
           ],
           "to": "8886216880",
-          "source": "https://www.azahcccs.gov/members/ALTCSlocations.html",
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE101andDE202.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         }
       ]
     },
@@ -540,6 +549,12 @@
           "phone": "(877) 767-2382",
           "description": "Local assistance with applications and Medicare counseling",
           "hours": "Mon-Fri 8am-5pm MST"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(602) 417-4000",
+          "description": "Number listed on azahcccs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -635,19 +650,21 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-04",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8554327587",
             "1800",
             "8777672382"
           ],
-          "to": "8004324040",
-          "source": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "to": "(602) 417-4000",
+          "source": "https://www.azahcccs.gov/plansproviders/feeforservicehealthplans/medicaresavingsprograms/",
+          "flaggedAt": "2026-10-06T12:18:13.391Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1294,7 +1311,7 @@
           "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         },
         {
           "field": "phone",
@@ -1304,10 +1321,10 @@
             "4808080429"
           ],
           "to": "6025344444",
-          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "source": "https://www.phoenix.gov/nsdsite/MediaAssets/WAP%20Program%20Fact%20Sheet.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         }
       ]
     },
@@ -1862,6 +1879,435 @@
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "az-abd-medicaid",
+      "name": "Aged, Blind, and Disabled (ABD) Medicaid",
+      "shortName": "ABD Medicaid",
+      "tagline": "If your parent is 65+ or disabled and earning under roughly $1,304/month, Arizona may cover their doctor visits, prescriptions, hospital care, and dental costs at little to no out-of-pocket expense.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "AHCCCS / Arizona Health Care Cost Containment System",
+            "type": "service-area"
+          },
+          {
+            "name": "AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "ABD Medicaid is Arizona's health coverage program for people who are 65 or older, blind, or living with a qualifying disability, and who have limited income. It is administered by AHCCCS (Arizona Health Care Cost Containment System) and can cover physician visits, hospital stays, prescription drugs, and services that Medicare does not pay for, including up to $1,000 per year in preventive and therapeutic dental care plus another $1,000 for emergency dental.\n\nThe income limit for a single person is approximately $1,304 per month (2026 estimate based on 100% of the Federal Poverty Level). Notably, Arizona does not impose an asset or resource limit for most non-long-term-care ABD applicants, which means your parent does not have to spend down savings to qualify for this coverage pathway.\n\nABD Medicaid can work alongside Medicare. When both are active, ABD may help pay Medicare cost-sharing and fill gaps in coverage. If your parent already receives SSI, they are not automatically enrolled; Arizona still requires a separate Medicaid application through AHCCCS.",
+      "savingsRange": "",
+      "savingsSource": "Free service: ABD Medicaid pays directly for covered services rather than providing a cash benefit. Dental coverage up to $2,000/year (combined preventive and emergency) is documented by secondary Arizona sources citing AHCCCS program materials.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+, blind, or have a qualifying disability",
+          "Income at or below approximately $1,304/month (single person, 2026 estimate)",
+          "Arizona resident and U.S. citizen or eligible non-citizen",
+          "No asset limit for most non-long-term-care applicants",
+          "Separate AHCCCS application required even for SSI recipients"
+        ],
+        "ageRequirement": "65+ (or blind or disabled at any age)",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1304
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1764
+          }
+        ],
+        "assetLimits": {
+          "individual": null,
+          "couple": null,
+          "countedAssets": [
+            "Cash and bank accounts (if resource testing applies in specific subprograms or the long-term-care pathway)",
+            "Investments",
+            "Non-exempt real and personal property"
+          ],
+          "exemptAssets": [
+            "Primary residence (while the applicant lives there or intends to return)",
+            "One vehicle",
+            "Certain burial arrangements",
+            "Personal effects"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be an Arizona resident",
+          "Must be a U.S. citizen or eligible non-citizen",
+          "Disability-based applicants must meet SSA/SSI-style disability standards as determined by AHCCCS",
+          "SSI recipients must still file a separate AHCCCS Medicaid application"
+        ],
+        "povertyLevelReference": "100% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to apply is online through Health-e-Arizona Plus; phone and mail options are also available, and processing time varies based on whether disability verification is needed.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your documents before you start",
+            "description": "You will need your parent's Social Security award letter, proof of Arizona residency, proof of citizenship or immigration status, and income information. If disability status has not been established through SSA, gather any medical or clinical records that support the disability claim. Having Medicare information ready is helpful if your parent is enrolled."
+          },
+          {
+            "step": 2,
+            "title": "Choose your application method",
+            "description": "Online is fastest: go to Health-e-Arizona Plus at https://www.healthearizonaplus.gov and create or log into an account. By phone, call 1-855-432-7587 (1-855-HEA-PLUS) Monday through Friday during business hours for help completing the application. By mail, send the completed Application for AHCCCS Health Insurance and Medicare Savings Programs (form DE-103) to AHCCCS Medical Assistance Specialty Programs, 801 E Jefferson St, Phoenix, AZ 85034."
+          },
+          {
+            "step": 3,
+            "title": "Submit the application and watch for follow-up",
+            "description": "AHCCCS may contact you for additional documentation, especially if disability status needs verification. Respond promptly to any requests to avoid delays. If your parent is already receiving SSI, clarify that you are filing a separate Medicaid application; SSI approval alone does not trigger AHCCCS enrollment."
+          },
+          {
+            "step": 4,
+            "title": "Await your eligibility determination",
+            "description": "Processing time is not publicly stated for a fixed number of days and can vary based on case complexity and whether a disability determination is required. Contact AHCCCS at 1-855-432-7587 to check status after submission."
+          }
+        ],
+        "processingTime": "Not specified in published AHCCCS materials; cases requiring disability verification take longer than straightforward age-based applications. Contact AHCCCS at 1-855-432-7587 to ask about your parent's specific timeline.",
+        "waitlist": null,
+        "tip": "If your parent already has Medicare, bring their Medicare card when applying. ABD Medicaid and Medicare can work together, and AHCCCS needs that information to coordinate benefits correctly.",
+        "urls": [
+          {
+            "label": "Health-e-Arizona Plus (online application)",
+            "url": "https://www.healthearizonaplus.gov"
+          },
+          {
+            "label": "AHCCCS official site",
+            "url": "https://www.azahcccs.gov/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent Social Security award letter (shows income and benefit amount)",
+        "Proof of Arizona residency (utility bill, lease agreement, or state-issued document with current address)",
+        "Proof of U.S. citizenship or eligible immigration status (birth certificate, U.S. passport, or immigration documents)",
+        "Social Security number for the applicant",
+        "Proof of age (birth certificate or passport if not established through Social Security records)",
+        "Pension or retirement income statements",
+        "Medicare card if your parent is enrolled (Part A and/or Part B)",
+        "Medical or clinical records supporting disability, if disability status has not already been established through SSA or SSI",
+        "Identification (state-issued ID or driver's license)",
+        "Completed form DE-103 (Application for AHCCCS Health Insurance and Medicare Savings Programs) if applying by mail"
+      ],
+      "contacts": [
+        {
+          "label": "AHCCCS Health-e-Arizona Plus Application Line",
+          "phone": "1-855-432-7587",
+          "description": "Call to apply, check status, or get help completing your application. This is the direct AHCCCS line for ABD Medicaid and related programs.",
+          "hours": "Monday through Friday, business hours (exact hours not published; call during standard business hours)"
+        },
+        {
+          "label": "AHCCCS Medical Assistance Specialty Programs (mail submissions)",
+          "phone": null,
+          "description": "Mail completed applications and supporting documents to: AHCCCS Medical Assistance Specialty Programs (MA-SP), 801 E Jefferson St, Phoenix, AZ 85034.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent already receives SSI, do not assume they are enrolled in ABD Medicaid. Arizona requires a separate AHCCCS application, and SSI approval does not automatically trigger Medicaid coverage.",
+        "ABD Medicaid and ALTCS (Arizona Long Term Care System) are separate programs with very different rules. ALTCS requires a Nursing Facility Level of Care assessment and has stricter financial rules. If your parent needs nursing home or in-home long-term care services, ask AHCCCS specifically about ALTCS eligibility.",
+        "Most non-long-term-care ABD applicants in Arizona face no asset or resource limit. Do not let concern about savings stop your parent from applying; confirm asset rules directly with AHCCCS at the time of application since rules can change.",
+        "Income limits and program details are updated annually. The $1,304/month figure is an approximate 2026 estimate. Verify the current limit with AHCCCS before submitting an application."
+      ],
+      "relatedPrograms": [
+        "Arizona Long Term Care System (ALTCS)",
+        "Medicare Savings Programs (help paying Medicare premiums and cost-sharing)",
+        "Arizona SNAP Food Benefits (for seniors on fixed incomes)",
+        "Extra Help / Low Income Subsidy (federal prescription drug cost assistance)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "ABD Medicaid is not ALTCS. Know the difference.",
+          "body": "ABD Medicaid covers standard medical care: doctor visits, hospital stays, prescriptions, and some dental. ALTCS (Arizona Long Term Care System) is a separate program for people who need nursing home-level care or intensive in-home support. ALTCS requires a clinical assessment (called a Nursing Facility Level of Care determination) and has stricter financial eligibility rules. If your parent is approaching the point of needing daily help with bathing, dressing, or medication management, ask AHCCCS about ALTCS at the same time you apply for ABD Medicaid."
+        },
+        {
+          "type": "prose",
+          "title": "What ABD Medicaid actually covers",
+          "body": "ABD Medicaid pays for physician visits, inpatient hospital care, prescription drugs, and ancillary services. It can also cover benefits not paid by Original Medicare, which is one reason it matters even if your parent already has Medicare Part A and Part B. On dental care specifically, Arizona ABD covers up to $1,000 per year for preventive, diagnostic, and therapeutic dental services, and another $1,000 per year for emergency dental care. These are secondary source figures citing AHCCCS program materials; confirm current dental limits with AHCCCS directly."
+        },
+        {
+          "type": "prose",
+          "title": "No asset limit for most ABD applicants",
+          "body": "This is the detail families most often miss. For non-long-term-care ABD Medicaid in Arizona, most applicants are not subject to an asset or resource cap. That means your parent does not need to spend down a bank account or sell property to qualify. The asset limit that people associate with Medicaid (the $2,000 SSI-style cap) typically applies to a different pathway, such as ALTCS for long-term care. Confirm this with AHCCCS for your parent's specific situation, since different coverage tracks within ABD may have different rules."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already gets SSI. Are they automatically covered by ABD Medicaid?",
+          "answer": "No. Arizona requires a separate AHCCCS application for Medicaid coverage even when your parent is already receiving SSI through the Social Security Administration. SSI approval establishes financial eligibility, but it does not trigger AHCCCS enrollment. Apply at https://www.healthearizonaplus.gov or call 1-855-432-7587."
+        },
+        {
+          "question": "Does my parent have to spend down their savings to qualify?",
+          "answer": "For most non-long-term-care ABD applicants in Arizona, there is no asset or resource limit. Your parent does not need to deplete savings or sell property to qualify for this coverage pathway. The situation is different if they are applying for ALTCS (long-term care Medicaid), which has stricter financial rules. Confirm the asset rules that apply to your parent's specific situation directly with AHCCCS at 1-855-432-7587."
+        },
+        {
+          "question": "My parent has Medicare. Do they still need ABD Medicaid?",
+          "answer": "Yes, and the two programs work together. ABD Medicaid can help pay Medicare cost-sharing (deductibles and copays) and may cover services Medicare does not pay for at all, including the dental benefit described above. Having both is often called being 'dual eligible.' Bring your parent's Medicare card when you apply so AHCCCS can coordinate coverage correctly."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they cannot do it themselves?",
+          "answer": "Yes. A family member, authorized representative, or legal guardian can complete and submit the application on behalf of the applicant. You may need to provide documentation of your authority to act on their behalf, such as a power of attorney. Call 1-855-432-7587 to ask what documentation AHCCCS requires for your situation."
+        },
+        {
+          "question": "What is the income limit, and what counts as income?",
+          "answer": "The income limit is approximately $1,304 per month for a single person (2026 estimate, based on 100% of the Federal Poverty Level). Arizona uses SSI-related financial methodology, which means countable income typically includes Social Security benefits, pensions, wages, and similar sources. Some deductions may apply. Because rules are updated annually, verify the current limit with AHCCCS before applying."
+        },
+        {
+          "question": "Can my parent apply for ABD Medicaid and ALTCS at the same time?",
+          "answer": "You can ask about both programs when you contact AHCCCS, but they are separate programs with different eligibility rules and application processes. ABD Medicaid covers standard medical care for income-eligible seniors and disabled individuals. ALTCS covers long-term care for people who meet a Nursing Facility Level of Care standard and separate financial criteria. If your parent may qualify for both, AHCCCS staff can help you understand which application to pursue first. Call 1-855-432-7587."
+        },
+        {
+          "question": "What happens if my parent's income or health situation changes after enrollment?",
+          "answer": "You are required to report changes in income, household composition, or other eligibility factors to AHCCCS. If income rises above the limit or the disability status changes, eligibility may be affected. AHCCCS conducts periodic renewals to reassess eligibility. Contact AHCCCS at 1-855-432-7587 or log into your Health-e-Arizona Plus account to report changes promptly."
+        },
+        {
+          "question": "How long does it take to get a decision after applying?",
+          "answer": "AHCCCS does not publish a fixed processing timeline for ABD Medicaid publicly. Cases that require a disability determination typically take longer than straightforward age-based applications. Submit all documents at once to avoid hold-ups. To check the status of a pending application, call 1-855-432-7587."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Stethoscope",
+      "phone": "1-855-432-7587",
+      "sourceUrl": "https://www.azahcccs.gov/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1304,
+          "to": 2982,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 300% SSI 2026",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1764,
+          "to": 2982,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 165% FPL 2026",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18554327587"
+          ],
+          "to": "8886216880",
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        }
+      ]
+    },
+    {
+      "id": "az-senior-property-valuation-freeze",
+      "name": "Senior Property Valuation Protection Option",
+      "shortName": "Property Tax Freeze",
+      "tagline": "If your parent owns their Arizona home and earns under $47,712/year, this program can freeze the assessed value used to calculate their property taxes for three years.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "County assessor offices in each Arizona county",
+            "type": "service-area"
+          },
+          {
+            "name": "Arizona Department of Revenue",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Arizona's Senior Property Valuation Protection Option freezes the assessed value of your parent's home for three years. Because the taxable value is locked, your parent is protected from rising assessments driving up their property tax bill during that period. This matters most when home values in their area are climbing fast.\n\nTo qualify, at least one owner must be 65 or older, the home must be their primary residence, and they must have lived there at least two years before applying. Income limits are $47,712/year for a single owner or $59,640/year for two or more owners, calculated as a three-year average of all income including Social Security and other non-taxable sources.\n\nOne honest caveat: this freezes the assessed value, not the tax rate. If your county raises its tax rate, your parent's bill can still go up even with this protection active. The freeze lasts three years and must be renewed. Applications go to the county assessor where the home is located, not to any state office.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "At least one owner age 65 or older",
+          "Income under $47,712/year (single owner) or $59,640/year (two or more owners)",
+          "Income is a 3-year average including Social Security",
+          "Must be the primary residence for at least 2 years before applying",
+          "Property must be occupied as primary residence at least 9 months per year"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3976
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4970
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "The property must be the applicant's primary residence (not a rental or vacation home).",
+          "The applicant must have lived in the home for at least 2 years before applying.",
+          "The home must be occupied as a primary residence for at least 9 months of the calendar year.",
+          "Only one property can qualify.",
+          "The owner must remain eligible to keep the freeze active.",
+          "The freeze lasts 3 years and must be renewed to continue."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Download ADOR Form 82104 from azdor.gov or pick it up at your parent's county assessor office, then submit it to that county assessor with supporting documents.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Download the application form",
+            "description": "Get ADOR Form 82104 at azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option. You can also call or visit your parent's county assessor office to pick up a paper copy. Some counties have their own instruction sheets or worksheets; ask when you contact them."
+          },
+          {
+            "step": 2,
+            "title": "Gather your documents",
+            "description": "Collect proof of age (such as a birth certificate or driver's license), proof of ownership (deed or mortgage statement), proof that the home is the primary residence (utility bill or voter registration), and income documentation for the previous three years. All owners listed on the property must sign the completed application."
+          },
+          {
+            "step": 3,
+            "title": "Submit to the county assessor",
+            "description": "File the completed Form 82104 and all supporting documents with the assessor's office in the county where the home is located. Depending on the county, you can submit in person, by mail, or by email. Contact your specific county assessor to confirm their preferred method and any local deadlines."
+          },
+          {
+            "step": 4,
+            "title": "Wait for confirmation",
+            "description": "Processing is handled locally by each county assessor's office. Turnaround time varies by county. Once approved, the freeze is active for 3 years. Mark the renewal date so you can reapply before it expires."
+          }
+        ],
+        "processingTime": "Varies by county; no statewide processing timeline is published. Contact your county assessor's office directly to ask about their current turnaround.",
+        "waitlist": null,
+        "tip": "Income for this program includes Social Security, pension payments, and other non-taxable income. Before applying, total up all income your parent received over the last three years and divide by three to get the average that will be compared to the limit.",
+        "urls": [
+          {
+            "label": "ADOR Form 82104 and Program Information",
+            "url": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, Arizona driver's license, or passport)",
+        "Proof of ownership (recorded deed or current mortgage statement)",
+        "Proof that the home is the primary residence (utility bill, voter registration card, or Arizona ID showing the address)",
+        "Income documentation for each of the previous 3 years: Social Security award letters, pension statements, tax returns, or any other records showing total income from all sources",
+        "Completed and signed ADOR Form 82104, signed by all owners listed on the property",
+        "Any county-specific worksheets or instruction sheets required by the local assessor's office"
+      ],
+      "contacts": [
+        {
+          "label": "Your County Assessor's Office",
+          "phone": null,
+          "description": "Applications are filed directly with the assessor's office in the county where the home is located. Contact your specific county assessor for their phone number, mailing address, office hours, and any local deadlines. A directory of Arizona county assessors is available through the Arizona Association of Counties.",
+          "hours": "Varies by county"
+        },
+        {
+          "label": "Arizona Department of Revenue (Property Tax Division)",
+          "phone": "(602) 716-6843",
+          "description": "Can answer general questions about the program and Form 82104. Applications are not filed here; they go to the county assessor.",
+          "hours": "Mon-Fri 8am-5pm AZ time"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(602) 255-3381",
+          "description": "Number listed on azdor.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "County deadlines for this program can vary. Contact your parent's county assessor early in the year to confirm when applications must be submitted.",
+        "Because income is averaged over three years, a parent who had one higher-income year may still qualify if the average falls under the limit. Calculate the three-year average before assuming they are ineligible."
+      ],
+      "relatedPrograms": [
+        "Arizona Property Tax Refund Credit (Form 140PTC)",
+        "Arizona Homestead Exemption",
+        "Low Income Home Energy Assistance Program (LIHEAP) Arizona"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "This freezes valuation, not your tax bill",
+          "body": "If your parent's county raises its tax rate, their property tax bill can still increase even with this freeze in place. The protection stops their assessed value from rising, which removes one source of tax increases but does not cap the bill itself."
+        },
+        {
+          "type": "callout",
+          "title": "Social Security counts toward the income limit",
+          "body": "The income test includes all taxable and non-taxable income. Social Security, pension payments, and other benefits all count. The limit is based on the three-year average of that total, not just this year's income."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's Social Security plus pension puts them just over the limit this year. Can they still qualify?",
+          "answer": "Possibly. The income limit is based on a three-year average of all income, not just the current year. If income in the two prior years was lower, the average may still fall under $47,712 (single owner) or $59,640 (two or more owners). Add up all income from the last three years, divide by three, and compare that number to the limit before assuming they do not qualify."
+        },
+        {
+          "question": "My parent's home value has gone up a lot. Will this program actually protect them?",
+          "answer": "It protects against rising assessed value for three years. Because property taxes are calculated using the assessed value, freezing that number means assessment increases cannot drive the bill higher during the freeze period. However, if the county raises its tax rate, the bill can still go up. The program removes one source of tax increases but does not cap the total tax amount."
+        },
+        {
+          "question": "Both my parent and their spouse are on the deed. Do both need to be 65?",
+          "answer": "No. Only one owner needs to be 65 or older at the time of application. However, all owners listed on the deed must sign the completed application form."
+        },
+        {
+          "question": "What happens when the three years are up?",
+          "answer": "The freeze expires and the property returns to normal reassessment unless your parent renews. You must file a new application with the county assessor before the freeze period ends. Mark the renewal date as soon as the approval comes through so it does not lapse."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "House",
+      "phone": "(602) 716-6843",
+      "sourceUrl": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "6027166843"
+          ],
+          "to": "(602) 255-3381",
+          "source": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
+          "flaggedAt": "2026-10-06T12:18:13.391Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -1937,5 +2383,5 @@
     ],
     "resourcesVsBenefits": "Most Arizona programs are benefits that require meeting income and asset limits, like ALTCS (Arizona's Medicaid) which covers nursing home costs but requires income under specific thresholds. However, Arizona's State Health Insurance Assistance Program (SHIP) provides free Medicare counseling to any Arizona senior regardless of income, helping them understand coverage options and find savings on healthcare costs."
   },
-  "factcheckedAt": "2026-10-02T07:33:36.731Z"
+  "factcheckedAt": "2026-10-06T12:18:13.391Z"
 }

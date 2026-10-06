@@ -2,8 +2,8 @@
   "state": "NY",
   "stateName": "New York",
   "draftedAt": "2026-04-13T21:50:19.559Z",
-  "total": 17,
-  "successful": 17,
+  "total": 20,
+  "successful": 20,
   "programs": [
     {
       "id": "community-medicaid",
@@ -200,7 +200,18 @@
       "sourceUrl": "https://www.health.ny.gov/health_care/medicaid/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 33038,
+          "to": 30182,
+          "source": "https://www.medicaidplanningassistance.org/medicaid-eligibility-new-york/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
+        }
+      ]
     },
     {
       "id": "hcbs-developmental-disabilities-waiver",
@@ -752,6 +763,12 @@
           "phone": "1-800-MEDICARE",
           "description": "General Medicare questions and eligibility verification",
           "hours": "24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 701-0501",
+          "description": "Number listed on aging.ny.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -841,32 +858,35 @@
           "field": "income_1",
           "from": 2494,
           "to": 1856,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "source": "https://aging.ny.gov/system/files/documents/2026/03/2026-nysofa-hiicap-notebook-module-9-medicare-savings-programs.pdf",
           "severity": "high",
           "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
         },
         {
           "field": "income_2",
           "from": 3375,
           "to": 2509,
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
+          "source": "https://aging.ny.gov/system/files/documents/2026/03/2026-nysofa-hiicap-notebook-module-9-medicare-savings-programs.pdf",
           "severity": "high",
           "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
-        },
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8886926116",
             "5857868900",
             "1800"
           ],
-          "to": "8006334227",
-          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "to": "(800) 701-0501",
+          "source": "https://aging.ny.gov/medicare-savings-program",
+          "flaggedAt": "2026-10-05T18:19:09.800Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1092,7 +1112,27 @@
       "phone": "(800) 342-3009",
       "sourceUrl": "https://otda.ny.gov/programs/snap/",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1663,
+          "to": 1496,
+          "source": "https://www.ny.gov/services/apply-snap",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2254,
+          "to": 2028,
+          "source": "https://www.ny.gov/services/apply-snap",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
+        }
+      ]
     },
     {
       "id": "heap-energy-assistance",
@@ -1490,11 +1530,11 @@
             "7166619430",
             "211"
           ],
-          "to": "311",
-          "source": "https://www.nyc.gov/html/records/pdf/govpub/moved/pubadvocate/SeniorGuide07final.pdf",
+          "to": "8003429871",
+          "source": "https://ag.ny.gov/sites/default/files/publications/Senior_Housing_Guide.pdf",
           "severity": "medium",
-          "why": "not a 10-digit number",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
         }
       ]
     },
@@ -2176,11 +2216,11 @@
         {
           "field": "income_1",
           "from": 1663,
-          "to": 15753,
+          "to": 1578,
           "source": "https://aging.ny.gov/senior-community-service-employment-program-scsep",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-04T00:52:31.794Z"
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:26:42.678Z"
         }
       ],
       "appliedCorrections": [
@@ -2318,6 +2358,12 @@
           "phone": "(800) 342-9871",
           "description": "Information, referrals, and connections to local aging services, benefits, long-term care supports, and county-based resources across New York.",
           "hours": "Mon-Fri, 8:00 AM-4:00 PM"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 481-0973",
+          "description": "Number listed on elderjusticeny.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2357,7 +2403,24 @@
       "phone": "(212) 244-6469",
       "sourceUrl": "https://aging.ny.gov/legal-services-initiative",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "2122446469",
+            "8454862555",
+            "8003429871"
+          ],
+          "to": "(844) 481-0973",
+          "source": "https://www.elderjusticeny.org/",
+          "flaggedAt": "2026-10-05T18:19:09.800Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nyc-senior-homeowners-exemption",
@@ -3160,6 +3223,539 @@
       "sourceUrl": "https://parks.ny.gov/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "ny-epic-prescription-assistance",
+      "name": "Elderly Pharmaceutical Insurance Coverage (EPIC)",
+      "shortName": "EPIC Drug Coverage",
+      "tagline": "If your parent is 65+ and living in New York on a limited income, EPIC can reduce what they pay out of pocket for prescriptions by working alongside their Medicare Part D plan.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "If your parent pays for prescription drugs through Medicare Part D and struggles to keep up with premiums or drug costs, New York's EPIC program is designed specifically for them. EPIC wraps around Medicare Part D to fill gaps the federal program leaves behind. Depending on your parent's income, EPIC either pays reduced flat fees for drug coverage or helps once a yearly deductible is met.\n\nEPIC has two income tiers. Single seniors earning up to $20,000 per year qualify for the Fee Plan, which charges lower co-pays rather than a deductible. Those earning between $20,001 and $75,000 qualify for the Deductible Plan, which requires meeting a deductible first, but still provides meaningful help once that threshold is crossed. Married couples living together use combined income: up to $26,000 for the Fee Plan, and up to $100,000 for the Deductible Plan.\n\nOne important detail: EPIC is not available to people who already receive full Medicaid benefits. If your parent has Medicaid, a different drug coverage pathway applies. But for the large group of middle-income older New Yorkers who earn too much for Medicaid and too little to absorb drug costs easily, EPIC fills a real gap. Income is calculated using adjusted gross income from the prior calendar year, including Social Security income minus Medicare Part B premiums.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "New York State resident",
+          "Annual income up to $75,000 (single) or $100,000 (married)",
+          "Enrolled in or eligible for Medicare Part D",
+          "Not receiving full Medicaid benefits"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a New York State resident",
+          "Must be enrolled in or eligible to enroll in a Medicare Part D plan",
+          "Cannot be receiving full Medicaid benefits",
+          "Married couples living together must report combined income, even if only one spouse is applying",
+          "Income is based on adjusted gross income from the prior calendar year, including Social Security income minus Medicare Part B premiums"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online, by mail, or by fax using the EPIC application form; there is no processing time stated on the official program page.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent qualifies",
+            "description": "Check that your parent is 65 or older, lives in New York, and is enrolled in or eligible for a Medicare Part D plan. Confirm they do not receive full Medicaid. Have last year's tax return or Social Security award letter nearby to verify annual income."
+          },
+          {
+            "step": 2,
+            "title": "Gather the required documents",
+            "description": "You will need the completed application signed by your parent, income information for the prior calendar year, Social Security income details, and Medicare Part D plan information if already enrolled. If your parent is married and living with their spouse, both must sign and report combined income."
+          },
+          {
+            "step": 3,
+            "title": "Choose how to apply",
+            "description": "Apply online at health.ny.gov/health_care/epic/application_contact.htm, or download form DOH-3409 or DOH-5080 from the same page. Mail the completed form to EPIC, P.O. Box 15018, Albany, NY 12212-5018, or fax it to (518) 452-3576."
+          },
+          {
+            "step": 4,
+            "title": "Await confirmation and enroll in Part D if needed",
+            "description": "After EPIC processes the application, your parent will receive enrollment information. If they are not yet in a Medicare Part D plan, EPIC staff can assist with that step. Keep a copy of everything submitted."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": "Income is calculated on adjusted gross income from the prior year, including Social Security income minus Medicare Part B premiums. Pull last year's tax return or Social Security benefit statement before starting the application to avoid delays.",
+        "urls": [
+          {
+            "label": "EPIC Application and Contact Page (NY State)",
+            "url": "https://www.health.ny.gov/health_care/epic/application_contact.htm"
+          },
+          {
+            "label": "EPIC Program Home Page",
+            "url": "https://www.health.ny.gov/health_care/epic/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed EPIC application (form DOH-3409 or DOH-5080), signed by your parent",
+        "Social Security award letter showing annual benefit amount",
+        "Prior year federal tax return or other income documentation for the previous calendar year",
+        "Medicare card showing Part D enrollment, or information about the Part D plan your parent is eligible to join",
+        "If married and living together: both spouses must sign the application and both income amounts must be reported"
+      ],
+      "contacts": [
+        {
+          "label": "EPIC Program Office",
+          "phone": "(800) 332-3742",
+          "description": "Apply, check eligibility, or ask questions about the Fee Plan and Deductible Plan. This is the program's own line and is the right starting point.",
+          "hours": "Mon-Fri, business hours (check health.ny.gov/health_care/epic/ for current hours)"
+        }
+      ],
+      "applicationNotes": [
+        "Married couples must report combined income even if only one spouse is applying. Missing or incomplete income documentation from either spouse is one of the most common reasons applications are delayed.",
+        "If your parent is not yet enrolled in a Medicare Part D plan, EPIC can still accept an application; eligibility for Part D is sufficient. EPIC staff can help with Part D enrollment after the application is filed."
+      ],
+      "relatedPrograms": [
+        "Medicare Savings Programs (MSP) in New York",
+        "New York State Medicaid",
+        "SHIP/HIICAP (Health Insurance Information, Counseling and Assistance Program)"
+      ],
+      "contentSections": [
+        {
+          "type": "prose",
+          "title": "Fee Plan vs. Deductible Plan: Which one applies to your parent?",
+          "body": "EPIC has two tracks based on annual income.\n\nThe Fee Plan is for lower-income seniors. Single applicants with annual income up to $20,000 qualify. Married couples living together qualify with combined income up to $26,000. Fee Plan members pay a reduced co-pay for covered drugs rather than a deductible.\n\nThe Deductible Plan is for higher-income seniors who still need help. Single applicants earning between $20,001 and $75,000 qualify. Married couples with combined income between $26,001 and $100,000 qualify. Deductible Plan members pay a yearly deductible first; the deductible amount depends on income and drug costs. After the deductible is met, EPIC begins covering costs.\n\nEPIC also helps pay Medicare Part D premiums for members with income up to $23,000 if single, or up to $29,000 if married."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already has Medicaid. Can they still use EPIC?",
+          "answer": "No. EPIC is not available to people who receive full Medicaid benefits. If your parent has full Medicaid, their prescription drug coverage is handled through a different pathway. If they have partial Medicaid (such as a Medicare Savings Program), confirm their exact benefit status with the EPIC office at (800) 332-3742 before applying."
+        },
+        {
+          "question": "My parent's income is above $20,000 but they still struggle with drug costs. Is EPIC worth applying for?",
+          "answer": "Yes. Singles earning up to $75,000 and married couples with combined income up to $100,000 can qualify for the Deductible Plan. This plan requires paying a deductible before EPIC help kicks in, but it still provides real coverage once that threshold is crossed, especially for seniors with high ongoing drug costs."
+        },
+        {
+          "question": "Can I apply on my parent's behalf if they have difficulty managing paperwork?",
+          "answer": "Yes, but the application must be signed by your parent (or their authorized representative). You can fill out form DOH-3409 or DOH-5080 on their behalf, gather the documents, and submit everything by mail to EPIC, P.O. Box 15018, Albany, NY 12212-5018, or by fax to (518) 452-3576. If your parent has a legal representative, include documentation of that authorization."
+        },
+        {
+          "question": "How is income counted if my parent collects Social Security?",
+          "answer": "EPIC uses adjusted gross income from the prior calendar year. Social Security income is included in that calculation, minus the Medicare Part B premium your parent paid. Pull last year's Social Security benefit statement and any tax return to get the right number before applying."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "Pill",
+      "phone": "(800) 332-3742",
+      "sourceUrl": "https://www.health.ny.gov/health_care/epic/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ny-property-tax-relief-seniors",
+      "name": "Property Tax Relief for Seniors",
+      "shortName": "Senior Property Tax Relief",
+      "tagline": "If your parent owns their home in New York and is 65 or older, they may be able to cut hundreds of dollars off their annual property tax bill through state and local exemption programs.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "New York State Department of Taxation and Finance",
+            "type": "service-area"
+          },
+          {
+            "name": "New York City Department of Finance",
+            "type": "service-area"
+          },
+          {
+            "name": "NYC 311",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "New York offers several property tax relief programs for homeowners 65 and older. The most widely available is Enhanced STAR, which reduces the school portion of your parent's property tax bill. Most eligible seniors receive this as a check; publicly reported amounts range from $700 to $1,500 per year, though the exact amount depends on the local school tax rate. There is no single fixed dollar amount statewide.\n\nIf your parent lives in New York City, there is a second program called SCHE (Senior Citizen Homeowners' Exemption) that can cut their city property tax bill by 5% to 50% depending on income. SCHE and Enhanced STAR are separate programs with different income limits and application processes. Your parent may qualify for both.\n\nOutside of New York City, many counties, towns, and school districts also offer a local senior citizens exemption that can reduce the assessed value of your parent's home by up to 50%. Whether this exemption is available and what income limit applies depends entirely on where your parent lives. The programs described here are not interchangeable; each has its own rules, income caps, and application path.",
+      "savingsRange": "Publicly reported Enhanced STAR credits range from $700 to $1,500/year; NYC SCHE reduces city property tax by 5% to 50% depending on income",
+      "savingsSource": "New York State Department of Taxation and Finance (tax.ny.gov); benefit varies by local school tax rate and program type, not a fixed statewide amount",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older",
+          "Primary residence must be in New York",
+          "Income limits vary by program: $110,750 (Enhanced STAR, 2026-27), $58,399 (NYC SCHE)",
+          "Must own the home as a primary residence",
+          "Local senior exemption availability depends on your parent's county, town, or school district"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Enhanced STAR (statewide): combined income of all owners and their spouses who primarily reside on the property must be $110,750 or less for the 2026-2027 school year ($113,550 or less for 2027-2028). Income is calculated as federal adjusted gross income minus the taxable portion of IRA distributions.",
+          "NYC SCHE: household income must be $58,399 or less for the last calendar year. The property must have been owned for at least 12 consecutive months before filing, unless the exemption was previously received on another property.",
+          "NYC Enhanced STAR: income must be $98,700 or less. Available to owners 65 and older.",
+          "Local senior citizens exemption (outside NYC): income limit is set by each county, city, town, village, or school district and can range from $3,000 to $50,000. Contact your local assessor to find out your parent's limit.",
+          "For Enhanced STAR, at least one owner must be 65 or older by December 31 of the year the exemption applies. For jointly owned property, only one spouse or sibling must meet the age requirement.",
+          "STAR relief applies only to school district taxes, not county, town, or city taxes. Exceptions apply in New York City, Buffalo, Rochester, Yonkers, and Syracuse."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Most families start by visiting tax.ny.gov or calling (518) 457-2036 for Enhanced STAR; NYC residents apply separately through the NYC Department of Finance for SCHE.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Identify which programs apply to your parent",
+            "description": "If your parent lives in New York City, they may qualify for SCHE and NYC Enhanced STAR through the NYC Department of Finance. If they live anywhere else in the state, they may qualify for Enhanced STAR through New York State, and possibly a local senior citizens exemption through their town or county assessor. These are separate applications."
+          },
+          {
+            "step": 2,
+            "title": "Apply for Enhanced STAR through New York State",
+            "description": "Visit tax.ny.gov or call (518) 457-2036. If your parent has not yet registered for STAR, they will need to register with the state first. If they previously received a STAR exemption and turned 65, they can apply to convert to Enhanced STAR using Form RP-425-MBE. Have proof of age, proof of ownership, proof of primary residence, and income documentation ready."
+          },
+          {
+            "step": 3,
+            "title": "Apply for NYC SCHE if your parent lives in New York City",
+            "description": "Visit the NYC Department of Finance property tax benefits page or call 311 and ask for SCHE. You can also apply in person or by mail through the NYC Department of Finance. Have proof of age, proof of ownership showing at least 12 consecutive months, and income documentation for the last calendar year."
+          },
+          {
+            "step": 4,
+            "title": "Check for the local senior citizens exemption if outside NYC",
+            "description": "Contact your parent's local assessor's office to ask whether the senior citizens exemption has been adopted in their town, county, village, or school district and what income limit applies. This is separate from STAR and has its own application through the local assessor."
+          },
+          {
+            "step": 5,
+            "title": "Submit documents and watch for confirmation",
+            "description": "After applying, Enhanced STAR is typically delivered as a credit check or applied as an exemption on the school tax bill depending on your parent's situation. SCHE relief appears on the NYC property tax bill. Processing timelines vary by program and locality; the state and NYC Department of Finance do not publish a single statewide timeline."
+          }
+        ],
+        "processingTime": "Not published as a single statewide timeline. STAR and SCHE processing varies by program and locality. Contact the relevant office after submitting to ask about timing.",
+        "waitlist": null,
+        "tip": "If your parent already receives the basic STAR exemption and has turned 65, they do not automatically get Enhanced STAR. They must apply separately. Enhanced STAR has higher savings. This is one of the most commonly missed upgrades.",
+        "urls": [
+          {
+            "label": "NY State STAR and Senior Exemption Information",
+            "url": "https://www.tax.ny.gov/pit/property/exemption/seniorexempt.htm"
+          },
+          {
+            "label": "NY State STAR Registration (tax.ny.gov)",
+            "url": "https://www.tax.ny.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age for each owner who is 65 or older (birth certificate, passport, or government-issued ID)",
+        "Proof that the home is your parent's primary residence (utility bill, driver's license, or voter registration showing the property address)",
+        "Income documentation for the most recent calendar year (federal tax return or Social Security award letter showing annual income)",
+        "Proof of ownership (deed or most recent property tax bill showing your parent's name)",
+        "For Enhanced STAR: income information for all owners and any spouse who primarily resides on the property",
+        "For NYC SCHE: documentation showing the property has been owned for at least 12 consecutive months before filing (deed with purchase date, or prior SCHE approval on a previous residence)",
+        "Form RP-425-MBE if applying for Enhanced STAR exemption (available at tax.ny.gov)"
+      ],
+      "contacts": [
+        {
+          "label": "NY State STAR Program (Taxation and Finance)",
+          "phone": "(518) 457-2036",
+          "description": "Apply for Enhanced STAR, convert a basic STAR exemption to Enhanced STAR, and get eligibility questions answered for the statewide program",
+          "hours": "Business hours; check tax.ny.gov for current hours"
+        },
+        {
+          "label": "NYC 311 (for SCHE and NYC property tax benefits)",
+          "phone": "311",
+          "description": "NYC residents: ask for SCHE or Senior Citizen Homeowners' Exemption to be connected to the NYC Department of Finance. This line transfers you; it does not process applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "There are three separate senior property tax programs in New York: Enhanced STAR (statewide school tax relief), SCHE (NYC city tax relief), and the local senior citizens exemption (outside NYC, adopted locally). Your parent may qualify for more than one, but each requires its own application.",
+        "If your parent already has basic STAR and has since turned 65, upgrading to Enhanced STAR requires a separate application. It does not happen automatically. Enhanced STAR typically provides more relief than basic STAR.",
+        "The local senior citizens exemption outside NYC is a local-option program. Not every town, county, or school district offers it. Call your parent's local assessor's office to find out whether it is available and what the income cap is in their specific location."
+      ],
+      "relatedPrograms": [
+        "STAR (School Tax Relief) Basic Exemption",
+        "NYC Disability Homeowners' Exemption (DHE)",
+        "NY Home Energy Assistance Program (HEAP)",
+        "Supplemental Security Income (SSI) for Seniors"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "Which program applies to your parent?",
+          "body": "Outside New York City: Apply for Enhanced STAR through New York State at tax.ny.gov or (518) 457-2036. Also ask your parent's local assessor whether the senior citizens exemption is available in their town or school district.\n\nIn New York City: Apply for SCHE through the NYC Department of Finance (call 311 and ask for SCHE). Also check whether your parent qualifies for NYC Enhanced STAR, which has a separate income limit of $98,700."
+        },
+        {
+          "type": "prose",
+          "title": "How the local senior citizens exemption works outside NYC",
+          "body": "Outside New York City, many local governments have adopted an optional senior citizens exemption that can reduce the assessed value of your parent's home by up to 50%. The income limit is set locally and can be anywhere from $3,000 to $50,000. If the local government has adopted the maximum $50,000 limit, the exemption percentage increases as income falls: 50% for income under $50,000, up to 65% for income under $47,000. Because this is a local-option program, your parent's town may not offer it at all. Call the local assessor's office to confirm."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent already has basic STAR. Do they automatically get Enhanced STAR when they turn 65?",
+          "answer": "No. Turning 65 does not automatically upgrade a basic STAR exemption to Enhanced STAR. Your parent must apply separately, using Form RP-425-MBE, through New York State. Enhanced STAR has a higher income limit and typically provides more savings. Call (518) 457-2036 or visit tax.ny.gov to start the process."
+        },
+        {
+          "question": "Can my parent get both Enhanced STAR and SCHE?",
+          "answer": "If your parent lives in New York City and meets the income requirements for both, they may qualify for both NYC Enhanced STAR (income limit $98,700) and SCHE (income limit $58,399). These are separate programs with separate applications. SCHE reduces the city property tax; Enhanced STAR reduces the school tax portion. Applying for one does not automatically enroll your parent in the other."
+        },
+        {
+          "question": "My parent's home is owned jointly with a sibling. Does the sibling also need to be 65?",
+          "answer": "For Enhanced STAR, only one owner needs to be 65 or older by December 31 of the exemption year. The same rule applies to jointly owned property held with a spouse or sibling: only one person needs to meet the age requirement. Income limits still apply to all owners and their spouses who primarily reside on the property."
+        },
+        {
+          "question": "Does this relief apply to all of my parent's property taxes?",
+          "answer": "Enhanced STAR applies only to the school district portion of the property tax bill, not to county, town, or city taxes. The exception is in New York City, Buffalo, Rochester, Yonkers, and Syracuse, where local administration differs. SCHE in NYC reduces the city property tax bill separately. The local senior citizens exemption outside NYC may apply to county, town, or school district taxes depending on which local governments have adopted it."
+        },
+        {
+          "question": "How is income counted for Enhanced STAR? Does Social Security count?",
+          "answer": "For Enhanced STAR, income means federal adjusted gross income minus the taxable portion of IRA distributions. This is not the same as total gross income. Social Security income is generally not included in federal AGI if your parent's total income is below certain thresholds, but the exact treatment depends on your parent's full tax picture. Review your parent's most recent federal tax return, or call (518) 457-2036 with questions about how their income will be counted."
+        },
+        {
+          "question": "Can I apply on behalf of my aging parent if they cannot handle this themselves?",
+          "answer": "Yes. A family member can gather documents and help complete applications for Enhanced STAR, SCHE, and the local senior citizens exemption on a parent's behalf. For Enhanced STAR, visit tax.ny.gov or call (518) 457-2036. For NYC SCHE, contact the NYC Department of Finance through 311. If your parent has a legal representative or power of attorney, bring that documentation when applying."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "savings",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(518) 457-2036",
+      "sourceUrl": "https://www.tax.ny.gov/pit/property/exemption/seniorexempt.htm",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "ny-cdpap-consumer-directed-personal-assistance",
+      "name": "Consumer Directed Personal Assistance Program (CDPAP)",
+      "shortName": "CDPAP Home Care",
+      "tagline": "If your parent qualifies for Medicaid home care in New York, CDPAP lets them choose who provides that care, including a trusted family member or friend.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "New York State Department of Health Medicaid resources",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Department of Social Services / social services district",
+            "type": "service-area"
+          },
+          {
+            "name": "Managed Care Organization (MCO)",
+            "type": "service-area"
+          },
+          {
+            "name": "PPL as the statewide fiscal intermediary",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent needs daily help with bathing, dressing, medication, or other personal care, and they already have New York State Medicaid, CDPAP may let them hire someone they already trust, including a family member, neighbor, or friend, to provide that care at home. The program pays the personal assistant directly through a state-designated organization called a fiscal intermediary. Your parent does not receive cash; the assistant receives payment.\n\nThe number of care hours is not fixed. It is determined by a clinical assessment called the UAS-NY Community Health Assessment, which evaluates your parent's specific daily needs. Once approved, your parent becomes the employer: they recruit, train, schedule, and if necessary, dismiss their own assistant. If your parent cannot manage those decisions independently, a designated representative (a family member or other trusted person) can do so on their behalf.\n\nCDPAP is a Medicaid service, not a standalone benefit. Your parent must first qualify for New York State Medicaid and then be authorized for home-care services before CDPAP can be added. The enrollment process involves multiple steps across several agencies, and the timeline varies. This page walks through each step so you know what to expect.",
+      "savingsRange": "",
+      "savingsSource": "CDPAP is a Medicaid home-care service model; payment goes to the personal assistant, not to the member or family. No fixed dollar benefit is paid to the consumer. See https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/ for program rate information published by the New York State Department of Health.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "New York State Medicaid member",
+          "Medically stable condition",
+          "Needs help with daily personal care or skilled nursing tasks",
+          "Able to self-direct care, or has a family member or representative who can",
+          "UAS-NY Community Health Assessment required for adults 18 and over"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": "Your parent must need help with daily activities such as bathing, dressing, or medication management, or with skilled nursing tasks. For adults 18 and over, the state requires a UAS-NY Community Health Assessment: a structured evaluation conducted by a nurse or social worker that measures your parent's functional capacity and determines how many hours of home care are authorized. The result of that assessment drives the care plan.",
+        "otherRequirements": [
+          "Must be a New York State Medicaid member; income and asset rules come from Medicaid eligibility, not from CDPAP itself.",
+          "Must have a stable medical condition (meaning the person's medical needs can be safely managed at home).",
+          "Must be capable of directing their own care, or must have a designated representative (a family member or other trusted person) who can make care decisions on their behalf.",
+          "Must be authorized for home-care services through a Medicaid managed care plan or the local social services district before CDPAP can be approved.",
+          "Both the consumer and the chosen personal assistant must register with PPL, the statewide fiscal intermediary, before care can begin."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The process has four sequential stages: confirm Medicaid eligibility, get a physician's order and nursing assessment, receive home-care authorization, then register with PPL as the fiscal intermediary. There is no single processing time because each stage has its own timeline.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm New York State Medicaid enrollment",
+            "description": "Your parent must already be enrolled in New York State Medicaid. If they are not, apply through NY State of Health at nystateofhealth.ny.gov or call the Medicaid Helpline at (800) 541-2831, Monday through Friday. If your parent is enrolled in a Medicaid Managed Care Organization (MCO), contact that MCO directly; the MCO manages the home-care authorization pathway."
+          },
+          {
+            "step": 2,
+            "title": "Get a physician's order for home-care services",
+            "description": "Your parent's doctor must submit a written order or medical request stating that home-care services are needed. Ask the doctor for a physician's order referencing home care. Some districts use a specific DOH-approved form (DMS-1 or equivalent). Check with your local Department of Social Services or MCO for the exact form they accept."
+          },
+          {
+            "step": 3,
+            "title": "Complete the nursing and community health assessments",
+            "description": "A nurse will conduct the LDSS-3139 nursing assessment. For adults 18 and over, a UAS-NY Community Health Assessment is also required. These are scheduled through your local Department of Social Services office or your MCO. The assessments determine how many hours of home care your parent needs. Gather your parent's medical history and a list of all daily tasks where they need help before this appointment."
+          },
+          {
+            "step": 4,
+            "title": "Request CDPAP specifically during home-care authorization",
+            "description": "Once home care is authorized, tell your parent's MCO or local social services district that you want CDPAP as the service model. This must be stated explicitly; home care does not default to CDPAP. If approved, you will receive written authorization."
+          },
+          {
+            "step": 5,
+            "title": "Register with PPL, the statewide fiscal intermediary",
+            "description": "After CDPAP is authorized, both your parent (as the consumer) and the person they want to hire (as the personal assistant) must register with Public Partnerships LLC (PPL), the statewide fiscal intermediary for New York CDPAP. PPL handles payroll and employment paperwork for the assistant. Visit pplfirst.com or call PPL's New York CDPAP line for registration materials. Your parent cannot begin receiving care until registration is complete."
+          },
+          {
+            "step": 6,
+            "title": "Your parent hires and begins directing their assistant",
+            "description": "Once registration is complete, your parent (or their designated representative) recruits, trains, schedules, and supervises the personal assistant. The assistant is paid by PPL on your parent's behalf. Keep the plan of care current; if your parent's needs change, contact the MCO or local district to request a reassessment."
+          }
+        ],
+        "processingTime": "No single statewide timeline applies. Each stage (Medicaid enrollment, physician's order, nursing assessment, home-care authorization, fiscal intermediary registration) has its own processing time, and timelines vary by managed care plan and local social services district.",
+        "waitlist": null,
+        "tip": "If your parent is being discharged from a hospital or rehabilitation facility, ask the discharge planner to initiate the home-care assessment before discharge. Starting the process while still inpatient can shorten the gap between discharge and the start of care at home.",
+        "urls": [
+          {
+            "label": "CDPAP program overview (NYS Department of Health)",
+            "url": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/"
+          },
+          {
+            "label": "NY State of Health (Medicaid enrollment)",
+            "url": "https://nystateofhealth.ny.gov"
+          },
+          {
+            "label": "PPL New York CDPAP (fiscal intermediary registration)",
+            "url": "https://www.pplfirst.com"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of New York State Medicaid eligibility (Medicaid ID card or enrollment letter)",
+        "Physician's order or medical request for home-care services (ask your parent's doctor; some districts use the DMS-1 form or another DOH-approved form)",
+        "Your parent's current medication list and a description of daily tasks where they need help (used during the UAS-NY Community Health Assessment)",
+        "Completed LDSS-3139 nursing assessment form (scheduled and conducted by a nurse through your local Department of Social Services or MCO)",
+        "Photo ID for your parent (state-issued ID, driver's license, or passport)",
+        "If a designated representative will direct care: written documentation naming that person and their relationship to your parent",
+        "Contact information for the personal assistant your parent wants to hire (name, address, Social Security number) for PPL registration",
+        "Personal assistant's employment eligibility documents (required by PPL as the employer of record for payroll purposes)"
+      ],
+      "contacts": [
+        {
+          "label": "NYS Medicaid Helpline",
+          "phone": "(800) 541-2831",
+          "description": "Call to ask about Medicaid enrollment, confirm your parent's Medicaid status, or get connected to the right local office to begin the home-care authorization process. This is the starting point if your parent is not yet enrolled in Medicaid or if you are unsure which pathway to use.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "PPL New York CDPAP (fiscal intermediary)",
+          "phone": "(833) 247-5346",
+          "description": "Call PPL after your parent has received written CDPAP authorization. PPL handles registration for both the consumer and the personal assistant and manages payroll for the assistant. Do not call PPL before authorization is in hand; they cannot start registration without it.",
+          "hours": "Check pplfirst.com for current hours"
+        },
+        {
+          "label": "Local Department of Social Services",
+          "phone": null,
+          "description": "Your county's Department of Social Services schedules the nursing assessment, processes home-care authorization, and can answer questions about the LDSS-3139 form. Find your local office at https://www.health.ny.gov/health_care/medicaid/ldss.htm",
+          "hours": "Varies by county"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is enrolled in a Medicaid Managed Care Organization, the MCO controls the home-care authorization pathway, not the local Department of Social Services. Contact the MCO first. The process and timeline differ by plan.",
+        "The personal assistant your parent hires cannot be their Medicaid-funded spouse. Other family members, including adult children, are generally permitted as personal assistants, but confirm with your MCO or local district because rules can vary.",
+        "If your parent cannot self-direct care and no designated representative is available, CDPAP is not available to them. Traditional home health aide services through Medicaid may still apply; ask the local district about alternatives.",
+        "Rates paid to personal assistants vary by region. New York City has separate published rates. The New York State Department of Health publishes current CDPAP rates at health.ny.gov."
+      ],
+      "relatedPrograms": [
+        "New York Medicaid Home Health Aide Services (traditional alternative if CDPAP self-direction is not possible)",
+        "NY Managed Long Term Care (MLTC) (the Medicaid managed care pathway most adults use to access CDPAP and other long-term home-care services)",
+        "Expanded In-Home Services for the Elderly Program (EISEP) (non-Medicaid home care for New Yorkers 60 and older who do not qualify for Medicaid)",
+        "NY Connects (local resource navigation for long-term care options, including help understanding which pathway applies to your parent)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "CDPAP pays the assistant, not your family",
+          "body": "This is a common source of confusion. CDPAP is not a cash payment to your parent or to you. The program pays the personal assistant through PPL, the fiscal intermediary. Your parent acts as the employer, directing the care. PPL handles payroll, taxes, and employment paperwork on the assistant's behalf."
+        },
+        {
+          "type": "callout",
+          "title": "Hours are set by assessment, not by a fixed schedule",
+          "body": "The number of weekly care hours is determined by the UAS-NY Community Health Assessment and the resulting plan of care. There is no statewide minimum or maximum. If your parent's needs increase, you can request a reassessment through the MCO or local Department of Social Services to get hours adjusted."
+        },
+        {
+          "type": "prose",
+          "title": "What a designated representative can do",
+          "body": "If your parent cannot direct their own care, a designated representative can act on their behalf. That person can recruit and hire the assistant, set the schedule, handle supervision, and communicate with PPL. Being a designated representative is an active, ongoing role, not a one-time signature. Before agreeing to serve in this role, understand that you will be responsible for the day-to-day decisions of an employer."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I, as my parent's adult child, be their paid personal assistant under CDPAP?",
+          "answer": "In most cases, yes. Adult children are generally permitted to serve as the paid personal assistant for a CDPAP consumer in New York. However, a Medicaid-funded spouse cannot be the paid assistant. Confirm with your parent's MCO or local Department of Social Services, because some managed care plans may have additional restrictions. If approved, you must register with PPL before receiving any payment."
+        },
+        {
+          "question": "My parent cannot make their own decisions. Can they still qualify for CDPAP?",
+          "answer": "Yes, if a designated representative is willing and able to direct care on their behalf. The designated representative takes on the employer role: hiring, training, scheduling, and supervising the personal assistant. If no one can serve in that role, CDPAP is not available, and traditional Medicaid home health aide services may be a better fit. Ask your local Department of Social Services about alternatives."
+        },
+        {
+          "question": "How many hours of care will my parent get?",
+          "answer": "The number of hours is not fixed statewide. It depends on the results of the UAS-NY Community Health Assessment and the plan of care developed from that assessment. Hours reflect your parent's specific functional needs. If those needs change, you can request a reassessment through the MCO or local Department of Social Services to update the authorized hours."
+        },
+        {
+          "question": "My parent already has Medicaid. Do they automatically qualify for CDPAP?",
+          "answer": "No. Having Medicaid is the starting point, but CDPAP requires two additional steps: authorization for home-care services (based on a physician's order and nursing assessment) and a specific request for CDPAP as the service model. Home care does not default to CDPAP. You must ask for it explicitly during the authorization process."
+        },
+        {
+          "question": "Can my parent apply for CDPAP and also receive other Medicaid home-care services at the same time?",
+          "answer": "CDPAP covers personal care, home health aide tasks, and some skilled nursing tasks within a single plan of care. Whether additional Medicaid home-care services can run alongside CDPAP depends on your parent's specific plan and what their MCO or local district authorizes. Ask the MCO care coordinator what services can be combined and what the plan of care allows."
+        },
+        {
+          "question": "What happens if my parent's needs change after they are enrolled?",
+          "answer": "Contact your parent's MCO or local Department of Social Services and request a reassessment. The UAS-NY Community Health Assessment can be repeated when circumstances change, such as after a hospitalization or a shift in functional ability. The plan of care and authorized hours can be adjusted based on the new assessment results."
+        },
+        {
+          "question": "Is there a waitlist for CDPAP?",
+          "answer": "CDPAP itself does not have a published statewide waitlist. However, each stage of the process (Medicaid enrollment, nursing assessment scheduling, home-care authorization, MCO processing) takes time, and timelines vary significantly by plan and county. The process from first contact to first day of care can take weeks to several months. Starting at the physician's office and requesting the order early helps avoid delays."
+        },
+        {
+          "question": "What if my parent moves to a different part of New York State?",
+          "answer": "CDPAP is a statewide New York Medicaid benefit, but administrative details including rates and the specific managed care plan differ by region. New York City has its own published CDPAP rates. If your parent moves, notify their MCO or local Department of Social Services. They may need to transfer to a different managed care plan, which could require a new authorization process. Contact PPL as well to update registration information."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "(800) 541-2831",
+      "sourceUrl": "https://www.health.ny.gov/health_care/medicaid/program/longterm/cdpap/",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -3242,5 +3838,5 @@
     ],
     "resourcesVsBenefits": "New York's programs split into two categories: income-qualified benefits that provide direct financial assistance (like Community Medicaid, SNAP, or HEAP), and free resources available to all seniors regardless of income (like HIICAP Medicare counseling, Legal Services, and Golden Park access). Start with benefits if your loved one's income is under $2,000/month, but don't skip the free resources, HIICAP alone can save hundreds by optimizing Medicare coverage, and legal services can prevent costly evictions or benefit denials."
   },
-  "factcheckedAt": "2026-10-04T00:52:31.794Z"
+  "factcheckedAt": "2026-10-06T12:26:42.678Z"
 }

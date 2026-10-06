@@ -1,0 +1,614 @@
+{
+  "state": "IL",
+  "addedAt": "2026-10-06T05:42:28.561Z",
+  "dive": {
+    "state": "IL",
+    "stateName": "Illinois",
+    "diveAt": "2026-10-06T05:36:51.959Z",
+    "total": 5,
+    "parsed": 5,
+    "programs": [
+      {
+        "name": "Illinois Community Care Program (CCP)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "CCP does not use a single published income cap in the same way a traditional income-tested benefit does. The key published financial threshold is the asset limit. If the older adult’s monthly income (and spouse’s income, if living together) is below the federal poverty level, CCP services are reported as free. Eligibility also requires applying for Medicaid and, if eligible, enrolling in Medicaid on an annual basis.",
+          "asset_limits": "Non-exempt assets must be $17,500 or less. Exempt assets specifically mentioned in Illinois materials include the home, one car, and personal furnishings. The official materials also say the person must meet asset requirements and have non-exempt assets at or below the limit. Income is verified during initial and annual redeterminations.",
+          "other_requirements": [
+            "Be an Illinois resident",
+            "Be a U.S. citizen or an eligible non-citizen within specified categories",
+            "Be determined to have a need for long-term care through the Determination of Need (DON) assessment and be at risk of nursing facility placement",
+            "Apply for Medicaid and, if eligible, enroll in Medicaid",
+            "Meet ongoing annual redetermination requirements"
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "No out-of-pocket cost for CCP services if eligible. Specific services named by Illinois include Comprehensive Care Coordination, Adult Day Service, In-Home Service, Emergency Home Response Services, and Automated Medication Dispenser Service. CCP is designed to help older adults remain in their homes and avoid nursing home placement.",
+          "varies_by": "priority_tier"
+        },
+        "application": {
+          "methods": [
+            "Online: Illinois Department on Aging Community Care Program online application",
+            "Phone: Illinois Senior Helpline at 800-252-8966",
+            "TTY: 888-206-1327",
+            "Contact the local Care Coordination Unit serving the person’s area"
+          ],
+          "processing_time": "No single official processing-time standard was found in the sources gathered. Assessment and financial verification occur at initial enrollment, and annual redeterminations occur later. Some secondary sources describe enrollment as moving within roughly 30 to 60 days when funding and eligibility align, but that timeframe was not stated on the main official program page.",
+          "waitlist": "No formal statewide waitlist was clearly described in the official source gathered. Access appears to depend on eligibility, assessment, and service availability through local Care Coordination Units.",
+          "forms": [
+            "Community Care Program Online Application",
+            "Legal Entity Application",
+            "In-Home Service Application and/or Adult Day Service Application",
+            "Application Complete Submission Form"
+          ],
+          "documents": [
+            "Proof of age",
+            "Proof of Illinois residency",
+            "Proof of citizenship or eligible non-citizen status",
+            "Income verification",
+            "Asset verification",
+            "Medicaid application information, if applicable",
+            "Medical or functional information used in the DON assessment"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to Illinois residents statewide who meet eligibility requirements.",
+          "regional_variations": "The core rules are statewide, but service access is administered through local Care Coordination Units, so application handling, provider availability, and timing can vary by area.",
+          "offices_or_providers": [
+            "Local Care Coordination Units",
+            "Illinois Department on Aging",
+            "Illinois Senior Helpline"
+          ]
+        },
+        "official_source": "https://ilaging.illinois.gov/programs/ccp.html",
+        "gotchas": [
+          "The most important gate is not just age or income; the person must also score as needing long-term care through the DON assessment and be at risk of nursing facility placement.",
+          "The asset limit is strict at $17,500 in non-exempt assets, but the home, one car, and personal furnishings are exempt.",
+          "Applicants must also apply for Medicaid and, if eligible, enroll in Medicaid, even though CCP itself is a state program.",
+          "Families often miss that services can be free, but only if the person meets the financial rules and is approved through the assessment process.",
+          "The application and service path runs through local Care Coordination Units, so experience and timing can differ by region even though the program is statewide."
+        ],
+        "data_shape_notes": "This program combines a statewide eligibility framework with a local-assessment and local-service-delivery structure. The biggest structural features are the fixed age threshold, the non-exempt asset test, the DON functional-need assessment, and service variation through local Care Coordination Units.",
+        "_raw": "{\n  \"name\": \"Illinois Community Care Program (CCP)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"CCP does not use a single published income cap in the same way a traditional income-tested benefit does. The key published financial threshold is the asset limit. If the older adult’s monthly income (and spouse’s income, if living together) is below the federal poverty level, CCP services are reported as free. Eligibility also requires applying for Medicaid and, if eligible, enrolling in Medicaid on an annual basis.\",\n    \"asset_limits\": \"Non-exempt assets must be $17,500 or less. Exempt assets specifically mentioned in Illinois materials include the home, one car, and personal furnishings. The official materials also say the person must meet asset requirements and have non-exempt assets at or below the limit. Income is verified during initial and annual redeterminations.\",\n    \"other_requirements\": [\n      \"Be an Illinois resident\",\n      \"Be a U.S. citizen or an eligible non-citizen within specified categories\",\n      \"Be determined to have a need for long-term care through the Determination of Need (DON) assessment and be at risk of nursing facility placement\",\n      \"Apply for Medicaid and, if eligible, enroll in Medicaid\",\n      \"Meet ongoing annual redetermination requirements\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"No out-of-pocket cost for CCP services if eligible. Specific services named by Illinois include Comprehensive Care Coordination, Adult Day Service, In-Home Service, Emergency Home Response Services, and Automated Medication Dispenser Service. CCP is designed to help older adults remain in their homes and avoid nursing home placement.\",\n    \"varies_by\": \"priority_tier\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: Illinois Department on Aging Community Care Program online application\",\n      \"Phone: Illinois Senior Helpline at 800-252-8966\",\n      \"TTY: 888-206-1327\",\n      \"Contact the local Care Coordination Unit serving the person’s area\"\n    ],\n    \"processing_time\": \"No single official processing-time standard was found in the sources gathered. Assessment and financial verification occur at initial enrollment, and annual redeterminations occur later. Some secondary sources describe enrollment as moving within roughly 30 to 60 days when funding and eligibility align, but that timeframe was not stated on the main official program page.\",\n    \"waitlist\": \"No formal statewide waitlist was clearly described in the official source gathered. Access appears to depend on eligibility, assessment, and service availability through local Care Coordination Units.\",\n    \"forms\": [\n      \"Community Care Program Online Application\",\n      \"Legal Entity Application\",\n      \"In-Home Service Application and/or Adult Day Service Application\",\n      \"Application Complete Submission Form\"\n    ],\n    \"documents\": [\n      \"Proof of age\",\n      \"Proof of Illinois residency\",\n      \"Proof of citizenship or eligible non-citizen status\",\n      \"Income verification\",\n      \"Asset verification\",\n      \"Medicaid application information, if applicable\",\n      \"Medical or functional information used in the DON assessment\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to Illinois residents statewide who meet eligibility requirements.\",\n    \"regional_variations\": \"The core rules are statewide, but service access is administered through local Care Coordination Units, so application handling, provider availability, and timing can vary by area.\",\n    \"offices_or_providers\": [\n      \"Local Care Coordination Units\",\n      \"Illinois Department on Aging\",\n      \"Illinois Senior Helpline\"\n    ]\n  },\n  \"official_source\": \"https://ilaging.illinois.gov/programs/ccp.html\",\n  \"gotchas\": [\n    \"The most important gate is not just age or income; the person must also score as needing long-term care through the DON assessment and be at risk of nursing facility placement.\",\n    \"The asset limit is strict at $17,500 in non-exempt assets, but the home, one car, and personal furnishings are exempt.\",\n    \"Applicants must also apply for Medicaid and, if eligible, enroll in Medicaid, even though CCP itself is a state program.\",\n    \"Families often miss that services can be free, but only if the person meets the financial rules and is approved through the assessment process.\",\n    \"The application and service path runs through local Care Coordination Units, so experience and timing can differ by region even though the program is statewide.\"\n  ],\n  \"data_shape_notes\": \"This program combines a statewide eligibility framework with a local-assessment and local-service-delivery structure. The biggest structural features are the fixed age threshold, the non-exempt asset test, the DON functional-need assessment, and service variation through local Care Coordination Units.\"\n}"
+      },
+      {
+        "name": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+        "eligibility": {
+          "age": 65,
+          "income_limits": "AABD cash is for Illinois residents who are age 65+, blind, or disabled, and who are either receiving SSI, or are ineligible for SSI because of income, or are ineligible because of the federal time limit for certain non-citizens. The sources reviewed do not give a single published AABD cash income table by household size. Instead, the key test is whether countable income is low enough that the person can qualify for SSI-related AABD cash; Illinois guidance says a person may qualify if they are denied SSI because of income and still meet the age/blind/disability rules. Illinois Legal Aid also states that if total basic needs are at least $1 less than countable income, a person may be eligible for an AABD cash grant, but the exact dollar thresholds are not provided in the reviewed official sources.",
+          "asset_limits": "AABD cash has a resource/asset test. Illinois Legal Aid reports a limit of $2,000 in assets for one person and $3,000 if living with a spouse or another dependent. The reviewed sources do not provide the full official list of counted versus exempt assets for AABD cash. One Illinois source notes that the Department exempts certain assets up to a specific dollar amount, but the actual exemption schedule was not included in the available materials. In practice, families should assume cash, bank accounts, and other countable resources matter, while some assets may be excluded under Illinois/SSI-style rules, and they should verify the current rule with IDHS.",
+          "other_requirements": [
+            "Must live in Illinois",
+            "Must be a U.S. citizen or meet certain non-citizen requirements",
+            "Must be age 65 or older, blind, or disabled",
+            "Must be receiving SSI or be ineligible for SSI because of income, or because of the federal time limit for certain immigrants",
+            "Must cooperate with program requirements and prove eligibility",
+            "Homelessness does not automatically disqualify a person",
+            "Disability follows SSA/Illinois definitions, depending on category"
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Monthly cash assistance to help pay for food, shelter, utilities, and other non-medical expenses. The program also ties to medical coverage: an AABD cash recipient receives a MediPlan card for medical needs and can show it to providers such as doctors, hospitals, drug stores, and clinics.",
+          "varies_by": "not_applicable"
+        },
+        "application": {
+          "methods": [
+            "Online through the Illinois Application for Benefits Eligibility (ABE) at https://abe.illinois.gov",
+            "In person at a local Illinois Department of Human Services (IDHS) Family Community Resource Center (FCRC) office",
+            "By mail to the local IDHS office",
+            "By fax to the local IDHS office",
+            "By phone through IDHS at (866) 311-1119 for help applying"
+          ],
+          "processing_time": "No exact statewide processing time was found in the reviewed sources. The application must be completed before benefits can start, and ABE is available 24/7. Timing may depend on how quickly the family submits verification documents and how fast the local IDHS office processes the case.",
+          "waitlist": null,
+          "forms": [
+            "IL444-2378B, Application for Cash, SNAP, and Medical Assistance",
+            "ABE online application",
+            "Caseworker-generated application printout signed at the local office"
+          ],
+          "documents": [
+            "Proof of identity",
+            "Proof of Illinois residency",
+            "Social Security number if available",
+            "Proof of age, blindness, or disability",
+            "Proof of SSI status or SSI denial",
+            "Proof of citizenship or eligible non-citizen status",
+            "Proof of income",
+            "Proof of resources/assets such as bank statements, property records, and vehicle information",
+            "Information about household members and spouse/dependent status",
+            "Any medical or disability records requested by IDHS"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Illinois through IDHS. Applicants typically work with their local Family Community Resource Center.",
+          "regional_variations": "The program itself is statewide and does not appear to vary by county in benefit rules. Practical differences can come from local office workload, staffing, and how quickly a particular FCRC processes applications or collects verifications.",
+          "offices_or_providers": [
+            "Local Illinois Department of Human Services Family Community Resource Center offices",
+            "Illinois Application for Benefits Eligibility (ABE)"
+          ]
+        },
+        "official_source": "https://www.dhs.state.il.us/page.aspx?item=45317",
+        "gotchas": [
+          "This is a cash benefit and not the same as AABD Medicaid, even though the names are similar.",
+          "Eligibility is not just about age or disability; SSI status, income status, and immigration/category rules matter too.",
+          "The family should not assume the person qualifies if they get some income; the key issue is whether income and resources stay within the AABD cash rules.",
+          "The reviewed sources do not publish a simple, universal monthly payment amount; the benefit is a cash grant tied to eligibility.",
+          "You can start online, but the application is not complete until it is submitted with a signature or processed through an IDHS office.",
+          "The local IDHS office may ask for a computer printout or additional verifications before approving benefits.",
+          "Asset limits are important, and families often overlook bank balances or other countable resources."
+        ],
+        "data_shape_notes": "This program is a statewide cash-assistance program with SSI-like disability/age rules, resource limits, and dual pathways through online ABE or local IDHS offices. The main complexity is that the public-facing sources emphasize eligibility categories and application routes more than a single published income table or fixed benefit amount.",
+        "_raw": "{\n  \"name\": \"Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": \"AABD cash is for Illinois residents who are age 65+, blind, or disabled, and who are either receiving SSI, or are ineligible for SSI because of income, or are ineligible because of the federal time limit for certain non-citizens. The sources reviewed do not give a single published AABD cash income table by household size. Instead, the key test is whether countable income is low enough that the person can qualify for SSI-related AABD cash; Illinois guidance says a person may qualify if they are denied SSI because of income and still meet the age/blind/disability rules. Illinois Legal Aid also states that if total basic needs are at least $1 less than countable income, a person may be eligible for an AABD cash grant, but the exact dollar thresholds are not provided in the reviewed official sources.\",\n    \"asset_limits\": \"AABD cash has a resource/asset test. Illinois Legal Aid reports a limit of $2,000 in assets for one person and $3,000 if living with a spouse or another dependent. The reviewed sources do not provide the full official list of counted versus exempt assets for AABD cash. One Illinois source notes that the Department exempts certain assets up to a specific dollar amount, but the actual exemption schedule was not included in the available materials. In practice, families should assume cash, bank accounts, and other countable resources matter, while some assets may be excluded under Illinois/SSI-style rules, and they should verify the current rule with IDHS.\",\n    \"other_requirements\": [\n      \"Must live in Illinois\",\n      \"Must be a U.S. citizen or meet certain non-citizen requirements\",\n      \"Must be age 65 or older, blind, or disabled\",\n      \"Must be receiving SSI or be ineligible for SSI because of income, or because of the federal time limit for certain immigrants\",\n      \"Must cooperate with program requirements and prove eligibility\",\n      \"Homelessness does not automatically disqualify a person\",\n      \"Disability follows SSA/Illinois definitions, depending on category\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Monthly cash assistance to help pay for food, shelter, utilities, and other non-medical expenses. The program also ties to medical coverage: an AABD cash recipient receives a MediPlan card for medical needs and can show it to providers such as doctors, hospitals, drug stores, and clinics.\",\n    \"varies_by\": \"not_applicable\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through the Illinois Application for Benefits Eligibility (ABE) at https://abe.illinois.gov\",\n      \"In person at a local Illinois Department of Human Services (IDHS) Family Community Resource Center (FCRC) office\",\n      \"By mail to the local IDHS office\",\n      \"By fax to the local IDHS office\",\n      \"By phone through IDHS at (866) 311-1119 for help applying\"\n    ],\n    \"processing_time\": \"No exact statewide processing time was found in the reviewed sources. The application must be completed before benefits can start, and ABE is available 24/7. Timing may depend on how quickly the family submits verification documents and how fast the local IDHS office processes the case.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"IL444-2378B, Application for Cash, SNAP, and Medical Assistance\",\n      \"ABE online application\",\n      \"Caseworker-generated application printout signed at the local office\"\n    ],\n    \"documents\": [\n      \"Proof of identity\",\n      \"Proof of Illinois residency\",\n      \"Social Security number if available\",\n      \"Proof of age, blindness, or disability\",\n      \"Proof of SSI status or SSI denial\",\n      \"Proof of citizenship or eligible non-citizen status\",\n      \"Proof of income\",\n      \"Proof of resources/assets such as bank statements, property records, and vehicle information\",\n      \"Information about household members and spouse/dependent status\",\n      \"Any medical or disability records requested by IDHS\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Illinois through IDHS. Applicants typically work with their local Family Community Resource Center.\",\n    \"regional_variations\": \"The program itself is statewide and does not appear to vary by county in benefit rules. Practical differences can come from local office workload, staffing, and how quickly a particular FCRC processes applications or collects verifications.\",\n    \"offices_or_providers\": [\n      \"Local Illinois Department of Human Services Family Community Resource Center offices\",\n      \"Illinois Application for Benefits Eligibility (ABE)\"\n    ]\n  },\n  \"official_source\": \"https://www.dhs.state.il.us/page.aspx?item=45317\",\n  \"gotchas\": [\n    \"This is a cash benefit and not the same as AABD Medicaid, even though the names are similar.\",\n    \"Eligibility is not just about age or disability; SSI status, income status, and immigration/category rules matter too.\",\n    \"The family should not assume the person qualifies if they get some income; the key issue is whether income and resources stay within the AABD cash rules.\",\n    \"The reviewed sources do not publish a simple, universal monthly payment amount; the benefit is a cash grant tied to eligibility.\",\n    \"You can start online, but the application is not complete until it is submitted with a signature or processed through an IDHS office.\",\n    \"The local IDHS office may ask for a computer printout or additional verifications before approving benefits.\",\n    \"Asset limits are important, and families often overlook bank balances or other countable resources.\"\n  ],\n  \"data_shape_notes\": \"This program is a statewide cash-assistance program with SSI-like disability/age rules, resource limits, and dual pathways through online ABE or local IDHS offices. The main complexity is that the public-facing sources emphasize eligibility categories and application routes more than a single published income table or fixed benefit amount.\"\n}"
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "eligibility": {
+          "age": 60,
+          "income_limits": "Illinois uses an income screen based on the household’s gross income for the 30 days before application. For the 2026-2027 program year, households with customers of Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, or Peoples Gas must be at or below 300% of the Federal Poverty Guidelines, and Illinois also describes eligibility in terms of 60% of State Median Income for some program materials. Older adults (60+), people with disabilities, families with children 5 and under, and households with a disconnect notice or very low propane levels may apply starting October 1, 2026. Actual 30-day gross income limits shown by household size are: 1 = $3,990; 2 = $5,410; 3 = $6,830; 4 = $8,250; 5 = $9,670; 6 = $11,090; 7 = $12,510; 8 = $13,930. Illinois materials also state annual equivalents of $47,880; $64,920; $81,960; $99,000; $116,040; $133,080; $150,120; $167,160 respectively.",
+          "asset_limits": "No asset limit is described in the Illinois LIHEAP materials reviewed. The program materials emphasize income, household composition, and responsibility for home heating costs rather than countable assets.",
+          "other_requirements": [
+            "Must be a resident of Illinois.",
+            "Must have household income within the current program limits.",
+            "Must be responsible for home heating costs or otherwise eligible under the current rules.",
+            "If applying during the early priority period, must be an older adult age 60+, a person with a disability, a family with a child age 5 or under, or a household with disconnect status/low propane as defined by the state.",
+            "Applications are accepted until funds are exhausted."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "LIHEAP provides financial help with home energy costs, including assistance for utility bills and energy crises. Illinois also ties the program to heating-cost relief and weather-related energy assistance. The exact payment amount is not shown in the materials reviewed here and may vary by household and utility situation.",
+          "varies_by": "household_size"
+        },
+        "application": {
+          "methods": [
+            "Online: https://helpillinoisfamilies.com",
+            "Phone hotline: 1-877-411-9276",
+            "Local administering agency / community action agency in the household’s county",
+            "In person at the local agency",
+            "The state page says applicants can start online by submitting a Request for Services form during their application month"
+          ],
+          "processing_time": "Illinois says applications run from October 1, 2026 through August 13, 2027, or until funding is exhausted. The materials reviewed do not give a fixed processing-time number.",
+          "waitlist": "No formal waitlist is described; instead, applications are accepted until funding is exhausted, which functions like a first-come, first-served cap.",
+          "forms": [
+            "Request for Services form"
+          ],
+          "documents": [
+            "Proof of gross income for all household members for the 30 days before application",
+            "Proof of Illinois residency",
+            "Information showing responsibility for home heating costs",
+            "Utility account information or heating vendor information",
+            "Any shutoff notice, disconnect date notice, or propane tank documentation if applying under crisis rules",
+            "Documentation of age/disability/child age 5 or under if claiming priority status"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available statewide in Illinois through local administering agencies, with county-level local access points. Applicants are served through the agency assigned to their county/area.",
+          "regional_variations": "The program is statewide, but application access and turnaround can differ by local agency, county, and utility service area. Some households may apply earlier based on priority status, and different local agencies handle intake in different parts of Illinois.",
+          "offices_or_providers": [
+            "Local Community Action Agencies / administering agencies listed by the Illinois Department of Commerce and Economic Opportunity",
+            "Utility-specific service areas such as Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, and Peoples Gas"
+          ]
+        },
+        "official_source": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+        "gotchas": [
+          "Priority households can apply starting October 1, but all other income-eligible households start November 1, 2026.",
+          "Funding is limited; the program can stop accepting applications before the published end date if money runs out.",
+          "Applicants usually need income proof for the prior 30 days, not just a tax return or annual income proof.",
+          "The program is administered through local agencies, so the exact intake process can vary by county.",
+          "The benefit is energy-bill assistance, not a general cash grant.",
+          "Illinois materials reference both Federal Poverty Guidelines and State Median Income language, so families should use the current program-year chart rather than assuming a single permanent cutoff."
+        ],
+        "data_shape_notes": "This program is household-based, income-tested, and administered through local agencies statewide. Eligibility and access are shaped by household size, priority category, utility type, and funding availability; benefit amounts are not presented as a fixed universal dollar grant in the source materials reviewed.",
+        "_raw": "{\n  \"name\": \"LIHEAP (Low Income Home Energy Assistance Program)\",\n  \"eligibility\": {\n    \"age\": 60,\n    \"income_limits\": \"Illinois uses an income screen based on the household’s gross income for the 30 days before application. For the 2026-2027 program year, households with customers of Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, or Peoples Gas must be at or below 300% of the Federal Poverty Guidelines, and Illinois also describes eligibility in terms of 60% of State Median Income for some program materials. Older adults (60+), people with disabilities, families with children 5 and under, and households with a disconnect notice or very low propane levels may apply starting October 1, 2026. Actual 30-day gross income limits shown by household size are: 1 = $3,990; 2 = $5,410; 3 = $6,830; 4 = $8,250; 5 = $9,670; 6 = $11,090; 7 = $12,510; 8 = $13,930. Illinois materials also state annual equivalents of $47,880; $64,920; $81,960; $99,000; $116,040; $133,080; $150,120; $167,160 respectively.\",\n    \"asset_limits\": \"No asset limit is described in the Illinois LIHEAP materials reviewed. The program materials emphasize income, household composition, and responsibility for home heating costs rather than countable assets.\",\n    \"other_requirements\": [\n      \"Must be a resident of Illinois.\",\n      \"Must have household income within the current program limits.\",\n      \"Must be responsible for home heating costs or otherwise eligible under the current rules.\",\n      \"If applying during the early priority period, must be an older adult age 60+, a person with a disability, a family with a child age 5 or under, or a household with disconnect status/low propane as defined by the state.\",\n      \"Applications are accepted until funds are exhausted.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"LIHEAP provides financial help with home energy costs, including assistance for utility bills and energy crises. Illinois also ties the program to heating-cost relief and weather-related energy assistance. The exact payment amount is not shown in the materials reviewed here and may vary by household and utility situation.\",\n    \"varies_by\": \"household_size\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online: https://helpillinoisfamilies.com\",\n      \"Phone hotline: 1-877-411-9276\",\n      \"Local administering agency / community action agency in the household’s county\",\n      \"In person at the local agency\",\n      \"The state page says applicants can start online by submitting a Request for Services form during their application month\"\n    ],\n    \"processing_time\": \"Illinois says applications run from October 1, 2026 through August 13, 2027, or until funding is exhausted. The materials reviewed do not give a fixed processing-time number.\",\n    \"waitlist\": \"No formal waitlist is described; instead, applications are accepted until funding is exhausted, which functions like a first-come, first-served cap.\",\n    \"forms\": [\n      \"Request for Services form\"\n    ],\n    \"documents\": [\n      \"Proof of gross income for all household members for the 30 days before application\",\n      \"Proof of Illinois residency\",\n      \"Information showing responsibility for home heating costs\",\n      \"Utility account information or heating vendor information\",\n      \"Any shutoff notice, disconnect date notice, or propane tank documentation if applying under crisis rules\",\n      \"Documentation of age/disability/child age 5 or under if claiming priority status\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available statewide in Illinois through local administering agencies, with county-level local access points. Applicants are served through the agency assigned to their county/area.\",\n    \"regional_variations\": \"The program is statewide, but application access and turnaround can differ by local agency, county, and utility service area. Some households may apply earlier based on priority status, and different local agencies handle intake in different parts of Illinois.\",\n    \"offices_or_providers\": [\n      \"Local Community Action Agencies / administering agencies listed by the Illinois Department of Commerce and Economic Opportunity\",\n      \"Utility-specific service areas such as Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, and Peoples Gas\"\n    ]\n  },\n  \"official_source\": \"https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html\",\n  \"gotchas\": [\n    \"Priority households can apply starting October 1, but all other income-eligible households start November 1, 2026.\",\n    \"Funding is limited; the program can stop accepting applications before the published end date if money runs out.\",\n    \"Applicants usually need income proof for the prior 30 days, not just a tax return or annual income proof.\",\n    \"The program is administered through local agencies, so the exact intake process can vary by county.\",\n    \"The benefit is energy-bill assistance, not a general cash grant.\",\n    \"Illinois materials reference both Federal Poverty Guidelines and State Median Income language, so families should use the current program-year chart rather than assuming a single permanent cutoff.\"\n  ],\n  \"data_shape_notes\": \"This program is household-based, income-tested, and administered through local agencies statewide. Eligibility and access are shaped by household size, priority category, utility type, and funding availability; benefit amounts are not presented as a fixed universal dollar grant in the source materials reviewed.\"\n}"
+      },
+      {
+        "name": "Senior Citizens Property Tax Freeze",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "statewide_program_name": "Low-Income Senior Citizens Assessment Freeze Homestead Exemption",
+            "general_state_limit": "$75,000 total household income",
+            "county_variation_note": "Some Illinois counties use a lower local limit for administering information or outreach materials, but the statewide exemption referenced by county assessor materials is commonly $75,000.",
+            "household_definition": "Household income includes income of all persons using the property as their principal dwelling on January 1 of the assessment year.",
+            "table": [
+              {
+                "household_size": "Not used for eligibility",
+                "income_limit": "$75,000 total household income"
+              }
+            ]
+          },
+          "asset_limits": null,
+          "other_requirements": [
+            "Applicant must be 65 or older by December 31 of the assessment year.",
+            "Applicant must own and occupy the property as a principal residence.",
+            "Applicant must have owned and occupied the home for the required period used by the county assessor, commonly the prior year and current year or two consecutive years depending on county instructions.",
+            "Applicant must typically file a renewal each year to keep the exemption.",
+            "Applicant must already be receiving the senior homestead exemption in some counties before the freeze can be granted."
+          ]
+        },
+        "benefits": {
+          "type": "financial",
+          "value": "Freezes the property’s equalized assessed value (EAV) at the base year value when the senior first qualifies. The EAV does not increase while eligibility continues, but the actual tax bill can still change if tax rates change.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online application through the local county assessor site, where available",
+            "Mail or in-person filing with the county supervisor of assessments or assessor office",
+            "Some counties provide a paper PTAX-340 form for return by mail"
+          ],
+          "processing_time": "No single statewide processing time was located; timing is handled by county assessors and is driven by local filing deadlines, often around July 1 for the application year.",
+          "waitlist": null,
+          "forms": [
+            "PTAX-340 Low-Income Senior Citizens Assessment Freeze Homestead Exemption"
+          ],
+          "documents": [
+            "Completed PTAX-340 form",
+            "Proof of age if requested",
+            "Federal income tax return and all schedules, if required by the county form instructions",
+            "Any local supporting documents requested by the assessor",
+            "Property index number or property address"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available in Illinois, administered locally by county assessor/supervisor of assessments offices.",
+          "regional_variations": "Yes. Counties may differ on filing portal, mailing address, office contact, documentation requirements, and exact local instructions. Some county materials cite different administrative details, but the underlying statewide exemption is the same.",
+          "offices_or_providers": [
+            "Cook County Assessor’s Office, 118 North Clark Street, Room 320, Chicago, IL 60602, 312.443.7550",
+            "Kane County Assessment Office, 719 Batavia Avenue, Geneva, IL 60134-3000",
+            "Winnebago County Supervisor of Assessments, 404 Elm St. Rm. 301, Rockford, IL 61101, 815.319.4460",
+            "County assessor or supervisor of assessments office in the applicant’s county of residence"
+          ]
+        },
+        "official_source": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+        "gotchas": [
+          "This freezes assessed value, not the tax bill; taxes can still rise if rates go up.",
+          "It is not an automatic benefit; families usually must apply each year.",
+          "Income is measured as total household income, not just the senior’s personal income.",
+          "County procedures differ, so the local assessor’s instructions control filing details and deadlines.",
+          "Some county materials emphasize that the property must already have been owned and occupied for a qualifying period before the freeze can be granted."
+        ],
+        "data_shape_notes": "This is a county-administered statewide property tax exemption with a single income threshold, an age gate, and a benefit based on freezing assessed value rather than issuing a cash payment or service.",
+        "_raw": "{\n  \"name\": \"Senior Citizens Property Tax Freeze\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"statewide_program_name\": \"Low-Income Senior Citizens Assessment Freeze Homestead Exemption\",\n      \"general_state_limit\": \"$75,000 total household income\",\n      \"county_variation_note\": \"Some Illinois counties use a lower local limit for administering information or outreach materials, but the statewide exemption referenced by county assessor materials is commonly $75,000.\",\n      \"household_definition\": \"Household income includes income of all persons using the property as their principal dwelling on January 1 of the assessment year.\",\n      \"table\": [\n        {\n          \"household_size\": \"Not used for eligibility\",\n          \"income_limit\": \"$75,000 total household income\"\n        }\n      ]\n    },\n    \"asset_limits\": null,\n    \"other_requirements\": [\n      \"Applicant must be 65 or older by December 31 of the assessment year.\",\n      \"Applicant must own and occupy the property as a principal residence.\",\n      \"Applicant must have owned and occupied the home for the required period used by the county assessor, commonly the prior year and current year or two consecutive years depending on county instructions.\",\n      \"Applicant must typically file a renewal each year to keep the exemption.\",\n      \"Applicant must already be receiving the senior homestead exemption in some counties before the freeze can be granted.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"financial\",\n    \"value\": \"Freezes the property’s equalized assessed value (EAV) at the base year value when the senior first qualifies. The EAV does not increase while eligibility continues, but the actual tax bill can still change if tax rates change.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application through the local county assessor site, where available\",\n      \"Mail or in-person filing with the county supervisor of assessments or assessor office\",\n      \"Some counties provide a paper PTAX-340 form for return by mail\"\n    ],\n    \"processing_time\": \"No single statewide processing time was located; timing is handled by county assessors and is driven by local filing deadlines, often around July 1 for the application year.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"PTAX-340 Low-Income Senior Citizens Assessment Freeze Homestead Exemption\"\n    ],\n    \"documents\": [\n      \"Completed PTAX-340 form\",\n      \"Proof of age if requested\",\n      \"Federal income tax return and all schedules, if required by the county form instructions\",\n      \"Any local supporting documents requested by the assessor\",\n      \"Property index number or property address\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available in Illinois, administered locally by county assessor/supervisor of assessments offices.\",\n    \"regional_variations\": \"Yes. Counties may differ on filing portal, mailing address, office contact, documentation requirements, and exact local instructions. Some county materials cite different administrative details, but the underlying statewide exemption is the same.\",\n    \"offices_or_providers\": [\n      \"Cook County Assessor’s Office, 118 North Clark Street, Room 320, Chicago, IL 60602, 312.443.7550\",\n      \"Kane County Assessment Office, 719 Batavia Avenue, Geneva, IL 60134-3000\",\n      \"Winnebago County Supervisor of Assessments, 404 Elm St. Rm. 301, Rockford, IL 61101, 815.319.4460\",\n      \"County assessor or supervisor of assessments office in the applicant’s county of residence\"\n    ]\n  },\n  \"official_source\": \"https://tax.illinois.gov/localgovernments/property/taxrelief.html\",\n  \"gotchas\": [\n    \"This freezes assessed value, not the tax bill; taxes can still rise if rates go up.\",\n    \"It is not an automatic benefit; families usually must apply each year.\",\n    \"Income is measured as total household income, not just the senior’s personal income.\",\n    \"County procedures differ, so the local assessor’s instructions control filing details and deadlines.\",\n    \"Some county materials emphasize that the property must already have been owned and occupied for a qualifying period before the freeze can be granted.\"\n  ],\n  \"data_shape_notes\": \"This is a county-administered statewide property tax exemption with a single income threshold, an age gate, and a benefit based on freezing assessed value rather than issuing a cash payment or service.\"\n}"
+      },
+      {
+        "name": "Illinois Benefit Access Program",
+        "eligibility": {
+          "age": 65,
+          "income_limits": {
+            "basis": "Total gross income for the last closed tax year",
+            "household_table": [
+              {
+                "household_size": 1,
+                "limit": 33562
+              },
+              {
+                "household_size": 2,
+                "limit": 44533
+              },
+              {
+                "household_size": 3,
+                "limit": 55500
+              }
+            ],
+            "rules": [
+              "If married and living together on December 31 of the prior year, spouse income must be included.",
+              "If the spouse died during the prior year, the applicant files as single and counts only their own income.",
+              "Do not include the income of a Qualified Additional Resident."
+            ]
+          },
+          "asset_limits": "No asset limit was identified in the official program information reviewed. Eligibility is described in terms of income, age/disability, and Illinois residency rather than assets.",
+          "other_requirements": [
+            "Must be an Illinois resident.",
+            "Must be at least 65 years old, or be 16 years of age or older before January 1 of the current year and have a disability.",
+            "Eligibility is determined through the online application.",
+            "For the Ride Free Transit Benefit, the income limits are the same as above."
+          ]
+        },
+        "benefits": {
+          "type": "in_kind",
+          "value": "Provides two main benefits: a license plate fee discount and a Ride Free Transit Benefit. The license plate discount reduces annual registration fees for eligible seniors and persons with disabilities. The Ride Free Transit Benefit provides free rides on participating public transit systems in Illinois.",
+          "varies_by": "fixed"
+        },
+        "application": {
+          "methods": [
+            "Online application: https://ilaging.illinois.gov/benefitsaccess/benefit-access-online-application.html",
+            "Phone help line: 1-800-252-8966",
+            "TTY: 1-888-206-1327",
+            "Assistance through a local Area Agency on Aging",
+            "Assistance through a Senior Health Assistance Program office"
+          ],
+          "processing_time": "Approximately 12 weeks to determine eligibility; after approval, wait 10 business days before the license plate discount is available.",
+          "waitlist": null,
+          "forms": [
+            "Benefit Access Application"
+          ],
+          "documents": [
+            "Proof of age or disability if requested",
+            "Income information for the last closed tax year",
+            "Spouse income information if married and living together on December 31 of the prior year",
+            "Illinois residency information",
+            "Any information needed to verify household size and qualified additional residents"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available to eligible Illinois residents statewide; benefits are tied to Illinois transit systems and Illinois Secretary of State vehicle services.",
+          "regional_variations": "The program’s eligibility rules are statewide, but transit benefit use depends on participating local transit systems. Processing support may be obtained through local Area Agencies on Aging or Senior Health Assistance Program offices, so access to help can vary by region.",
+          "offices_or_providers": [
+            "Illinois Department on Aging",
+            "Illinois Secretary of State facilities for license plate discounts",
+            "Local Area Agencies on Aging",
+            "Senior Health Assistance Program offices"
+          ]
+        },
+        "official_source": "https://ilaging.illinois.gov/benefitsaccess.html",
+        "gotchas": [
+          "The program is not a cash benefit; it mainly provides a license plate discount and free transit rides.",
+          "Applicants must use the online application; paper applications are not available.",
+          "Income is based on the last closed tax year, not current monthly income.",
+          "Married applicants often miss the rule that spouse income counts if living together on December 31 of the prior year.",
+          "A Qualified Additional Resident can affect household size, but that person’s income is not counted.",
+          "Approval does not immediately activate the license plate discount; it can take 10 business days after approval."
+        ],
+        "data_shape_notes": "This program is income-based, household-size based, and benefit-specific: one application determines eligibility for two linked benefits, with separate activation steps for the license plate discount and transit benefit.",
+        "_raw": "{\n  \"name\": \"Illinois Benefit Access Program\",\n  \"eligibility\": {\n    \"age\": 65,\n    \"income_limits\": {\n      \"basis\": \"Total gross income for the last closed tax year\",\n      \"household_table\": [\n        {\n          \"household_size\": 1,\n          \"limit\": 33562\n        },\n        {\n          \"household_size\": 2,\n          \"limit\": 44533\n        },\n        {\n          \"household_size\": 3,\n          \"limit\": 55500\n        }\n      ],\n      \"rules\": [\n        \"If married and living together on December 31 of the prior year, spouse income must be included.\",\n        \"If the spouse died during the prior year, the applicant files as single and counts only their own income.\",\n        \"Do not include the income of a Qualified Additional Resident.\"\n      ]\n    },\n    \"asset_limits\": \"No asset limit was identified in the official program information reviewed. Eligibility is described in terms of income, age/disability, and Illinois residency rather than assets.\",\n    \"other_requirements\": [\n      \"Must be an Illinois resident.\",\n      \"Must be at least 65 years old, or be 16 years of age or older before January 1 of the current year and have a disability.\",\n      \"Eligibility is determined through the online application.\",\n      \"For the Ride Free Transit Benefit, the income limits are the same as above.\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"in_kind\",\n    \"value\": \"Provides two main benefits: a license plate fee discount and a Ride Free Transit Benefit. The license plate discount reduces annual registration fees for eligible seniors and persons with disabilities. The Ride Free Transit Benefit provides free rides on participating public transit systems in Illinois.\",\n    \"varies_by\": \"fixed\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online application: https://ilaging.illinois.gov/benefitsaccess/benefit-access-online-application.html\",\n      \"Phone help line: 1-800-252-8966\",\n      \"TTY: 1-888-206-1327\",\n      \"Assistance through a local Area Agency on Aging\",\n      \"Assistance through a Senior Health Assistance Program office\"\n    ],\n    \"processing_time\": \"Approximately 12 weeks to determine eligibility; after approval, wait 10 business days before the license plate discount is available.\",\n    \"waitlist\": null,\n    \"forms\": [\n      \"Benefit Access Application\"\n    ],\n    \"documents\": [\n      \"Proof of age or disability if requested\",\n      \"Income information for the last closed tax year\",\n      \"Spouse income information if married and living together on December 31 of the prior year\",\n      \"Illinois residency information\",\n      \"Any information needed to verify household size and qualified additional residents\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available to eligible Illinois residents statewide; benefits are tied to Illinois transit systems and Illinois Secretary of State vehicle services.\",\n    \"regional_variations\": \"The program’s eligibility rules are statewide, but transit benefit use depends on participating local transit systems. Processing support may be obtained through local Area Agencies on Aging or Senior Health Assistance Program offices, so access to help can vary by region.\",\n    \"offices_or_providers\": [\n      \"Illinois Department on Aging\",\n      \"Illinois Secretary of State facilities for license plate discounts\",\n      \"Local Area Agencies on Aging\",\n      \"Senior Health Assistance Program offices\"\n    ]\n  },\n  \"official_source\": \"https://ilaging.illinois.gov/benefitsaccess.html\",\n  \"gotchas\": [\n    \"The program is not a cash benefit; it mainly provides a license plate discount and free transit rides.\",\n    \"Applicants must use the online application; paper applications are not available.\",\n    \"Income is based on the last closed tax year, not current monthly income.\",\n    \"Married applicants often miss the rule that spouse income counts if living together on December 31 of the prior year.\",\n    \"A Qualified Additional Resident can affect household size, but that person’s income is not counted.\",\n    \"Approval does not immediately activate the license plate discount; it can take 10 business days after approval.\"\n  ],\n  \"data_shape_notes\": \"This program is income-based, household-size based, and benefit-specific: one application determines eligibility for two linked benefits, with separate activation steps for the license plate discount and transit benefit.\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "IL",
+    "stateName": "Illinois",
+    "classifiedAt": "2026-10-06T05:36:51.970Z",
+    "total": 5,
+    "typeSummary": {
+      "benefit": 3,
+      "resource": 2
+    },
+    "scopeSummary": {
+      "state": 4,
+      "federal": 1
+    },
+    "complexitySummary": {
+      "deep": 3,
+      "simple": 2
+    },
+    "programs": [
+      {
+        "name": "Illinois Community Care Program (CCP)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Care Coordination Units",
+              "type": "service-area"
+            },
+            {
+              "name": "Illinois Department on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Illinois Senior Helpline",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "tier-comparison",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": true,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Local Illinois Department of Human Services Family Community Resource Center offices",
+              "type": "service-area"
+            },
+            {
+              "name": "Illinois Application for Benefits Eligibility (ABE)",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "federal",
+          "stateVariation": true,
+          "localEntities": [
+            {
+              "name": "Local Community Action Agencies / administering agencies listed by the Illinois Department of Commerce and Economic Opportunity",
+              "type": "service-area"
+            },
+            {
+              "name": "Utility-specific service areas such as Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, and Peoples Gas",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Senior Citizens Property Tax Freeze",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Cook County Assessor’s Office, 118 North Clark Street, Room 320, Chicago, IL 60602, 312.443.7550",
+              "type": "service-area"
+            },
+            {
+              "name": "Kane County Assessment Office, 719 Batavia Avenue, Geneva, IL 60134-3000",
+              "type": "service-area"
+            },
+            {
+              "name": "Winnebago County Supervisor of Assessments, 404 Elm St. Rm. 301, Rockford, IL 61101, 815.319.4460",
+              "type": "service-area"
+            },
+            {
+              "name": "County assessor or supervisor of assessments office in the applicant’s county of residence",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "financial",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": false,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": true,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      },
+      {
+        "name": "Illinois Benefit Access Program",
+        "programType": "resource",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Illinois Department on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Illinois Secretary of State facilities for license plate discounts",
+              "type": "service-area"
+            },
+            {
+              "name": "Local Area Agencies on Aging",
+              "type": "service-area"
+            },
+            {
+              "name": "Senior Health Assistance Program offices",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "simple",
+        "recommendedSections": [
+          "prose",
+          "county-directory"
+        ],
+        "signals": {
+          "benefitType": "in_kind",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "IL",
+      "id": "il-community-care-program",
+      "name": "Illinois Community Care Program (CCP)",
+      "legacyId": "hcbs-medicaid-waiver-programs",
+      "programType": "benefit"
+    },
+    {
+      "state": "IL",
+      "id": "il-aabd-cash-assistance",
+      "name": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+      "legacyId": "aid-to-the-aged-blind-and-disabled-aabd-cash-assistance",
+      "programType": "benefit"
+    },
+    {
+      "state": "IL",
+      "id": "il-liheap-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "legacyId": "liheap-low-income-home-energy-assistance-program",
+      "programType": "benefit"
+    },
+    {
+      "state": "IL",
+      "id": "il-senior-property-tax-freeze",
+      "name": "Senior Citizens Property Tax Freeze",
+      "legacyId": "senior-citizens-property-tax-freeze",
+      "programType": "resource"
+    },
+    {
+      "state": "IL",
+      "id": "il-benefit-access-program",
+      "name": "Illinois Benefit Access Program",
+      "legacyId": null,
+      "programType": "resource"
+    }
+  ]
+}

@@ -107,6 +107,7 @@ export default function AdminStudentDetailPage() {
   const [interviews, setInterviews] = useState<InterviewRow[]>([]);
   const [connectionCount, setConnectionCount] = useState(0);
   const [viewingDoc, setViewingDoc] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   // View a document from private storage by fetching a signed URL
   async function viewDocument(path: string, docType: string) {
@@ -240,6 +241,49 @@ export default function AdminStudentDetailPage() {
       setLinkMessage({ type: "error", text: "Could not reach the server." });
     } finally {
       setSendingLink(false);
+    }
+  }
+
+  async function handleExportPdf() {
+    setExporting(true);
+    try {
+      const url = `/api/admin/caregivers/${studentId}/export-pdf`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        alert(errorData.error || `Export failed: ${response.status}`);
+        return;
+      }
+
+      // Get the PDF blob and create a download link
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Extract filename from Content-Disposition header if available
+      const disposition = response.headers.get("Content-Disposition");
+      let filename = "student-profile.pdf";
+      if (disposition) {
+        const match = disposition.match(/filename="?([^";\n]+)"?/);
+        if (match) filename = match[1];
+      }
+
+      // Create a temporary link and click it to trigger download/open
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.target = "_blank";
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up blob URL after a delay
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (err) {
+      console.error("Export PDF error:", err);
+      alert("Failed to export PDF. Please try again.");
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -442,6 +486,14 @@ export default function AdminStudentDetailPage() {
                 {linkMessage.text}
               </span>
             )}
+            <button
+              onClick={handleExportPdf}
+              disabled={exporting}
+              title="Export student profile as PDF"
+              className="px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {exporting ? "Exporting..." : "Export PDF"}
+            </button>
             <button
               onClick={handleSendMagicLink}
               disabled={sendingLink || !student.email}

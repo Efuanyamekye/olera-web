@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T07:57:10.909Z
+ * Last updated: 2026-10-06T12:32:14.317Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -585,10 +585,10 @@ export const drafts: PipelineStateDrafts = {
             "8002528966"
           ],
           "to": "2177821200",
-          "source": "https://hfs.illinois.gov/medicalproviders/pace.html",
+          "source": "https://hfs.illinois.gov/content/dam/soi/en/web/hfs/sitecollectiondocuments/pacepublicmeetingnotice11032021.pdf",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "why": "source dated 2021",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         }
       ]
     },
@@ -815,26 +815,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-14",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1330,
-          "to": 1796,
-          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1803,
-          "to": 2435,
-          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -1060,22 +1041,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-06",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 2608,
-          "to": 1696,
-          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         },
         {
-          "field": "income_2",
-          "from": 3525,
-          "to": 2292,
-          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         }
       ]
     },
@@ -2374,6 +2355,1050 @@ export const drafts: PipelineStateDrafts = {
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       }
+    },
+    {
+      "id": "il-community-care-program",
+      "name": "Illinois Community Care Program (CCP)",
+      "shortName": "Community Care Program",
+      "tagline": "If your parent is 60 or older and struggling to manage daily tasks at home, Illinois may cover in-home help, adult day services, and care coordination at no cost.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Care Coordination Units",
+            "type": "service-area"
+          },
+          {
+            "name": "Illinois Department on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Illinois Senior Helpline",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "The Illinois Community Care Program (CCP) pays for in-home aides, adult day services, medication management tools, and a care coordinator to help your parent stay in their home instead of moving to a nursing facility. There is no monthly cost for eligible participants. The program is funded and administered by the Illinois Department on Aging and is available statewide.\n\nTo qualify, your parent must be 60 or older, live in Illinois, and pass a functional assessment called the Determination of Need (DON). That assessment looks at whether your parent needs daily help with things like bathing, dressing, or managing medications. The financial test focuses on assets: your parent must have $17,500 or fewer in non-exempt assets. The home, one car, and personal furnishings do not count toward that limit. Income below the federal poverty level means services are free; applicants must also apply for Medicaid and enroll if eligible.\n\nThe application runs through local Care Coordination Units, not a central state office. That means timing, provider availability, and the specific aide assigned can differ depending on where your parent lives. The core eligibility rules are the same statewide, but what you experience on the ground will depend on your local unit.",
+      "savingsRange": "",
+      "savingsSource": "Free service. Illinois Department on Aging states no out-of-pocket cost for eligible CCP participants. See https://ilaging.illinois.gov/programs/ccp.html",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60 or older",
+          "Illinois resident and U.S. citizen or eligible non-citizen",
+          "Non-exempt assets at or below $17,500 (home, one car, and furnishings are exempt)",
+          "Functional need for long-term care confirmed through a DON assessment",
+          "Must apply for Medicaid and enroll if eligible"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 17500,
+          "couple": null,
+          "countedAssets": [
+            "Checking and savings account balances",
+            "Certificates of deposit",
+            "Stocks, bonds, and mutual funds",
+            "Non-primary real estate",
+            "Cash value of life insurance above exempt thresholds"
+          ],
+          "exemptAssets": [
+            "Primary home",
+            "One vehicle",
+            "Personal furnishings and household goods"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must be assessed as needing long-term care through the Determination of Need (DON) process. A trained assessor reviews whether your parent needs daily help with activities like bathing, dressing, eating, or managing medications. The assessment also evaluates whether your parent is at risk of nursing facility placement without help at home.",
+        "otherRequirements": [
+          "Must be an Illinois resident",
+          "Must be a U.S. citizen or eligible non-citizen in a specified category",
+          "Must apply for Medicaid and, if found eligible, enroll in Medicaid",
+          "Must complete annual redetermination of eligibility to continue receiving services"
+        ],
+        "povertyLevelReference": "Services are reported as free when monthly income falls below the federal poverty level. Income is verified at initial enrollment and at each annual redetermination."
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Call the Illinois Senior Helpline at 800-252-8966 or apply online; a local Care Coordination Unit will schedule your parent's DON assessment and financial review.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Contact the program to start your application",
+            "description": "Call the Illinois Senior Helpline at 800-252-8966 (TTY: 888-206-1327), Monday through Friday during business hours, or use the Illinois Department on Aging online application at https://ilaging.illinois.gov/programs/ccp.html. Either path routes you to the local Care Coordination Unit serving your parent's address."
+          },
+          {
+            "step": 2,
+            "title": "Complete the financial application",
+            "description": "Your parent (or a legal representative) submits proof of age, Illinois residency, citizenship or eligible non-citizen status, income, and assets. The application forms include the Community Care Program Online Application and, depending on services needed, an In-Home Service Application or Adult Day Service Application. If your parent may qualify for Medicaid, that application runs at the same time."
+          },
+          {
+            "step": 3,
+            "title": "Schedule and complete the Determination of Need (DON) assessment",
+            "description": "A care coordinator from the local Care Coordination Unit visits your parent at home (or wherever they live) and conducts the DON assessment. This is a structured functional evaluation of whether your parent needs daily help with bathing, dressing, medication management, or other personal care tasks, and whether they are at risk of nursing facility placement."
+          },
+          {
+            "step": 4,
+            "title": "Receive an eligibility decision and service plan",
+            "description": "If your parent passes both the financial review and the DON assessment, the Care Coordination Unit develops a service plan. That plan specifies which services are approved, such as in-home aide hours, adult day service days, or an automated medication dispenser. Services begin once the plan is finalized and a provider is assigned."
+          },
+          {
+            "step": 5,
+            "title": "Complete annual redetermination each year",
+            "description": "Eligibility is not permanent. Every year, your parent must complete a redetermination confirming they still meet the financial and functional requirements. The Care Coordination Unit initiates this process. Missing a redetermination deadline can interrupt services."
+          }
+        ],
+        "processingTime": "No single official processing-time standard is published on the main program page. Secondary sources describe enrollment as typically moving within roughly 30 to 60 days when eligibility and funding align, but that figure is not confirmed in official state materials. Ask your local Care Coordination Unit for current timelines in your area.",
+        "waitlist": "No formal statewide waitlist is described in official program materials. Access depends on eligibility, the DON assessment result, and service availability through the local Care Coordination Unit. Availability may vary by region.",
+        "tip": "Gather your parent's asset documents before the first call. The financial review happens quickly once the application opens, and delays in submitting bank balances or property records are a common reason the process stalls.",
+        "urls": [
+          {
+            "label": "CCP program page and online application",
+            "url": "https://ilaging.illinois.gov/programs/ccp.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Proof of age (birth certificate, passport, or other government-issued document showing date of birth)",
+        "Proof of Illinois residency (utility bill, lease agreement, or state-issued document showing current address)",
+        "Proof of citizenship or eligible non-citizen status (U.S. passport, naturalization certificate, or immigration documents)",
+        "Social Security award letter or other current income statements showing monthly amounts from all sources",
+        "Current balances for any checking, savings, or certificate of deposit accounts (the program verifies assets at enrollment and each annual redetermination; ask your Care Coordination Unit what statement format they accept)",
+        "Documentation of any non-exempt property other than your parent's primary home (deeds, tax assessments, or appraisals for second properties)",
+        "Vehicle registration or title for any vehicles beyond the one exempt vehicle",
+        "Life insurance policy statements if the policies carry cash value",
+        "Any investment account statements (stocks, bonds, mutual funds, annuities)",
+        "Medical records or physician documentation relevant to the Determination of Need (DON) assessment, if your parent has recent evaluations already on file",
+        "Legal representative documents if someone other than the older adult is applying on their behalf (power of attorney, guardianship order, or legal entity authorization)",
+        "Medicaid application information or current Medicaid card if your parent is already enrolled"
+      ],
+      "contacts": [
+        {
+          "label": "Illinois Senior Helpline",
+          "phone": "800-252-8966",
+          "description": "The primary entry point for the Community Care Program. Call here to begin an application or to be connected to your local Care Coordination Unit.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Illinois Senior Helpline (TTY)",
+          "phone": "888-206-1327",
+          "description": "TTY line for callers who are deaf, hard of hearing, or speech-impaired.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Illinois Department on Aging",
+          "phone": "217-785-2870",
+          "description": "State agency that administers CCP. Contact for program policy questions or if you cannot reach a local Care Coordination Unit.",
+          "hours": "Monday through Friday, business hours"
+        }
+      ],
+      "applicationNotes": [
+        "Your parent must pass both the financial review and the DON functional assessment. Passing one does not guarantee approval. Families sometimes assume the income or asset test is the only gate and are caught off guard when the DON assessment is the deciding factor.",
+        "Even though CCP is a state program, applicants must apply for Medicaid and enroll if found eligible. If you skip the Medicaid step, CCP enrollment may be delayed or denied.",
+        "Service delivery runs through local Care Coordination Units, not a central state office. The timing, the specific providers available, and the aides assigned can differ by county. Ask your local unit directly about current provider availability and any regional delays.",
+        "Annual redetermination is required every year. Mark the deadline on your calendar. Missing it can cause a gap in services even if your parent is still fully eligible."
+      ],
+      "relatedPrograms": [
+        "Illinois Medicaid (required co-enrollment for many CCP participants)",
+        "Illinois SNAP (Supplemental Nutrition Assistance Program for older adults on fixed incomes)",
+        "Illinois Circuit Breaker / Senior Property Tax Freeze",
+        "Illinois Lifespan Respite Program (for family caregivers who need a break)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The DON assessment is the gate most families don't expect",
+          "body": "Age and assets are necessary, but not enough. Your parent must also be assessed as needing long-term care through the Determination of Need (DON) process. If the assessor determines your parent does not yet meet the functional threshold, they will not qualify, even if finances are in order. If your parent's condition has recently declined, that is worth describing in detail during the assessment."
+        },
+        {
+          "type": "prose",
+          "title": "What services CCP actually covers",
+          "body": "CCP covers five specific service categories:\n\n1. Comprehensive Care Coordination: A care coordinator assigned through your local Care Coordination Unit monitors your parent's needs, develops the service plan, and adjusts it as needs change.\n\n2. In-Home Service: A paid aide comes to your parent's home to help with bathing, dressing, meal preparation, and other personal care tasks.\n\n3. Adult Day Service: A structured daytime program outside the home that provides supervision, activities, and health monitoring.\n\n4. Emergency Home Response Services: A personal emergency response device (like a call button) your parent can use to summon help if they fall or have a medical emergency.\n\n5. Automated Medication Dispenser Service: A device that dispenses the correct medications at the correct times, reducing the risk of missed or double doses.\n\nNot every participant receives all five services. The service plan developed after the DON assessment determines which services are approved based on your parent's specific needs."
+        },
+        {
+          "type": "prose",
+          "title": "How the asset limit works in practice",
+          "body": "The non-exempt asset limit is $17,500. Three major asset categories are exempt and do not count toward that number: your parent's primary home, one vehicle, and personal furnishings and household goods.\n\nWhat does count: checking and savings account balances, CDs, stocks, bonds, cash value of life insurance policies, non-primary real estate, and similar financial assets. If your parent's countable assets exceed $17,500, they must spend down to that level before becoming eligible.\n\nIf your parent is married and living with a spouse, the spouse's income and assets are also reviewed. Ask your local Care Coordination Unit how spousal rules apply in your specific situation, since the published materials do not detail a separate couple-level asset limit."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent owns a home worth more than $17,500. Does that disqualify them?",
+          "answer": "No. The primary home is explicitly exempt from the asset limit. Your parent can own a home of any value and still qualify, as long as their non-exempt assets (bank accounts, investments, non-primary real estate, and similar) total $17,500 or less. The home only becomes a complication if your parent owns a second property; that would count as a non-exempt asset."
+        },
+        {
+          "question": "My parent already lives with me. Can they still get in-home services at my house?",
+          "answer": "The program is designed for older adults living in a home setting, which can include a family member's home. The DON assessment will be conducted wherever your parent lives. Contact your local Care Coordination Unit through the Illinois Senior Helpline at 800-252-8966 to confirm how services are delivered in shared-household situations."
+        },
+        {
+          "question": "Can I apply on my parent's behalf, or do they have to apply themselves?",
+          "answer": "Yes, a family member or legal representative can apply on behalf of an older adult. You will need documentation showing your authority to act for them, such as a durable power of attorney or a guardianship order. Submit that documentation with the application."
+        },
+        {
+          "question": "My parent may qualify for Medicaid. Do they have to enroll in Medicaid to get CCP services?",
+          "answer": "Yes. CCP requires applicants to apply for Medicaid and, if found eligible, enroll in Medicaid. This is not optional. The Medicaid application can run at the same time as the CCP application; your Care Coordination Unit can help coordinate both. If your parent is not eligible for Medicaid, they may still qualify for CCP services under state funding, but the requirement to apply still applies."
+        },
+        {
+          "question": "What happens if my parent's condition gets worse after they are enrolled? Can services increase?",
+          "answer": "Yes. If your parent's needs change significantly, the care coordinator assigned through the local Care Coordination Unit can update the service plan. Contact the care coordinator directly and describe the change. A new or updated DON assessment may be required to authorize additional services. You do not need to restart the full application process."
+        },
+        {
+          "question": "How long does it actually take from first call to services starting?",
+          "answer": "No official processing-time standard is published by the Illinois Department on Aging. Secondary sources suggest enrollment can move within roughly 30 to 60 days when eligibility and local service availability align, but that is not a guaranteed timeline. Timing varies by region and by how quickly documentation is submitted. Ask your local Care Coordination Unit for a current estimate when you call 800-252-8966."
+        },
+        {
+          "question": "Is there a waitlist?",
+          "answer": "No formal statewide waitlist is described in official program materials. Access depends on eligibility, the DON assessment result, and provider availability through the local Care Coordination Unit. Some regions may have more immediate openings than others. Ask your local unit directly about current availability when you apply."
+        },
+        {
+          "question": "What happens if my parent misses the annual redetermination deadline?",
+          "answer": "Missing the redetermination deadline can interrupt or end services, even if your parent is still fully eligible. The Care Coordination Unit initiates the redetermination process, but it is worth tracking the deadline yourself and following up proactively. If services are interrupted due to a missed redetermination, contact your local Care Coordination Unit immediately through 800-252-8966 to find out what steps are needed to restore them."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "800-252-8966",
+      "sourceUrl": "https://ilaging.illinois.gov/programs/ccp.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
+    },
+    {
+      "id": "il-aabd-cash-assistance",
+      "name": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+      "shortName": "AABD Cash",
+      "tagline": "If your parent is 65 or older and on a very limited income in Illinois, this state program may provide monthly cash to help cover food, rent, and utilities, along with a medical card for health care.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Local Illinois Department of Human Services Family Community Resource Center offices",
+            "type": "service-area"
+          },
+          {
+            "name": "Illinois Application for Benefits Eligibility (ABE)",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "AABD Cash Assistance is Illinois's state-funded safety net for older adults and people with disabilities whose income is too low to cover basic living expenses. If your parent is 65 or older (or blind or disabled at any age) and has very little income and few assets, this program can provide a monthly cash grant to help pay for food, rent, utilities, and other everyday needs.\n\nThe program also comes with a MediPlan card, which your parent can use at doctors' offices, hospitals, pharmacies, and clinics for medical care. This means applying for AABD cash may unlock two forms of help at once: the monthly cash grant and medical coverage.\n\nEligibility is more layered than a single income cutoff. The key question is whether your parent receives SSI (Supplemental Security Income) or was denied SSI because their income or resources are just above SSI limits, or because of a federal immigration time limit. Illinois uses SSI-style rules to determine who qualifies. Asset limits matter: $2,000 for one person, or $3,000 if a spouse or dependent lives in the home. Because these rules interact in ways that are not always obvious, it is worth calling IDHS or applying online to get a formal determination.",
+      "savingsRange": "",
+      "savingsSource": "The Illinois Department of Human Services does not publish a single standard monthly payment amount for AABD cash. The grant is determined individually based on the applicant's income and needs. A specific benefit figure cannot be confirmed from official published sources.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older (or blind or disabled at any age)",
+          "Illinois resident",
+          "Income low enough to meet SSI-style rules",
+          "Assets under $2,000 (one person) or $3,000 (with spouse or dependent)",
+          "Receiving SSI, or denied SSI due to income or certain immigration rules"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Cash on hand",
+            "Checking and savings account balances",
+            "Other countable financial resources"
+          ],
+          "exemptAssets": [
+            "Certain assets may be exempt under Illinois/SSI-style rules; IDHS must confirm the current exemption schedule"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or meet specific non-citizen eligibility rules",
+          "Must be receiving SSI, or have been denied SSI because of income, or denied because of the federal time limit that applies to certain immigrants",
+          "Must cooperate with IDHS verification requirements",
+          "Homelessness does not automatically disqualify an applicant"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "The fastest way to start is online at abe.illinois.gov (available 24 hours a day), but the application is not complete until it is signed and submitted with verification documents to an IDHS office.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather key documents before you start",
+            "description": "You will need your parent's Social Security award letter or SSI denial notice, proof of Illinois residency, proof of age or disability, and current bank account balances. Having these ready prevents delays after submission."
+          },
+          {
+            "step": 2,
+            "title": "Start the application online or by phone",
+            "description": "Go to abe.illinois.gov and complete the Application for Cash, SNAP, and Medical Assistance (form IL444-2378B). If you prefer, call IDHS at (866) 311-1119 for help applying by phone, or visit your local IDHS Family Community Resource Center (FCRC) in person."
+          },
+          {
+            "step": 3,
+            "title": "Submit a signed application",
+            "description": "An online application started through ABE must be submitted with a valid signature. If you apply in person at an FCRC, staff will print and process the application. Mail and fax submissions also go to the local FCRC. The application is not active until a signature is on file."
+          },
+          {
+            "step": 4,
+            "title": "Respond to any IDHS verification requests",
+            "description": "After submission, your local FCRC may contact you for additional documents or to schedule an interview. Respond promptly. Missing or late documents are the most common reason applications stall. Submit everything at once when possible."
+          },
+          {
+            "step": 5,
+            "title": "Wait for a written determination",
+            "description": "IDHS will notify your parent in writing of the decision. If approved, the MediPlan card and cash benefit will follow. If denied, the notice will explain the reason and your parent's right to appeal."
+          }
+        ],
+        "processingTime": "No exact statewide processing time is published by IDHS. Timing depends on how quickly verification documents are submitted and how fast the local FCRC processes the case.",
+        "waitlist": null,
+        "tip": "Apply online at abe.illinois.gov even outside business hours so the application date is established. Then gather and submit all verification documents as quickly as possible, because the clock on processing does not run until IDHS has what it needs.",
+        "urls": [
+          {
+            "label": "Apply online through ABE (Illinois Application for Benefits Eligibility)",
+            "url": "https://abe.illinois.gov"
+          },
+          {
+            "label": "IDHS AABD Cash Assistance program page",
+            "url": "https://www.dhs.state.il.us/page.aspx?item=45317"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter, or SSI denial notice showing the reason for denial",
+        "Proof of Illinois residency (utility bill, lease agreement, or government-issued document with a home address)",
+        "Proof of identity (state-issued ID, driver's license, or passport)",
+        "Proof of age (birth certificate or passport, if not already shown by identity document)",
+        "Social Security number (card or documentation showing the number)",
+        "Proof of citizenship or eligible non-citizen immigration status",
+        "Proof of disability or blindness, if applying on that basis (medical records, SSA determination letters, or other documentation IDHS requests)",
+        "Current balances for any checking or savings accounts (IDHS will ask for this to verify assets against the $2,000/$3,000 limit)",
+        "Documentation of any other financial resources or assets (property records, vehicle information, or other accounts)",
+        "Proof of any income received (pension statements, Social Security income verification, or other income sources)",
+        "Information about all household members and any spouse or dependent living in the home"
+      ],
+      "contacts": [
+        {
+          "label": "IDHS Helpline (Application Assistance)",
+          "phone": "(866) 311-1119",
+          "description": "Call to get help applying for AABD cash assistance or to ask eligibility questions. IDHS staff can walk you through the application by phone or direct you to your local Family Community Resource Center.",
+          "hours": "Mon-Fri, business hours (confirm current hours at dhs.state.il.us)"
+        },
+        {
+          "label": "ABE Online Application Portal",
+          "phone": null,
+          "description": "Apply online at abe.illinois.gov, available 24 hours a day, 7 days a week. Starting online establishes your application date even before you submit verification documents.",
+          "hours": "Available 24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 843-6154",
+          "description": "Number listed on dhs.state.il.us",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "This is a cash benefit program, not the same as AABD Medicaid. The names are similar, but these are separate programs. Confirm with IDHS which program (or both) your parent may qualify for.",
+        "If your parent was denied SSI because their income is slightly above SSI limits, they may still qualify for AABD cash. Do not assume an SSI denial means no AABD eligibility.",
+        "Asset limits can disqualify applicants who would otherwise qualify. Bank account balances and other countable resources must stay under $2,000 for one person. Families often overlook savings accounts or other assets. Verify what is counted and what is exempt with IDHS before assuming there is a problem.",
+        "If your parent is undocumented, they will not qualify. But certain lawfully present non-citizens who have been denied SSI because of a federal immigration time limit may still be eligible for AABD cash. Ask IDHS specifically about this if it applies to your family's situation."
+      ],
+      "relatedPrograms": [
+        "AABD Medicaid (Illinois medical coverage for people with disabilities and older adults, separate from the cash grant)",
+        "Supplemental Security Income (SSI, federal cash benefit; AABD cash may fill in when SSI is unavailable)",
+        "SNAP Food Assistance (can be applied for simultaneously through ABE)",
+        "Illinois Low Income Home Energy Assistance Program (LIHEAP, for help with heating and cooling bills)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "AABD Cash vs. AABD Medicaid: These are not the same program",
+          "body": "Illinois has two programs with nearly identical names. AABD Cash Assistance is the monthly cash grant that helps pay for food, rent, and utilities. AABD Medicaid is the health coverage program. Your parent may qualify for one, both, or neither. When you contact IDHS, ask about both programs specifically so you do not miss coverage your parent is entitled to."
+        },
+        {
+          "type": "callout",
+          "title": "The MediPlan card comes with cash approval",
+          "body": "If your parent is approved for AABD cash, they will also receive a MediPlan card for medical care. This card can be used at doctors' offices, hospitals, drug stores, and clinics. One application can unlock both the cash grant and medical coverage."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent was denied SSI. Does that mean they cannot get AABD cash?",
+          "answer": "Not necessarily. AABD cash specifically covers people who were denied SSI because their income is slightly too high or because of certain immigration rules. If your parent is 65 or older (or blind or disabled) and meets the Illinois age, residency, and asset rules, they may still qualify for AABD cash even with an SSI denial. Bring the SSI denial letter to your IDHS application so the caseworker can see the reason for denial."
+        },
+        {
+          "question": "Can my parent keep their house if it is worth more than $2,000?",
+          "answer": "The primary home is generally treated differently from other assets under SSI-style rules, and IDHS applies similar exemptions. The $2,000 asset limit applies to countable resources such as bank account balances, not necessarily to a home your parent lives in. However, the full exemption schedule for AABD cash is not published in a simple public table. Call IDHS at (866) 311-1119 or ask your caseworker to confirm whether specific assets will be counted before assuming your parent is over the limit."
+        },
+        {
+          "question": "Can I apply for AABD cash and SNAP at the same time?",
+          "answer": "Yes. The ABE online application at abe.illinois.gov covers Cash, SNAP, and Medical Assistance on one form (IL444-2378B). Applying for all three at once is the most efficient approach and does not hurt your parent's chances for any individual benefit."
+        },
+        {
+          "question": "How much cash will my parent actually receive each month?",
+          "answer": "Illinois does not publish a fixed monthly payment amount for AABD cash. The grant is calculated individually based on your parent's income and assessed needs. We cannot confirm a specific dollar figure from official published sources. Ask your IDHS caseworker for the calculation once the application is in process."
+        },
+        {
+          "question": "Can a family member apply on behalf of an aging parent?",
+          "answer": "Yes. A family member, legal guardian, or authorized representative can help complete and submit the application. If someone other than your parent will be the primary contact with IDHS, let the caseworker know and provide documentation of your authority to act on their behalf if requested."
+        },
+        {
+          "question": "What if my parent is homeless? Are they still eligible?",
+          "answer": "Homelessness does not automatically disqualify your parent. Illinois AABD rules do not require a permanent address to qualify, though you will still need to provide some form of contact or residency information during the application. Ask the caseworker at your local IDHS Family Community Resource Center how to handle address documentation in this situation."
+        },
+        {
+          "question": "How do I find my parent's local IDHS Family Community Resource Center?",
+          "answer": "Go to dhs.state.il.us and use the office locator, or call (866) 311-1119 and ask IDHS staff which office serves your parent's zip code. The local FCRC is where your application is ultimately processed and where you will submit verification documents."
+        },
+        {
+          "question": "What happens if my parent's income or assets change after they are approved?",
+          "answer": "Your parent is required to report changes in income, assets, or household status to IDHS. Changes can affect the benefit amount or eligibility. Failing to report changes can result in overpayment that must be repaid. Contact your local FCRC or call (866) 311-1119 to report any change as soon as it happens."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "CurrencyDollar",
+      "phone": "(866) 311-1119",
+      "sourceUrl": "https://www.dhs.state.il.us/page.aspx?item=45317",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8663111119"
+          ],
+          "to": "(800) 843-6154",
+          "source": "https://www.dhs.state.il.us/page.aspx?item=30370",
+          "flaggedAt": "2026-10-06T12:20:53.699Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "il-liheap-energy-assistance",
+      "name": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "shortName": "Home Energy Help",
+      "tagline": "If your parent is 60+ and struggling to pay heating or electric bills, Illinois can pay a portion of their utility costs directly to the utility company, with no asset test and no repayment required.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "federal",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Local Community Action Agencies / administering agencies listed by the Illinois Department of Commerce and Economic Opportunity",
+            "type": "service-area"
+          },
+          {
+            "name": "Utility-specific service areas such as Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, and Peoples Gas",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 60 or older and living on a fixed income, Illinois's LIHEAP program can pay a portion of their heating or electric bill directly to their utility company. The money never passes through your parent's hands, and there is no repayment obligation. The benefit is not a general cash grant; it applies specifically to home energy costs.\n\nIllinois administers LIHEAP through local Community Action Agencies, meaning the agency assigned to your parent's county handles intake and payment. For the 2026-2027 program year, households at or below 300% of the Federal Poverty Guidelines may qualify. A single-person household can have up to $3,990 in gross income per month (or roughly $47,880 per year) and still be eligible.\n\nBecause LIHEAP is funded with a fixed federal and state appropriation, the program stops accepting applications when money runs out, sometimes before the published August 13, 2027 end date. Adults 60 and older can apply starting October 1, 2026, one month before the general public. Applying early is the single most important thing you can do.",
+      "savingsRange": "",
+      "savingsSource": "The Illinois LIHEAP source materials reviewed do not publish a fixed or maximum benefit amount. Benefit amounts vary by household size and utility situation. No dollar figure was verified from official sources.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 60+ for priority access starting October 1, 2026",
+          "Illinois resident responsible for home energy costs",
+          "Monthly income at or below $3,990 (single person) for 2026-2027",
+          "No asset test",
+          "Applications accepted until funds run out"
+        ],
+        "ageRequirement": "60+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 3990
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5410
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 6830
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 8250
+          },
+          {
+            "householdSize": 5,
+            "monthlyLimit": 9670
+          },
+          {
+            "householdSize": 6,
+            "monthlyLimit": 11090
+          },
+          {
+            "householdSize": 7,
+            "monthlyLimit": 12510
+          },
+          {
+            "householdSize": 8,
+            "monthlyLimit": 13930
+          }
+        ],
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a resident of Illinois.",
+          "Must be responsible for paying home heating or energy costs (either directly billed or included in rent, depending on local agency rules).",
+          "Income is calculated on gross household income for the 30 days before application, not annual tax returns.",
+          "Priority period begins October 1, 2026 for adults 60+, people with disabilities, families with children age 5 or under, and households with a shutoff notice or critically low propane.",
+          "General applications open November 1, 2026 for all other income-eligible households.",
+          "Applications are accepted until funding is exhausted, which may happen before August 13, 2027."
+        ],
+        "povertyLevelReference": "300% FPL"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at helpillinoisfamilies.com, call 1-877-411-9276, or contact your parent's county Community Action Agency in person starting October 1, 2026.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Confirm your parent qualifies for the priority window",
+            "description": "Adults 60 and older may apply starting October 1, 2026. Everyone else must wait until November 1, 2026. Because funding is capped, applying in October gives your parent the best chance. Confirm your parent's county agency at dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html."
+          },
+          {
+            "step": 2,
+            "title": "Gather income proof for the last 30 days",
+            "description": "Illinois calculates income based on gross household income for the 30 days before the application date, not the prior year's tax return. Gather Social Security award letters, pension statements, or pay stubs that cover the most recent 30-day period. You will also need proof of residency and your parent's most recent utility bill."
+          },
+          {
+            "step": 3,
+            "title": "Submit the Request for Services form",
+            "description": "Go to helpillinoisfamilies.com to submit the Request for Services form online during your parent's application month. You can also call 1-877-411-9276 to apply by phone or locate a local agency for in-person help. The local agency will contact your parent to complete the full application."
+          },
+          {
+            "step": 4,
+            "title": "Respond promptly to the local agency",
+            "description": "Because intake is handled by county-level Community Action Agencies, your parent or a family member may receive a follow-up call or appointment request. Delays in responding can result in the application being set aside. If you haven't heard back within two weeks, call 1-877-411-9276 to check status."
+          }
+        ],
+        "processingTime": "Processing time is not stated in Illinois program materials. Contact your local Community Action Agency for current turnaround estimates, as it varies by county and application volume.",
+        "waitlist": "There is no formal waitlist. Illinois operates on a first-come, first-served basis until funding is exhausted. If funds run out, the program closes, and no further applications are accepted until the next program year.",
+        "tip": "Apply as close to October 1 as possible if your parent is 60+. The priority window is real, but so is the funding cap. Waiting until November puts you in line with the general public and after the first wave of applications.",
+        "urls": [
+          {
+            "label": "Apply Online: Help Illinois Families",
+            "url": "https://helpillinoisfamilies.com"
+          },
+          {
+            "label": "Illinois DCEO: How to Apply for LIHEAP",
+            "url": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Most recent utility bill for your parent's account (showing the account holder name and service address)",
+        "Proof of gross income for all household members for the 30 days before application: this means a current Social Security award letter, pension or retirement statement, or recent pay stubs, not last year's tax return",
+        "Proof of Illinois residency (a utility bill, lease agreement, or state-issued document showing the current address)",
+        "Proof of age for adults claiming priority status (birth certificate, driver's license, or state ID showing date of birth)",
+        "Heating vendor account information if your parent uses propane or fuel oil rather than a utility billed through Ameren Illinois, ComEd, Nicor Gas, North Shore Gas, or Peoples Gas",
+        "Any shutoff or disconnection notice if your parent's utility service is at risk, which may qualify the household for crisis processing",
+        "Propane tank documentation showing critically low levels, if applicable",
+        "Names and dates of birth for all persons living in the household",
+        "Documentation of disability if claiming priority status on that basis (such as an SSI or SSDI award letter or a letter from a physician)"
+      ],
+      "contacts": [
+        {
+          "label": "Illinois LIHEAP Hotline",
+          "phone": "1-877-411-9276",
+          "description": "Apply by phone, ask about eligibility, or get connected to your local Community Action Agency for in-person help.",
+          "hours": "Contact the hotline for current hours; hours may vary by season and program period."
+        },
+        {
+          "label": "Apply Online: Help Illinois Families",
+          "phone": null,
+          "description": "Submit a Request for Services form online at helpillinoisfamilies.com. Available during the program year starting October 1, 2026.",
+          "hours": null
+        },
+        {
+          "label": "Illinois DCEO Program Page",
+          "phone": null,
+          "description": "Find your county's local administering agency and read current program-year rules at dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html.",
+          "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(833) 711-0374",
+          "description": "Number listed on dceo.illinois.gov",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "If your parent has received a shutoff notice or is in a heating crisis with critically low propane, say so when you call or apply online. Crisis situations may be handled separately and more quickly than standard applications.",
+        "Income is calculated on the 30 days before the application date, not the prior calendar year. A tax return alone is not sufficient; you need current award letters or statements.",
+        "The exact benefit amount is not published as a fixed number. It varies by household size, utility type, and available funding. The local agency will tell you what your parent's household is eligible to receive after the application is reviewed.",
+        "Because each county's Community Action Agency runs its own intake, the process, turnaround time, and available appointment slots differ across Illinois. If your parent is in a rural county, calling the hotline first to confirm the local agency and their current intake process will save time."
+      ],
+      "relatedPrograms": [
+        "Illinois Home Weatherization Assistance Program (IHWAP)",
+        "Illinois SNAP (Supplemental Nutrition Assistance Program)",
+        "Illinois Circuit Breaker / Senior Property Tax Relief",
+        "Percentage of Income Payment Plan (PIPP) through Illinois utility companies"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "The funding cap is real",
+          "body": "LIHEAP is not an entitlement program. Illinois receives a fixed allocation each year. When the money is gone, the program closes, even if the calendar says applications are open through August 13, 2027. Adults 60+ who apply starting October 1 are in the best position. Waiting until December or January is a meaningful risk."
+        },
+        {
+          "type": "prose",
+          "title": "How the income test actually works",
+          "body": "Illinois measures income differently than most people expect. The program looks at gross household income for the 30 days before you apply, not your parent's annual income or last year's tax return. This matters in two ways. First, if your parent recently had a one-time income event, it may or may not affect the 30-day calculation depending on when it happened. Second, if your parent's income recently dropped (due to a job loss or a benefit reduction), they may now qualify even if they didn't before. The 2026-2027 limit for a one-person household is $3,990/month gross. For a two-person household (your parent and one other resident), the limit is $5,410/month."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent rents their apartment. Can they still get LIHEAP if their landlord pays the heat?",
+          "answer": "This depends on the local agency's rules and how the lease is structured. In some cases, renters whose heat is included in rent may still be eligible under certain program provisions. When you call 1-877-411-9276 or contact the local Community Action Agency, explain that heat is landlord-paid and ask whether your parent's household qualifies. Do not assume they are ineligible without asking."
+        },
+        {
+          "question": "My parent's income is just over the limit. Is there any flexibility?",
+          "answer": "No. The 2026-2027 income limit for a one-person household is $3,990/month gross. If your parent's gross income in the 30 days before application exceeds that, the household does not qualify for that application period. However, because income is measured over the prior 30 days, it is worth applying in a month when income was lower, if that reflects your parent's normal situation. Call 1-877-411-9276 to discuss your specific case."
+        },
+        {
+          "question": "Can I apply on behalf of my elderly parent if they can't do it themselves?",
+          "answer": "Yes. A family member or authorized representative can apply on behalf of a parent who is unable to apply on their own due to age, disability, or health. Be prepared to explain the representative relationship and bring documentation of the household's income and utility account. Contact your local Community Action Agency or call 1-877-411-9276 to confirm what documentation they require for a representative applicant."
+        },
+        {
+          "question": "My parent has savings in the bank. Does that disqualify them?",
+          "answer": "No. Illinois LIHEAP has no asset test. Savings, investment accounts, and property are not counted. The only financial test is household gross income for the 30 days before application. A parent with significant savings but modest monthly income can still qualify."
+        },
+        {
+          "question": "What happens if my parent gets a shutoff notice before they've applied?",
+          "answer": "Apply immediately and tell the hotline or local agency that there is an active shutoff or disconnection notice. Crisis situations may be processed differently and more quickly than standard applications. Bring the shutoff notice documentation when you apply. Call 1-877-411-9276 and describe the situation on the first call."
+        },
+        {
+          "question": "Can my parent receive LIHEAP and also apply for the Illinois Weatherization Assistance Program at the same time?",
+          "answer": "Yes. LIHEAP and the Illinois Home Weatherization Assistance Program (IHWAP) are separate programs and can be used together. Weatherization pays for physical improvements to the home (insulation, furnace repairs, air sealing) that reduce future energy bills, while LIHEAP pays a portion of current utility costs. Ask your local Community Action Agency about IHWAP when you apply for LIHEAP, as many agencies administer both."
+        },
+        {
+          "question": "The program says it runs through August 2027. Does that mean my parent can wait and apply in the spring?",
+          "answer": "Waiting is a significant risk. The August 13, 2027 date is the latest the program can run, but it closes as soon as funds are exhausted, which can happen months earlier. Illinois has historically seen LIHEAP funds run out before the published end date in prior years. Adults 60+ should apply as close to October 1, 2026 as possible."
+        },
+        {
+          "question": "How does my parent know how much they will receive?",
+          "answer": "Illinois does not publish a fixed benefit amount. The payment varies by household size, energy costs, utility type, and available program funding. Your parent's local Community Action Agency will calculate the benefit as part of the application review and notify your parent of the amount before or at the time of payment. The benefit is paid directly to the utility company or heating vendor, not to your parent."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Lightning",
+      "phone": "1-877-411-9276",
+      "sourceUrl": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18774119276"
+          ],
+          "to": "(833) 711-0374",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance.html",
+          "flaggedAt": "2026-10-06T12:20:53.699Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "il-senior-property-tax-freeze",
+      "name": "Senior Citizens Property Tax Freeze",
+      "shortName": "Property Tax Freeze",
+      "tagline": "If your parent owns their Illinois home and earns under $75,000/year, this program can stop their property's assessed value from rising, keeping future tax bills from growing.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Cook County Assessor's Office, 118 North Clark Street, Room 320, Chicago, IL 60602, 312.443.7550",
+            "type": "service-area"
+          },
+          {
+            "name": "Kane County Assessment Office, 719 Batavia Avenue, Geneva, IL 60134-3000",
+            "type": "service-area"
+          },
+          {
+            "name": "Winnebago County Supervisor of Assessments, 404 Elm St. Rm. 301, Rockford, IL 61101, 815.319.4460",
+            "type": "service-area"
+          },
+          {
+            "name": "County assessor or supervisor of assessments office in the applicant's county of residence",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older and owns their Illinois home, this exemption can freeze the assessed value of their property at the level it was when they first qualified. That means even if neighboring home values rise and the local tax assessor reassesses the area, your parent's taxable base stays the same.\n\nThe formal name is the Low-Income Senior Citizens Assessment Freeze Homestead Exemption. To qualify, total household income must be $75,000 or less. That figure includes income from everyone who lives in and uses the home as their primary residence, not just your parent's income alone.\n\nOne important limitation: this freezes the assessed value, not the tax bill itself. If local tax rates increase, your parent's actual property tax payment can still go up even with the freeze in place. The exemption protects against rising property valuations; it does not cap the overall tax rate. Your parent must apply each year to keep the exemption active.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older by December 31 of the assessment year",
+          "Total household income at or below $75,000",
+          "Must own and occupy the home as primary residence",
+          "Must have owned and occupied the home for the required period (typically one to two consecutive years, depending on county)",
+          "Annual renewal required to keep the exemption"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Applicant must own and occupy the property as a principal residence on January 1 of the assessment year.",
+          "Total household income includes income of all persons using the property as their principal dwelling, not only the applicant.",
+          "Applicant must have owned and occupied the home for the consecutive period specified by the local county assessor, commonly the prior year and the current year.",
+          "Applicant must file a renewal application each year; the exemption is not automatically continued.",
+          "Some counties require that the senior homestead exemption already be in place before the freeze can be granted."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply using form PTAX-340 through your parent's county assessor office, online, by mail, or in person, typically before the local deadline in the spring or early summer.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Locate your county assessor's office",
+            "description": "The program is administered locally. Find your parent's county assessor or supervisor of assessments office by visiting tax.illinois.gov or searching '[County name] assessor Illinois.' Cook County residents can go to cookcountyassessor.com or call 312-443-7550. Winnebago County residents can call 815-319-4460."
+          },
+          {
+            "step": 2,
+            "title": "Get form PTAX-340",
+            "description": "Download or request the PTAX-340 Low-Income Senior Citizens Assessment Freeze Homestead Exemption form from your county assessor's office. Some counties provide their own version of this form with local instructions; use the version your county provides."
+          },
+          {
+            "step": 3,
+            "title": "Gather required documents",
+            "description": "You will need your parent's completed PTAX-340, proof of age if the assessor requests it, the property index number or property address, and federal income tax return with all schedules if the county form instructions require it."
+          },
+          {
+            "step": 4,
+            "title": "Submit before your county's deadline",
+            "description": "Filing deadlines are set locally; many counties use a deadline around July 1 for the current assessment year. Submit online through your county assessor's portal if available, or mail or deliver the completed form and documents to the assessor's office."
+          },
+          {
+            "step": 5,
+            "title": "Renew every year",
+            "description": "This exemption does not renew automatically. Your parent must file a new PTAX-340 each year to keep the freeze in place. Set a reminder for early spring so you have time to gather documents before the local deadline."
+          }
+        ],
+        "processingTime": "Processing is handled locally by county assessors. No single statewide timeline applies. Contact your county assessor after submission to ask when decisions are typically issued.",
+        "waitlist": null,
+        "tip": "Call your parent's county assessor office before submitting to confirm the current year's filing deadline and whether any additional local documents are required. Deadlines and requirements vary by county and the statewide form instructions alone may not reflect local rules.",
+        "urls": [
+          {
+            "label": "Illinois Department of Revenue: Property Tax Relief",
+            "url": "https://tax.illinois.gov/localgovernments/property/taxrelief.html"
+          },
+          {
+            "label": "Cook County Assessor: Senior Freeze Exemption",
+            "url": "https://www.cookcountyassessor.com/senior-freeze-exemption"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Completed PTAX-340 form (available from your county assessor's office)",
+        "Property index number or property address for the home",
+        "Proof of age if requested by the county assessor (birth certificate, passport, or government-issued ID showing date of birth)",
+        "Federal income tax return with all schedules, if required by your county's form instructions",
+        "Any additional local documents requested by your specific county assessor"
+      ],
+      "contacts": [
+        {
+          "label": "Cook County Assessor's Office",
+          "phone": "312-443-7550",
+          "description": "Apply for the Senior Freeze Exemption in Cook County. Located at 118 North Clark Street, Room 320, Chicago, IL 60602.",
+          "hours": "Contact office for current hours"
+        },
+        {
+          "label": "Winnebago County Supervisor of Assessments",
+          "phone": "815-319-4460",
+          "description": "Apply for the Senior Freeze Exemption in Winnebago County. Located at 404 Elm St., Room 301, Rockford, IL 61101.",
+          "hours": "Contact office for current hours"
+        },
+        {
+          "label": "Illinois Department of Revenue: Property Tax",
+          "phone": "217-782-3336",
+          "description": "Statewide information on Illinois property tax exemptions. Can help identify your correct county assessor office if you are unsure where to file.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        }
+      ],
+      "applicationNotes": [
+        "Income is measured as total household income, meaning all income from everyone living in the home counts toward the $75,000 limit, not just your parent's personal income. If other adults live with your parent, their income is included.",
+        "This exemption freezes the assessed value of the property, not the tax rate. If local governments raise tax rates, your parent's tax bill can still increase even with the freeze active."
+      ],
+      "relatedPrograms": [
+        "Senior Citizens Homestead Exemption (Illinois)",
+        "Senior Citizens Real Estate Tax Deferral Program (Illinois)",
+        "Illinois Circuit Breaker / Senior Property Tax Grant (check current status with your county assessor)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "What 'freezing assessed value' actually means",
+          "body": "Illinois property taxes are calculated by multiplying a tax rate against the equalized assessed value (EAV) of your parent's home. When property values rise in the area, the EAV normally rises too, pushing the tax bill up. This exemption locks the EAV at the base year value from when your parent first qualified. The taxable base stops growing. But if local tax rates increase, the bill can still rise because the rate is applied to the frozen base. The freeze protects against one source of tax increases, not all of them."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does every adult living in my parent's home have their income counted toward the $75,000 limit?",
+          "answer": "Yes. The $75,000 income limit applies to total household income, which includes the income of all persons who use the property as their principal dwelling on January 1 of the assessment year. If an adult child or other family member lives with your parent and earns income, that income counts. This is one of the most common reasons an otherwise eligible senior does not qualify."
+        },
+        {
+          "question": "My parent's tax bill went up last year. Does that mean the freeze isn't working?",
+          "answer": "Not necessarily. The freeze stops the assessed value from increasing, but it does not cap the tax rate. If local governments, school districts, or other taxing bodies raised their rates, your parent's bill can still go up even with the freeze in place. Check whether the EAV on your parent's tax bill stayed flat from year to year; if it did, the freeze is working as designed."
+        },
+        {
+          "question": "What happens if my parent forgets to renew the application one year?",
+          "answer": "The exemption does not carry over automatically. If your parent misses the renewal deadline, the freeze is not applied for that tax year and the assessed value can increase. Contact your county assessor as soon as possible if a deadline was missed; some counties may have a process to address late filings, but this is not guaranteed. Building a calendar reminder in early spring each year is the simplest way to avoid this."
+        },
+        {
+          "question": "Can I file the application on behalf of my parent?",
+          "answer": "Many county assessor offices will work with an adult child or authorized representative, particularly if the senior has difficulty visiting the office or completing paperwork. Contact your parent's county assessor directly to ask about their process for representative filings. Having a signed authorization or power of attorney document available may be helpful."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "House",
+      "phone": "312-443-7550",
+      "sourceUrl": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3124437550",
+            "8153194460",
+            "2177823336"
+          ],
+          "to": "8007328866",
+          "source": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
+        }
+      ]
+    },
+    {
+      "id": "il-benefit-access-program",
+      "name": "Illinois Benefit Access Program",
+      "shortName": "Benefit Access",
+      "tagline": "If your parent is 65+ and earns under $33,562/year, they may qualify for free public transit rides and a discount on their annual vehicle registration fee.",
+      "programType": "benefit",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Illinois Department on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Illinois Secretary of State facilities for license plate discounts",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Area Agencies on Aging",
+            "type": "service-area"
+          },
+          {
+            "name": "Senior Health Assistance Program offices",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "The Illinois Benefit Access Program gives qualifying seniors two concrete perks: free rides on participating public transit systems across Illinois, and a reduced annual vehicle registration fee through the Secretary of State. One application covers both benefits.\n\nYour parent qualifies if they are 65 or older, live in Illinois, and earned under $33,562 last year (single) or $44,533 (two-person household). There is no asset test. Eligibility is based entirely on age, residency, and last year's total gross income.\n\nThis is not a cash benefit. But for a parent who relies on the bus or still has a registered vehicle, these savings can reduce real out-of-pocket costs each year without any monthly paperwork or ongoing reporting.",
+      "savingsRange": "",
+      "savingsSource": "Free service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or 16+ with a qualifying disability)",
+          "Illinois resident",
+          "Income below $33,562/year for a single person",
+          "No asset test",
+          "One application, two benefits"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be an Illinois resident at the time of application.",
+          "Income is calculated from the last closed tax year (total gross income), not current monthly income.",
+          "If married and living together on December 31 of the prior year, both spouses' incomes are counted toward the household limit.",
+          "If a spouse died during the prior year, the applicant files as single and counts only their own income.",
+          "A Qualified Additional Resident (a non-spouse household member) adds to household size but their income is not counted.",
+          "For persons with disabilities, the minimum age is 16 before January 1 of the current year."
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "online",
+        "summary": "Apply online through the Illinois Department on Aging; there is no paper application, and the process takes about 12 weeks to complete.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather last year's income information",
+            "description": "Pull together your parent's total gross income from the last closed tax year. If they were married and living with their spouse on December 31 of that year, you will need the spouse's income too. Social Security statements, pension letters, and any other income sources all count."
+          },
+          {
+            "step": 2,
+            "title": "Submit the online application",
+            "description": "Go to https://ilaging.illinois.gov/benefitsaccess/benefit-access-online-application.html and complete the Benefit Access Application. This is the only way to apply; paper applications are not available. If your parent needs help completing the form, call 1-800-252-8966 (TTY: 1-888-206-1327) or contact your local Area Agency on Aging."
+          },
+          {
+            "step": 3,
+            "title": "Wait for the eligibility decision",
+            "description": "Expect approximately 12 weeks for the Illinois Department on Aging to process the application and determine eligibility. You may be asked to provide proof of age, disability, or residency if the department needs to verify information."
+          },
+          {
+            "step": 4,
+            "title": "Activate the license plate discount",
+            "description": "After approval, wait at least 10 business days before visiting an Illinois Secretary of State facility to use the license plate fee discount. The transit benefit activates separately through participating local transit systems."
+          }
+        ],
+        "processingTime": "Approximately 12 weeks; after approval, allow 10 business days before the license plate discount is usable.",
+        "waitlist": null,
+        "tip": "Income is based on last year's taxes, not your parent's current monthly income. If they had a higher-earning year last year but income has since dropped, they may still be ineligible until the next tax year's figures apply. Check again next year if they miss the current threshold.",
+        "urls": [
+          {
+            "label": "Benefit Access Online Application",
+            "url": "https://ilaging.illinois.gov/benefitsaccess/benefit-access-online-application.html"
+          },
+          {
+            "label": "Illinois Benefit Access Program Overview",
+            "url": "https://ilaging.illinois.gov/benefitsaccess.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Total gross income figure from the last closed tax year (tax return, Social Security award letter, or pension statements)",
+        "Proof of Illinois residency (utility bill, lease agreement, or state-issued ID showing Illinois address)",
+        "Proof of age (birth certificate, passport, or state-issued ID) if requested during review",
+        "Spouse's income information if married and living together on December 31 of the prior year",
+        "Documentation of disability status if applying on the basis of disability rather than age",
+        "Information about any Qualified Additional Residents in the household (names and relationship) to establish correct household size"
+      ],
+      "contacts": [
+        {
+          "label": "Illinois Department on Aging Helpline",
+          "phone": "1-800-252-8966",
+          "description": "Main line for the Benefit Access Program. Call here to get help completing the online application or to ask eligibility questions.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "TTY Line (hearing impaired)",
+          "phone": "1-888-206-1327",
+          "description": "TTY access for the same Benefit Access Program helpline.",
+          "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Local Area Agency on Aging",
+          "phone": "1-800-252-8966",
+          "description": "Ask the main helpline to connect you with your local Area Agency on Aging or Senior Health Assistance Program office if your parent needs in-person help completing the application.",
+          "hours": "Varies by location"
+        }
+      ],
+      "applicationNotes": [
+        "The online application is the only way to apply. There is no paper version. If your parent cannot use a computer, call 1-800-252-8966 and ask for assistance through a local Senior Health Assistance Program office.",
+        "If your parent was married last year but their spouse died before December 31, they file as single and count only their own income. This can shift eligibility for households that were previously over the two-person limit."
+      ],
+      "relatedPrograms": [
+        "Illinois Circuit Breaker (Property Tax Relief Credit for seniors)",
+        "Illinois Low Income Home Energy Assistance Program (LIHEAP)",
+        "Community Care Program (in-home services for seniors)",
+        "Illinois SNAP (Supplemental Nutrition Assistance Program)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "No asset test",
+          "body": "Unlike many senior benefit programs, the Benefit Access Program does not count savings, home value, or investments. Eligibility depends only on age, Illinois residency, and last year's income."
+        },
+        {
+          "type": "callout",
+          "title": "Transit benefit depends on your parent's local system",
+          "body": "The Ride Free Transit Benefit works on participating Illinois public transit systems. Coverage depends on which systems operate in your parent's area. Contact your local transit provider after approval to confirm your parent's route is included."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My parent's income was higher last year due to a one-time event (like selling a property). Can they still apply next year?",
+          "answer": "Yes. Eligibility is recalculated each year based on the most recently closed tax year. If that one-time income event does not repeat, your parent's income in the next tax year may fall under the threshold. Reapply when the lower-income year becomes the basis for review."
+        },
+        {
+          "question": "My parent lives with me. Does my income count toward the household limit?",
+          "answer": "It depends on your relationship. If you are a spouse who was living with your parent on December 31 of the prior year, your income counts. If you are an adult child or another non-spouse resident, the program may classify you as a Qualified Additional Resident. A Qualified Additional Resident increases the household size (raising the income limit) but their income is not counted. Call 1-800-252-8966 to clarify how your specific living situation is classified."
+        },
+        {
+          "question": "My parent applied but has not heard anything after several weeks. What should they do?",
+          "answer": "Processing takes approximately 12 weeks. If it has been longer than that and no decision has arrived, call the Illinois Department on Aging helpline at 1-800-252-8966. Have the application confirmation information ready. Do not reapply without checking first, as submitting a second application can slow the process."
+        },
+        {
+          "question": "Can I apply for Benefit Access on behalf of my elderly parent?",
+          "answer": "Yes. You can complete the online application at https://ilaging.illinois.gov/benefitsaccess/benefit-access-online-application.html on your parent's behalf. You will need their income and residency information to complete the form. If you need additional help, call 1-800-252-8966 or visit a local Area Agency on Aging."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": null,
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "Bus",
+      "phone": "1-800-252-8966",
+      "sourceUrl": "https://ilaging.illinois.gov/benefitsaccess.html",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {

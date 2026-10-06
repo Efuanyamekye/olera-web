@@ -196,7 +196,9 @@ function FirstStep({ p, callFor, cardRef }: { p: FinderProgram; callFor: string;
   const sayStart = isAgency
     ? `Hi, I'm looking for help finding benefits ${callFor}`
     : `Hi, I'm calling to ask about ${p.shortName}. I'd like to apply ${callFor}`;
-  const sayEnd = isAgency ? ". Can I talk with a benefits counselor?" : ". Could you help me get started?";
+  const sayEnd = isAgency
+    ? ". Can I talk with a benefits counselor?"
+    : `. Could you help me get started?${p.needsMedicaid ? " It needs Medicaid. If they don't have it yet, can we start that application on this call too?" : ""}`;
   const docs = docsOpen ? p.docs : p.docs.slice(0, 1).map(shortDoc);
 
   return (

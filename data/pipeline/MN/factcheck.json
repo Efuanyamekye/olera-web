@@ -1,14 +1,14 @@
 {
   "state": "MN",
   "stateName": "Minnesota",
-  "checkedAt": "2026-10-02T07:39:39.575Z",
-  "total": 14,
+  "checkedAt": "2026-10-06T12:23:48.852Z",
+  "total": 17,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 6,
-  "highSeverityFlags": 2,
+  "programsWithFlags": 7,
+  "totalFlags": 12,
+  "highSeverityFlags": 4,
   "programs": [
     {
       "programId": "medical-assistance-medicaid",
@@ -21,7 +21,8 @@
         "assets_couple": 6000,
         "phones": [
           "8553667873",
-          "211"
+          "211",
+          "8006573672"
         ],
         "hasVerifiableFacts": true
       },
@@ -31,14 +32,14 @@
         "income_2": null,
         "assets_individual": 3000,
         "assets_couple": 6000,
-        "phone": "8006573672",
+        "phone": "6514312670",
         "sources": {
-          "age": "https://mn.gov/dhs/health-care/age-65-older/",
-          "income": "https://mn.gov/dhs/health-care/apply/income-asset-limits/",
+          "age": "https://hcopub.dhs.state.mn.us/epm/2_1_3_1.htm",
+          "income": null,
           "assets": "https://hcopub.dhs.state.mn.us/epm/2_1_3_1.htm",
-          "phone": "https://mn.gov/dhs/health-care/contact-us/consumer-support/"
+          "phone": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/"
         },
-        "notes": "Minnesota Medical Assistance is current and not discontinued; the senior pathway applies at age 65+ and uses MA-ABD asset limits."
+        "notes": "Minnesota Medical Assistance has a senior pathway for age 65+; current official source located for age and asset limits. No separate income value was requested here, and a current authoritative income citation for the senior pathway was not retrieved in the gathered results."
       },
       "flags": [
         {
@@ -46,12 +47,13 @@
           "severity": "medium",
           "draftValue": [
             "8553667873",
-            "211"
+            "211",
+            "8006573672"
           ],
-          "verifiedValue": "8006573672"
+          "verifiedValue": "6514312670"
         }
       ],
-      "notes": "Minnesota Medical Assistance is current and not discontinued; the senior pathway applies at age 65+ and uses MA-ABD asset limits."
+      "notes": "Minnesota Medical Assistance has a senior pathway for age 65+; current official source located for age and asset limits. No separate income value was requested here, and a current authoritative income citation for the senior pathway was not retrieved in the gathered results."
     },
     {
       "programId": "elderly-waiver",
@@ -73,18 +75,18 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 3000,
-        "assets_couple": 3000,
+        "assets_couple": null,
         "phone": "8003332433",
         "sources": {
           "age": "https://mn.gov/dhs/disability-aging/home-and-community-services/programs-and-services/elderly-waiver/",
           "income": "https://mn.gov/dhs/disability-aging/home-and-community-services/programs-and-services/elderly-waiver/",
           "assets": "https://hcopub.dhs.state.mn.us/hcpmstd/03_40_25.htm",
-          "phone": "https://millelacs.mn.gov/FAQ.aspx?QID=143"
+          "phone": "https://mn.gov/dhs/disability-aging/home-and-community-services/programs-and-services/elderly-waiver/"
         },
-        "notes": "EW is current in Minnesota; official DHS sources confirm age 65+ and a $3,000 countable asset limit per applicant. EW uses MA/SIS income rules rather than a single fixed income cap, so income fields are null."
+        "notes": "EW is current and not renamed; official sources show age 65+ and a $3,000 individual asset limit. No separate income cap was found in the retrieved official sources because eligibility depends on MA/spenddown and waiver rules."
       },
       "flags": [],
-      "notes": "EW is current in Minnesota; official DHS sources confirm age 65+ and a $3,000 countable asset limit per applicant. EW uses MA/SIS income rules rather than a single fixed income cap, so income fields are null."
+      "notes": "EW is current and not renamed; official sources show age 65+ and a $3,000 individual asset limit. No separate income cap was found in the retrieved official sources because eligibility depends on MA/spenddown and waiver rules."
     },
     {
       "programId": "msho-senior-health-options",
@@ -107,14 +109,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6514312517",
+        "phone": "8887406013",
         "sources": {
           "age": "https://mn.gov/dhs/health-care/age-65-older/msho/",
           "income": null,
           "assets": null,
-          "phone": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/"
+          "phone": "https://mn.gov/dhs/health-care/contact-us/health-plan-member-services/"
         },
-        "notes": "Current Minnesota DHS guidance shows MSHO is for people age 65 or older; no separate income or asset test was found in the retrieved official source."
+        "notes": "Current Minnesota DHS guidance shows MSHO is for people age 65+ who are eligible for Medical Assistance and enrolled in Medicare Parts A and B; no income or asset test was found on the retrievable official source page."
       },
       "flags": [
         {
@@ -124,10 +126,10 @@
             "6514312670",
             "9528837979"
           ],
-          "verifiedValue": "6514312517"
+          "verifiedValue": "8887406013"
         }
       ],
-      "notes": "Current Minnesota DHS guidance shows MSHO is for people age 65 or older; no separate income or asset test was found in the retrieved official source."
+      "notes": "Current Minnesota DHS guidance shows MSHO is for people age 65+ who are eligible for Medical Assistance and enrolled in Medicare Parts A and B; no income or asset test was found on the retrievable official source page."
     },
     {
       "programId": "medicare-savings-programs",
@@ -140,24 +142,25 @@
         "assets_couple": 18000,
         "phones": [
           "6514312670",
-          "8006573739"
+          "8006573739",
+          "8663332466"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 1330,
-        "income_2": 1799,
+        "income_1": 1325,
+        "income_2": 1784,
         "assets_individual": 10000,
         "assets_couple": 18000,
-        "phone": "8663332466",
+        "phone": "8003332433",
         "sources": {
           "age": null,
-          "income": "https://hcopub.dhs.state.mn.us/epm/4_2_1_7.htm",
-          "assets": "https://hcopub.dhs.state.mn.us/hcpmsrc/03_35_05.htm",
-          "phone": "https://mn.db101.org/mn/programs/health_coverage/medicare2/program2b.htm"
+          "income": "https://www.mnaging.org/en/advisor/sll.html",
+          "assets": "https://hcopub.dhs.state.mn.us/epm/4_2_3_1.htm",
+          "phone": "https://www.cms.gov/about-cms/contact/directory/minnesota-state-health-insurance-assistance-program-senior-linkage-line/1562111"
         },
-        "notes": "Minnesota Medicare Savings Programs (QMB/SLMB/QI) still use income and asset limits; age does not apply as a separate eligibility test. The phone number source is a non-government guide that cites Minnesota assistance contact information."
+        "notes": "Minnesota Medicare Savings Programs (QMB/SLMB/QI) are current; no age test applies, income limits effective 7/1/25–6/30/26, and asset limits are the same for QMB/SLMB/QI."
       },
       "flags": [
         {
@@ -165,12 +168,13 @@
           "severity": "medium",
           "draftValue": [
             "6514312670",
-            "8006573739"
+            "8006573739",
+            "8663332466"
           ],
-          "verifiedValue": "8663332466"
+          "verifiedValue": "8003332433"
         }
       ],
-      "notes": "Minnesota Medicare Savings Programs (QMB/SLMB/QI) still use income and asset limits; age does not apply as a separate eligibility test. The phone number source is a non-government guide that cites Minnesota assistance contact information."
+      "notes": "Minnesota Medicare Savings Programs (QMB/SLMB/QI) are current; no age test applies, income limits effective 7/1/25–6/30/26, and asset limits are the same for QMB/SLMB/QI."
     },
     {
       "programId": "snap-food-benefits",
@@ -193,16 +197,16 @@
         "age": null,
         "income_1": 2660,
         "income_2": 3607,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 4750,
+        "assets_couple": 4750,
         "phone": "8006573698",
         "sources": {
           "age": null,
-          "income": "https://mn.gov/dhs/mnfoodhelper/",
-          "assets": "https://dcyf.mn.gov/snap-frequently-asked-questions",
+          "income": "https://dcyf.mn.gov/snap",
+          "assets": "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=cm_001581",
           "phone": "https://www.fns.usda.gov/snap-directory-entry/minnesota"
         },
-        "notes": "SNAP has no senior-specific minimum age test; seniors are included under general eligibility. Minnesota SNAP uses income limits and does not publish a countable financial asset test for standard SNAP eligibility."
+        "notes": "Minnesota SNAP has no senior-specific minimum age test; the eligible 'elderly' pathway is age 60+, but SNAP eligibility itself is not age-restricted. Income limits shown are the current gross monthly limits on the Minnesota SNAP page. Asset limit applies only to non-categorically eligible units with at least one elderly or disabled member; Minnesota DHS lists $4,750 effective Oct. 1, 2026."
       },
       "flags": [
         {
@@ -218,9 +222,23 @@
           "draftValue": 1763,
           "verifiedValue": 3607,
           "pctDiff": 51.1
+        },
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 4500,
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 4500,
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
         }
       ],
-      "notes": "SNAP has no senior-specific minimum age test; seniors are included under general eligibility. Minnesota SNAP uses income limits and does not publish a countable financial asset test for standard SNAP eligibility."
+      "notes": "Minnesota SNAP has no senior-specific minimum age test; the eligible 'elderly' pathway is age 60+, but SNAP eligibility itself is not age-restricted. Income limits shown are the current gross monthly limits on the Minnesota SNAP page. Asset limit applies only to non-categorically eligible units with at least one elderly or disabled member; Minnesota DHS lists $4,750 effective Oct. 1, 2026."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -247,12 +265,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/about-cms/contact/directory/minnesota-state-health-insurance-assistance-program-senior-linkage-line/1562111"
+          "phone": "https://mn.gov/aging-pathways/medicare/"
         },
-        "notes": "No age, income, or asset test found for Minnesota SHIP/Senior LinkAge Line; current official contact number is 800-333-2433."
+        "notes": "Minnesota SHIP is Minnesota Aging Pathways (formerly Senior LinkAge Line); no age, income, or asset test found for the senior Medicare counseling pathway."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for Minnesota SHIP/Senior LinkAge Line; current official contact number is 800-333-2433."
+      "notes": "Minnesota SHIP is Minnesota Aging Pathways (formerly Senior LinkAge Line); no age, income, or asset test found for the senior Medicare counseling pathway."
     },
     {
       "programId": "senior-nutrition-meals-on-wheels",
@@ -284,10 +302,10 @@
           "assets": null,
           "phone": "https://mn.gov/dhs/disability-aging/home-and-community-services/programs-and-services/senior-nutrition/"
         },
-        "notes": "Current Minnesota Senior Nutrition Program eligibility is age 60+; spouse may also participate even if under 60. No official income or asset test found for the senior pathway."
+        "notes": "Current Minnesota Senior Nutrition Program guidance shows a 60+ senior threshold; no income or asset test is stated on the official source."
       },
       "flags": [],
-      "notes": "Current Minnesota Senior Nutrition Program eligibility is age 60+; spouse may also participate even if under 60. No official income or asset test found for the senior pathway."
+      "notes": "Current Minnesota Senior Nutrition Program guidance shows a 60+ senior threshold; no income or asset test is stated on the official source."
     },
     {
       "programId": "family-adult-assistance-alternative-care-grants",
@@ -318,14 +336,14 @@
         "income_2": 27050,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6512597581",
+        "phone": "6512597500",
         "sources": {
-          "age": "https://careerforce.mn.gov/programs-services/senior-community-service-employment-program-scsep",
+          "age": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/",
           "income": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/",
           "assets": null,
-          "phone": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/"
+          "phone": "https://careerforce.mn.gov/SCSEP"
         },
-        "notes": "SCSEP is current in Minnesota and serves low-income unemployed adults age 55+; no assets test was found in the retrieved official sources."
+        "notes": "Current Minnesota SCSEP page shows age 55+ and income eligibility at 125% of federal poverty guidelines; no asset test was found in the retrieved official sources."
       },
       "flags": [
         {
@@ -350,10 +368,10 @@
             "5073456822",
             "6512597114"
           ],
-          "verifiedValue": "6512597581"
+          "verifiedValue": "6512597500"
         }
       ],
-      "notes": "SCSEP is current in Minnesota and serves low-income unemployed adults age 55+; no assets test was found in the retrieved official sources."
+      "notes": "Current Minnesota SCSEP page shows age 55+ and income eligibility at 125% of federal poverty guidelines; no asset test was found in the retrieved official sources."
     },
     {
       "programId": "legal-assistance-seniors",
@@ -377,17 +395,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8776966529",
+        "phone": "18776966529",
         "sources": {
           "age": "https://mylegalaid.org/how-we-help/seniors/",
-          "income": null,
-          "assets": null,
-          "phone": "https://mylegalaid.org/how-we-help/seniors/"
+          "income": "https://mylegalaid.org/how-we-help/seniors/",
+          "assets": "https://mylegalaid.org/how-we-help/seniors/",
+          "phone": "https://mylegalaid.org/get-legal-help/"
         },
-        "notes": "Current Senior Law Project appears to serve adults age 60+; no authoritative income or asset test found on the retrieved official source."
+        "notes": "Current senior pathway appears to be Mid-Minnesota Legal Aid Senior Law Project / Legal Services for Seniors; age threshold is 60+ and no separate income or asset test was found for the senior pathway."
       },
       "flags": [],
-      "notes": "Current Senior Law Project appears to serve adults age 60+; no authoritative income or asset test found on the retrieved official source."
+      "notes": "Current senior pathway appears to be Mid-Minnesota Legal Aid Senior Law Project / Legal Services for Seniors; age threshold is 60+ and no separate income or asset test was found for the senior pathway."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -418,10 +436,10 @@
           "assets": null,
           "phone": "https://mn.gov/ooltc/contactus/"
         },
-        "notes": "No age, income, or asset eligibility test found for this ombudsman advocacy program; official contact number is toll-free 800-657-3591."
+        "notes": "Program found under the current Minnesota Office of Ombudsman for Long-Term Care name; no age, income, or asset eligibility test applies. The main intake/help number is 1-800-657-3591."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility test found for this ombudsman advocacy program; official contact number is toll-free 800-657-3591."
+      "notes": "Program found under the current Minnesota Office of Ombudsman for Long-Term Care name; no age, income, or asset eligibility test applies. The main intake/help number is 1-800-657-3591."
     },
     {
       "programId": "ucare-senior-care-plus",
@@ -446,17 +464,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002037225",
+        "phone": "8006573672",
         "sources": {
-          "age": "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=dhs16_145398",
-          "income": null,
-          "assets": null,
-          "phone": "https://mn.gov/dhs/health-plan-member-services/index.jsp"
+          "age": "https://www.healthpartners.com/insurance/minnesota-medical-assistance/msc/",
+          "income": "https://www.healthpartners.com/insurance/minnesota-medical-assistance/msc/",
+          "assets": "https://www.healthpartners.com/insurance/minnesota-medical-assistance/msc/",
+          "phone": "https://mn.gov/dhs/health-care/contact-us/health-plan-member-services/"
         },
-        "notes": "Current program appears active; official state and UCare sources show MSC+ is for people age 65+ and provide the main customer service number."
+        "notes": "MSC+ is a current Minnesota Senior Care Plus program for people age 65+; no authoritative current income or asset thresholds were found in the retrieved sources, and the main Minnesota DHS help number for MSC+ is listed as 800-657-3672."
       },
-      "flags": [],
-      "notes": "Current program appears active; official state and UCare sources show MSC+ is for people age 65+ and provide the main customer service number."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8003332433",
+            "8006573739",
+            "8002037225",
+            "8006273529"
+          ],
+          "verifiedValue": "8006573672"
+        }
+      ],
+      "notes": "MSC+ is a current Minnesota Senior Care Plus program for people age 65+; no authoritative current income or asset thresholds were found in the retrieved sources, and the main Minnesota DHS help number for MSC+ is listed as 800-657-3672."
     },
     {
       "programId": "aging-pathways",
@@ -485,10 +515,10 @@
           "assets": null,
           "phone": "https://mn.gov/aging-pathways/"
         },
-        "notes": "Current official site identifies the program as Minnesota Aging Pathways (formerly Senior LinkAge Line); no senior minimum age test was found on the retrieved official pages."
+        "notes": "Minnesota Aging Pathways (formerly Senior LinkAge Line) is a statewide information-and-assistance service; no senior-specific minimum age test was found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "Current official site identifies the program as Minnesota Aging Pathways (formerly Senior LinkAge Line); no senior minimum age test was found on the retrieved official pages."
+      "notes": "Minnesota Aging Pathways (formerly Senior LinkAge Line) is a statewide information-and-assistance service; no senior-specific minimum age test was found in the retrieved official sources."
     },
     {
       "programId": "family-caregiver-support",
@@ -517,10 +547,132 @@
           "assets": null,
           "phone": "https://mn.gov/board-on-aging/direct-services/aging-pathways/"
         },
-        "notes": "Minnesota Aging Pathways is a statewide information/referral service for older adults and caregivers; no age, income, or asset test was found for the senior caregiver pathway."
+        "notes": "Minnesota Aging Pathways (formerly Senior LinkAge Line) appears to have no age, income, or asset eligibility test for the senior/caregiver pathway; official state sources present it as a free statewide information and assistance service. Official main phone number confirmed as 800-333-2433."
       },
       "flags": [],
-      "notes": "Minnesota Aging Pathways is a statewide information/referral service for older adults and caregivers; no age, income, or asset test was found for the senior caregiver pathway."
+      "notes": "Minnesota Aging Pathways (formerly Senior LinkAge Line) appears to have no age, income, or asset eligibility test for the senior/caregiver pathway; official state sources present it as a free statewide information and assistance service. Official main phone number confirmed as 800-333-2433."
+    },
+    {
+      "programId": "mn-supplemental-aid-msa",
+      "programName": "Minnesota Supplemental Aid (MSA)",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": null,
+        "phones": [
+          "211",
+          "6514313805"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 10000,
+        "assets_couple": null,
+        "phone": "8663332466",
+        "sources": {
+          "age": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+          "income": null,
+          "assets": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+          "phone": "https://mn.db101.org/mn/programs/income_support/msa/program2a.htm"
+        },
+        "notes": "Current Minnesota DHS page shows the senior pathway at age 65+ and a $10,000 asset limit for non-SSI recipients; no separate senior couple asset limit was found in the retrieved sources."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 65
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 2000,
+          "verifiedValue": 10000,
+          "pctDiff": 80
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211",
+            "6514313805"
+          ],
+          "verifiedValue": "8663332466"
+        }
+      ],
+      "notes": "Current Minnesota DHS page shows the senior pathway at age 65+ and a $10,000 asset limit for non-SSI recipients; no separate senior couple asset limit was found in the retrieved sources."
+    },
+    {
+      "programId": "mn-liheap-energy-assistance",
+      "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
+      "facts": {
+        "age": null,
+        "income_1": 3205,
+        "income_2": 4191,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18006573710",
+          "6515391500",
+          "6512962860"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 3205,
+        "income_2": 4191,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8006573710",
+        "sources": {
+          "age": null,
+          "income": "https://mn.gov/commerce/energy/consumer-assistance/energy-assistance-program/guidelines.jsp",
+          "assets": null,
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
+        },
+        "notes": "Minnesota LIHEAP/Energy Assistance uses income guidelines rather than age or asset tests; 2026-2027 monthly limits shown are current for FFY27."
+      },
+      "flags": [],
+      "notes": "Minnesota LIHEAP/Energy Assistance uses income guidelines rather than age or asset tests; 2026-2027 monthly limits shown are current for FFY27."
+    },
+    {
+      "programId": "mn-property-tax-refund-seniors",
+      "programName": "Minnesota Property Tax Refund (PTF) for Seniors",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "6512963781"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "6512963781",
+        "sources": {
+          "age": "https://www.revenue.state.mn.us/mndor-pp/1636?type=html",
+          "income": "https://www.revenue.state.mn.us/so/mndor-pp/17921?type=html",
+          "assets": "https://www.revisor.mn.gov/statutes/cite/290A/full",
+          "phone": "https://www.revenue.state.mn.us/property-tax-relief"
+        },
+        "notes": "Program appears to be the Minnesota Property Tax Refund (M1PR) / senior-related property tax relief; no senior-specific age threshold exists for the general refund, but the senior pathway is 65+. No asset test found for the senior refund pathway."
+      },
+      "flags": [],
+      "notes": "Program appears to be the Minnesota Property Tax Refund (M1PR) / senior-related property tax relief; no senior-specific age threshold exists for the general refund, but the senior pathway is 65+. No asset test found for the senior refund pathway."
     }
   ]
 }

@@ -2,8 +2,8 @@
   "state": "GA",
   "stateName": "Georgia",
   "draftedAt": "2026-04-13T22:29:50.196Z",
-  "total": 11,
-  "successful": 11,
+  "total": 13,
+  "successful": 13,
   "programs": [
     {
       "id": "medicaid-aged-blind-disabled",
@@ -191,17 +191,7 @@
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-09",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2982,
-          "to": 2094,
-          "source": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
-          "severity": "high",
-          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ccsp-home-care",
@@ -588,7 +578,7 @@
           "source": "https://aging.georgia.gov/programs-and-services/home-community-based-services",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         }
       ]
     },
@@ -852,20 +842,20 @@
         {
           "field": "income_1",
           "from": 1350,
-          "to": 1550,
-          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
-          "severity": "medium",
+          "to": 837,
+          "source": "https://dhs.georgia.gov/document/publication/fsmedicaidabd06apdf/download",
+          "severity": "high",
           "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "income_2",
           "from": 1824,
-          "to": 2095,
-          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
-          "severity": "medium",
+          "to": 1120,
+          "source": "https://dhs.georgia.gov/document/publication/fsmedicaidabd06apdf/download",
+          "severity": "high",
           "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "assets_individual",
@@ -874,7 +864,7 @@
           "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "assets_couple",
@@ -883,7 +873,7 @@
           "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         }
       ]
     },
@@ -1062,7 +1052,36 @@
       "sourceUrl": "https://dfcs.georgia.gov/services/snap/senior-snap",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/3725/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_1",
+          "from": 1729,
+          "to": 2152,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/appendix-a-food-stamp-income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2345,
+          "to": 2909,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/appendix-a-food-stamp-income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1235,20 +1254,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8774234746",
-            "211"
-          ],
-          "to": "4046573426",
-          "source": "https://dhs.georgia.gov/low-income-home-energy-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-program",
@@ -1457,20 +1463,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "4045841000",
-            "211"
-          ],
-          "to": "4046563826",
-          "source": "https://psc.ga.gov/about-the-psc/consumer-corner/consumer-advisories/utility-assistance-programs/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ship-medicare-counseling",
@@ -2079,6 +2072,12 @@
           "phone": "2-1-1",
           "description": "General employment services and SCSEP provider referrals",
           "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 436-7442",
+          "description": "Number listed on georgia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2135,17 +2134,38 @@
       "lastVerifiedDate": "2026-09-09",
       "reviewQueue": [
         {
-          "field": "phone",
+          "field": "income_1",
+          "from": 1663,
+          "to": 1572,
+          "source": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2254,
+          "to": 2129,
+          "source": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
           "from": [
             "8558502525",
             "7705382657",
             "211"
           ],
-          "to": "8665524464",
-          "source": "https://dhs.georgia.gov/document/document/guidehealthsocialservicesv8pdf-0/download",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "to": "(800) 436-7442",
+          "source": "https://georgia.gov/aging-services",
+          "flaggedAt": "2026-10-06T12:19:55.566Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2298,6 +2318,184 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-03"
+    },
+    {
+      "id": "ga-family-caregiver-support-program",
+      "name": "Georgia Family Caregiver Support Program",
+      "shortName": "Caregiver Support",
+      "tagline": "If you are caring for an aging parent or a relative with dementia in Georgia, this program can connect you with respite care, adult day services, counseling, and other hands-on support at no cost to you.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Georgia Department of Human Services Division of Aging Services",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Area Agencies on Aging across Georgia",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If you are an adult caring for a parent age 60 or older, or for a family member with Alzheimer's disease or a related dementia, Georgia's Family Caregiver Support Program exists specifically for you. Not just for your parent. For you. The program funds respite care (temporary relief so you can rest), adult day and adult day health care, telephone counseling, legal assistance, and other supportive services delivered through your local Area Agency on Aging.\n\nThere is no income limit and no asset test for this program. Eligibility is based on the caregiving relationship and your family member's condition, not on what you earn or what you own. If you are 18 or older and providing unpaid care to someone who qualifies, you are likely eligible to contact your local AAA and begin a screening.\n\nBecause the program is administered county by county through local Area Agencies on Aging, the specific services available to you depend on where you live in Georgia. Some regions offer more options than others. The first step is always the same: call the Aging and Disability Resource Connection at 1-866-552-4464 to find out what is available in your county.",
+      "savingsRange": "",
+      "savingsSource": "Free service. The Georgia Family Caregiver Support Program does not provide cash benefits; it funds direct supportive services through local Area Agencies on Aging. No statewide dollar figure has been published by the Georgia Division of Aging Services for individual caregiver awards.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Caregiver must be age 18 or older",
+          "Caring for someone age 60+ with chronic health conditions or frailty",
+          "OR caring for someone of any age with Alzheimer's disease or a related disorder",
+          "OR age 55+ and caring for a child under 18 or an adult with disabilities ages 18-59",
+          "No income or asset limits"
+        ],
+        "ageRequirement": "18+",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Caregiver must be an unpaid family member or other informal caregiver, not a paid professional",
+          "The person receiving care must fit one of three categories: age 60+ with chronic conditions or frailty; any age with Alzheimer's disease or a related dementia disorder; or a child under 18 or adult ages 18-59 with disabilities being cared for by a relative age 55 or older",
+          "Services are accessed through the local Area Agency on Aging serving your county; a local screening or intake is required",
+          "This program funds caregiver support services, not direct medical treatment for the person you are caring for"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Georgia Aging and Disability Resource Connection at 1-866-552-4464 to be connected to your local Area Agency on Aging, which will screen you and determine what services are available in your county.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Aging and Disability Resource Connection",
+            "description": "Call 1-866-552-4464. This is Georgia's statewide entry point for aging services. Tell the staff member you are a family caregiver and want to ask about the Family Caregiver Support Program. They will connect you to the Area Agency on Aging (AAA) serving your county."
+          },
+          {
+            "step": 2,
+            "title": "Complete a local intake screening",
+            "description": "Your local AAA will ask basic questions about you and the person you care for: your relationship, the care recipient's age and health conditions, and what kinds of support you most need. This is not a financial review. No income or asset documents are required."
+          },
+          {
+            "step": 3,
+            "title": "Learn what is available in your county",
+            "description": "Because services vary by region, your AAA contact will tell you which specific services (respite care, adult day, counseling, legal assistance, nutrition services) are currently available where you live. Ask directly whether there is a waitlist for any service you need."
+          },
+          {
+            "step": 4,
+            "title": "Begin receiving services",
+            "description": "If services are available and you are eligible, your AAA will arrange them. There is no single statewide form to complete. The local AAA manages enrollment from this point forward. Keep the direct number of your AAA contact for follow-up questions."
+          }
+        ],
+        "processingTime": "No statewide processing-time standard has been published. Timing depends on local AAA capacity and which services you are requesting. Ask your AAA contact how long the current wait is for the specific service you need.",
+        "waitlist": "No statewide waitlist data has been published. Availability varies by county and service type. Ask your local AAA directly when you call.",
+        "tip": "When you call, say specifically what you need most right now: a break from caregiving, help with your parent's legal documents, or a place for your parent to go during the day. The clearer you are, the faster the AAA can match you to available services.",
+        "urls": [
+          {
+            "label": "Georgia Division of Aging Services: Caregiver Programs",
+            "url": "https://aging.georgia.gov/programs-and-services/home-community-based-services/caregiver-programs"
+          },
+          {
+            "label": "Georgia Division of Aging Services main site",
+            "url": "https://aging.georgia.gov"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Basic information about yourself as the caregiver: your name, address, and relationship to the person you care for",
+        "Basic information about the care recipient: their name, date of birth, and primary health condition (for example, dementia diagnosis, chronic illness, or frailty)",
+        "A description of the care recipient's daily needs and what support you are currently providing",
+        "Proof of age for the care recipient if requested by your local AAA (a birth certificate, driver's license, or Medicare card are common options)",
+        "Any relevant medical information about the care recipient's condition, particularly if the basis for eligibility is Alzheimer's disease or a related dementia disorder",
+        "Your own contact information and, if applicable, the contact information for any other caregivers involved"
+      ],
+      "contacts": [
+        {
+          "label": "Georgia Aging and Disability Resource Connection",
+          "phone": "1-866-552-4464",
+          "description": "The statewide entry point for all Georgia aging services. Call here first to be connected to the Area Agency on Aging in your county, which administers the Family Caregiver Support Program locally.",
+          "hours": "Contact your local AAA for specific hours; the statewide line is staffed during standard business hours"
+        },
+        {
+          "label": "Georgia Division of Aging Services",
+          "phone": "404-657-5258",
+          "description": "The state agency that oversees the program. Call if you have questions about the program's structure or cannot reach your local AAA.",
+          "hours": "Mon-Fri, standard business hours"
+        }
+      ],
+      "applicationNotes": [
+        "This program does not pay cash. It arranges specific services for you as a caregiver. If you are looking for help paying household bills or covering your parent's medical costs, ask your local AAA about other programs such as the Community Care Services Program (CCSP) or SOURCE waiver.",
+        "Do not confuse this program with Georgia's Medicaid home and community-based waiver programs (CCSP, SOURCE, or NOW/COMP). Those are separate programs with separate eligibility rules and are designed to fund care for the older adult directly. This program funds support for you, the caregiver.",
+        "If you are a grandparent or other relative age 55 or older raising a grandchild or caring for an adult family member with a disability, you may qualify under the kinship caregiving category. Mention this specifically when you call.",
+        "Service availability differs significantly by county. If your local AAA does not have a service you need right now, ask to be placed on a waitlist and ask about alternative resources in the meantime."
+      ],
+      "relatedPrograms": [
+        "Community Care Services Program (CCSP): Georgia Medicaid waiver that funds in-home care for older adults who meet nursing facility level of care",
+        "SOURCE Waiver: Georgia Medicaid program for older adults needing nursing home level care who are managed by a primary care physician",
+        "Georgia Alzheimer's and Related Dementias State Plan programs",
+        "Meals on Wheels through local AAAs: home-delivered meals for homebound older adults in Georgia"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "title": "What this program is not",
+          "body": "This is not a cash payment program. It does not pay you a wage for caregiving. It does not cover your parent's medical bills. It is a services program: it arranges specific types of support for family caregivers through your local Area Agency on Aging. If you need financial help for your parent's care costs, ask your AAA about CCSP or SOURCE, which are separate Georgia Medicaid waiver programs."
+        },
+        {
+          "type": "prose",
+          "title": "What services are actually available",
+          "body": "The program can fund respite care (someone else steps in so you can rest, run errands, or take a break), adult day care and adult day health care (structured daytime programs for your parent outside the home), telephone counseling for caregivers, legal assistance, and nutrition services. The specific mix depends entirely on your county. Some AAAs have more funding and more providers than others. When you call 1-866-552-4464, ask specifically which services have current openings and which have waitlists."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does my income or my parent's income affect whether we qualify?",
+          "answer": "No. The Georgia Family Caregiver Support Program has no income limit and no asset test. Eligibility is based on the caregiving relationship and the care recipient's condition, not on what either of you earns or owns. You do not need to provide pay stubs, tax returns, or bank statements to apply."
+        },
+        {
+          "question": "My parent has not been formally diagnosed with dementia. Can we still apply?",
+          "answer": "Yes, but the category you qualify under may affect the process. If your parent is 60 or older with chronic health conditions or general frailty, you do not need a dementia diagnosis. If you are applying specifically under the Alzheimer's and related disorders category, your local AAA may ask for medical information to confirm the condition. Contact your AAA at 1-866-552-4464 to discuss your specific situation."
+        },
+        {
+          "question": "I am a grandparent raising my grandchildren. Does this program apply to me?",
+          "answer": "Possibly. If you are age 55 or older and caring for a grandchild under 18, or for an adult family member ages 18 to 59 with a disability, you may qualify under the program's kinship caregiving category. When you call 1-866-552-4464, tell the intake staff member your age and describe your caregiving situation specifically so they can screen you for the right category."
+        },
+        {
+          "question": "Can I apply for this program and Georgia Medicaid waiver programs at the same time?",
+          "answer": "Yes. This program and Georgia's Medicaid waiver programs (such as CCSP and SOURCE) serve different purposes and have separate eligibility processes. This program supports you as the caregiver. CCSP and SOURCE fund direct care services for your parent. You can pursue both at the same time. Ask your local AAA to help you understand which programs your parent may separately qualify for."
+        },
+        {
+          "question": "How long will I wait before services actually start?",
+          "answer": "There is no published statewide answer to this question. Wait times depend on which service you need and what your local AAA currently has available. Some services may start quickly; others may have a waitlist. Ask your local AAA contact directly when you call: how long is the current wait for respite care, or adult day services, in this county specifically."
+        },
+        {
+          "question": "What if I live in a rural county and there are no local providers?",
+          "answer": "Service availability is genuinely uneven across Georgia. If your county has limited resources, your local AAA should still be able to screen you and place you on any relevant waitlists. Ask whether telephone counseling or other remotely delivered services are available in the meantime. The statewide line at 1-866-552-4464 can tell you which AAA serves your county and what that office currently has to offer."
+        },
+        {
+          "question": "My parent's condition has gotten worse since we first contacted the AAA. Do we need to reapply?",
+          "answer": "No separate reapplication is required, but you should contact your local AAA directly to report the change. A more significant care need may open access to additional services or move you up on a waitlist. Do not assume your current service level will automatically adjust; call your AAA contact and describe what has changed."
+        },
+        {
+          "question": "Is this the same as hiring a home health aide through Medicaid?",
+          "answer": "No. This program does not pay for ongoing in-home medical care or personal care aides the way a Medicaid waiver does. It funds caregiver support services: respite, counseling, adult day programs, and similar services. If your parent needs ongoing personal care assistance paid for by Medicaid, ask your AAA about the Community Care Services Program (CCSP) or the SOURCE waiver, which are the appropriate Georgia programs for that purpose."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "HandHeart",
+      "phone": "1-866-552-4464",
+      "sourceUrl": "https://aging.georgia.gov/programs-and-services/home-community-based-services/caregiver-programs",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -2373,5 +2571,5 @@
     ],
     "resourcesVsBenefits": "Georgia offers two types of help: qualification-based benefits that require income limits (like CCSP home care or SNAP grocery assistance) and free resources available to everyone regardless of income. Georgia SHIP provides free Medicare counseling to any senior, while the Elderly Legal Assistance Program offers free legal help to anyone 60+ facing benefit denials or elder abuse, no financial qualification needed."
   },
-  "factcheckedAt": "2026-10-02T07:35:51.173Z"
+  "factcheckedAt": "2026-10-06T12:19:55.566Z"
 }

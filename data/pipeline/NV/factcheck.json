@@ -1,14 +1,14 @@
 {
   "state": "NV",
   "stateName": "Nevada",
-  "checkedAt": "2026-10-04T00:52:12.168Z",
-  "total": 17,
+  "checkedAt": "2026-10-06T12:26:21.063Z",
+  "total": 19,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 7,
-  "highSeverityFlags": 2,
+  "programsWithFlags": 8,
+  "totalFlags": 15,
+  "highSeverityFlags": 9,
   "programs": [
     {
       "programId": "medicaid-long-term-care",
@@ -31,18 +31,29 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
-        "phone": "7756874210",
+        "assets_couple": 3000,
+        "phone": "8009920900",
         "sources": {
-          "age": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
-          "income": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
-          "assets": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Boards/CSPD/2020/CBC%20Overview%20-%2006-20.pptx",
-          "phone": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/"
+          "age": "https://www.medicaid.nv.gov/Downloads/provider/NV_BillingGuidelines_PT48.pdf",
+          "income": null,
+          "assets": "https://www.medicaidplanningassistance.org/nevada-waiver-for-the-frail-elderly/",
+          "phone": "https://www.dss.nv.gov/medical/general-medical-information/2-general-information-1gi/"
         },
-        "notes": "Current official source shows age 65+ and financial eligibility; a current official source with a couple asset limit was not found. Program appears active as the HCBS Waiver for the Frail Elderly."
+        "notes": "Program is still active as Nevada Waiver for the Frail Elderly; authoritative source located for age and phone, but asset limits are corroborated by a current secondary source citing Nevada Medicaid rules. No clear program-specific income test found in retrieved sources."
       },
-      "flags": [],
-      "notes": "Current official source shows age 65+ and financial eligibility; a current official source with a couple asset limit was not found. Program appears active as the HCBS Waiver for the Frail Elderly."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7756874210",
+            "211",
+            "8005252395"
+          ],
+          "verifiedValue": "8009920900"
+        }
+      ],
+      "notes": "Program is still active as Nevada Waiver for the Frail Elderly; authoritative source located for age and phone, but asset limits are corroborated by a current secondary source citing Nevada Medicaid rules. No clear program-specific income test found in retrieved sources."
     },
     {
       "programId": "hcbs-waiver",
@@ -64,18 +75,18 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
+        "assets_couple": 3000,
         "phone": "7756874210",
         "sources": {
           "age": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
-          "income": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
+          "income": null,
           "assets": "https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/27079",
           "phone": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/"
         },
-        "notes": "Current Nevada FE waiver appears active and serves seniors age 65+; official source says to call for current income guidelines, and a publicly retrievable state source lists $2,000 resources. No authoritative couple-specific asset figure was found."
+        "notes": "Official Nevada FE Waiver page states age 65+ and lists Carson City intake phone; available sources found a $2,000 resource limit, but no separate official current couple-specific asset limit was retrievable. Income limits were referenced as 'call for current income guidelines' or institutional Medicaid guidelines, but no specific current dollar amount was found."
       },
       "flags": [],
-      "notes": "Current Nevada FE waiver appears active and serves seniors age 65+; official source says to call for current income guidelines, and a publicly retrievable state source lists $2,000 resources. No authoritative couple-specific asset figure was found."
+      "notes": "Official Nevada FE Waiver page states age 65+ and lists Carson City intake phone; available sources found a $2,000 resource limit, but no separate official current couple-specific asset limit was retrievable. Income limits were referenced as 'call for current income guidelines' or institutional Medicaid guidelines, but no specific current dollar amount was found."
     },
     {
       "programId": "medicare-savings-programs",
@@ -94,21 +105,36 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1330,
-        "income_2": 1804,
-        "assets_individual": 9090,
-        "assets_couple": 13630,
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
         "phone": "8009920900",
         "sources": {
-          "age": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
-          "income": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
+          "age": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/E-400_Resources_Sept_2024_ADA.pdf",
+          "income": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/E-400_Resources_Sept_2024_ADA.pdf",
           "assets": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/E-400_TYPES_OF_RESOURCES.pdf",
-          "phone": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/"
+          "phone": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/E-400_Resources_Sept_2024_ADA.pdf"
         },
-        "notes": "Nevada’s current Medicare Savings Program limits appear to be for QMB/SLMB/QI and use 2026 charts; no separate senior age threshold is listed, so 65 is the senior pathway age for Medicare-based eligibility."
+        "notes": "Nevada Medicare Savings Programs (QMB, SLMB, QI) are administered through DWSS; official state PDFs provide resource limits and contact number. The age threshold is senior pathway Medicare eligibility (65+), since MSPs serve Medicare beneficiaries rather than a separate younger senior program."
       },
-      "flags": [],
-      "notes": "Nevada’s current Medicare Savings Program limits appear to be for QMB/SLMB/QI and use 2026 charts; no separate senior age threshold is listed, so 65 is the senior pathway age for Medicare-based eligibility."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 9090,
+          "verifiedValue": 9950,
+          "pctDiff": 8.6
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 13630,
+          "verifiedValue": 14910,
+          "pctDiff": 8.6
+        }
+      ],
+      "notes": "Nevada Medicare Savings Programs (QMB, SLMB, QI) are administered through DWSS; official state PDFs provide resource limits and contact number. The age threshold is senior pathway Medicare eligibility (65+), since MSPs serve Medicare beneficiaries rather than a separate younger senior program."
     },
     {
       "programId": "snap-food-benefits",
@@ -128,21 +154,50 @@
       },
       "verified": {
         "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 3200,
-        "assets_couple": 3200,
+        "income_1": 1552,
+        "income_2": 2093,
+        "assets_individual": 4250,
+        "assets_couple": 4250,
         "phone": "8009920900",
         "sources": {
-          "age": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-3/",
-          "income": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-3/",
-          "assets": "https://www.dss.nv.gov/programs/snap/rules-eligibility/snap-rules-6/",
+          "age": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
+          "income": "https://www.fna.usda.gov/snap-directory-entry/nevada",
+          "assets": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
           "phone": "https://www.fna.usda.gov/snap-directory-entry/nevada"
         },
-        "notes": "Nevada SNAP is current and active. The senior-specific pathway uses age 60+ for resource limits; no senior-specific age minimum beyond program participation was found. Official Nevada pages accessible here did not provide the 2026 household size 1 and 2 monthly income table in retrievable text, so those values are null."
+        "notes": "SNAP is active in Nevada; senior pathway uses age 60+ for higher resource limit and households with a member age 60+ only need to meet net income rules."
       },
-      "flags": [],
-      "notes": "Nevada SNAP is current and active. The senior-specific pathway uses age 60+ for resource limits; no senior-specific age minimum beyond program participation was found. Official Nevada pages accessible here did not provide the 2026 household size 1 and 2 monthly income table in retrievable text, so those values are null."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2608,
+          "verifiedValue": 1552,
+          "pctDiff": 40.5
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 3526,
+          "verifiedValue": 2093,
+          "pctDiff": 40.6
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 3200,
+          "verifiedValue": 4250,
+          "pctDiff": 24.7
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 3200,
+          "verifiedValue": 4250,
+          "pctDiff": 24.7
+        }
+      ],
+      "notes": "SNAP is active in Nevada; senior pathway uses age 60+ for higher resource limit and households with a member age 60+ only need to meet net income rules."
     },
     {
       "programId": "energy-assistance-eap-liheap",
@@ -155,37 +210,28 @@
         "assets_couple": null,
         "phones": [
           "211",
-          "7756840500"
+          "7756840500",
+          "8009920900"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 1995,
-        "income_2": 2705,
+        "income_1": 1956,
+        "income_2": 2644,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8009920900",
         "sources": {
           "age": null,
-          "income": "https://www.dss.nv.gov/programs/energy/eligibility-criteria/",
+          "income": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/home/features/forms/2824-EL_Energy_Assistance_Application.pdf",
           "assets": null,
-          "phone": "https://www.dss.nv.gov/contact/eap-office-south/"
+          "phone": "https://liheapch.acf.hhs.gov/profiles/Nevada.htm"
         },
-        "notes": "Current Nevada EAP/LIHEAP income limits are posted by the state for FY 2027 (July 1, 2026–June 30, 2027); no age or asset test was found on the retrieved official sources."
+        "notes": "Current Nevada EAP/LIHEAP uses a 150% FPL income test; no asset test found. Monthly amounts are from the program’s published annual FY 2026 limits divided by 12."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211",
-            "7756840500"
-          ],
-          "verifiedValue": "8009920900"
-        }
-      ],
-      "notes": "Current Nevada EAP/LIHEAP income limits are posted by the state for FY 2027 (July 1, 2026–June 30, 2027); no age or asset test was found on the retrieved official sources."
+      "flags": [],
+      "notes": "Current Nevada EAP/LIHEAP uses a 150% FPL income test; no asset test found. Monthly amounts are from the program’s published annual FY 2026 limits divided by 12."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -207,48 +253,36 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1310,
-        "income_2": 1778,
+        "income_1": 1995,
+        "income_2": 2705,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7756842941",
+        "phone": "7024864311",
         "sources": {
           "age": null,
           "income": "https://housing.nv.gov/programs/Weatherization/",
           "assets": null,
-          "phone": "https://www.dss.nv.gov/contentassets/b3bcdb93ea2d4b3f8dc252451a34cbe4/nevada-fund-for-energy-assistance-and-conservation-state-plan-fy2027_remediated.pdf"
+          "phone": "https://housing.nv.gov/programs/Weatherization/"
         },
-        "notes": "Nevada WAP appears to use a household income test at 200% of federal poverty level for DOE/LIHEAP pathways; the official page does not publish a separate age or assets test. Monthly income figures were derived from the annual limits in the official Nevada EAP application chart."
+        "notes": "Nevada Weatherization Assistance Program uses income eligibility at 200% of the federal poverty level; official page provides monthly figures through the related program materials and lists the main Nevada Housing Division contact number."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 2660,
-          "verifiedValue": 1310,
-          "pctDiff": 50.8
+          "verifiedValue": 1995,
+          "pctDiff": 25
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 3607,
-          "verifiedValue": 1778,
-          "pctDiff": 50.7
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "7024864311",
-            "7757866023",
-            "7027950575",
-            "8664045204",
-            "211"
-          ],
-          "verifiedValue": "7756842941"
+          "verifiedValue": 2705,
+          "pctDiff": 25
         }
       ],
-      "notes": "Nevada WAP appears to use a household income test at 200% of federal poverty level for DOE/LIHEAP pathways; the official page does not publish a separate age or assets test. Monthly income figures were derived from the annual limits in the official Nevada EAP application chart."
+      "notes": "Nevada Weatherization Assistance Program uses income eligibility at 200% of the federal poverty level; official page provides monthly figures through the related program materials and lists the main Nevada Housing Division contact number."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -276,12 +310,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/about-cms/contact/directory/nevada-medicare-assistance-program-map/1562136"
+          "phone": "https://adsd.nv.gov/Programs/Seniors/Medicare_Assistance_Program_(MAP)/MAP_Prog/"
         },
-        "notes": "Nevada SHIP (Nevada Medicare Assistance Program / MAP) does not appear to have age, income, or asset eligibility tests; it is a Medicare counseling program for people with Medicare and their families. Phone verified from CMS/Nevada state-linked sources."
+        "notes": "No income, age, or asset test found for Nevada SHIP/MAP; official current statewide contact number is 800-307-4444."
       },
       "flags": [],
-      "notes": "Nevada SHIP (Nevada Medicare Assistance Program / MAP) does not appear to have age, income, or asset eligibility tests; it is a Medicare counseling program for people with Medicare and their families. Phone verified from CMS/Nevada state-linked sources."
+      "notes": "No income, age, or asset test found for Nevada SHIP/MAP; official current statewide contact number is 800-307-4444."
     },
     {
       "programId": "home-delivered-meals",
@@ -313,10 +347,10 @@
           "assets": null,
           "phone": "https://www.washoecounty.gov/seniorsrv/programs_and_services/nutrition/home_delivered_meals.php"
         },
-        "notes": "Current Nevada senior pathway appears to use age 60+ for Meals on Wheels/home delivered meals; no income or asset test found in authoritative sources."
+        "notes": "Current official county program page shows age 60+ for seniors and lists the main contact number. No income or asset test found on the retrievable official source; program appears to operate under senior nutrition services rather than a means-tested benefit."
       },
       "flags": [],
-      "notes": "Current Nevada senior pathway appears to use age 60+ for Meals on Wheels/home delivered meals; no income or asset test found in authoritative sources."
+      "notes": "Current official county program page shows age 60+ for seniors and lists the main contact number. No income or asset test found on the retrievable official source; program appears to operate under senior nutrition services rather than a means-tested benefit."
     },
     {
       "programId": "senior-respite-vouchers",
@@ -329,7 +363,8 @@
         "assets_couple": null,
         "phones": [
           "7753582768",
-          "211"
+          "211",
+          "8665355654"
         ],
         "hasVerifiableFacts": true
       },
@@ -339,27 +374,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7026337264",
+        "phone": "7753582768",
         "sources": {
-          "age": "https://adsd.nv.gov/uploadedfiles/adsdnvgov/content/Programs/Grant/ServSpecs/RespiteVoucherService.pdf",
+          "age": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Boards/Nevada_Lifespan_Respite_Care_Coalition/Meetings/2024/(R)SIS_Respite_Application_24-25.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://adsd.nv.gov/uploadedUploadedFiles/agingnvgov/content/Resources/PAC%20Resource%20Guide%20(January%202021).pdf"
+          "phone": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Boards/Nevada_Lifespan_Respite_Care_Coalition/Meetings/2024/(R)SIS_Respite_Application_24-25.pdf"
         },
-        "notes": "Current Nevada respite voucher materials show a senior threshold of age 60+; no income or asset test was identified in the retrieved official sources. The main assistance number for Respite Voucher Services appears in ADSD materials, but the exact current program routing should be confirmed if needed."
+        "notes": "Current Nevada senior respite voucher materials indicate a senior care-receiver threshold of age 60+; no income or asset test was found in the retrievable official materials."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "7753582768",
-            "211"
-          ],
-          "verifiedValue": "7026337264"
-        }
-      ],
-      "notes": "Current Nevada respite voucher materials show a senior threshold of age 60+; no income or asset test was identified in the retrieved official sources. The main assistance number for Respite Voucher Services appears in ADSD materials, but the exact current program routing should be confirmed if needed."
+      "flags": [],
+      "notes": "Current Nevada senior respite voucher materials indicate a senior care-receiver threshold of age 60+; no income or asset test was found in the retrievable official materials."
     },
     {
       "programId": "scsep-employment",
@@ -373,7 +398,8 @@
         "phones": [
           "7753232243",
           "211",
-          "7756874210"
+          "7756874210",
+          "8558502525"
         ],
         "hasVerifiableFacts": true
       },
@@ -383,14 +409,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8558502525",
+        "phone": "7026483356",
         "sources": {
-          "age": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/About/Reports/SrCommSvcEmplyProg/Nevada_SCSEP_Stand_Alone_State_Plan_Modification%20.pdf",
-          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "age": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Grant/ServSpecs/SCSEPServiceSpecs.pdf",
+          "income": null,
           "assets": null,
-          "phone": "https://my.aarpfoundation.org/locator/scsep/"
+          "phone": "https://states.aarp.org/nevada/volunteers-needed"
         },
-        "notes": "SCSEP in Nevada is current and serves adults age 55+; it has an income test (federal rule: no more than 125% of the federal poverty level) but no asset test found in authoritative sources."
+        "notes": "Nevada SCSEP remains active in 2026; official Nevada service specs show minimum age 55, and the listed Nevada program contact is the Las Vegas SCSEP number."
       },
       "flags": [
         {
@@ -399,12 +425,13 @@
           "draftValue": [
             "7753232243",
             "211",
-            "7756874210"
+            "7756874210",
+            "8558502525"
           ],
-          "verifiedValue": "8558502525"
+          "verifiedValue": "7026483356"
         }
       ],
-      "notes": "SCSEP in Nevada is current and serves adults age 55+; it has an income test (federal rule: no more than 125% of the federal poverty level) but no asset test found in authoritative sources."
+      "notes": "Nevada SCSEP remains active in 2026; official Nevada service specs show minimum age 55, and the listed Nevada program contact is the Las Vegas SCSEP number."
     },
     {
       "programId": "advocates-for-seniors",
@@ -422,19 +449,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7027500055",
+        "phone": "7024863545",
         "sources": {
-          "age": null,
+          "age": "https://www.leg.state.nv.us/Division/Research/Publications/PandPReport/24-SC.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://www.bbb.org/us/nv/las-vegas/profile/senior-services/nevada-advocates-1086-90054672"
+          "phone": "https://nvapros.com/our-services/"
         },
-        "notes": "Could not find authoritative eligibility data for the senior pathway; the program appears to be a private advocacy service rather than a government benefit program."
+        "notes": "Program appears current as Nevada Advocates / Advocate for Elders; no authoritative income or asset test found for the senior pathway."
       },
       "flags": [
         {
@@ -444,10 +471,10 @@
             "7756874210",
             "211"
           ],
-          "verifiedValue": "7027500055"
+          "verifiedValue": "7024863545"
         }
       ],
-      "notes": "Could not find authoritative eligibility data for the senior pathway; the program appears to be a private advocacy service rather than a government benefit program."
+      "notes": "Program appears current as Nevada Advocates / Advocate for Elders; no authoritative income or asset test found for the senior pathway."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -472,17 +499,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8882821155",
+        "phone": "18882821155",
         "sources": {
-          "age": "https://ltcombudsman.org/uploads/files/support/NV-VLTCOBrochure.pdf",
+          "age": "https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/31858",
           "income": null,
           "assets": null,
           "phone": "https://adsd.nv.gov/programs/seniors/ltcombudsman/ltcombudsprog/"
         },
-        "notes": "Current Nevada LTC Ombudsman Program is an advocacy/complaint program for long-term care residents; no income or asset test found. Senior pathway threshold reflects service to residents age 60+."
+        "notes": "Current Nevada LTC Ombudsman services appear to apply to residents age 60+ for the senior pathway; no income or asset test found. Program advocacy may also extend to residents of any age in practice, but the statutory senior threshold is 60."
       },
       "flags": [],
-      "notes": "Current Nevada LTC Ombudsman Program is an advocacy/complaint program for long-term care residents; no income or asset test found. Senior pathway threshold reflects service to residents age 60+."
+      "notes": "Current Nevada LTC Ombudsman services appear to apply to residents age 60+ for the senior pathway; no income or asset test found. Program advocacy may also extend to residents of any age in practice, but the statutory senior threshold is 60."
     },
     {
       "programId": "senior-rx-program",
@@ -501,22 +528,37 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
+        "age": 62,
+        "income_1": 25477,
+        "income_2": 33963,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8663036323",
         "sources": {
-          "age": "https://adsd.nv.gov/programs/physical/disabilityrx/disabilityrx/",
-          "income": "https://adsd.nv.gov/programs/physical/disabilityrx/disabilityrx/",
+          "age": "https://www.nyecountynv.gov/673/Nevadas-Senior-RX-Program",
+          "income": "https://www.nyecountynv.gov/673/Nevadas-Senior-RX-Program",
           "assets": null,
-          "phone": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/SeniorRx/SRxDRx%20FAQs%20-2.1.2021%20-%20updated%20income.pdf"
+          "phone": "https://www.nyecountynv.gov/673/Nevadas-Senior-RX-Program"
         },
-        "notes": "Official Nevada source states the Senior Rx and Disability Rx Program ended on December 31, 2023, so current eligibility thresholds are not available; the phone number is from the official FAQ/contact materials."
+        "notes": "Official Nevada source found via county program page; program appears to have ended on Dec. 31, 2023 on ADSD pages, but county guidance still lists current eligibility figures updated July 2026. No asset test located."
       },
-      "flags": [],
-      "notes": "Official Nevada source states the Senior Rx and Disability Rx Program ended on December 31, 2023, so current eligibility thresholds are not available; the phone number is from the official FAQ/contact materials."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2763,
+          "verifiedValue": 25477,
+          "pctDiff": 89.2
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 3683,
+          "verifiedValue": 33963,
+          "pctDiff": 89.2
+        }
+      ],
+      "notes": "Official Nevada source found via county program page; program appears to have ended on Dec. 31, 2023 on ADSD pages, but county guidance still lists current eligibility figures updated July 2026. No asset test located."
     },
     {
       "programId": "hcbw-fe-waiver",
@@ -535,21 +577,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2313,
+        "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 3000,
+        "assets_couple": null,
         "phone": "7756874210",
         "sources": {
           "age": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
-          "income": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Boards/CSPD/2020/CBC%20Overview%20-%2006-20.pptx",
-          "assets": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Boards/CSPD/2020/CBC%20Overview%20-%2006-20.pptx",
+          "income": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
+          "assets": "https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/27079",
           "phone": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/"
         },
-        "notes": "Current Nevada FE waiver appears active; official ADSD page says age 65+ and financial eligibility with current income guidelines. Income and asset figures were taken from an official NV.gov presentation; the waiver page itself directs callers for current income guidelines."
+        "notes": "Official Nevada ADSD page lists FE Waiver as age 65+ and says to call for current income guidelines; retrievable official source for couple asset limit was not found."
       },
       "flags": [],
-      "notes": "Current Nevada FE waiver appears active; official ADSD page says age 65+ and financial eligibility with current income guidelines. Income and asset figures were taken from an official NV.gov presentation; the waiver page itself directs callers for current income guidelines."
+      "notes": "Official Nevada ADSD page lists FE Waiver as age 65+ and says to call for current income guidelines; retrievable official source for couple asset limit was not found."
     },
     {
       "programId": "personal-care-services-program",
@@ -563,7 +605,8 @@
         "phones": [
           "8005252395",
           "7756874210",
-          "211"
+          "211",
+          "8009920900"
         ],
         "hasVerifiableFacts": true
       },
@@ -571,19 +614,19 @@
         "age": null,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8005252395",
         "sources": {
           "age": null,
           "income": null,
-          "assets": null,
-          "phone": "https://www.medicaid.nv.gov/Downloads/provider/PCS_Presentation_2012_ver1_0_050712.pdf"
+          "assets": "https://www.medicaidplanningassistance.org/nevada-personal-care-services-program/",
+          "phone": "https://www.medicaidplanningassistance.org/nevada-personal-care-services-program/"
         },
-        "notes": "Could not confirm current senior-specific age or countable asset limits from authoritative current sources. PCS appears to be a Medicaid service rather than a separate senior-only program; current official phone for PCS authorizations is 800-525-2395."
+        "notes": "No authoritative senior-specific age threshold was found; PCS appears to have no separate senior age test and serves Medicaid recipients of any age. Asset limits are current via a current secondary source citing program rules; official current age/income limits could not be verified from retrievable authoritative sources."
       },
       "flags": [],
-      "notes": "Could not confirm current senior-specific age or countable asset limits from authoritative current sources. PCS appears to be a Medicaid service rather than a separate senior-only program; current official phone for PCS authorizations is 800-525-2395."
+      "notes": "No authoritative senior-specific age threshold was found; PCS appears to have no separate senior age test and serves Medicaid recipients of any age. Asset limits are current via a current secondary source citing program rules; official current age/income limits could not be verified from retrievable authoritative sources."
     },
     {
       "programId": "cope-community-options-elderly",
@@ -605,21 +648,21 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2923,
+        "income_1": null,
         "income_2": null,
-        "assets_individual": 10000,
-        "assets_couple": 30000,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "7756874210",
         "sources": {
           "age": "https://adsd.nv.gov/Programs/Seniors/COPE/COPE_Prog/",
-          "income": "https://dhcfp.nv.gov/uploadedFiles/dhcfpnvgov/content/Pgms/Grants/REVISED%20BIPP%20PACKET%203-04-14%20Accept%20Changes.pdf",
-          "assets": "https://dhcfp.nv.gov/uploadedFiles/dhcfpnvgov/content/Pgms/Grants/REVISED%20BIPP%20PACKET%203-04-14%20Accept%20Changes.pdf",
+          "income": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/COPE/COPE%20Manual%20-6-18.DOCX",
+          "assets": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/COPE/COPE%20Manual%20-6-18.DOCX",
           "phone": "https://adsd.nv.gov/Programs/Seniors/COPE/COPE_Prog/"
         },
-        "notes": "Current official ADSD page shows age 65+; income/assets figures were found in a Nevada state document and may need re-verification if you need 2026 program manual-level certainty."
+        "notes": "Program is current in Nevada; official materials show senior eligibility at 65+. Official public sources found did not provide current numeric income or asset thresholds in retrievable text."
       },
       "flags": [],
-      "notes": "Current official ADSD page shows age 65+; income/assets figures were found in a Nevada state document and may need re-verification if you need 2026 program manual-level certainty."
+      "notes": "Program is current in Nevada; official materials show senior eligibility at 65+. Official public sources found did not provide current numeric income or asset thresholds in retrievable text."
     },
     {
       "programId": "tap-taxi-assistance",
@@ -644,15 +687,99 @@
         "assets_couple": null,
         "phone": "7024863581",
         "sources": {
-          "age": "https://adsd.nv.gov/programs/seniors/tap/tap_prog/",
-          "income": "https://adsd.nv.gov/programs/seniors/tap/tap_prog/",
+          "age": "https://adsd.nv.gov/Programs/Seniors/TAP/TAP_Prog/",
+          "income": "https://adsd.nv.gov/uploadedFiles/agingnvgov/content/Programs/TAP%20Client%20Registration%20Form_Rev_01.2024.pdf",
           "assets": null,
-          "phone": "https://adsd.nv.gov/programs/seniors/tap/tap_prog/"
+          "phone": "https://adsd.nv.gov/Programs/Seniors/TAP/TAP_Prog/"
         },
-        "notes": "Current Nevada ADSD TAP senior pathway appears active; senior minimum age is 60 and no asset test was found in the retrieved official source."
+        "notes": "Current Nevada TAP senior pathway uses age 60+ for seniors; no asset limit found in current official materials. Income is described as below 300% of Federal Poverty Guidelines on current TAP form."
       },
       "flags": [],
-      "notes": "Current Nevada ADSD TAP senior pathway appears active; senior minimum age is 60 and no asset test was found in the retrieved official source."
+      "notes": "Current Nevada TAP senior pathway uses age 60+ for seniors; no asset limit found in current official materials. Income is described as below 300% of Federal Poverty Guidelines on current TAP form."
+    },
+    {
+      "programId": "nv-maabd-medicaid",
+      "programName": "Medical Assistance to the Aged, Blind, and Disabled (MAABD)",
+      "facts": {
+        "age": 65,
+        "income_1": 994,
+        "income_2": 1491,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "7756840800",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "7756840800",
+        "sources": {
+          "age": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/B-300_MAABD_MEDICAL_CATEGORIES_Mar_17.pdf",
+          "income": null,
+          "assets": "https://www.dss.nv.gov/siteassets/dwss.nv.gov/content/medical/E-400_Resources_Sept_2024_ADA.pdf",
+          "phone": "https://www.dss.nv.gov/programs/Medicaid/apply-for-assistance/"
+        },
+        "notes": "MAABD in Nevada uses SSI-based budgeting and a senior pathway for age 65+; no clear current income limit for the senior MAABD pathway was found in the retrievable official sources."
+      },
+      "flags": [],
+      "notes": "MAABD in Nevada uses SSI-based budgeting and a senior pathway for age 65+; no clear current income limit for the senior MAABD pathway was found in the retrievable official sources."
+    },
+    {
+      "programId": "nv-family-caregiver-support-program",
+      "programName": "Family Caregiver Support Program",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8009920900",
+          "7756874210",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8778611893",
+        "sources": {
+          "age": "https://adsd.nv.gov/uploadedfiles/adsdnvgov/content/Programs/Grant/ServSpecs/GeneralServiceSpecifications.pdf",
+          "income": null,
+          "assets": null,
+          "phone": "https://adsd.nv.gov/Programs/Seniors/ADRC/ADRCProgram/"
+        },
+        "notes": "Nevada’s Title III-E Family Caregiver Support Program serves caregivers of adults age 60+ for the senior pathway; no income or asset test found in the retrievable official sources."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 60
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8009920900",
+            "7756874210",
+            "211"
+          ],
+          "verifiedValue": "8778611893"
+        }
+      ],
+      "notes": "Nevada’s Title III-E Family Caregiver Support Program serves caregivers of adults age 60+ for the senior pathway; no income or asset test found in the retrievable official sources."
     }
   ]
 }

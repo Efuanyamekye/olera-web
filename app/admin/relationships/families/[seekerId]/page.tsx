@@ -11,7 +11,7 @@ import type { BenefitsCaseView } from "@/lib/benefits/case-view.server";
 import type { CityLeadToolsData } from "@/components/admin/CityLeadTools";
 import { TABS, matches, type Tab } from "@/lib/seeker-touches/queues";
 import {
-  SEEKER_FLAG_LABEL,
+  seekerFlagLabel,
   type SeekerFlag,
   type SeekerRelationship,
   type SeekerRelationshipRow,
@@ -207,7 +207,7 @@ function FamilyList({ currentId, backQuery }: { currentId: string; backQuery: st
                 <span className="min-w-0 flex-1">
                   <span className={`block truncate text-[14px] font-semibold ${r.label_is_fallback ? "text-gray-500" : "text-gray-900"}`}>{r.label}</span>
                   {preview && <span className="block truncate text-[13px] text-gray-500">{preview}</span>}
-                  {flag && <span className="block truncate text-[12px] text-gray-900">{SEEKER_FLAG_LABEL[flag as SeekerFlag]}</span>}
+                  {flag && <span className="block truncate text-[12px] text-gray-900">{seekerFlagLabel(flag as SeekerFlag, r.city_lead_id)}</span>}
                 </span>
               </Link>
             </li>
@@ -1479,12 +1479,14 @@ function CasePanel({
     : flags.includes("awaiting_reply")
       ? { title: `Reply to ${familyName}`, when: "They wrote and nobody has answered" }
       : flags.includes("tried_three")
-        ? { title: "Send one last message, then archive", when: "Called three times, never reached" }
+        ? { title: "Text twice, then archive", when: "Called three times, never reached" }
         : flags.includes("promise_owed")
-          ? { title: `Call ${familyName}`, when: "We promised a call" }
+          ? { title: `Call ${familyName}`, when: data.city_lead_id ? "We promised a call" : `They asked ${data.providers[0]?.name ?? "a provider"} about care. Check they're being looked after.` }
           : flags.includes("provider_no_show")
             ? { title: "Find them another provider", when: "The provider never got back to them" }
-            : null;
+            : flags.includes("check_provider") && data.handed_to
+              ? { title: `Ask ${data.handed_to.name} how it went`, when: "Handed over three or more days ago. Log what they say." }
+              : null;
 
   const consentText =
     consent === "opted_out"
@@ -2117,14 +2119,14 @@ function CaseInner() {
                 {/* On a phone one line says what is wrong; the Next step in the
                     Case tab says what to do about it. */}
                 {!isDesktop && data.flags[0] && (
-                  <p className="mt-2 text-[14px] font-semibold text-gray-900">{SEEKER_FLAG_LABEL[data.flags[0]]}</p>
+                  <p className="mt-2 text-[14px] font-semibold text-gray-900">{seekerFlagLabel(data.flags[0], data.city_lead_id)}</p>
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
                 {isDesktop &&
                   data.flags.map((f) => (
                     <span key={f} className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
-                      {SEEKER_FLAG_LABEL[f]}
+                      {seekerFlagLabel(f, data.city_lead_id)}
                     </span>
                   ))}
                 {data.archived && (

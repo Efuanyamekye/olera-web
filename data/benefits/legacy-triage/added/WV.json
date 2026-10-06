@@ -1,0 +1,9 @@
+[
+  {
+    "state": "WV",
+    "id": "wv-aged-blind-disabled-medicaid",
+    "name": "Aged, Blind, and Disabled Medicaid",
+    "legacyId": "aged-blind-and-disabled-medicaid",
+    "programType": "benefit"
+  }
+]

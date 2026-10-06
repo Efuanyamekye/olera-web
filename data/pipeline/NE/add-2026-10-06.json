@@ -1,0 +1,141 @@
+{
+  "state": "NE",
+  "addedAt": "2026-10-06T06:30:57.225Z",
+  "dive": {
+    "state": "NE",
+    "stateName": "Nebraska",
+    "diveAt": "2026-10-06T06:29:23.680Z",
+    "total": 1,
+    "parsed": 1,
+    "programs": [
+      {
+        "name": "Nebraska Family Caregiver Support Program",
+        "eligibility": {
+          "age": 18,
+          "income_limits": "No fixed income limit is stated for the caregiver. Eligibility is based on the care recipient’s situation and, for some service components, financial screening is used for the recipient. For respite-funded eligibility in Nebraska’s aging-state-plan material, the applicant/recipient must have gross income minus allowable exclusions at or below 312% of the federal poverty level, adjusted for family size, and family resources must not exceed $35,000 for a family of one or $50,000 for a family of two or more.[12] The state plan also says family size is based on adults and children related by blood, marriage, or adoption living in the same household, and an unborn child may be counted.[12] The brochure does not present a caregiver income test.[1]",
+          "asset_limits": "For the respite-related program standards reflected in Nebraska’s plan, family resources over $35,000 for a family of one or $50,000 for a family of two or more make the applicant ineligible.[12] The material reviewed does not provide a detailed asset-counting list or exemptions; it only says the department considers income and resources and that applicants with sufficient resources may be found ineligible.[12]",
+          "other_requirements": [
+            "Caregiver must be an adult family member or other informal caregiver age 18 or older.[1]",
+            "Care recipient must be age 60 or older, or have Alzheimer’s disease or a related disorder, for the older-adult caregiver track.[1][7]",
+            "Grandparent/relative caregiver track applies to older relatives age 55 or older caring for a child under 18 or an adult age 18-59 with disabilities.[1][7]",
+            "Caregiving must be unpaid/informal rather than paid employment.[1]",
+            "The program is for non-institutional settings and is intended for people with special needs requiring ongoing care.[12]",
+            "For some respite eligibility standards, the caregiver must live in the same home as the person with special needs or provide care in the recipient’s home for at least 4 hours per day Sunday through Saturday.[12]"
+          ]
+        },
+        "benefits": {
+          "type": "service",
+          "value": "The program provides care management, respite, education and training, information and assistance, and limited supplemental services such as transportation and home modifications.[4][8] Nebraska’s brochure also describes services for counseling/support and help maintaining the caregiving role, and says a service can be approved if it helps the caregiver successfully continue caregiving.[1][4] No single statewide dollar cap or fixed hourly benefit amount was found in the sources reviewed; services are individualized and may include respite and supplemental supports subject to approval and local availability.[1][4]",
+          "varies_by": "region"
+        },
+        "application": {
+          "methods": [
+            "Online through Nebraska DHHS respite/caregiver pages: https://dhhs.ne.gov/Pages/Respite.aspx[6][9]",
+            "Through local Area Agencies on Aging, which administer caregiver support services locally[2][5][8]",
+            "By phone through the local Area Agency on Aging or caregiver support office; the reviewed sources did not provide one statewide caregiver-support application phone number[2][5][8]",
+            "In-person through local aging offices/Area Agencies on Aging[2][5][8]"
+          ],
+          "processing_time": "No statewide processing-time standard was found in the sources reviewed. Eligibility is generally finalized after a comprehensive assessment with a care manager, so timing depends on local staffing and assessment completion.[2]",
+          "waitlist": "No statewide waitlist policy was identified in the reviewed sources. Because services are locally administered and some supports are limited, availability may depend on regional funding and provider capacity.[4][8]",
+          "forms": [
+            "No standalone statewide family caregiver support application form number was identified in the reviewed sources.",
+            "For respite-related Nebraska DHHS eligibility, the state material indicates an application process through the respite page rather than a single publicly cited universal form.[6][9]"
+          ],
+          "documents": [
+            "Information about the care recipient’s age, diagnosis, and functional needs[1][2][7]",
+            "Household information for all adults and children related by blood, marriage, or adoption living in the home[12]",
+            "Income information and resource information if financial screening is required for the specific service track[12]",
+            "Caregiver contact information and proof of caregiver relationship[1][7]",
+            "For some local assessments, documentation showing the care recipient needs help with activities of daily living or has Alzheimer’s/dementia[2][1]"
+          ]
+        },
+        "geography": {
+          "statewide": true,
+          "restrictions": "Available throughout Nebraska, but services are delivered through local Area Agencies on Aging and can differ by region and provider.[7][8][15]",
+          "regional_variations": "Yes. The core program exists statewide, but intake, assessment, service menus, and available supplemental supports are handled locally by Area Agencies on Aging, so wait times and what can actually be approved may vary by region.[2][5][8]",
+          "offices_or_providers": [
+            "Eastern Nebraska Office on Aging (ENOA) caregiver support program[2]",
+            "Northeast Nebraska Area Agency on Aging caregiver support program[5]",
+            "Other local Area Agencies on Aging across Nebraska administering the statewide caregiver support network[7][8]"
+          ]
+        },
+        "official_source": "https://dhhs.ne.gov/Pages/Respite.aspx",
+        "gotchas": [
+          "There is no simple universal income test for the caregiver; financial screening can apply to the care recipient and can vary by service track.[1][12]",
+          "The program is not one single statewide office; it is delivered through local Area Agencies on Aging, so the experience depends on where the family lives.[2][5][8]",
+          "Services are not guaranteed cash grants; the program mainly offers coordinated supports, respite, education, and limited supplemental services approved case by case.[1][4][8]",
+          "Eligibility can depend on the care recipient’s age, diagnosis, disability status, and household resources, so families should verify the correct track before applying.[1][7][12]",
+          "The reviewed sources did not show one definitive statewide form number, phone number, or processing-time standard for all Nebraska caregiver cases.[2][6][9]"
+        ],
+        "data_shape_notes": "This program is regionally administered, service-based, and eligibility is track-specific: one track serves caregivers of adults 60+, another serves caregivers of people with Alzheimer’s/related disorders, and another serves grandparents/older relatives caring for children or adults with disabilities.[1][7] Financial criteria appear in the state plan for certain respite services, while the broader caregiver-support brochure emphasizes caregiver age and care-recipient category rather than a single household-income table.[1][12]",
+        "_raw": "{\n  \"name\": \"Nebraska Family Caregiver Support Program\",\n  \"eligibility\": {\n    \"age\": 18,\n    \"income_limits\": \"No fixed income limit is stated for the caregiver. Eligibility is based on the care recipient’s situation and, for some service components, financial screening is used for the recipient. For respite-funded eligibility in Nebraska’s aging-state-plan material, the applicant/recipient must have gross income minus allowable exclusions at or below 312% of the federal poverty level, adjusted for family size, and family resources must not exceed $35,000 for a family of one or $50,000 for a family of two or more.[12] The state plan also says family size is based on adults and children related by blood, marriage, or adoption living in the same household, and an unborn child may be counted.[12] The brochure does not present a caregiver income test.[1]\",\n    \"asset_limits\": \"For the respite-related program standards reflected in Nebraska’s plan, family resources over $35,000 for a family of one or $50,000 for a family of two or more make the applicant ineligible.[12] The material reviewed does not provide a detailed asset-counting list or exemptions; it only says the department considers income and resources and that applicants with sufficient resources may be found ineligible.[12]\",\n    \"other_requirements\": [\n      \"Caregiver must be an adult family member or other informal caregiver age 18 or older.[1]\",\n      \"Care recipient must be age 60 or older, or have Alzheimer’s disease or a related disorder, for the older-adult caregiver track.[1][7]\",\n      \"Grandparent/relative caregiver track applies to older relatives age 55 or older caring for a child under 18 or an adult age 18-59 with disabilities.[1][7]\",\n      \"Caregiving must be unpaid/informal rather than paid employment.[1]\",\n      \"The program is for non-institutional settings and is intended for people with special needs requiring ongoing care.[12]\",\n      \"For some respite eligibility standards, the caregiver must live in the same home as the person with special needs or provide care in the recipient’s home for at least 4 hours per day Sunday through Saturday.[12]\"\n    ]\n  },\n  \"benefits\": {\n    \"type\": \"service\",\n    \"value\": \"The program provides care management, respite, education and training, information and assistance, and limited supplemental services such as transportation and home modifications.[4][8] Nebraska’s brochure also describes services for counseling/support and help maintaining the caregiving role, and says a service can be approved if it helps the caregiver successfully continue caregiving.[1][4] No single statewide dollar cap or fixed hourly benefit amount was found in the sources reviewed; services are individualized and may include respite and supplemental supports subject to approval and local availability.[1][4]\",\n    \"varies_by\": \"region\"\n  },\n  \"application\": {\n    \"methods\": [\n      \"Online through Nebraska DHHS respite/caregiver pages: https://dhhs.ne.gov/Pages/Respite.aspx[6][9]\",\n      \"Through local Area Agencies on Aging, which administer caregiver support services locally[2][5][8]\",\n      \"By phone through the local Area Agency on Aging or caregiver support office; the reviewed sources did not provide one statewide caregiver-support application phone number[2][5][8]\",\n      \"In-person through local aging offices/Area Agencies on Aging[2][5][8]\"\n    ],\n    \"processing_time\": \"No statewide processing-time standard was found in the sources reviewed. Eligibility is generally finalized after a comprehensive assessment with a care manager, so timing depends on local staffing and assessment completion.[2]\",\n    \"waitlist\": \"No statewide waitlist policy was identified in the reviewed sources. Because services are locally administered and some supports are limited, availability may depend on regional funding and provider capacity.[4][8]\",\n    \"forms\": [\n      \"No standalone statewide family caregiver support application form number was identified in the reviewed sources.\",\n      \"For respite-related Nebraska DHHS eligibility, the state material indicates an application process through the respite page rather than a single publicly cited universal form.[6][9]\"\n    ],\n    \"documents\": [\n      \"Information about the care recipient’s age, diagnosis, and functional needs[1][2][7]\",\n      \"Household information for all adults and children related by blood, marriage, or adoption living in the home[12]\",\n      \"Income information and resource information if financial screening is required for the specific service track[12]\",\n      \"Caregiver contact information and proof of caregiver relationship[1][7]\",\n      \"For some local assessments, documentation showing the care recipient needs help with activities of daily living or has Alzheimer’s/dementia[2][1]\"\n    ]\n  },\n  \"geography\": {\n    \"statewide\": true,\n    \"restrictions\": \"Available throughout Nebraska, but services are delivered through local Area Agencies on Aging and can differ by region and provider.[7][8][15]\",\n    \"regional_variations\": \"Yes. The core program exists statewide, but intake, assessment, service menus, and available supplemental supports are handled locally by Area Agencies on Aging, so wait times and what can actually be approved may vary by region.[2][5][8]\",\n    \"offices_or_providers\": [\n      \"Eastern Nebraska Office on Aging (ENOA) caregiver support program[2]\",\n      \"Northeast Nebraska Area Agency on Aging caregiver support program[5]\",\n      \"Other local Area Agencies on Aging across Nebraska administering the statewide caregiver support network[7][8]\"\n    ]\n  },\n  \"official_source\": \"https://dhhs.ne.gov/Pages/Respite.aspx\",\n  \"gotchas\": [\n    \"There is no simple universal income test for the caregiver; financial screening can apply to the care recipient and can vary by service track.[1][12]\",\n    \"The program is not one single statewide office; it is delivered through local Area Agencies on Aging, so the experience depends on where the family lives.[2][5][8]\",\n    \"Services are not guaranteed cash grants; the program mainly offers coordinated supports, respite, education, and limited supplemental services approved case by case.[1][4][8]\",\n    \"Eligibility can depend on the care recipient’s age, diagnosis, disability status, and household resources, so families should verify the correct track before applying.[1][7][12]\",\n    \"The reviewed sources did not show one definitive statewide form number, phone number, or processing-time standard for all Nebraska caregiver cases.[2][6][9]\"\n  ],\n  \"data_shape_notes\": \"This program is regionally administered, service-based, and eligibility is track-specific: one track serves caregivers of adults 60+, another serves caregivers of people with Alzheimer’s/related disorders, and another serves grandparents/older relatives caring for children or adults with disabilities.[1][7] Financial criteria appear in the state plan for certain respite services, while the broader caregiver-support brochure emphasizes caregiver age and care-recipient category rather than a single household-income table.[1][12]\"\n}"
+      }
+    ]
+  },
+  "classify": {
+    "state": "NE",
+    "stateName": "Nebraska",
+    "classifiedAt": "2026-10-06T06:29:23.686Z",
+    "total": 1,
+    "typeSummary": {
+      "benefit": 1
+    },
+    "scopeSummary": {
+      "state": 1
+    },
+    "complexitySummary": {
+      "deep": 1
+    },
+    "programs": [
+      {
+        "name": "Nebraska Family Caregiver Support Program",
+        "programType": "benefit",
+        "geographicScope": {
+          "type": "state",
+          "stateVariation": false,
+          "localEntities": [
+            {
+              "name": "Eastern Nebraska Office on Aging (ENOA) caregiver support program[2]",
+              "type": "service-area"
+            },
+            {
+              "name": "Northeast Nebraska Area Agency on Aging caregiver support program[5]",
+              "type": "service-area"
+            },
+            {
+              "name": "Other local Area Agencies on Aging across Nebraska administering the statewide caregiver support network[7][8]",
+              "type": "service-area"
+            }
+          ]
+        },
+        "complexity": "deep",
+        "recommendedSections": [
+          "prose",
+          "income-table",
+          "what-counts",
+          "documents",
+          "county-directory",
+          "callout"
+        ],
+        "signals": {
+          "benefitType": "service",
+          "hasIncomeTiers": true,
+          "hasAssetLimits": true,
+          "hasRegionalVariation": true,
+          "hasFunctionalReq": false,
+          "hasMultipleTiers": false,
+          "isStatewide": true
+        }
+      }
+    ]
+  },
+  "added": [
+    {
+      "state": "NE",
+      "id": "ne-family-caregiver-support-program",
+      "name": "Nebraska Family Caregiver Support Program",
+      "legacyId": "nebraska-family-caregiver-support-program",
+      "programType": "benefit"
+    }
+  ]
+}

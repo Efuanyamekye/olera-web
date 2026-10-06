@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-04T02:03:26.927Z
+ * Last updated: 2026-10-06T12:32:14.829Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -208,25 +208,16 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "assets_individual",
-          "from": 103645,
-          "to": 94523,
-          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
-        },
-        {
           "field": "phone",
           "from": [
             "8556732372",
             "211"
           ],
-          "to": "5039455600",
-          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-income-resource-standards.pdf",
+          "to": "5039455811",
+          "source": "https://www.oregon.gov/odhs/home-care-consumers/pages/default.aspx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -394,10 +385,10 @@ export const drafts: PipelineStateDrafts = {
             "18556732372"
           ],
           "to": "8442247223",
-          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/long-term-care.aspx",
+          "source": "https://sharedsystems.dhsoha.state.or.us/DHSForms/Served/de2658.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -625,7 +616,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -648,6 +639,13 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
           "reason": "page also lists ours ((855) 673-2372)",
           "dismissedAt": "2026-10-04"
+        },
+        {
+          "field": "phone",
+          "proposed": "8006999075",
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/Pages/medicare-savings-programs.aspx",
+          "reason": "page also lists ours ((855) 673-2372)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -1070,7 +1068,8 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 453-5511",
       "sourceUrl": "https://www.oregon.gov/ohcs/energy-weatherization/pages/utility-bill-payment-assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-wap",
@@ -2069,6 +2068,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(503) 224-4094",
           "description": "Number listed on lasoregon.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(503) 581-5265",
+          "description": "Number listed on lasoregon.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2136,6 +2141,24 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://lasoregon.org/about/",
           "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "5032242640",
+            "5032445204",
+            "5419268678",
+            "5413856944",
+            "18006786944",
+            "5032244086",
+            "5032244094"
+          ],
+          "to": "(503) 581-5265",
+          "source": "https://lasoregon.org/locations/salem-regional-office/",
+          "flaggedAt": "2026-10-06T12:27:37.787Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -2425,7 +2448,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-04T00:53:23.578Z"
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     },
@@ -2558,6 +2581,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(541) 737-4331",
           "description": "Number listed on registrar.oregonstate.edu",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(541) 346-2935",
+          "description": "Number listed on registrar.uoregon.edu",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2636,6 +2665,21 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://registrar.oregonstate.edu/how-register/audit-registration",
           "flaggedAt": "2026-10-04T00:53:23.578Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "9717226111",
+            "5033250910",
+            "8005478887",
+            "5417374331"
+          ],
+          "to": "(541) 346-2935",
+          "source": "https://registrar.uoregon.edu/registration/register-classes/auditing-courses",
+          "flaggedAt": "2026-10-06T12:27:37.787Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -2748,6 +2792,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Referral form for HRSN services",
           "hours": "Online referral system"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 834-4304",
+          "description": "Number listed on ohpopencard.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2819,6 +2869,278 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.oregon.gov/oha/hsd/ohp/pages/housing.aspx",
           "reason": "page also lists ours ((800) 273-0557)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8002730557",
+            "211"
+          ],
+          "to": "(888) 834-4304",
+          "source": "https://ohpopencard.org/hrsn/",
+          "flaggedAt": "2026-10-05T18:19:59.332Z",
+          "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
+    },
+    {
+      "id": "or-medicaid-apd-waiver",
+      "name": "Oregon Medicaid - Aged and Physically Disabled (APD) Waiver",
+      "shortName": "APD Waiver",
+      "tagline": "If your aging parent needs nursing-home-level care but wants to stay home or in the community, this Oregon Medicaid waiver pays for the case management and transition support to make that possible.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false,
+        "localEntities": [
+          {
+            "name": "Oregon Department of Human Services / Aging and People with Disabilities",
+            "type": "service-area"
+          },
+          {
+            "name": "Local Aging and Disability Resource Center / local APD office",
+            "type": "service-area"
+          },
+          {
+            "name": "ONE Customer Service Center",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "If your parent is 65 or older (or has a physical disability and is at least 18) and their care needs are serious enough that a doctor or assessor would say they require nursing-home-level support, Oregon's APD Waiver may fund the services that let them live at home or in a community setting instead of a facility.\n\nThe waiver does not pay for broad in-home caregiving the way people often expect. What it specifically covers is waiver case management (a coordinator who arranges and monitors your parent's care plan), community transition services (one-time help with moving costs and setup when your parent leaves a facility or provider-operated setting to live more independently), and housing support services (help finding or keeping housing so in-home care can actually be delivered). These are targeted, not comprehensive, services.\n\nTo qualify, your parent must pass two gates: a financial eligibility test under Oregon's Medicaid rules and a functional assessment confirming they meet nursing-facility level of care. Income limits are commonly reported at $2,523/month for a single applicant. Asset limits are commonly reported at $2,000 in countable assets for a single applicant. Because Medicaid rules are complex and these figures can change, verify current limits with Oregon APD before applying.",
+      "savingsRange": "",
+      "savingsSource": "Free service; the waiver funds specific support services rather than paying cash or reimbursing the family directly.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ (or age 18-64 with a physical disability)",
+          "Oregon resident",
+          "Income commonly reported below $2,523/month for a single applicant",
+          "Countable assets commonly reported below $2,000 for a single applicant",
+          "Must meet nursing-facility level of care through a clinical assessment"
+        ],
+        "ageRequirement": "65+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2523
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5046
+          }
+        ],
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 4000,
+          "countedAssets": [
+            "Cash",
+            "Checking and savings accounts",
+            "Stocks and bonds",
+            "Non-exempt investment accounts",
+            "Additional real property beyond the primary home"
+          ],
+          "exemptAssets": [
+            "Primary home (if certain Medicaid rules are met)",
+            "One vehicle",
+            "Personal belongings and household furnishings",
+            "Pre-paid or irrevocable burial and funeral arrangements"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Your parent must meet nursing-facility level of care, meaning a clinical assessor from Oregon APD determines that your parent needs substantial daily help with activities such as bathing, dressing, medication management, or mobility at a level that would otherwise require institutional care. This is not a self-reported threshold; APD conducts the assessment.",
+        "otherRequirements": [
+          "Must be an Oregon resident",
+          "Must be a U.S. citizen or meet Medicaid immigration eligibility rules",
+          "Must qualify for Oregon Health Plan (OHP) / Medicaid financial eligibility",
+          "Must need to avoid or transition from institutional or provider-operated care and be able to receive services safely in the community"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Start by calling the ONE Customer Service Center at 800-699-9075 or applying online through Oregon's benefits portal; after financial eligibility is confirmed, APD schedules a separate functional assessment, so expect the full process to take longer than a standard benefits application.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Gather your parent's basic documents before you call",
+            "description": "Before contacting APD, locate your parent's Social Security award letter, proof of Oregon residency (a utility bill or lease works), proof of age (birth certificate or Oregon ID), and income statements. These are what the intake worker will ask for first. You do not need everything on your full document list to start the conversation."
+          },
+          {
+            "step": 2,
+            "title": "Start the application: call 800-699-9075 or apply online",
+            "description": "Call the ONE Customer Service Center at 800-699-9075 (Monday through Friday, 7am to 6pm) or visit https://www.oregon.gov/dhs/ASSISTANCE/Pages/apply-for-benefits.aspx to submit the Application for Oregon Health Plan Benefits. You can also apply in person at a local APD office or mail a completed paper application. All paths open the same Medicaid eligibility review."
+          },
+          {
+            "step": 3,
+            "title": "Complete the financial eligibility review",
+            "description": "A caseworker will review your parent's income, assets, residency, and citizenship status against Oregon Medicaid rules. You will likely be asked to submit supporting documents. Submit everything at once to avoid delays. If only one spouse is applying, only the applicant's income counts toward the $2,523/month limit."
+          },
+          {
+            "step": 4,
+            "title": "Schedule and complete the nursing-facility level-of-care assessment",
+            "description": "After financial eligibility is cleared, an APD assessor will conduct a functional evaluation of your parent's daily care needs. This is a separate step from the financial review. The assessor determines whether your parent meets the clinical threshold required for waiver services. Ask APD how long the assessment wait is in your county, as local backlogs vary."
+          },
+          {
+            "step": 5,
+            "title": "Work with an APD case manager to set up your parent's service plan",
+            "description": "If your parent qualifies, an APD case manager will coordinate the specific waiver services: case management, community transition help (if moving out of a facility), and housing support if needed. Ask explicitly about local provider availability, because the waiver's coverage does not automatically mean a provider is immediately available in your area."
+          }
+        ],
+        "processingTime": "No precise statewide processing time is published for the full APD Waiver process. Financial eligibility review and the separate functional assessment each take time; families should plan for the process to take longer than a standard benefits application. Ask APD directly how long each step is currently taking in your region.",
+        "waitlist": "The gathered sources do not show a single statewide waitlist number. Oregon APD is also developing a separate 1115 waiver initiative, which suggests some service pathways may be capacity-sensitive. Ask APD whether there is a local assessment backlog or service availability delay when you call.",
+        "tip": "If your parent is currently in a hospital or short-term rehab facility, ask the facility's discharge planner to contact APD on your behalf. They can often initiate the process before discharge, which may reduce the gap between leaving the facility and having services in place.",
+        "urls": [
+          {
+            "label": "Oregon APD Waivers and K-Plan information",
+            "url": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/pages/waivers-kplan.aspx"
+          },
+          {
+            "label": "Apply for Oregon Health Plan Benefits online",
+            "url": "https://www.oregon.gov/dhs/ASSISTANCE/Pages/apply-for-benefits.aspx"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security award letter (shows monthly benefit amount)",
+        "Proof of Oregon residency: a utility bill, current lease, or Oregon-issued ID showing your parent's address",
+        "Proof of age: birth certificate, U.S. passport, or Oregon driver's license",
+        "Proof of U.S. citizenship or qualifying immigration status: U.S. birth certificate, U.S. passport, or immigration documents",
+        "Social Security card",
+        "Pension, annuity, or retirement income statements showing current monthly amounts",
+        "Current balances for all checking and savings accounts (APD will tell you which statements to bring once your review is scheduled)",
+        "Investment account statements: stocks, bonds, mutual funds, IRAs",
+        "Life insurance policies: face value and any cash surrender value",
+        "Vehicle title or registration for any vehicle your parent owns beyond the one exempt vehicle",
+        "Deed or property tax statement for any real property beyond the primary home",
+        "Pre-paid burial contracts or irrevocable funeral trust documents (these may be listed as exempt assets)",
+        "Medical or functional documentation from your parent's physician describing their current care needs, diagnoses, and level of daily assistance required",
+        "Legal documents if someone other than the applicant is applying on their behalf: power of attorney or guardianship paperwork",
+        "Housing information: current lease, proof of home ownership, or documentation of living situation if applying for housing support services"
+      ],
+      "contacts": [
+        {
+          "label": "ONE Customer Service Center (APD Benefits Line)",
+          "phone": "800-699-9075",
+          "description": "The primary line to apply for Oregon Health Plan / Medicaid benefits and to ask about APD Waiver eligibility. This is where you start the application.",
+          "hours": "Mon-Fri 7am-6pm PT"
+        },
+        {
+          "label": "Oregon APD / Local APD Office",
+          "phone": null,
+          "description": "After financial eligibility is opened, your parent's case transfers to a local APD office for functional assessment and service coordination. Find your local office at https://www.oregon.gov/odhs/apd/pages/offices.aspx",
+          "hours": "Varies by office"
+        },
+        {
+          "label": "Oregon 211",
+          "phone": "2-1-1",
+          "description": "General statewide helpline that can direct you to local APD offices and aging services if you are unsure where to start. Does not process APD applications directly.",
+          "hours": "24 hours, 7 days a week"
+        }
+      ],
+      "applicationNotes": [
+        "If your parent is applying but their spouse is not, only your parent's income counts toward the $2,523/month limit. However, asset rules still apply to both spouses' combined assets; the non-applicant spouse may keep up to a community spouse resource allowance (commonly reported at up to $137,400 in countable assets). These figures should be verified with APD because Medicaid spousal rules are legally complex.",
+        "The waiver's core services are narrower than most families expect. Case management, community transition, and housing supports are the specific covered services; the waiver does not replace a broader home-care aide benefit. If your parent needs personal care or in-home assistance beyond these services, ask APD whether they also qualify for other Oregon Medicaid-funded in-home programs.",
+        "Oregon is also developing a separate 1115 waiver initiative, which may expand or change some APD service pathways over time. When you speak with APD, ask specifically whether your parent should be applying under the 1915(c) Aged and Physically Disabled Waiver or another authority.",
+        "A family may qualify on paper but still face a delay before services start because of local assessment scheduling and provider availability. Ask your APD caseworker for an estimated timeline specific to your county, and document the date you applied so you have a record if a dispute arises later."
+      ],
+      "relatedPrograms": [
+        "Oregon Health Plan (OHP) / Oregon Medicaid",
+        "Oregon In-Home Services (Personal Care and Homecare Worker programs through APD)",
+        "Oregon K Plan (1115 waiver initiative for community-based services)",
+        "Oregon Senior Farm Direct Nutrition Program (for food support alongside care services)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "heading": "What the APD Waiver actually pays for",
+          "body": "Families often expect this waiver to cover a home-care aide who comes daily. It does not. The three services this waiver specifically funds are: (1) waiver case management, meaning a coordinator who builds and monitors your parent's care plan; (2) community transition services, which are one-time costs to help your parent move from a facility or provider-operated setting into independent community living (such as deposits, basic furnishings, or setup costs); and (3) housing support services, which help your parent find or keep housing so in-home care can be delivered. If your parent needs personal care beyond these, ask APD what other Medicaid-funded home-care options exist."
+        },
+        {
+          "type": "callout",
+          "heading": "The two gates your parent must pass",
+          "body": "Gate 1 is financial: income commonly reported below $2,523/month and countable assets commonly reported below $2,000 for a single applicant. These figures are reported by secondary sources and should be confirmed with Oregon APD. Gate 2 is functional: an APD assessor must determine your parent meets nursing-facility level of care, meaning they need substantial daily help with tasks like bathing, dressing, or medication management at a level that would otherwise require a nursing home. Passing one gate does not guarantee passing the other."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can my parent keep their house if they apply for the APD Waiver?",
+          "answer": "Yes, in most cases. The primary home is generally exempt from Oregon Medicaid's countable asset rules as long as your parent lives there or intends to return. The $2,000 countable asset limit applies to assets like cash, bank accounts, stocks, and bonds, not the home itself. However, Medicaid's treatment of home equity can become more complex over time, including estate recovery rules after the person passes away. Ask an APD eligibility worker to walk you through how the home is treated in your parent's specific situation."
+        },
+        {
+          "question": "My parent's spouse is not applying. Does the spouse's income count against the limit?",
+          "answer": "No. When only one spouse applies, Oregon Medicaid counts only the applicant's income toward the $2,523/month limit. However, both spouses' assets are considered together at the start of the review, and the non-applicant spouse may keep a community spouse resource allowance (commonly reported at up to $137,400). Because spousal Medicaid rules are legally complex and these figures can change, verify the current allowance with APD at 800-699-9075 before making any financial decisions."
+        },
+        {
+          "question": "How long is the waitlist, and what do we do in the meantime?",
+          "answer": "Oregon APD does not publish a single statewide waitlist number for the APD Waiver. Service availability can vary by county, and Oregon is also developing a separate 1115 waiver initiative that may affect access. When you call 800-699-9075, ask specifically whether there is a current assessment backlog or service availability delay in your parent's county. While waiting, ask APD whether your parent qualifies for any Oregon Medicaid in-home services that do not require waiver enrollment."
+        },
+        {
+          "question": "Can I apply on behalf of my parent if they can't manage the process themselves?",
+          "answer": "Yes. A family member, legal representative, or someone with power of attorney can apply on your parent's behalf. Bring your legal authorization document (power of attorney, guardianship order, or similar) when you apply. If your parent is currently hospitalized, ask the hospital's discharge planner to contact APD directly; discharge planners frequently initiate this process."
+        },
+        {
+          "question": "Can my parent apply for the APD Waiver and other Oregon Medicaid programs at the same time?",
+          "answer": "Yes. The APD Waiver application runs through the Oregon Health Plan application process, which also screens for other Medicaid-funded services your parent may qualify for. You do not need separate applications for each program. When your parent's case is assigned to a local APD office, ask the caseworker what additional in-home or personal care services your parent might be eligible for under regular Medicaid, separate from the waiver."
+        },
+        {
+          "question": "What happens after my parent is enrolled if their care needs get worse?",
+          "answer": "Your parent's APD case manager is responsible for reviewing and updating the care plan when needs change. You can request a reassessment at any time by contacting your parent's assigned APD case manager. If your parent's needs escalate to the point where community services are no longer safe or sufficient, the case manager can also help coordinate a transition to a higher level of care."
+        },
+        {
+          "question": "The waiver says it covers community transition services. Does that mean it pays for moving costs if my parent is leaving a nursing home?",
+          "answer": "Yes, that is the intent. Community transition services are a one-time benefit designed to cover set-up costs when your parent moves from a nursing facility or provider-operated setting into community or home-based living. This can include things like security deposits, basic furnishings, or household essentials needed to establish the new living situation. The specific items covered and any dollar limits should be confirmed with your parent's APD case manager, as these details are determined at the service-plan level."
+        },
+        {
+          "question": "My parent has more than $2,000 in savings. Are they automatically disqualified?",
+          "answer": "Not necessarily. Some assets are exempt from the $2,000 countable asset limit, including the primary home (if certain conditions are met), one vehicle, personal belongings, and pre-paid or irrevocable burial arrangements. If your parent's savings exceed the limit after exemptions are applied, they may need to spend down countable assets before qualifying. Medicaid planning is a specialized area; consider consulting an elder law attorney before moving or spending assets, because some transfers can trigger a penalty period."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "Signpost",
+      "phone": "800-699-9075",
+      "sourceUrl": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/pages/waivers-kplan.aspx",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2523,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
+        },
+        {
+          "field": "income_2",
+          "from": 5046,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4000,
+          "to": 2000,
+          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
       ]
     }
