@@ -94,6 +94,9 @@ const PROVIDER_SILENT_MS = 3 * DAY_MS;
 
 /** How long after a handover we ask how it went, and when we stop asking. */
 const CHECK_PROVIDER_MS = 3 * DAY_MS;
+
+/** How long a provider-page family with a phone stays owed a call. */
+const ORGANIC_CALL_WINDOW_MS = 14 * DAY_MS;
 const CHECK_PROVIDER_CAP_MS = 30 * DAY_MS;
 
 /**
@@ -1430,13 +1433,28 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   // a dated next action says when we will try again. Logging "called, mailbox
   // full" must not clear it — trying is not reaching, and clearing on the
   // attempt would quietly drop the families who are hardest to get hold of.
-  const callOwed =
+  const cityCallOwed =
     Boolean(lead) &&
     !lead!.reached_at &&
     !cityClosed &&
     getCityConfig(lead!.slug)?.routingMode === "concierge" &&
     !everReached &&
     !(openAction && openAction.due);
+  // A PROVIDER-PAGE FAMILY WITH A PHONE IS A CALL TOO (6 Oct). Seven in ten
+  // organic inquiries leave no number; the ones that do are the families we
+  // can actually reach, so every one of them is owed a call for two weeks from
+  // their newest inquiry. Same parking, same three strikes as a city lead. The
+  // provider has them too, so this is a check-in alongside the provider, and
+  // the row says so (present.ts). Pinged at release in provider-notifications.
+  const newestInquiryAt = inquiries.find((c) => c.type === "inquiry")?.created_at ?? null;
+  const organicCallOwed =
+    !lead &&
+    Boolean(newestInquiryAt) &&
+    now.getTime() - new Date(newestInquiryAt!).getTime() < ORGANIC_CALL_WINDOW_MS &&
+    reach.open.includes("phone") &&
+    !everReached &&
+    !(openAction && openAction.due);
+  const callOwed = cityCallOwed || organicCallOwed;
   // Only a family who still owes a call can be parked. Helen Garner had a
   // missed call logged after she had already been reached, and read "back in
   // Call them tomorrow" for a list she was never going back to.
@@ -1620,6 +1638,10 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
     const ra = rank(a);
     const rb = rank(b);
     if (ra !== rb) return ra - rb;
+    // Calls go newest first: a family who asked yesterday is still near the
+    // phone, and the call list's own clock drops the oldest after two weeks.
+    // Sorted on the episode's age, the "day N" the row shows.
+    if (ra === 1) return (a.episode.age_days ?? 999) - (b.episode.age_days ?? 999);
     return (b.days_quiet ?? -1) - (a.days_quiet ?? -1);
   });
 

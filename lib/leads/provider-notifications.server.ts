@@ -11,6 +11,8 @@ import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { newInquirySms } from "@/lib/sms/templates";
 import { sendWhatsApp } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/site-url";
+import { pingCareTeam } from "@/lib/city-ads/care-team-ping.server";
+import { stateToTimezone } from "@/lib/sms/quiet-hours";
 
 /**
  * Provider lead notifications, held until the inquiry is qualified or abandoned.
@@ -508,7 +510,81 @@ export async function sendProviderLeadNotifications(opts: {
   }
 
   await finish("sent");
+  await pingCareTeamForInquiry(db, connection, parsed, {
+    familyFirstName,
+    providerName: provider.display_name || null,
+    careTypeDisplay,
+    careRecipientDisplay,
+  });
   return { sent: true };
+}
+
+/**
+ * Put a provider-page family with a phone number in front of Ces (6 Oct).
+ *
+ * Seven in ten organic inquiries never leave a phone number; the ones that do
+ * are the families Olera can actually call, so every one of them is pinged and
+ * lands in "Call them" on the families board (lib/seeker-touches). Fired here,
+ * at release, because the phone usually arrives during enrichment, a minute
+ * after the inquiry itself, and this is the moment the provider is told too.
+ *
+ * Skipped, quietly: no phone; a city-ad family (already pinged at intake); a
+ * family who inquired elsewhere in the last fourteen days (already on her list).
+ * Never throws: the provider's notification has already gone out.
+ */
+async function pingCareTeamForInquiry(
+  db: ReturnType<typeof getServiceClient>,
+  connection: ConnectionRow,
+  parsed: Record<string, unknown>,
+  labels: { familyFirstName: string | null; providerName: string | null; careTypeDisplay: string | null; careRecipientDisplay: string | null },
+): Promise<void> {
+  try {
+    const { data: family } = await db
+      .from("business_profiles")
+      .select("id, phone, state")
+      .eq("id", connection.from_profile_id)
+      .maybeSingle();
+    const phone = normalizeUSPhone(String(parsed.seeker_phone ?? "") || family?.phone || "");
+    if (!phone) return;
+
+    const { data: cityLead } = await db
+      .from("city_leads")
+      .select("id")
+      .eq("care_seeker_id", connection.from_profile_id)
+      .limit(1)
+      .maybeSingle();
+    if (cityLead) return;
+
+    const since = new Date(new Date(connection.created_at).getTime() - 14 * 86_400_000).toISOString();
+    const { data: earlier } = await db
+      .from("connections")
+      .select("id")
+      .eq("from_profile_id", connection.from_profile_id)
+      .eq("type", "inquiry")
+      .neq("id", connection.id)
+      .gte("created_at", since)
+      .lt("created_at", connection.created_at)
+      .limit(1);
+    if (earlier?.length) return;
+
+    const state = (parsed.looking_in_state as string | null) || family?.state || null;
+    const need = [labels.careTypeDisplay, labels.careRecipientDisplay ? `for ${labels.careRecipientDisplay}` : null]
+      .filter(Boolean)
+      .join(" ");
+    await pingCareTeam({
+      city: (parsed.looking_in_city as string | null) || state || "Provider page",
+      timeZone: stateToTimezone(state) ?? "America/Chicago",
+      firstName: labels.familyFirstName || "A family",
+      phone,
+      need: need || null,
+      inquiredWith: labels.providerName || "the provider",
+      submittedAt: new Date(connection.created_at),
+      seekerId: connection.from_profile_id,
+      source: "Provider page",
+    });
+  } catch (err) {
+    console.error("[lead-notify] care team ping failed", err);
+  }
 }
 
 /**
