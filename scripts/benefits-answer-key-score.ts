@@ -5,7 +5,7 @@
  * official state and federal sources without reading Olera's program data,
  * so agreement means something. Each family runs through the plan twice:
  * once with the nine-question form's answers, once with the conversation's
- * extra facts (daily help, savings).
+ * questions replayed through the question engine.
  *
  * Reports per family and overall:
  *   found      researched "likely" programs the plan shows at all
@@ -28,6 +28,7 @@ import { buildFinderResult } from "@/lib/benefits/finder-engine.server";
 import { zipToCounty } from "@/lib/benefits/zip-lookup";
 import { emptyFinderAnswers, type FinderAnswers, type FinderIncome } from "@/lib/benefits/finder-answers";
 import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
+import { rulesOf, nextQuestion, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 
 for (const p of [resolve(process.cwd(), ".env.local"), resolve(process.env.HOME || "", "Desktop/olera-web/.env.local")]) {
   if (!existsSync(p)) continue;
@@ -60,26 +61,69 @@ const aliases: Record<string, string | null> = existsSync(`${DIR}/aliases.json`)
 const band = (n: number): FinderIncome => (n < 1000 ? "under1000" : n < 1500 ? "under1500" : n < 2500 ? "under2500" : n < 4000 ? "under4000" : "over4000");
 const ageBand = (n: number): FinderAnswers["age"] => (n < 60 ? "under_60" : n < 65 ? "60_64" : n < 75 ? "65_74" : n < 85 ? "75_84" : "85_plus");
 
-/** What a family would actually enter. Both flows ask the person's own
- *  income in practice (the conversation asks it outright). */
-function answersFor(f: Family, conversation: boolean, county: string | null): FinderAnswers {
+const hasDementia = (f: Family) => /dementia|alzheimer/i.test(`${f.story} ${f.dailyHelpDetail}`);
+
+/** The nine-question form, as a family would fill it in. Income is the
+ *  person's own (the household's for a couple). */
+function formAnswers(f: Family, county: string | null): FinderAnswers {
   return {
     ...emptyFinderAnswers(),
-    county,
     who: f.who,
     zip: f.zip,
     stateCode: f.state,
+    county,
     age: ageBand(f.age),
     // "Memory loss" only where the facts say dementia (the D families don't).
-    needs: /dementia|alzheimer/i.test(`${f.story} ${f.dailyHelpDetail}`) ? ["memory", "care"] : ["care"],
+    needs: hasDementia(f) ? ["memory", "care"] : ["care"],
     caregiverNeeds: ["paid"],
     household: f.householdSize === 1 ? "1" : f.householdSize === 2 ? "2" : "3",
     income: band(f.monthlyIncome),
     medicaid: f.medicaid === "has" ? "alreadyHas" : "doesNotHave",
     veteran: f.veteran,
-    ...(conversation
-      ? { dailyHelp: f.dailyHelp, savings: f.savings < 2000 ? "under2000" : f.savings < 10000 ? "under10000" : "over10000" }
-      : {}),
+  };
+}
+
+/** The conversation, replayed: the question engine asks what it would ask
+ *  (same rules and priors as /api/benefits/conversation), the family answers
+ *  truthfully, and the plan is built the way app/benefits/conversation's
+ *  finderAnswers() builds it. Facts it never asks stay unknown. */
+function conversationAnswers(f: Family, county: string | null): FinderAnswers {
+  const slug = getStateSlug(f.state)!;
+  const rules = getCanonicalProgramIds(slug)
+    .map((id) => getEnrichedProgram(slug, id))
+    .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit")
+    .map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
+  const truth: KnownFacts = {
+    age: ageBand(f.age) as KnownFacts["age"],
+    income: band(f.monthlyIncome) as KnownFacts["income"],
+    medicaid: f.medicaid,
+    veteran: f.veteran === "no" ? "no" : "yes", // the question includes "or the spouse of one"
+    dailyHelp: f.dailyHelp,
+    savings: f.savings < 2000 ? "under2000" : f.savings < 10000 ? "under10000" : "over10000",
+    disability: "yes",
+    // "Does she live with a spouse or partner?" A widow living with her daughter answers no.
+    household: f.householdSize === 2 ? "couple" : "alone",
+  };
+  let facts: KnownFacts = { ...EMPTY_FACTS };
+  const asked = new Set<FactKey>();
+  for (let q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS }); q; q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS })) {
+    asked.add(q.fact);
+    facts = { ...facts, [q.fact]: truth[q.fact] };
+  }
+  return {
+    ...emptyFinderAnswers(),
+    who: f.who,
+    zip: f.zip,
+    stateCode: f.state,
+    county,
+    age: facts.age,
+    needs: [hasDementia(f) ? "memory" : "care"],
+    household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
+    income: facts.income ?? (asked.has("income") ? "unsure" : null),
+    medicaid: facts.medicaid === "has" ? "alreadyHas" : facts.medicaid === "no" ? "doesNotHave" : null,
+    veteran: facts.veteran ?? null,
+    dailyHelp: facts.dailyHelp,
+    savings: facts.savings,
   };
 }
 
@@ -138,7 +182,7 @@ async function main() {
       ?? match(f.state, { name: kf.firstCall.program, verdict: "likely", reason: "" }, cat);
 
     for (const mode of ["form", "conversation"] as const) {
-      const res = await buildFinderResult(db, answersFor(f, mode === "conversation", await zipToCounty(f.zip)));
+      const res = await buildFinderResult(db, (mode === "conversation" ? conversationAnswers : formAnswers)(f, await zipToCounty(f.zip)));
       if (!res) throw new Error(`no result for ${f.id}`);
       // The first call is not repeated in programs.
       const shown = new Map([...(res.firstStep ? [res.firstStep] : []), ...res.programs].map((p) => [p.id, p.tier]));

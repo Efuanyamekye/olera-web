@@ -228,8 +228,10 @@ export default function BenefitsConversationPage() {
     needs: need ? [need] : ["care"],
     household: facts.household === "couple" ? "2" : facts.household === "alone" ? "1" : null,
     income: facts.income ?? (asked.includes("income") ? "unsure" : null),
-    medicaid: null,
-    veteran: facts.veteran ?? "no",
+    // Carry what the conversation learned; a fact it never asked stays unknown
+    // rather than "no", which would rule programs out unasked.
+    medicaid: facts.medicaid === "has" ? "alreadyHas" : facts.medicaid === "no" ? "doesNotHave" : asked.includes("medicaid") ? "notSure" : null,
+    veteran: facts.veteran ?? (asked.includes("veteran") ? "unsure" : null),
     dailyHelp: facts.dailyHelp,
     savings: facts.savings,
   });

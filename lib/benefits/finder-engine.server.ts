@@ -474,13 +474,12 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
 
   // A bare state fallback names some other region's agency (Philadelphia got
   // Berks County, answer key 6 Oct 2026; about 3 in 10 ZIP areas have no
-  // county match). The national Eldercare Locator connects them to the right one.
-  const agency: FinderAgency | null = aaa?.agency?.phone && aaa.matchedBy !== "state"
+  // county match, and six states, IL among them, have no agency on file).
+  // The national Eldercare Locator connects them to the right one.
+  const agency: FinderAgency = aaa?.agency?.phone && aaa.matchedBy !== "state"
     ? { name: aaa.agency.name, phone: aaa.agency.phone, website: aaa.agency.website ?? null }
-    : aaa
-      ? { name: "Eldercare Locator", phone: "1-800-677-1116", website: "https://eldercare.acl.gov" }
-      : null;
-  const firstStep = first?.program ?? (agency ? agencyStep(agency, a) : screened[0]?.program ?? null);
+    : { name: "Eldercare Locator", phone: "1-800-677-1116", website: "https://eldercare.acl.gov" };
+  const firstStep = first?.program ?? agencyStep(agency, a);
 
   return {
     stateCode,
