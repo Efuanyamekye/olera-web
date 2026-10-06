@@ -41,6 +41,7 @@ import {
 import { CARE_LABEL, formatUSPhone, getCityConfig, hourIn } from "@/lib/city-ads/config";
 import { startOrAdvance } from "@/lib/city-ads/offers.server";
 import { getThreadLead, notifyProvider, threadProvider, firstWordOf } from "@/lib/city-ads/thread.server";
+import { providerAlertPhone } from "@/lib/city-ads/provider-alert-phone";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** Day 2 in practice: asked the morning after the day the provider took it. */
@@ -105,10 +106,10 @@ async function acceptedProvider(
     .maybeSingle();
   if (!offer) return null;
   const [{ data: profile }, { data: pool }] = await Promise.all([
-    db.from("business_profiles").select("id, display_name, phone, email").eq("id", offer.provider_id).maybeSingle(),
+    db.from("business_profiles").select("id, display_name, phone, email, metadata").eq("id", offer.provider_id).maybeSingle(),
     db.from("city_pool").select("phone_override").eq("slug", lead.slug).eq("provider_id", offer.provider_id).maybeSingle(),
   ]);
-  const raw = (pool?.phone_override as string | null) || (profile?.phone as string | null) || null;
+  const raw = (pool?.phone_override as string | null) || providerAlertPhone(profile as { phone?: string | null; metadata?: unknown } | null) || null;
   return {
     id: offer.provider_id as string,
     name: (profile?.display_name as string) ?? "the provider",
