@@ -16,8 +16,15 @@
  *
  * Resumable: a checkpoint of provider ids already checked is kept in
  * ~/Library/Application Support/cortex-runner/website-sweep.json. Pass
- * --restart to forget it. Dead means DNS failure, connection refused, or a
- * 404/410 after one retry; a timeout is "unknown" and is not flagged.
+ * --restart to forget it.
+ *
+ * Dead means the domain does not resolve or refuses connections, after one
+ * retry. Nothing else: a 404, 410 or TLS error is "unknown" and not flagged.
+ * The first run (6 Oct 2026) flagged 404/410/TLS too, and a spot check found
+ * bot-blocks answering 404 or 410 to the crawler and 403 to a browser, and
+ * deep links (a community's page on a group site) gone while the business
+ * stood. --reverify re-fetches every open website_dead flag with the
+ * tightened rule and resolves the ones that no longer qualify.
  */
 import { createClient } from "@supabase/supabase-js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -28,6 +35,7 @@ const args = process.argv.slice(2);
 const flag = (name: string) => args.includes(name);
 const opt = (name: string) => (args.includes(name) ? args[args.indexOf(name) + 1] : null);
 const DRY = flag("--dry-run");
+const REVERIFY = flag("--reverify");
 const LIMIT = Number(opt("--limit") ?? 0) || Infinity;
 const CONCURRENCY = Number(opt("--concurrency") ?? 40);
 const TIMEOUT_MS = 10_000;
@@ -61,7 +69,7 @@ async function probe(url: string, attempt = 0): Promise<Verdict> {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(url, { method: "GET", redirect: "follow", signal: ctl.signal, headers: { "User-Agent": "Mozilla/5.0 (compatible; OleraDirectoryCheck/1.0; +https://olera.care)" , Accept: "text/html,*/*;q=0.8" } });
+    const res = await fetch(url, { method: "GET", redirect: "follow", signal: ctl.signal, headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36", Accept: "text/html,*/*;q=0.8" } });
     clearTimeout(timer);
     let facebook: string | null = null;
     if (res.ok && (res.headers.get("content-type") ?? "").includes("text/html")) {
@@ -69,13 +77,14 @@ async function probe(url: string, attempt = 0): Promise<Verdict> {
       const m = html.match(FB_RE);
       if (m) facebook = `https://www.facebook.com/${m[1].replace(/\/+$/, "").split("?")[0]}`;
     }
-    if (res.status === 404 || res.status === 410) return { status: "dead", code: res.status, error: null, facebook: null };
+    // The server answered. Whatever it said, something is there: a 404 is a
+    // moved page or a bot-block, not a closed business.
     return { status: res.ok || res.status < 500 ? "ok" : "unknown", code: res.status, error: null, facebook };
   } catch (err) {
     clearTimeout(timer);
     const msg = err instanceof Error ? `${(err as NodeJS.ErrnoException).cause ? String((err as { cause?: { code?: string } }).cause?.code ?? "") : ""} ${err.name}: ${err.message}`.trim() : String(err);
-    if (/ENOTFOUND|EAI_AGAIN|ECONNREFUSED|CERT_HAS_EXPIRED|ERR_TLS_CERT_ALTNAME_INVALID|UNABLE_TO_VERIFY/i.test(msg)) {
-      if (attempt === 0 && /EAI_AGAIN/.test(msg)) return probe(url, 1);
+    if (/ENOTFOUND|EAI_AGAIN|ECONNREFUSED/i.test(msg)) {
+      if (attempt === 0) return probe(url, 1);
       return { status: "dead", code: null, error: msg.slice(0, 160), facebook: null };
     }
     if (attempt === 0) return probe(url, 1);
@@ -106,7 +115,31 @@ async function openFlags(): Promise<Set<string>> {
   return new Set((data ?? []).map((r) => (r as { provider_id: string }).provider_id));
 }
 
+/** Re-fetch every open website_dead flag under the tightened rule; resolve what no longer qualifies. */
+async function reverify() {
+  const { data, error } = await db.from("provider_health_actions").select("id, provider_id, evidence").eq("kind", "website_dead").is("resolved_at", null).is("undone_at", null).limit(50_000);
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as Array<{ id: string; provider_id: string; evidence: { url?: string } }>;
+  console.log(`open website_dead flags: ${rows.length}; ${DRY ? "dry run" : "resolving the reachable"}`);
+  const stats = { kept: 0, resolved: 0, unknown: 0 };
+  let i = 0;
+  const worker = async () => {
+    while (i < rows.length) {
+      const row = rows[i++];
+      const url = normalizeUrl(row.evidence?.url ?? "");
+      const v = url ? await probe(url) : { status: "unknown" as const, code: null, error: "no url", facebook: null };
+      if (v.status === "dead") { stats.kept += 1; continue; }
+      if (v.status === "unknown") stats.unknown += 1; else stats.resolved += 1;
+      if (!DRY) await db.from("provider_health_actions").update({ resolved_at: new Date().toISOString(), resolved_by: `sweep:reverify (${v.status}${v.code ? ` ${v.code}` : ""})` }).eq("id", row.id);
+      if ((stats.kept + stats.resolved + stats.unknown) % 200 === 0) console.log(JSON.stringify(stats));
+    }
+  };
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  console.log(`reverify done ${JSON.stringify(stats)}`);
+}
+
 async function main() {
+  if (REVERIFY) return reverify();
   const done = loadDone();
   const [rows, flagged] = await Promise.all([candidates(), openFlags()]);
   const todo = rows.filter((r) => !done.has(r.provider_id)).slice(0, LIMIT === Infinity ? undefined : LIMIT);
