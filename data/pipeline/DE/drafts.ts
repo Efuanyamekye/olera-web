@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.370Z
+ * Last updated: 2026-10-06T12:32:14.159Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -198,7 +198,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhss.delaware.gov/dmma/medicaid.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-08-31",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://dhss.delaware.gov/services/diamond-state-health-plan-plus/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
+        }
+      ]
     },
     {
       "id": "dsaapd-waivers",
@@ -357,17 +368,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-03",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 60,
-          "to": 55,
-          "source": "https://dhss.delaware.gov/dsaapd/",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "pace-comprehensive-care",
@@ -497,6 +498,12 @@ export const drafts: PipelineStateDrafts = {
           "label": "Delaware Aging and Disability Resource Center",
           "phone": "1-800-223-9074",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(302) 255-9040",
+          "description": "Number listed on dhss.delaware.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -562,19 +569,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-03",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "13026603380",
             "3028653565",
             "18002239074"
           ],
-          "to": "18669408963",
-          "source": "https://dhss.delaware.gov/wp-content/uploads/sites/2/2026/06/Program-Information-Rights-and-Responsibilities-English.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "to": "(302) 255-9040",
+          "source": "https://dhss.delaware.gov/dmma/home/medicaid/long-term-care-medicaid-programs/pace/",
+          "flaggedAt": "2026-10-06T12:19:41.408Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -771,7 +780,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dhss.delaware.gov/dmma/home/income-limits/",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
         },
         {
           "field": "income_2",
@@ -780,7 +789,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dhss.delaware.gov/dmma/home/income-limits/",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
         }
       ],
       "appliedCorrections": [
@@ -1023,7 +1032,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhss.delaware.gov/dss/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8005269099",
+          "source": "https://dhss.delaware.gov/dss/division-of-social-services/snap/",
+          "reason": "page also lists ours ((302) 255-9040)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1147,6 +1166,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for energy assistance and other social services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(302) 255-9040",
+          "description": "Number listed on dhss.delaware.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1214,7 +1239,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhss.delaware.gov/dhss/dss/liheap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "3022559875",
+            "211"
+          ],
+          "to": "(302) 255-9040",
+          "source": "https://dhss.delaware.gov/services/liheap-heating-and-cooling-assistance/",
+          "flaggedAt": "2026-10-06T12:19:41.408Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1433,11 +1474,11 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2510,
-          "to": 2658,
+          "to": 2660,
           "source": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 200% FPL 2024 or 200% FPL 2023 or 300% SSI 2022)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
         },
         {
           "field": "income_2",
@@ -1446,7 +1487,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
         }
       ]
     },
@@ -1605,7 +1646,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dhss.delaware.gov/dsaapd/services/delaware-senior-medicare-patrol-program/",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z"
         }
       ]
     },
@@ -1774,7 +1815,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(302) 421-3734",
       "sourceUrl": "https://dhss.delaware.gov/wp-content/uploads/sites/2/dsaapd/pdf/home_delivered_meals2.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "3022559040",
+          "source": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/home-delivered-meals/",
+          "reason": "page also lists ours ((302) 421-3734, (302) 734-1200)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "scsep-employment",
@@ -1941,20 +1993,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://laborfiles.delaware.gov/main/det/faqs-scsep/SCSEP_FAQs.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "3022523211",
-            "211"
-          ],
-          "to": "3027813568",
-          "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "legal-aid-seniors",
@@ -2181,6 +2220,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General helpline for all social services and referrals",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 773-1002",
+          "description": "Number listed on dhss.delaware.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2217,18 +2262,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhss.delaware.gov/dsaapd",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8002239074",
             "211"
           ],
-          "to": "18557731002",
+          "to": "(855) 773-1002",
           "source": "https://dhss.delaware.gov/office-of-the-secretary/long-term-care-ombudsman-program/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:04.265Z"
+          "flaggedAt": "2026-10-06T12:19:41.408Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2460,6 +2507,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(302) 255-9040",
           "description": "Assistance with using the ASSIST online application portal. Call this number if you have trouble completing or submitting the online application.",
           "hours": "Monday through Friday, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 843-7212",
+          "description": "Number listed on medicaid.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2537,7 +2590,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-372-2022",
       "sourceUrl": "https://dhss.delaware.gov/dmma/home/medicaid/faq/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003722022",
+            "3022559500",
+            "3022559040"
+          ],
+          "to": "(866) 843-7212",
+          "source": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip",
+          "flaggedAt": "2026-10-06T12:19:41.408Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

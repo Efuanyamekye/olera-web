@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.363Z
+ * Last updated: 2026-10-06T12:32:13.291Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -132,7 +132,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Alaska DPA Medicaid Information",
-          "phone": "Call number provided through pre-screening tool",
+          "phone": "(800) 478-7778",
           "description": "Program-specific number based on your location and situation",
           "hours": "Varies by office"
         },
@@ -232,22 +232,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Stethoscope",
-      "phone": null,
+      "phone": "(800) 478-7778",
       "sourceUrl": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/apply-for-medicaid/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8004787778",
+          "to": "(800) 478-7778",
           "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -439,10 +441,10 @@ export const drafts: PipelineStateDrafts = {
             "211"
           ],
           "to": "8004789996",
-          "source": "https://health.alaska.gov/en/services/hcbs-waivers/",
+          "source": "https://health.alaska.gov/media/kjaduunn/sds_medwaiverbrochure.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         }
       ]
     },
@@ -597,20 +599,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-elderly",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "9074653300",
-            "211"
-          ],
-          "to": "8006334227",
-          "source": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-programs",
@@ -844,15 +833,33 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
+          "field": "income_1",
+          "from": 1663,
+          "to": 2265,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2247,
+          "to": 3064,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
           "field": "phone",
           "from": [
             "8774862048"
           ],
-          "to": "8004786065",
-          "source": "https://health.alaska.gov/en/services/extra-help-on-medicare-drug-costs/",
+          "to": "18004786065",
+          "source": "https://www.medicare.gov/publications/10050-medicare-and-you.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         }
       ]
     },
@@ -1019,6 +1026,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Application assistance and outreach support",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(907) 465-3347",
+          "description": "Number listed on fna.usda.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1086,20 +1099,52 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 3258,
-          "to": 1630,
-          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "to": 2162,
+          "source": "https://health.alaska.gov/media/wzalr0op/alaska-snap-standards.pdf",
           "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
         },
         {
           "field": "income_2",
           "from": 4406,
-          "to": 2203,
-          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "to": 2931,
+          "source": "https://health.alaska.gov/media/wzalr0op/alaska-snap-standards.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8004787778"
+          ],
+          "to": "(907) 465-3347",
+          "source": "https://www.fna.usda.gov/snap/snap-state-popup/Alaska",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1795,6 +1840,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "National directory to find local providers",
           "hours": "24/7 online"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(907) 463-6179",
+          "description": "Number listed on ccsak.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1848,19 +1899,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "9073490613",
             "9074521735",
             "9078520276"
           ],
-          "to": "9074636179",
-          "source": "https://www.ccsak.org/uploads/8/5/9/6/85963578/brochure__6_commonly_asked_questions_for_clients.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "to": "(907) 463-6179",
+          "source": "https://ccsak.org/services/southeast-senior-services/",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2126,7 +2179,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Alaska Department of Labor and Workforce Development",
-          "phone": null,
+          "phone": "(907) 465-4872",
           "description": "Division of Vocational Rehabilitation administers MASST statewide",
           "hours": "Business hours"
         },
@@ -2193,23 +2246,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": null,
+      "phone": "(907) 465-4872",
       "sourceUrl": "https://labor.alaska.gov/masst/about-masst.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "9074654872",
-          "source": "https://www.jedc.org/wp-content/uploads/2025/10/SREC-Meeting-Minutes-10032025.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:32:37.357Z"
+          "to": "(907) 465-4872",
+          "source": "https://labor.alaska.gov/masst/about-masst.htm",
+          "flaggedAt": "2026-10-06T12:17:24.650Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "legal-services-senior-hotline",
@@ -2744,7 +2800,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "855-565-2017",
       "sourceUrl": "https://health.alaska.gov/en/services/hcbs-waivers/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8555652017",
+            "8004787778"
+          ],
+          "to": "19072693666",
+          "source": "https://health.alaska.gov/media/qjheyxpy/2025-assesment-brochure.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:17:24.650Z"
+        }
+      ]
     },
     {
       "id": "ak-senior-property-tax-exemption",

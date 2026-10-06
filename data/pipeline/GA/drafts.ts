@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/GA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.372Z
+ * Last updated: 2026-10-06T12:32:14.214Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -196,17 +196,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-09",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2982,
-          "to": 2094,
-          "source": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
-          "severity": "high",
-          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ccsp-home-care",
@@ -593,7 +583,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://aging.georgia.gov/programs-and-services/home-community-based-services",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         }
       ]
     },
@@ -851,20 +841,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1350,
-          "to": 1550,
-          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
-          "severity": "medium",
+          "to": 837,
+          "source": "https://dhs.georgia.gov/document/publication/fsmedicaidabd06apdf/download",
+          "severity": "high",
           "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "income_2",
           "from": 1824,
-          "to": 2095,
-          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
-          "severity": "medium",
+          "to": 1120,
+          "source": "https://dhs.georgia.gov/document/publication/fsmedicaidabd06apdf/download",
+          "severity": "high",
           "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "assets_individual",
@@ -873,7 +863,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         },
         {
           "field": "assets_couple",
@@ -882,7 +872,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
         }
       ]
     },
@@ -1061,7 +1051,36 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dfcs.georgia.gov/services/snap/senior-snap",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/3725/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_1",
+          "from": 1729,
+          "to": 2152,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/appendix-a-food-stamp-income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2345,
+          "to": 2909,
+          "source": "https://pamms.dhs.ga.gov/dfcs/snap/appendix-a-food-stamp-income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1234,20 +1253,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-09",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8774234746",
-            "211"
-          ],
-          "to": "4046573426",
-          "source": "https://dhs.georgia.gov/low-income-home-energy-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-program",
@@ -1456,20 +1462,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "4045841000",
-            "211"
-          ],
-          "to": "4046563826",
-          "source": "https://psc.ga.gov/about-the-psc/consumer-corner/consumer-advisories/utility-assistance-programs/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ship-medicare-counseling",
@@ -2078,6 +2071,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General employment services and SCSEP provider referrals",
           "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 436-7442",
+          "description": "Number listed on georgia.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2134,17 +2133,38 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-09",
       "reviewQueue": [
         {
-          "field": "phone",
+          "field": "income_1",
+          "from": 1663,
+          "to": 1572,
+          "source": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 130% FPL 2024 or 133% FPL 2024 or 135% FPL 2024 or 133% FPL 2023 or 135% FPL 2023 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2254,
+          "to": 2129,
+          "source": "https://pamms.dhs.ga.gov/das/hcbs-5300-manual/416/",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:19:55.566Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
           "from": [
             "8558502525",
             "7705382657",
             "211"
           ],
-          "to": "8665524464",
-          "source": "https://dhs.georgia.gov/document/document/guidehealthsocialservicesv8pdf-0/download",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:35:51.173Z"
+          "to": "(800) 436-7442",
+          "source": "https://georgia.gov/aging-services",
+          "flaggedAt": "2026-10-06T12:19:55.566Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.392Z
+ * Last updated: 2026-10-06T12:32:13.796Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -390,7 +390,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhhs.ne.gov/Pages/Medicaid-Provider-All-Inclusive-Care-for-the-Elderly.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-06"
+      "lastVerifiedDate": "2026-09-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4025126199",
+            "8448436364",
+            "8556327633"
+          ],
+          "to": "4029910330",
+          "source": "https://dhhs.ne.gov/licensure/Documents/HHARoster.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-program",
@@ -544,6 +559,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "In-person assistance and document submission - find locations at dhhs.ne.gov",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 632-7633",
+          "description": "Number listed on vas-nebraska.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -619,17 +640,19 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8003834278"
           ],
-          "to": "8556327633",
-          "source": "https://dhhs.ne.gov/pages/accessnebraska.aspx?id=2636",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(855) 632-7633",
+          "source": "https://www.vas-nebraska.org/medicare/",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -836,7 +859,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhhs.ne.gov/pages/snap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 25000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/SNAP%20Program%20Standards.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 25000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/SNAP%20Program%20Standards.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1045,7 +1088,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 383-4278",
       "sourceUrl": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1956,
+          "to": 1595,
+          "source": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2644,
+          "to": 2164,
+          "source": "https://dhhs.ne.gov/pages/energy-assistance.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1203,6 +1266,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline for weatherization and energy assistance referrals",
           "hours": "24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 253-2603",
+          "description": "Number listed on dwee.nebraska.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1264,37 +1333,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dee.nebraska.gov/sites/default/files/publications/22-044-Final_WX_Full_Policies_and_Procedures_Manual.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "income_1",
-          "from": 2672,
-          "to": 1958,
-          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3625,
-          "to": 2645,
-          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 150% FPL 2026",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024446666",
             "4023428232",
             "211"
           ],
-          "to": "8772532603",
+          "to": "(877) 253-2603",
           "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1504,6 +1557,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-677-1116",
           "description": "National service to find your local Area Agency on Aging",
           "hours": "Mon-Fri 9am-8pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(402) 471-9147",
+          "description": "Number listed on cap.nebraska.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1556,18 +1615,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhhs.ne.gov/Medicaid%20SUA/SUA-21-PI-02%20Home%20Delivered%20Meals.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024714619",
             "18006771116"
           ],
-          "to": "4022231376",
-          "source": "https://dhhs.ne.gov/pages/aging.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(402) 471-9147",
+          "source": "https://cap.nebraska.gov/agencies/1039",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1860,7 +1921,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "National Able",
-          "phone": null,
+          "phone": "(855) 994-8300",
           "description": "Primary SCSEP provider in Nebraska",
           "hours": "Contact via website for local office hours"
         },
@@ -1919,23 +1980,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": "2-1-1",
+      "phone": "(855) 994-8300",
       "sourceUrl": "https://www.nationalable.org/wp-content/uploads/2020/02/SCSEP_NebraskaHandbook_013120.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "5314278229",
-          "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(855) 994-8300",
+          "source": "https://www.nationalable.org/scsep/",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "legal-services-seniors-aaa",
@@ -2513,6 +2577,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for all social services and local aging resources",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(402) 471-2307",
+          "description": "Number listed on dhhs.ne.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2575,18 +2645,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhhs.ne.gov/pages/aging.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4024714270",
             "211"
           ],
-          "to": "4024712307",
-          "source": "https://dhhs.ne.gov/pages/aging.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "to": "(402) 471-2307",
+          "source": "https://dhhs.ne.gov/Pages/Aging.aspx",
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2895,26 +2967,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-31",
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 2000,
-          "to": 4000,
-          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 3000,
-          "to": 6000,
-          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ssad-aged-disabled-services",
@@ -3008,7 +3061,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Nebraska DHHS Local Offices",
-          "phone": null,
+          "phone": "(402) 471-3121",
           "description": "Contact your local DHHS office for SSAD applications and information",
           "hours": "Varies by location, search dhhs.ne.gov for local contacts"
         },
@@ -3076,22 +3129,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "HandHeart",
-      "phone": null,
+      "phone": "(402) 471-3121",
       "sourceUrl": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "4024713121",
+          "to": "(402) 471-3121",
           "source": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:52.600Z"
+          "flaggedAt": "2026-10-06T12:25:17.317Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -3300,7 +3355,28 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(402) 471-2307",
       "sourceUrl": "https://dhhs.ne.gov/Pages/Respite.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://respite.ne.gov/paying-respite",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:25:17.317Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8448436364",
+          "source": "https://dhhs.ne.gov/Pages/Aging-and-Disability-Resource-Center.aspx",
+          "reason": "page also lists ours ((402) 471-2307)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AZ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.367Z
+ * Last updated: 2026-10-06T12:32:14.059Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -395,16 +395,25 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": null,
       "reviewQueue": [
         {
+          "field": "assets_couple",
+          "from": 2000,
+          "to": 4000,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.rtf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
           "field": "phone",
           "from": [
             "18554327587",
             "211"
           ],
           "to": "8886216880",
-          "source": "https://www.azahcccs.gov/members/ALTCSlocations.html",
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE101andDE202.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         }
       ]
     },
@@ -545,6 +554,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 767-2382",
           "description": "Local assistance with applications and Medicare counseling",
           "hours": "Mon-Fri 8am-5pm MST"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(602) 417-4000",
+          "description": "Number listed on azahcccs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -640,19 +655,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-04",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8554327587",
             "1800",
             "8777672382"
           ],
-          "to": "8004324040",
-          "source": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "to": "(602) 417-4000",
+          "source": "https://www.azahcccs.gov/plansproviders/feeforservicehealthplans/medicaresavingsprograms/",
+          "flaggedAt": "2026-10-06T12:18:13.391Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1299,7 +1316,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
           "severity": "medium",
           "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         },
         {
           "field": "phone",
@@ -1309,10 +1326,10 @@ export const drafts: PipelineStateDrafts = {
             "4808080429"
           ],
           "to": "6025344444",
-          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "source": "https://www.phoenix.gov/nsdsite/MediaAssets/WAP%20Program%20Fact%20Sheet.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:36.731Z"
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
         }
       ]
     },
@@ -2077,7 +2094,38 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-432-7587",
       "sourceUrl": "https://www.azahcccs.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1304,
+          "to": 2982,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 300% SSI 2026",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1764,
+          "to": 2982,
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 165% FPL 2026",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18554327587"
+          ],
+          "to": "8886216880",
+          "source": "https://www.azahcccs.gov/Members/Downloads/Publications/DE-828_english.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:18:13.391Z"
+        }
+      ]
     },
     {
       "id": "az-senior-property-valuation-freeze",
@@ -2190,6 +2238,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(602) 716-6843",
           "description": "Can answer general questions about the program and Form 82104. Applications are not filed here; they go to the county assessor.",
           "hours": "Mon-Fri 8am-5pm AZ time"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(602) 255-3381",
+          "description": "Number listed on azdor.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2243,7 +2297,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(602) 716-6843",
       "sourceUrl": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "6027166843"
+          ],
+          "to": "(602) 255-3381",
+          "source": "https://azdor.gov/forms/property-tax-forms/senior-property-valuation-protection-option",
+          "flaggedAt": "2026-10-06T12:18:13.391Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

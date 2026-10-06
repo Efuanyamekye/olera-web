@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/RI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.571Z
+ * Last updated: 2026-10-06T12:32:14.937Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1040,7 +1040,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 2461,
+          "source": "https://dhs.ri.gov/programs-and-services/supplemental-nutrition-assistance-program-snap/supplemental-nutrition-0",
+          "severity": "medium",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3540,
+          "to": 3337,
+          "source": "https://dhs.ri.gov/programs-and-services/supplemental-nutrition-assistance-program-snap/supplemental-nutrition-0",
+          "severity": "medium",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 185% FPL 2026",
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1248,10 +1267,10 @@ export const drafts: PipelineStateDrafts = {
             "211"
           ],
           "to": "4014626419",
-          "source": "https://dhs.ri.gov/programs-and-services/energy-assistance-programs-heating/low-income-home-energy-assistance-program",
+          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:20:37.010Z"
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
         }
       ]
     },
@@ -1435,7 +1454,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dhs.ri.gov/media/7941/download?language=en",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:20:37.010Z"
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
         }
       ]
     },
@@ -2027,6 +2046,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free referral service for employment and social services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 872-5627",
+          "description": "Number listed on dol.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2089,7 +2114,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dlt.ri.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "4014628000",
+            "211"
+          ],
+          "to": "(877) 872-5627",
+          "source": "https://www.dol.gov/agencies/eta/seniors",
+          "flaggedAt": "2026-10-06T12:28:19.511Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -2250,7 +2290,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.helprilaw.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4012742652",
+            "4018462264",
+            "4014217799",
+            "4014217758",
+            "4018313150"
+          ],
+          "to": "4015215040",
+          "source": "https://ribar.com/?pg=PublicServiceProgramsHome",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2771,20 +2827,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1569,
-          "to": 2609,
+          "to": 1041,
           "source": "https://oha.ri.gov/resources/home-care/home-cost-share",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 133% FPL 2022 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-05T18:20:37.010Z"
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
         },
         {
           "field": "income_2",
           "from": 2129,
-          "to": 3539,
+          "to": 1409,
           "source": "https://oha.ri.gov/resources/home-care/home-cost-share",
           "severity": "high",
           "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
-          "flaggedAt": "2026-10-05T18:20:37.010Z"
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
         }
       ]
     },
@@ -2915,10 +2971,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 60,
           "to": 55,
-          "source": "https://oha.ri.gov/media/2891/download?language=en",
+          "source": "https://oha.ri.gov/media/2766/download?language=en",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-05T18:20:37.010Z"
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
         }
       ]
     },
@@ -3120,7 +3176,17 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": null
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 24980,
+          "source": "https://oha.ri.gov/media/1121/download?language=en",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
+        }
+      ]
     },
     {
       "id": "ri-medicaid-ead-elders-adults-disabilities",
@@ -3717,7 +3783,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(401) 574-8829",
       "sourceUrl": "https://tax.ri.gov/sites/g/files/xkgbur541/files/2026-01/2025%201040H_w.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4015748829"
+          ],
+          "to": "4014215900",
+          "source": "https://www.providenceri.gov/tax-assessor/exemptions/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:28:19.511Z"
+        }
+      ]
     }
   ],
   "stateOverview": null

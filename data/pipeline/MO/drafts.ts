@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.388Z
+ * Last updated: 2026-10-06T12:32:15.352Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -250,40 +250,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 1131,
-          "to": 860,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
-          "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1533,
-          "to": 1166,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
-          "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
-        },
-        {
           "field": "assets_individual",
           "from": 6220.5,
-          "to": 3000,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "to": 5035,
+          "source": "https://dss.mo.gov/employment-training-provider-portal/docs/MHABD-Program-Overview.pdf",
           "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_couple",
           "from": 12441,
-          "to": 6000,
-          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "to": 10070,
+          "source": "https://dss.mo.gov/employment-training-provider-portal/docs/MHABD-Program-Overview.pdf",
           "severity": "high",
-          "why": "source dated 2019",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -1105,20 +1087,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1632,
+          "to": 1696,
           "source": "https://dss.mo.gov/benefit-program-income-limits",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2215,
+          "to": 2296,
           "source": "https://dss.mo.gov/benefit-program-income-limits",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_individual",
@@ -1127,7 +1109,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "assets_couple",
@@ -1136,7 +1118,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -1553,15 +1535,33 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
+          "field": "income_1",
+          "from": 2152,
+          "to": 2640,
+          "source": "https://www.daeoc.com/weatherization-dept",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2913,
+          "to": 3607,
+          "source": "https://www.daeoc.com/weatherization-dept",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        },
+        {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "5737512254",
+          "to": "5737513443",
           "source": "https://dnr.mo.gov/energy/weatherization/low-income-assistance",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -2635,19 +2635,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "income_1",
           "from": 1276,
           "to": 1805,
-          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "income_2",
           "from": 1711,
           "to": 2428,
-          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         },
         {
           "field": "phone",
@@ -2656,10 +2656,10 @@ export const drafts: PipelineStateDrafts = {
             "1800"
           ],
           "to": "8003751406",
-          "source": "https://dss.mo.gov/mhd/morx-pharmacist-faqs",
+          "source": "https://dssmanuals.mo.gov/wp-content/themes/mogovwp_dssmanuals/public/memos/memos_08/im56_08_finalmorx_application_brochure.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -2830,10 +2830,10 @@ export const drafts: PipelineStateDrafts = {
             "6362070847"
           ],
           "to": "5737513505",
-          "source": "https://dor.mo.gov/personal/ptc/",
+          "source": "https://www.stlouis-mo.gov/government/departments/human-services/aging-services/property-tax-credit.cfm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -3190,10 +3190,10 @@ export const drafts: PipelineStateDrafts = {
             "5737516400"
           ],
           "to": "8002355503",
-          "source": "https://health.mo.gov/sites/health/files/media/pdf/2026/02/Programs%20and%20Services%20Directory.pdf",
+          "source": "https://health.mo.gov/seniors/pdf/program-info.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:40:05.397Z"
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
         }
       ]
     },
@@ -3557,7 +3557,28 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-235-5503",
       "sourceUrl": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:24:13.591Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "5735264542",
+          "source": "https://health.mo.gov/partners-providers/area-agencies-aging/caregiver-services",
+          "reason": "page also lists ours ((800) 235-5503)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {

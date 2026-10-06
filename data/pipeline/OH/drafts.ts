@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.568Z
+ * Last updated: 2026-10-06T12:32:14.780Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -221,22 +221,11 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_2",
           "from": 1491,
-          "to": 1306,
+          "to": 1302,
           "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Families,%20Individuals/Programs/whoQualifies/2026_Aged_Blind_Disabled_Individuals.pdf",
           "severity": "medium",
           "why": "value fits more than one tier (100% FPL 2022 or 100% SSI 2026 or 100% SSI 2025)",
-          "flaggedAt": "2026-10-05T18:19:25.030Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8003248680"
-          ],
-          "to": "18446406446",
-          "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Resources/Publications/Forms/ODM07216fillx.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-05T18:19:25.030Z"
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
         }
       ]
     },
@@ -879,20 +868,32 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 1350,
-          "to": 1616,
+          "to": 1796,
           "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-05T18:19:25.030Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
         },
         {
           "field": "income_2",
           "from": 1824,
-          "to": 2184,
+          "to": 2434,
           "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-05T18:19:25.030Z"
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18003248680",
+            "18446406446"
+          ],
+          "to": "8006861578",
+          "source": "https://insurance.ohio.gov/wps/wcm/connect/gov/7b4bb533-6c62-4576-9ae7-2185fbf2ff60/MedSavProg_02072020.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-7b4bb533-6c62-4576-9ae7-2185fbf2ff60-n0LRlzC",
+          "severity": "medium",
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
         }
       ]
     },
@@ -1079,7 +1080,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://benefits.ohio.gov/SNAP",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://benefitscheckup.org/program/nutrition_oh_snap_program",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
+        }
+      ]
     },
     {
       "id": "heap-energy-assistance",
@@ -1973,7 +1985,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ohio.gov/care-and-living/caregiver-support",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -1988,6 +2000,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-05",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8002664346",
+          "source": "https://www.aarp.org/states/ohio/caregiver-resources/",
+          "reason": "page also lists ours ((866) 243-5678)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -2594,7 +2615,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-324-8680",
       "sourceUrl": "https://medicaid.ohio.gov",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9950,
+          "to": 7970,
+          "source": "https://www.acdjfs.org/cash-food-and-medical-assistance",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 11960,
+          "source": "https://www.acdjfs.org/cash-food-and-medical-assistance",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:27:00.077Z"
+        }
+      ]
     },
     {
       "id": "oh-homestead-exemption",
@@ -2701,6 +2742,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 282-1780",
           "description": "The Ohio Department of Taxation can answer questions about the statewide program rules and direct you to your county auditor. They do not process applications directly.",
           "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(614) 525-3240",
+          "description": "Number listed on treasurer.franklincountyohio.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2777,7 +2824,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 282-1780",
       "sourceUrl": "https://tax.ohio.gov/individual/resources/homestead-exemption",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8002821780"
+          ],
+          "to": "(614) 525-3240",
+          "source": "https://treasurer.franklincountyohio.gov/Tax-Savings/Homestead-Exemption",
+          "flaggedAt": "2026-10-06T12:27:00.077Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.370Z
+ * Last updated: 2026-10-06T12:32:14.109Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -388,7 +388,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dacl.dc.gov/service/safe-home",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "income_1",
@@ -608,7 +608,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-10-03",
-      "reviewQueue": [],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "age",
@@ -757,7 +757,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dcoa.dc.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "phone",
@@ -1222,6 +1222,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(202) 724-5506",
           "description": "Call to locate the closest IMA service center for in-person application submission. IMA is located at 645 H Street, N.E., Washington, DC 20002.",
           "hours": "Contact IMA to confirm current hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(202) 724-5626",
+          "description": "Number listed on dacl.dc.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1295,7 +1301,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(202) 698-4220",
       "sourceUrl": "https://dhcf.dc.gov/service/qualified-Medicare-beneficiary-qmb",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "2026984220",
+            "2027245506"
+          ],
+          "to": "(202) 724-5626",
+          "source": "https://dacl.dc.gov/service/qualified-medicare-beneficiaries-qmb-program",
+          "flaggedAt": "2026-10-06T12:19:24.804Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "dc-snap-food-benefits",
@@ -1545,7 +1567,36 @@ export const drafts: PipelineStateDrafts = {
       "phone": "202-727-5355",
       "sourceUrl": "https://dhs.dc.gov/service/snap-eligibility-requirements",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1032,
+          "to": 1696,
+          "source": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:19:24.804Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1395,
+          "to": 2292,
+          "source": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:19:24.804Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 3000,
+          "source": "https://dhs.dc.gov/service/snap-eligibility-requirements",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:19:24.804Z"
+        }
+      ]
     },
     {
       "id": "dc-liheap-energy-assistance",
@@ -1688,6 +1739,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "3-1-1",
           "description": "General DC government information line. Can direct you to the correct DOEE office or Front Door DC location if the numbers above are unavailable.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(202) 535-2600",
+          "description": "Number listed on doee.dc.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1765,7 +1822,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(202) 299-3336",
       "sourceUrl": "https://doee.dc.gov/liheap",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "2022993336",
+            "2027370938",
+            "311"
+          ],
+          "to": "(202) 535-2600",
+          "source": "https://doee.dc.gov/energyassistance",
+          "flaggedAt": "2026-10-06T12:19:24.804Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

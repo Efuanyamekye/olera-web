@@ -1,14 +1,14 @@
 {
   "state": "IL",
   "stateName": "Illinois",
-  "checkedAt": "2026-10-02T07:37:04.852Z",
-  "total": 13,
+  "checkedAt": "2026-10-06T12:20:53.699Z",
+  "total": 18,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 3,
-  "totalFlags": 5,
-  "highSeverityFlags": 4,
+  "programsWithFlags": 5,
+  "totalFlags": 6,
+  "highSeverityFlags": 0,
   "programs": [
     {
       "programId": "medical-assistance-medicaid-seniors-disabled",
@@ -31,17 +31,17 @@
         "income_2": 1804,
         "assets_individual": 17500,
         "assets_couple": 17500,
-        "phone": "18008436154",
+        "phone": "8008436154",
         "sources": {
-          "age": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
-          "income": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
-          "assets": "https://www.dhs.state.il.us/page.aspx?item=14876",
-          "phone": "https://www.dhs.state.il.us/page.aspx?item=14876"
+          "age": "https://il.db101.org/il/programs/health_coverage/how_health/program2a.htm",
+          "income": "https://il.db101.org/il/programs/health_coverage/how_health/program2a.htm",
+          "assets": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicaidincomeassetlimits.pdf",
+          "phone": "https://hfs.illinois.gov/medicalclients/medicaidguide/applying.html"
         },
-        "notes": "Illinois senior pathway is AABD Medical; official sources found for 2026 income/resource limits and DHS help line. No separate minimum age test was located in the official eligibility tables, so 65 is used as the senior threshold for this program category."
+        "notes": "Program is Illinois AABD Medicaid / Medicaid for older adults and people with disabilities; income and asset figures are current 2026 standards and the main application/help line is 1-800-843-6154."
       },
       "flags": [],
-      "notes": "Illinois senior pathway is AABD Medical; official sources found for 2026 income/resource limits and DHS help line. No separate minimum age test was located in the official eligibility tables, so 65 is used as the senior threshold for this program category."
+      "notes": "Program is Illinois AABD Medicaid / Medicaid for older adults and people with disabilities; income and asset figures are current 2026 standards and the main application/help line is 1-800-843-6154."
     },
     {
       "programId": "hsp-waiver-home-services",
@@ -59,22 +59,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": 17500,
-        "assets_couple": 17500,
+        "assets_couple": null,
         "phone": "8008436154",
         "sources": {
-          "age": "https://www.dhs.state.il.us/page.aspx?item=146418",
+          "age": null,
           "income": null,
           "assets": "https://www.dhs.state.il.us/page.aspx?item=146418",
-          "phone": "https://www.dhs.state.il.us/page.aspx?item=158178"
+          "phone": "https://www.dhs.state.il.us/page.aspx?item=29738"
         },
-        "notes": "Current Illinois DHS sources show HSP is for people under age 60, with an asset limit of $17,500 for adults; no separate income test was identified in the retrieved official sources."
+        "notes": "Current Illinois HSP senior-pathway guidance found a countable asset limit of $17,500 for age 18+ applicants; no separate income test or senior-specific age minimum was found in the retrieved sources. The program page lists the main toll-free help line as 800-843-6154."
       },
       "flags": [],
-      "notes": "Current Illinois DHS sources show HSP is for people under age 60, with an asset limit of $17,500 for adults; no separate income test was identified in the retrieved official sources."
+      "notes": "Current Illinois HSP senior-pathway guidance found a countable asset limit of $17,500 for age 18+ applicants; no separate income test or senior-specific age minimum was found in the retrieved sources. The program page lists the main toll-free help line as 800-843-6154."
     },
     {
       "programId": "pace-comprehensive-care",
@@ -98,12 +98,12 @@
         "assets_couple": null,
         "phone": "2177821200",
         "sources": {
-          "age": "https://hfs.illinois.gov/medicalproviders/pace.html",
+          "age": "https://gov.illinois.gov/newsroom/press-release.25315.html",
           "income": null,
           "assets": null,
-          "phone": "https://hfs.illinois.gov/medicalproviders/pace.html"
+          "phone": "https://hfs.illinois.gov/content/dam/soi/en/web/hfs/sitecollectiondocuments/pacepublicmeetingnotice11032021.pdf"
         },
-        "notes": "Illinois PACE is currently active; official Illinois HFS page lists five PACE regions and the age threshold is 55+."
+        "notes": "PACE in Illinois is still active in 2026; official Illinois sources show the senior eligibility age is 55+. No statewide income or asset limit was found in the retrieved official sources; the listed phone is the Illinois HFS number appearing on the state PACE notice."
       },
       "flags": [
         {
@@ -115,7 +115,7 @@
           "verifiedValue": "2177821200"
         }
       ],
-      "notes": "Illinois PACE is currently active; official Illinois HFS page lists five PACE regions and the age threshold is 55+."
+      "notes": "PACE in Illinois is still active in 2026; official Illinois sources show the senior eligibility age is 55+. No statewide income or asset limit was found in the retrieved official sources; the listed phone is the Illinois HFS number appearing on the state PACE notice."
     },
     {
       "programId": "medicare-savings-programs",
@@ -134,8 +134,8 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1796,
-        "income_2": 2435,
+        "income_1": 1330,
+        "income_2": 1803,
         "assets_individual": 9950,
         "assets_couple": 14910,
         "phone": "8008436154",
@@ -143,27 +143,12 @@
           "age": null,
           "income": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
           "assets": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
-          "phone": "https://hfs.illinois.gov/info/brochures-and-forms/brochures/hfs3352.html"
+          "phone": "https://hfs.illinois.gov/info/brochures-and-forms/brochures/hfs3757.html"
         },
-        "notes": "Illinois Medicare Savings Programs (QMB, SLMB/SLIB, QI-1) use income and resource limits; no separate age minimum found because eligibility is by Medicare status/senior pathway, not age. QI/SLMB values reflect the 2026 Illinois chart; phone is DHS Helpline."
+        "notes": "Illinois Medicare Savings Programs for QMB/SLMB/QI-1 remain active in 2026; no age test found because eligibility is Medicare-based, not age-based, and the official chart lists income/resource limits."
       },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1330,
-          "verifiedValue": 1796,
-          "pctDiff": 25.9
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 1803,
-          "verifiedValue": 2435,
-          "pctDiff": 26
-        }
-      ],
-      "notes": "Illinois Medicare Savings Programs (QMB, SLMB/SLIB, QI-1) use income and resource limits; no separate age minimum found because eligibility is by Medicare status/senior pathway, not age. QI/SLMB values reflect the 2026 Illinois chart; phone is DHS Helpline."
+      "flags": [],
+      "notes": "Illinois Medicare Savings Programs for QMB/SLMB/QI-1 remain active in 2026; no age test found because eligibility is Medicare-based, not age-based, and the official chart lists income/resource limits."
     },
     {
       "programId": "snap-food-benefits",
@@ -181,37 +166,37 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1696,
-        "income_2": 2292,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8008436154",
+        "age": 60,
+        "income_1": 2608,
+        "income_2": 3526,
+        "assets_individual": 4750,
+        "assets_couple": 4750,
+        "phone": "18008436154",
         "sources": {
-          "age": null,
+          "age": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
           "income": "https://www.dhs.state.il.us/page.aspx?item=30357",
-          "assets": null,
-          "phone": "https://www.dhs.state.il.us/page.aspx?item=29757"
+          "assets": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
+          "phone": "https://www.dhs.state.il.us/page.aspx?item=30357"
         },
-        "notes": "SNAP in Illinois has no senior-specific minimum age threshold; eligibility is household-based, with elderly status affecting deductions/eligibility rules rather than a minimum age. The official Illinois SNAP page provides current household income limits and the DHS help line; no separate countable asset limit was located in the retrieved official sources."
+        "notes": "Illinois SNAP applies elderly special rules at age 60+; income limits shown are the 200% FPL elderly/disabled household limits; Illinois appears to have no SNAP asset test under current guidance, but the official federal SNAP special-rules page still publishes the standard countable-resource thresholds."
       },
       "flags": [
         {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2608,
-          "verifiedValue": 1696,
-          "pctDiff": 35
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 4500,
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
         },
         {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 3525,
-          "verifiedValue": 2292,
-          "pctDiff": 35
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 4500,
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
         }
       ],
-      "notes": "SNAP in Illinois has no senior-specific minimum age threshold; eligibility is household-based, with elderly status affecting deductions/eligibility rules rather than a minimum age. The official Illinois SNAP page provides current household income limits and the DHS help line; no separate countable asset limit was located in the retrieved official sources."
+      "notes": "Illinois SNAP applies elderly special rules at age 60+; income limits shown are the 200% FPL elderly/disabled household limits; Illinois appears to have no SNAP asset test under current guidance, but the official federal SNAP special-rules page still publishes the standard countable-resource thresholds."
     },
     {
       "programId": "home-weatherization-assistance",
@@ -230,22 +215,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2660,
-        "income_2": 3607,
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8337110374",
+        "phone": "18337110374",
         "sources": {
-          "age": null,
-          "income": "https://www.cedaorg.net/en/find-services/home-weatherization",
+          "age": "https://gov.illinois.gov/news/press-release.32964.html",
+          "income": "https://dceo.illinois.gov/communityservices/homeweatherization.html",
           "assets": null,
           "phone": "https://dceo.illinois.gov/communityservices/homeweatherization.html"
         },
-        "notes": "Current Illinois IHWAP eligibility is income-based at 200% of poverty; no age or asset test was found in the retrieved authoritative/current sources. Monthly income values were taken from a current Illinois guide listing 30-day gross income limits (1=$2,660; 2=$3,606/$3,607)."
+        "notes": "IHWAP is a weatherization program with senior priority (60+) and an income standard of 200% of the federal poverty level; the state page does not publish a current monthly dollar table for household sizes 1 or 2, so those values are null. No asset test found."
       },
       "flags": [],
-      "notes": "Current Illinois IHWAP eligibility is income-based at 200% of poverty; no age or asset test was found in the retrieved authoritative/current sources. Monthly income values were taken from a current Illinois guide listing 30-day gross income limits (1=$2,660; 2=$3,606/$3,607)."
+      "notes": "IHWAP is a weatherization program with senior priority (60+) and an income standard of 200% of the federal poverty level; the state page does not publish a current monthly dollar table for household sizes 1 or 2, so those values are null. No asset test found."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -275,10 +260,10 @@
           "assets": null,
           "phone": "https://ilaging.illinois.gov/ship.html"
         },
-        "notes": "SHIP is a Medicare counseling program for seniors and caregivers; no age, income, or asset test applies, and the current main help number is 800-252-8966."
+        "notes": "SHIP is a Medicare counseling program, not a means-tested benefit; no senior age, income, or asset eligibility limits were found in authoritative current sources."
       },
       "flags": [],
-      "notes": "SHIP is a Medicare counseling program for seniors and caregivers; no age, income, or asset test applies, and the current main help number is 800-252-8966."
+      "notes": "SHIP is a Medicare counseling program, not a means-tested benefit; no senior age, income, or asset eligibility limits were found in authoritative current sources."
     },
     {
       "programId": "ccp-home-delivered-meals",
@@ -308,14 +293,14 @@
         "phone": "8002528966",
         "sources": {
           "age": "https://ilaging.illinois.gov/programs/nutrition/nutrition.html",
-          "income": null,
-          "assets": null,
-          "phone": "https://ilaging.illinois.gov/programs/i-a.html"
+          "income": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/resources/newsandpublications/publications/documents/HDMReport2023.pdf",
+          "assets": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/resources/newsandpublications/publications/documents/HDMReport2023.pdf",
+          "phone": "https://ilaging.illinois.gov/programs/nutrition/nutrition.html"
         },
-        "notes": "Illinois Senior Nutrition Program / Home-Delivered Meals serves older adults age 60+; no income or asset test found in current official source."
+        "notes": "Current Illinois Department on Aging nutrition program; no means test reported for senior home-delivered meals."
       },
       "flags": [],
-      "notes": "Illinois Senior Nutrition Program / Home-Delivered Meals serves older adults age 60+; no income or asset test found in current official source."
+      "notes": "Current Illinois Department on Aging nutrition program; no means test reported for senior home-delivered meals."
     },
     {
       "programId": "community-care-program",
@@ -341,14 +326,14 @@
         "phone": "8002528966",
         "sources": {
           "age": "https://ilaging.illinois.gov/programs/ccp.html",
-          "income": null,
+          "income": "https://ilaging.illinois.gov/programs/ccp.html",
           "assets": "https://ilaging.illinois.gov/programs/ccp.html",
           "phone": "https://ilaging.illinois.gov/programs/ccp.html"
         },
-        "notes": "Current Illinois Department on Aging CCP page shows the program is for age 60+; no separate income threshold found on the official CCP page; asset limit is non-exempt assets of $17,500 or less; senior helpline is the main contact."
+        "notes": "Current Illinois Department on Aging page lists CCP as age 60+, with non-exempt assets of $17,500 or less and Senior HelpLine 1-800-252-8966. No separate official income threshold was found on the current CCP page."
       },
       "flags": [],
-      "notes": "Current Illinois Department on Aging CCP page shows the program is for age 60+; no separate income threshold found on the official CCP page; asset limit is non-exempt assets of $17,500 or less; senior helpline is the main contact."
+      "notes": "Current Illinois Department on Aging page lists CCP as age 60+, with non-exempt assets of $17,500 or less and Senior HelpLine 1-800-252-8966. No separate official income threshold was found on the current CCP page."
     },
     {
       "programId": "scsep-employment-training",
@@ -371,17 +356,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002528966",
+        "phone": "18002528966",
         "sources": {
           "age": "https://ilaging.illinois.gov/programs/employ.html",
           "income": "https://ilaging.illinois.gov/programs/employ.html",
           "assets": null,
-          "phone": "https://ilaging.illinois.gov/aboutus/employ.html"
+          "phone": "https://ilaging.illinois.gov/programs/employ.html"
         },
-        "notes": "SCSEP in Illinois has a 55+ age threshold and a low-income test at 125% of the federal poverty level, but the official Illinois pages found did not publish household-1 or household-2 dollar amounts; no asset test was found."
+        "notes": "SCSEP in Illinois is active in 2026; official Illinois sources state age 55+ and income at or below 125% of the federal poverty level, but they do not publish fixed monthly dollar limits on the program page."
       },
       "flags": [],
-      "notes": "SCSEP in Illinois has a 55+ age threshold and a low-income test at 125% of the federal poverty level, but the official Illinois pages found did not publish household-1 or household-2 dollar amounts; no asset test was found."
+      "notes": "SCSEP in Illinois is active in 2026; official Illinois sources state age 55+ and income at or below 125% of the federal poverty level, but they do not publish fixed monthly dollar limits on the program page."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -400,22 +385,30 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8002528966",
         "sources": {
-          "age": null,
+          "age": "https://ilaging.illinois.gov/programs/ltcombudsman.html",
           "income": null,
           "assets": null,
-          "phone": "https://ilaging.illinois.gov/contactus.html"
+          "phone": "https://ilaging.illinois.gov/programs/ltcombudsman.html"
         },
-        "notes": "No senior age test found for LTCOP; program appears available to residents/prospective residents/former residents of long-term care facilities. Official Illinois Department on Aging Senior HelpLine number is 1-800-252-8966."
+        "notes": "Official Illinois Department on Aging page lists eligibility for persons 18+ who are current, prospective, or former residents of a long-term care facility; no income or asset test found."
       },
-      "flags": [],
-      "notes": "No senior age test found for LTCOP; program appears available to residents/prospective residents/former residents of long-term care facilities. Official Illinois Department on Aging Senior HelpLine number is 1-800-252-8966."
+      "flags": [
+        {
+          "field": "age",
+          "severity": "info",
+          "draftValue": 60,
+          "verifiedValue": 18,
+          "note": "likely compound program — drafted senior threshold, verified returned floor age for other population"
+        }
+      ],
+      "notes": "Official Illinois Department on Aging page lists eligibility for persons 18+ who are current, prospective, or former residents of a long-term care facility; no income or asset test found."
     },
     {
       "programId": "legal-assistance-seniors",
@@ -444,12 +437,12 @@
           "age": "https://www.ilga.gov/documents/reports/ReportsSubmitted/5470RSGAEmail11746RSGAAttachIDoA%20Annual%20Report%20FY%202024.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://ilaging.illinois.gov/resources/helpline-main.html"
+          "phone": "https://ilaging.illinois.gov/programs/legalassistance.html"
         },
-        "notes": "Current Illinois senior legal assistance is administered through the Department on Aging and local Area Agencies on Aging; age 60+ applies to the senior pathway. No authoritative income or asset test found for the senior program."
+        "notes": "Current Illinois senior legal assistance appears to serve adults 60+; no income or asset test found in authoritative sources."
       },
       "flags": [],
-      "notes": "Current Illinois senior legal assistance is administered through the Department on Aging and local Area Agencies on Aging; age 60+ applies to the senior pathway. No authoritative income or asset test found for the senior program."
+      "notes": "Current Illinois senior legal assistance appears to serve adults 60+; no income or asset test found in authoritative sources."
     },
     {
       "programId": "family-caregiver-support",
@@ -471,17 +464,211 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002528966",
+        "phone": "18002528966",
         "sources": {
-          "age": "https://ilaging.illinois.gov/programs/caregiver/program.html",
+          "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://ilaging.illinois.gov/programs/i-a.html"
+          "phone": "https://ilaging.illinois.gov/programs/caregiver/program.html"
         },
-        "notes": "No income or asset test found for the Illinois Caregiver Support Program senior pathway; official Illinois Department on Aging pages direct callers to the Senior HelpLine 800-252-8966. "
+        "notes": "No age, income, or asset test found for the Illinois Caregiver Support Program senior pathway; official Illinois Department on Aging lists the Senior HelpLine as the main contact."
       },
       "flags": [],
-      "notes": "No income or asset test found for the Illinois Caregiver Support Program senior pathway; official Illinois Department on Aging pages direct callers to the Senior HelpLine 800-252-8966. "
+      "notes": "No age, income, or asset test found for the Illinois Caregiver Support Program senior pathway; official Illinois Department on Aging lists the Senior HelpLine as the main contact."
+    },
+    {
+      "programId": "il-community-care-program",
+      "programName": "Illinois Community Care Program (CCP)",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 17500,
+        "assets_couple": null,
+        "phones": [
+          "8002528966",
+          "8882061327",
+          "2177852870"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 17500,
+        "assets_couple": null,
+        "phone": "18002528966",
+        "sources": {
+          "age": "https://ilaging.illinois.gov/programs/ccp.html",
+          "income": null,
+          "assets": "https://ilaging.illinois.gov/programs/ccp.html",
+          "phone": "https://ilaging.illinois.gov/programs/ccp.html"
+        },
+        "notes": "Current Illinois Department on Aging CCP page lists age 60+, non-exempt assets of $17,500 or less, and Senior HelpLine 1-800-252-8966. No separate senior income limit was found in the retrieved official source."
+      },
+      "flags": [],
+      "notes": "Current Illinois Department on Aging CCP page lists age 60+, non-exempt assets of $17,500 or less, and Senior HelpLine 1-800-252-8966. No separate senior income limit was found in the retrieved official source."
+    },
+    {
+      "programId": "il-aabd-cash-assistance",
+      "programName": "Aid to the Aged, Blind, and Disabled (AABD) Cash Assistance",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8663111119"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8008436154",
+        "sources": {
+          "age": "https://www.dhs.state.il.us/page.aspx?item=30370",
+          "income": null,
+          "assets": "https://www.dhs.state.il.us/page.aspx?item=45317",
+          "phone": "https://www.dhs.state.il.us/page.aspx?item=30370"
+        },
+        "notes": "AABD Cash is current in Illinois; official DHS pages show the senior pathway as age 65+ and countable resource limits of $2,000 individual / $3,000 couple. No separate income-test cap was found on the official pages reviewed."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8663111119"
+          ],
+          "verifiedValue": "8008436154"
+        }
+      ],
+      "notes": "AABD Cash is current in Illinois; official DHS pages show the senior pathway as age 65+ and countable resource limits of $2,000 individual / $3,000 couple. No separate income-test cap was found on the official pages reviewed."
+    },
+    {
+      "programId": "il-liheap-energy-assistance",
+      "programName": "LIHEAP (Low Income Home Energy Assistance Program)",
+      "facts": {
+        "age": 60,
+        "income_1": 3990,
+        "income_2": 5410,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18774119276"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": 3990,
+        "income_2": 5410,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8337110374",
+        "sources": {
+          "age": "https://www.nicorgas.com/residential/billingandpaymentoptions/bill-payment-assistance/liheap.html",
+          "income": "https://www.dceo.illinois.gov/communityservices/homeweatherization/communityactionagencies/helpillinoisfamilies.html",
+          "assets": null,
+          "phone": "https://dceo.illinois.gov/communityservices/utilitybillassistance.html"
+        },
+        "notes": "Illinois LIHEAP is current for the 2026-2027 program year; senior pathway begins at age 60. No asset test found in current official Illinois LIHEAP materials."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18774119276"
+          ],
+          "verifiedValue": "8337110374"
+        }
+      ],
+      "notes": "Illinois LIHEAP is current for the 2026-2027 program year; senior pathway begins at age 60. No asset test found in current official Illinois LIHEAP materials."
+    },
+    {
+      "programId": "il-senior-property-tax-freeze",
+      "programName": "Senior Citizens Property Tax Freeze",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "3124437550",
+          "8153194460",
+          "2177823336"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 75000,
+        "income_2": 77000,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8007328866",
+        "sources": {
+          "age": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+          "income": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+          "assets": null,
+          "phone": "https://tax.illinois.gov/localgovernments/property/taxrelief.html"
+        },
+        "notes": "Current Illinois low-income senior property tax freeze appears active; no asset test found in official guidance."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3124437550",
+            "8153194460",
+            "2177823336"
+          ],
+          "verifiedValue": "8007328866"
+        }
+      ],
+      "notes": "Current Illinois low-income senior property tax freeze appears active; no asset test found in official guidance."
+    },
+    {
+      "programId": "il-benefit-access-program",
+      "programName": "Illinois Benefit Access Program",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18002528966",
+          "18882061327"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18002528966",
+        "sources": {
+          "age": "https://ilaging.illinois.gov/benefitsaccess.html",
+          "income": "https://ilaging.illinois.gov/benefitsaccess.html",
+          "assets": "https://ilaging.illinois.gov/benefitsaccess.html",
+          "phone": "https://ilaging.illinois.gov/benefitsaccess.html"
+        },
+        "notes": "Current official Illinois Department on Aging Benefit Access Program page shows the senior threshold as 65+; no separate senior income or asset test was found on the official page, and the main help line is 1-800-252-8966."
+      },
+      "flags": [],
+      "notes": "Current official Illinois Department on Aging Benefit Access Program page shows the senior threshold as 65+; no separate senior income or asset test was found on the official page, and the main help line is 1-800-252-8966."
     }
   ]
 }

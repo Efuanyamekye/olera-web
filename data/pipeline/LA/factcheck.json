@@ -1,14 +1,14 @@
 {
   "state": "LA",
   "stateName": "Louisiana",
-  "checkedAt": "2026-10-02T07:38:10.855Z",
-  "total": 9,
+  "checkedAt": "2026-10-06T12:22:06.255Z",
+  "total": 13,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 6,
   "totalFlags": 9,
-  "highSeverityFlags": 5,
+  "highSeverityFlags": 7,
   "programs": [
     {
       "programId": "medicaid-long-term-care",
@@ -35,11 +35,11 @@
         "phone": "18883426207",
         "sources": {
           "age": null,
-          "income": "https://ldh.la.gov/faq/category/24",
+          "income": null,
           "assets": "https://ldh.la.gov/faq/category/24",
           "phone": "https://ldh.la.gov/faq/category/24"
         },
-        "notes": "Official Louisiana DHH long-term care FAQ shows no senior-specific age test for this program; it uses Medicaid LTC financial rules and resource limits."
+        "notes": "Official Louisiana DH long-term care FAQ confirms asset limits and application phone number; no senior-specific minimum age test was found in the retrieved official sources."
       },
       "flags": [
         {
@@ -53,7 +53,7 @@
           "verifiedValue": "18883426207"
         }
       ],
-      "notes": "Official Louisiana DHH long-term care FAQ shows no senior-specific age test for this program; it uses Medicaid LTC financial rules and resource limits."
+      "notes": "Official Louisiana DH long-term care FAQ confirms asset limits and application phone number; no senior-specific minimum age test was found in the retrieved official sources."
     },
     {
       "programId": "community-choices-waiver",
@@ -73,18 +73,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2523,
-        "income_2": 5046,
+        "income_1": 2199,
+        "income_2": 4398,
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phone": "18774561146",
         "sources": {
-          "age": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
+          "age": "https://ldh.la.gov/office-of-aging-and-adult-services/community-choices-waiver-ccw",
           "income": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
           "assets": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
           "phone": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf"
         },
-        "notes": "CCW is current in Louisiana; official LDH sources show the senior pathway at age 65+ and list income/resources limits. Phone number shown is Louisiana Options in Long Term Care."
+        "notes": "Current Louisiana DH source shows CCW is for older adults and persons with adult onset disabilities; senior pathway age is 65+. Income and resource limits come from the LDH fact sheet; this program uses Medicaid financial eligibility and a waiver spend-down option."
       },
       "flags": [
         {
@@ -95,20 +95,20 @@
         },
         {
           "field": "income_1",
-          "severity": "medium",
+          "severity": "high",
           "draftValue": 2742,
-          "verifiedValue": 2523,
-          "pctDiff": 8
+          "verifiedValue": 2199,
+          "pctDiff": 19.8
         },
         {
           "field": "income_2",
-          "severity": "medium",
+          "severity": "high",
           "draftValue": 5484,
-          "verifiedValue": 5046,
-          "pctDiff": 8
+          "verifiedValue": 4398,
+          "pctDiff": 19.8
         }
       ],
-      "notes": "CCW is current in Louisiana; official LDH sources show the senior pathway at age 65+ and list income/resources limits. Phone number shown is Louisiana Options in Long Term Care."
+      "notes": "Current Louisiana DH source shows CCW is for older adults and persons with adult onset disabilities; senior pathway age is 65+. Income and resource limits come from the LDH fact sheet; this program uses Medicaid financial eligibility and a waiver spend-down option."
     },
     {
       "programId": "pace-elder-care",
@@ -131,19 +131,19 @@
         "age": 55,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 2000,
         "assets_couple": null,
         "phone": "5049451531",
         "sources": {
           "age": "https://ldh.la.gov/office-of-aging-and-adult-services/pace",
-          "income": "https://ldh.la.gov/assets/medicaid/MedicaidEligibilityPolicy/H-3600.pdf",
-          "assets": "https://ldh.la.gov/assets/medicaid/MedicaidEligibilityPolicy/H-3600.pdf",
-          "phone": "https://ldh.la.gov/assets/docs/OAAS/publications/OAASRC09006PACEFactSheetRI11310.pdf"
+          "income": "https://ldh.la.gov/assets/docs/OAAS/publications/OAASRC09006PACEFactSheetRI11310.pdf",
+          "assets": "https://ldh.la.gov/assets/docs/OAAS/publications/OAASRC09006PACEFactSheetRI11310.pdf",
+          "phone": "https://ldh.la.gov/office-of-aging-and-adult-services/pace"
         },
-        "notes": "PACE is current in Louisiana; official state sources show a minimum age of 55. No separate countable asset test was found in the current official Louisiana PACE eligibility materials reviewed; only broader Medicaid/resource references and service-area/LOC criteria were available."
+        "notes": "Louisiana PACE remains active in 2026; official state sources show a 55+ age threshold and a $2,000 resource limit for an individual. No separate couple asset limit was found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "PACE is current in Louisiana; official state sources show a minimum age of 55. No separate countable asset test was found in the current official Louisiana PACE eligibility materials reviewed; only broader Medicaid/resource references and service-area/LOC criteria were available."
+      "notes": "Louisiana PACE remains active in 2026; official state sources show a 55+ age threshold and a $2,000 resource limit for an individual. No separate couple asset limit was found in the retrieved official sources."
     },
     {
       "programId": "medicare-savings-programs",
@@ -162,21 +162,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1350,
-        "income_2": 1824,
+        "income_1": 1330,
+        "income_2": 1804,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18883426207",
         "sources": {
-          "age": null,
-          "income": "https://ldh.la.gov/medicaid/MedicareSavingsProgram",
-          "assets": "https://ldh.la.gov/medicaid/MedicareSavingsProgram",
-          "phone": "https://ldh.la.gov/medicaid/MedicareSavingsProgram"
+          "age": "https://ldh.la.gov/medicaid/medicare-savings-program",
+          "income": "https://ldh.la.gov/medicaid/Medicaid-Partners",
+          "assets": "https://ldh.la.gov/medicaid/medicare-savings-program",
+          "phone": "https://ldh.la.gov/medicaid/medicare-savings-program"
         },
-        "notes": "Louisiana LDH says resources are disregarded for QMB, SLMB, and QI; no age minimum is stated on the retrieved official page."
+        "notes": "Louisiana’s Medicare Savings Program covers QMB, SLMB, and QI; LDH states resources are disregarded for these groups, so no asset limit applies. Income limits shown are the current LDH monthly figures for the QMB tier; the program page also provides the application/help phone number."
       },
       "flags": [],
-      "notes": "Louisiana LDH says resources are disregarded for QMB, SLMB, and QI; no age minimum is stated on the retrieved official page."
+      "notes": "Louisiana’s Medicare Savings Program covers QMB, SLMB, and QI; LDH states resources are disregarded for these groups, so no asset limit applies. Income limits shown are the current LDH monthly figures for the QMB tier; the program page also provides the application/help phone number."
     },
     {
       "programId": "snap-food-benefits",
@@ -201,12 +201,12 @@
         "assets_couple": null,
         "phone": "8885243578",
         "sources": {
-          "age": "https://ldh.la.gov/page/snap-eligibility-application",
+          "age": "https://ldh.la.gov/supplemental-nutrition-assistance-program",
           "income": "https://ldh.la.gov/supplemental-nutrition-assistance-program",
           "assets": null,
-          "phone": "https://www.dcfs.la.gov/page/lahelpu-customer-service-center-information"
+          "phone": "https://ldh.la.gov/page/snap-faqs"
         },
-        "notes": "SNAP in Louisiana uses a senior-specific rule for households with a person age 60+ (net income test only); no separate senior asset limit was found in the retrieved official sources."
+        "notes": "SNAP is current in Louisiana; senior pathway uses age 60+ for special rules, but no senior-only minimum age threshold exists for eligibility. No asset limit source was found in the retrieved official pages."
       },
       "flags": [
         {
@@ -224,7 +224,7 @@
           "pctDiff": 36.5
         }
       ],
-      "notes": "SNAP in Louisiana uses a senior-specific rule for households with a person age 60+ (net income test only); no separate senior asset limit was found in the retrieved official sources."
+      "notes": "SNAP is current in Louisiana; senior pathway uses age 60+ for special rules, but no senior-only minimum age threshold exists for eligibility. No asset limit source was found in the retrieved official pages."
     },
     {
       "programId": "csfp-senior-food-boxes",
@@ -249,12 +249,12 @@
         "assets_couple": null,
         "phone": "2253100091",
         "sources": {
-          "age": "https://ldh.la.gov/bureau-of-nutrition-services/commodity-supplemental-food-program",
-          "income": "https://www.feedinglouisiana.org/csfp",
+          "age": "https://ldh.la.gov/page/998",
+          "income": "https://ldh.la.gov/assets/oph/Center-PHCH/Center-PH/nutrition/CSFPprogram/StatePlanFY26/LA-CSFPStatePlanFY2026_FINAL.pdf",
           "assets": null,
-          "phone": "https://ldh.la.gov/bureau-of-nutrition-services/commodity-supplemental-food-program"
+          "phone": "https://ldh.la.gov/page/998"
         },
-        "notes": "Current Louisiana CSFP Senior Box Program uses a 60+ senior threshold and income limit at 150% of federal poverty guidelines; no asset test found in the retrieved official/current sources."
+        "notes": "Louisiana CSFP is active for seniors age 60+; current FY2026 state plan says income eligibility is at or below 150% of Federal Poverty Income Guidelines. No asset test found in current authoritative sources."
       },
       "flags": [
         {
@@ -267,7 +267,7 @@
           "verifiedValue": "2253100091"
         }
       ],
-      "notes": "Current Louisiana CSFP Senior Box Program uses a 60+ senior threshold and income limit at 150% of federal poverty guidelines; no asset test found in the retrieved official/current sources."
+      "notes": "Louisiana CSFP is active for seniors age 60+; current FY2026 state plan says income eligibility is at or below 150% of Federal Poverty Income Guidelines. No asset test found in current authoritative sources."
     },
     {
       "programId": "spas-personal-assistance",
@@ -296,12 +296,12 @@
           "age": "https://www.ldh.la.gov/office-of-aging-and-adult-services/SPAS",
           "income": null,
           "assets": null,
-          "phone": "https://www.thearcla.org/wp-content/uploads/2025/07/SPAS-Application-Packet-Fillable-1.pdf"
+          "phone": "https://www.thearcla.org/programs/state-personal-assistance-services/"
         },
-        "notes": "SPAS appears current and administered through The Arc of Louisiana; no income or asset test was found in the retrievable official/current sources."
+        "notes": "Current Louisiana SPAS materials describe an 18+ disability program, not a senior-specific program; no senior age threshold, income, or asset test was found in authoritative current sources."
       },
       "flags": [],
-      "notes": "SPAS appears current and administered through The Arc of Louisiana; no income or asset test was found in the retrievable official/current sources."
+      "notes": "Current Louisiana SPAS materials describe an 18+ disability program, not a senior-specific program; no senior age threshold, income, or asset test was found in authoritative current sources."
     },
     {
       "programId": "adult-day-health-care-waiver",
@@ -327,12 +327,12 @@
         "assets_couple": null,
         "phone": "8774561146",
         "sources": {
-          "age": "https://ldh.la.gov/office-of-aging-and-adult-services/ADHC-waiver",
-          "income": "https://ldh.la.gov/office-of-aging-and-adult-services/ADHC-waiver",
-          "assets": "https://ldh.la.gov/office-of-aging-and-adult-services/ADHC-waiver",
+          "age": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/LA",
+          "income": null,
+          "assets": null,
           "phone": "https://ldh.la.gov/office-of-aging-and-adult-services"
         },
-        "notes": "Current Louisiana ADHC Waiver official page shows senior pathway at age 65+; Medicaid financial eligibility applies, but I could not find a current published income/assets limit on the official page."
+        "notes": "Current ADHC Waiver senior pathway is for ages 65+; program also serves ages 22-64 with physical disabilities. No income or asset test found in the retrieved official sources."
       },
       "flags": [
         {
@@ -342,7 +342,7 @@
           "verifiedValue": 65
         }
       ],
-      "notes": "Current Louisiana ADHC Waiver official page shows senior pathway at age 65+; Medicaid financial eligibility applies, but I could not find a current published income/assets limit on the official page."
+      "notes": "Current ADHC Waiver senior pathway is for ages 65+; program also serves ages 22-64 with physical disabilities. No income or asset test found in the retrieved official sources."
     },
     {
       "programId": "caregiver-voucher-program",
@@ -362,18 +362,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 2982,
+        "income_2": 5964,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "8774561146",
+        "phone": "18774561146",
         "sources": {
-          "age": "https://www.lamedicaid.com/provweb1/Providermanuals/manuals/CCW2/CCW2_7.3_01-13-25.pdf",
-          "income": "https://www.lamedicaid.com/provweb1/Providermanuals/manuals/CCW2/CCW2_7.3_01-13-25.pdf",
-          "assets": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
-          "phone": "https://ldh.la.gov/office-of-aging-and-adult-services/community-choices-waiver-ccw"
+          "age": "https://medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/LA",
+          "income": "https://www.medicaidplanningassistance.org/louisiana-community-choices-waiver/amp/",
+          "assets": "https://www.medicaidplanningassistance.org/louisiana-community-choices-waiver/amp/",
+          "phone": "https://ldh.la.gov/faq/category/24"
         },
-        "notes": "Community Choices Waiver is current; senior pathway applies to age 65+ (not 55+). Financial eligibility is Medicaid-based; separate monthly income figures were not clearly stated in the official sources retrieved."
+        "notes": "Current CCW appears active and is for seniors age 65+ or younger adults with disabilities; the program requires LTC Medicaid eligibility and nursing facility level of care."
       },
       "flags": [
         {
@@ -383,7 +383,140 @@
           "verifiedValue": 65
         }
       ],
-      "notes": "Community Choices Waiver is current; senior pathway applies to age 65+ (not 55+). Financial eligibility is Medicaid-based; separate monthly income figures were not clearly stated in the official sources retrieved."
+      "notes": "Current CCW appears active and is for seniors age 65+ or younger adults with disabilities; the program requires LTC Medicaid eligibility and nursing facility level of care."
+    },
+    {
+      "programId": "la-aged-blind-disabled-medicaid",
+      "programName": "Aged, Blind, and Disabled Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": null,
+        "phones": [
+          "18883426207",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18883426207",
+        "sources": {
+          "age": "https://ldh.la.gov/faq/category/24",
+          "income": "https://ldh.la.gov/faq/category/24",
+          "assets": "https://ldh.la.gov/faq/category/24",
+          "phone": "https://ldh.la.gov/medicaid"
+        },
+        "notes": "Louisiana ABD Medicaid is an aged/blind/disabled pathway; current official FAQ and Medicaid pages show age 65+, resource limits of $2,000 individual/$3,000 couple, and the main help line 1-888-342-6207."
+      },
+      "flags": [],
+      "notes": "Louisiana ABD Medicaid is an aged/blind/disabled pathway; current official FAQ and Medicaid pages show age 65+, resource limits of $2,000 individual/$3,000 couple, and the main help line 1-888-342-6207."
+    },
+    {
+      "programId": "la-liheap-energy-assistance",
+      "programName": "LIHEAP (Low-Income Home Energy Assistance Program)",
+      "facts": {
+        "age": null,
+        "income_1": 2552,
+        "income_2": 3337,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18884542001",
+          "2257638700"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 2551,
+        "income_2": 3337,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8884542001",
+        "sources": {
+          "age": null,
+          "income": "https://www.lhc.la.gov/energy-assistance",
+          "assets": null,
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
+        },
+        "notes": "Louisiana LIHEAP uses 60% of State Median Income for FFY 2026; no age or asset test found in the retrieved official sources. The public inquiries phone number is 1-888-454-2001."
+      },
+      "flags": [],
+      "notes": "Louisiana LIHEAP uses 60% of State Median Income for FFY 2026; no age or asset test found in the retrieved official sources. The public inquiries phone number is 1-888-454-2001."
+    },
+    {
+      "programId": "la-home-delivered-meals",
+      "programName": "Home-Delivered Meals (Nutrition Program)",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "3372625990",
+          "2253427100"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "2253427100",
+        "sources": {
+          "age": "https://www.nocoa.org/nutrition",
+          "income": null,
+          "assets": null,
+          "phone": "https://goea.louisiana.gov/about-us/agency-overview/"
+        },
+        "notes": "Home-delivered meals for Louisiana seniors are generally administered through local Area Agencies on Aging; no statewide income or asset test was found for the senior pathway."
+      },
+      "flags": [],
+      "notes": "Home-delivered meals for Louisiana seniors are generally administered through local Area Agencies on Aging; no statewide income or asset test was found for the senior pathway."
+    },
+    {
+      "programId": "la-national-family-caregiver-support-program",
+      "programName": "National Family Caregiver Support Program",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "2253427100",
+          "18007382256",
+          "18774561146"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18007382256",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://goea.louisiana.gov/resources/caregiver-resources/caregiver-faqs/"
+        },
+        "notes": "No income, asset, or age test found for Louisiana's senior caregiver pathway; official statewide help number found via GOEA caregiver FAQs."
+      },
+      "flags": [],
+      "notes": "No income, asset, or age test found for Louisiana's senior caregiver pathway; official statewide help number found via GOEA caregiver FAQs."
     }
   ]
 }

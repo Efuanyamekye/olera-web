@@ -153,7 +153,7 @@
           "source": "https://wyoparks.wyo.gov/index.php/learn/contact",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         }
       ]
     },
@@ -496,31 +496,19 @@
           "field": "assets_individual",
           "from": 29950,
           "to": 25000,
-          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "source": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         },
         {
           "field": "assets_couple",
           "from": 59900,
-          "to": 25000,
-          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "to": 50000,
+          "source": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "3077777320",
-            "211"
-          ],
-          "to": "8669898901",
-          "source": "https://wyotax.org/wp-content/uploads/2020/07/Current-Property-Tax-Assistance-Programs-2013.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:40.673Z"
+          "flaggedAt": "2026-10-06T12:31:44.063Z"
         }
       ]
     },
@@ -614,7 +602,7 @@
       "contentSections": [],
       "faqs": [],
       "sourceUrl": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/",
-      "lastVerifiedDate": "2026-10-02",
+      "lastVerifiedDate": "2026-10-06",
       "reviewedBy": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-02",
@@ -625,7 +613,17 @@
         "hasLocationFinder": true,
         "hasDocumentChecklist": true,
         "visualTone": "warm"
-      }
+      },
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "3077778566",
+          "source": "https://www.wyocourts.gov/legal-help-by-topic/temporary-guardianship-of-a-minor/",
+          "reason": "page also lists ours ((800) 442-2766)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "wy-aged-blind-disabled-medicaid",
@@ -976,6 +974,12 @@
           "phone": null,
           "description": "Oversees the Community Choice Waiver statewide. Mailing address for paper applications: 122 West 25th Street, 4 West, Cheyenne, WY 82002. Full program information at https://health.wyo.gov/healthcarefin/hcbs/.",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 510-0280",
+          "description": "Number listed on health.wyo.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1048,7 +1052,22 @@
       "phone": "(307) 630-4729",
       "sourceUrl": "https://health.wyo.gov/healthcarefin/hcbs/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "3076304729"
+          ],
+          "to": "(800) 510-0280",
+          "source": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+          "flaggedAt": "2026-10-06T12:31:44.063Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "wy-medicare-savings-programs",
@@ -1459,7 +1478,7 @@
       "contacts": [
         {
           "label": "Wyoming DFS SNAP Unit (Email Application)",
-          "phone": null,
+          "phone": "(307) 777-7564",
           "description": "Submit your completed DFS 100 application by email and direct SNAP questions to this unit. This is the statewide SNAP intake email.",
           "hours": "Contact your local DFS office for response time expectations"
         },
@@ -1548,10 +1567,26 @@
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": null,
+      "phone": "(307) 777-7564",
       "sourceUrl": "https://dfs.wyo.gov/assistance-programs/food-assistance/supplemental-nutrition-assistance-program-snap/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "(307) 777-7564",
+          "source": "https://dfs.wyo.gov/assistance-programs/food-assistance/",
+          "flaggedAt": "2026-10-06T12:31:44.063Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "wy-home-delivered-meals",
@@ -1721,7 +1756,18 @@
       "phone": "(307) 777-5048",
       "sourceUrl": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nutrition/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8004422766",
+          "source": "https://health.wyo.gov/aging/communityliving/public_resources/",
+          "reason": "page also lists ours ((307) 777-5048)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {
@@ -1773,5 +1819,5 @@
     ],
     "resourcesVsBenefits": "Wyoming's programs are primarily qualification-based benefits that require income limits or age requirements. The Low Income Energy Assistance Program and Tax Refund for Elderly & Disabled both have income requirements and provide direct financial assistance. Wyoming State Parks Senior Discounts are available to all residents 62+ regardless of income, providing immediate savings on recreation fees across the state."
   },
-  "factcheckedAt": "2026-10-02T07:48:40.673Z"
+  "factcheckedAt": "2026-10-06T12:31:44.063Z"
 }

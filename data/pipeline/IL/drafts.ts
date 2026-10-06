@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.378Z
+ * Last updated: 2026-10-06T12:32:14.317Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -585,10 +585,10 @@ export const drafts: PipelineStateDrafts = {
             "8002528966"
           ],
           "to": "2177821200",
-          "source": "https://hfs.illinois.gov/medicalproviders/pace.html",
+          "source": "https://hfs.illinois.gov/content/dam/soi/en/web/hfs/sitecollectiondocuments/pacepublicmeetingnotice11032021.pdf",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "why": "source dated 2021",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         }
       ]
     },
@@ -815,26 +815,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-14",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1330,
-          "to": 1796,
-          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1803,
-          "to": 2435,
-          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -1060,22 +1041,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-06",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 2608,
-          "to": 1696,
-          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         },
         {
-          "field": "income_2",
-          "from": 3525,
-          "to": 2292,
-          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:04.852Z"
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.fna.usda.gov/snap/eligibility/elderly-disabled-special-rules",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
         }
       ]
     },
@@ -2717,6 +2698,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Apply online at abe.illinois.gov, available 24 hours a day, 7 days a week. Starting online establishes your application date even before you submit verification documents.",
           "hours": "Available 24/7"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 843-6154",
+          "description": "Number listed on dhs.state.il.us",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2789,7 +2776,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(866) 311-1119",
       "sourceUrl": "https://www.dhs.state.il.us/page.aspx?item=45317",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8663111119"
+          ],
+          "to": "(800) 843-6154",
+          "source": "https://www.dhs.state.il.us/page.aspx?item=30370",
+          "flaggedAt": "2026-10-06T12:20:53.699Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "il-liheap-energy-assistance",
@@ -2939,6 +2941,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Find your county's local administering agency and read current program-year rules at dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html.",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(833) 711-0374",
+          "description": "Number listed on dceo.illinois.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3011,7 +3019,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-877-411-9276",
       "sourceUrl": "https://dceo.illinois.gov/communityservices/utilitybillassistance/howtoapply.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18774119276"
+          ],
+          "to": "(833) 711-0374",
+          "source": "https://dceo.illinois.gov/communityservices/utilitybillassistance.html",
+          "flaggedAt": "2026-10-06T12:20:53.699Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "il-senior-property-tax-freeze",
@@ -3184,7 +3207,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "312-443-7550",
       "sourceUrl": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3124437550",
+            "8153194460",
+            "2177823336"
+          ],
+          "to": "8007328866",
+          "source": "https://tax.illinois.gov/localgovernments/property/taxrelief.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:20:53.699Z"
+        }
+      ]
     },
     {
       "id": "il-benefit-access-program",

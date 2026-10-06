@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NJ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.565Z
+ * Last updated: 2026-10-06T12:32:14.675Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1479,6 +1479,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-356-1561",
           "description": "Your parent's county agency handles intake, document review, and eligibility determination. Call the number above to be directed to the correct county office if you are unsure which one applies.",
           "hours": "Varies by county. Ask when you call."
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 701-0710",
+          "description": "Number listed on nj.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1543,7 +1549,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-356-1561",
       "sourceUrl": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/aged-disabled/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18003561561"
+          ],
+          "to": "(800) 701-0710",
+          "source": "https://www.nj.gov/humanservices/dmahs/individuals-families/familycare/",
+          "flaggedAt": "2026-10-06T12:25:39.034Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nj-familycare-mltss-waiver",
@@ -2161,6 +2182,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(609) 588-2401",
           "description": "State-level program office for NJ SNAP. Best for policy questions or escalated issues after working with your county. Your county agency handles the actual application.",
           "hours": "Mon-Fri, standard business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 792-9773",
+          "description": "Number listed on fna.usda.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2233,7 +2260,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://www.nj.gov/humanservices/njsnap/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "6095882401"
+          ],
+          "to": "(800) 792-9773",
+          "source": "https://www.fna.usda.gov/snap-directory-entry/new-jersey",
+          "flaggedAt": "2026-10-06T12:25:39.034Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nj-liheap-home-energy-assistance",
@@ -2522,7 +2565,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-510-3102",
       "sourceUrl": "https://www.nj.gov/dca/dhcr/offices/hea.shtml",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2518,
+          "to": 4273,
+          "source": "https://www.nj.gov/dca/dhcr/offices/docs/FY2026%20LIHEAP%20Handbook%20.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-06T12:25:39.034Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3291,
+          "to": 5587,
+          "source": "https://www.nj.gov/dca/dhcr/offices/docs/FY2026%20LIHEAP%20Handbook%20.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-06T12:25:39.034Z"
+        }
+      ]
     },
     {
       "id": "nj-pace-program-all-inclusive-care-elderly",
@@ -2634,6 +2697,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General statewide helpline that can connect you to local aging services and transfer you to the right PACE contact if you are unsure who to call first.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 792-8820",
+          "description": "Number listed on nj.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2706,7 +2775,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(609) 943-3343",
       "sourceUrl": "https://www.nj.gov/humanservices/doas/services/l-p/pace/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "6099433343",
+            "211"
+          ],
+          "to": "(800) 792-8820",
+          "source": "https://www.nj.gov/humanservices/doas/services/l-p/pace/",
+          "flaggedAt": "2026-10-06T12:25:39.034Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nj-family-caregiver-support-program",

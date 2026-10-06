@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.380Z
+ * Last updated: 2026-10-06T12:32:14.366Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -188,22 +188,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_couple",
           "from": 4000,
           "to": 3000,
-          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/Pages/enroll.aspx",
+          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/enroll.aspx",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8553068959",
-            "211"
-          ],
-          "to": "8554596328",
-          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/enroll.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         }
       ]
     },
@@ -735,7 +723,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
           "severity": "high",
           "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         },
         {
           "field": "income_2",
@@ -744,7 +732,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
           "severity": "high",
           "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         }
       ]
     },
@@ -1118,17 +1106,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-03",
-      "reviewQueue": [
-        {
-          "field": "assets_couple",
-          "from": 2000,
-          "to": 4000,
-          "source": "https://www.chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "weatherization-assistance-program",
@@ -1335,7 +1313,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 530,
+          "source": "https://www.kyhousing.org/programs/weatherization",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 717,
+          "source": "https://www.kyhousing.org/programs/weatherization",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -1639,7 +1636,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.mealsonwheels.ky/get-meals",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         },
         {
           "field": "phone",
@@ -1651,7 +1648,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.mealsonwheels.ky/get-meals",
           "severity": "medium",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         }
       ]
     },
@@ -1757,6 +1754,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(859) 283-1885",
           "description": "Serves Boone, Campbell, Carroll, Gallatin, Grant, Kenton, Owen, Pendleton counties",
           "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(502) 564-6930",
+          "description": "Number listed on governor.ky.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1811,39 +1814,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/caregiversupport.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2128,
-          "to": 1505,
-          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
-          "severity": "high",
-          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2878,
-          "to": 2043,
-          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
-          "severity": "high",
-          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "211",
-            "5022665571",
-            "8592831885"
-          ],
-          "to": "5025646930",
-          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
-        }
-      ],
+      "reviewQueue": null,
       "appliedCorrections": [
         {
           "field": "structuredEligibility.incomeTable",
@@ -1871,6 +1842,20 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-06",
           "appliedBy": "answer-key review",
           "note": "The draft's own summary says income limits apply only to the Kentucky grandparent program; the national caregiver program (Title III-E) has none. As a rule the table ruled out caregivers of an older parent over it."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "5022665571",
+            "8592831885"
+          ],
+          "to": "(502) 564-6930",
+          "source": "https://governor.ky.gov/flood-resources",
+          "flaggedAt": "2026-10-06T12:21:49.819Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1981,6 +1966,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(270) 686-1607",
           "description": "Serves Henderson, Ohio, Union, Webster, Butler, Edmonson, Hart, Warren, Breckinridge, Grayson, Hardin, Larue, Meade counties",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(502) 564-5759",
+          "description": "Number listed on chfs.ky.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2036,20 +2027,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8334397759",
             "6067896517",
             "8595816607",
             "2706861607"
           ],
-          "to": "5025645759",
+          "to": "(502) 564-5759",
           "source": "https://www.chfs.ky.gov/agencies/dail/Pages/scsep.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2208,7 +2201,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 782-1924",
       "sourceUrl": "https://kycourts.gov/Legal-Help/Pages/Civil-Legal-Aid-Programs.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "2707825740",
+          "source": "https://www.klaid.org/how-we-work",
+          "reason": "page also lists ours ((800) 782-1924, (270) 782-1924)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2348,10 +2352,10 @@ export const drafts: PipelineStateDrafts = {
             "8007372723"
           ],
           "to": "8003722991",
-          "source": "https://www.ag.ky.gov/AG%20Publications/Protect-Nursing-Home-Residents.pdf",
+          "source": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/ResidentsRightsGuidev2022.pdf",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "why": "source dated 2022",
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         }
       ]
     },
@@ -2840,10 +2844,10 @@ export const drafts: PipelineStateDrafts = {
             "6064736244"
           ],
           "to": "5025646930",
-          "source": "https://www.chfs.ky.gov/agencies/dail/Pages/default.aspx",
+          "source": "https://www.chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:58.975Z"
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
         }
       ]
     },
@@ -3038,7 +3042,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(502) 564-4581",
       "sourceUrl": "https://revenue.ky.gov/Property/Residential-Farm-Commercial-Property/Pages/Homestead-Exemption.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5025644581"
+          ],
+          "to": "5025648338",
+          "source": "https://revenue.ky.gov/Property/pages/property-tax-exemptions.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:21:49.819Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

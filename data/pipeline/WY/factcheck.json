@@ -1,13 +1,13 @@
 {
   "state": "WY",
   "stateName": "Wyoming",
-  "checkedAt": "2026-10-02T07:48:40.673Z",
-  "total": 4,
+  "checkedAt": "2026-10-06T12:31:44.063Z",
+  "total": 9,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 2,
-  "totalFlags": 4,
+  "programsWithFlags": 6,
+  "totalFlags": 7,
   "highSeverityFlags": 2,
   "programs": [
     {
@@ -37,7 +37,7 @@
           "assets": null,
           "phone": "https://wyoparks.wyo.gov/index.php/learn/contact"
         },
-        "notes": "No authoritative statewide senior-discount age threshold could be verified from the retrieved official Wyoming State Parks pages; the official general contact phone is 307-777-6323."
+        "notes": "No official Wyoming State Parks senior discount age threshold could be verified from retrievable official sources; contact the agency directly."
       },
       "flags": [
         {
@@ -49,7 +49,7 @@
           "verifiedValue": "3077776323"
         }
       ],
-      "notes": "No authoritative statewide senior-discount age threshold could be verified from the retrieved official Wyoming State Parks pages; the official general contact phone is 307-777-6323."
+      "notes": "No official Wyoming State Parks senior discount age threshold could be verified from retrievable official sources; contact the agency directly."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -78,10 +78,10 @@
           "assets": null,
           "phone": "https://dfs.wyo.gov/wp-content/uploads/2026/09/2026-0903-LIEAP-About-handout.pdf"
         },
-        "notes": "Wyoming LIHEAP/LIEAP uses a 60% State Median Income test; no asset test found in current official materials. Senior-specific LIHEAP pathway not identified; using standard household income limits."
+        "notes": "Wyoming LIHEAP/LIEAP uses a 60% state median income test; no asset test was found in the retrieved official sources. Current official handout shows monthly limits for 1 and 2 persons and the application/help phone number."
       },
       "flags": [],
-      "notes": "Wyoming LIHEAP/LIEAP uses a 60% State Median Income test; no asset test found in current official materials. Senior-specific LIHEAP pathway not identified; using standard household income limits."
+      "notes": "Wyoming LIHEAP/LIEAP uses a 60% state median income test; no asset test was found in the retrieved official sources. Current official handout shows monthly limits for 1 and 2 persons and the application/help phone number."
     },
     {
       "programId": "tax-refund-elderly-disabled",
@@ -100,18 +100,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 17500,
+        "income_2": 28500,
         "assets_individual": 25000,
-        "assets_couple": 25000,
-        "phone": "8669898901",
+        "assets_couple": 50000,
+        "phone": "3077777320",
         "sources": {
-          "age": "https://wyoleg.gov/LSOResearch/2007/07RM055.pdf",
-          "income": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
-          "assets": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
-          "phone": "https://wyotax.org/wp-content/uploads/2020/07/Current-Property-Tax-Assistance-Programs-2013.pdf"
+          "age": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
+          "income": "https://wyoleg.gov/LSOResearch/2022/22RM007%20Updated%20Property%20Tax%20Relief%20w%20Appendix.pdf",
+          "assets": "https://law.justia.com/codes/wyoming/title-39/chapter-11/section-39-11-109/",
+          "phone": "https://wyo-prop-div.wyo.gov/tax-relief"
         },
-        "notes": "Program is the Wyoming Tax Refund for Elderly & Disabled; current statute indicates age 65+ for senior pathway. Asset limit is stated per adult member of the household and no separate couple cap was found in the available official-style sources. Income values were not extracted because the request asked only for assets and age, and the retrievable statutory snippet did not provide clear current income thresholds."
+        "notes": "Program remains active under Wyoming tax relief statutes; assets are capped at $25,000 per adult household member, so a couple would be $50,000 total if both are adults."
       },
       "flags": [
         {
@@ -125,20 +125,11 @@
           "field": "assets_couple",
           "severity": "high",
           "draftValue": 59900,
-          "verifiedValue": 25000,
-          "pctDiff": 58.3
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "3077777320",
-            "211"
-          ],
-          "verifiedValue": "8669898901"
+          "verifiedValue": 50000,
+          "pctDiff": 16.5
         }
       ],
-      "notes": "Program is the Wyoming Tax Refund for Elderly & Disabled; current statute indicates age 65+ for senior pathway. Asset limit is stated per adult member of the household and no separate couple cap was found in the available official-style sources. Income values were not extracted because the request asked only for assets and age, and the retrievable statutory snippet did not provide clear current income thresholds."
+      "notes": "Program remains active under Wyoming tax relief statutes; assets are capped at $25,000 per adult household member, so a couple would be $50,000 total if both are adults."
     },
     {
       "programId": "family-caregiver-support",
@@ -161,17 +152,217 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3077777995",
+        "phone": "3077778566",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/"
+          "phone": "https://www.wyocourts.gov/legal-help-by-topic/temporary-guardianship-of-a-minor/"
         },
-        "notes": "No age, income, or asset test found for Wyoming's National Family Caregiver Support Program senior-caregiver pathway; official contact number listed on Wyoming Department of Health page."
+        "notes": "No age, income, or asset test found for the senior caregiver pathway; current authoritative contact number located on Wyoming court guidance and WDH aging pages."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8004422766",
+            "3077777995"
+          ],
+          "verifiedValue": "3077778566"
+        }
+      ],
+      "notes": "No age, income, or asset test found for the senior caregiver pathway; current authoritative contact number located on Wyoming court guidance and WDH aging pages."
+    },
+    {
+      "programId": "wy-aged-blind-disabled-medicaid",
+      "programName": "Aged, Blind, and Disabled Medicaid",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18552942127",
+          "18553295204"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18552942127",
+        "sources": {
+          "age": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+          "income": "https://health.wyo.gov/wp-content/uploads/2025/12/Chapter-18-1.pdf",
+          "assets": "https://health.wyo.gov/wp-content/uploads/2025/12/Chapter-18-1.pdf",
+          "phone": "https://health.wyo.gov/healthcarefin/medicaid/"
+        },
+        "notes": "Current Wyoming ABD Medicaid senior pathway uses age 65+; no current authoritative income or asset dollar limits were retrievable from the official sources surfaced here."
       },
       "flags": [],
-      "notes": "No age, income, or asset test found for Wyoming's National Family Caregiver Support Program senior-caregiver pathway; official contact number listed on Wyoming Department of Health page."
+      "notes": "Current Wyoming ABD Medicaid senior pathway uses age 65+; no current authoritative income or asset dollar limits were retrievable from the official sources surfaced here."
+    },
+    {
+      "programId": "wy-community-choice-waiver",
+      "programName": "Community Choice Waiver (CCW)",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "3076304729"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8005100280",
+        "sources": {
+          "age": "https://health.wyo.gov/wp-content/uploads/2026/07/CCW-Form-01-CCW-Program-Application-and-Fact-Sheet-07_2026.pdf",
+          "income": "https://health.wyo.gov/healthcarefin/hcbs/",
+          "assets": "https://health.wyo.gov/healthcarefin/hcbs/",
+          "phone": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/"
+        },
+        "notes": "Current Wyoming CCW guidance shows the senior pathway begins at age 65; no separate income or asset dollar limits were found in the retrieved official sources, only Medicaid/financial eligibility language."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3076304729"
+          ],
+          "verifiedValue": "8005100280"
+        }
+      ],
+      "notes": "Current Wyoming CCW guidance shows the senior pathway begins at age 65; no separate income or asset dollar limits were found in the retrieved official sources, only Medicaid/financial eligibility language."
+    },
+    {
+      "programId": "wy-medicare-savings-programs",
+      "programName": "Medicare Savings Programs",
+      "facts": {
+        "age": null,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8552942127",
+          "8552032936",
+          "8007721213"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8552942127",
+        "sources": {
+          "age": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+          "income": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/medicaid-income-requirements/",
+          "assets": "https://health.wyo.gov/healthcarefin/medicaid/programs-and-eligibility/",
+          "phone": "https://ecom.wyo.gov/m400-application-process/m401-applying-for-benefits"
+        },
+        "notes": "Wyoming Medicare Savings Programs use income and resource standards; the official page lists QMB/SLMB/QI eligibility and references a maximum resource standard, but the retrieved sources did not expose the exact asset amounts."
+      },
+      "flags": [],
+      "notes": "Wyoming Medicare Savings Programs use income and resource standards; the official page lists QMB/SLMB/QI eligibility and references a maximum resource standard, but the retrieved sources did not expose the exact asset amounts."
+    },
+    {
+      "programId": "wy-snap-food-benefits",
+      "programName": "Supplemental Nutrition Assistance Program (SNAP)",
+      "facts": {
+        "age": null,
+        "income_1": 2195,
+        "income_2": 2976,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 2195,
+        "income_2": 2976,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "3077777564",
+        "sources": {
+          "age": null,
+          "income": "https://dfs.wyo.gov/about/policy-manuals/snap-and-power-policy-manual/table-i-snap-income-limits/",
+          "assets": null,
+          "phone": "https://dfs.wyo.gov/assistance-programs/food-assistance/"
+        },
+        "notes": "SNAP uses gross/net income limits rather than an asset test in the retrieved Wyoming sources; no senior-specific age pathway applies."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "3077777564"
+        }
+      ],
+      "notes": "SNAP uses gross/net income limits rather than an asset test in the retrieved Wyoming sources; no senior-specific age pathway applies."
+    },
+    {
+      "programId": "wy-home-delivered-meals",
+      "programName": "Home-Delivered Meals",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "3077775048"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8004422766",
+        "sources": {
+          "age": "https://health.wyo.gov/wp-content/uploads/2023/03/C2-Home-Delivered-Meals-Policies-and-Procedures-FY23-update-Autosaved.pdf",
+          "income": null,
+          "assets": null,
+          "phone": "https://health.wyo.gov/aging/communityliving/public_resources/"
+        },
+        "notes": "Current Wyoming aging-program guidance shows senior eligibility at age 60+; no income or asset test found for this program."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3077775048"
+          ],
+          "verifiedValue": "8004422766"
+        }
+      ],
+      "notes": "Current Wyoming aging-program guidance shows senior eligibility at age 60+; no income or asset test found for this program."
     }
   ]
 }

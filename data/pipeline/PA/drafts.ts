@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T09:18:23.571Z
+ * Last updated: 2026-10-06T12:32:14.884Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -212,7 +212,17 @@ export const drafts: PipelineStateDrafts = {
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
       "lastVerifiedDate": "2026-10-04",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 8000,
+          "to": 2000,
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        }
+      ],
       "dismissedFlags": [
         {
           "field": "phone",
@@ -761,7 +771,26 @@ export const drafts: PipelineStateDrafts = {
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
       "lastVerifiedDate": "2026-10-04",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/055/chapter140/subchapBtoc.html&d=reduce",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2184,
+          "source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        }
+      ],
       "dismissedFlags": [
         {
           "field": "phone",
@@ -1235,6 +1264,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(717) 783-1550",
           "description": "Number listed on palottery.pa.gov",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 468-2433",
+          "description": "Number listed on pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1311,6 +1346,20 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.palottery.pa.gov/Benefits/Local-Services-Senior-Centers-Meals.aspx",
           "flaggedAt": "2026-10-05T18:20:13.875Z",
           "appliedAt": "2026-10-05",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "7177719610",
+            "8149461235",
+            "7177831550"
+          ],
+          "to": "(800) 468-2433",
+          "source": "https://www.pa.gov/agencies/aging/aging-programs-and-services/meals-and-food-assistance",
+          "flaggedAt": "2026-10-06T12:27:54.539Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -1951,6 +2000,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "A general helpline that can connect you to your local CAO or other community resources if the DHS line is busy. This line transfers you; it does not process Medical Assistance applications directly.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 550-4355",
+          "description": "Number listed on pa.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2023,7 +2078,42 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 692-7462",
       "sourceUrl": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1835,
+          "to": 1016,
+          "source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2489,
+          "to": 1524,
+          "source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8006927462",
+            "211"
+          ],
+          "to": "(866) 550-4355",
+          "source": "https://www.pa.gov/services/dhs/apply-for-medicaid-benefits",
+          "flaggedAt": "2026-10-06T12:27:54.539Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "pa-liheap-heating-assistance",
@@ -2607,7 +2697,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-772-1213",
       "sourceUrl": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 65,
+          "source": "https://www.ssa.gov/pubs/EN-05-11150.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:27:54.539Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

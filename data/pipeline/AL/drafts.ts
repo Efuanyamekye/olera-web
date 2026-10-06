@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.365Z
+ * Last updated: 2026-10-06T12:32:13.949Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -773,26 +773,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1729,
-          "to": 1305,
-          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2345,
-          "to": 1763,
-          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -1174,23 +1155,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-23",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "211",
-            "3342624300",
-            "2569991166",
-            "2563833832",
-            "2568519800"
-          ],
-          "to": "3342428972",
-          "source": "https://adeca.alabama.gov/wp-content/uploads/2025-WAP-State-Plan.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "ship-medicare-counseling",
@@ -1926,6 +1891,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "info@EastAlabamaAging.org",
           "description": "Email contact for East Alabama region legal services",
           "hours": "Email response times vary"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 456-4995",
+          "description": "Number listed on legalservicesalabama.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1965,7 +1936,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-243-5463",
       "sourceUrl": "https://alabamaageline.gov/legal-assistance/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18002435463",
+            "18664563959",
+            "18667851798"
+          ],
+          "to": "(866) 456-4995",
+          "source": "https://legalservicesalabama.org/apply-for-services/",
+          "flaggedAt": "2026-10-06T12:17:45.405Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2644,26 +2632,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 65,
-          "to": 55,
-          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        },
-        {
-          "field": "income_1",
-          "from": 2982,
-          "to": 1292,
-          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:33:05.611Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "seniorx-prescription-assistance",
@@ -3269,7 +3238,64 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(334) 242-1310",
       "sourceUrl": "https://dhr.alabama.gov/food-assistance/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dhr.alabama.gov/food-assistance/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "income_1",
+          "from": 1133,
+          "to": 1729,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2026/09/Form-DHR-FAP-2200-Rev-09.2026-.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1526,
+          "to": 2345,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2026/09/Form-DHR-FAP-2200-Rev-09.2026-.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://benefitscheckup.org/program/nutrition_al_snap_program",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://benefitscheckup.org/program/nutrition_al_snap_program",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:45.405Z"
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8003820499",
+          "source": "https://dhr.alabama.gov/contact/",
+          "reason": "page also lists ours ((334) 242-1310)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     }
   ],
   "stateOverview": {

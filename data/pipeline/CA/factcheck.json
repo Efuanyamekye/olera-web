@@ -1,14 +1,14 @@
 {
   "state": "CA",
   "stateName": "California",
-  "checkedAt": "2026-10-02T07:33:59.830Z",
-  "total": 17,
+  "checkedAt": "2026-10-06T12:18:38.646Z",
+  "total": 20,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 1,
-  "programsWithFlags": 6,
-  "totalFlags": 8,
-  "highSeverityFlags": 3,
+  "errors": 0,
+  "programsWithFlags": 5,
+  "totalFlags": 6,
+  "highSeverityFlags": 1,
   "programs": [
     {
       "programId": "medi-cal-medicare-savings-programs",
@@ -38,10 +38,10 @@
           "assets": "https://www.dhcs.ca.gov/individuals/medicare-savings-programs-in-california/",
           "phone": "https://www.dhcs.ca.gov/individuals/medicare-savings-programs-in-california/"
         },
-        "notes": "California DHCS shows current 2026 MSP eligibility for seniors; no age minimum applies because this is a Medicare-based senior pathway. DHCS lists annual income limits and asset limits effective January 1, 2026; monthly income values are the annual figures divided by 12 and rounded to the nearest integer."
+        "notes": "California MSP (QMB/SLMB/QI) has no age minimum beyond Medicare eligibility; DHCS lists annual income and 2026 asset limits. Phone number is the Medi-Cal Helpline; county offices also handle applications."
       },
       "flags": [],
-      "notes": "California DHCS shows current 2026 MSP eligibility for seniors; no age minimum applies because this is a Medicare-based senior pathway. DHCS lists annual income limits and asset limits effective January 1, 2026; monthly income values are the annual figures divided by 12 and rounded to the nearest integer."
+      "notes": "California MSP (QMB/SLMB/QI) has no age minimum beyond Medicare eligibility; DHCS lists annual income and 2026 asset limits. Phone number is the Medi-Cal Helpline; county offices also handle applications."
     },
     {
       "programId": "mssp-waiver",
@@ -64,14 +64,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "9165529105",
+        "phone": "8003394661",
         "sources": {
           "age": "https://www.dhcs.ca.gov/services/medi-cal-resources/multipurpose-senior-services-program-msspmedi-calwaiver/",
           "income": null,
           "assets": null,
-          "phone": "https://www.dhcs.ca.gov/services/medi-cal-resources/multipurpose-senior-services-program-msspmedi-calwaiver/"
+          "phone": "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/ais/Services/Multipurpose-Senior-Services-Program.html"
         },
-        "notes": "Current California DHCS materials show MSSP age 60+; no income or asset test was found in the retrieved official source. Phone number extracted from DHCS contact information on the official page."
+        "notes": "Current California DHCS page says age 60+; some county pages list 65+ or older, so 60 is used for the state-level MSSP waiver. No income or asset test found in the retrieved official sources."
       },
       "flags": [
         {
@@ -81,10 +81,10 @@
             "9164197500",
             "18884528609"
           ],
-          "verifiedValue": "9165529105"
+          "verifiedValue": "8003394661"
         }
       ],
-      "notes": "Current California DHCS materials show MSSP age 60+; no income or asset test was found in the retrieved official source. Phone number extracted from DHCS contact information on the official page."
+      "notes": "Current California DHCS page says age 60+; some county pages list 65+ or older, so 60 is used for the state-level MSSP waiver. No income or asset test found in the retrieved official sources."
     },
     {
       "programId": "cbas-adult-day-services",
@@ -97,7 +97,8 @@
         "assets_couple": 195000,
         "phones": [
           "9164407400",
-          "211"
+          "211",
+          "9164197545"
         ],
         "hasVerifiableFacts": true
       },
@@ -110,24 +111,14 @@
         "phone": "9164197545",
         "sources": {
           "age": "https://aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
-          "income": "https://aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
-          "assets": "https://aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
-          "phone": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/"
+          "income": null,
+          "assets": null,
+          "phone": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/"
         },
-        "notes": "CBAS is current in California; the senior-specific age threshold is 18+ for eligibility, and no countable asset test is listed in the official program materials found."
+        "notes": "CBAS is current; age is 18+ for eligibility, with medical necessity and Medi-Cal aid-code requirements. No countable asset test was found in the retrieved official sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "9164407400",
-            "211"
-          ],
-          "verifiedValue": "9164197545"
-        }
-      ],
-      "notes": "CBAS is current in California; the senior-specific age threshold is 18+ for eligibility, and no countable asset test is listed in the official program materials found."
+      "flags": [],
+      "notes": "CBAS is current; age is 18+ for eligibility, with medical necessity and Medi-Cal aid-code requirements. No countable asset test was found in the retrieved official sources."
     },
     {
       "programId": "calfresh-food-benefits",
@@ -145,49 +136,54 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 55,
-        "income_1": 1628,
-        "income_2": 2203,
+        "age": 60,
+        "income_1": 2610,
+        "income_2": 3526,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18778473663",
         "sources": {
-          "age": "https://www.cdss.ca.gov/inforesources/calfresh/eligibility-and-issuance-requirements",
-          "income": "https://www.cdss.ca.gov/Portals/9/FA/Forms/CF24.pdf?ver=2026-10-01-095941-493",
-          "assets": "https://www.cdss.ca.gov/inforesources/calfresh/eligibility-and-issuance-requirements",
+          "age": "https://cdss.ca.gov/calfreshoutreach/res/Toolkit/Handbook-OlderAdults/OlderAdultsHandbook_CH5_CaliforniaEligibilityGuidelinesSpecifictoOlderAdults.pdf",
+          "income": "https://www.countyofkingsca.gov/departments/human-services-agency/benefit-services-division/health-care-benefits/calfresh-snap",
+          "assets": null,
           "phone": "https://cdss.ca.gov/inforesources/calfresh/contacts"
         },
-        "notes": "CalFresh is current and active; no general asset test applies for most households, but seniors/disabled households have special rules and deductions rather than a simple standard asset limit."
+        "notes": "CalFresh is active; for the senior pathway, households with a member age 60+ have special rules and can qualify under the older-adult pathway."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 60,
-          "verifiedValue": 55
-        },
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2610,
-          "verifiedValue": 1628,
-          "pctDiff": 37.6
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 3526,
-          "verifiedValue": 2203,
-          "pctDiff": 37.5
-        }
-      ],
-      "notes": "CalFresh is current and active; no general asset test applies for most households, but seniors/disabled households have special rules and deductions rather than a simple standard asset limit."
+      "flags": [],
+      "notes": "CalFresh is active; for the senior pathway, households with a member age 60+ have special rules and can qualify under the older-adult pathway."
     },
     {
       "programId": "liheap-energy-assistance",
       "programName": "LIHEAP (Low-Income Home Energy Assistance Program)",
-      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
-      "flags": []
+      "facts": {
+        "age": 18,
+        "income_1": 3332,
+        "income_2": 4357,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8666756623"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 3332,
+        "income_2": 4357,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8666756623",
+        "sources": {
+          "age": null,
+          "income": "https://www.csd.ca.gov/Pages/LIHEAP-Income-Eligibility.aspx",
+          "assets": null,
+          "phone": "https://www.csd.ca.gov/Pages/Assistance-PayingMyEnergyBills.aspx"
+        },
+        "notes": "California LIHEAP does not show a senior age minimum for eligibility; priority categories may include seniors, but the program is income-based. No official asset test was found."
+      },
+      "flags": [],
+      "notes": "California LIHEAP does not show a senior age minimum for eligibility; priority categories may include seniors, but the program is income-based. No official asset test was found."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -207,21 +203,21 @@
       },
       "verified": {
         "age": null,
-        "income_1": 24000,
+        "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8666756623",
         "sources": {
           "age": "https://www.csd.ca.gov/Pages/Residential-Energy-Efficiency.aspx",
-          "income": "https://www.csd.ca.gov/Shared%20Documents/2025-Final-DOE-WAP-State-Plan.pdf",
-          "assets": null,
+          "income": "https://www.csd.ca.gov/Pages/Residential-Energy-Efficiency.aspx",
+          "assets": "https://www.csd.ca.gov/Pages/Residential-Energy-Efficiency.aspx",
           "phone": "https://www.csd.ca.gov/Pages/Assistance-HomeEnergyEfficiency.aspx"
         },
-        "notes": "No separate senior age threshold or asset test found for California WAP; program prioritizes elderly households but uses income-based eligibility. Phone is the state help line for finding local application services."
+        "notes": "No single statewide senior-specific age or asset test was found; California WAP is administered through local providers and uses income, household size, energy use, and other factors. Official statewide help line found; use local provider for application details."
       },
       "flags": [],
-      "notes": "No separate senior age threshold or asset test found for California WAP; program prioritizes elderly households but uses income-based eligibility. Phone is the state help line for finding local application services."
+      "notes": "No single statewide senior-specific age or asset test was found; California WAP is administered through local providers and uses income, household size, energy use, and other factors. Official statewide help line found; use local provider for application details."
     },
     {
       "programId": "hicap-medicare-counseling",
@@ -248,12 +244,12 @@
           "age": "https://aging.ca.gov/Programs_and_Services/Medicare_Counseling/",
           "income": null,
           "assets": null,
-          "phone": "https://aging.ca.gov/Programs_and_Services/Medicare_Counseling/"
+          "phone": "https://www.dhcs.ca.gov/services/ltc/Pages/ConsHICAP.aspx"
         },
-        "notes": "Current California HICAP is active and serves Medicare-related counseling; senior pathway age is 65+, while younger disabled Medicare beneficiaries are also served. No income or asset test found in official sources."
+        "notes": "Current California HICAP counseling eligibility for the senior pathway is age 65+ (or younger than 65 with disability/Medicare); no income or asset test found."
       },
       "flags": [],
-      "notes": "Current California HICAP is active and serves Medicare-related counseling; senior pathway age is 65+, while younger disabled Medicare beneficiaries are also served. No income or asset test found in official sources."
+      "notes": "Current California HICAP counseling eligibility for the senior pathway is age 65+ (or younger than 65 with disability/Medicare); no income or asset test found."
     },
     {
       "programId": "meals-on-wheels-aaa",
@@ -279,15 +275,15 @@
         "assets_couple": null,
         "phone": "8005102020",
         "sources": {
-          "age": "https://aging.ca.gov/Providers_and_Partners/Area_Agencies_on_Aging/Congregate_Nutrition/Program_Narrative_and_Fact_Sheets/",
-          "income": "https://aging.ca.gov/Providers_and_Partners/Area_Agencies_on_Aging/Congregate_Nutrition/Program_Narrative_and_Fact_Sheets/",
-          "assets": null,
-          "phone": "https://aging.ca.gov/Contact_Us/"
+          "age": "https://www.kerncounty.com/government/aging-adult-services/services/senior-nutrition",
+          "income": "https://aging.ca.gov/Programs_and_Services/Meal_Programs/",
+          "assets": "https://aging.ca.gov/Programs_and_Services/Meal_Programs/",
+          "phone": "https://www.aging.ca.gov/Programs_and_Services/Meal_Programs/"
         },
-        "notes": "California’s Older Americans Act meal programs use a 60+ senior threshold; no income or asset test is listed in the cited state materials."
+        "notes": "California Department of Aging meal programs appear current; home-delivered meals are for older adults, commonly age 60+ under OAA-funded local programs. No income or asset test found."
       },
       "flags": [],
-      "notes": "California’s Older Americans Act meal programs use a 60+ senior threshold; no income or asset test is listed in the cited state materials."
+      "notes": "California Department of Aging meal programs appear current; home-delivered meals are for older adults, commonly age 60+ under OAA-funded local programs. No income or asset test found."
     },
     {
       "programId": "mssp-caregiver-support",
@@ -306,22 +302,39 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8005102020",
+        "phone": "8003394661",
         "sources": {
-          "age": "https://www.dhcs.ca.gov/services/medi-cal-resources/multipurpose-senior-services-program-msspmedi-calwaiver/",
+          "age": "https://www.dhcs.ca.gov/services/ltc/Pages/MSSP.aspx",
           "income": null,
           "assets": null,
-          "phone": "https://aging.ca.gov/Programs_and_Services/Multipurpose_Senior_Services_Program/"
+          "phone": "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/ais/Services/Multipurpose-Senior-Services-Program.html"
         },
-        "notes": "Current California MSSP senior pathway shows age 60+; no income or asset test found in the retrieved official sources. Official statewide help line listed as 1-800-510-2020."
+        "notes": "Current California DHCS page states age 65+ for MSSP; no authoritative income or asset test found in retrieved sources. Phone number taken from a county MSSP contact page."
       },
-      "flags": [],
-      "notes": "Current California MSSP senior pathway shows age 60+; no income or asset test found in the retrieved official sources. Official statewide help line listed as 1-800-510-2020."
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18005102020",
+            "8006644664",
+            "6263973110"
+          ],
+          "verifiedValue": "8003394661"
+        }
+      ],
+      "notes": "Current California DHCS page states age 65+ for MSSP; no authoritative income or asset test found in retrieved sources. Phone number taken from a county MSSP contact page."
     },
     {
       "programId": "scsep-employment-program",
@@ -351,12 +364,12 @@
           "age": "https://aging.ca.gov/Providers_and_Partners/Senior_Community_Service_Employment_Program/Program_Narrative_and_Fact_Sheets/",
           "income": null,
           "assets": null,
-          "phone": "https://www.aging.ca.gov/download.ashx?lE0rcNUV0zY6pydZwctbkA=="
+          "phone": "https://aging.ca.gov/Programs_and_Services/Senior_Employment_and_Training/"
         },
-        "notes": "Current California SCSEP materials list age 55+; no separate income or asset tests were found in the retrievable official state source beyond low-income references in general program descriptions. Main statewide help line is the California Department of Aging Senior Information Line."
+        "notes": "SCSEP remains an active California program; current California Department of Aging materials show the senior age threshold as 55+ and the statewide senior information line as the main help number."
       },
       "flags": [],
-      "notes": "Current California SCSEP materials list age 55+; no separate income or asset tests were found in the retrievable official state source beyond low-income references in general program descriptions. Main statewide help line is the California Department of Aging Senior Information Line."
+      "notes": "SCSEP remains an active California program; current California Department of Aging materials show the senior age threshold as 55+ and the statewide senior information line as the main help number."
     },
     {
       "programId": "senior-legal-services",
@@ -379,27 +392,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002221753",
+        "phone": "8005102020",
         "sources": {
           "age": "https://aging.ca.gov/Programs_and_Services/Legal_Services/",
-          "income": "https://aging.ca.gov/download.ashx?lE0rcNUV0zYoBNz7s7Tr5A==",
+          "income": null,
           "assets": null,
-          "phone": "https://dfpi.ca.gov/wp-content/uploads/sites/337/2019/07/Consumer_ResourceGuide.pdf"
+          "phone": "https://aging.ca.gov/Contact_Us/"
         },
-        "notes": "Program appears to be California Department of Aging legal services for older adults, with the senior pathway using age 60+; no current household income or asset limit was found in the retrieved official sources."
+        "notes": "California Department of Aging legal services for older adults; official source shows persons 60+ regardless of income level, with intake routed through the statewide Aging and Adult Information Line."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18005102020",
-            "18006758001"
-          ],
-          "verifiedValue": "8002221753"
-        }
-      ],
-      "notes": "Program appears to be California Department of Aging legal services for older adults, with the senior pathway using age 60+; no current household income or asset limit was found in the retrieved official sources."
+      "flags": [],
+      "notes": "California Department of Aging legal services for older adults; official source shows persons 60+ regardless of income level, with intake routed through the statewide Aging and Adult Information Line."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -425,15 +428,15 @@
         "assets_couple": null,
         "phone": "8002314024",
         "sources": {
-          "age": "https://aging.ca.gov/programs_and_services/long-term_care_ombudsman/",
-          "income": "https://aging.ca.gov/programs_and_services/long-term_care_ombudsman/",
-          "assets": "https://aging.ca.gov/programs_and_services/long-term_care_ombudsman/",
-          "phone": "https://aging.ca.gov/programs_and_services/long-term_care_ombudsman/"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://aging.ca.gov/Contact_Us/"
         },
-        "notes": "Program is not means-tested and serves all residents of long-term care facilities regardless of age or payer; statewide hotline is 800-231-4024."
+        "notes": "Program has no age, income, or asset eligibility test for the senior ombudsman help line; current statewide hotline is 800-231-4024."
       },
       "flags": [],
-      "notes": "Program is not means-tested and serves all residents of long-term care facilities regardless of age or payer; statewide hotline is 800-231-4024."
+      "notes": "Program has no age, income, or asset eligibility test for the senior ombudsman help line; current statewide hotline is 800-231-4024."
     },
     {
       "programId": "ssp-supplemental-payment",
@@ -458,15 +461,15 @@
         "assets_couple": 3000,
         "phone": "18007721213",
         "sources": {
-          "age": "https://cdss.ca.gov/inforesources/ssi-ssp",
+          "age": "https://www.cdss.ca.gov/inforesources/ssi-ssp",
           "income": null,
           "assets": "https://www.cdss.ca.gov/inforesources/cdss-programs/ssi-ssp/ssi-ssp-eligibility-summary",
-          "phone": "https://cdss.ca.gov/inforesources/ssi-ssp"
+          "phone": "https://www.cdss.ca.gov/inforesources/ssi-ssp"
         },
-        "notes": "California SSP is tied to SSI eligibility for aged 65+; no separate senior-specific age below 65 was found. Official sources confirm the asset/resource limits and SSA application phone number."
+        "notes": "SSP is part of SSI/SSP in California; for senior applicants the age threshold is 65+. The program has resource limits, but no separate income dollar limit was found in the retrieved official summary."
       },
       "flags": [],
-      "notes": "California SSP is tied to SSI eligibility for aged 65+; no separate senior-specific age below 65 was found. Official sources confirm the asset/resource limits and SSA application phone number."
+      "notes": "SSP is part of SSI/SSP in California; for senior applicants the age threshold is 65+. The program has resource limits, but no separate income dollar limit was found in the retrieved official summary."
     },
     {
       "programId": "property-tax-postponement",
@@ -482,21 +485,21 @@
       },
       "verified": {
         "age": 62,
-        "income_1": 57002,
+        "income_1": 55002,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8009525661",
         "sources": {
-          "age": "https://www.sco.ca.gov/ardtax_prop_tax_postponement.html",
-          "income": "https://www.sco.ca.gov/ardtax_prop_tax_postponement.html",
-          "assets": "https://www.sco.ca.gov/ardtax_prop_tax_postponement.html",
-          "phone": "https://www.sco.ca.gov/ardtax_prop_tax_postponement.html"
+          "age": "https://www.sco.ca.gov/ardtax_fact_sheet.html",
+          "income": "https://www.sco.ca.gov/ardtax_fact_sheet.html",
+          "assets": "https://www.sco.ca.gov/ardtax_fact_sheet.html",
+          "phone": "https://www.sco.ca.gov/ardtax_fact_sheet.html"
         },
-        "notes": "Current California Property Tax Postponement Program; senior pathway minimum age is 62. The program uses a home equity test (40% equity), not an asset-limit test, so asset fields are null. Income limit shown on the current SCO page is $57,002 for 2026-27."
+        "notes": "Current California Property Tax Postponement Program; senior pathway minimum age is 62. Program uses household income and 40% home equity tests, but no liquid-asset limit was found in current official materials."
       },
       "flags": [],
-      "notes": "Current California Property Tax Postponement Program; senior pathway minimum age is 62. The program uses a home equity test (40% equity), not an asset-limit test, so asset fields are null. Income limit shown on the current SCO page is $57,002 for 2026-27."
+      "notes": "Current California Property Tax Postponement Program; senior pathway minimum age is 62. Program uses household income and 40% home equity tests, but no liquid-asset limit was found in current official materials."
     },
     {
       "programId": "ihss-in-home-supportive-services",
@@ -514,18 +517,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "income_1": 1836,
+        "income_2": 2490,
+        "assets_individual": 130000,
+        "assets_couple": 195000,
         "phone": "8663767066",
         "sources": {
-          "age": "https://www.cdss.ca.gov/in-home-supportive-services",
-          "income": "https://www.cdss.ca.gov/in-home-supportive-services",
-          "assets": "https://www.cdss.ca.gov/in-home-supportive-services",
-          "phone": "https://www.cdss.ca.gov/inforesources/county-ihss-offices"
+          "age": "https://www.dhcs.ca.gov/medi-cal/help/",
+          "income": "https://www.medicaidplanningassistance.org/medi-cal-in-home-supportive-services/",
+          "assets": "https://www.medicaidplanningassistance.org/medi-cal-in-home-supportive-services/",
+          "phone": "https://www.cdss.ca.gov/inforesources/ihss/ihss-providers/how-to-become-an-ihss-provider"
         },
-        "notes": "IHSS is age 65+ for the senior pathway and requires Medi-Cal eligibility; the official state IHSS pages do not publish a separate program income or countable-asset limit for the senior pathway in the retrieved source. The statewide IHSS service desk phone is listed by CDSS."
+        "notes": "IHSS is an aged/blind/disabled Medi-Cal-linked program; for the senior pathway, the age criterion is 65+ and there is no separate senior-only income/asset rule apart from Medi-Cal-linked limits."
       },
       "flags": [
         {
@@ -537,7 +540,7 @@
           "verifiedValue": "8663767066"
         }
       ],
-      "notes": "IHSS is age 65+ for the senior pathway and requires Medi-Cal eligibility; the official state IHSS pages do not publish a separate program income or countable-asset limit for the senior pathway in the retrieved source. The statewide IHSS service desk phone is listed by CDSS."
+      "notes": "IHSS is an aged/blind/disabled Medi-Cal-linked program; for the senior pathway, the age criterion is 65+ and there is no separate senior-only income/asset rule apart from Medi-Cal-linked limits."
     },
     {
       "programId": "caregiver-resource-centers",
@@ -550,24 +553,25 @@
         "assets_couple": null,
         "phones": [
           "8006756694",
-          "9095141404"
+          "9095141404",
+          "8005102020"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 18,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8005102020",
+        "phone": "8005404442",
         "sources": {
-          "age": "https://www.aging.ca.gov/Providers_and_Partners/Caregiver_Resource_Centers/Program_Narrative_and_Fact_Sheets/",
-          "income": "https://www.aging.ca.gov/download.ashx?lE0rcNUV0zZP3Plyeq3NYg==",
-          "assets": "https://www.aging.ca.gov/download.ashx?lE0rcNUV0zZP3Plyeq3NYg==",
-          "phone": "https://aging.ca.gov/Aging_Resources/Caring_for_the_Caregivers/"
+          "age": "https://www.caregivercalifornia.org/home/",
+          "income": "https://www.caregivercalifornia.org/home/",
+          "assets": "https://www.caregivercalifornia.org/home/",
+          "phone": "https://gero.usc.edu/centers/fcsc/"
         },
-        "notes": "CRC services do not have a means test; no income or asset limits found. Current statewide help line is 800-510-2020."
+        "notes": "CRC is a statewide caregiver-support program for adults 18+; no income or asset test found in current official/currently updated sources."
       },
       "flags": [
         {
@@ -575,12 +579,13 @@
           "severity": "medium",
           "draftValue": [
             "8006756694",
-            "9095141404"
+            "9095141404",
+            "8005102020"
           ],
-          "verifiedValue": "8005102020"
+          "verifiedValue": "8005404442"
         }
       ],
-      "notes": "CRC services do not have a means test; no income or asset limits found. Current statewide help line is 800-510-2020."
+      "notes": "CRC is a statewide caregiver-support program for adults 18+; no income or asset test found in current official/currently updated sources."
     },
     {
       "programId": "cbas-adult-day-services",
@@ -606,15 +611,124 @@
         "assets_couple": null,
         "phone": "9164197545",
         "sources": {
-          "age": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/Program_Narrative_and_Fact_Sheets/",
-          "income": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/Program_Narrative_and_Fact_Sheets/",
+          "age": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
+          "income": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
           "assets": null,
-          "phone": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/"
+          "phone": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/"
         },
-        "notes": "CBAS uses a Medi-Cal eligibility pathway and does not show a separate countable-asset limit on the retrieved official sources; income eligibility is tied to Medi-Cal aid code rather than a standalone CBAS income cap."
+        "notes": "CBAS appears active in California; current official materials show age 18+ and Medi-Cal eligibility, with no separate senior-specific age threshold or countable asset test stated in the retrieved official sources."
       },
       "flags": [],
-      "notes": "CBAS uses a Medi-Cal eligibility pathway and does not show a separate countable-asset limit on the retrieved official sources; income eligibility is tied to Medi-Cal aid code rather than a standalone CBAS income cap."
+      "notes": "CBAS appears active in California; current official materials show age 18+ and Medi-Cal eligibility, with no separate senior-specific age threshold or countable asset test stated in the retrieved official sources."
+    },
+    {
+      "programId": "ca-medi-cal-aged-disabled",
+      "programName": "Medi-Cal for Aged and Disabled",
+      "facts": {
+        "age": 65,
+        "income_1": 1836,
+        "income_2": 2490,
+        "assets_individual": 130000,
+        "assets_couple": 195000,
+        "phones": [
+          "8005415555",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1835,
+        "income_2": 2489,
+        "assets_individual": 130000,
+        "assets_couple": 195000,
+        "phone": "18005415555",
+        "sources": {
+          "age": "https://www.dhcs.ca.gov/medi-cal/help/",
+          "income": "https://ca.db101.org/ca/programs/health_coverage/medi_cal/program2a.htm",
+          "assets": "https://www.dhcs.ca.gov/medi-cal/help/asset-limit-frequently-asked-questions/",
+          "phone": "https://www.dhcs.ca.gov/services/medi-cal/contact/"
+        },
+        "notes": "Current 2026 Aged & Disabled Medi-Cal eligibility still uses age 65+ for the senior pathway; income figures are monthly; asset limits were reinstated effective Jan. 1, 2026."
+      },
+      "flags": [],
+      "notes": "Current 2026 Aged & Disabled Medi-Cal eligibility still uses age 65+ for the senior pathway; income figures are monthly; asset limits were reinstated effective Jan. 1, 2026."
+    },
+    {
+      "programId": "ca-assisted-living-waiver-alw",
+      "programName": "California Assisted Living Waiver (ALW)",
+      "facts": {
+        "age": 21,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "9165529105",
+          "9164197500"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 21,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "9165529105",
+        "sources": {
+          "age": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+          "income": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+          "assets": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/assisted-living-waiver/",
+          "phone": "https://www.icarol.info/ResourceView2.aspx?org=2264&agencynum=68731903"
+        },
+        "notes": "Current DHCS ALW page lists age 21+ and does not show a separate income or asset limit on the retrieved snippet; official DHCS phone was not clearly surfaced in the retrieved official page snippet, so the number provided is from a state resource listing DHCS Assisted Living Waiver Program."
+      },
+      "flags": [],
+      "notes": "Current DHCS ALW page lists age 21+ and does not show a separate income or asset limit on the retrieved snippet; official DHCS phone was not clearly surfaced in the retrieved official page snippet, so the number provided is from a state resource listing DHCS Assisted Living Waiver Program."
+    },
+    {
+      "programId": "ca-pace-programs",
+      "programName": "California PACE Programs",
+      "facts": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "9165529105",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "9167138444",
+        "sources": {
+          "age": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/program-of-all-inclusive-care-for-the-elderly/",
+          "income": "null",
+          "assets": "null",
+          "phone": "https://www.dhcs.ca.gov/services/long-term-care-alternatives-home-and-community-based-service-options/contact-information-for-the-pace/"
+        },
+        "notes": "Current California PACE eligibility is age 55+; no income or asset test found in the retrieved official sources. DHCS PACE contact phone is listed as (916) 713-8444."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "9165529105",
+            "211"
+          ],
+          "verifiedValue": "9167138444"
+        }
+      ],
+      "notes": "Current California PACE eligibility is age 55+; no income or asset test found in the retrieved official sources. DHCS PACE contact phone is listed as (916) 713-8444."
     }
   ]
 }

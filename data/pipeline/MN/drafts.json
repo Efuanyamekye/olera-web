@@ -210,7 +210,7 @@
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/seniors.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -225,6 +225,15 @@
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "6514312670",
+          "source": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/",
+          "reason": "page also lists ours ((800) 657-3672)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -533,6 +542,12 @@
           "phone": "(952) 883-7979",
           "description": "Serves Anoka, Benton, Carver, Chisago, Dakota, Hennepin, Ramsey, Scott, Sherburne, Stearns, Washington, Wright counties",
           "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 740-6013",
+          "description": "Number listed on mn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -605,6 +620,21 @@
           "source": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/",
           "reason": "page also lists ours ((651) 431-2670)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "6514312670",
+            "9528837979"
+          ],
+          "to": "(888) 740-6013",
+          "source": "https://mn.gov/dhs/health-care/contact-us/health-plan-member-services/",
+          "flaggedAt": "2026-10-06T12:23:48.852Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -773,6 +803,12 @@
           "phone": "(866) 333-2466",
           "description": "Number listed on mn.db101.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 333-2433",
+          "description": "Number listed on cms.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -855,6 +891,20 @@
           "source": "https://mn.db101.org/mn/programs/health_coverage/medicare2/program2b.htm",
           "flaggedAt": "2026-10-02T07:39:39.575Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "6514312670",
+            "8006573739",
+            "8663332466"
+          ],
+          "to": "(800) 333-2433",
+          "source": "https://www.cms.gov/about-cms/contact/directory/minnesota-state-health-insurance-assistance-program-senior-linkage-line/1562111",
+          "flaggedAt": "2026-10-06T12:23:48.852Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -1111,19 +1161,37 @@
           "field": "income_1",
           "from": 1305,
           "to": 2660,
-          "source": "https://mn.gov/dhs/mnfoodhelper/",
+          "source": "https://dcyf.mn.gov/snap",
           "severity": "high",
           "why": "tier dispute: draft 100% FPL 2026 vs verified 200% FPL 2026",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
         },
         {
           "field": "income_2",
           "from": 1763,
           "to": 3607,
-          "source": "https://mn.gov/dhs/mnfoodhelper/",
+          "source": "https://dcyf.mn.gov/snap",
           "severity": "high",
           "why": "tier dispute: draft 100% FPL 2026 vs verified 200% FPL 2026",
-          "flaggedAt": "2026-10-02T07:39:39.575Z"
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=cm_001581",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.dhs.state.mn.us/main/idcplg?IdcService=GET_DYNAMIC_CONVERSION&RevisionSelectionMethod=LatestReleased&dDocName=cm_001581",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
         }
       ]
     },
@@ -1724,6 +1792,12 @@
           "phone": "651-259-7114",
           "description": "General SCSEP information and county provider referrals",
           "hours": "Mon-Fri 8am-4:30pm CT"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(651) 259-7500",
+          "description": "Number listed on careerforce.mn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1795,6 +1869,22 @@
           "source": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/",
           "reason": "page also lists ours ((832) 599-0872)",
           "dismissedAt": "2026-10-04"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8325990872",
+            "5073456822",
+            "6512597114"
+          ],
+          "to": "(651) 259-7500",
+          "source": "https://careerforce.mn.gov/SCSEP",
+          "flaggedAt": "2026-10-06T12:23:48.852Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2239,7 +2329,23 @@
       "sourceUrl": "https://www.ucare.org/health-plans/medicaid/ages-65-plus/msc-plus",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8003332433",
+            "8006573739",
+            "8002037225",
+            "8006273529"
+          ],
+          "to": "8006573672",
+          "source": "https://mn.gov/dhs/health-care/contact-us/health-plan-member-services/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
+        }
+      ]
     },
     {
       "id": "aging-pathways",
@@ -2593,6 +2699,12 @@
           "phone": "(651) 431-3805",
           "description": "Minnesota Department of Human Services main line for income assistance programs. Can answer policy questions and direct you to the correct county office if needed.",
           "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 333-2466",
+          "description": "Number listed on mn.db101.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2670,7 +2782,42 @@
       "phone": null,
       "sourceUrl": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 65,
+          "source": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 2000,
+          "to": 10000,
+          "source": "https://mn.gov/dhs/housing-income/income-assistance/minnesota-supplemental-aid/",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:23:48.852Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "6514313805"
+          ],
+          "to": "(866) 333-2466",
+          "source": "https://mn.db101.org/mn/programs/income_support/msa/program2a.htm",
+          "flaggedAt": "2026-10-06T12:23:48.852Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mn-liheap-energy-assistance",
@@ -3198,5 +3345,5 @@
     ],
     "resourcesVsBenefits": "Six programs require qualification based on income, assets, or care needs, these provide direct financial benefits like Medical Assistance covering health costs or SNAP providing grocery money. Four programs are free resources available to any Minnesota caregiver: SHIP for Medicare help, Legal Assistance for elder law issues, the Ombudsman for nursing home problems, and Aging Pathways for general guidance. Start with free resources to understand options, then apply for benefits your loved one qualifies for."
   },
-  "factcheckedAt": "2026-10-02T07:39:39.575Z"
+  "factcheckedAt": "2026-10-06T12:23:48.852Z"
 }

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.386Z
+ * Last updated: 2026-10-06T12:32:13.665Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -217,10 +217,10 @@ export const drafts: PipelineStateDrafts = {
             "211"
           ],
           "to": "5172418474",
-          "source": "https://www.michigan.gov/mdhhs/-/media/Project/Websites/mdhhs/Assistance-Programs/Medicaid-BPHASA/Other-Prov-Specific-Page-Docs/MI-Choice-Participant-Handbook---DCH-1433-2-2023-Final.pdf?rev=31bad12ce6994bc6a117b68e555f325f&hash=D63402EBA421A897A9AC1E49ACBEB2EF",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver/mi-choice-waiver-program",
           "severity": "medium",
-          "why": "source dated 2023",
-          "flaggedAt": "2026-10-02T07:39:19.738Z"
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:23:32.465Z"
         }
       ]
     },
@@ -407,11 +407,11 @@ export const drafts: PipelineStateDrafts = {
             "18008037174",
             "211"
           ],
-          "to": "8332302057",
-          "source": "https://www.caresource.com/documents/h4193_mi-snp-m-4199449_m-mmp-to-hide-2026-anoc-508.pdf",
+          "to": "8332302159",
+          "source": "https://www.michigan.gov/mdhhs/-/media/Project/Websites/mdhhs/Doing-Business-with-MDHHS/Health-Care-Providers/MICH/MICH_Contact_List_for_Provider_Contracting.pdf",
           "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:39:19.738Z"
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:23:32.465Z"
         }
       ]
     },
@@ -638,7 +638,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Senior Project Fresh Email",
-          "phone": null,
+          "phone": "(855) 773-6424",
           "description": "Email for county contact information and general questions",
           "hours": "MDHHS-SeniorProjectFresh@michigan.gov"
         },
@@ -682,22 +682,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "warm"
       },
       "icon": "BowlFood",
-      "phone": null,
+      "phone": "(855) 773-6424",
       "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8557736424",
-          "source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:39:19.738Z"
+          "to": "(855) 773-6424",
+          "source": "https://www.healthytogether.co/michigan-spf-help-center",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -1022,10 +1024,24 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 21,
           "to": 55,
-          "source": "https://fsamich.org/programs/senior-programs/senior-companion/",
+          "source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:39:19.738Z"
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:23:32.465Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "2485373300",
+            "8102573769",
+            "2693820515",
+            "5173738230"
+          ],
+          "to": "5172414100",
+          "source": "https://www.legislature.mi.gov/publications/servicesforseniors.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:23:32.465Z"
         }
       ]
     },
@@ -1194,6 +1210,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "A general referral line that can help you find your local MDHHS county office if you are not sure where to go. They do not process Medicaid applications themselves.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 642-3195",
+          "description": "Number listed on michigan.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1266,7 +1288,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(888) 642-7434",
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/medicaid/health-care-programs-eligibility",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8886427434",
+            "8883676557",
+            "211"
+          ],
+          "to": "(800) 642-3195",
+          "source": "https://www.michigan.gov/mdhhs/inside-mdhhs/hotlines",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mi-medicare-savings-program",
@@ -1399,6 +1438,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline that can refer you to your nearest local MDHHS office if you need help locating it. Does not process MSP applications directly.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(517) 332-2521",
+          "description": "Number listed on michigan.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1494,7 +1539,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(855) 275-6424",
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/disabilities/dualeligible/medicare-savings-programs",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8552756424",
+            "211"
+          ],
+          "to": "(517) 332-2521",
+          "source": "https://www.michigan.gov/msp/about-msp/contact",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mi-food-assistance-program-snap",
@@ -1634,6 +1695,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "You can apply in person at your county MDHHS office. Find your nearest office at michigan.gov/ContactMDHHS. In-person staff can help complete the DHS-Pub-765 application form.",
           "hours": "Varies by county office"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 464-3447",
+          "description": "Number listed on fna.usda.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1707,7 +1774,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(517) 241-3740",
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/food",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "5172413740",
+            "8447999876"
+          ],
+          "to": "(844) 464-3447",
+          "source": "https://www.fna.usda.gov/snap/snap-state-popup/Michigan",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mi-pace-all-inclusive-care",
@@ -1832,6 +1915,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General helpline that can help identify local PACE organizations, Medicaid offices, and Area Agencies on Aging. Does not process PACE enrollment but can transfer you to the right local contact.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(517) 241-4293",
+          "description": "Number listed on michigan.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1909,7 +1998,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8006423195",
+            "211"
+          ],
+          "to": "(517) 241-4293",
+          "source": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/program-of-all-inclusive-care-for-the-elderly-pace",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mi-state-emergency-relief",
@@ -2121,7 +2226,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(855) 275-6424",
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/emergency-relief",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8552756424",
+            "211"
+          ],
+          "to": "5172413740",
+          "source": "https://www.cadl.org/community-connections",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:23:32.465Z"
+        }
+      ]
     },
     {
       "id": "mi-family-caregiver-support-program",
@@ -2305,7 +2424,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 347-5297",
       "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/aging-services",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "5172414100",
+          "source": "https://www.caregiver.org/connecting-caregivers/services-by-state/michigan/",
+          "reason": "page also lists ours ((313) 446-4444)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "mi-property-tax-credit-seniors",
@@ -2583,6 +2713,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Visit the official state program page for program details and links to regional providers. This page does not handle applications directly.",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 803-7174",
+          "description": "Number listed on michigan.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2646,7 +2782,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 677-1116",
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/other-help/food/home-delivered-meals",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8006771116"
+          ],
+          "to": "(800) 803-7174",
+          "source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/long-term-services-and-supports",
+          "flaggedAt": "2026-10-06T12:23:32.465Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "mi-state-ssi-supplement",
@@ -3104,7 +3255,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(855) 275-6424",
       "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/independent",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8009794662",
+          "source": "https://www.michigan.gov/mdhhs/inside-mdhhs/hotlines",
+          "reason": "page also lists ours ((800) 642-3195)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "mi-home-heating-credit",
