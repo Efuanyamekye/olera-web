@@ -33,7 +33,7 @@ import {
   rankProgramsForFamily,
   incomeLimitFromTable,
   draftMinAge,
-  medicaidGatedName,
+  requiresMedicaid,
   isWaiverPath,
   isMedicaidDoor,
 } from "@/lib/benefits/eligibility.server";
@@ -208,7 +208,7 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
     else income = "unknown";
   }
 
-  const gated = medicaidGatedName(p.name);
+  const gated = requiresMedicaid(p.name, p.structuredEligibility?.summary);
   const hasMedicaid = a.medicaid === "alreadyHas";
   const also = otherRequirement(p);
   const withAlso = (text: string) => (also ? `${text} ${also}` : text);
@@ -304,10 +304,8 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
 
 /** A program the person must already have Medicaid for (Michigan's Home
  *  Help, state-plan personal care). A waiver is itself a way into Medicaid. */
-const MUST_HAVE_MEDICAID = /^\s*(must|need to) (have|be enrolled in|be on|receive|qualify for)( an?)?( active| full| current)?( [a-z]+)? medicaid\b/i;
 function needsMedicaidFirst(p: WaiverProgram): boolean {
-  if (isWaiverPath(p.name)) return false;
-  return (medicaidGatedName(p.name) && !isMedicaidDoor(p.name)) || (p.structuredEligibility?.summary || []).some((x) => MUST_HAVE_MEDICAID.test(x));
+  return !isWaiverPath(p.name) && requiresMedicaid(p.name, p.structuredEligibility?.summary);
 }
 
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
