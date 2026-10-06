@@ -74,6 +74,33 @@ CREATE POLICY "Members can update their agency" ON business_profiles
     id IN (SELECT profile_id FROM business_profile_members WHERE email = lower(auth.jwt() ->> 'email'))
   );
 
+-- The update policy above checks only that the row is the member's agency, so
+-- on its own a member could rewrite account_id and take the agency over. Only
+-- the current owner, or server code, may change who owns a profile.
+CREATE OR REPLACE FUNCTION public.guard_profile_owner()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NEW.account_id IS NOT DISTINCT FROM OLD.account_id
+     OR coalesce(auth.jwt() ->> 'role', '') = 'service_role'
+     OR auth.uid() IS NULL THEN
+    RETURN NEW;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM accounts a WHERE a.id = OLD.account_id AND a.user_id = auth.uid()) THEN
+    RAISE EXCEPTION 'Only the owner can change who owns this profile' USING ERRCODE = '42501';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS business_profiles_guard_owner ON business_profiles;
+CREATE TRIGGER business_profiles_guard_owner
+  BEFORE UPDATE OF account_id ON business_profiles
+  FOR EACH ROW EXECUTE FUNCTION public.guard_profile_owner();
+
 -- Members see and update the agency's inquiries, as the owner does.
 DROP POLICY IF EXISTS "Members can view agency connections" ON connections;
 CREATE POLICY "Members can view agency connections" ON connections
