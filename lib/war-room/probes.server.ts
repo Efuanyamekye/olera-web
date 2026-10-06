@@ -24,10 +24,22 @@ export const WAR_ROOM_PROBE_IDS = [
   "traffic_by_page_family",
   "revenue_by_product",
   "support_backlog_composition",
+  "benefits_finder_weekly",
   "none",
 ] as const;
 
 export type WarRoomProbeId = (typeof WAR_ROOM_PROBE_IDS)[number];
+
+/**
+ * Probes that run every scan whether or not an open investigation asked.
+ *
+ * The others run only when a condition names them, which is right for an
+ * investigation and wrong for a priority: nothing ever asked about the
+ * Benefits Finder, so its line in the brief read "No measured number moved"
+ * through a week of shipped Benefits work (TJ, 2026-10-05: "This is wrong").
+ * A standing probe is the brief's own reading of a priority, taken daily.
+ */
+export const STANDING_PROBE_IDS: ReadonlyArray<Exclude<WarRoomProbeId, "none">> = ["benefits_finder_weekly"];
 
 export type WarRoomProbeResult = {
   probeId: WarRoomProbeId;
@@ -378,6 +390,67 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
       caveat: "Capped at 2,000 threads. The mailbox source has been backfilling, so duplicates are possible.",
     };
   },
+
+  /**
+   * The Benefits Finder, measured on outcomes: families who finished it, and
+   * what the Care Navigator sent them. Last 7 days against the 7 before, so
+   * the headline's first figure is the one the brief compares day to day.
+   *
+   * A completion is a results token (`benefits_results_tokens`): the row
+   * `/api/benefits/save-results` writes once the finder has enough to render
+   * a results page. One family can finish it more than once, so families are
+   * distinct profiles and runs are rows. Letters are the cascade's own email
+   * log types; the text companion is `family_answer_jobs` with status `sent`.
+   */
+  benefits_finder_weekly: async (db) => {
+    const weekAgo = since(7);
+    const twoWeeksAgo = since(14);
+    const fail = (error: { message: string }) => new Error(`war_room_probe_query_failed:${error.message}`);
+
+    const tokens = async (from: string, to: string | null) => {
+      let query = db.from("benefits_results_tokens").select("profile_id, created_at").gte("created_at", from).limit(5_000);
+      if (to) query = query.lt("created_at", to);
+      const { data, error } = await query;
+      if (error) throw fail(error);
+      const rows = (data ?? []) as Array<{ profile_id: string | null }>;
+      return { runs: rows.length, families: new Set(rows.map((row) => row.profile_id).filter(Boolean)).size };
+    };
+    const emails = async (type: string, from: string, to: string | null) => {
+      let query = db.from("email_log").select("id", { count: "exact", head: true }).eq("email_type", type).gte("created_at", from);
+      if (to) query = query.lt("created_at", to);
+      const { count, error } = await query;
+      if (error) throw fail(error);
+      return count ?? 0;
+    };
+    const texts = async (from: string, to: string | null) => {
+      let query = db.from("family_answer_jobs").select("id", { count: "exact", head: true }).eq("status", "sent").gte("created_at", from);
+      if (to) query = query.lt("created_at", to);
+      const { count, error } = await query;
+      if (error) throw fail(error);
+      return count ?? 0;
+    };
+
+    const [now, prior, firstStep, firstStepPrior, checkIn, checkInPrior, firstStepSms, checkInSms, companion, companionPrior] = await Promise.all([
+      tokens(weekAgo, null), tokens(twoWeeksAgo, weekAgo),
+      emails("benefits_first_step", weekAgo, null), emails("benefits_first_step", twoWeeksAgo, weekAgo),
+      emails("benefits_check_in", weekAgo, null), emails("benefits_check_in", twoWeeksAgo, weekAgo),
+      emails("benefits_first_step_sms", weekAgo, null), emails("benefits_check_in_sms", weekAgo, null),
+      texts(weekAgo, null), texts(twoWeeksAgo, weekAgo),
+    ]);
+
+    return {
+      headline: `${n(now.families)} families finished the Benefits Finder in the last 7 days, ${n(prior.families)} the week before. ${n(firstStep)} first-step letters and ${n(checkIn)} check-ins went out.`,
+      detail: `${n(now.runs)} finder runs this week (${n(prior.runs)} prior); a family can finish it more than once. Letters the week before: ${n(firstStepPrior)} first-step, ${n(checkInPrior)} check-ins. By text: ${n(firstStepSms)} first-step and ${n(checkInSms)} check-in messages this week, and ${n(companion)} text-companion answers (${n(companionPrior)} prior). A finish is a results page the family could open; it says nothing about whether they applied for anything.`,
+      rows: [
+        { measure: "Families finished", this_week: now.families, prior_week: prior.families },
+        { measure: "Finder runs", this_week: now.runs, prior_week: prior.runs },
+        { measure: "First-step letters", this_week: firstStep, prior_week: firstStepPrior },
+        { measure: "Check-ins", this_week: checkIn, prior_week: checkInPrior },
+        { measure: "Text-companion answers", this_week: companion, prior_week: companionPrior },
+      ],
+      caveat: "Counts what Olera sent, not what families did with it. Nothing here measures an application started or an award received.",
+    };
+  },
 };
 
 export function warRoomProbeMenu() {
@@ -388,6 +461,7 @@ export function warRoomProbeMenu() {
     { id: "traffic_by_page_family", question: "Which page family gained or lost organic reach?" },
     { id: "revenue_by_product", question: "Where does the Ad Boost revenue funnel stop?" },
     { id: "support_backlog_composition", question: "What is actually in the support backlog?" },
+    { id: "benefits_finder_weekly", question: "How many families finished the Benefits Finder this week, and what did the Navigator send them?" },
     { id: "none", question: "No probe in the menu can advance this condition." },
   ] as const;
 }

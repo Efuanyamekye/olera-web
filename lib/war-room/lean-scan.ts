@@ -82,6 +82,7 @@ export const LEAN_PROBE_KINDS = [
   "provider_contactability",
   "revenue_by_product",
   "support_backlog_composition",
+  "benefits_finder_weekly",
   "none",
 ] as const;
 

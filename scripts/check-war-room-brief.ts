@@ -178,6 +178,23 @@ assert.deepEqual(priorityLines, [
   console.log("shipped checks passed");
 }
 
+// The standing Benefits probe gives the Benefits line a measured number. Its
+// label is the priority's own, so the line opens with the headline's first
+// sentence, not "Benefits Finder Benefits Finder 90 → 79"; the rest is under
+// "What moved".
+{
+  assert.equal(priorityFor("Benefits Finder"), "benefits");
+  const headline = "79 families finished the Benefits Finder in the last 7 days, 90 the week before. 61 first-step letters and 113 check-ins went out.";
+  const lines = buildPriorityLines({
+    payingProviders: 1, openCampaigns: 20, renewal: null, providerEmailsWaiting: 0, inboxItemsWaiting: 0, since: "Oct 5",
+    movers: [{ label: "Benefits Finder", headline, previousHeadline: "90 families finished the Benefits Finder in the last 7 days, 84 the week before. 155 first-step letters and 68 check-ins went out." }],
+    shipped: { benefits: "Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372)." },
+    now: new Date("2026-10-06T01:00:00Z"),
+  });
+  assert.equal(lines[1], "*Benefits Finder:* 79 families finished the Benefits Finder in the last 7 days, 90 the week before. Shipped since Oct 5: Say what shipped when a priority has no measured number (#2372).");
+  console.log("benefits probe line check passed");
+}
+
 const withPriorities = buildWarRoomBriefText({ ...base, renewal, priorityLines, readings: [
   { probeId: "traffic_by_page_family", label: "Organic traffic", question: "", headline: "Direct up 4%", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "Direct flat" } as never,
   { probeId: "support_backlog_composition", label: "Support backlog", question: "", headline: "1,222 unhandled", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "1,747 unhandled" } as never,
