@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.384Z
+ * Last updated: 2026-10-06T12:32:14.473Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -543,7 +543,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-14",
-      "lastVerifiedDate": "2026-09-14",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": null,
       "appliedCorrections": [
         {
@@ -558,6 +558,15 @@ export const drafts: PipelineStateDrafts = {
           "appliedAt": "2026-10-04",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ],
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8002433425",
+          "source": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
+          "reason": "page also lists ours ((410) 767-1100)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -685,6 +694,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 492-5231",
           "description": "Questions about Medicaid eligibility for PACE",
           "hours": "Mon-Fri 8am-6pm EST"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 767-6500",
+          "description": "Number listed on health.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -748,18 +763,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8002433425",
             "8004925231"
           ],
-          "to": "4107671739",
+          "to": "(410) 767-6500",
           "source": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -922,6 +939,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-243-3425",
           "description": "Free Medicare counseling and MSP guidance",
           "hours": "Mon-Fri 8:30am-5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 486-3101",
+          "description": "Number listed on mdsp.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1004,6 +1027,20 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-02T07:38:57.033Z",
           "appliedAt": "2026-10-02",
           "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "4107676860",
+            "18006383403",
+            "18002433425"
+          ],
+          "to": "(410) 486-3101",
+          "source": "https://mdsp.maryland.gov/about-us/offices-departments/office-superintendent",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
       "reviewQueue": [
@@ -1011,19 +1048,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "source": "https://health.maryland.gov/mmcp/Medicaid%20Manual/Appendix%20schedules%202026%20Eff%201_1_2026%20updates.docx.pdf",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "source": "https://health.maryland.gov/mmcp/Medicaid%20Manual/Appendix%20schedules%202026%20Eff%201_1_2026%20updates.docx.pdf",
           "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     },
@@ -1261,40 +1298,31 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-14",
       "reviewQueue": [
         {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dhs.maryland.gov/maryland-offers-support-as-trump-administrations-new-snap-work-requirements-begin-to-impact-customers-this-march/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        },
+        {
           "field": "income_1",
           "from": 2152,
-          "to": 1696,
-          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "to": 1615,
+          "source": "https://dhs.maryland.gov/documents/Supplemental%20Nutrition%20Assistance%20Program%20(SNAP)/October-2026-Income-Guidelines-revised-8_2026.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         },
         {
           "field": "income_2",
           "from": 2909,
-          "to": 2292,
-          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "to": 2184,
+          "source": "https://dhs.maryland.gov/documents/Supplemental%20Nutrition%20Assistance%20Program%20(SNAP)/October-2026-Income-Guidelines-revised-8_2026.pdf",
           "severity": "high",
-          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
-        {
-          "field": "assets_individual",
-          "from": 3001,
-          "to": 4500,
-          "source": "https://aging.maryland.gov/media/116",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 3001,
-          "to": 4500,
-          "source": "https://aging.maryland.gov/media/116",
-          "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     },
@@ -1951,6 +1979,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Find your local Area Agency on Aging for county-specific providers",
           "hours": "Visit aging.maryland.gov"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(301) 475-4200",
+          "description": "Number listed on stmaryscountymd.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2012,18 +2046,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.maryland.gov/pages/nutrition.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "4105580923",
             "4102224257"
           ],
-          "to": "3014754200",
+          "to": "(301) 475-4200",
           "source": "https://www.stmaryscountymd.gov/aging/homedeliveredmeals/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2179,22 +2215,19 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://aging.maryland.gov/programs-and-services/caregivers",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
-        },
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        }
+      ],
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "4107671100",
-            "2407773000",
-            "211"
-          ],
-          "to": "18446275465",
+          "proposed": "8002433425",
           "source": "https://aging.maryland.gov/programs-and-services/caregivers",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "reason": "page also lists ours ((410) 767-1100)",
+          "dismissedAt": "2026-10-06"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "scsep-employment",
@@ -2511,6 +2544,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(301) 475-4200 ext. 1064",
           "description": "Local Area Agency on Aging for St. Mary's County",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 243-3425",
+          "description": "Number listed on aging.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2555,20 +2594,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-14",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8008964213",
             "8006771116",
             "4103965605",
             "30147542001064"
           ],
-          "to": "8446275465",
-          "source": "https://aging.maryland.gov/Pages/senior-legal-assistance.aspx",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "to": "(800) 243-3425",
+          "source": "https://aging.maryland.gov/programs-and-services/legal-assistance",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2856,11 +2897,11 @@ export const drafts: PipelineStateDrafts = {
             "8665020560",
             "4107671100"
           ],
-          "to": "18665023560",
+          "to": "18665024325",
           "source": "https://aging.maryland.gov/programs-and-services/senior-call-check",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:38:57.033Z"
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
         }
       ]
     },
@@ -3011,6 +3052,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 492-5231",
           "description": "Maryland Medicaid general information line. Can answer questions about coverage and direct you to the right application office, but does not process applications directly.",
           "hours": "Mon-Fri, business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(410) 767-6500",
+          "description": "Number listed on health.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3088,7 +3135,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 332-6347",
       "sourceUrl": "https://health.maryland.gov/mmcp/eligibility/Pages/generalrequirements.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8003326347",
+            "4107677406",
+            "8004925231"
+          ],
+          "to": "(410) 767-6500",
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "md-medical-assistance-medically-needy",
@@ -3243,6 +3307,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "An additional in-person application site. Find your local health department at health.maryland.gov.",
           "hours": "Varies by location"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 492-5231",
+          "description": "Number listed on msa.maryland.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3315,7 +3385,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-642-8572",
       "sourceUrl": "https://health.maryland.gov/mmcp/eligibility/Pages/incomelimits.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18556428572"
+          ],
+          "to": "(800) 492-5231",
+          "source": "https://msa.maryland.gov/msa/mdmanual/16dhmh/html/dhmh.html",
+          "flaggedAt": "2026-10-06T12:22:54.220Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "md-hcbs-community-options-waiver",
@@ -3530,7 +3615,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "844-627-5465",
       "sourceUrl": "https://health.maryland.gov/mmcp/ltss/Pages/community-options-waiver.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://health.maryland.gov/mmcp/docs/FINALFormattedWaiverBrochure.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8446275465",
+            "4107676500"
+          ],
+          "to": "4107671739",
+          "source": "https://health.maryland.gov/mmcp/Documents/2505_MMA_HowtoReachMDMedicaid.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:22:54.220Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

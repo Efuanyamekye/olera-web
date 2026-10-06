@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.409Z
+ * Last updated: 2026-10-06T12:32:13.850Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -233,7 +233,44 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 973,
+          "source": "https://dhhr.wv.gov/bms/BMSPUB/Documents/DualEligible-jh.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 1311,
+          "source": "https://dhhr.wv.gov/bms/BMSPUB/Documents/DualEligible-jh.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9660,
+          "to": 7160,
+          "source": "https://dhhr.wv.gov/bms/BMSPUB/Documents/DualEligible-jh.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14470,
+          "to": 10750,
+          "source": "https://dhhr.wv.gov/bms/BMSPUB/Documents/DualEligible-jh.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -442,10 +479,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 18,
           "to": 65,
-          "source": "https://adwprogram.wv.gov/",
+          "source": "https://www.medicaidplanningassistance.org/west-virginia-aged-disabled-waiver/",
           "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
         }
       ]
     },
@@ -540,7 +577,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "PACE Your LIFE West Virginia",
-          "phone": null,
+          "phone": "(304) 983-7223",
           "description": "Primary PACE provider for enrollment and services",
           "hours": "Visit paceyourlifemwv.com for contact information"
         },
@@ -606,11 +643,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Stethoscope",
-      "phone": null,
+      "phone": "(304) 983-7223",
       "sourceUrl": "https://paceyourlifemwv.com",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "(304) 983-7223",
+          "source": "https://paceenterprises.org/contact/",
+          "flaggedAt": "2026-10-06T12:31:30.965Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -828,26 +880,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 2660,
-          "to": 1608,
-          "source": "https://bfa.wv.gov/snap",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
-        },
-        {
-          "field": "income_2",
-          "from": 3607,
-          "to": 2171,
-          "source": "https://bfa.wv.gov/snap",
-          "severity": "high",
-          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -1060,7 +1093,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://bfa.wv.gov/utility-assistancelieap",
           "severity": "high",
           "why": "value fits more than one tier (138% FPL 2026 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
         },
         {
           "field": "income_2",
@@ -1069,7 +1102,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://bfa.wv.gov/utility-assistancelieap",
           "severity": "high",
           "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
+          "flaggedAt": "2026-10-06T12:31:30.965Z"
         }
       ]
     },
@@ -1696,20 +1729,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8779873646",
-            "211"
-          ],
-          "to": "3045583317",
-          "source": "https://wvats.cedwvu.org/media/3774/pathways-to-funding-for-adults-accessible.pdf",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:35.284Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "senior-legal-aid",

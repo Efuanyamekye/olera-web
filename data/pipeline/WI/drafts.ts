@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.409Z
+ * Last updated: 2026-10-06T12:32:15.298Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -522,11 +522,11 @@ export const drafts: PipelineStateDrafts = {
             "6082424928",
             "211"
           ],
-          "to": "6082677286",
-          "source": "https://www.dhs.wisconsin.gov/employment-skills/index.htm",
+          "to": "6082679097",
+          "source": "https://www.dhs.wisconsin.gov/wise/index.htm",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:16.664Z"
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
         }
       ]
     },
@@ -655,6 +655,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General information and referral to local ADRCs and other services",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 362-3002",
+          "description": "Number listed on dhs.wisconsin.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -718,18 +724,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8449472372",
             "211"
           ],
-          "to": "8003623002",
+          "to": "(800) 362-3002",
           "source": "https://www.dhs.wisconsin.gov/familycare/index.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:16.664Z"
+          "flaggedAt": "2026-10-06T12:31:10.459Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -854,6 +862,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free 24/7 helpline for all social services and program information",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(888) 515-4747",
+          "description": "Number listed on dhs.wisconsin.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -918,18 +932,20 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18556772372",
             "211"
           ],
-          "to": "8885154747",
+          "to": "(888) 515-4747",
           "source": "https://www.dhs.wisconsin.gov/iris/index.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:16.664Z"
+          "flaggedAt": "2026-10-06T12:31:10.459Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1432,7 +1448,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "800-362-3002",
       "sourceUrl": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 1330,
+          "source": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3525,
+          "to": 1803,
+          "source": "https://www.dhs.wisconsin.gov/publications/p1/p10062.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
+        }
+      ]
     },
     {
       "id": "wi-foodshare-snap",
@@ -1604,6 +1640,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General statewide helpline. Can connect you to your local county economic support office or other food resources if you are unsure who handles FoodShare in your area. This line transfers you; it does not process FoodShare applications directly.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 366-3635",
+          "description": "Number listed on feedingamericawi.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1681,7 +1723,42 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 362-3002",
       "sourceUrl": "https://www.dhs.wisconsin.gov/foodshare/eligibility.htm",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1729,
+          "to": 2660,
+          "source": "https://www.dhs.wisconsin.gov/foodshare/fpl.htm",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2345,
+          "to": 3608,
+          "source": "https://www.dhs.wisconsin.gov/foodshare/fpl.htm",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8003623002",
+            "211"
+          ],
+          "to": "(877) 366-3635",
+          "source": "https://feedingamericawi.org/find-help/assistance/foodshare/",
+          "flaggedAt": "2026-10-06T12:31:10.459Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "wi-pace-program",
@@ -2063,6 +2140,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline that can connect you to the WHEAP agency in your parent's county. This line does not process applications itself but can refer you to the right local office.",
           "hours": "Available 24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 432-8947",
+          "description": "Number listed on energyandhousing.wi.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2140,7 +2223,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(608) 267-3680",
       "sourceUrl": "https://energyandhousing.wi.gov/Pages/AgencyResources/energy-assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "6082673680",
+            "211"
+          ],
+          "to": "(866) 432-8947",
+          "source": "https://energyandhousing.wi.gov/Pages/CustomerResources/assistance.aspx",
+          "flaggedAt": "2026-10-06T12:31:10.459Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "wi-property-tax-relief-circuit-breaker-credit",
@@ -2592,7 +2691,28 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(888) 486-9545",
       "sourceUrl": "https://dhs.wisconsin.gov/aging/resources.htm",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8884869545",
+            "7153696170",
+            "9203863580",
+            "6083260235",
+            "2622848120",
+            "9206834180",
+            "7157435166",
+            "2625487848",
+            "6087236113"
+          ],
+          "to": "8449472372",
+          "source": "https://www.dhs.wisconsin.gov/aging/nutrition.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:31:10.459Z"
+        }
+      ]
     },
     {
       "id": "wi-state-ssi-supplement",

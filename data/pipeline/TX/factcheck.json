@@ -1,14 +1,14 @@
 {
   "state": "TX",
   "stateName": "Texas",
-  "checkedAt": "2026-10-02T07:46:40.083Z",
-  "total": 12,
+  "checkedAt": "2026-10-06T12:29:17.360Z",
+  "total": 16,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 1,
-  "programsWithFlags": 6,
-  "totalFlags": 10,
-  "highSeverityFlags": 5,
+  "errors": 0,
+  "programsWithFlags": 8,
+  "totalFlags": 16,
+  "highSeverityFlags": 7,
   "programs": [
     {
       "programId": "medicaid-buy-in-qmb-slmb-qi",
@@ -29,19 +29,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": 1330,
         "income_2": 1804,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": "211",
+        "phone": "8002528263",
         "sources": {
-          "age": null,
-          "income": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
-          "assets": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
-          "phone": "https://www.hhs.texas.gov/services/health/medicare-savings-programs"
+          "age": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/q-1000-medicare-savings-programs-overview",
+          "income": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-ix-medicare-savings-program-information",
+          "assets": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/q-1300-msp-resource-limits",
+          "phone": "https://hhs.texas.gov/services/health/medicare-savings-programs"
         },
-        "notes": "Texas MSP (QMB/SLMB/QI-1) effective March 1, 2026 for income and Jan. 1, 2026 for resources; no age test found. Phone help/application number commonly routed through 2-1-1 Texas."
+        "notes": "Texas MSP (QMB/SLMB/QI) is current for 2026; income/resource limits effective March 1, 2026. Age 65 is not a standard eligibility requirement for the senior pathway, but Medicare entitlement is required; phone number verified from Texas HHS contact page."
       },
       "flags": [
         {
@@ -57,9 +57,21 @@
           "draftValue": 2435,
           "verifiedValue": 1804,
           "pctDiff": 25.9
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8775417905",
+            "211",
+            "8559372372",
+            "8002529240",
+            "8003334114"
+          ],
+          "verifiedValue": "8002528263"
         }
       ],
-      "notes": "Texas MSP (QMB/SLMB/QI-1) effective March 1, 2026 for income and Jan. 1, 2026 for resources; no age test found. Phone help/application number commonly routed through 2-1-1 Texas."
+      "notes": "Texas MSP (QMB/SLMB/QI) is current for 2026; income/resource limits effective March 1, 2026. Age 65 is not a standard eligibility requirement for the senior pathway, but Medicare entitlement is required; phone number verified from Texas HHS contact page."
     },
     {
       "programId": "star-plus-medicaid-hcbs",
@@ -73,7 +85,8 @@
         "phones": [
           "18774385658",
           "211",
-          "8777826440"
+          "8777826440",
+          "8009642777"
         ],
         "hasVerifiableFacts": true
       },
@@ -81,16 +94,16 @@
         "age": 21,
         "income_1": null,
         "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
-        "phone": "8009642777",
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18774385658",
         "sources": {
-          "age": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/1200-starplus-hcbs-program-eligibility",
-          "income": "https://fhb.hhs.texas.gov/handbooks/starplus-program-support-unit-operational-procedures-handbook/3200-eligibility",
-          "assets": "https://www.medicaidlongtermcare.org/eligibility/texas/",
-          "phone": "https://fhb.hhs.texas.gov/handbooks/starplus-handbook/3300-administrative-procedures"
+          "age": "https://www.hhs.texas.gov/sites/default/files/documents/hhsc-waivers-house-human-services.pdf",
+          "income": "https://www.txp2p.org/Media/files/S._Burek_-_STARPLUS_HCBS_Waiver_-_Are_You_Eligible.pdf",
+          "assets": "https://www.txp2p.org/Media/files/S._Burek_-_STARPLUS_HCBS_Waiver_-_Are_You_Eligible.pdf",
+          "phone": "https://www.hhs.texas.gov/sites/default/files/documents/hhsc-waivers-house-human-services.pdf"
         },
-        "notes": "Official Texas handbook shows the program is for age 21+; financial eligibility is tied to Medicaid, and the handbook does not state a single standalone countable asset cap in the retrieved passage. External current guide reports $2,000 individual and $3,000 couple resource limits for Texas HCBS waivers, consistent with Medicaid waiver rules."
+        "notes": "Texas STAR+PLUS HCBS is current in 2026; official HHSC material in the retrieved results confirms age 21+ and a 1-877-438-5658 contact, but the retrieved official sources did not expose the specific countable asset limits in accessible text. The asset and income values above are therefore left null unless verified from an accessible authoritative source."
       },
       "flags": [
         {
@@ -99,19 +112,9 @@
           "draftValue": 65,
           "verifiedValue": 21,
           "note": "likely compound program — drafted senior threshold, verified returned floor age for other population"
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18774385658",
-            "211",
-            "8777826440"
-          ],
-          "verifiedValue": "8009642777"
         }
       ],
-      "notes": "Official Texas handbook shows the program is for age 21+; financial eligibility is tied to Medicaid, and the handbook does not state a single standalone countable asset cap in the retrieved passage. External current guide reports $2,000 individual and $3,000 couple resource limits for Texas HCBS waivers, consistent with Medicaid waiver rules."
+      "notes": "Texas STAR+PLUS HCBS is current in 2026; official HHSC material in the retrieved results confirms age 21+ and a 1-877-438-5658 contact, but the retrieved official sources did not expose the specific countable asset limits in accessible text. The asset and income values above are therefore left null unless verified from an accessible authoritative source."
     },
     {
       "programId": "pace-eldercare",
@@ -136,17 +139,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18557387223",
         "sources": {
-          "age": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/o-2100-program-all-inclusive-care-elderly",
+          "age": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
           "income": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/o-2100-program-all-inclusive-care-elderly",
-          "assets": null,
-          "phone": null
+          "assets": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/o-2100-program-all-inclusive-care-elderly",
+          "phone": "https://www.texaspaceauthority.org/"
         },
-        "notes": "PACE in Texas is current and age-based at 55+; no separate countable asset limit was identified in the retrieved official source, which instead references SSI or Medicaid institutional special income limit eligibility. No official statewide main application/help phone number for PACE was found in the retrieved sources."
+        "notes": "PACE is the senior care program; Texas uses Medicaid/SSI rules rather than a separate countable asset limit in the cited state handbook, so no countable asset cap was found in the retrieved official sources."
       },
-      "flags": [],
-      "notes": "PACE in Texas is current and age-based at 55+; no separate countable asset limit was identified in the retrieved official source, which instead references SSI or Medicaid institutional special income limit eligibility. No official statewide main application/help phone number for PACE was found in the retrieved sources."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "9155623444",
+            "211",
+            "8006334227",
+            "18002529240"
+          ],
+          "verifiedValue": "18557387223"
+        }
+      ],
+      "notes": "PACE is the senior care program; Texas uses Medicaid/SSI rules rather than a separate countable asset limit in the cited state handbook, so no countable asset cap was found in the retrieved official sources."
     },
     {
       "programId": "snap-food-benefits",
@@ -164,19 +179,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 1696,
         "income_2": 2292,
-        "assets_individual": 4750,
-        "assets_couple": 4750,
-        "phone": "8775417905",
+        "assets_individual": 3000,
+        "assets_couple": 3000,
+        "phone": "8007777328",
         "sources": {
-          "age": "https://www.fna.usda.gov/snap/recipient/eligibility",
+          "age": null,
           "income": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/c-120-supplemental-nutrition-assistance-program",
           "assets": "https://www.fna.usda.gov/snap/recipient/eligibility",
-          "phone": "https://www.fna.usda.gov/snap/snap-state-popup/Texas"
+          "phone": "https://www.hhs.texas.gov/services/food/snap-food-benefits"
         },
-        "notes": "Texas SNAP is current for Oct. 1, 2026–Sept. 30, 2027. No separate senior minimum age threshold was found beyond the federal senior resource rule at age 60+."
+        "notes": "SNAP has no senior-specific minimum age test; the 60+ threshold appears only for higher resource limits. Texas SNAP income limits effective Oct. 1, 2026 are shown in the cited handbook. Federal SNAP resource limit is $3,000 for most households, or $4,750 if at least one member is age 60+ or disabled."
       },
       "flags": [
         {
@@ -192,9 +207,32 @@
           "draftValue": 1804,
           "verifiedValue": 2292,
           "pctDiff": 21.3
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 5000,
+          "verifiedValue": 3000,
+          "pctDiff": 40
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 5000,
+          "verifiedValue": 3000,
+          "pctDiff": 40
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8775417905",
+            "211"
+          ],
+          "verifiedValue": "8007777328"
         }
       ],
-      "notes": "Texas SNAP is current for Oct. 1, 2026–Sept. 30, 2027. No separate senior minimum age threshold was found beyond the federal senior resource rule at age 60+."
+      "notes": "SNAP has no senior-specific minimum age test; the 60+ threshold appears only for higher resource limits. Texas SNAP income limits effective Oct. 1, 2026 are shown in the cited handbook. Federal SNAP resource limit is $3,000 for most households, or $4,750 if at least one member is age 60+ or disabled."
     },
     {
       "programId": "liheap-energy-assistance",
@@ -222,9 +260,9 @@
           "age": null,
           "income": "https://www.tdhca.texas.gov/community-affairs-income-guidelines",
           "assets": null,
-          "phone": "https://liheapch.acf.hhs.gov/profiles/Texas.htm"
+          "phone": "https://www.tdhca.texas.gov/community-affairs-income-guidelines"
         },
-        "notes": "Texas LIHEAP/CEAP uses an income test at 150% of federal poverty guidelines; no separate age or asset limit was found in the authoritative sources reviewed."
+        "notes": "Texas LIHEAP/CEAP uses income-based eligibility; no authoritative asset test found. Income values are the 2026 TDHCA 150% FPL monthly equivalents for households of 1 and 2."
       },
       "flags": [
         {
@@ -242,7 +280,7 @@
           "pctDiff": 5.5
         }
       ],
-      "notes": "Texas LIHEAP/CEAP uses an income test at 150% of federal poverty guidelines; no separate age or asset limit was found in the authoritative sources reviewed."
+      "notes": "Texas LIHEAP/CEAP uses income-based eligibility; no authoritative asset test found. Income values are the 2026 TDHCA 150% FPL monthly equivalents for households of 1 and 2."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -263,22 +301,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18886068889",
+        "phone": "8005250657",
         "sources": {
-          "age": "https://www.puc.texas.gov/consumer/lowincome/assistance/",
-          "income": "https://www.puc.texas.gov/consumer/lowincome/assistance/",
+          "age": "https://www.dallascounty.org/Assets/uploads/docs/hhs/human-services/WAP-Application-2023-English_fillable-rev071223-Blank-PROTECTED.pdf",
+          "income": "https://www.dallascounty.org/Assets/uploads/docs/hhs/human-services/WAP-Application-2023-English_fillable-rev071223-Blank-PROTECTED.pdf",
           "assets": null,
           "phone": "https://www.tdhca.texas.gov/sites/default/files/pdf/WAPFlyer.pdf"
         },
-        "notes": "Texas WAP is a low-income weatherization program with senior priority, but no separate senior age or asset limit was found in the authoritative sources reviewed. The main statewide help line is the toll-free provider locator number."
+        "notes": "Current Texas WAP uses a senior priority pathway (people over 60) and a 200% FPL income test; no asset test found in authoritative sources. Official statewide help line located for finding local providers is 800-525-0657."
       },
       "flags": [],
-      "notes": "Texas WAP is a low-income weatherization program with senior priority, but no separate senior age or asset limit was found in the authoritative sources reviewed. The main statewide help line is the toll-free provider locator number."
+      "notes": "Current Texas WAP uses a senior priority pathway (people over 60) and a 200% FPL income test; no asset test found in authoritative sources. Official statewide help line located for finding local providers is 800-525-0657."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -308,10 +346,10 @@
           "assets": null,
           "phone": "https://www.cms.gov/about-cms/contact/directory/texas-department-aging-disability-services-hicap/1562216"
         },
-        "notes": "Texas SHIP is listed as HICAP in Texas; no age, income, or asset test was found for the senior counseling pathway."
+        "notes": "Texas SHIP in Texas is listed as HICAP and appears current; no age, income, or asset eligibility test was found for the senior counseling pathway."
       },
       "flags": [],
-      "notes": "Texas SHIP is listed as HICAP in Texas; no age, income, or asset test was found for the senior counseling pathway."
+      "notes": "Texas SHIP in Texas is listed as HICAP and appears current; no age, income, or asset eligibility test was found for the senior counseling pathway."
     },
     {
       "programId": "meals-on-wheels",
@@ -336,17 +374,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8173360912",
+        "phone": "8888696325",
         "sources": {
-          "age": "https://www.mealsonwheelsetx.org/how-to-get-meals/",
-          "income": "https://www.mealsonwheelsetx.org/how-to-get-meals/",
-          "assets": "https://www.mealsonwheelsetx.org/how-to-get-meals/",
-          "phone": "https://www.mealsonwheelstexas.org/contact/"
+          "age": "https://tcog.com/aging-services/nutrition-services/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.nctcog.org/aging-services/service-map"
         },
-        "notes": "Texas Meals on Wheels services vary by local provider; the cited Texas East provider lists age 60+ for home-delivered meals. No statewide income or asset test was found in the retrieved current sources."
+        "notes": "Texas Meals on Wheels eligibility is generally age 60+ for senior home-delivered meal pathways; no current official income or asset test was found in the retrieved authoritative sources."
       },
-      "flags": [],
-      "notes": "Texas Meals on Wheels services vary by local provider; the cited Texas East provider lists age 60+ for home-delivered meals. No statewide income or asset test was found in the retrieved current sources."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18559372372",
+            "8173360912",
+            "9727719514",
+            "211"
+          ],
+          "verifiedValue": "8888696325"
+        }
+      ],
+      "notes": "Texas Meals on Wheels eligibility is generally age 60+ for senior home-delivered meal pathways; no current official income or asset test was found in the retrieved authoritative sources."
     },
     {
       "programId": "cba-waiver",
@@ -359,37 +409,28 @@
         "assets_couple": 3000,
         "phones": [
           "211",
-          "8775417905"
+          "8775417905",
+          "8774385658"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 21,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "8774385658",
+        "phone": "8775417905",
         "sources": {
-          "age": "https://www.txp2p.org/services/services-for-parents-pathway-to-adulthood/services-and-supports",
-          "income": null,
-          "assets": "https://www.tdhca.texas.gov/sites/default/files/hhscc/docs/RefGuide.doc",
-          "phone": "https://www.txp2p.org/services/services-for-parents-pathway-to-adulthood/services-and-supports"
+          "age": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/o-1200-community-based-alternatives-program",
+          "income": "null",
+          "assets": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/o-1000-waiver-programs",
+          "phone": "https://www.211texas.org/"
         },
-        "notes": "CBA appears to remain in use, but current official HHSC eligibility details were not fully retrievable here. Senior pathway minimum age appears to be 21, not 55+; no separate income limit found in retrieved sources."
+        "notes": "CBA was terminated on Sept. 1, 2014 and transitioned into STAR+PLUS; current figures may not apply to an active CBA program. No current senior-specific age or income test was found in authoritative current sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211",
-            "8775417905"
-          ],
-          "verifiedValue": "8774385658"
-        }
-      ],
-      "notes": "CBA appears to remain in use, but current official HHSC eligibility details were not fully retrievable here. Senior pathway minimum age appears to be 21, not 55+; no separate income limit found in retrieved sources."
+      "flags": [],
+      "notes": "CBA was terminated on Sept. 1, 2014 and transitioned into STAR+PLUS; current figures may not apply to an active CBA program. No current senior-specific age or income test was found in authoritative current sources."
     },
     {
       "programId": "community-caregiver-support",
@@ -398,8 +439,8 @@
         "age": 18,
         "income_1": null,
         "income_2": null,
-        "assets_individual": 5000,
-        "assets_couple": 6000,
+        "assets_individual": null,
+        "assets_couple": null,
         "phones": [
           "18559372372",
           "8775417905"
@@ -412,14 +453,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002529240",
+        "phone": "8002529240",
         "sources": {
-          "age": "https://nasua.org/familycaregiver/pdf/sf-tx.pdf",
+          "age": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
           "income": null,
           "assets": null,
           "phone": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers"
         },
-        "notes": "Texas AAA Caregiver Support Program appears to be the relevant senior-pathway service; no current official asset test or income test was found in retrievable sources. The program line is listed as 1-800-252-9240."
+        "notes": "Texas AAA Caregiver Support Program serves caregivers of people age 60+; no income or asset test found in authoritative current sources."
       },
       "flags": [
         {
@@ -435,16 +476,59 @@
             "18559372372",
             "8775417905"
           ],
-          "verifiedValue": "18002529240"
+          "verifiedValue": "8002529240"
         }
       ],
-      "notes": "Texas AAA Caregiver Support Program appears to be the relevant senior-pathway service; no current official asset test or income test was found in retrievable sources. The program line is listed as 1-800-252-9240."
+      "notes": "Texas AAA Caregiver Support Program serves caregivers of people age 60+; no income or asset test found in authoritative current sources."
     },
     {
       "programId": "legal-aid-seniors-aaa",
       "programName": "Legal Aid for Seniors through AAAs",
-      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
-      "flags": []
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18002529240",
+          "3252235704",
+          "3256728544",
+          "5129166062",
+          "3256778591"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8006222520",
+        "sources": {
+          "age": "https://www.hotcogtx.gov/health-and-human-services/area-agency-on-aging",
+          "income": null,
+          "assets": null,
+          "phone": "https://guides.sll.texas.gov/legal-help/hotlines"
+        },
+        "notes": "Current Texas AAA legal assistance for seniors is generally for age 60+; no income or asset test located in authoritative sources. Phone reflects Texas Legal Services Center free legal hotline used by AAA-related senior legal help."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18002529240",
+            "3252235704",
+            "3256728544",
+            "5129166062",
+            "3256778591"
+          ],
+          "verifiedValue": "8006222520"
+        }
+      ],
+      "notes": "Current Texas AAA legal assistance for seniors is generally for age 60+; no income or asset test located in authoritative sources. Phone reflects Texas Legal Services Center free legal hotline used by AAA-related senior legal help."
     },
     {
       "programId": "ltc-ombudsman",
@@ -472,12 +556,154 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://ltco.texas.gov/",
-          "notes": "Texas Long-Term Care Ombudsman Program does not use age, income, or asset eligibility tests for the senior pathway; current statewide help line is 800-252-2412."
-        }
+          "phone": "https://ltco.texas.gov/about-us"
+        },
+        "notes": "Texas Long-Term Care Ombudsman Program does not have age, income, or asset eligibility for the senior-resident help pathway; statewide help phone is 800-252-2412."
       },
       "flags": [],
-      "notes": null
+      "notes": "Texas Long-Term Care Ombudsman Program does not have age, income, or asset eligibility for the senior-resident help pathway; statewide help phone is 800-252-2412."
+    },
+    {
+      "programId": "tx-medicaid-elderly-disabilities",
+      "programName": "Texas Medicaid for the Elderly and People with Disabilities",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8775417905",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8775417905",
+        "sources": {
+          "age": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxiii-medicaid-elderly-people-disabilities-information",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.hhs.texas.gov/contact"
+        },
+        "notes": "Current Texas HHSC MEPD rules apply a senior threshold of 65+; the program also covers people under 65 with disabilities. No current authoritative income/assets threshold was retrieved for this broad program page."
+      },
+      "flags": [],
+      "notes": "Current Texas HHSC MEPD rules apply a senior threshold of 65+; the program also covers people under 65 with disabilities. No current authoritative income/assets threshold was retrieved for this broad program page."
+    },
+    {
+      "programId": "tx-primary-home-care-community-care",
+      "programName": "Primary Home Care (Community Care)",
+      "facts": {
+        "age": 21,
+        "income_1": 2829,
+        "income_2": 5658,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8775417905",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 21,
+        "income_1": 2829,
+        "income_2": 5658,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8002528263",
+        "sources": {
+          "age": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xxxiii-requests-services-individuals-under-21-years-age",
+          "income": "https://www.hhs.texas.gov/sites/default/files/documents/laws-regulations/forms/2307/Attachment_2307-a.pdf",
+          "assets": "https://www.hhs.texas.gov/sites/default/files/documents/laws-regulations/forms/2307/Attachment_2307-a.pdf",
+          "phone": "https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/1100-program-introduction"
+        },
+        "notes": "PHC is not a senior-only program; the senior-relevant threshold is 21+ (not under 21). Income/resource limits apply only to income-eligible applicants, while Medicaid-eligible applicants may qualify without those limits."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8775417905",
+            "211"
+          ],
+          "verifiedValue": "8002528263"
+        }
+      ],
+      "notes": "PHC is not a senior-only program; the senior-relevant threshold is 21+ (not under 21). Income/resource limits apply only to income-eligible applicants, while Medicaid-eligible applicants may qualify without those limits."
+    },
+    {
+      "programId": "tx-respite-care-services",
+      "programName": "Texas Respite Care Services",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18559372372",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8559372372",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://www.dshs.texas.gov/alzheimers-disease/options-care"
+        },
+        "notes": "Could not verify age, income, or asset tests from an authoritative source; the current statewide caregiver/respite contact number is the ADRC line, 1-855-937-2372."
+      },
+      "flags": [],
+      "notes": "Could not verify age, income, or asset tests from an authoritative source; the current statewide caregiver/respite contact number is the ADRC line, 1-855-937-2372."
+    },
+    {
+      "programId": "tx-community-attendant-services",
+      "programName": "Community Attendant Services (CAS)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phones": [
+          "8559372372",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 2982,
+        "income_2": 5964,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8559372372",
+        "sources": {
+          "age": null,
+          "income": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/appendix-xi-income-resource-limits",
+          "assets": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/3200-resource-eligibility-criteria",
+          "phone": "https://www.medicaidplanningassistance.org/texas-community-attendant-services/"
+        },
+        "notes": "CAS is still active in 2026. Official Texas HHSC guidance says CAS financial eligibility is determined by MEPD staff; the listed income/resource limits are the applicable 2026 HHSC limits for CAS, and the phone number is from a current non-government guide citing Texas HHS. No official age minimum for the senior pathway was found in the retrieved sources."
+      },
+      "flags": [],
+      "notes": "CAS is still active in 2026. Official Texas HHSC guidance says CAS financial eligibility is determined by MEPD staff; the listed income/resource limits are the applicable 2026 HHSC limits for CAS, and the phone number is from a current non-government guide citing Texas HHS. No official age minimum for the senior pathway was found in the retrieved sources."
     }
   ]
 }

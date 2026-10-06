@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.379Z
+ * Last updated: 2026-10-06T12:32:13.560Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -203,7 +203,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://khap.kdhe.ks.gov/KEESM/Oct_2020_Output/keesm8210.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8552002372",
+          "source": "https://www.kdads.ks.gov/services-programs/long-term-services-supports/home-and-community-based-services-hcbs-programs/hcbs-programs/frail-elderly-fe",
+          "reason": "page also lists ours ((785) 296-4986)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -638,7 +648,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://khap.kdhe.ks.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9430,
+          "to": 9950,
+          "source": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/medicare-part-d-prescription-drug-coverage/medicare-frequently-asked-questions",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:21:30.432Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14130,
+          "to": 14910,
+          "source": "https://www.kdads.ks.gov/services-programs/aging/medicare-programs/senior-health-insurance-counseling-for-kansas-shick/medicare-part-d-prescription-drug-coverage/medicare-frequently-asked-questions",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:21:30.432Z"
+        }
+      ]
     },
     {
       "id": "snap-food-assistance",
@@ -845,7 +875,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistance.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistanceFAQs.aspx",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:21:30.432Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://www.dcf.ks.gov/services/ees/Pages/Food/FoodAssistanceFAQs.aspx",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:21:30.432Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1182,6 +1232,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Help finding local weatherization providers statewide",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 752-4422",
+          "description": "Number listed on content.dcf.ks.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1243,18 +1299,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://kshousingcorp.org/weatherization-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8004320303",
             "211"
           ],
-          "to": "18007524422",
+          "to": "(800) 752-4422",
           "source": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:38.319Z"
+          "flaggedAt": "2026-10-06T12:21:30.432Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1732,10 +1790,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 18,
           "to": 60,
-          "source": "https://www.jhawkaaa.org/caregiving",
+          "source": "https://www.kdads.ks.gov/services-programs/aging/older-americans-act",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:38.319Z"
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:21:30.432Z"
         }
       ]
     },
@@ -2346,20 +2404,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.kdads.ks.gov/services-programs/aging/senior-care-act-sca",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8552002372",
-            "7852964986"
-          ],
-          "to": "8006771116",
-          "source": "https://www.kdads.ks.gov/services-programs/aging",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:37:38.319Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "senior-citizen-law-project",
@@ -2428,7 +2473,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Kansas Legal Services",
-          "phone": "316-XXX-XXXX",
+          "phone": "(316) 267-3975",
           "description": "Main number for SCLP legal services",
           "hours": "Contact for current hours"
         },
@@ -2469,23 +2514,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "minimal"
       },
       "icon": "Scales",
-      "phone": null,
+      "phone": "(316) 267-3975",
       "sourceUrl": "https://www.kansaslegalservices.org/page/57/programs-seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "316"
           ],
-          "to": "8883535337",
+          "to": "(316) 267-3975",
           "source": "https://www.kansaslegalservices.org/page/57/programs-seniors",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:37:38.319Z"
+          "flaggedAt": "2026-10-06T12:21:30.432Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "ks-aged-blind-disabled-medicaid",

@@ -1,14 +1,14 @@
 {
   "state": "UT",
   "stateName": "Utah",
-  "checkedAt": "2026-10-02T07:47:00.310Z",
-  "total": 13,
+  "checkedAt": "2026-10-06T12:29:35.992Z",
+  "total": 14,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 7,
-  "totalFlags": 14,
-  "highSeverityFlags": 8,
+  "totalFlags": 7,
+  "highSeverityFlags": 3,
   "programs": [
     {
       "programId": "medicaid-program",
@@ -32,14 +32,14 @@
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "18664357414",
+        "phone": "8664357414",
         "sources": {
-          "age": "https://medicaid-documents.dhhs.utah.gov/Documents/pdfs/medicalprograms.pdf",
+          "age": "https://medicaidlongtermcare.org/eligibility/utah/",
           "income": null,
-          "assets": "https://oepmanuals.dhhs.utah.gov/500/503_Household_Size_and_Asset_Limits.htm",
-          "phone": "https://medicaid.utah.gov/contact/"
+          "assets": "https://medicaidlongtermcare.org/eligibility/utah/",
+          "phone": "https://medicaid.utah.gov/apply-medicaid/"
         },
-        "notes": "Utah Medicaid’s senior pathway is Aged, Blind, Disabled Medical (aged 65+); income limits were not retrievable from the gathered sources, but asset limits and application phone were."
+        "notes": "Utah Medicaid has multiple pathways; the senior-specific values above appear to align with the Aging Waiver / long-term care pathway for age 65+. No authoritative source found here for a standard income limit, so income fields are null."
       },
       "flags": [
         {
@@ -50,7 +50,7 @@
           "pctDiff": 25
         }
       ],
-      "notes": "Utah Medicaid’s senior pathway is Aged, Blind, Disabled Medical (aged 65+); income limits were not retrievable from the gathered sources, but asset limits and application phone were."
+      "notes": "Utah Medicaid has multiple pathways; the senior-specific values above appear to align with the Aging Waiver / long-term care pathway for age 65+. No authoritative source found here for a standard income limit, so income fields are null."
     },
     {
       "programId": "pace-elder-care",
@@ -75,15 +75,15 @@
         "assets_couple": null,
         "phone": null,
         "sources": {
-          "age": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
+          "age": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
           "income": null,
           "assets": null,
           "phone": null
         },
-        "notes": "Could not verify a current Utah-specific PACE program. Medicare’s current PACE eligibility page shows the senior age minimum as 55, but no authoritative Utah program phone number was found in the retrievable sources."
+        "notes": "Current federal PACE rule sets the minimum age at 55. I could not find an authoritative Utah-specific PACE program phone number; Utah appears not to operate its own PACE program in current secondary sources, so phone is null."
       },
       "flags": [],
-      "notes": "Could not verify a current Utah-specific PACE program. Medicare’s current PACE eligibility page shows the senior age minimum as 55, but no authoritative Utah program phone number was found in the retrievable sources."
+      "notes": "Current federal PACE rule sets the minimum age at 55. I could not find an authoritative Utah-specific PACE program phone number; Utah appears not to operate its own PACE program in current secondary sources, so phone is null."
     },
     {
       "programId": "medicare-savings-programs",
@@ -108,15 +108,15 @@
         "assets_couple": 14910,
         "phone": "8664357414",
         "sources": {
-          "age": "https://medicaid.utah.gov/medicare-cost-sharing-programs/",
-          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "phone": "https://medicaid.utah.gov/contact/"
+          "age": null,
+          "income": "https://medicaid.utah.gov/medicare-cost-sharing-programs/",
+          "assets": "https://brevy.com/medicaid/utah/medicare-savings-programs",
+          "phone": "https://medicaid.utah.gov/medicare-cost-sharing-programs/"
         },
-        "notes": "Utah Medicare Savings Programs (QMB, SLMB, QI) are current; age is not a program eligibility test for the senior pathway, so null. Income and asset limits reflect 2026 Medicare/Utah figures for QMB/SLMB/QI."
+        "notes": "Utah’s Medicare Savings Programs (QMB, SLMB, QI) are administered through Medicaid/DWS; no separate age threshold beyond Medicare eligibility was found. Income and asset limits are current 2026 figures from the retrieved sources."
       },
       "flags": [],
-      "notes": "Utah Medicare Savings Programs (QMB, SLMB, QI) are current; age is not a program eligibility test for the senior pathway, so null. Income and asset limits reflect 2026 Medicare/Utah figures for QMB/SLMB/QI."
+      "notes": "Utah’s Medicare Savings Programs (QMB, SLMB, QI) are administered through Medicaid/DWS; no separate age threshold beyond Medicare eligibility was found. Income and asset limits are current 2026 figures from the retrieved sources."
     },
     {
       "programId": "snap-food-benefits",
@@ -135,21 +135,21 @@
       },
       "verified": {
         "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1305,
+        "income_2": 1763,
         "assets_individual": 4500,
         "assets_couple": 4500,
-        "phone": "8664357414",
+        "phone": "18664357414",
         "sources": {
           "age": "https://jobs.utah.gov/customereducation/services/foodstamps/deductions.html",
-          "income": "https://jobs.utah.gov/customereducation/services/foodstamps/",
+          "income": "https://jobs.utah.gov/customereducation/services/foodstamps/deductions.html",
           "assets": "https://jobs.utah.gov/customereducation/services/foodstamps/deductions.html",
-          "phone": "https://jobs.utah.gov/customereducation/services/foodstamps/"
+          "phone": "https://jobs.utah.gov/department/contact/eligibility.html"
         },
-        "notes": "Utah SNAP remains active in 2026; the official page provides resource limits for households with a member age 60+ but does not publish the monthly household-size income figures on the retrieved page."
+        "notes": "Utah SNAP is current; elderly pathway uses age 60+ and the household resource limit for households with an elderly member is $4,500. Income limits for 1 and 2 person households are the USDA poverty-based net-income figures reflected by Utah DWS for households with an elderly member."
       },
       "flags": [],
-      "notes": "Utah SNAP remains active in 2026; the official page provides resource limits for households with a member age 60+ but does not publish the monthly household-size income figures on the retrieved page."
+      "notes": "Utah SNAP is current; elderly pathway uses age 60+ and the household resource limit for households with an elderly member is $4,500. Income limits for 1 and 2 person households are the USDA poverty-based net-income figures reflected by Utah DWS for households with an elderly member."
     },
     {
       "programId": "liheap-heat-energy-assistance",
@@ -168,34 +168,20 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1550,
-        "income_2": 2110,
+        "income_1": 1881,
+        "income_2": 2546,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18662054357",
+        "phone": "8662054357",
         "sources": {
-          "age": "https://jobs.utah.gov/housing/scso/seal/heat.html",
-          "income": "https://jobs.utah.gov/housing/scso/seal/heat.html",
+          "age": null,
+          "income": "https://liheapch.acf.hhs.gov/profiles/Utah.htm",
           "assets": null,
-          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
+          "phone": "https://liheapch.acf.hhs.gov/profiles/Utah.htm"
         },
-        "notes": "Utah HEAT is the LIHEAP program for Utah; eligibility is based on income at or below 150% of the Federal Poverty Level. Monthly values are derived from the current FPL figure implied by the program guidance and rounded to the nearest dollar. No asset test was found in the authoritative sources reviewed."
+        "notes": "Utah LIHEAP/HEAT uses 150% of Federal Poverty Level; no asset test was found in the official sources retrieved. The official public inquiry number is listed as 866-205-4357."
       },
       "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1956,
-          "verifiedValue": 1550,
-          "pctDiff": 20.8
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2644,
-          "verifiedValue": 2110,
-          "pctDiff": 20.2
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -203,10 +189,10 @@
             "211",
             "4355861112"
           ],
-          "verifiedValue": "18662054357"
+          "verifiedValue": "8662054357"
         }
       ],
-      "notes": "Utah HEAT is the LIHEAP program for Utah; eligibility is based on income at or below 150% of the Federal Poverty Level. Monthly values are derived from the current FPL figure implied by the program guidance and rounded to the nearest dollar. No asset test was found in the authoritative sources reviewed."
+      "notes": "Utah LIHEAP/HEAT uses 150% of Federal Poverty Level; no asset test was found in the official sources retrieved. The official public inquiry number is listed as 866-205-4357."
     },
     {
       "programId": "weatherization-assistance-program",
@@ -227,34 +213,20 @@
       },
       "verified": {
         "age": null,
-        "income_1": 380,
-        "income_2": 514,
+        "income_1": 2530,
+        "income_2": 3423,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8015383939",
+        "phone": "8016263320",
         "sources": {
-          "age": "https://jobs.utah.gov/housing/scso/wap/how.html",
-          "income": "https://jobs.utah.gov/housing/scso/wap/how.html",
+          "age": null,
+          "income": "https://jobs.utah.gov/housing/scso/wap/iwtc/wapguidelines.pdf",
           "assets": null,
-          "phone": "https://jobs.utah.gov/housing/scso/wap/how.html"
+          "phone": "https://jobs.utah.gov/housing/scso/wap/iwtc/wapguidelines.pdf"
         },
-        "notes": "Current Utah Weatherization Assistance Program uses an income test of 200% of the federal poverty level and prioritizes elderly households; no asset test was found in the authoritative sources reviewed. Monthly income figures were derived from the cited 2026 LIHEAP-style threshold using the federal poverty guideline proxy, and the main statewide contact number listed is 801-538-3939."
+        "notes": "Current Utah Weatherization Assistance Program guidelines state income eligibility is 200% of the federal poverty level; no separate age or asset test was found in the retrieved official guidance. Monthly values were derived by dividing the annual FPL figures by 12 and rounding."
       },
       "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2510,
-          "verifiedValue": 380,
-          "pctDiff": 84.9
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 3407,
-          "verifiedValue": 514,
-          "pctDiff": 84.9
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -264,10 +236,10 @@
             "8012293800",
             "4358650195"
           ],
-          "verifiedValue": "8015383939"
+          "verifiedValue": "8016263320"
         }
       ],
-      "notes": "Current Utah Weatherization Assistance Program uses an income test of 200% of the federal poverty level and prioritizes elderly households; no asset test was found in the authoritative sources reviewed. Monthly income figures were derived from the cited 2026 LIHEAP-style threshold using the federal poverty guideline proxy, and the main statewide contact number listed is 801-538-3939."
+      "notes": "Current Utah Weatherization Assistance Program guidelines state income eligibility is 200% of the federal poverty level; no separate age or asset test was found in the retrieved official guidance. Monthly values were derived by dividing the annual FPL figures by 12 and rounding."
     },
     {
       "programId": "ship-medicare-counseling",
@@ -293,14 +265,14 @@
         "phone": "8005417735",
         "sources": {
           "age": "https://www.cms.gov/about-cms/contact/directory/senior-health-insurance-information-program-ship/1565301",
-          "income": "https://daas.utah.gov/services/",
-          "assets": "https://daas.utah.gov/services/",
+          "income": "https://www.cms.gov/about-cms/contact/directory/senior-health-insurance-information-program-ship/1565301",
+          "assets": "https://www.cms.gov/about-cms/contact/directory/senior-health-insurance-information-program-ship/1565301",
           "phone": "https://daas.utah.gov/seniors/"
         },
-        "notes": "Utah’s SHIP is the Senior Health Insurance Information Program; it is a Medicare counseling program and does not appear to use income or asset tests."
+        "notes": "Utah SHIP is current; it is a Medicare counseling program for Medicare-eligible individuals and their families/caregivers, with no income or asset test found in the official sources reviewed."
       },
       "flags": [],
-      "notes": "Utah’s SHIP is the Senior Health Insurance Information Program; it is a Medicare counseling program and does not appear to use income or asset tests."
+      "notes": "Utah SHIP is current; it is a Medicare counseling program for Medicare-eligible individuals and their families/caregivers, with no income or asset test found in the official sources reviewed."
     },
     {
       "programId": "meals-on-wheels",
@@ -329,17 +301,33 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8774244640",
+        "phone": "3854683200",
         "sources": {
-          "age": "https://daas.utah.gov/seniors/",
+          "age": "https://daas.utah.gov/locations/",
           "income": null,
           "assets": null,
-          "phone": "https://daas.utah.gov/seniors/"
+          "phone": "https://www.saltlakecounty.gov/aging-adult-services/services/meals-on-wheels/"
         },
-        "notes": "Utah DHHS pages point seniors to local Area Agencies on Aging for Meals on Wheels; the statewide senior pathway is age 60+ and the main statewide contact shown is 877-424-4640. No income or asset test was found for this program."
+        "notes": "Utah Meals on Wheels is administered locally through Area Agencies on Aging; the senior pathway commonly uses age 60+ and no income/assets test was found in the retrieved official sources."
       },
-      "flags": [],
-      "notes": "Utah DHHS pages point seniors to local Area Agencies on Aging for Meals on Wheels; the statewide senior pathway is age 60+ and the main statewide contact shown is 877-424-4640. No income or asset test was found for this program."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8015383910",
+            "18774244640",
+            "8015255050",
+            "8012293802",
+            "4356544920",
+            "4357131467",
+            "4357551720",
+            "211"
+          ],
+          "verifiedValue": "3854683200"
+        }
+      ],
+      "notes": "Utah Meals on Wheels is administered locally through Area Agencies on Aging; the senior pathway commonly uses age 60+ and no income/assets test was found in the retrieved official sources."
     },
     {
       "programId": "caregiver-support-program",
@@ -354,7 +342,8 @@
           "18774244640",
           "8014682460",
           "8014513377",
-          "8016253866"
+          "8016253866",
+          "8015383910"
         ],
         "hasVerifiableFacts": true
       },
@@ -366,12 +355,12 @@
         "assets_couple": null,
         "phone": "8015383910",
         "sources": {
-          "age": "https://daas.utah.gov/seniors/",
-          "income": "https://daas.utah.gov/seniors/",
-          "assets": "https://daas.utah.gov/seniors/",
-          "phone": "https://daas.utah.gov/"
+          "age": "https://magutah.gov/cgsupport/",
+          "income": "https://daas.utah.gov/services/",
+          "assets": "https://daas.utah.gov/services/",
+          "phone": "https://daas.utah.gov/services/"
         },
-        "notes": "Current Utah Caregiver Support Program appears to use a 60+ senior pathway; no income or asset test found on official sources."
+        "notes": "Current Utah Caregiver Support Program (senior pathway) appears to use age 60+ for older adults; no income or asset test is listed in the official state service description."
       },
       "flags": [
         {
@@ -379,20 +368,9 @@
           "severity": "high",
           "draftValue": 18,
           "verifiedValue": 60
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18774244640",
-            "8014682460",
-            "8014513377",
-            "8016253866"
-          ],
-          "verifiedValue": "8015383910"
         }
       ],
-      "notes": "Current Utah Caregiver Support Program appears to use a 60+ senior pathway; no income or asset test found on official sources."
+      "notes": "Current Utah Caregiver Support Program (senior pathway) appears to use age 60+ for older adults; no income or asset test is listed in the official state service description."
     },
     {
       "programId": "scsep-employment",
@@ -405,51 +383,28 @@
         "assets_couple": null,
         "phones": [
           "8007712153",
-          "211"
+          "211",
+          "8015383910"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 55,
-        "income_1": 1983,
-        "income_2": 2689,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8015383910",
         "sources": {
           "age": "https://daas.utah.gov/seniors/",
-          "income": "https://daas.utah.gov/seniors/",
+          "income": "https://daas.utah.gov/wp-content/uploads/2026/02/Utah-SCSEP-Four-Year-State-Plan-Update-2026-2.23.26-1.pdf",
           "assets": null,
           "phone": "https://daas.utah.gov/seniors/"
         },
-        "notes": "SCSEP is active in Utah; official Utah source states age 55+, low-income, unemployed, and uses 125% of the federal poverty level. No asset test found in the official source."
+        "notes": "SCSEP in Utah is active and uses a senior pathway age threshold of 55+. The official Utah state plan says eligibility is income no more than 125% of federal poverty level, but the retrievable source snippet did not provide the actual 2026 household 1/2 dollar amounts. No asset test was found in the official sources reviewed."
       },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1583,
-          "verifiedValue": 1983,
-          "pctDiff": 20.2
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2142,
-          "verifiedValue": 2689,
-          "pctDiff": 20.3
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8007712153",
-            "211"
-          ],
-          "verifiedValue": "8015383910"
-        }
-      ],
-      "notes": "SCSEP is active in Utah; official Utah source states age 55+, low-income, unemployed, and uses 125% of the federal poverty level. No asset test found in the official source."
+      "flags": [],
+      "notes": "SCSEP in Utah is active and uses a senior pathway age threshold of 55+. The official Utah state plan says eligibility is income no more than 125% of federal poverty level, but the retrievable source snippet did not provide the actual 2026 household 1/2 dollar amounts. No asset test was found in the official sources reviewed."
     },
     {
       "programId": "legal-services-seniors",
@@ -463,7 +418,8 @@
         "phones": [
           "8013288849",
           "8016498895",
-          "211"
+          "211",
+          "8013288891"
         ],
         "hasVerifiableFacts": true
       },
@@ -475,26 +431,15 @@
         "assets_couple": null,
         "phone": "8013288891",
         "sources": {
-          "age": "https://www.utahlegalservices.org/print/pdf/node/20",
-          "income": "https://www.utahlegalservices.org/node/16/who-qualifies-get-help-utah-legal-services",
-          "assets": "https://www.utahlegalservices.org/node/16/who-qualifies-get-help-utah-legal-services",
-          "phone": "https://www.utahlegalservices.org/contact"
+          "age": "https://daas.utah.gov/questions/",
+          "income": "https://www.utahlegalservices.org/page/16/who-qualifies-get-help-utah-legal-services",
+          "assets": "https://www.utahlegalservices.org/page/16/who-qualifies-get-help-utah-legal-services",
+          "phone": "https://daas.utah.gov/questions/"
         },
-        "notes": "Senior pathway uses age 60+; Utah Legal Services says seniors may qualify without regard to financial circumstances, so no current senior-specific income or asset limits were found."
+        "notes": "Senior legal services appear to use a 60+ senior pathway; Utah Legal Services notes seniors may qualify without regard to financial circumstances, so no current senior-specific income or asset test was found."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8013288849",
-            "8016498895",
-            "211"
-          ],
-          "verifiedValue": "8013288891"
-        }
-      ],
-      "notes": "Senior pathway uses age 60+; Utah Legal Services says seniors may qualify without regard to financial circumstances, so no current senior-specific income or asset limits were found."
+      "flags": [],
+      "notes": "Senior legal services appear to use a 60+ senior pathway; Utah Legal Services notes seniors may qualify without regard to financial circumstances, so no current senior-specific income or asset test was found."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -516,14 +461,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3852221273",
+        "phone": "8015383910",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://daas.utah.gov/ombudsman-locations-3/"
+          "phone": "https://daas.utah.gov/long-term-care-ombudsman/"
         },
-        "notes": "No age, income, or asset eligibility test found for this ombudsman program; official statewide contact number appears to be 385-222-1273."
+        "notes": "No age, income, or asset eligibility test found for the Utah Long-Term Care Ombudsman Program; official state page lists the main program phone number."
       },
       "flags": [
         {
@@ -532,10 +477,10 @@
           "draftValue": [
             "8012293809"
           ],
-          "verifiedValue": "3852221273"
+          "verifiedValue": "8015383910"
         }
       ],
-      "notes": "No age, income, or asset eligibility test found for this ombudsman program; official statewide contact number appears to be 385-222-1273."
+      "notes": "No age, income, or asset eligibility test found for the Utah Long-Term Care Ombudsman Program; official state page lists the main program phone number."
     },
     {
       "programId": "aging-waiver",
@@ -553,19 +498,59 @@
         "age": 65,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 2000,
         "assets_couple": null,
         "phone": "8015383910",
         "sources": {
           "age": "https://medicaid.utah.gov/ltc-2/ag/",
           "income": "https://medicaid.utah.gov/ltc-2/ag/",
-          "assets": "https://medicaid.utah.gov/ltc-2/ag/",
+          "assets": "https://medicaid-documents.dhhs.utah.gov/Documents/pdfs/Home_Community_Waiver_Medicaid.pdf",
           "phone": "https://medicaid.utah.gov/ltc-2/ag/"
         },
-        "notes": "Current official Utah DHHS Aging Waiver page says age 65+ and requires Medicaid financial eligibility, but the page does not publish a countable asset limit or income limit for this waiver."
+        "notes": "Utah’s Aging Waiver is current and serves individuals age 65 or older. Public official sources found do not clearly state a separate income cap; the waiver page references meeting Medicaid financial eligibility and another official PDF states assets must be $2000 or less."
       },
       "flags": [],
-      "notes": "Current official Utah DHHS Aging Waiver page says age 65+ and requires Medicaid financial eligibility, but the page does not publish a countable asset limit or income limit for this waiver."
+      "notes": "Utah’s Aging Waiver is current and serves individuals age 65 or older. Public official sources found do not clearly state a separate income cap; the waiver page references meeting Medicaid financial eligibility and another official PDF states assets must be $2000 or less."
+    },
+    {
+      "programId": "ut-new-choices-waiver",
+      "programName": "New Choices Waiver",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8015386155",
+          "8006629651"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8006629651",
+        "sources": {
+          "age": "https://medicaid.utah.gov/medicaid-long-term-care-and-waiver-programs/",
+          "income": null,
+          "assets": null,
+          "phone": "https://medicaid.utah.gov/ltc-2/nc/"
+        },
+        "notes": "Current Utah Medicaid/New Choices Waiver information found; senior pathway age is 65+ and no income/asset test was located in the retrieved official sources."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 65
+        }
+      ],
+      "notes": "Current Utah Medicaid/New Choices Waiver information found; senior pathway age is 65+ and no income/asset test was located in the retrieved official sources."
     }
   ]
 }

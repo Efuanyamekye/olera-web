@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.366Z
+ * Last updated: 2026-10-06T12:32:14.006Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -210,7 +210,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov/wp-content/uploads/ARChoices-Detailed-Overview.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 2742,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/long-term-services-and-supports-ltss-medicaid-assistance/",
+          "severity": "medium",
+          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3000,
+          "to": 2000,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/long-term-services-and-supports-ltss-medicaid-assistance/",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -400,21 +420,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-07",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "4794636600",
-            "8702077500",
-            "8002522412"
-          ],
-          "to": "18668013435",
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicare-savings-programs",
@@ -683,19 +689,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_individual",
           "from": 9090,
           "to": 9950,
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         },
         {
           "field": "assets_couple",
           "from": 13630,
           "to": 14910,
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
           "severity": "medium",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -859,6 +865,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-997-9999",
           "description": "EBT card issues, balance checks, and PIN resets",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(855) 372-1084",
+          "description": "Number listed on humanservices.arkansas.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -922,19 +934,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "18004828988",
             "211",
             "18009979999"
           ],
-          "to": "18553721084",
-          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/contact-dco/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "to": "(855) 372-1084",
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/supplemental-nutrition-assistance-snap/snap-overview-and-how-to-apply/",
+          "flaggedAt": "2026-10-06T12:17:59.626Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1146,7 +1160,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -1401,37 +1415,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2608,
-          "to": 1280,
+          "to": 395,
           "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
           "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         },
         {
           "field": "income_2",
           "from": 3525,
-          "to": 1820,
+          "to": 533,
           "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
           "severity": "high",
-          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8882330326",
-            "5013791535",
-            "8702021347",
-            "5017768446",
-            "4797852303",
-            "8703335127",
-            "211"
-          ],
-          "to": "5016827390",
-          "source": "https://adeq.state.ar.us/energy/pdfs/state-plan-august-29-2024.pdf",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-02T07:33:22.568Z"
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
         }
       ]
     },
@@ -1686,6 +1683,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(800) 482-6359",
           "description": "Number listed on search.arkansas211.org",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 245-5498",
+          "description": "Number listed on agingarkansas.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1760,6 +1763,20 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://search.arkansas211.org/search/2157d3ff-8296-5962-b65f-a3cbc7f1eea2",
           "flaggedAt": "2026-10-02T07:33:22.568Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "5016822441",
+            "211",
+            "8004826359"
+          ],
+          "to": "(866) 245-5498",
+          "source": "https://agingarkansas.org/how-to-get-meals-on-wheels-in-arkansas/",
+          "flaggedAt": "2026-10-06T12:17:59.626Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -2539,7 +2556,45 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-482-8988",
       "sourceUrl": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/health-care-programs/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 108.33,
+          "to": 1064,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "income_2",
+          "from": 216.66,
+          "to": 1442,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9950,
+          "to": 2000,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 3000,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/arkansas/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:17:59.626Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

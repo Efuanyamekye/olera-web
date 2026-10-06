@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/HI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.373Z
+ * Last updated: 2026-10-06T12:32:13.454Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -128,6 +128,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": null,
           "description": "Contact for regional eligibility offices and specific program questions",
           "hours": "Varies by office"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 316-8005",
+          "description": "Number listed on medquest.hawaii.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -190,17 +196,19 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medquest.hawaii.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8776285076"
           ],
-          "to": "18003168005",
-          "source": "https://medquest.hawaii.gov/en/contact-us.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "to": "(800) 316-8005",
+          "source": "https://medquest.hawaii.gov/en/members-applicants/get-started/how-to-apply.html",
+          "flaggedAt": "2026-10-06T12:20:19.102Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -748,7 +756,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medquest.hawaii.gov/content/medquest/en/members-applicants/get-started/programs.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "18776285076",
+          "source": "https://medquest.hawaii.gov/",
+          "reason": "page also lists ours ((800) 316-8005)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -965,13 +983,40 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-09",
       "reviewQueue": [
         {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://humanservices.hawaii.gov/bessd/snap/snap-rights-and-resp/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
+        },
+        {
+          "field": "income_1",
+          "from": 2998,
+          "to": 1989,
+          "source": "https://humanservices.hawaii.gov/bessd/snap/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
+        },
+        {
+          "field": "income_2",
+          "from": 4054,
+          "to": 2697,
+          "source": "https://humanservices.hawaii.gov/bessd/snap/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
+        },
+        {
           "field": "assets_individual",
           "from": 0,
           "to": 4500,
           "source": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-cola-fy26memo.pdf",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
         },
         {
           "field": "assets_couple",
@@ -980,7 +1025,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-cola-fy26memo.pdf",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
         }
       ]
     },
@@ -1231,7 +1276,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
         }
       ]
     },
@@ -1386,7 +1431,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Oahu - HCAP",
-          "phone": null,
+          "phone": "(808) 521-4531",
           "description": "Weatherization services for Honolulu County",
           "hours": "Contact via website"
         },
@@ -1457,7 +1502,7 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "2-1-1",
+      "phone": "(808) 521-4531",
       "sourceUrl": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
@@ -1465,33 +1510,37 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "income_1",
           "from": 2600,
-          "to": 2998,
-          "source": "https://gems.hawaii.gov/save-on-your-energy-bill-programs-for-hawaii-households/",
+          "to": 2940,
+          "source": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
           "severity": "medium",
-          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
         },
         {
           "field": "income_2",
           "from": 3520,
-          "to": 4053,
-          "source": "https://gems.hawaii.gov/save-on-your-energy-bill-programs-for-hawaii-households/",
+          "to": 3983,
+          "source": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
           "severity": "medium",
-          "why": "value fits more than one tier (165% FPL 2026 or 185% FPL 2024 or 185% FPL 2023 or 200% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
-        },
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
+        }
+      ],
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8085868675",
-          "source": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "to": "(808) 521-4531",
+          "source": "https://www.hcapweb.org/weatherization-assistance-program/",
+          "flaggedAt": "2026-10-06T12:20:19.102Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "ship-medicare-counseling",
@@ -1811,7 +1860,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
+        }
+      ],
       "appliedCorrections": [
         {
           "field": "phone_added",
@@ -2017,17 +2076,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.hawaii.gov/eoa/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 18,
-          "to": 55,
-          "source": "https://www.caregiver.org/connecting-caregivers/services-by-state/hawaii/",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
-        }
-      ],
+      "reviewQueue": null,
       "dismissedFlags": [
         {
           "field": "phone",
@@ -3411,7 +3460,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://humanservices.hawaii.gov/ssd/home/adult-services/",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:36:18.771Z"
+          "flaggedAt": "2026-10-06T12:20:19.102Z"
         }
       ]
     },

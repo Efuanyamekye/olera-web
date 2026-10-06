@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.385Z
+ * Last updated: 2026-10-06T12:32:14.522Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -800,7 +800,16 @@ export const drafts: PipelineStateDrafts = {
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ],
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-10-06",
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8004524668",
+          "source": "https://www.maine.gov/energy/winter-heating-resources",
+          "reason": "page also lists ours ((207) 626-4600)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -896,6 +905,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 353-3771",
           "description": "Number listed on maine.gov",
           "hours": null
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 262-2232",
+          "description": "Number listed on cms.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -948,6 +963,19 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.maine.gov/pfr/insurance/consumers/medicare-supplement-insurance/where-to-get-help",
           "flaggedAt": "2026-10-02T07:39:10.236Z",
           "appliedAt": "2026-10-04",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        },
+        {
+          "field": "phone_added",
+          "from": [
+            "2073966524",
+            "8773533771"
+          ],
+          "to": "(800) 262-2232",
+          "source": "https://www.cms.gov/about-cms/contact/directory/maine-state-health-insurance-assistance-program-ship/1562091",
+          "flaggedAt": "2026-10-06T12:23:11.395Z",
+          "appliedAt": "2026-10-06",
           "appliedBy": "page-verifier",
           "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
@@ -1525,6 +1553,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "1-800-262-2232",
           "description": "Local resource centers can help you understand your options, prepare documents, and navigate the application. They do not process applications themselves but can walk alongside you through the process.",
           "hours": "Hours vary by location; call for your nearest center"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 977-6740",
+          "description": "Number listed on maine.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1597,7 +1631,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-797-4357",
       "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18557974357",
+            "2077788429",
+            "18002622232"
+          ],
+          "to": "(800) 977-6740",
+          "source": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+          "flaggedAt": "2026-10-06T12:23:11.395Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "me-mainecare-ead-waiver",
@@ -1738,6 +1789,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "211",
           "description": "General information and referral line. Can help you locate your nearest DHHS district office or regional OADS office. Transfers you rather than handling the application itself.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 977-6740",
+          "description": "Number listed on maine.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1815,7 +1872,34 @@ export const drafts: PipelineStateDrafts = {
       "phone": "855-797-4357",
       "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 5964,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/maine-elderly-adults-disabilities-waiver/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:23:11.395Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8557974357",
+            "2072879200",
+            "211"
+          ],
+          "to": "(800) 977-6740",
+          "source": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
+          "flaggedAt": "2026-10-06T12:23:11.395Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "me-mainecare-medicare-savings-programs",
@@ -2040,7 +2124,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(207) 287-3707",
       "sourceUrl": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "18557974357",
+          "source": "https://www1.maine.gov/dhhs/oms/contact-us",
+          "reason": "page also lists ours ((207) 287-3707, (800) 977-6740)",
+          "dismissedAt": "2026-10-06"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "me-state-ssi-supplement",

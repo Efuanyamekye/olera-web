@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.390Z
+ * Last updated: 2026-10-06T12:32:13.732Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -677,21 +677,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "8882450179",
-            "211",
-            "8006334227"
-          ],
-          "to": "8006627030",
-          "source": "https://medicaid.ncdhhs.gov/documents/medicaid/medcare-savings/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -917,25 +903,25 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/child-and-family-well-being/food-and-nutrition-services-food-stamps/simplified-nutritional-assistance-program-snap",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_1",
           "from": 1330,
-          "to": 1696,
-          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "to": 2660,
+          "source": "https://www.snapscreener.com/guides/north-carolina",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_2",
           "from": 1804,
-          "to": 2292,
-          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "to": 3608,
+          "source": "https://www.snapscreener.com/guides/north-carolina",
           "severity": "high",
           "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         }
       ]
     },
@@ -1056,7 +1042,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Local County Social Services",
-          "phone": null,
+          "phone": "(800) 662-7030",
           "description": "Contact your county Department of Social Services for applications and questions",
           "hours": "Varies by county"
         },
@@ -1123,11 +1109,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": null,
+      "phone": "(800) 662-7030",
       "sourceUrl": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance-lieap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": [
         {
           "field": "income_1",
@@ -1136,27 +1122,30 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
           "severity": "medium",
           "why": "value fits more than one tier (120% FPL 2023 or 120% FPL 2022 or 125% FPL 2022 or 130% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
         },
         {
           "field": "income_2",
           "from": 1930,
-          "to": 2110,
+          "to": 2242,
           "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
           "severity": "medium",
-          "why": "value fits more than one tier (120% FPL 2023 or 125% FPL 2022 or 130% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        },
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ],
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8006627030",
-          "source": "https://liheapch.acf.hhs.gov/profiles/NC.htm",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/news/press-releases/2025/12/08/ncdhhs-receives-low-income-home-and-energy-assistance-program-funds-new-eligible-north-carolinians",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -1481,6 +1470,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Statewide helpline to find your county's meal program",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1534,19 +1529,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "211",
             "7044321111",
             "7043363144"
           ],
-          "to": "9198553400",
-          "source": "https://www.ncdhhs.gov/home-delivered-meal-provider-directory-fy-24/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/aging/congregate-and-home-delivered-meals",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1660,6 +1657,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "24/7 helpline for all North Carolina social services and caregiver resources",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1730,20 +1733,23 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.ncdhhs.gov/divisions/aging/family-caregiver-support-program",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        },
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8282655434",
             "8282655434139",
             "211"
           ],
-          "to": "9198553417",
-          "source": "https://www.nctreasurer.gov/documents/files/slgfdcompliancesupplements/93052-2024/open",
-          "severity": "medium",
-          "why": "source dated 2024",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/aging/nc-lifespan-respite-program",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1963,7 +1969,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(919) 219-3101",
       "sourceUrl": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1693,
+          "to": 1862,
+          "source": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2289,
+          "to": 2518,
+          "source": "https://www.ncdhhs.gov/divisions/aging/senior-community-services-employment-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-for-older-adults",
@@ -2575,7 +2601,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://medicaid.ncdhhs.gov/ltss-services-eligibility-fact-sheet/open",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:24:35.279Z"
+        }
+      ]
     },
     {
       "id": "project-care-dementia-caregiver-support",
@@ -2751,22 +2788,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-02",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18006627030",
-            "7044321111",
-            "8282655434",
-            "211"
-          ],
-          "to": "9843656992",
-          "source": "https://www.ncdhhs.gov/rfa-fiduciary-agent-fy-25/open",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "special-assistance-in-home",
@@ -2982,21 +3004,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "phone",
-          "from": [
-            "18006627030",
-            "9192127000",
-            "211"
-          ],
-          "to": "9199895300",
-          "source": "https://www.johnstonnc.gov/dss/content.cfm?pageid=saih",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:41:04.679Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "nc-medicaid-aged-blind-disabled",
@@ -3365,6 +3373,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General referral line that can help you identify your county DSS office if you are unsure which county applies. This line does not handle Special Assistance applications directly.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 662-7030",
+          "description": "Number listed on ncdhhs.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3437,7 +3451,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.ncdhhs.gov/documents/files/sa-program-brochure-11-17-16/open",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "9195276335",
+            "211"
+          ],
+          "to": "(800) 662-7030",
+          "source": "https://www.ncdhhs.gov/divisions/social-services/special-assistance/state-and-county-special-assistance-adult-care-home-residents",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "nc-circuit-breaker-property-tax-deferral",
@@ -3545,6 +3575,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(919) 814-1129",
           "description": "Can answer questions about program rules and direct you to the correct forms. Cannot accept applications; those go to the county.",
           "hours": "Monday through Friday, 8am to 5pm ET"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(877) 252-3052",
+          "description": "Number listed on ncdor.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -3622,7 +3658,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(919) 814-1129",
       "sourceUrl": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "9198141129"
+          ],
+          "to": "(877) 252-3052",
+          "source": "https://www.ncdor.gov/taxes-forms/property-tax/property-tax-forms/av-9-2018-application-property-tax-relief",
+          "flaggedAt": "2026-10-06T12:24:35.279Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {

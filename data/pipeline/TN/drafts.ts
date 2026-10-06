@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.404Z
+ * Last updated: 2026-10-06T12:32:15.036Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -195,15 +195,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "phone",
-          "from": [
-            "8778010044"
-          ],
-          "to": "8552590701",
-          "source": "https://www.tn.gov/tenncare/contact-us.html",
+          "field": "income_1",
+          "from": 1350,
+          "to": 1565,
+          "source": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
           "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2115,
+          "source": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
+          "severity": "medium",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
         }
       ]
     },
@@ -412,37 +419,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1330,
-          "to": 1729,
-          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1804,
-          "to": 2348,
-          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8663114287"
-          ],
-          "to": "8337728347",
-          "source": "https://www.tn.gov/humanservices/need-help-/tdhs-contact-us.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "liheap-energy-assistance",
@@ -625,7 +602,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://thda.org/help-for-homeowners/low-income-home-energy-assistance-program-liheap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-01"
+      "lastVerifiedDate": "2026-08-01",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6158152200",
+            "18002288432",
+            "8656912551"
+          ],
+          "to": "8002288423",
+          "source": "https://thda.org/help-for-homeowners/low-income-home-energy-assistance-program-liheap/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1085,10 +1077,10 @@ export const drafts: PipelineStateDrafts = {
           "field": "age",
           "from": 55,
           "to": 60,
-          "source": "https://www.tn.gov/content/dam/tn/aging/documents/06_Helping_Caregivers.pdf",
+          "source": "https://www.tn.gov/disability-and-aging/disability-aging-programs/caregiving.html",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "flaggedAt": "2026-10-06T12:28:53.554Z"
         }
       ]
     },
@@ -1227,6 +1219,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(865) 691-2551",
           "description": "Anderson, Blount, Cocke, Grainger, Hamblen, Jefferson, Loudon, Monroe, Roane, Sevier counties - ext. 4347 for Renae Hawkins",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(844) 224-5818",
+          "description": "Number listed on tn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1282,20 +1280,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null,
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7319895111",
             "8003726013",
             "7315874213",
             "8656912551"
           ],
-          "to": "6157415671",
-          "source": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "to": "(844) 224-5818",
+          "source": "https://www.tn.gov/workforce.html",
+          "flaggedAt": "2026-10-06T12:28:53.554Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1843,6 +1843,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "Contact local Area Agency",
           "description": "Find your regional Area Agency on Aging and Disability",
           "hours": "Varies by region"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(866) 836-6678",
+          "description": "Number listed on tn.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1880,19 +1886,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://tn.gov/disability-and-aging",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8656912551",
             "86569125514212",
             "86569125514216"
           ],
-          "to": "8668366678",
-          "source": "https://www.tn.gov/disability-and-aging/resource-directory/aaad.html",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:46:20.995Z"
+          "to": "(866) 836-6678",
+          "source": "https://www.tn.gov/disability-and-aging/about-us/contact-information/other-helpful-numbers.html",
+          "flaggedAt": "2026-10-06T12:28:53.554Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },

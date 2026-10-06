@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.408Z
+ * Last updated: 2026-10-06T12:32:15.423Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -182,26 +182,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-care/apple-health-medicaid-apple-health-elderly-blind-disabled",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1835,
-          "to": 994,
-          "source": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
-        },
-        {
-          "field": "income_2",
-          "from": 2490,
-          "to": 1491,
-          "source": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "medicaid-personal-care-mpc",
@@ -1875,21 +1856,15 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://app.leg.wa.gov/wac/default.aspx?cite=388-473-0020",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31",
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
         {
           "field": "phone",
-          "from": [
-            "3605335100",
-            "2064485767",
-            "18443485464",
-            "211"
-          ],
-          "to": "2537984600",
-          "source": "https://www.piercecountywa.gov/6826/Senior-Nutrition",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "proposed": "2069628467",
+          "source": "https://www.agingkingcounty.org/what-we-do/healthy-aging/",
+          "reason": "page also lists ours ((844) 348-5464)",
+          "dismissedAt": "2026-10-06"
         }
       ]
     },
@@ -2040,25 +2015,16 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
-          "field": "age",
-          "from": 18,
-          "to": 55,
-          "source": "https://www.dshs.wa.gov/adult-and-aging-services/caregiving-resources/information-caregivers",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
-        },
-        {
           "field": "phone",
           "from": [
             "8004223263",
             "211"
           ],
           "to": "18555670252",
-          "source": "https://www.dshs.wa.gov/media/578/download?inline",
+          "source": "https://www.dshs.wa.gov/sites/default/files/publications/documents/22-1331.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "flaggedAt": "2026-10-06T12:30:54.407Z"
         }
       ]
     },
@@ -3272,19 +3238,19 @@ export const drafts: PipelineStateDrafts = {
           "field": "assets_individual",
           "from": 6000,
           "to": 12000,
-          "source": "https://manuals.dshs.wa.gov/book/export/html/17",
+          "source": "https://www.dshs.wa.gov/sites/default/files/publications/documents/22-2019.pdf",
           "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-06T12:30:54.407Z"
         },
         {
           "field": "assets_couple",
           "from": 6000,
-          "to": 12000,
-          "source": "https://manuals.dshs.wa.gov/book/export/html/17",
+          "to": 18000,
+          "source": "https://www.dshs.wa.gov/sites/default/files/publications/documents/22-2019.pdf",
           "severity": "high",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-06T12:30:54.407Z"
         }
       ]
     },
@@ -3572,10 +3538,10 @@ export const drafts: PipelineStateDrafts = {
             "2065825011"
           ],
           "to": "2066840500",
-          "source": "https://seattle.gov/agefriendly/programs/discounts",
+          "source": "https://www.seattle.gov/age-friendly/discounts/request-your-discount-card",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:48:08.854Z"
+          "flaggedAt": "2026-10-06T12:30:54.407Z"
         }
       ]
     },
@@ -4002,7 +3968,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-422-3263",
       "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/tailored-supports-older-adults-tsoa",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18004223263",
+            "18005623022",
+            "211"
+          ],
+          "to": "8555670252",
+          "source": "https://www.hca.wa.gov/assets/free-or-low-cost/18-008.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:30:54.407Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

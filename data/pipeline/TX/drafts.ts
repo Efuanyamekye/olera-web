@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.405Z
+ * Last updated: 2026-10-06T12:32:15.090Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -249,19 +249,34 @@ export const drafts: PipelineStateDrafts = {
           "field": "income_1",
           "from": 1796,
           "to": 1330,
-          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-ix-medicare-savings-program-information",
           "severity": "high",
           "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025 or 138% FPL 2024 or 150% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         },
         {
           "field": "income_2",
           "from": 2435,
           "to": 1804,
-          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-ix-medicare-savings-program-information",
           "severity": "high",
           "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025 or 138% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8775417905",
+            "211",
+            "8559372372",
+            "8002529240",
+            "8003334114"
+          ],
+          "to": "8002528263",
+          "source": "https://hhs.texas.gov/services/health/medicare-savings-programs",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         }
       ]
     },
@@ -711,7 +726,23 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9155623444",
+            "211",
+            "8006334227",
+            "18002529240"
+          ],
+          "to": "18557387223",
+          "source": "https://www.texaspaceauthority.org/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -923,7 +954,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/c-120-supplemental-nutrition-assistance-program",
           "severity": "high",
           "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         },
         {
           "field": "income_2",
@@ -932,7 +963,37 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/c-120-supplemental-nutrition-assistance-program",
           "severity": "high",
           "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 5000,
+          "to": 3000,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 5000,
+          "to": 3000,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8775417905",
+            "211"
+          ],
+          "to": "8007777328",
+          "source": "https://www.hhs.texas.gov/services/food/snap-food-benefits",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         }
       ]
     },
@@ -1148,7 +1209,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.tdhca.texas.gov/community-affairs-income-guidelines",
           "severity": "medium",
           "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 165% FPL 2023)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         },
         {
           "field": "income_2",
@@ -1157,7 +1218,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.tdhca.texas.gov/community-affairs-income-guidelines",
           "severity": "medium",
           "why": "value fits more than one tier (138% FPL 2026 or 150% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         }
       ]
     },
@@ -1642,7 +1703,17 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mealsonwheelsamerica.org/find-meals-and-services/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "dismissedFlags": [
+        {
+          "field": "phone",
+          "proposed": "8888696325",
+          "source": "https://www.nctcog.org/aging-services/service-map",
+          "reason": "page also lists ours ((972) 771-9514)",
+          "dismissedAt": "2026-10-06"
+        }
+      ]
     },
     {
       "id": "cba-waiver",
@@ -2032,16 +2103,16 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/health/support-caregivers",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-10-04",
+      "lastVerifiedDate": "2026-10-06",
       "reviewQueue": [
         {
           "field": "age",
           "from": 18,
           "to": 60,
-          "source": "https://nasua.org/familycaregiver/pdf/sf-tx.pdf",
+          "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:46:40.083Z"
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
         }
       ],
       "dismissedFlags": [
@@ -2051,6 +2122,13 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
           "reason": "page also lists ours ((855) 937-2372)",
           "dismissedAt": "2026-10-04"
+        },
+        {
+          "field": "phone",
+          "proposed": "8002529240",
+          "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
+          "reason": "page also lists ours ((855) 937-2372)",
+          "dismissedAt": "2026-10-06"
         }
       ],
       "appliedCorrections": [
@@ -2208,6 +2286,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(325) 677-8591",
           "description": "Legal representation referrals for North/West Texas",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 622-2520",
+          "description": "Number listed on guides.sll.texas.gov",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -2249,7 +2333,26 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-05-05"
+      "lastVerifiedDate": "2026-05-05",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "18002529240",
+            "3252235704",
+            "3256728544",
+            "5129166062",
+            "3256778591"
+          ],
+          "to": "(800) 622-2520",
+          "source": "https://guides.sll.texas.gov/legal-help/hotlines",
+          "flaggedAt": "2026-10-06T12:29:17.360Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "ltc-ombudsman",
@@ -2820,7 +2923,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 541-7905",
       "sourceUrl": "https://fhb.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/4600-primary-home-care-community-attendant-services",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8775417905",
+            "211"
+          ],
+          "to": "8002528263",
+          "source": "https://www.hhs.texas.gov/handbooks/community-care-services-eligibility-handbook/1100-program-introduction",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:29:17.360Z"
+        }
+      ]
     },
     {
       "id": "tx-respite-care-services",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { countyForZip } from "@/lib/benefits/zip-county.server";
 import { createClient } from "@supabase/supabase-js";
-import { zipToState, zipToCounty } from "@/lib/benefits/zip-lookup";
+import { zipToState } from "@/lib/benefits/zip-lookup";
 import { buildFinderResult } from "@/lib/benefits/finder-engine.server";
 import { emptyFinderAnswers, type FinderAnswers } from "@/lib/benefits/finder-answers";
 
@@ -33,7 +34,8 @@ export async function POST(request: Request) {
   if (!a.stateCode) {
     return NextResponse.json({ error: "We couldn't tell the state from that ZIP code." }, { status: 400 });
   }
-  if (!a.county && a.zip.length === 5) a.county = await zipToCounty(a.zip);
+  // The full ZIP's county over the three-digit guess the browser sent.
+  if (a.zip.length === 5) a.county = await countyForZip(a.zip, a.county);
 
   try {
     const result = await buildFinderResult(getSupabase(), a);

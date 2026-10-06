@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { countyForZip } from "@/lib/benefits/zip-county.server";
 import { createClient } from "@supabase/supabase-js";
 import type {
   BenefitsIntakeAnswers,
@@ -11,7 +12,7 @@ import { getTierLabel, needsToCategories } from "@/lib/types/benefits";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
-import { zipToState, zipToCounty } from "@/lib/benefits/zip-lookup";
+import { zipToState } from "@/lib/benefits/zip-lookup";
 import { findLocalAAA } from "@/lib/benefits/local-aaa";
 import { ageBandFromExact } from "@/lib/benefits/age";
 import { pickCallContact, stripParen } from "@/lib/benefits/call-script";
@@ -157,9 +158,8 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!answers.county && answers.zipCode) {
-      answers.county = await zipToCounty(answers.zipCode);
-    }
+    // The full ZIP's county over the three-digit guess the browser sent.
+    if (answers.zipCode) answers.county = await countyForZip(answers.zipCode, answers.county);
 
     const supabase = getSupabase();
     const [sbfRows, aaa] = await Promise.all([

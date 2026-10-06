@@ -1,14 +1,14 @@
 {
   "state": "CT",
   "stateName": "Connecticut",
-  "checkedAt": "2026-10-02T07:34:30.320Z",
-  "total": 9,
+  "checkedAt": "2026-10-06T12:19:14.833Z",
+  "total": 15,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 7,
-  "highSeverityFlags": 2,
+  "programsWithFlags": 9,
+  "totalFlags": 14,
+  "highSeverityFlags": 7,
   "programs": [
     {
       "programId": "husky-health-medicaid-seniors",
@@ -34,15 +34,15 @@
         "assets_couple": 2400,
         "phone": "18556266632",
         "sources": {
-          "age": "https://portal.ct.gov/husky/about-us",
-          "income": null,
-          "assets": "https://www.huskyhealthct.org/members/contact_us.html",
+          "age": "https://portal.ct.gov/husky/how-to-qualify",
+          "income": "https://portal.ct.gov/husky/how-to-qualify",
+          "assets": "https://portal.ct.gov/husky/how-to-qualify",
           "phone": "https://portal.ct.gov/HUSKY/How-to-Contact-Us"
         },
-        "notes": "HUSKY C is the senior/disabled pathway; no authoritative income limit source was retrieved here. The official contact number for applying/getting help is DSS 1-855-626-6632."
+        "notes": "HUSKY C is the senior/disabled Medicaid pathway in Connecticut; current official sources show age 65+ and asset limits of $1,600 individual / $2,400 couple. No separate income value was requested for this program in the source summary provided."
       },
       "flags": [],
-      "notes": "HUSKY C is the senior/disabled pathway; no authoritative income limit source was retrieved here. The official contact number for applying/getting help is DSS 1-855-626-6632."
+      "notes": "HUSKY C is the senior/disabled Medicaid pathway in Connecticut; current official sources show age 65+ and asset limits of $1,600 individual / $2,400 couple. No separate income value was requested for this program in the source summary provided."
     },
     {
       "programId": "chcpe-medicare-savings",
@@ -64,19 +64,34 @@
         "age": 65,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "assets_individual": 41220,
+        "assets_couple": 54960,
+        "phone": "18004455394",
         "sources": {
           "age": "https://portal.ct.gov/dss/health-and-home-care/connecticut-home-care-program-for-elders/connecticut-home-care-program-for-elders-chcpe",
-          "income": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/faq",
-          "assets": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/faq",
-          "phone": null
+          "income": null,
+          "assets": "https://portal.ct.gov/-/media/AgingandDisability/AgingServices/CHOICES/Benefits-Quick-Guide-and-Supplement---Accessible-Version-rev-31022.pdf",
+          "phone": "https://portal.ct.gov/dss/health-and-home-care/connecticut-home-care-program-for-elders/connecticut-home-care-program-for-elders-chcpe"
         },
-        "notes": "CHCPE is a home care program for elders age 65+; the Medicare Savings Program FAQ says eligibility is based solely on income and Connecticut does not review assets. A current official phone number specific to this program was not found in the retrieved sources."
+        "notes": "CHCPE is for adults age 65+; official current source found for age, assets, and phone. No current official monthly income limit was found for the senior CHCPE pathway in the retrieved sources; state materials indicate some CHCPE categories have no monthly income ceiling."
       },
-      "flags": [],
-      "notes": "CHCPE is a home care program for elders age 65+; the Medicare Savings Program FAQ says eligibility is based solely on income and Connecticut does not review assets. A current official phone number specific to this program was not found in the retrieved sources."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 35766,
+          "verifiedValue": 41220,
+          "pctDiff": 13.2
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 47688,
+          "verifiedValue": 54960,
+          "pctDiff": 13.2
+        }
+      ],
+      "notes": "CHCPE is for adults age 65+; official current source found for age, assets, and phone. No current official monthly income limit was found for the senior CHCPE pathway in the retrieved sources; state materials indicate some CHCPE categories have no monthly income ceiling."
     },
     {
       "programId": "snap-food-benefits",
@@ -96,35 +111,20 @@
       "verified": {
         "age": 60,
         "income_1": 2609,
-        "income_2": 3528,
-        "assets_individual": 4250,
-        "assets_couple": 4250,
+        "income_2": 3525,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
         "phone": "8556266632",
         "sources": {
           "age": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
-          "income": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
+          "income": "https://portal.ct.gov/dss/snap/commodity-supplemental-food-program/contact",
           "assets": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
-          "phone": "https://www.fns.usda.gov/snap/snap-state-popup/Connecticut"
+          "phone": "https://portal.ct.gov/dss/common-elements/dss-client-information-line-and-benefits-center"
         },
-        "notes": "Connecticut SNAP has no senior-only age test beyond the elderly/disabled pathway; the official state page uses age 60+ for the asset-limit exception. Income limits are based on 200% FPL gross income for 2025-10-01 through 2026-09-30; monthly values converted from the official chart and rounded."
+        "notes": "SNAP in Connecticut is current; senior-specific asset rules apply to households with at least one member age 60+ or disabled. Income values reflect the official CT SNAP table’s gross monthly limits for 2026."
       },
-      "flags": [
-        {
-          "field": "assets_individual",
-          "severity": "medium",
-          "draftValue": 4500,
-          "verifiedValue": 4250,
-          "pctDiff": 5.6
-        },
-        {
-          "field": "assets_couple",
-          "severity": "medium",
-          "draftValue": 4500,
-          "verifiedValue": 4250,
-          "pctDiff": 5.6
-        }
-      ],
-      "notes": "Connecticut SNAP has no senior-only age test beyond the elderly/disabled pathway; the official state page uses age 60+ for the asset-limit exception. Income limits are based on 200% FPL gross income for 2025-10-01 through 2026-09-30; monthly values converted from the official chart and rounded."
+      "flags": [],
+      "notes": "SNAP in Connecticut is current; senior-specific asset rules apply to households with at least one member age 60+ or disabled. Income values reflect the official CT SNAP table’s gross monthly limits for 2026."
     },
     {
       "programId": "energy-assistance-ceap",
@@ -144,19 +144,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 4063,
-        "income_2": 5316,
+        "age": 65,
+        "income_1": 4059,
+        "income_2": 5309,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "211",
         "sources": {
-          "age": null,
-          "income": "https://portal.ct.gov/heatinghelp/connecticut-energy-assistance-program-ceap",
+          "age": "https://portal.ct.gov/heatinghelp/knowledge-base/articles/the-connecticut-energy-assistance-program-ceap",
+          "income": "https://portal.ct.gov/dss/economic-security/winter-heating-assistance/energy-assistance---winter-heating/who-is-eligible",
           "assets": null,
-          "phone": "https://portal.ct.gov/deep/environmental-justice/11-available-programs-and-initiatives"
+          "phone": "https://portal.ct.gov/heatinghelp/knowledge-base/articles/the-connecticut-energy-assistance-program-ceap"
         },
-        "notes": "CEAP is current for 2026-2027 and uses income-based eligibility; no age or asset test found in official current guidance. Income values are monthly equivalents of the stated annual limits, rounded to the nearest dollar. Official help line is 2-1-1 for referral/contact information; local CAA phone numbers vary by region."
+        "notes": "CEAP uses a senior/vulnerability pathway: households with a member age 65+ are treated as vulnerable, and categorical eligibility may apply for SSI/State Supplement recipients. No asset limit was found in the official sources reviewed; statewide help is through 211 and local CAAs rather than a single CEAP phone line."
       },
       "flags": [
         {
@@ -171,7 +171,7 @@
           "verifiedValue": "211"
         }
       ],
-      "notes": "CEAP is current for 2026-2027 and uses income-based eligibility; no age or asset test found in official current guidance. Income values are monthly equivalents of the stated annual limits, rounded to the nearest dollar. Official help line is 2-1-1 for referral/contact information; local CAA phone numbers vary by region."
+      "notes": "CEAP uses a senior/vulnerability pathway: households with a member age 65+ are treated as vulnerable, and categorical eligibility may apply for SSI/State Supplement recipients. No asset limit was found in the official sources reviewed; statewide help is through 211 and local CAAs rather than a single CEAP phone line."
     },
     {
       "programId": "weatherization-assistance",
@@ -188,19 +188,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 4059,
         "income_2": 5310,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8608272655",
         "sources": {
-          "age": "https://eregulations.ct.gov/eRegsPortal/Browse/getDocument?guid=%7BA09EE155-0600-C70F-A3E7-7DD06E54A63C%7D",
-          "income": "https://www.cngcorp.com/smartenergy/rebatesandprograms/hes-ie",
+          "age": null,
+          "income": "https://portal.ct.gov/dss/economic-security/winter-heating-assistance/energy-assistance---winter-heating/who-is-eligible",
           "assets": null,
           "phone": "https://portal.ct.gov/deep/about/contact-us/general-contact-information"
         },
-        "notes": "Connecticut WAP uses 60% of State Median Income and priority is given to elderly households; no asset test found in the official/current sources reviewed."
+        "notes": "Program is active in Connecticut; official eligibility is 60% of State Median Income. No asset test found. Monthly income values calculated from official annual limits for 1 and 2 person households: $48,714/12 and $63,703/12."
       },
       "flags": [
         {
@@ -226,7 +226,7 @@
           "verifiedValue": "8608272655"
         }
       ],
-      "notes": "Connecticut WAP uses 60% of State Median Income and priority is given to elderly households; no asset test found in the official/current sources reviewed."
+      "notes": "Program is active in Connecticut; official eligibility is 60% of State Median Income. No asset test found. Monthly income values calculated from official annual limits for 1 and 2 person households: $48,714/12 and $63,703/12."
     },
     {
       "programId": "choices-ship",
@@ -256,10 +256,10 @@
           "assets": null,
           "phone": "https://portal.ct.gov/ads/programs-and-services/choices"
         },
-        "notes": "CHOICES/CT SHIP appears current and active; no age, income, or asset test found for the senior-counseling pathway. Official statewide hotline is 1-800-994-9422."
+        "notes": "CHOICES is Connecticut’s SHIP and appears current; no authoritative age, income, or asset test was found for the senior pathway."
       },
       "flags": [],
-      "notes": "CHOICES/CT SHIP appears current and active; no age, income, or asset test found for the senior-counseling pathway. Official statewide hotline is 1-800-994-9422."
+      "notes": "CHOICES is Connecticut’s SHIP and appears current; no authoritative age, income, or asset test was found for the senior pathway."
     },
     {
       "programId": "statewide-respite-care",
@@ -285,15 +285,15 @@
         "assets_couple": null,
         "phone": "8009949422",
         "sources": {
-          "age": null,
-          "income": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/connecticut-statewide-respite-care",
-          "assets": "https://portal.ct.gov/dss/-/media/dss/legislative-reports/2025/respite-care-and-family-caregiver-support-report.pdf?rev=7bc372d3f27c429499e8b9885bac1c85&hash=FF5C5F9A4707FF2BEFC8298DC148CD08",
+          "age": "https://cga.ct.gov/2024/rpt/pdf/2024-R-0115.pdf",
+          "income": "https://cga.ct.gov/2024/rpt/pdf/2024-R-0115.pdf",
+          "assets": "https://cga.ct.gov/2024/rpt/pdf/2024-R-0115.pdf",
           "phone": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/connecticut-statewide-respite-care"
         },
-        "notes": "No age test found for the senior pathway; program appears current and administered through Connecticut ADS/Area Agencies on Aging."
+        "notes": "Program is for caregivers of people with Alzheimer’s disease or related dementias; no age requirement found. The official CT report states income and liquid asset limits for the state-funded program, but no separate couple asset figure was found for this pathway."
       },
       "flags": [],
-      "notes": "No age test found for the senior pathway; program appears current and administered through Connecticut ADS/Area Agencies on Aging."
+      "notes": "Program is for caregivers of people with Alzheimer’s disease or related dementias; no age requirement found. The official CT report states income and liquid asset limits for the state-funded program, but no separate couple asset figure was found for this pathway."
     },
     {
       "programId": "scsep-employment-training",
@@ -316,14 +316,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18004393307",
+        "phone": "8604245643",
         "sources": {
           "age": "https://portal.ct.gov/ads/knowledge-base/articles/employment-services/for-job-seekers/jobs-for-older-adults",
-          "income": null,
+          "income": "https://portal.ct.gov/ads/knowledge-base/articles/employment-services/for-job-seekers/jobs-for-older-adults",
           "assets": null,
-          "phone": "https://portal.ct.gov/ads/knowledge-base/articles/employment-services/for-job-seekers/jobs-for-older-adults"
+          "phone": "https://portal.ct.gov/-/media/aginganddisability/agingservices/ffy-2025-2027-state-plan-on-aging-w-approval.pdf"
         },
-        "notes": "Current Connecticut SCSEP appears active in 2026; authoritative CT source shows age 55+ and provides the main contact number. No official current asset test was found; income details were not needed for the requested fields and were not separately sourced here."
+        "notes": "Current Connecticut SCSEP eligibility is age 55+; no assets test found. Income limit is 125% FPL, but a current dollar value was not reliably extracted from an official source."
       },
       "flags": [
         {
@@ -333,10 +333,10 @@
             "2034612154",
             "211"
           ],
-          "verifiedValue": "18004393307"
+          "verifiedValue": "8604245643"
         }
       ],
-      "notes": "Current Connecticut SCSEP appears active in 2026; authoritative CT source shows age 55+ and provides the main contact number. No official current asset test was found; income details were not needed for the requested fields and were not separately sourced here."
+      "notes": "Current Connecticut SCSEP eligibility is age 55+; no assets test found. Income limit is 125% FPL, but a current dollar value was not reliably extracted from an official source."
     },
     {
       "programId": "long-term-care-ombudsman",
@@ -362,15 +362,273 @@
         "assets_couple": null,
         "phone": "8663881888",
         "sources": {
-          "age": "https://portal.ct.gov/ltcop/content/about-ltcop/about-the-long-term-care--ombudsman-program",
-          "income": "https://portal.ct.gov/ltcop/content/about-ltcop/about-the-long-term-care--ombudsman-program",
-          "assets": "https://portal.ct.gov/ltcop/content/about-ltcop/about-the-long-term-care--ombudsman-program",
-          "phone": "https://portal.ct.gov/ltcop/content/contact-us/contact"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://portal.ct.gov/ltcop/ombudsman"
         },
-        "notes": "This program is an ombudsman advocacy service for residents of long-term care facilities; no age, income, or asset eligibility test applies to the senior pathway."
+        "notes": "No age, income, or asset test applies to the Connecticut Long Term Care Ombudsman Program; official CT.gov pages list the statewide toll-free contact number as 1-866-388-1888."
       },
       "flags": [],
-      "notes": "This program is an ombudsman advocacy service for residents of long-term care facilities; no age, income, or asset eligibility test applies to the senior pathway."
+      "notes": "No age, income, or asset test applies to the Connecticut Long Term Care Ombudsman Program; official CT.gov pages list the statewide toll-free contact number as 1-866-388-1888."
+    },
+    {
+      "programId": "ct-medicare-savings-program",
+      "programName": "Medicare Savings Program (QMB/SLMB/QI)",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8556266632",
+          "8009949422",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 2807,
+        "income_2": 3806,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18009949422",
+        "sources": {
+          "age": "https://portal.ct.gov/-/media/Departments-and-Agencies/DSS/Medicare-Savings-Program/MSPFAQs.pdf?la=en",
+          "income": "https://www.211ct.org/search/17317830",
+          "assets": "https://portal.ct.gov/dss/health-and-home-care/medicare-savings-program/medicare-savings-program/faq",
+          "phone": "https://portal.ct.gov/ads/programs-and-services/choices"
+        },
+        "notes": "Connecticut MSP has no asset test; current 2026 income limits used for QMB. Age threshold for senior pathway is 65 or Medicare Part A eligible."
+      },
+      "flags": [],
+      "notes": "Connecticut MSP has no asset test; current 2026 income limits used for QMB. Age threshold for senior pathway is 65 or Medicare Part A eligible."
+    },
+    {
+      "programId": "ct-state-ssi-supplement",
+      "programName": "Connecticut State SSI Supplement",
+      "facts": {
+        "age": 65,
+        "income_1": 1054,
+        "income_2": 1710,
+        "assets_individual": 1600,
+        "assets_couple": 2400,
+        "phones": [
+          "18556266632"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 2982,
+        "income_2": 2982,
+        "assets_individual": 1600,
+        "assets_couple": 2400,
+        "phone": "18556266632",
+        "sources": {
+          "age": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet",
+          "income": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet",
+          "assets": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet",
+          "phone": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet"
+        },
+        "notes": "Current CT DSS fact sheet lists the program as State Supplement to the Aged, Blind or Disabled; senior pathway is age 65+. Income limit is three times the current maximum SSI amount per eligible person, converted here to a monthly figure using the 2026 SSI maximum seen in the source snippet."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1054,
+          "verifiedValue": 2982,
+          "pctDiff": 64.7
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1710,
+          "verifiedValue": 2982,
+          "pctDiff": 42.7
+        }
+      ],
+      "notes": "Current CT DSS fact sheet lists the program as State Supplement to the Aged, Blind or Disabled; senior pathway is age 65+. Income limit is three times the current maximum SSI amount per eligible person, converted here to a monthly figure using the 2026 SSI maximum seen in the source snippet."
+    },
+    {
+      "programId": "ct-property-tax-relief-seniors",
+      "programName": "Connecticut Property Tax Relief for Seniors",
+      "facts": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8604186300",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8604186290",
+        "sources": {
+          "age": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
+          "income": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
+          "assets": "null",
+          "phone": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program"
+        },
+        "notes": "Current CT elderly/disabled Circuit Breaker program uses a senior threshold of 65+; no asset test found in the official source, and income limits are referenced but not specified on the retrieved page."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8604186300",
+            "211"
+          ],
+          "verifiedValue": "8604186290"
+        }
+      ],
+      "notes": "Current CT elderly/disabled Circuit Breaker program uses a senior threshold of 65+; no asset test found in the official source, and income limits are referenced but not specified on the retrieved page."
+    },
+    {
+      "programId": "ct-connpace-prescription-assistance",
+      "programName": "ConnPace (Connecticut Pharmaceutical Assistance)",
+      "facts": {
+        "age": 65,
+        "income_1": 2092,
+        "income_2": 2817,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18004235026",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 20942,
+        "income_2": 23942,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18004235026",
+        "sources": {
+          "age": "https://cslib.contentdm.oclc.org/digital/api/collection/p128501coll2/id/103257/download",
+          "income": "https://cslib.contentdm.oclc.org/digital/api/collection/p128501coll2/id/194189/download",
+          "assets": null,
+          "phone": "https://cslib.contentdm.oclc.org/digital/api/collection/p128501coll2/id/103257/download"
+        },
+        "notes": "ConnPACE appears to be a legacy/closed-to-new-enrollment Connecticut pharmaceutical assistance program; the latest retrievable official-style source found still describes senior eligibility and income limits, but no asset test was found."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2092,
+          "verifiedValue": 20942,
+          "pctDiff": 90
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2817,
+          "verifiedValue": 23942,
+          "pctDiff": 88.2
+        }
+      ],
+      "notes": "ConnPACE appears to be a legacy/closed-to-new-enrollment Connecticut pharmaceutical assistance program; the latest retrievable official-style source found still describes senior eligibility and income limits, but no asset test was found."
+    },
+    {
+      "programId": "ct-national-family-caregiver-support-program",
+      "programName": "National Family Caregiver Support Program (Connecticut)",
+      "facts": {
+        "age": 18,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18009949422",
+          "8608873561",
+          "8607246443",
+          "2037858533",
+          "2037575449"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8009949422",
+        "sources": {
+          "age": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program",
+          "income": null,
+          "assets": null,
+          "phone": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program"
+        },
+        "notes": "Current Connecticut program uses senior-pathway eligibility for older relative caregivers age 55+; no income or asset test found."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 55
+        }
+      ],
+      "notes": "Current Connecticut program uses senior-pathway eligibility for older relative caregivers age 55+; no income or asset test found."
+    },
+    {
+      "programId": "ct-home-delivered-meals",
+      "programName": "Connecticut Home-Delivered Meals Program",
+      "facts": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "211",
+          "8604245274"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8604245055",
+        "sources": {
+          "age": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
+          "income": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
+          "assets": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
+          "phone": "https://www.ctfoodshare.org/community-resources"
+        },
+        "notes": "Current CT Senior Nutrition Program/home-delivered meals pathway uses age 60+ and has no income or asset limit; the main state contact number listed is 860-424-5055."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211",
+            "8604245274"
+          ],
+          "verifiedValue": "8604245055"
+        }
+      ],
+      "notes": "Current CT Senior Nutrition Program/home-delivered meals pathway uses age 60+ and has no income or asset limit; the main state contact number listed is 860-424-5055."
     }
   ]
 }

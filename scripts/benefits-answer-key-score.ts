@@ -52,7 +52,7 @@ interface KeyProgram { name: string; alsoKnownAs?: string[]; verdict: Verdict; r
 interface KeyFamily { familyId: string; programs: KeyProgram[]; firstCall: { program: string; why: string }; notes?: string }
 interface Family {
   id: string; state: string; zip: string; who: "parent" | "spouse"; age: number; householdSize: number; household: string;
-  story: string; dailyHelpDetail: string; monthlyIncome: number; savings: number; medicaid: "has" | "no"; veteran: "yes" | "no" | "spouse"; dailyHelp: "none" | "some" | "lots";
+  story: string; dailyHelpDetail: string; monthlyIncome: number; householdMonthlyIncome?: number; savings: number; medicaid: "has" | "no"; veteran: "yes" | "no" | "spouse"; dailyHelp: "none" | "some" | "lots";
 }
 
 const families: Family[] = JSON.parse(readFileSync(`${DIR}/families.json`, "utf-8")).families;
@@ -63,8 +63,10 @@ const ageBand = (n: number): FinderAnswers["age"] => (n < 60 ? "under_60" : n < 
 
 const hasDementia = (f: Family) => /dementia|alzheimer/i.test(`${f.story} ${f.dailyHelpDetail}`);
 
-/** The nine-question form, as a family would fill it in. Income is the
- *  person's own (the household's for a couple). */
+/** The nine-question form, as a family would fill it in. A household of two
+ *  or more is asked for the whole household's income ("for the whole
+ *  household"), so a parent living with her daughter's family answers with
+ *  theirs too. */
 function formAnswers(f: Family, county: string | null): FinderAnswers {
   return {
     ...emptyFinderAnswers(),
@@ -77,7 +79,7 @@ function formAnswers(f: Family, county: string | null): FinderAnswers {
     needs: hasDementia(f) ? ["memory", "care"] : ["care"],
     caregiverNeeds: ["paid"],
     household: f.householdSize === 1 ? "1" : f.householdSize === 2 ? "2" : "3",
-    income: band(f.monthlyIncome),
+    income: band(f.householdMonthlyIncome ?? f.monthlyIncome),
     medicaid: f.medicaid === "has" ? "alreadyHas" : "doesNotHave",
     veteran: f.veteran,
   };

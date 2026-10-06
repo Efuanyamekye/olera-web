@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.368Z
+ * Last updated: 2026-10-06T12:32:13.349Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -239,32 +239,20 @@ export const drafts: PipelineStateDrafts = {
         {
           "field": "assets_individual",
           "from": 9660,
-          "to": 11160,
-          "source": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
-          "severity": "medium",
+          "to": 11450,
+          "source": "https://hcpf.colorado.gov/sites/hcpf/files/HCPF%20OM%2025-078%202026%20Increase%20to%20Resource%20Limits%20-%20Medicare%20Savings%20Programs%20and%20Low-Income%20Subsidy.pdf",
+          "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
         },
         {
           "field": "assets_couple",
           "from": 14490,
-          "to": 17470,
-          "source": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "to": 17910,
+          "source": "https://hcpf.colorado.gov/sites/hcpf/files/HCPF%20OM%2025-078%202026%20Increase%20to%20Resource%20Limits%20-%20Medicare%20Savings%20Programs%20and%20Low-Income%20Subsidy.pdf",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
-        },
-        {
-          "field": "phone",
-          "from": [
-            "8002213943",
-            "211"
-          ],
-          "to": "18007116994",
-          "source": "https://hcpf.colorado.gov/health-first-colorado-buy-in-programs",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
         }
       ]
     },
@@ -452,7 +440,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.healthfirstcolorado.com",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://hcpf.colorado.gov/sites/hcpf/files/HCBS%20Adult%20Waivers%20and%20PACE%20Comparison%20Chart-March%202024.pdf",
+          "severity": "high",
+          "why": "source dated 2020",
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-elderly-care",
@@ -859,18 +858,22 @@ export const drafts: PipelineStateDrafts = {
       "lastVerifiedDate": "2026-09-28",
       "reviewQueue": [
         {
-          "field": "phone",
-          "from": [
-            "8558554626",
-            "8008164451",
-            "211",
-            "8883282656"
-          ],
-          "to": "8005365298",
-          "source": "https://www.fna.usda.gov/snap-directory-entry/colorado",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "field": "income_1",
+          "from": 2608,
+          "to": 1960,
+          "source": "https://cdhs.colorado.gov/snap",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3526,
+          "to": 2650,
+          "source": "https://cdhs.colorado.gov/snap",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 150% FPL 2026",
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
         }
       ]
     },
@@ -1290,7 +1293,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Colorado 2-1-1",
-          "phone": "2-1-1",
+          "phone": "(303) 866-2800",
           "description": "Free helpline to find your local Case Management Agency",
           "hours": "Hours vary by region; the online directory at 211colorado.org is available anytime"
         },
@@ -1364,22 +1367,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "HandHeart",
-      "phone": "2-1-1",
+      "phone": "(303) 866-2800",
       "sourceUrl": "https://hcpf.colorado.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "3038662800",
-          "source": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "to": "(303) 866-2800",
+          "source": "https://cdhs.colorado.gov/i-want-to",
+          "flaggedAt": "2026-10-06T12:18:56.874Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -1494,7 +1499,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "SER National Colorado SCSEP",
-          "phone": null,
+          "phone": "(877) 872-5627",
           "description": "Primary grantee serving Colorado areas",
           "hours": "Contact via website for local office information"
         },
@@ -1573,22 +1578,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Briefcase",
-      "phone": "2-1-1",
+      "phone": "(877) 872-5627",
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8778725627",
-          "source": "https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "to": "(877) 872-5627",
+          "source": "https://www.dol.gov/agencies/eta/seniors/contact",
+          "flaggedAt": "2026-10-06T12:18:56.874Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
       ]
     },
@@ -1672,7 +1679,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Colorado Legal Services",
-          "phone": null,
+          "phone": "(303) 837-1313",
           "description": "Main website with office finder and online application",
           "hours": "Find local office hours at coloradolegalservices.org"
         },
@@ -1713,23 +1720,26 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "warm"
       },
       "icon": "Scales",
-      "phone": null,
+      "phone": "(303) 837-1313",
       "sourceUrl": "https://www.coloradolegalservices.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "3038371313",
+          "to": "(303) 837-1313",
           "source": "https://www.coloradolegalservices.org/get-help/",
-          "severity": "medium",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "flaggedAt": "2026-10-06T12:18:56.874Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "ltc-ombudsman",
@@ -1825,6 +1835,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(719) 601-6282",
           "description": "Advocacy for Pueblo area facilities",
           "hours": "Business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(303) 862-3524",
+          "description": "Number listed on coombudsman.org",
+          "hours": null
         }
       ],
       "applicationNotes": null,
@@ -1865,19 +1881,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.coombudsman.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "7209258609",
             "3034411170",
             "7196016282"
           ],
-          "to": "3038623524",
-          "source": "https://cdhs.colorado.gov/about-cdhs/performance-outcomes-and-reviews/ombudsman-offices/long-term-care-ombudsman",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:14.795Z"
+          "to": "(303) 862-3524",
+          "source": "https://www.coombudsman.org/contact/",
+          "flaggedAt": "2026-10-06T12:18:56.874Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -3125,7 +3143,25 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(303) 294-0111",
       "sourceUrl": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/nutrition-services-for-older-adults",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3032940111",
+            "7207803380",
+            "9704729630",
+            "9703539738",
+            "7198451133",
+            "7195894511"
+          ],
+          "to": "3034806700",
+          "source": "https://www.denvergov.org/files/assets/public/v/1/human-rights-amp-community-partnerships/divisions/aging/workgroup-resource-guides/mealsandnutrition.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
+        }
+      ]
     },
     {
       "id": "co-family-caregiver-support-program",
@@ -3298,7 +3334,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-888-866-4243",
       "sourceUrl": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:18:56.874Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

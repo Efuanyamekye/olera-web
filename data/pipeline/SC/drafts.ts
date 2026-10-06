@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T06:44:48.402Z
+ * Last updated: 2026-10-06T12:32:14.987Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -210,7 +210,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
           "severity": "high",
           "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         },
         {
           "field": "assets_individual",
@@ -219,7 +219,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www1.scdhhs.gov/mppm/word/section300/chapter%20303%20amb-qmb-slmb.doc",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         },
         {
           "field": "assets_couple",
@@ -228,7 +228,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://www1.scdhhs.gov/mppm/word/section300/chapter%20303%20amb-qmb-slmb.doc",
           "severity": "high",
           "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         }
       ]
     },
@@ -681,26 +681,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-09-28",
-      "reviewQueue": [
-        {
-          "field": "income_1",
-          "from": 1330,
-          "to": 1816,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
-        },
-        {
-          "field": "income_2",
-          "from": 1804,
-          "to": 2455,
-          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "severity": "high",
-          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "snap-food-benefits",
@@ -843,6 +824,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "Free helpline for all social services and benefit programs",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 616-1309",
+          "description": "Number listed on dss.sc.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -906,7 +893,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.sc.gov/assistance-programs/snap/faq/",
           "severity": "high",
           "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         },
         {
           "field": "income_2",
@@ -915,19 +902,22 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.sc.gov/assistance-programs/snap/faq/",
           "severity": "high",
           "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
-        },
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
+        }
+      ],
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8888980055",
             "211"
           ],
-          "to": "8006161309",
+          "to": "(800) 616-1309",
           "source": "https://dss.sc.gov/contact-dss/",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -1626,6 +1616,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(864) 885-1000",
           "description": "Senior meal programs for Oconee County",
           "hours": "Monday-Friday business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(800) 868-9095",
+          "description": "Number listed on aging.sc.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -1688,20 +1684,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.sc.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": null,
+      "appliedCorrections": [
         {
-          "field": "phone",
+          "field": "phone_added",
           "from": [
             "8642429733",
             "8004344036",
             "8644893868",
             "8648851000"
           ],
-          "to": "8037349900",
-          "source": "https://aging.sc.gov/sites/default/files/documents/SeniorNutritionProgram/Senior%20Nutrition%20Program%20Flyer_Revised%20July_10_2025.pdf",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "to": "(800) 868-9095",
+          "source": "https://aging.sc.gov/programs-initiatives/senior-nutrition-program",
+          "flaggedAt": "2026-10-06T12:28:38.920Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
         }
       ]
     },
@@ -2312,7 +2310,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         }
       ]
     },
@@ -2492,7 +2490,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.sc.gov/news/senior-farmers-market-nutrition-program-returns-june-1st-2/",
           "severity": "high",
           "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         },
         {
           "field": "income_2",
@@ -2501,7 +2499,7 @@ export const drafts: PipelineStateDrafts = {
           "source": "https://dss.sc.gov/news/senior-farmers-market-nutrition-program-returns-june-1st-2/",
           "severity": "high",
           "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:45:42.328Z"
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
         }
       ]
     },
@@ -3086,7 +3084,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "855-801-2653",
       "sourceUrl": "https://www.scdhhs.gov/members/managed-care-plan-information/program-all-inclusive-care-elderly-pace",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558012653"
+          ],
+          "to": "8885490820",
+          "source": "https://www.scdhhs.gov/partners/managed-care/program-all-inclusive-care-elderly-pace",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-06T12:28:38.920Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

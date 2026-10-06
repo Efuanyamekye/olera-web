@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T07:14:41.484Z
+ * Last updated: 2026-10-06T12:32:13.610Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -450,7 +450,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://portal.ct.gov/dss/health-and-home-care/connecticut-home-care-program-for-elders/connecticut-home-care-program-for-elders-chcpe",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 35766,
+          "to": 41220,
+          "source": "https://portal.ct.gov/-/media/AgingandDisability/AgingServices/CHOICES/Benefits-Quick-Guide-and-Supplement---Accessible-Version-rev-31022.pdf",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 47688,
+          "to": 54960,
+          "source": "https://portal.ct.gov/-/media/AgingandDisability/AgingServices/CHOICES/Benefits-Quick-Guide-and-Supplement---Accessible-Version-rev-31022.pdf",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -675,26 +695,7 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-08-31",
-      "reviewQueue": [
-        {
-          "field": "assets_individual",
-          "from": 4500,
-          "to": 4250,
-          "source": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
-        },
-        {
-          "field": "assets_couple",
-          "from": 4500,
-          "to": 4250,
-          "source": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
-          "severity": "medium",
-          "why": "asset limit (federal figure; applied with the yearly table)",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
-        }
-      ]
+      "reviewQueue": null
     },
     {
       "id": "energy-assistance-ceap",
@@ -910,10 +911,10 @@ export const drafts: PipelineStateDrafts = {
             "8607389138"
           ],
           "to": "211",
-          "source": "https://portal.ct.gov/deep/environmental-justice/11-available-programs-and-initiatives",
+          "source": "https://portal.ct.gov/heatinghelp/knowledge-base/articles/the-connecticut-energy-assistance-program-ceap",
           "severity": "medium",
           "why": "not a 10-digit number",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
         }
       ]
     },
@@ -1039,7 +1040,7 @@ export const drafts: PipelineStateDrafts = {
       "contacts": [
         {
           "label": "Connecticut 2-1-1",
-          "phone": "2-1-1",
+          "phone": "(860) 827-2655",
           "description": "Energy Assistance and Weatherization intake scheduling",
           "hours": "24 hours, 7 days a week"
         },
@@ -1097,7 +1098,7 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "2-1-1",
+      "phone": "(860) 827-2655",
       "sourceUrl": "https://portal.ct.gov/DEEP/Energy/Weatherization/Weatherization-in-Connecticut",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
@@ -1106,32 +1107,36 @@ export const drafts: PipelineStateDrafts = {
           "field": "income_1",
           "from": 3252,
           "to": 4059,
-          "source": "https://www.cngcorp.com/smartenergy/rebatesandprograms/hes-ie",
+          "source": "https://portal.ct.gov/dss/economic-security/winter-heating-assistance/energy-assistance---winter-heating/who-is-eligible",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
+          "why": "tier dispute: draft 250% FPL 2026 vs verified 300% FPL 2026",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
         },
         {
           "field": "income_2",
           "from": 4253,
           "to": 5310,
-          "source": "https://www.cngcorp.com/smartenergy/rebatesandprograms/hes-ie",
+          "source": "https://portal.ct.gov/dss/economic-security/winter-heating-assistance/energy-assistance---winter-heating/who-is-eligible",
           "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
-        },
+          "why": "value fits more than one tier (250% FPL 2025 or 250% FPL 2024 or 250% FPL 2023 or 300% SSI 2025 or 300% SSI 2024 or 300% SSI 2023)",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        }
+      ],
+      "appliedCorrections": [
         {
           "field": "phone",
           "from": [
             "211"
           ],
-          "to": "8608272655",
+          "to": "(860) 827-2655",
           "source": "https://portal.ct.gov/deep/about/contact-us/general-contact-information",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
+          "flaggedAt": "2026-10-06T12:19:14.833Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page; the draft had no usable number."
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-06"
     },
     {
       "id": "choices-ship",
@@ -1568,11 +1573,11 @@ export const drafts: PipelineStateDrafts = {
             "2034612154",
             "211"
           ],
-          "to": "18004393307",
-          "source": "https://portal.ct.gov/ads/knowledge-base/articles/employment-services/for-job-seekers/jobs-for-older-adults",
+          "to": "8604245643",
+          "source": "https://portal.ct.gov/-/media/aginganddisability/agingservices/ffy-2025-2027-state-plan-on-aging-w-approval.pdf",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:30.320Z"
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
         }
       ]
     },
@@ -1953,7 +1958,7 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1054
+            "monthlyLimit": 2982
           },
           {
             "householdSize": 2,
@@ -2114,7 +2119,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-626-6632",
       "sourceUrl": "https://portal.ct.gov/dss/knowledge-base/articles/cash-assistance/state-supplement-cash-assistance",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 1054,
+          "to": 2982,
+          "source": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet",
+          "flaggedAt": "2026-10-06T12:19:14.833Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 1710,
+          "to": 2982,
+          "source": "https://portal.ct.gov/dss/knowledge-base/articles/fact-sheets-and-brochures-articles/fact-sheets-articles/state-supplement-to-the-aged-blind-or-disabled-fact-sheet",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2025 vs verified 165% FPL 2026",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        }
+      ]
     },
     {
       "id": "ct-property-tax-relief-seniors",
@@ -2232,6 +2260,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "2-1-1",
           "description": "General information and referral line that can help you locate your parent's local assessor office if you are having trouble finding the right contact. This line does not process applications.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(860) 418-6290",
+          "description": "Number listed on portal.ct.gov",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2319,7 +2353,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(860) 418-6300",
       "sourceUrl": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "8604186300",
+            "211"
+          ],
+          "to": "(860) 418-6290",
+          "source": "https://portal.ct.gov/opm/igpp/grants/tax-relief-grants/homeowners--elderlydisabled-circuit-breaker-tax-relief-program",
+          "flaggedAt": "2026-10-06T12:19:14.833Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     },
     {
       "id": "ct-connpace-prescription-assistance",
@@ -2501,7 +2551,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-423-5026",
       "sourceUrl": "https://portal.ct.gov/-/media/DMHAS/MedicareD/CONNPACEpdf.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2092,
+          "to": 20942,
+          "source": "https://cslib.contentdm.oclc.org/digital/api/collection/p128501coll2/id/194189/download",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2817,
+          "to": 23942,
+          "source": "https://cslib.contentdm.oclc.org/digital/api/collection/p128501coll2/id/194189/download",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        }
+      ]
     },
     {
       "id": "ct-national-family-caregiver-support-program",
@@ -2692,7 +2762,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-994-9422",
       "sourceUrl": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://portal.ct.gov/ads/knowledge-base/articles/independent-living-services/healthy-living-services/national-family-caregiver-support-program",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-06T12:19:14.833Z"
+        }
+      ]
     },
     {
       "id": "ct-home-delivered-meals",
@@ -2818,6 +2899,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(860) 424-5274",
           "description": "The state agency overseeing the Senior Nutrition Program. Call here for general program questions or if you have trouble reaching your local provider. They do not process individual applications directly.",
           "hours": "Mon-Fri, standard state business hours"
+        },
+        {
+          "label": "Program web page",
+          "phone": "(860) 424-5055",
+          "description": "Number listed on ctfoodshare.org",
+          "hours": null
         }
       ],
       "applicationNotes": [
@@ -2886,7 +2973,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "211",
       "sourceUrl": "https://portal.ct.gov/ads/programs-and-services/senior-nutrition-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-10-06"
+      "draftedAt": "2026-10-06",
+      "reviewQueue": null,
+      "appliedCorrections": [
+        {
+          "field": "phone_added",
+          "from": [
+            "211",
+            "8604245274"
+          ],
+          "to": "(860) 424-5055",
+          "source": "https://www.ctfoodshare.org/community-resources",
+          "flaggedAt": "2026-10-06T12:19:14.833Z",
+          "appliedAt": "2026-10-06",
+          "appliedBy": "page-verifier",
+          "note": "The number appears on the cited official page and the draft's does not; added as a second contact, the draft's number kept as primary. A person decides whether to swap them."
+        }
+      ]
     }
   ],
   "stateOverview": {
