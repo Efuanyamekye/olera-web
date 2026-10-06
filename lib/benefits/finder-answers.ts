@@ -271,6 +271,9 @@ export interface FinderProgram {
   docs: string[];
   /** /benefits/<state>/<id> */
   url: string;
+  /** Needs Medicaid first and the family hasn't said they have it, so the
+   *  call script asks to start the Medicaid application on the same call. */
+  needsMedicaid?: boolean;
 }
 
 export interface FinderLeftOut {

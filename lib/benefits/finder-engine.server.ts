@@ -302,6 +302,14 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
   };
 }
 
+/** A program the person must already have Medicaid for (Michigan's Home
+ *  Help, state-plan personal care). A waiver is itself a way into Medicaid. */
+const MUST_HAVE_MEDICAID = /^\s*(must|need to) (have|be enrolled in|be on|receive|qualify for)( an?)?( active| full| current)?( [a-z]+)? medicaid\b/i;
+function needsMedicaidFirst(p: WaiverProgram): boolean {
+  if (isWaiverPath(p.name)) return false;
+  return (medicaidGatedName(p.name) && !isMedicaidDoor(p.name)) || (p.structuredEligibility?.summary || []).some((x) => MUST_HAVE_MEDICAID.test(x));
+}
+
 function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   const helping = isHelpingSomeone(a);
   // "PACE (Pharmaceutical Assistance ...)" is Pennsylvania's drug program,
@@ -451,6 +459,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       hours: contact?.hours || null,
       docs: (item.documentsNeeded || []).slice(0, 4),
       url: `/benefits/${stateSlug}/${item.id}`,
+      needsMedicaid: a.medicaid !== "alreadyHas" && needsMedicaidFirst(item),
     };
     return { program, category, score, raw: item, fitsButAssess };
   });

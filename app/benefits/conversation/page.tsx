@@ -492,15 +492,19 @@ function Thinking({ text }: { text: string }) {
 }
 
 function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void; onCall: () => void }) {
-  const [open, setOpen] = useState<"say" | "ready" | "more" | null>(null);
+  const [open, setOpen] = useState<"say" | "ready" | "more" | "moreLikely" | null>(null);
   const first: FinderProgram | null = plan.firstStep;
-  const likelyRest = plan.programs.filter((p) => p.tier === "likely");
+  // Four is a list someone can take in; the rest fold away (a Michigan plan
+  // listed thirteen once the catalog filled in, 6 Oct 2026).
+  const likelyAll = plan.programs.filter((p) => p.tier === "likely");
+  const likelyRest = likelyAll.slice(0, 4);
+  const likelyMore = likelyAll.slice(4);
   const checkRest = plan.programs.filter((p) => p.tier === "check");
   if (!first) return <p className="text-gray-600">We couldn&apos;t find a first call for this state yet.</p>;
   const isAgency = first.id === "local-agency";
   const script = isAgency
     ? `Hi, I'm looking for help finding benefits ${callFor}. Could you tell me what we might qualify for?`
-    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?`;
+    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?${first.needsMedicaid ? " It needs Medicaid. If they don't have it yet, can we start that application on this call too?" : ""}`;
 
   return (
     <div className="conv-rise flex flex-col gap-5">
@@ -534,6 +538,14 @@ function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderR
         <section className="flex flex-col">
           <h2 className="text-[15px] font-semibold text-gray-900 m-0 mb-1">Also likely</h2>
           {likelyRest.map((p) => <Row key={p.id} p={p} />)}
+          {likelyMore.length ? (
+            <>
+              <button type="button" onClick={() => setOpen(open === "moreLikely" ? null : "moreLikely")} aria-expanded={open === "moreLikely"} className="text-left bg-transparent border-none p-0 py-3 text-[15px] text-gray-500 cursor-pointer">
+                {likelyMore.length} more that look likely {open === "moreLikely" ? "▴" : "▾"}
+              </button>
+              {open === "moreLikely" ? likelyMore.map((p) => <Row key={p.id} p={p} />) : null}
+            </>
+          ) : null}
         </section>
       ) : null}
 
