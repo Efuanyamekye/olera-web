@@ -101,6 +101,18 @@ export async function updateSession(request: NextRequest) {
             return supabaseResponse;
           }
 
+          // A team member of an agency (migration 272) is not a new family.
+          // Their own account owns nothing, so without this they would land on
+          // the family welcome. RLS returns only the signed-in email's rows.
+          const { data: teamRow } = await supabase
+            .from("business_profile_members")
+            .select("profile_id")
+            .limit(1)
+            .maybeSingle();
+          if (teamRow) {
+            return supabaseResponse;
+          }
+
           // Which kinds of account this is. "caregiver" is in the list for
           // history only — nothing creates that type; students are "student".
           // Leaving students out is what made this branch treat every one of

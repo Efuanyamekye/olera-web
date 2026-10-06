@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { getServiceClient } from "@/lib/admin";
 import { getCampaignFamilies } from "@/lib/ad-boost/families.server";
 import { isTrustedMetricsSource } from "@/lib/ad-boost/metrics-provenance";
@@ -64,25 +65,19 @@ export async function GET(request: NextRequest) {
       updated_at: string;
     } | null = null;
 
-    if (account.active_profile_id) {
+    // Owned agencies plus agencies this email is a team member of (migration 272).
+    const actingIds = await actingProfileIds(getServiceClient(), user, { types: ["organization", "caregiver"] });
+    const pick =
+      account.active_profile_id && actingIds.includes(account.active_profile_id)
+        ? account.active_profile_id
+        : actingIds[0] ?? null;
+    if (pick) {
       const { data: active } = await supabase
         .from("business_profiles")
         .select(profileSelect)
-        .eq("id", account.active_profile_id)
-        .eq("account_id", account.id)
-        .in("type", ["organization", "caregiver"])
+        .eq("id", pick)
         .maybeSingle();
       profile = active;
-    }
-
-    if (!profile) {
-      const { data: profiles } = await supabase
-        .from("business_profiles")
-        .select(profileSelect)
-        .eq("account_id", account.id)
-        .in("type", ["organization", "caregiver"])
-        .limit(1);
-      profile = profiles?.[0] ?? null;
     }
 
     if (!profile?.slug) {

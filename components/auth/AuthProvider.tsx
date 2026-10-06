@@ -305,6 +305,34 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         console.timeEnd(profilesLabel);
 
         const profiles = (profilesResult.data as Profile[]) || [];
+
+        // Agencies this email is a team member of (migration 272): an intake
+        // director who works the families while the owner holds the account.
+        // RLS returns only the signed-in email's rows, and the member policy on
+        // business_profiles lets the agency itself be read.
+        const teamAgencyIds = new Set<string>();
+        try {
+          const { data: memberRows } = await supabase
+            .from("business_profile_members")
+            .select("profile_id");
+          const memberIds = ((memberRows as { profile_id: string }[] | null) ?? [])
+            .map((m) => m.profile_id)
+            .filter((id) => !profiles.some((p) => p.id === id));
+          if (memberIds.length > 0) {
+            const { data: memberProfiles } = await supabase
+              .from("business_profiles")
+              .select("*")
+              .in("id", memberIds);
+            for (const mp of (memberProfiles as Profile[] | null) ?? []) {
+              profiles.push(mp);
+              teamAgencyIds.add(mp.id);
+            }
+          }
+        } catch (e) {
+          // Before migration 272 the table does not exist; owners are unaffected.
+          console.warn("[auth] team membership lookup failed", e);
+        }
+
         const membershipRows = (membershipResult.data as Membership[]) || [];
         const membership = membershipRows[0] ?? null;
 
@@ -312,6 +340,23 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         if (account.active_profile_id) {
           activeProfile =
             profiles.find((p) => p.id === account.active_profile_id) || null;
+        }
+
+        // A team member's own account owns nothing, so nothing has set an
+        // active profile yet. Make their agency active, and save it: the
+        // message routes read active_profile_id on the server. Only for an
+        // agency they joined as a team member, never an owner's own profile.
+        if (!activeProfile && !account.active_profile_id) {
+          const agency = profiles.find((p) => teamAgencyIds.has(p.id));
+          if (agency) {
+            activeProfile = agency;
+            account.active_profile_id = agency.id;
+            const { error: setError } = await supabase
+              .from("accounts")
+              .update({ active_profile_id: agency.id, onboarding_completed: true })
+              .eq("id", account.id);
+            if (setError) console.warn("[auth] could not set team agency active", setError.message);
+          }
         }
 
         console.timeEnd(timerLabel);
