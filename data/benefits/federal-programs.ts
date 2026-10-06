@@ -172,9 +172,11 @@ export const FEDERAL_PROGRAMS: PipelineDraft[] = [
 
 export const FEDERAL_PROGRAM_IDS = new Set(FEDERAL_PROGRAMS.map((p) => p.id));
 
-/** The state's own program covers it already (California's SSI/SSP, New York's SSI supplement). */
+/** The state's own program covers it already (California's SSI/SSP). A
+ *  "State SSI Supplement" doesn't: it is paid on top of SSI, so the family
+ *  still needs SSI itself (11 states list only the supplement). */
 const STATE_HOLDS: Record<string, RegExp> = {
-  "federal-ssi": /\bssi\b|supplemental security income/i,
+  "federal-ssi": /^(?!.*\bsupplement\b).*(\bssi\b|supplemental security income)/i,
   "federal-extra-help": /extra help|low[- ]income subsidy|\blis\b/i,
   "federal-va-pension": /aid (and|&) attendance|va pension|veterans? pension/i,
 };
