@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
-import { directoryHealthSummary, listHealthActions, type HealthActionRow } from "@/lib/providers/directory-health.server";
+import { directoryHealthSummary, type HealthActionRow } from "@/lib/providers/directory-health.server";
 
 /**
  * Cortex speaking for itself in Slack.
@@ -74,7 +74,21 @@ function providerLink(a: HealthActionRow): string {
  * (the weekly state post is where quiet gets said out loud).
  */
 export async function directoryDigestText(db: SupabaseClient, since: Date): Promise<string | null> {
-  const rows = (await listHealthActions(db, { open: false, limit: 300 })).filter((a) => Date.parse(a.created_at) >= since.getTime());
+  // Read the window directly: the queue's 300-row page truncated a day the
+  // website sweep wrote 1,996 rows, and the digest said "300".
+  const { data } = await db.from("provider_health_actions")
+    .select("id, provider_id, kind, source, evidence, applied_at, resolved_at, undone_at, created_at")
+    .gte("created_at", since.toISOString())
+    .order("created_at", { ascending: false })
+    .limit(5_000);
+  const base = (data ?? []) as Array<Omit<HealthActionRow, "provider_name" | "slug">>;
+  const ids = [...new Set(base.map((a) => a.provider_id))].slice(0, 400);
+  const names = new Map<string, { provider_name: string | null; slug: string | null }>();
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data: providers } = await db.from("olera-providers").select("provider_id, provider_name, slug").in("provider_id", ids.slice(i, i + 200));
+    for (const p of providers ?? []) names.set(p.provider_id as string, { provider_name: (p.provider_name as string | null) ?? null, slug: (p.slug as string | null) ?? null });
+  }
+  const rows: HealthActionRow[] = base.map((a) => ({ ...a, provider_name: names.get(a.provider_id)?.provider_name ?? null, slug: names.get(a.provider_id)?.slug ?? null }));
   const applied = rows.filter((a) => a.applied_at && !a.undone_at);
   const flagged = rows.filter((a) => !a.applied_at && !a.resolved_at);
   if (!applied.length && !flagged.length) return null;
@@ -88,7 +102,7 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
     lines.push("*Directory, overnight.* What I did:");
     for (const [kind, list] of group(applied)) {
       const shown = list.slice(0, 5).map(providerLink).join(", ");
-      lines.push(`• ${list.length} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${list.length - 5} more` : ""}`);
+      lines.push(`• ${list.length.toLocaleString("en-US")} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${(list.length - 5).toLocaleString("en-US")} more` : ""}`);
     }
     lines.push(`Undo any of these at <${SITE()}/admin/directory/health|admin › Directory health>.`);
   }
@@ -96,7 +110,7 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
     lines.push(applied.length ? "What I want a person to decide:" : "*Directory.* Waiting on a person:");
     for (const [kind, list] of group(flagged)) {
       const shown = list.slice(0, 5).map(providerLink).join(", ");
-      lines.push(`• ${list.length} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${list.length - 5} more` : ""}`);
+      lines.push(`• ${list.length.toLocaleString("en-US")} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${(list.length - 5).toLocaleString("en-US")} more` : ""}`);
     }
     if (!applied.length) lines.push(`Done or Open on each at <${SITE()}/admin/directory/health|admin › Directory health>.`);
   }
@@ -108,11 +122,11 @@ export async function directoryWeeklyText(db: SupabaseClient): Promise<string> {
   const s = await directoryHealthSummary(db, 7);
   const total = s.checked + s.unchecked;
   const coverage = total ? Math.round((s.checked / total) * 100) : 0;
-  const did = Object.entries(s.byKind).map(([k, v]) => `${v} ${KIND_WORDS[k] ?? k.replace(/_/g, " ")}`).join(", ");
+  const did = Object.entries(s.byKind).map(([k, v]) => `${v.toLocaleString("en-US")} ${KIND_WORDS[k] ?? k.replace(/_/g, " ")}`).join(", ");
   const sinceLast = s.lastActionAt ? Math.floor((Date.now() - Date.parse(s.lastActionAt)) / 86_400_000) : null;
   const quiet = sinceLast === null ? "I have not acted on the directory yet." : sinceLast > 7 ? `My last action was ${sinceLast} days ago; something is stuck.` : "";
   return [
-    `*Directory, this week.* ${did || "Nothing changed."} ${s.openFlags} flag${s.openFlags === 1 ? "" : "s"} waiting on a person.`,
+    `*Directory, this week.* ${did ? `${did}.` : "Nothing changed."} ${s.openFlags.toLocaleString("en-US")} flag${s.openFlags === 1 ? "" : "s"} waiting on a person.`,
     `${coverage}% of the directory checked against Google (${s.checked.toLocaleString()} of ${total.toLocaleString()}); about 10,000 more each month at $0.`,
     quiet,
   ].filter(Boolean).join("\n");
@@ -129,15 +143,15 @@ export async function handoffsWaitingText(db: SupabaseClient): Promise<string | 
     .not("result", "is", null)
     .order("closed_at", { ascending: false })
     .limit(20);
-  const waiting = (data ?? []).filter((h) => /github\.com\/.+\/pull\/\d+/.test(String(h.result)));
+  const waiting = (data ?? []).filter((h) => /github\.com\/.+\/pull\/\d+/.test(String(h.result))).slice(0, 10);
   if (!waiting.length) return null;
-  const open: string[] = [];
-  for (const h of waiting) {
+  // In parallel and capped at ten: twenty serial GitHub calls at a ten-second
+  // timeout each would outlast the cron's two minutes.
+  const states = await Promise.all(waiting.map(async (h) => {
     const url = String(h.result).match(/https:\/\/github\.com\/[^\s)]+\/pull\/\d+/)?.[0];
-    if (!url) continue;
-    const state = await prState(url);
-    if (state === "OPEN") open.push(`• <${url}|${h.title}>${h.status === "partial" ? " (partial)" : ""}`);
-  }
+    return { h, url, state: url ? await prState(url) : "UNKNOWN" as const };
+  }));
+  const open = states.filter((s) => s.url && s.state === "OPEN").map(({ h, url }) => `• <${url}|${h.title}>${h.status === "partial" ? " (partial)" : ""}`);
   if (!open.length) return null;
   return [`*Pull requests waiting for your look* (built from briefs you approved):`, ...open, "Reply here with yes to merge, or what to change."].join("\n");
 }
