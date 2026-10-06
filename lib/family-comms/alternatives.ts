@@ -152,8 +152,13 @@ export async function findAlternativeProviders(
   familyLng?: number | null,
   /** The family, so a provider they already asked is never suggested again. */
   familyProfileId?: string | null,
-  /** False on a dry run: use providers that already have an account row, create none. */
-  createMissing = true,
+  /**
+   * "create": distance match, creating missing account rows (the live run).
+   * "existing": distance match on rows that already exist, creating none (dry run).
+   * "off": city match only, for a run that is short of time (the distance
+   * lookup costs one to three seconds per family).
+   */
+  distance: "create" | "existing" | "off" = "create",
 ): Promise<RecommendedProvider[]> {
   // DISTANCE FIRST (6 Oct 2026). The city match below only draws on providers
   // that already have an account row (about 2,400 of 74,000 in the directory)
@@ -165,12 +170,12 @@ export async function findAlternativeProviders(
   // provider has no coordinates or fewer than three qualify.
   let candidates: CandidateRow[] = [];
   const anchorMiles = new Map<string, number>();
-  try {
+  if (distance !== "off") try {
     const nearby = await findNearbyOptions(db, { anchorProfileId: excludeProfileId, familyProfileId, limit: 3 });
     if (nearby.length >= 3) {
       const ids: string[] = [];
       for (const o of nearby) {
-        const id = createMissing
+        const id = distance === "create"
           ? await ensureProviderProfileId(db, o.providerId)
           : ((await db.from("business_profiles").select("id").eq("source_provider_id", o.providerId).limit(1).maybeSingle()).data?.id as
               | string
@@ -180,7 +185,9 @@ export async function findAlternativeProviders(
         anchorMiles.set(id, o.distanceMi);
       }
       if (ids.length >= 3) {
-        const { data } = await db.from("business_profiles").select(CANDIDATE_COLUMNS).in("id", ids);
+        // is_active: an existing row can be a deactivated listing; the city
+        // match below never offers those, so neither does this.
+        const { data } = await db.from("business_profiles").select(CANDIDATE_COLUMNS).in("id", ids).eq("is_active", true);
         // Keep the lookup's ranking (responsive, rating band, distance).
         candidates = ((data ?? []) as unknown as CandidateRow[]).sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
       }
