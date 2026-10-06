@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
 
-    // Owned profiles plus agencies this email is a team member of (migration 271).
+    // Owned profiles plus agencies this email is a team member of (migration 272).
     const profileIds = await actingProfileIds(admin, user);
 
     // Fetch the connection (include type to handle inquiry vs request flows)

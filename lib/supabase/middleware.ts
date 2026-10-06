@@ -101,7 +101,7 @@ export async function updateSession(request: NextRequest) {
             return supabaseResponse;
           }
 
-          // A team member of an agency (migration 271) is not a new family.
+          // A team member of an agency (migration 272) is not a new family.
           // Their own account owns nothing, so without this they would land on
           // the family welcome. RLS returns only the signed-in email's rows.
           const { data: teamRow } = await supabase

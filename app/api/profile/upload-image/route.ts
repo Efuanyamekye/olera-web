@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
 
     // The lookup above reads account_id but never compared it, so any
     // signed-in user could replace any profile's photo. Owners and team
-    // members only (migration 271).
+    // members only (migration 272).
     if (admin && !(await canActForProfile(admin, user, profile.id))) {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 });
     }

@@ -306,7 +306,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         const profiles = (profilesResult.data as Profile[]) || [];
 
-        // Agencies this email is a team member of (migration 271): an intake
+        // Agencies this email is a team member of (migration 272): an intake
         // director who works the families while the owner holds the account.
         // RLS returns only the signed-in email's rows, and the member policy on
         // business_profiles lets the agency itself be read.
@@ -329,7 +329,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             }
           }
         } catch (e) {
-          // Before migration 271 the table does not exist; owners are unaffected.
+          // Before migration 272 the table does not exist; owners are unaffected.
           console.warn("[auth] team membership lookup failed", e);
         }
 

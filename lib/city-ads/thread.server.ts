@@ -400,7 +400,7 @@ export async function notifyProvider(
     });
   }
   const recipients = [provider.email, ...(provider.alertEmails ?? [])].filter((e): e is string => !!e);
-  // Team members (migration 271) get a link that signs them in as themselves.
+  // Team members (migration 272) get a link that signs them in as themselves.
   const members = provider.via === "inbox" ? new Set(await memberEmails(db, provider.id)) : new Set<string>();
   for (const to of recipients) {
     await sendEmail({

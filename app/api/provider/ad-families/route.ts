@@ -53,7 +53,7 @@ async function caller(): Promise<Caller> {
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, res: NextResponse.json({ error: "Sign in first." }, { status: 401 }) };
   const db = getServiceClient();
-  // Owned agencies and agencies this email is a team member of (migration 271).
+  // Owned agencies and agencies this email is a team member of (migration 272).
   const ids = await actingProfileIds(db, user, { types: ["organization", "caregiver"] });
   if (ids.length === 0) return { ok: true, profileIds: [], names: new Map() };
   const { data: profiles } = await db.from("business_profiles").select("id, display_name").in("id", ids);

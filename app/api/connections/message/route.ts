@@ -87,7 +87,7 @@ export async function POST(request: Request) {
       }
       // The active profile is stored on the account and was once writable to
       // any id from the browser. Act only for a profile this user owns or is a
-      // team member of (migration 271).
+      // team member of (migration 272).
       if (!(await canActForProfile(admin, user, account.active_profile_id))) {
         return NextResponse.json({ error: "Not authorized" }, { status: 403 });
       }

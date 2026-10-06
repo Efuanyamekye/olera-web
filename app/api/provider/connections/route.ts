@@ -59,7 +59,7 @@ export async function GET(_request: NextRequest) {
       | { id: string; type: string; verification_state: string | null }
       | null = null;
 
-    // Owned agencies plus agencies this email is a team member of (migration 271).
+    // Owned agencies plus agencies this email is a team member of (migration 272).
     const actingIds = await actingProfileIds(getServiceClient(), user, { types: ["organization", "caregiver"] });
     const pick =
       account.active_profile_id && actingIds.includes(account.active_profile_id)

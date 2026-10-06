@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       updated_at: string;
     } | null = null;
 
-    // Owned agencies plus agencies this email is a team member of (migration 271).
+    // Owned agencies plus agencies this email is a team member of (migration 272).
     const actingIds = await actingProfileIds(getServiceClient(), user, { types: ["organization", "caregiver"] });
     const pick =
       account.active_profile_id && actingIds.includes(account.active_profile_id)

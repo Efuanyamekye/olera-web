@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
 
 /**
- * Team members of an agency (migration 271).
+ * Team members of an agency (migration 272).
  *
  * GET    /api/admin/providers/[id]/members                 → { owner_email, members }
  * POST   /api/admin/providers/[id]/members  { email }      → adds a member

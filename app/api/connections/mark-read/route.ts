@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's profile IDs (business_profiles.account_id → accounts.id)
-    // Owned profiles plus agencies this email is a team member of (migration 271).
+    // Owned profiles plus agencies this email is a team member of (migration 272).
     const profileIds = await actingProfileIds(db, user);
 
     if (profileIds.length === 0) {
