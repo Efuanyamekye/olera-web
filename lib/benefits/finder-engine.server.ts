@@ -64,7 +64,7 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
   health: ["healthcare"],
 };
 
-const PAYS_FOR_CARE = /aid (and|&) attendance|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
+const PAYS_FOR_CARE = /aid (and|&) attendance|home help|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
