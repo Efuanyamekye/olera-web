@@ -37,6 +37,8 @@ import {
   benefitsCheckInSubject,
   benefitsCheckInDoneEmail,
   benefitsCheckInDoneSubject,
+  benefitsApplyCheckEmail,
+  benefitsApplyCheckSubject,
   type CompareCardItem,
   // family · profile sequences (family-nudges / conversation-stale / lead-family-nudge / matches-nudge)
   completionNudge1Email,
@@ -393,6 +395,21 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
       movingUrl: "https://olera.care/benefits-outcome?tok=sample-moving",
       helpUrl: "https://olera.care/benefits-outcome?tok=sample-help",
       wrongUrl: "https://olera.care/benefits-outcome?tok=sample-wrong",
+    }),
+  },
+  {
+    id: "benefits_apply_check", audience: "family", group: "Family · Benefits cascade",
+    label: "B3 · Apply-along check-in (letter came?)", subject: benefitsApplyCheckSubject("letter"),
+    emailType: "benefits_apply_check", cron: "family-comms-coordinator",
+    timing: "B3 · about a week after the Extra Help form was sent, then about five weeks",
+    situation: "The family told us they sent Social Security's Extra Help form through the apply-along, which also starts the state's Medicare Savings application.",
+    who: "Benefits families with benefits_cascade.applied, no decision reported yet; each stage once.",
+    why: "Applying is where families get lost. One button to the plan, where a tap records approved / waiting / denied / stuck; denied and stuck reach a person.",
+    render: () => benefitsApplyCheckEmail({
+      unsubscribeId: "sample-id",
+      familyName: F.familyName,
+      stage: "letter",
+      planUrl: "https://olera.care/m/sample",
     }),
   },
   {

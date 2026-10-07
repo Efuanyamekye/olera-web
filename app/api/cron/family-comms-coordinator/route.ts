@@ -15,7 +15,7 @@ import { companionActive } from "@/lib/family-comms/benefits-companion.server";
 import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion-settings";
 import { isBenefitsAutomationHeld, isBenefitsOnlyFamily } from "@/lib/family-comms/benefits-automation";
 import { sendSMS } from "@/lib/twilio";
-import { benefitsCheckInSms } from "@/lib/sms/templates";
+import { benefitsCheckInSms, benefitsApplyCheckSms } from "@/lib/sms/templates";
 import { withSmsSource } from "@/lib/sms/click-source";
 import { quietHoursCheck } from "@/lib/sms/quiet-hours";
 import { familyBenefitsFacts, friendlyCareLabel, getProgramsForFamily, pickQuizQuestion, pathTellBackLine } from "@/lib/family-comms/benefits-guidance.server";
@@ -50,6 +50,8 @@ import {
   completionMaintenanceEmail,
   completionNudgeSubject,
   careUnsubscribeUrl,
+  benefitsApplyCheckEmail,
+  benefitsApplyCheckSubject,
 } from "@/lib/email-templates";
 import type { CompareCardItem } from "@/lib/email-templates";
 import { familyLocationText } from "@/lib/email-templates";
@@ -1135,6 +1137,8 @@ export async function GET(request: NextRequest) {
         if (
           benefitsCascade.first_step_sent_at &&
           !benefitsCascade.check_sent_at &&
+          // Applied through the apply-along: rung B3's check-ins follow them.
+          !benefitsCascade.applied &&
           !benefitsCascade.check_sms_queued_for &&
           !benefitsCascade.outcome &&
           !benefitsHeld
@@ -1201,6 +1205,106 @@ export async function GET(request: NextRequest) {
                   .update({ metadata: { ...familyMeta } })
                   .eq("id", fam.familyId);
               },
+            };
+          }
+        }
+
+        // ── Rung B3: apply-along check-ins. The family told us they sent Social
+        //    Security's Extra Help form through Olera (benefits_cascade.applied,
+        //    lib/benefits/apply-along.ts), which also starts the state's Medicare
+        //    Savings application. About a week later: has a letter come? About
+        //    five weeks later: what was decided? Each once, each inside a window
+        //    so a stale stamp can't fire months later, and none once they've told
+        //    us an answer (approved, denied, stuck). Both link to the plan page,
+        //    where a tap records the answer; texted replies are read too. ──
+        const applied = benefitsCascade.applied;
+        if (applied?.at && !benefitsHeld) {
+          const sinceApplied = now - new Date(applied.at).getTime();
+          const settled = applied.decision === "approved" || applied.decision === "denied" || applied.decision === "stuck";
+          const stage: "letter" | "decision" | null = settled
+            ? null
+            : !applied.letter_check_at && !applied.decision_check_at && sinceApplied >= 7 * DAY && sinceApplied <= 21 * DAY
+              ? "letter"
+              : !applied.decision_check_at && sinceApplied >= 35 * DAY && sinceApplied <= 70 * DAY
+                ? "decision"
+                : null;
+          if (stage) {
+            const phone = fp?.phone ?? null;
+            const familyState = fp?.state ?? null;
+            const stampKey = stage === "letter" ? "letter_check_at" : "decision_check_at";
+            const stampApplied = async (at: string) => {
+              const current = readBenefitsCascade(familyMeta);
+              familyMeta.benefits_cascade = { ...current, applied: { ...(current.applied || applied), [stampKey]: at } };
+              await db.from("business_profiles").update({ metadata: { ...familyMeta } }).eq("id", fam.familyId);
+            };
+            const planUrlFor = async (source: string | null) => {
+              const { data: tokenRow } = await db
+                .from("benefits_results_tokens")
+                .select("token")
+                .eq("profile_id", fam.familyId)
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+              if (!tokenRow?.token) return null;
+              const url = `${siteUrl}/m/${tokenRow.token}`;
+              return source ? withSmsSource(url, source) : url;
+            };
+            const sendApplySms = async (): Promise<CascadeSmsDelivery | null> => {
+              if (!smsEligible || !phone || companionActive(familyMeta, companionSettings)) return null;
+              const url = await planUrlFor("benefits_apply_check_sms");
+              if (!url) return null;
+              const body = benefitsApplyCheckSms({ stage, url });
+              const quiet = quietHoursCheck({ state: familyState });
+              if (!quiet.allowed) {
+                const sendAfter = (quiet.sendAfter ?? new Date()).toISOString();
+                const { error: qErr } = await db.from("sms_queue").insert({
+                  to_phone: phone,
+                  body,
+                  email_type: "benefits_apply_check_sms",
+                  recipient_type: "family",
+                  family_profile_id: fam.familyId,
+                  send_after: sendAfter,
+                });
+                if (qErr) {
+                  console.error(`[family-comms-coordinator] apply check SMS enqueue failed:`, qErr);
+                  return null;
+                }
+                // Stamped when queued: the queue flush has no stamp for this
+                // type, so without it the next run would queue it again.
+                await stampApplied(sendAfter);
+                return { at: sendAfter, queued: true };
+              }
+              const r = await sendSMS({
+                to: phone,
+                body,
+                emailType: "benefits_apply_check_sms",
+                recipientType: "family",
+                recipientLogProfileId: fam.familyId,
+              });
+              if (r.success && !r.skipped) {
+                const at = new Date().toISOString();
+                await stampApplied(at);
+                return { at, queued: false };
+              }
+              return null;
+            };
+            return {
+              rung: "benefits_apply_check",
+              emailType: "benefits_apply_check",
+              subject: benefitsApplyCheckSubject(stage),
+              metadata: { stage, program_id: applied.program_id || null },
+              buildHtml: async (eid) => {
+                const url = (await planUrlFor(null)) || `${siteUrl}/portal`;
+                return benefitsApplyCheckEmail({
+                  familyName,
+                  stage,
+                  planUrl: `${siteUrl}${appendTrackingParams(url.replace(siteUrl, ""), eid)}`,
+                  unsubscribeId: fam.familyId,
+                });
+              },
+              afterSend: async () => { await sendApplySms(); },
+              smsOnlySend: sendApplySms,
+              stamp: async (sentAt) => { await stampApplied(sentAt); },
             };
           }
         }

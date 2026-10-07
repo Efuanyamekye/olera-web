@@ -131,6 +131,7 @@ const SINGLES: Record<string, string> = {
   NOTELIGIBLE: "NOTELIGIBLE",
   INELIGIBLE: "NOTELIGIBLE",
   DENIED: "NOTELIGIBLE",
+  APPROVED: "APPROVED",
 };
 
 export interface OutcomeMatch {

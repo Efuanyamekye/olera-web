@@ -350,6 +350,7 @@ const CHECKIN_WORD: Record<string, string> = {
   APPLIED: "application submitted",
   WAITING: "waiting on the agency",
   NOTELIGIBLE: "not eligible",
+  APPROVED: "approved",
 };
 
 /**

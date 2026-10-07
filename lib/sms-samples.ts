@@ -19,6 +19,7 @@ import {
   benefitsResultsSms,
   benefitsFirstStepSms,
   benefitsCheckInSms,
+  benefitsApplyCheckSms,
   medjobsApplicationSms,
   verificationCodeSms,
   smsHelpReply,
@@ -247,6 +248,25 @@ export const SMS_VARIANTS: SmsVariant[] = [
     ],
     render: () =>
       benefitsCheckInSms({ programShortName: "LIHEAP", url: "https://olera.care/m/sample", done: false }),
+  },
+  {
+    id: "sms_benefits_apply_check",
+    cron: "family-comms-coordinator",
+    audience: "family",
+    group: "Family · Benefits cascade",
+    label: "Apply-along check-in — has a letter come?",
+    emailType: "benefits_apply_check_sms",
+    timing: "B3 · about a week after the family sent the Extra Help form",
+    situation: "The family told us they sent Social Security's Extra Help form through the apply-along, which also starts the state's Medicare Savings application.",
+    trigger: "The coordinator's B3 rung, 7–21 days after benefits_cascade.applied.at, once",
+    who: "Consent-gated benefits families who applied through the apply-along and haven't told us a decision.",
+    why: "Social Security usually decides within a few weeks. The reply words (WAITING, APPROVED, DENIED, STUCK) update the living plan, and STUCK reaches a person.",
+    gates: [
+      "Requires stored phone + explicit sms_consent (10DLC posture)",
+      "Skipped once the family reported APPROVED, DENIED or STUCK",
+      "A second check (about five weeks) asks what was decided",
+    ],
+    render: () => benefitsApplyCheckSms({ stage: "letter", url: "https://olera.care/m/sample" }),
   },
   {
     id: "sms_benefits_check_in_done",

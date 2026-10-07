@@ -3,6 +3,7 @@ import type { WaiverProgram } from "@/data/waiver-library";
 import { CARE_NEED_LABEL, type CareNeed } from "@/lib/benefits/match-care-need";
 import type { FirstStepPick, BenefitsCascadeMeta } from "@/lib/family-comms/benefits-cascade.server";
 import JourneyActions, { type NextStepInfo } from "@/components/benefits/JourneyActions";
+import ApplyStatusCard from "@/components/benefits/ApplyStatusCard";
 import FactChips, { type KnownFacts } from "@/components/benefits/FactChips";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { switchLine } from "@/lib/benefits/switch-line";
@@ -55,6 +56,9 @@ export interface BenefitsHomeProps {
   /** Our texting number, set only for families with sms_consent (they already
    *  have a thread with it) — renders the "Stuck? Text TJ" line. */
   textTjNumber?: string | null;
+  /** The apply-along link when the first step is Medicare Savings or Extra
+   *  Help (lib/benefits/apply-along.ts), carrying this plan's token. */
+  applyHref?: string | null;
 }
 
 const APPLICATION_STATUS_COPY: Partial<
@@ -157,6 +161,7 @@ export default function BenefitsHome(props: BenefitsHomeProps) {
     callScript,
     cascade,
     textTjNumber,
+    applyHref,
   } = props;
 
   // Family-language chips, not taxonomy: "Paying for care" is our enum label
@@ -315,7 +320,19 @@ export default function BenefitsHome(props: BenefitsHomeProps) {
             initialChecked={cascade.docs_checked || []}
             nextStep={nextStepInfo}
           />
-        ) : (
+        ) : null}
+        {cascade.applied?.at ? (
+          <ApplyStatusCard token={token} appliedAt={cascade.applied.at} initial={cascade.applied.decision ?? null} />
+        ) : null}
+        {firstStep && applyHref && !cascade.applied ? (
+          <a
+            href={applyHref}
+            className="mt-3 flex min-h-[52px] items-center justify-center rounded-2xl border-[1.5px] border-primary-800 text-[16px] font-semibold text-primary-800 no-underline"
+          >
+            Or apply online, with us beside you
+          </a>
+        ) : null}
+        {firstStep ? null : (
           matches[0] && (
             <section className="mt-5 rounded-2xl bg-[#33261e] p-6 text-[#f7f3ee] shadow-sm">
               <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-[#c9b8a8]">

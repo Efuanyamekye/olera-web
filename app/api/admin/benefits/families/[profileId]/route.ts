@@ -68,6 +68,7 @@ const BENEFITS_REPLY_LABELS: Record<string, string> = {
   APPLIED: "Reported: application submitted",
   WAITING: "Reported: waiting on the agency",
   NOTELIGIBLE: "Reported: program was not eligible",
+  APPROVED: "Reported: approved",
   STUCK: "Asked Olera for help",
 };
 

@@ -62,7 +62,9 @@ export default function ConditionalFooter() {
     pathname.startsWith("/account") ||
     pathname.startsWith("/m/") ||
     pathname.startsWith("/benefits-outcome") ||
-    pathname.startsWith("/benefits/finder")
+    pathname.startsWith("/benefits/finder") ||
+    // The apply-along: mid-task, and it asks for a phone number (2026-10-07).
+    pathname.startsWith("/benefits/apply")
   ) {
     return <SimpleFooter />;
   }

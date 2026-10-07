@@ -84,6 +84,7 @@ export function interpretBenefitsSmsReply(
     case "WAITING":
       return {
         cascade: withStatus(existing, "waiting", keyword, at, {
+          ...(existing.applied ? { applied: { ...existing.applied, decision: "waiting" as const, decision_at: at } } : {}),
           first_step_done_at: firstStepDone,
           first_step_done_program_id: firstStepDoneProgram,
           outcome: "moving",
@@ -93,9 +94,23 @@ export function interpretBenefitsSmsReply(
         needsHuman: false,
         label: "is waiting on the agency",
       };
+    case "APPROVED":
+      return {
+        cascade: withStatus(existing, "approved", keyword, at, {
+          first_step_done_at: firstStepDone,
+          first_step_done_program_id: firstStepDoneProgram,
+          outcome: "moving",
+          outcome_at: at,
+          ...(existing.applied ? { applied: { ...existing.applied, decision: "approved" as const, decision_at: at } } : {}),
+        }),
+        response: "Olera: That's wonderful news. We marked it approved. If anything about it doesn't look right, reply STUCK and a person will help.",
+        needsHuman: false,
+        label: "was approved",
+      };
     case "NOTELIGIBLE":
       return {
         cascade: withStatus(existing, "not_eligible", keyword, at, {
+          ...(existing.applied ? { applied: { ...existing.applied, decision: "denied" as const, decision_at: at } } : {}),
           outcome: "wrong_program",
           outcome_at: at,
           outcome_reason: "not_eligible",
@@ -107,6 +122,7 @@ export function interpretBenefitsSmsReply(
     case "STUCK":
       return {
         cascade: withStatus(existing, "stuck", keyword, at, {
+          ...(existing.applied ? { applied: { ...existing.applied, decision: "stuck" as const, decision_at: at } } : {}),
           outcome: "wants_help",
           outcome_at: at,
         }),

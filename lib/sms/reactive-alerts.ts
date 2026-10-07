@@ -134,6 +134,12 @@ const BENEFITS_QUEUED_TYPES = new Set([
   "benefits_first_step_sms",
   "benefits_check_in_sms",
 ]);
+/**
+ * Benefits texts re-checked at delivery (consent, unsubscribe, a reply waiting
+ * on a person). The apply-along check-in (coordinator B3) is stamped when it is
+ * queued, so it needs these checks but none of the cascade stamping above.
+ */
+const BENEFITS_RECHECKED_TYPES = new Set([...BENEFITS_QUEUED_TYPES, "benefits_apply_check_sms"]);
 
 async function stampBenefitsQueueDelivery(
   db: ReturnType<typeof getServiceClient>,
@@ -333,7 +339,7 @@ export async function flushDueSmsQueue(now?: Date): Promise<FlushResult> {
         continue;
       }
       if (
-        BENEFITS_QUEUED_TYPES.has(row.email_type) &&
+        BENEFITS_RECHECKED_TYPES.has(row.email_type) &&
         !(prof?.metadata as { sms_consent?: unknown } | null)?.sms_consent
       ) {
         await db.from("sms_queue").update({ status: "canceled", last_error: "consent_removed" }).eq("id", row.id);
@@ -345,7 +351,7 @@ export async function flushDueSmsQueue(now?: Date): Promise<FlushResult> {
       // send) must not go out over what the family said since: a reply that
       // pauses automation, an unsubscribe, or a death report. The send paths
       // check these at queue time; this is the same check at delivery.
-      if (BENEFITS_QUEUED_TYPES.has(row.email_type)) {
+      if (BENEFITS_RECHECKED_TYPES.has(row.email_type)) {
         const pm = (prof?.metadata as Record<string, unknown> | null) || {};
         const stop =
           pm.nudges_unsubscribed === true
