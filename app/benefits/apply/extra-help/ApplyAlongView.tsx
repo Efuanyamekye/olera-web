@@ -41,7 +41,11 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
   const [contact, setContact] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [savedTo, setSavedTo] = useState<"sms" | "email" | null>(token ? "sms" : null);
+  const [savedTo, setSavedTo] = useState<"sms" | "email" | null>(null);
+  // True once the submission is on the family's record, which is what the
+  // check-ins read. A returning family saved from this browser isn't (their
+  // record isn't changed from an unverified browser), so no check-in promise.
+  const [recorded, setRecorded] = useState(false);
   const entryTracked = useRef(false);
 
   const track = (event: "benefits_entry_viewed" | "benefits_step_completed", stepName: string) =>
@@ -86,6 +90,7 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
     setBusy(true);
     try {
       await recordApplied(token);
+      setRecorded(true);
       setPhase("done");
     } catch (e) {
       setError(e instanceof Error ? e.message : "We couldn't save that just now.");
@@ -146,7 +151,10 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
       if (!res.ok) throw new Error(body.error || "We couldn't save that just now. Please try again.");
       // A returning family's record isn't changed from an unverified browser;
       // their plan still goes to what's on file.
-      if (purpose === "applied" && body.token) await recordApplied(body.token);
+      if (purpose === "applied" && body.token) {
+        await recordApplied(body.token);
+        setRecorded(true);
+      }
       track("benefits_step_completed", purpose === "applied" ? "applied_saved" : "saved_for_later");
       setSavedTo(isEmail ? "email" : "sms");
       setPhase("done");
@@ -173,9 +181,13 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
             {sheet.next.map((n) => <li key={n}>{n}</li>)}
           </ul>
         )}
-        {savedTo && purpose === "applied" ? (
+        {recorded && purpose === "applied" ? (
           <p className="m-0 text-[15px] text-gray-600">
-            We&apos;ll check in by {savedTo === "email" ? "email" : "text"} in about a week to see what came in the mail. A person on our team reads every reply.
+            We&apos;ll check in{savedTo ? ` by ${savedTo === "email" ? "email" : "text"}` : ""} in about a week to see what came in the mail. A person on our team reads every reply.
+          </p>
+        ) : purpose === "applied" && savedTo ? (
+          <p className="m-0 text-[15px] text-gray-600">
+            Your plan is on its way. When something comes in the mail, open it and tap what happened.
           </p>
         ) : null}
       </div>
