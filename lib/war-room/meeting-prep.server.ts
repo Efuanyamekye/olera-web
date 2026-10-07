@@ -9,6 +9,7 @@ import {
   attendeesOf,
   externalAttendees,
   needsPrep,
+  noteMatchesMeeting,
   prepKey,
   routeMeeting,
   whenText,
@@ -81,11 +82,13 @@ export async function meetingContext(db: SupabaseClient, event: CalendarEvent): 
     lastNotionNoteFor(event.summary ?? "").catch(() => null),
     Promise.all(external.slice(0, 4).map((p) => contextFor(db, p))),
   ]);
+  const note = lastNote && noteMatchesMeeting(event.summary ?? "", lastNote.title, lastNote.editedAt, new Date()) ? lastNote : null;
   const description = (event.description ?? "").replace(/----\( Video Call \)----[\s\S]*?---===---/g, "").replace(/https?:\/\/\S+/g, "").trim();
   return [
-    `ATTENDEES: ${people.map((p) => `${p.name}${p.team ? " (Olera)" : ""}`).join(", ")}`,
+    `ATTENDEES: TJ Falohun (Olera founder), ${people.map((p) => `${p.name}${p.team ? " (Olera team)" : " (outside Olera)"}`).join(", ")}`,
+    external.length ? "" : "NO OUTSIDE ATTENDEES: everyone on this meeting is Olera.",
     description ? `INVITE DESCRIPTION:\n${description.slice(0, 1_500)}` : "",
-    lastNote ? `LAST TIME (Notion note "${lastNote.title}", edited ${lastNote.editedAt.slice(0, 10)}):\n${lastNote.body.slice(0, 3_500)}` : "LAST TIME: no Notion note found for this meeting.",
+    note ? `LAST TIME (Notion note "${note.title}", edited ${note.editedAt.slice(0, 10)}):\n${note.body.slice(0, 3_500)}` : "LAST TIME: no Notion note found for this meeting.",
     outside.length ? `OUTSIDE ATTENDEES:\n${outside.join("\n\n")}` : "",
   ].filter(Boolean).join("\n\n");
 }
@@ -98,8 +101,8 @@ async function writeNote(event: CalendarEvent, context: string): Promise<string 
     max_tokens: 600,
     system: [
       "You prepare Olera's team for a meeting later today. Olera is a senior-care marketplace and benefits guide. The post goes in the team's Slack channel and is read by everyone attending, not only the founder.",
-      "Plain text, Slack mrkdwn single asterisks for bold, no headers, short lines. In this order: one line on what the meeting is for; *Last time:* the decisions and action items from the last note, with owners, marking any that look unfinished; *Who's coming from outside:* one line each on what they are to Olera and the most recent touch (skip if none); *Open promises:* anything Olera or they said would happen that has no sign of happening, or 'None on file'; *To settle:* the two or three questions this meeting should answer.",
-      "Use only the record given. Never invent history, numbers, commitments or owners. If there is no note and no outside record, say so in one line and give the questions only. Family members are first name only. No em dashes. Under 180 words.",
+      "Plain text, Slack mrkdwn single asterisks for bold, no headers, short lines. In this order: one line on what the meeting is for, from the title and invite only; *Last time:* the decisions and action items from the LAST TIME note, with the owners the note names, marking any that look unfinished, or 'No notes from last time.' when there is no note; *From outside:* one line per OUTSIDE attendee on what they are to Olera and the most recent touch (leave this line out entirely when there are no outside attendees; Olera team members and TJ are never outside); *Open promises:* only promises written in the record, or 'None on file'; *To settle:* two or three questions this meeting should answer, phrased for the attendees.",
+      "Use only the record given. Never invent history, numbers, commitments, action items or owners; never attribute a task to someone the record does not name. When the record is thin, say less. Family members are first name only. No em dashes. Under 160 words.",
     ].join("\n"),
     messages: [{ role: "user", content: `MEETING: ${event.summary ?? "(no title)"}\n\n${context.slice(0, MAX_CONTEXT)}` }],
   }, { timeout: 25_000, maxRetries: 0 });
