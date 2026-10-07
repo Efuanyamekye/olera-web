@@ -66,22 +66,22 @@ function obviousRecommendation(message: NormalizedGmailMessage, identity: Matche
   // Voice notifications are often Auto-Submitted, but unlike generic machine
   // mail they are actionable. Let the model read the transcript/body instead
   // of short-circuiting on the subject or downgrading the call as automation.
-  if (!isVoicemail(message) && message.autoSubmitted && message.autoSubmitted.toLowerCase() !== "no") {
-    return fixed({
-      category: "automated", priority: "low", summary: "Automated notification that does not need a reply.",
-      reason: `Auto-Submitted header is ${message.autoSubmitted}.`, confidence: 0.99,
-      suggestedAction: "archive", suggestedOwner: null, suggestedDraft: null, riskFlags: [],
-    });
-  }
   // Anything addressed to the press alias is a journalist query or a digest
   // of them (Source of Sources, Qwoted, Featured), however bulk it looks.
-  // Checked before the list/bulk rule, which would file the digests as
-  // marketing and the noise sweep would archive them. docs/cortex/PRESS.md.
+  // Checked before the auto-submitted and list/bulk rules, either of which
+  // would file a digest as noise for the sweep to archive. docs/cortex/PRESS.md.
   if (isToPressAlias(message.toEmails, message.ccEmails)) {
     return fixed({
       category: "press", priority: "normal", summary: "Sent to the press address: journalist requests for sources.",
       reason: "Addressed to press@ (To or Cc).", confidence: 0.95, suggestedAction: "create_task",
       suggestedOwner: "TJ", suggestedDraft: null, riskFlags: [],
+    });
+  }
+  if (!isVoicemail(message) && message.autoSubmitted && message.autoSubmitted.toLowerCase() !== "no") {
+    return fixed({
+      category: "automated", priority: "low", summary: "Automated notification that does not need a reply.",
+      reason: `Auto-Submitted header is ${message.autoSubmitted}.`, confidence: 0.99,
+      suggestedAction: "archive", suggestedOwner: null, suggestedDraft: null, riskFlags: [],
     });
   }
   if (/list|bulk|junk/.test(precedence) && message.listUnsubscribe.length > 0) {

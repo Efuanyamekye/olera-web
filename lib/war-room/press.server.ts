@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createGmailDraft, gmailAccessToken } from "@/lib/support-email/gmail.server";
 import { decryptGmailToken } from "@/lib/support-email/crypto.server";
 import {
+  isToPressAlias,
   parsePressQueries,
   pitchSubject,
   pitchSummary,
@@ -130,7 +131,7 @@ export async function pressProposals(db: SupabaseClient, now = new Date()): Prom
   const { data: threads, error } = await db.from("support_email_threads")
     .select("id, subject, last_message_at, mailbox_id, gmail_thread_id")
     .eq("category", "press")
-    .in("state", ["needs_reply", "escalated", "handled"])
+    .in("state", ["needs_reply", "escalated"])
     .gte("last_message_at", since)
     .order("last_message_at", { ascending: false })
     .limit(20);
@@ -144,15 +145,25 @@ export async function pressProposals(db: SupabaseClient, now = new Date()): Prom
   const candidates: Array<{ thread: ThreadRow; q: PressQuery; hash: string }> = [];
   for (const thread of rows) {
     const { data: msg } = await db.from("support_email_messages")
-      .select("subject, body_text, snippet")
+      .select("subject, body_text, snippet, to_emails, cc_emails")
       .eq("thread_id", thread.id).eq("direction", "in")
       .order("internal_date", { ascending: false }).limit(1).maybeSingle();
     const body = String(msg?.body_text || msg?.snippet || "");
     if (!body.trim()) continue;
-    const extracted = await extractQueries(String(msg?.subject ?? thread.subject), body, facts).catch(() => ({ queries: [] as PressQuery[], costUsd: 0 }));
+    const extracted = await extractQueries(String(msg?.subject ?? thread.subject), body, facts).catch(() => null);
+    if (!extracted) continue;
     costUsd += extracted.costUsd;
     queriesSeen += extracted.queries.length;
     for (const q of worthPitching(extracted.queries, undefined, 10)) candidates.push({ thread, q, hash: queryHash(thread.id, q) });
+    // A digest addressed to the press alias has been read once it is here;
+    // marking it handled keeps the next pass from paying to read it again
+    // (two passes a day, three-day window: six reads otherwise). A reporter
+    // who wrote to support@ directly stays needs_reply for a person.
+    if (isToPressAlias((msg?.to_emails as string[]) ?? [], (msg?.cc_emails as string[]) ?? [])) {
+      await db.from("support_email_threads")
+        .update({ state: "handled", unread: false, handled_at: now.toISOString(), handled_by: "cortex:press", updated_at: now.toISOString() })
+        .eq("id", thread.id).eq("state", "needs_reply");
+    }
   }
   if (!candidates.length) return { items: [], costUsd, queriesSeen };
 
