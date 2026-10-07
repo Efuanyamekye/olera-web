@@ -348,7 +348,7 @@ export async function POST(req: Request) {
         .from("business_profiles")
         .select("type")
         .eq("account_id", account.id);
-      const types = new Set((ownProfiles || []).map((p) => p.type));
+      const types = new Set((ownProfiles || []).map((p: { type: string }) => p.type));
       const isProviderAccount = ["organization", "caregiver", "student"].some((t) => types.has(t));
       if (isProviderAccount && !types.has("family")) {
         return NextResponse.json(
