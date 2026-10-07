@@ -13,6 +13,7 @@ import { approvalReply, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { withoutStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { handleInboxCommand, parseInboxCommand } from "@/lib/war-room/inbox-operator.server";
+import { applyTuningMessage, initiativeForThread, recordGrade } from "@/lib/war-room/tuning.server";
 
 export const maxDuration = 90;
 
@@ -33,6 +34,9 @@ type SlackEventsEnvelope = {
     bot_id?: string;
     app_id?: string;
     subtype?: string;
+    /** reaction_added / reaction_removed */
+    reaction?: string;
+    item?: { type?: string; channel?: string; ts?: string };
   };
 };
 
@@ -62,6 +66,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const db = getServiceClient();
+
+    // A thumbs up or down on one of Cortex's own posts is a grade on that
+    // initiative (lib/war-room/tuning.ts). Needs the reaction_added event
+    // subscription and reactions:read on the app; until then this never fires.
+    if (payload.event.type === "reaction_added" && payload.event.reaction && payload.event.item?.ts) {
+      if (request.headers.get("x-slack-retry-num")) return NextResponse.json({ ok: true, retry: true });
+      const grade = await recordGrade(db, { itemTs: payload.event.item.ts, reaction: payload.event.reaction, user: payload.event.user ?? null }).catch(() => ({ recorded: false }));
+      return NextResponse.json({ ok: true, grade });
+    }
 
     // A direct message from a human is the founder answering the question the
     // daily brief asked. This is the only path by which his knowledge reaches
@@ -117,6 +130,20 @@ export async function POST(request: NextRequest) {
         const reply = await handleInboxCommand(db, command);
         if (reply) await say(reply);
         return NextResponse.json({ ok: true, cortexChannel: { command: command.verb } });
+      }
+      // The founder replying inside one of Cortex's initiative threads may be
+      // tuning it ("weekly, not daily", "ask me first on renames", a standing
+      // rule). Saved scoped to the initiative, acknowledged with the way back.
+      // Anything that is not an instruction falls through and is answered.
+      if (fromFounder && payload.event.thread_ts && payload.event.ts) {
+        const thread = await initiativeForThread(db, payload.event.thread_ts).catch(() => null);
+        if (thread) {
+          const tuned = await applyTuningMessage(db, { initiative: thread.initiative, lastPost: thread.lastPost, text, slackTs: payload.event.ts, user: payload.event.user ?? null }).catch(() => null);
+          if (tuned) {
+            await say(tuned.reply);
+            return NextResponse.json({ ok: true, cortexChannel: { tuned: thread.initiative, parsed: tuned.parsed } });
+          }
+        }
       }
       const addressed = payload.event.thread_ts ? await findAskByThread(db, payload.event.thread_ts) : null;
       const openExchange = addressed ? null : await loadOpenExchange(db);

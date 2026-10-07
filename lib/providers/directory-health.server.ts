@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   decideHealthActions,
+  DEFAULT_DIRECTORY_POLICY,
+  type DirectoryPolicy,
   type GoogleBusinessStatus,
   type ProviderForHealth,
   type StatusCandidate,
@@ -28,6 +30,28 @@ export type HealthSource = "google_status" | "review_refresh" | "manual_refresh"
 export type AppliedHealth = { providerId: string; actions: string[] };
 
 /**
+ * The directory's fences, as tuned in #cortex (cortex_tuning, initiative
+ * "directory"). Cached for five minutes: a status pass applies up to 5,000
+ * observations and the policy does not change mid-pass.
+ */
+let policyCache: { at: number; policy: DirectoryPolicy } | null = null;
+export async function loadDirectoryPolicy(db: SupabaseClient): Promise<DirectoryPolicy> {
+  if (policyCache && Date.now() - policyCache.at < 5 * 60_000) return policyCache.policy;
+  const policy: DirectoryPolicy = { ...DEFAULT_DIRECTORY_POLICY };
+  const { data } = await db.from("cortex_tuning")
+    .select("value, created_at")
+    .eq("initiative", "directory").eq("kind", "fence")
+    .order("created_at", { ascending: true })
+    .limit(200);
+  for (const row of (data ?? []) as Array<{ value: string }>) {
+    const [setting, fence] = row.value.split("=");
+    if ((setting === "renames" || setting === "archive") && (fence === "alone" || fence === "ask")) policy[setting] = fence;
+  }
+  policyCache = { at: Date.now(), policy };
+  return policy;
+}
+
+/**
  * Record what Google said about a provider: stamp the observation on the row,
  * apply what is reversible, flag the rest. Idempotent for a repeat
  * observation (still open, same name): the stamp updates, no ledger row.
@@ -48,7 +72,7 @@ export async function applyStatusObservation(
   if (!data) return { providerId, actions: [] };
   const provider = data as ProviderForHealth;
   const observation: StatusObservation = { status: asStatus(observed.business_status), googleName: observed.google_name };
-  const decisions = decideHealthActions(provider, observation);
+  const decisions = decideHealthActions(provider, observation, await loadDirectoryPolicy(db));
   const nowIso = now.toISOString();
 
   const update: Record<string, unknown> = {
@@ -77,8 +101,8 @@ export async function applyStatusObservation(
         evidence: { from: provider.provider_name, to: decision.newName },
         undo: decision.undo,
       });
-    } else if (decision.kind === "closed_temporarily") {
-      rows.push({ provider_id: providerId, kind: decision.kind, source, evidence: { status: observed.business_status, google_name: observed.google_name } });
+    } else if (decision.kind === "closed_temporarily" || decision.kind === "closed_flagged") {
+      rows.push({ provider_id: providerId, kind: decision.kind, source, evidence: { status: observed.business_status, google_name: observed.google_name, provider_name: provider.provider_name } });
     } else if (decision.kind === "rename_flagged") {
       rows.push({ provider_id: providerId, kind: decision.kind, source, evidence: { stored: provider.provider_name, google: observed.google_name } });
     }

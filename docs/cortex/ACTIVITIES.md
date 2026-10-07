@@ -41,7 +41,7 @@ Tuning is a conversation, not a config. A reply in an activity's `#cortex` threa
 | Activity | Status | Signal | Fence | Cadence | Cost | What is missing |
 |---|---|---|---|---|---|---|
 | Provider relationships management | partial | support@ threads (provider moments), touch log, Stripe renewals, Slack owed | draft; a person sends | moments in the brief daily; a relationship line weekly | $0 | A relationship ledger: per key provider, last touch, next touch due, open promise. Today it exists as scattered memory files. |
-| Providers getting traction but not engaged | not built | `provider_page_view_stats`, questions, inquiries, vs claimed / last login / last reply | ask (the list), draft (the outreach) | weekly, Monday | $0 (SQL) | The probe and the thread. This is the cheapest high-value row in the register and feeds the two rows below it. |
+| Providers getting traction but not engaged | built 7 Oct | questions (slug), inquiries (profile → canonical id), views (slug), claim + claim event, actor events | report (the Monday list); draft on "draft <name>" | Mondays in the `providers` thread; cadence tunable | $0 (SQL) | The draft reply (slice 3 shares it). On 7 Oct: 111 claimed-and-silent, 920 unclaimed with demand, 40 claimed and active in 28 days. |
 | Hyper-personal provider growth comms ("set up your owner profile") | partial | welcome / preview-nudge / dormant crons send templated email; the governance gate caps at 3/wk | draft for the first 20, then alone under the gate if TJ approves the sample | daily small batches | Haiku per note (under $0.01 each) | Model-written notes that cite the provider's own page and traffic; a sampled review step before autonomy |
 | Managed Ads set up | partial | `ad_campaign_requests`, launch scheduler, the Google Ads SOP (Notion) | ask (spend is the provider's money; campaign creation is a browser task) | per request | ad spend, provider-funded | The Mac runner driving Google Ads through the browser; Cortex scopes the campaign from the SOP and asks |
 | Managed Ads optimization | blocked | needs Google Ads API read access for live campaigns | ask (every change) | weekly read | $0 for reads | Ads API credentials. Until then, optimization is a human reading the dashboard. |
@@ -61,6 +61,7 @@ Tuning is a conversation, not a config. A reply in an activity's `#cortex` threa
 | Activity | Status | Signal | Fence | Cadence | Cost | What is missing |
 |---|---|---|---|---|---|---|
 | SEO auditing | built (performance), not built (technical) | daily organic read (GA4 + Search Console, Sonnet 5), deindexing diagnostic | report | daily | ~$0.05/day (organic read) | A technical audit: sitemap vs index coverage, 404s on linked pages, canonical drift, Firewall blocks on Googlebot/AdsBot. All free from GSC + our own crawl. |
+| Agent readiness (Muse, dots, Grok Bot) | partial | Vercel Observability bot names (chatgpt-user, claude-user, meta-webindexer), Firewall Traffic | report; firewall changes are TJ's | weekly line, Monday | $0 | 7 Oct: AI Bots rule Deny → Log, training crawlers denied by a custom rule. Next: weekly agent-traffic read, label on the inquiry email field, llms.txt aimed at tasks, Personal Agent Protocol when v0.1 ships, a Muse connector once there is a task. |
 | SEO growth activities, identified and executed | partial | the organic read proposes one action a day → handoff brief | ask (the brief), alone to open the PR | daily proposal, build on approval | Sonnet for the read; $0 to build | The Mac runner. Proposals exist; nothing builds them without a person starting a session. |
 | Drafted editorial articles for human review | partial | editorial system, article topics, organic read's page-family findings | draft; a person publishes | one a week | ~$0.30 per draft (Sonnet) | A topic picker fed by Search Console queries with no page, and the draft saved to admin content as unpublished |
 
@@ -87,8 +88,8 @@ Tuning is a conversation, not a config. A reply in an activity's `#cortex` threa
 
 Free and already-measured first. Each row is one slice, one PR, one thread.
 
-1. **The tuning loop.** Corrections captured in `#cortex` threads (today only DMs capture them), reactions as grades, this register in Cortex's written-record allowlist so it knows its own job list.
-2. **Traction but not engaged.** SQL only. Feeds relationships, hyper-personal comms, and the information-gap row.
+1. **The tuning loop.** Built 7 Oct: a founder reply in an initiative thread sets cadence, a fence, or a lesson (`cortex_tuning`); the directory reads its fences on every observation and its cadence every morning; reactions become grades once the Slack app has `reactions:read` and the `reaction_added` event. This register is in Cortex's written-record allowlist.
+2. **Traction but not engaged.** Built 7 Oct: Monday post in the `providers` thread, two lists (claimed and silent, unclaimed with demand), counts beyond the names. Feeds relationships, hyper-personal comms, and the information-gap row.
 3. **Information gaps on claimed, high-traffic pages.** SQL plus the highlights waterfall.
 4. **Meeting preparation.** Calendar and touches already exist; only the morning note is new.
 5. **Founder priorities with dates.** Monday post.

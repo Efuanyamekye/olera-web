@@ -36,6 +36,7 @@ const KIND_LABEL: Record<string, string> = {
   closed_temporarily: "Google says temporarily closed",
   rename_applied: "Renamed to match Google",
   rename_flagged: "Google has a different name",
+  closed_flagged: "Google says permanently closed (archive waits for you)",
   website_dead: "Website unreachable",
   category_flagged: "Category looks wrong",
   duplicate_flagged: "Possible duplicate",
