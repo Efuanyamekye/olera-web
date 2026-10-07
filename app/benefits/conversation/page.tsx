@@ -525,7 +525,7 @@ function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderR
   const isAgency = first.id === "local-agency";
   const script = isAgency
     ? `Hi, I'm looking for help finding benefits ${callFor}. Could you tell me what we might qualify for?`
-    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?${first.needsMedicaid ? " It needs Medicaid. If they don't have it yet, can we start that application on this call too?" : ""}`;
+    : `Hi, I'm calling to ask about ${first.shortName}. I'd like to apply ${callFor}. Could you help me get started?${first.needsMedicaid ? " It needs Medicaid. If they don't have it yet, can we start that application on this call too?" : ""}${/Extra Help with prescriptions/.test(first.reason) ? " I understand it also signs us up for Extra Help with prescriptions." : ""}`;
 
   return (
     <div className="conv-rise flex flex-col gap-5">
