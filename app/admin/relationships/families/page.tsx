@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { callSignals, compareCallPriority } from "@/lib/seeker-touches/call-priority";
 import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
 import { TABS, TAB_BLURB, matches, openWorkCount, type Tab } from "@/lib/seeker-touches/queues";
 import { ORIGIN_LABEL, checkLine, consentWarning, detailLine, handedAge, nextLine, problemLine, stateOf } from "@/lib/seeker-touches/present";
@@ -287,6 +288,8 @@ function AdminSeekerRelationshipsInner() {
     ? (rows ?? []).filter((r) => matchesSearch(r, q))
     : (rows ?? []).filter((r) => matches(r, tab) && (origin === "all" || r.origin === origin));
 
+  if (!searching && tab === "call") shown.sort(compareCallPriority);
+
   // Fifty at a time. The work queues are a dozen rows; All is ~400 and was one
   // long scroll. Paging the render, not the fetch: the load time is the
   // server assembling every family's history, which is the same for 50 rows
@@ -488,7 +491,7 @@ function AdminSeekerRelationshipsInner() {
       )}
 
       {/* The rule behind the queue, in a line. */}
-      {!searching && <p className="mt-3 text-[13px] text-gray-500">{TAB_BLURB[tab]}</p>}
+      {!searching && <p className="mt-3 text-[13px] text-gray-500">{TAB_BLURB[tab]}{tab === "call" && " Urgent needs and unanswered replies stay first, then ASAP requests, with private pay first within the same urgency. Equal priorities keep newest first."}</p>}
 
       {error && <p className="py-6 text-sm text-red-600">{error}</p>}
       {rows === null && !error && <p className="py-10 text-center text-sm text-gray-400">Loading…</p>}
@@ -524,6 +527,7 @@ function AdminSeekerRelationshipsInner() {
       <div className="mt-2">
         {visible.map((r) => {
           const st = stateOf(r);
+          const priority = callSignals(r);
           // In the provider check-in queue the row says who to ask, even when
           // the family also has something more urgent (that has its own tab).
           const checking = tab === "check" && !searching && Boolean(r.handed_to);
@@ -574,6 +578,11 @@ function AdminSeekerRelationshipsInner() {
                   >
                     {r.label}
                   </span>
+                  {tab === "call" && !searching && (priority.asap || priority.privatePay) && (
+                    <span className="mt-1 block text-[12.5px] font-medium text-teal-800">
+                      {[priority.asap && "ASAP", priority.privatePay && "Private pay"].filter(Boolean).join(" · ")}
+                    </span>
+                  )}
                   {meta && <span className="mt-0.5 block truncate text-[13.5px] text-gray-500">{meta}</span>}
                   {saidText ? (
                     <span className="mt-1.5 line-clamp-2 block text-[14px] leading-snug text-gray-700 sm:line-clamp-1">&ldquo;{saidText}&rdquo;</span>

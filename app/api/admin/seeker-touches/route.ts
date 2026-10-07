@@ -179,6 +179,7 @@ async function loadRouting(seekerId: string, leadId: string) {
     closed,
     offers: offers.map((o) => ({
       id: o.id,
+      provider_id: o.provider_id,
       provider_name: nameOf.get(o.provider_id) ?? "a provider",
       offered_at: o.offered_at,
       state: o.accepted_at ? (holding?.id === o.id ? "accepted" : "moved") : o.declined_at ? "declined" : o.expired_at || new Date(o.expires_at) < new Date() ? "expired" : "open",
@@ -186,6 +187,7 @@ async function loadRouting(seekerId: string, leadId: string) {
     has_provider: Boolean(holding) || Boolean(lead.handed_at),
     handed_at: (lead.handed_at as string | null) ?? null,
     campaign_owner: primary?.providerName ?? null,
+    campaign_provider_id: primary?.providerId ?? null,
     can_hand: !closed && !lead.handed_at && !lead.accepted_offer_id && Boolean(primary),
     admin_note: (lead.admin_note as string | null) ?? null,
     has_phone: Boolean(lead.phone),
