@@ -475,6 +475,14 @@
 - **TJ in Meta Ads Manager:** Pascagoula form consent copy + one question (who is the care for, how soon), so families arrive with words.
 - **Watch Friday:** day-2 family check replies for the 5; whether Liz has messaged the other 4. Meta and Nextdoor spend still not synced.
 
+### 2026-09-23 (night) — Cortex: answers wide questions from the record, reads Slack properly, and "visualize" publishes a real artifact (`zen-goodall`, #2084→#2117 all in PROD; #2118 merged to staging)
+
+- **Shipped to prod today:** proposals wait 7 days, and a parked "Accept, later" state (migration 249); approved work gets a nudge in the brief; Sonnet 5 answers with a lookup-tool loop over a precomputed ledger, shipped work, ads engagement, a provider ranking (reply > engage > leads), record search and document reading; web search for questions about the outside world; Slack reader fixes (newest page, threads, form-encoded calls, names from `<@U…>` mentions, attached docx/pdf/txt read via mammoth/unpdf); the brief says what Cortex could not look up; #2109, Cortex never claims an action it did not take.
+- **Visualize (#2110, prod via #2117):** "visualize X" in the Cortex DM → Cortex writes a source brief → fires the Claude Code routine "Cortex visualize" (`trig_01Jxpf8bwgMyvVAxa5GncWsP`, API trigger, no connectors) → the session runs the repo's `.claude/skills/visualize` and publishes an artifact after TJ taps Allow. Env `CORTEX_VISUAL_ROUTINE_URL` and `CORTEX_VISUAL_ROUTINE_TOKEN` are set in Vercel Production as secrets. **First live run worked at 22:31 ICT.**
+- **Open:** #2118 (bold `*visualize*` from Slack failed the anchored match) merged to staging 2026-09-23.
+- **Decisions:** Olera facts come only from the record or lookups, and counts and rankings are computed in code; the model only reports them. Visualize uses one-tap approval per run, not a standing page that each run overwrites. The routine has no connectors, because by default a routine gets all of them, including Mercury and Gmail.
+- **Next:** promote #2118; time the first visualize run end to end; layer 3, a nightly replay of TJ's real questions as regression tests; confirm the live Slack feed (`slack_events`) once channel messages flow.
+
 ### 2026-09-23 (later) — Ad Boost pre-flight for seven: the landing pages were the finding, and Meta-to-provider-page turns out to be 6x cheaper and untested (`channel-name-precision` #2095 merged, prod data fixes, NO campaigns launched)
 
 **#2095 merged and live.** `both` → `google_meta` across `BOOST_CHANNELS`, `normalizeBoostChannel()`, and migration `250`. Ten rows moved, zero `both` remain. `'both'` deliberately left in the CHECK for one release cycle so an older deploy cannot fail an insert.
