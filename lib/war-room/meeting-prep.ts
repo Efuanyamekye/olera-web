@@ -127,6 +127,26 @@ export function prepKey(event: CalendarEvent): string {
   return `meetprep:${event.id ?? event.summary ?? "event"}:${event.start?.dateTime ?? ""}`;
 }
 
+/**
+ * Is this Notion note from this meeting? The words that make the title
+ * distinctive (not "meeting", "check", "in", "sync", "olera", "tj") must
+ * mostly appear in the note's title. On 7 Oct 2026 a search for "Esther <> TJ
+ * Product Development Check In" returned "Olera Product Development Meeting"
+ * from a month earlier, and the prep presented its action items as last time's.
+ */
+const GENERIC = new Set(["meeting", "check", "in", "sync", "olera", "tj", "and", "the", "with", "x", "call", "weekly", "update", "updates", "so", "far"]);
+export function titleWords(title: string): string[] {
+  return title.toLowerCase().replace(/[^a-z0-9 ]+/g, " ").split(/\s+/).filter((w) => w.length > 1 && !GENERIC.has(w));
+}
+export function noteMatchesMeeting(meetingTitle: string, noteTitle: string, noteEditedAt: string, now: Date, maxAgeDays = 45): boolean {
+  const want = titleWords(meetingTitle);
+  if (!want.length) return false;
+  const have = new Set(titleWords(noteTitle));
+  const hit = want.filter((w) => have.has(w)).length;
+  const fresh = Date.parse(noteEditedAt) >= now.getTime() - maxAgeDays * 86_400_000;
+  return fresh && hit / want.length >= 0.75;
+}
+
 /** "Thu 8 Oct, 10:00 Bangkok · 22:00 Chicago": TJ's time and the team's. */
 export function whenText(iso: string): string {
   const d = new Date(iso);

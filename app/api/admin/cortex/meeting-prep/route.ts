@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
-import { findEvent, prepOne, previewMeetings } from "@/lib/war-room/meeting-prep.server";
+import { draftPrep, findEvent, prepOne, previewMeetings } from "@/lib/war-room/meeting-prep.server";
 
 export const maxDuration = 60;
 
 /**
  * GET /api/admin/cortex/meeting-prep              the next 3 days' meetings and which channel each prep goes to
+ * GET /api/admin/cortex/meeting-prep?draft=<id>   write the prep for that meeting and show it, without posting
  * GET /api/admin/cortex/meeting-prep?post=<id>    write and post the prep for that meeting now (test)
  *
  * From a browser address bar, so the founder can see the routing and fire one
@@ -17,6 +18,13 @@ export async function GET(request: NextRequest) {
   const admin = await getAdminUser(user.id);
   if (!admin) return NextResponse.json({ error: "Access denied" }, { status: 403 });
   const db = getServiceClient();
+  const draftId = request.nextUrl.searchParams.get("draft");
+  if (draftId) {
+    const event = await findEvent(db, draftId);
+    if (!event) return NextResponse.json({ error: "No upcoming meeting with that id in the next 7 days" }, { status: 404 });
+    const { channel, text } = await draftPrep(db, event);
+    return NextResponse.json({ draft: { channel, text } });
+  }
   const id = request.nextUrl.searchParams.get("post");
   if (id) {
     const event = await findEvent(db, id);

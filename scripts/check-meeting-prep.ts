@@ -5,7 +5,7 @@
  *   npx tsx scripts/check-meeting-prep.ts
  */
 import assert from "node:assert/strict";
-import { attendeesOf, externalAttendees, isTeam, needsPrep, prepKey, routeMeeting, whenText } from "../lib/war-room/meeting-prep";
+import { attendeesOf, externalAttendees, isTeam, needsPrep, noteMatchesMeeting, prepKey, routeMeeting, whenText } from "../lib/war-room/meeting-prep";
 
 const now = new Date("2026-10-08T02:15:00Z");
 const at = (h: number) => new Date(now.getTime() + h * 3_600_000).toISOString();
@@ -57,5 +57,14 @@ assert.ok(!needsPrep(ev("Call", [esther], at(2), { status: "cancelled" }), now))
 // Keys and times.
 assert.equal(prepKey(ev("x", [esther])), `meetprep:e1:${at(2)}`);
 assert.equal(whenText("2026-10-08T11:45:00Z"), "Thu 8 Oct, 18:45 Bangkok · 06:45 Chicago");
+
+// Last time's note must be this meeting's note, and recent.
+const ref = new Date("2026-10-07T08:00:00Z");
+assert.ok(!noteMatchesMeeting("Esther <> TJ Product Development Check In", "Olera Product Development Meeting", "2026-09-10T11:59:00Z", ref), "a different meeting with overlapping words");
+assert.ok(noteMatchesMeeting("Esther <> TJ Product Development Check In", "Esther <> TJ Product Development Check In", "2026-09-30T12:00:00Z", ref));
+assert.ok(noteMatchesMeeting("Care seeker and provider support (Managed Ads)", "Care seeker and provider support (Managed Ads)", "2026-10-06T08:26:00Z", ref));
+assert.ok(!noteMatchesMeeting("Care seeker and provider support (Managed Ads)", "Care seeker and provider support (Managed Ads)", "2026-07-01T00:00:00Z", ref), "too old");
+assert.ok(noteMatchesMeeting("Olera × Assisting Hands: North Texas partnership", "Olera × Assisting Hands: North Texas partnership", "2026-09-30T15:03:00Z", ref));
+assert.ok(!noteMatchesMeeting("Huddle - Big Picture This Week", "Olera Team Operations & MedJobs Strategy Meeting", "2026-09-14T14:01:00Z", ref));
 
 console.log("meeting prep checks passed");
