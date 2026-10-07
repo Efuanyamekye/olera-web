@@ -2907,7 +2907,7 @@
           }
         ]
       },
-      "intro": "If your parent is 65 or older (or has a physical disability and is at least 18) and their care needs are serious enough that a doctor or assessor would say they require nursing-home-level support, Oregon's APD Waiver may fund the services that let them live at home or in a community setting instead of a facility.\n\nThe waiver does not pay for broad in-home caregiving the way people often expect. What it specifically covers is waiver case management (a coordinator who arranges and monitors your parent's care plan), community transition services (one-time help with moving costs and setup when your parent leaves a facility or provider-operated setting to live more independently), and housing support services (help finding or keeping housing so in-home care can actually be delivered). These are targeted, not comprehensive, services.\n\nTo qualify, your parent must pass two gates: a financial eligibility test under Oregon's Medicaid rules and a functional assessment confirming they meet nursing-facility level of care. Income limits are commonly reported at $2,523/month for a single applicant. Asset limits are commonly reported at $2,000 in countable assets for a single applicant. Because Medicaid rules are complex and these figures can change, verify current limits with Oregon APD before applying.",
+      "intro": "If your parent is 65 or older (or has a physical disability and is at least 18) and their care needs are serious enough that a doctor or assessor would say they require nursing-home-level support, Oregon's APD Waiver may fund the services that let them live at home or in a community setting instead of a facility.\n\nThe waiver does not pay for broad in-home caregiving the way people often expect. What it specifically covers is waiver case management (a coordinator who arranges and monitors your parent's care plan), community transition services (one-time help with moving costs and setup when your parent leaves a facility or provider-operated setting to live more independently), and housing support services (help finding or keeping housing so in-home care can actually be delivered). These are targeted, not comprehensive, services.\n\nTo qualify, your parent must pass two gates: a financial eligibility test under Oregon's Medicaid rules and a functional assessment confirming they meet nursing-facility level of care. Income limits are  $2,982/month for a single applicant. Asset limits are  $2,000 in countable assets for a single applicant. Because Medicaid rules are complex and these figures can change, verify current limits with Oregon APD before applying.",
       "savingsRange": "",
       "savingsSource": "Free service; the waiver funds specific support services rather than paying cash or reimbursing the family directly.",
       "savingsVerified": false,
@@ -2915,19 +2915,19 @@
         "summary": [
           "Age 65+ (or age 18-64 with a physical disability)",
           "Oregon resident",
-          "Income commonly reported below $2,523/month for a single applicant",
-          "Countable assets commonly reported below $2,000 for a single applicant",
+          "Income below $2,982/month for a single applicant",
+          "Countable assets below $2,000 for a single applicant",
           "Must meet nursing-facility level of care through a clinical assessment"
         ],
         "ageRequirement": "65+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2523
+            "monthlyLimit": 2982
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 5046
+            "monthlyLimit": 5964
           }
         ],
         "assetLimits": {
@@ -2955,7 +2955,14 @@
           "Must qualify for Oregon Health Plan (OHP) / Medicaid financial eligibility",
           "Must need to avoid or transition from institutional or provider-operated care and be able to receive services safely in the community"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "official"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2974,7 +2981,7 @@
           {
             "step": 3,
             "title": "Complete the financial eligibility review",
-            "description": "A caseworker will review your parent's income, assets, residency, and citizenship status against Oregon Medicaid rules. You will likely be asked to submit supporting documents. Submit everything at once to avoid delays. If only one spouse is applying, only the applicant's income counts toward the $2,523/month limit."
+            "description": "A caseworker will review your parent's income, assets, residency, and citizenship status against Oregon Medicaid rules. You will likely be asked to submit supporting documents. Submit everything at once to avoid delays. If only one spouse is applying, only the applicant's income counts toward the $2,982/month limit."
           },
           {
             "step": 4,
@@ -3039,7 +3046,7 @@
         }
       ],
       "applicationNotes": [
-        "If your parent is applying but their spouse is not, only your parent's income counts toward the $2,523/month limit. However, asset rules still apply to both spouses' combined assets; the non-applicant spouse may keep up to a community spouse resource allowance (commonly reported at up to $137,400 in countable assets). These figures should be verified with APD because Medicaid spousal rules are legally complex.",
+        "If your parent is applying but their spouse is not, only your parent's income counts toward the $2,982/month limit. However, asset rules still apply to both spouses' combined assets; the non-applicant spouse may keep up to a community spouse resource allowance ( up to $137,400 in countable assets). These figures should be verified with APD because Medicaid spousal rules are legally complex.",
         "The waiver's core services are narrower than most families expect. Case management, community transition, and housing supports are the specific covered services; the waiver does not replace a broader home-care aide benefit. If your parent needs personal care or in-home assistance beyond these services, ask APD whether they also qualify for other Oregon Medicaid-funded in-home programs.",
         "Oregon is also developing a separate 1115 waiver initiative, which may expand or change some APD service pathways over time. When you speak with APD, ask specifically whether your parent should be applying under the 1915(c) Aged and Physically Disabled Waiver or another authority.",
         "A family may qualify on paper but still face a delay before services start because of local assessment scheduling and provider availability. Ask your APD caseworker for an estimated timeline specific to your county, and document the date you applied so you have a record if a dispute arises later."
@@ -3059,7 +3066,7 @@
         {
           "type": "callout",
           "heading": "The two gates your parent must pass",
-          "body": "Gate 1 is financial: income commonly reported below $2,523/month and countable assets commonly reported below $2,000 for a single applicant. These figures are reported by secondary sources and should be confirmed with Oregon APD. Gate 2 is functional: an APD assessor must determine your parent meets nursing-facility level of care, meaning they need substantial daily help with tasks like bathing, dressing, or medication management at a level that would otherwise require a nursing home. Passing one gate does not guarantee passing the other."
+          "body": "Gate 1 is financial: income below $2,982/month and countable assets below $2,000 for a single applicant. These figures are reported by secondary sources and should be confirmed with Oregon APD. Gate 2 is functional: an APD assessor must determine your parent meets nursing-facility level of care, meaning they need substantial daily help with tasks like bathing, dressing, or medication management at a level that would otherwise require a nursing home. Passing one gate does not guarantee passing the other."
         }
       ],
       "faqs": [
@@ -3069,7 +3076,7 @@
         },
         {
           "question": "My parent's spouse is not applying. Does the spouse's income count against the limit?",
-          "answer": "No. When only one spouse applies, Oregon Medicaid counts only the applicant's income toward the $2,523/month limit. However, both spouses' assets are considered together at the start of the review, and the non-applicant spouse may keep a community spouse resource allowance (commonly reported at up to $137,400). Because spousal Medicaid rules are legally complex and these figures can change, verify the current allowance with APD at 800-699-9075 before making any financial decisions."
+          "answer": "No. When only one spouse applies, Oregon Medicaid counts only the applicant's income toward the $2,982/month limit. However, both spouses' assets are considered together at the start of the review, and the non-applicant spouse may keep a community spouse resource allowance ( up to $137,400). Because spousal Medicaid rules are legally complex and these figures can change, verify the current allowance with APD at 800-699-9075 before making any financial decisions."
         },
         {
           "question": "How long is the waitlist, and what do we do in the meantime?",
@@ -3111,15 +3118,6 @@
       "draftedAt": "2026-10-06",
       "reviewQueue": [
         {
-          "field": "income_1",
-          "from": 2523,
-          "to": 2982,
-          "source": "https://www.medicaidplanningassistance.org/oregon-aged-physically-disabled-waiver/amp/",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-06T12:27:37.787Z"
-        },
-        {
           "field": "income_2",
           "from": 5046,
           "to": 2982,
@@ -3137,7 +3135,19 @@
           "why": "aggregator source",
           "flaggedAt": "2026-10-06T12:27:37.787Z"
         }
-      ]
+      ],
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 2523,
+          "to": 2982,
+          "source": "https://ch461rules.odhs.oregon.gov/rules/461-155-0250.pdf",
+          "flaggedAt": "2026-10-07",
+          "appliedAt": "2026-10-07",
+          "appliedBy": "hand (answer-key work, 7 Oct 2026): care waiver special income limit, 300% of the 2026 SSI rate"
+        }
+      ],
+      "lastVerifiedDate": "2026-10-07"
     }
   ],
   "stateOverview": {

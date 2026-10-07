@@ -43,6 +43,10 @@ export interface FinderAnswers {
    *  programs, so the plan reads them when present. */
   dailyHelp?: "none" | "some" | "lots" | null;
   savings?: "under2000" | "under10000" | "over10000" | null;
+  /** The conversation's follow-ups on those ranges ("under:1796"), when it
+   *  asked one (question-engine parseCut). */
+  incomeCut?: string | null;
+  savingsCut?: string | null;
 }
 
 export function emptyFinderAnswers(): FinderAnswers {

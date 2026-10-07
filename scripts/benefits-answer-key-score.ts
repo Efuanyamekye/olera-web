@@ -28,7 +28,7 @@ import { buildFinderResult } from "@/lib/benefits/finder-engine.server";
 import { zipToCounty } from "@/lib/benefits/zip-lookup";
 import { emptyFinderAnswers, type FinderAnswers, type FinderIncome } from "@/lib/benefits/finder-answers";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
-import { rulesOf, nextQuestion, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesOf, hasStateSupplement, nextQuestion, cutAnswer, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 
 for (const p of [resolve(process.cwd(), ".env.local"), resolve(process.env.HOME || "", "Desktop/olera-web/.env.local")]) {
   if (!existsSync(p)) continue;
@@ -91,10 +91,11 @@ function formAnswers(f: Family, county: string | null): FinderAnswers {
  *  finderAnswers() builds it. Facts it never asks stay unknown. */
 function conversationAnswers(f: Family, county: string | null): FinderAnswers {
   const slug = getStateSlug(f.state)!;
-  const rules = getPlanProgramIds(slug)
+  const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
-    .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit")
-    .map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
+    .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
+  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
+  const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0], { stateSupplement }));
   const truth: KnownFacts = {
     age: ageBand(f.age) as KnownFacts["age"],
     income: band(f.monthlyIncome) as KnownFacts["income"],
@@ -110,7 +111,11 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
   const asked = new Set<FactKey>();
   for (let q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS }); q; q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS })) {
     asked.add(q.fact);
-    facts = { ...facts, [q.fact]: truth[q.fact] };
+    // A follow-up asks "$X or less?" of the family's real figure.
+    const value = q.fact === "incomeCut" ? cutAnswer(q.at!, f.monthlyIncome <= q.at!)
+      : q.fact === "savingsCut" ? cutAnswer(q.at!, f.savings <= q.at!)
+      : truth[q.fact];
+    facts = { ...facts, [q.fact]: value };
   }
   return {
     ...emptyFinderAnswers(),
@@ -126,6 +131,8 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
     veteran: facts.veteran ?? null,
     dailyHelp: facts.dailyHelp,
     savings: facts.savings,
+    incomeCut: facts.incomeCut ?? null,
+    savingsCut: facts.savingsCut ?? null,
   };
 }
 
@@ -200,6 +207,7 @@ async function main() {
           if (!tier && alreadyHas.has(id)) { s.found++; s.likely++; continue; }
           if (tier) s.found++; else detail.push(`  NOT SHOWN ${kp.name}  (${kp.keyRule ?? kp.reason})`);
           if (tier === "likely") s.likely++;
+          else if (tier) detail.push(`  CHECK    ${kp.name} only worth checking; research says likely: ${kp.keyRule ?? kp.reason}`);
         } else if (kp.verdict === "unlikely" && id && tier) {
           s.shownWrong++;
           if (tier === "likely") { s.wrong++; detail.push(`  WRONG    ${kp.name} marked likely; research: ${kp.keyRule ?? kp.reason}`); }

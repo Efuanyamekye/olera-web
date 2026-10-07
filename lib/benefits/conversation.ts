@@ -16,7 +16,8 @@ export interface ConversationProgram {
 }
 
 export interface ConversationTurn {
-  question: { fact: FactKey; turnsOn: string[] } | null;
+  /** `at`: the dollar figure a follow-up asks about (incomeCut, savingsCut). */
+  question: { fact: FactKey; turnsOn: string[]; at?: number } | null;
   /** Upper bound on engine questions still to come, this one included. */
   left: number;
   programs: ConversationProgram[];
@@ -46,7 +47,9 @@ function listNames(names: string[], stateName?: string | null): string {
   return `${n.slice(0, -1).join(", ")} and ${n[n.length - 1]}`;
 }
 
-export function questionCopy(fact: FactKey, who: FinderWho | null, turnsOn: string[], stateName: string | null): { title: string; why: string; choices: Choice[] } {
+const dollars = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
+
+export function questionCopy(fact: FactKey, who: FinderWho | null, turnsOn: string[], stateName: string | null, at?: number): { title: string; why: string; choices: Choice[] } {
   const v = voice(who);
   const programs = listNames(turnsOn, stateName);
   // One short line: which programs this answer decides, by short name.
@@ -78,6 +81,18 @@ export function questionCopy(fact: FactKey, who: FinderWho | null, turnsOn: stri
       return { title: `${v.does} have Medicaid now?`, why: `${these}.`, choices: [{ value: "has", label: "Yes" }, { value: "no", label: "No" }] };
     case "veteran":
       return { title: `${v.is} a veteran, or the spouse of one?`, why: `${these}.`, choices: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }] };
+    // A follow-up on a range already answered, asked only when a program's
+    // limit sits inside it. The figure is the program's own limit.
+    case "incomeCut": {
+      const whose = who === "spouse" ? "your monthly income together" : who === "me" || !who ? "your monthly income" : `${v.their} monthly income`;
+      return { title: `Is ${whose} ${dollars(at ?? 0)} or less?`, why: `${these}. Before taxes, from every source.`, choices: [
+        { value: "under", label: `${dollars(at ?? 0)} or less` }, { value: "over", label: "More than that" }] };
+    }
+    case "savingsCut": {
+      const whose = who === "spouse" ? "your savings together" : who === "me" || !who ? "your savings" : `${v.their} savings`;
+      return { title: `Are ${whose} ${dollars(at ?? 0)} or less?`, why: `${these}. A home and car don't count.`, choices: [
+        { value: "under", label: `${dollars(at ?? 0)} or less` }, { value: "over", label: "More than that" }] };
+    }
   }
 }
 

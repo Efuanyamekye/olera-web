@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T12:32:14.728Z
+ * Last updated: 2026-10-07T04:20:05.316Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1576,7 +1576,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your parent is 65 or older, qualifies for Medicaid, and needs the level of daily help that would otherwise require a nursing home, the New Mexico Turquoise Care Community Benefit can pay for the support that keeps them at home instead. That includes home health aides, homemaker and personal care services, adult day health programs, respite for you as a caregiver, emergency response systems, ramps and grab bars, medically tailored home-delivered meals, private duty nursing, and more. It is a service package, not a cash payment, and the services are provided through your parent's Turquoise Care managed care organization.\n\nThis program is not a simple sign-up. Your parent must first qualify for New Mexico Medicaid financially, with income at or below $994 per month for a single person (2026 limit), and must pass a clinical assessment confirming they need nursing-facility-level care. Both gates must be cleared before services begin. Because of those requirements, the application process has multiple steps and can take weeks to complete. Starting early matters, especially if your parent is still in the hospital or is about to be discharged from a rehab facility.\n\nThe single most important thing to know: the entry point is the New Mexico Aging and Disability Resource Center (ADRC), not your parent's doctor and not Medicaid directly. Calling the ADRC at 1-800-432-2080 starts the process. They coordinate the nursing-facility-level-of-care assessment and connect your family to the next steps.",
+      "intro": "If your parent is 65 or older, qualifies for Medicaid, and needs the level of daily help that would otherwise require a nursing home, the New Mexico Turquoise Care Community Benefit can pay for the support that keeps them at home instead. That includes home health aides, homemaker and personal care services, adult day health programs, respite for you as a caregiver, emergency response systems, ramps and grab bars, medically tailored home-delivered meals, private duty nursing, and more. It is a service package, not a cash payment, and the services are provided through your parent's Turquoise Care managed care organization.\n\nThis program is not a simple sign-up. Your parent must first qualify for New Mexico Medicaid financially, with income at or below $2,982 per month for a single person (2026 limit), and must pass a clinical assessment confirming they need nursing-facility-level care. Both gates must be cleared before services begin. Because of those requirements, the application process has multiple steps and can take weeks to complete. Starting early matters, especially if your parent is still in the hospital or is about to be discharged from a rehab facility.\n\nThe single most important thing to know: the entry point is the New Mexico Aging and Disability Resource Center (ADRC), not your parent's doctor and not Medicaid directly. Calling the ADRC at 1-800-432-2080 starts the process. They coordinate the nursing-facility-level-of-care assessment and connect your family to the next steps.",
       "savingsRange": "",
       "savingsSource": "Free service: the Community Benefit covers services at no cost to Medicaid-eligible enrollees. No dollar benefit figure is published by the New Mexico Aging and Long-Term Services Department for the service package as a whole.",
       "savingsVerified": false,
@@ -1584,7 +1584,7 @@ export const drafts: PipelineStateDrafts = {
         "summary": [
           "Age 65 or older",
           "New Mexico resident",
-          "Income at or below $994/month for a single person (2026 Medicaid limit)",
+          "Income at or below $2,982/month for a single person (300% of SSI, 2026)",
           "Qualifies for full New Mexico Medicaid coverage",
           "Needs nursing-facility-level care but chooses to remain at home or in the community"
         ],
@@ -1592,11 +1592,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 994
+            "monthlyLimit": 2982
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1491
+            "monthlyLimit": 5964
           }
         ],
         "assetLimits": {
@@ -1614,7 +1614,14 @@ export const drafts: PipelineStateDrafts = {
           "Native Americans enrolled in Turquoise Care who need long-term care services are required to access services through Turquoise Care",
           "Some enrollment pathways require an available enrollment slot; contact the ADRC to determine which pathway applies"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "official"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1685,7 +1692,7 @@ export const drafts: PipelineStateDrafts = {
       ],
       "applicationNotes": [
         "If your parent is already enrolled in New Mexico Medicaid under the standard state plan, they may be able to access the Community Benefit without waiting for an enrollment slot under a separate waiver pathway. Ask the ADRC specifically about the state-plan route when you call.",
-        "Assets matter here, not just income. Even if your parent's monthly income is below $994, they may be disqualified or delayed if countable assets exceed Medicaid limits. Talk to the ADRC or an elder law attorney before applying if your parent owns property beyond their primary home, has significant savings, or recently transferred assets to a family member.",
+        "Assets matter here, not just income. Even if your parent's monthly income is below $2,982, they may be disqualified or delayed if countable assets exceed Medicaid limits. Talk to the ADRC or an elder law attorney before applying if your parent owns property beyond their primary home, has significant savings, or recently transferred assets to a family member.",
         "The program is administered by Turquoise Care managed care organizations, and the specific services available, the providers in your parent's area, and how quickly services start can vary by which MCO is assigned. Once enrolled, ask the care coordinator which services are currently available in your parent's location.",
         "Native American families: Turquoise Care is the required pathway for Turquoise Care members who need long-term care services. The ADRC can provide guidance on how this requirement applies to your parent's specific situation."
       ],
@@ -1699,7 +1706,7 @@ export const drafts: PipelineStateDrafts = {
         {
           "type": "callout",
           "title": "Two gates, both required",
-          "body": "Many families spend weeks gathering documents only to find out their parent does not meet the nursing-facility-level-of-care threshold, or vice versa. Your parent must clear both gates: Medicaid financial eligibility (income at or below $994/month for a single person in 2026, plus asset review) AND a clinical determination that they need nursing-home-level daily care. Call the ADRC first at 1-800-432-2080. They can tell you whether your parent is likely to clear both before you invest significant time in paperwork."
+          "body": "Many families spend weeks gathering documents only to find out their parent does not meet the nursing-facility-level-of-care threshold, or vice versa. Your parent must clear both gates: Medicaid financial eligibility (income at or below $2,982/month for a single person in 2026, plus asset review) AND a clinical determination that they need nursing-home-level daily care. Call the ADRC first at 1-800-432-2080. They can tell you whether your parent is likely to clear both before you invest significant time in paperwork."
         },
         {
           "type": "prose",
@@ -1715,7 +1722,7 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "My parent's income is $1,100 per month. Does that disqualify them?",
-          "answer": "The 2026 income limit for a single Medicaid applicant is $994 per month. At $1,100, your parent would exceed that limit under standard Medicaid rules. However, New Mexico has a Medicaid spend-down pathway for some applicants, and there may be deductions that bring countable income below the threshold. Call the ADRC at 1-800-432-2080 and describe the full income picture, including whether your parent pays health insurance premiums or has significant medical expenses, before assuming they are ineligible."
+          "answer": "The 2026 income limit for a single Medicaid applicant is $2,982 per month. At $1,100, your parent would exceed that limit under standard Medicaid rules. However, New Mexico has a Medicaid spend-down pathway for some applicants, and there may be deductions that bring countable income below the threshold. Call the ADRC at 1-800-432-2080 and describe the full income picture, including whether your parent pays health insurance premiums or has significant medical expenses, before assuming they are ineligible."
         },
         {
           "question": "How do I know if my parent needs nursing-facility-level care? They are living at home now.",
@@ -1759,17 +1766,19 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.aging.nm.gov/consumer-and-elder-rights/home-and-community-based-waiver-turquoise-care/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-10-06",
-      "reviewQueue": [
+      "reviewQueue": [],
+      "appliedCorrections": [
         {
           "field": "income_1",
           "from": 994,
           "to": 2982,
-          "source": "https://sclonm.org/uploads/documents/WAIVER%20MEDICAID%20HCBS%20FACT%20SHEET%20SCLO%20-%20January%202026.pdf",
-          "severity": "high",
-          "why": "aggregator source",
-          "flaggedAt": "2026-10-06T12:25:55.109Z"
+          "source": "https://www.hca.nm.gov/wp-content/uploads/Eligibility-Pamphlet-1.1.2026.pdf",
+          "flaggedAt": "2026-10-07",
+          "appliedAt": "2026-10-07",
+          "appliedBy": "hand (answer-key work, 7 Oct 2026): care waiver special income limit, 300% of the 2026 SSI rate"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-07"
     },
     {
       "id": "nm-snap-food-benefits",

@@ -42,6 +42,36 @@ function stripStatePrefix(normalizedId: string, stateAbbrev: string): string {
   return normalizedId;
 }
 
+/**
+ * Does a name contain a short name as whole words ("NY SSI Supplement"
+ * contains "SSI"; "Supplemental Nutrition Assistance" does not)? A substring
+ * test on the separator-free ids gave New York's state SSI supplement (short
+ * name "SSI") the SNAP draft's rules, because "assistance" contains "ssi"
+ * (7 Oct 2026).
+ */
+const DRAFT_PINS: Record<string, string> = {
+  // New York calls its LIHEAP "HEAP".
+  "NY|low-income-home-energy-assistance-program-liheap": "heap-energy-assistance",
+  "MS|elderly-and-disabled-waiver": "elderly-disabled-waiver",
+};
+
+/**
+ * Library programs with no draft of their own that had borrowed another
+ * program's type and rules through the substring match. They stay in the
+ * finder, judged on nothing ("worth checking") rather than on SNAP's rules
+ * (New York) or Family Care's (Wisconsin).
+ */
+const BASE_TYPES: Record<string, WaiverProgram["programType"]> = {
+  "NY|state-supplemental-security-income-ssi-supplement": "benefit",
+  "WI|wisconsin-family-caregiver-support-program": "benefit",
+};
+
+function hasWords(name: string, short: string): boolean {
+  const words = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const n = words(short);
+  return !!n && ` ${words(name)} `.includes(` ${n} `);
+}
+
 function findDraftMatch(stateAbbrev: string, programId: string): PipelineDraft | undefined {
   const stateDrafts = pipelineDrafts[stateAbbrev];
   if (!stateDrafts?.programs) return undefined;
@@ -65,6 +95,14 @@ function findDraftMatch(stateAbbrev: string, programId: string): PipelineDraft |
   );
   if (prefixMatch) return prefixMatch;
 
+  // Pairs whose names share no whole short name, matched by hand (7 Oct
+  // 2026, when the substring test that had matched them by chance went).
+  const pinned = DRAFT_PINS[`${stateAbbrev}|${programId}`];
+  if (pinned) {
+    const hit = stateDrafts.programs.find((d) => d.id === pinned);
+    if (hit) return hit;
+  }
+
   // 4. Name-based match (handles completely different IDs like
   //    "star-plus-home-and-community-based-services" vs "tx-star-plus-medicaid-hcbs")
   // Try to find the base program name from waiver-library and match against draft names
@@ -79,8 +117,8 @@ function findDraftMatch(stateAbbrev: string, programId: string): PipelineDraft |
       const draftName = normalizeId(d.name);
       const draftShort = normalizeId(d.shortName || "");
       return draftName === baseName || draftShort === baseShort
-        || (baseShort && draftName.includes(baseShort))
-        || (draftShort && baseName.includes(draftShort));
+        || (baseShort && hasWords(d.name, baseProgram.shortName || ""))
+        || (draftShort && hasWords(baseProgram.name, d.shortName || ""));
     });
   }
 
@@ -312,7 +350,10 @@ export function getEnrichedProgram(
   if (!baseProgram && draft) return draftToProgram(draft);
 
   if (!baseProgram) return undefined;
-  if (!draft) return baseProgram;
+  if (!draft) {
+    const type = BASE_TYPES[`${stateAbbrev}|${programId}`];
+    return type && !baseProgram.programType ? { ...baseProgram, programType: type } : baseProgram;
+  }
 
   // Merge: base wins for existing fields, draft fills gaps
   return {

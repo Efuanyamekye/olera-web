@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
-import { rulesOf, explain, nextQuestion, questionsLeft, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesOf, hasStateSupplement, explain, nextQuestion, questionsLeft, parseCut, CUT_FACTS, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine, type ConversationTurn } from "@/lib/benefits/conversation";
 import { isWaiverPath } from "@/lib/benefits/eligibility.server";
 
@@ -28,7 +28,8 @@ export async function POST(request: NextRequest) {
   const raw = (body.facts && typeof body.facts === "object" ? body.facts : {}) as Record<string, unknown>;
   for (const k of Object.keys(ANSWERS) as FactKey[]) {
     const v = raw[k];
-    if (typeof v === "string" && (ANSWERS[k] as string[]).includes(v)) (facts as unknown as Record<string, unknown>)[k] = v;
+    const ok = (CUT_FACTS as readonly string[]).includes(k) ? parseCut(typeof v === "string" ? v : null) != null : (ANSWERS[k] as string[]).includes(v as string);
+    if (typeof v === "string" && ok) (facts as unknown as Record<string, unknown>)[k] = v;
   }
   const asked = new Set<FactKey>(
     (Array.isArray(body.asked) ? body.asked : []).filter((x): x is FactKey => typeof x === "string" && x in ANSWERS),
@@ -37,14 +38,15 @@ export async function POST(request: NextRequest) {
   const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
-  const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0]));
+  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
+  const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0], { stateSupplement }));
 
   // Families read the short name ("STAR+PLUS", "PACE"), not the official one.
   const short = new Map(drafts.map((d) => [d.name, (d as { shortName?: string | null }).shortName || d.name]));
   const q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS });
   const order = { likely: 0, check: 1, out: 2 } as const;
   const turn: ConversationTurn = {
-    question: q ? { fact: q.fact, turnsOn: q.turnsOn.map((n) => short.get(n) ?? n) } : null,
+    question: q ? { fact: q.fact, turnsOn: q.turnsOn.map((n) => short.get(n) ?? n), ...(q.at != null ? { at: q.at } : {}) } : null,
     left: q ? questionsLeft(rules, facts, asked) : 0,
     programs: rules
       .map((r) => {

@@ -156,6 +156,10 @@ export function resolveSbfRow(
  * Medicaid (Washington's Medicaid Personal Care, Oregon's OPI-M) stay gated.
  */
 export function isWaiverPath(name: string): boolean {
+  // "Long-Term Care Ombudsman" is an advocate for people in care homes, not a
+  // way into Medicaid; it matched "long-term care" below and, read "likely",
+  // was told "the state also checks income and does a care assessment".
+  if (/ombudsman/i.test(name)) return false;
   return /waivers?\b|home (and|&) community|\bhcbs\b|community[- ]based|star\+plus|long[- ]term (care|services)/i.test(name);
 }
 

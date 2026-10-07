@@ -6,6 +6,7 @@ import { zipToCounty, zipToState } from "@/lib/benefits/zip-lookup";
 import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
+import { cutAnswer } from "@/lib/benefits/cut";
 import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, type FinderProgram, type FinderResult, type FinderWho } from "@/lib/benefits/finder-answers";
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
@@ -204,10 +205,12 @@ export default function BenefitsConversationPage() {
 
   const remember = () => setHistory((h) => [...h, { step, facts, asked }]);
 
-  const answerFact = (fact: FactKey, value: string | null) => {
+  const answerFact = (fact: FactKey, value: string | null, at?: number) => {
     completed(value ? fact : `${fact}:not_sure`);
     remember();
-    const f = value ? ({ ...facts, [fact]: value } as KnownFacts) : facts;
+    // A follow-up's answer carries its figure ("under:1796").
+    const stored = value && at != null && (fact === "incomeCut" || fact === "savingsCut") ? cutAnswer(at, value === "under") : value;
+    const f = stored ? ({ ...facts, [fact]: stored } as KnownFacts) : facts;
     const a = [...asked, fact];
     setFacts(f);
     setAsked(a);
@@ -244,6 +247,8 @@ export default function BenefitsConversationPage() {
     veteran: facts.veteran ?? (asked.includes("veteran") ? "unsure" : null),
     dailyHelp: facts.dailyHelp,
     savings: facts.savings,
+    incomeCut: facts.incomeCut ?? null,
+    savingsCut: facts.savingsCut ?? null,
   });
 
   /** The first call comes from the finder's engine, which reads the same answers. */
@@ -400,7 +405,7 @@ export default function BenefitsConversationPage() {
             </div>
           </div>
         ) : turn?.question && !loading ? (() => {
-          const c = questionCopy(turn.question.fact, who, turn.question.turnsOn, stateName);
+          const c = questionCopy(turn.question.fact, who, turn.question.turnsOn, stateName, turn.question.at);
           return (
             <Screen
               key={turn.question.fact}
@@ -414,7 +419,7 @@ export default function BenefitsConversationPage() {
               }
               pillList={pillOpen && likely.length ? likely.map((p) => p.name) : null}
             >
-              {c.choices.map((o) => <Choice key={o.value} label={o.label} onClick={() => answerFact(turn.question!.fact, o.value)} />)}
+              {c.choices.map((o) => <Choice key={o.value} label={o.label} onClick={() => answerFact(turn.question!.fact, o.value, turn.question!.at)} />)}
               <Choice label="I'm not sure" ghost onClick={() => answerFact(turn.question!.fact, null)} />
             </Screen>
           );
