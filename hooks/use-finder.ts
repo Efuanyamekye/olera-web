@@ -11,7 +11,7 @@ import {
 } from "@/lib/benefits/finder-answers";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
-import { sendToConversation, SPLIT_PARAM, SPLIT_VALUE } from "@/lib/benefits/finder-split";
+import { finderVisit } from "@/lib/benefits/finder-split";
 
 /**
  * State for the redesigned finder (/benefits/finder).
@@ -84,6 +84,9 @@ export function useFinder() {
   const [restored, setRestored] = useState(false);
   const [cohort, setCohort] = useState<string | null>(null);
   const stepShownAt = useRef<number>(Date.now());
+  // The split arm this browser was randomized into (lib/benefits/finder-split.ts).
+  // Usually "form"; "conversation" when the conversation handed its plan here.
+  const splitArm = useRef<"form" | "conversation" | null>(null);
   // A second tap during the short pause before advancing would skip a step
   // (or submit twice on the last one).
   const advancing = useRef(false);
@@ -103,12 +106,12 @@ export function useFinder() {
 
     // Half of new families get the conversation instead (lib/benefits/finder-split.ts).
     // Nothing has rendered or been logged yet, so the form never flashes.
-    if (sendToConversation(params, !!s && !who)) {
-      const next = new URLSearchParams({ [SPLIT_PARAM]: SPLIT_VALUE });
-      if (who) next.set("who", who);
-      window.location.replace(`/benefits/conversation?${next.toString()}`);
+    const visit = finderVisit(params, !!s && !who);
+    if (visit.show === "conversation") {
+      window.location.replace(`/benefits/conversation${who ? `?who=${who}` : ""}`);
       return;
     }
+    splitArm.current = visit.arm;
 
     if (who) {
       // A fresh start from the hub: they just answered question one.
@@ -156,6 +159,7 @@ export function useFinder() {
         stepNumber,
         timeOnStepMs: event === "benefits_step_completed" ? Date.now() - stepShownAt.current : undefined,
         entrySource: ENTRY_SOURCE,
+        splitArm: splitArm.current,
       });
     },
     [answers.stateCode],

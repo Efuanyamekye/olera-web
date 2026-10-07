@@ -433,23 +433,23 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
     };
 
     // The finder vs conversation split (lib/benefits/finder-split.ts): families
-    // who opened /benefits/finder this week, by the arm they got. Direct
-    // visits to the conversation (tests, shared links) log another entry
-    // source and stay out.
+    // randomized this week, by the arm they got. Browsers never randomized
+    // (study links, crawlers, drafts from before the split) and pinned test
+    // browsers carry no split_arm and stay out.
     const split = async () => {
-      type Row = { event_type: string; metadata: { session_id?: string; variant?: string; step_name?: string } | null };
+      type Row = { event_type: string; metadata: { session_id?: string; split_arm?: string; step_name?: string } | null };
       const { rows } = await page<Row>((from, to) => db
         .from("provider_activity")
         .select("id, event_type, metadata")
         .eq("provider_id", "benefits-finder")
-        .eq("metadata->>entry_source", "/benefits/finder")
+        .in("metadata->>split_arm", ["form", "conversation"])
         .gte("created_at", weekAgo)
         .order("id")
         .range(from, to));
       const arms: Record<string, { started: Set<string>; plan: Set<string>; sent: Set<string> }> = {};
       for (const row of rows) {
         const m = row.metadata ?? {};
-        const variant = m.variant === "conversation_v1" ? "conversation" : m.variant === "finder_v2" ? "form" : null;
+        const variant = m.split_arm === "conversation" || m.split_arm === "form" ? m.split_arm : null;
         if (!variant || !m.session_id) continue;
         const arm = (arms[variant] ??= { started: new Set(), plan: new Set(), sent: new Set() });
         if (row.event_type === "benefits_entry_viewed") arm.started.add(m.session_id);
@@ -483,7 +483,7 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
 
     return {
       headline: `${n(now.families)} families finished the Benefits Finder in the last 7 days, ${n(prior.families)} the week before. ${n(firstStep)} first-step letters and ${n(checkIn)} check-ins went out.${splitLine}`,
-      detail: `Finder vs conversation this week: form ${n(form.started)} started, ${n(form.plan)} reached a plan, ${n(form.sent)} asked for it by text or email; conversation ${n(conversation.started)} started, ${n(conversation.plan)} reached a plan, ${n(conversation.sent)} asked for it. Half of new families get the conversation; returning families and study links stay on the form. ${n(now.runs)} finder runs this week (${n(prior.runs)} prior); a family can finish it more than once. Letters the week before: ${n(firstStepPrior)} first-step, ${n(checkInPrior)} check-ins. By text: ${n(firstStepSms)} first-step and ${n(checkInSms)} check-in messages this week, and ${n(companion)} text-companion answers (${n(companionPrior)} prior). A finish is a results page the family could open; it says nothing about whether they applied for anything.`,
+      detail: `Finder vs conversation this week: form ${n(form.started)} started, ${n(form.plan)} reached a plan, ${n(form.sent)} asked for it by text or email; conversation ${n(conversation.started)} started, ${n(conversation.plan)} reached a plan, ${n(conversation.sent)} asked for it. Half of new families get the conversation and keep it; only randomized browsers count, so study links, crawlers and drafts from before the split stay out. ${n(now.runs)} finder runs this week (${n(prior.runs)} prior); a family can finish it more than once. Letters the week before: ${n(firstStepPrior)} first-step, ${n(checkInPrior)} check-ins. By text: ${n(firstStepSms)} first-step and ${n(checkInSms)} check-in messages this week, and ${n(companion)} text-companion answers (${n(companionPrior)} prior). A finish is a results page the family could open; it says nothing about whether they applied for anything.`,
       rows: [
         { measure: "Families finished", this_week: now.families, prior_week: prior.families },
         { measure: "Finder runs", this_week: now.runs, prior_week: prior.runs },

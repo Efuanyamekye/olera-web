@@ -1,68 +1,86 @@
 /**
  * The finder vs conversation split (7 Oct 2026).
  *
- * Half of the families who open /benefits/finder are sent to the
- * conversation (/benefits/conversation) instead. Both log the same funnel
- * events under different variants (finder_v2 / conversation_v1), so one
- * query compares them: the Phase 3 test is "caregivers complete the
- * conversation at least as often as the form".
+ * Half of the new families who open /benefits/finder are sent to the
+ * conversation (/benefits/conversation) instead. The arm is drawn once and
+ * kept in this browser, so a family who comes back sees the same thing, and
+ * every event from a randomized browser carries it as metadata.split_arm.
+ * The daily brief compares the two arms on those events only: the Phase 3
+ * test is "caregivers complete the conversation at least as often as the
+ * form".
  *
- * The arm is kept in this browser, so a family who comes back sees the same
- * thing. Some visits always stay on the form:
- *  - a family with a saved form draft or plan (this includes the
- *    conversation's own "Text me this", which hands its plan to the form);
+ * Some visits always see the form:
+ *  - a browser with a saved form draft or plan (this includes the
+ *    conversation's own "Text me this", which hands its plan to the form;
+ *    a randomized family keeps its tag there);
  *  - a study link (?cohort=), because the conversation doesn't carry the tag;
  *  - crawlers, so search engines keep seeing the indexed form.
+ * A browser that was never randomized (a saved draft from before the split,
+ * a study link, a crawler) gets no arm and stays out of the comparison.
  *
- * ?arm=form or ?arm=conversation pins the arm, for testing.
+ * ?arm=form or ?arm=conversation pins the page for testing; pinned browsers
+ * stay out of the comparison too.
  */
 
 export type FinderArm = "form" | "conversation";
 
 const ARM_KEY = "olera-benefits-arm";
+const PINNED = "pinned-";
 /** Share of new families sent to the conversation. 0 turns the split off. */
 export const CONVERSATION_SHARE = 0.5;
 const BOT_RE = /bot|crawl|spider|slurp|google|bing|lighthouse|headless|preview/i;
 
-function stored(): FinderArm | null {
+/** Accepted values of metadata.split_arm on finder and conversation events. */
+export function isSplitArm(value: unknown): value is FinderArm {
+  return value === "form" || value === "conversation";
+}
+
+function read(): string | null {
   try {
-    const v = localStorage.getItem(ARM_KEY);
-    return v === "form" || v === "conversation" ? v : null;
+    return localStorage.getItem(ARM_KEY);
   } catch {
     return null;
   }
 }
 
-function store(arm: FinderArm) {
+function write(value: string) {
   try {
-    localStorage.setItem(ARM_KEY, arm);
+    localStorage.setItem(ARM_KEY, value);
   } catch {
     // Private window: the family gets an arm for this visit only.
   }
 }
 
-/**
- * Whether this visit to the finder should go to the conversation.
- * `hasSavedForm` is true when the form found a draft or plan to restore.
- */
-export function sendToConversation(params: URLSearchParams, hasSavedForm: boolean): boolean {
-  const pinned = params.get("arm");
-  if (pinned === "form" || pinned === "conversation") {
-    store(pinned);
-    return pinned === "conversation";
-  }
-  // Off means off, including browsers already given the conversation.
-  if (CONVERSATION_SHARE <= 0 || hasSavedForm || params.get("cohort")) return false;
-  if (typeof navigator !== "undefined" && BOT_RE.test(navigator.userAgent)) return false;
-
-  let arm = stored();
-  if (!arm) {
-    arm = Math.random() < CONVERSATION_SHARE ? "conversation" : "form";
-    store(arm);
-  }
-  return arm === "conversation";
+/** The arm this browser was randomized into; null if never drawn or pinned. */
+export function splitArm(): FinderArm | null {
+  if (CONVERSATION_SHARE <= 0) return null;
+  const v = read();
+  return isSplitArm(v) ? v : null;
 }
 
-/** Marks a conversation visit that came through the split. */
-export const SPLIT_PARAM = "from";
-export const SPLIT_VALUE = "finder";
+/**
+ * What a visit to /benefits/finder shows, and the arm its events carry
+ * (null: not in the comparison). `hasSavedForm` is true when the form found
+ * a draft or plan to restore.
+ */
+export function finderVisit(params: URLSearchParams, hasSavedForm: boolean): { show: FinderArm; arm: FinderArm | null } {
+  const pin = params.get("arm");
+  if (isSplitArm(pin)) {
+    write(PINNED + pin);
+    return { show: hasSavedForm ? "form" : pin, arm: null };
+  }
+  const v = read();
+  if (v?.startsWith(PINNED)) {
+    return { show: !hasSavedForm && v === `${PINNED}conversation` ? "conversation" : "form", arm: null };
+  }
+  // Off means off, including browsers already given the conversation.
+  if (CONVERSATION_SHARE <= 0 || params.get("cohort")) return { show: "form", arm: null };
+
+  let arm = splitArm();
+  if (!arm) {
+    if (hasSavedForm || (typeof navigator !== "undefined" && BOT_RE.test(navigator.userAgent))) return { show: "form", arm: null };
+    arm = Math.random() < CONVERSATION_SHARE ? "conversation" : "form";
+    write(arm);
+  }
+  return { show: hasSavedForm ? "form" : arm, arm };
+}
