@@ -11,10 +11,13 @@ import { ACTOR_EVENT_TYPES, buildTractionLists, TRACTION_WINDOW_DAYS, tractionTe
  * (checked against production on 7 Oct 2026: 9,699 of 9,843 view rows join
  * by slug and 8 by id; actor events join by slug 20 to 180 of each kind).
  *
- * "Claimed" means a business_profiles row with claim_state = 'claimed' AND a
- * claim_completed event: profiles claimed in bulk from inside Olera carry
- * no claim event and are listed as unclaimed, which is what they are to the
- * provider.
+ * "Claimed" means a business_profiles row with claim_state = 'claimed'.
+ * The first version also required a claim_completed event, on the guess that
+ * claims without one were bulk claims made inside Olera. Checked 7 Oct 2026:
+ * 3 of 949 claimed profiles have an Olera-owned account, and the claims
+ * without an event are real owners from before the event existed (Elliott
+ * Place, Bowie Commons, Hoop Cares), who were being listed as "nobody owns
+ * the page".
  */
 
 const CHUNK = 200;
@@ -44,12 +47,12 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
 
   // Intent first: questions by slug, inquiries by profile → canonical id.
   const questionRows = await pageAll<{ provider_id: string }>((from, to) =>
-    db.from("provider_questions").select("provider_id").gte("created_at", sinceIso).range(from, to));
+    db.from("provider_questions").select("id, provider_id").gte("created_at", sinceIso).order("id").range(from, to));
   const questionsBySlug = new Map<string, number>();
   for (const q of questionRows) questionsBySlug.set(q.provider_id, (questionsBySlug.get(q.provider_id) ?? 0) + 1);
 
   const inquiryRows = await pageAll<{ to_profile_id: string }>((from, to) =>
-    db.from("connections").select("to_profile_id").eq("type", "inquiry").gte("created_at", sinceIso).range(from, to));
+    db.from("connections").select("id, to_profile_id").eq("type", "inquiry").gte("created_at", sinceIso).order("id").range(from, to));
   const inquiriesByProfile = new Map<string, number>();
   for (const c of inquiryRows) inquiriesByProfile.set(c.to_profile_id, (inquiriesByProfile.get(c.to_profile_id) ?? 0) + 1);
   const inquiriesById = new Map<string, number>();
@@ -79,7 +82,7 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
   const viewsBySlug = new Map<string, number>();
   for (const part of chunks(slugs)) {
     const rows = await pageAll<{ provider_id: string; unique_view_count: number | null }>((from, to) =>
-      db.from("provider_page_view_stats").select("provider_id, unique_view_count").gte("date", sinceDate).in("provider_id", part).range(from, to));
+      db.from("provider_page_view_stats").select("provider_id, unique_view_count").gte("date", sinceDate).in("provider_id", part).order("provider_id").order("date").range(from, to));
     for (const r of rows) viewsBySlug.set(r.provider_id, (viewsBySlug.get(r.provider_id) ?? 0) + (r.unique_view_count ?? 0));
   }
 
@@ -98,12 +101,10 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
 
   // The provider acting, any time: newest event per key, keys are slug or id.
   const lastActorByKey = new Map<string, string>();
-  const claimEventKeys = new Set<string>();
   for (const part of chunks([...slugs, ...ids])) {
     const rows = await pageAll<{ provider_id: string; event_type: string; created_at: string }>((from, to) =>
       db.from("provider_activity").select("provider_id, event_type, created_at").in("provider_id", part).in("event_type", [...ACTOR_EVENT_TYPES]).order("created_at", { ascending: false }).range(from, to), 1000, 10_000);
     for (const r of rows) {
-      if (r.event_type === "claim_completed") claimEventKeys.add(r.provider_id);
       const prev = lastActorByKey.get(r.provider_id);
       if (!prev || prev < r.created_at) lastActorByKey.set(r.provider_id, r.created_at);
     }
@@ -122,7 +123,7 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
       views: viewsBySlug.get(slug) ?? 0,
       questions: questionsBySlug.get(slug) ?? 0,
       inquiries: inquiriesById.get(p.provider_id) ?? 0,
-      claimed: claimedIds.has(p.provider_id) && (claimEventKeys.has(slug) || claimEventKeys.has(p.provider_id)),
+      claimed: claimedIds.has(p.provider_id),
       lastActorAt: last,
       hasEmail: Boolean(p.email && p.email.trim()) || profileEmailIds.has(p.provider_id),
     };
