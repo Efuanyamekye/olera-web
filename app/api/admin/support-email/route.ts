@@ -6,7 +6,7 @@ import { diagnoseSupportGmail } from "@/lib/support-email/diagnostics.server";
 export const maxDuration = 300;
 
 const CATEGORIES = new Set([
-  "care_seeker", "provider", "partner", "marketing", "automated",
+  "care_seeker", "provider", "partner", "press", "marketing", "automated",
   "legal", "security", "billing", "voicemail", "internal", "other",
 ]);
 const DATE_WINDOWS: Record<string, number> = {

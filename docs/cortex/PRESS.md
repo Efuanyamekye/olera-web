@@ -54,10 +54,17 @@ Not to be quoted: any dollar figure of benefits "identified" for families (the e
 - December 2025: a press release and outreach templates drafted in `#provider-outreach`.
 - May 2025 marketing kickoff: "about 20 PR contacts made". Those names are not in the repository.
 
-## What is missing, in order
+## What is built, and what is missing
 
-1. **An inbox.** Which address the platforms write to. Recommendation: press@olera.care forwarding to support@, so the support inbox sorts it and the reporter sees a press address. TJ creates the alias.
-2. **The `press` category in the inbox pass** (`lib/war-room/inbox-operator.server.ts`): tag, fit score against the angles above, a pitch draft, send on approval. Same path support replies already use.
-3. **A ledger**, `cortex_press`: query, outlet, reporter, deadline, draft, sent at, outcome.
-4. **The media list**: the trade names above plus the twenty contacts from May 2025 once someone finds them.
-5. **The monthly data story**: Cortex proposes one in the `press` thread; TJ picks; Cortex writes the first draft and the numbers come from queries, not memory.
+Built 7 Oct 2026 (the press branch):
+
+- **The inbox.** press@olera.care is an alias on support@olera.care. Anything addressed to it is filed `press` by rule before the bulk-mail rule can call it marketing; a reporter writing to support@ directly is filed `press` by the classifier.
+- **The pass.** Each inbox pass reads press threads from the last three days, extracts the individual queries with one Haiku call per digest, keeps the ones at fit 0.6 or above with a reply address, drafts a pitch for the best three with Sonnet from the facts above, and proposes them by number. Approval saves a Gmail draft addressed to the reporter, on no thread; TJ sends it from Gmail. "skip" is remembered.
+- **The ledger.** `cortex_press` (migration 275): one row per query worth a pitch, keyed by a hash of thread, reply address and query, with the draft, the Gmail draft id, and a status (proposed, drafted, sent, skipped, placed, declined).
+
+Missing, in order:
+
+1. **Subscriptions.** press@olera.care on Source of Sources, Qwoted and Featured, once migration 275 is applied and this is deployed (the category must exist before the first digest lands).
+2. **Outcomes.** Marking a pitch sent or placed is by hand in the ledger for now; the Monday post should read it.
+3. **The media list**: the trade names above plus the twenty contacts from May 2025 once someone finds them.
+4. **The monthly data story**: Cortex proposes one in the `press` thread; TJ picks; Cortex writes the first draft and the numbers come from queries, not memory.

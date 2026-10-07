@@ -8,6 +8,7 @@ import { checkDraft, renderCheck } from "@/lib/war-room/draft-check.server";
 import { HUMAN_VOICE_RULES } from "@/lib/family-answers/human-voice";
 import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
 import { saveHandoff } from "@/lib/war-room/handoff.server";
+import { pressProposals, savePressDraft, skipPressPitch } from "@/lib/war-room/press.server";
 import { buildOrganicRead, rememberOrganicRead, type OrganicRead } from "@/lib/war-room/organic-read.server";
 import { findSlackOwed, postSlackReplyAsTj, type SlackOwed } from "@/lib/war-room/slack-owed.server";
 
@@ -512,12 +513,14 @@ export async function buildInboxProposals(db: SupabaseClient, now = new Date()):
     notes.push(`${what} failed: ${error instanceof Error ? error.message : String(error)}`);
     return null;
   };
-  const [sms, email, voicemail, slack, organic] = await Promise.all([
+  const [sms, email, voicemail, slack, organic, press] = await Promise.all([
     smsProposals(db), emailProposals(db), voicemailProposals(db),
     // Each has its own clock: the pass has 300s, the organic read alone takes
     // about 125s (2 Oct dry run), and the inbox must go out regardless.
     withDeadline(findSlackOwed(db, now), 120_000, "Slack scan").catch(failed("Slack scan")),
     withDeadline(buildOrganicRead(db, now), 210_000, "Organic read").catch(failed("Organic read")),
+    // Journalist queries from press@ (docs/cortex/PRESS.md): a few pitches, drafts only.
+    withDeadline(pressProposals(db, now), 120_000, "Press read").catch(failed("Press read")),
   ]);
   const proposal = organic ? organicProposal(organic) : null;
   // Order: clear first, then ready to send, then the one question.
@@ -528,6 +531,7 @@ export async function buildInboxProposals(db: SupabaseClient, now = new Date()):
     ...sms.items.filter((item) => item.kind === "triage_batch"),
     ...sms.items.filter((item) => item.kind === "sms_draft"),
     ...email.items.filter((item) => item.kind === "email_draft"),
+    ...(press?.items ?? []),
     ...(slack ? slackProposals(slack) : []),
     ...voicemail.items.filter((item) => item.kind === "question"),
     ...(proposal ? [proposal] : []),
@@ -537,7 +541,7 @@ export async function buildInboxProposals(db: SupabaseClient, now = new Date()):
   return {
     proposed,
     waitingElsewhere: sms.waitingElsewhere + email.waitingElsewhere + Math.max(0, extraQuestions),
-    costUsd: email.costUsd + voicemail.costUsd + (slack?.costUsd ?? 0) + (organic?.costUsd ?? 0),
+    costUsd: email.costUsd + voicemail.costUsd + (slack?.costUsd ?? 0) + (organic?.costUsd ?? 0) + (press?.costUsd ?? 0),
     draftsInGmail: email.draftsInGmail,
     extras: { slackCoverage: slack?.coverage ?? null, organic: organic ? { synopsis: organic.synopsis, section: organic.section } : null, notes },
     organicRead: organic,
@@ -799,7 +803,7 @@ export function renderDigest(pass: InboxPass): string {
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
-    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider account: sent from support@ when you approve.)" : "\n(Saved as a Gmail draft when you approve. You send it.)") : ""}${item.kind === "slack_draft" ? `\n(Posts in the thread as you when you approve.${item.target?.permalink ? ` ${String(item.target.permalink)}` : ""})` : ""}${item.kind === "proposal" ? "\n(Approving turns this into a /handoff brief. Nothing changes on the site by itself.)" : ""}`).join("\n\n")}`;
+    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (item.category === "email:draft:press" ? `\n(Pitch: saved as a Gmail draft to ${String(item.target?.to ?? "the reporter")} when you approve. You send it.)` : sendsOnApproval(item) ? "\n(Provider account: sent from support@ when you approve.)" : "\n(Saved as a Gmail draft when you approve. You send it.)") : ""}${item.kind === "slack_draft" ? `\n(Posts in the thread as you when you approve.${item.target?.permalink ? ` ${String(item.target.permalink)}` : ""})` : ""}${item.kind === "proposal" ? "\n(Approving turns this into a /handoff brief. Nothing changes on the site by itself.)" : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),
@@ -951,6 +955,12 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
       const scheduled = result.json.scheduled as { sendAfter?: string; tz?: string } | undefined;
       return finish("done", scheduled?.sendAfter ? `scheduled for their morning (quiet hours where they are).` : "sent.");
     }
+    if (item.kind === "email_draft" && item.category === "email:draft:press") {
+      // A pitch goes to the reporter, not back to the digest: a Gmail draft
+      // on no thread, addressed to them. TJ sends it from Gmail.
+      const saved = await savePressDraft(db, { pressId: String(item.target.pressId), body: edit ?? stripDraftHeaders(currentText(item)), actor: approver.actor });
+      return finish("done", `saved as a Gmail draft to ${saved.to}. Send it from Gmail (support@ drafts).`);
+    }
     if (item.kind === "email_draft") {
       const args = { threadId: String(item.target.threadId), body: edit ?? stripDraftHeaders(currentText(item)), actor: approver.actor, adminUserId: approver.id };
       if (sendsOnApproval(item)) {
@@ -1003,6 +1013,8 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
     }
     if (command.verb === "skip") {
       await db.from("cortex_inbox_items").update({ status: "skipped", decided_at: new Date().toISOString() }).eq("id", item.id).eq("status", "proposed");
+      // A skipped pitch is remembered in the press ledger, so it is not pitched again.
+      if (item.category === "email:draft:press" && item.target?.pressId) await skipPressPitch(db, String(item.target.pressId)).catch(() => null);
       lines.push(`${item.number}: skipped.`);
     } else {
       lines.push(await executeInboxItem(db, item, command.edit));
