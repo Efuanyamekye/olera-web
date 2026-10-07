@@ -36,3 +36,17 @@ export function addCut(prev: string | null | undefined, at: number, under: boole
 export function cutAnswer(at: number, under: boolean): string {
   return addCut(null, at, under);
 }
+
+/**
+ * A range narrowed by its follow-ups: "or less" caps it at the figure, "more"
+ * starts just above. A figure outside what's left of the range was asked about
+ * another range (the family changed their answer afterwards) and is ignored.
+ */
+export function narrowRange(range: [number, number], cut: string | null | undefined): [number, number] {
+  let [lo, hi] = range;
+  for (const c of parseCuts(cut) || []) {
+    if (c.under == null || c.at <= lo || c.at >= hi) continue;
+    [lo, hi] = c.under ? [lo, Math.min(hi, c.at)] : [Math.max(lo, c.at + 1), hi];
+  }
+  return [lo, hi];
+}

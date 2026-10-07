@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { applyAlongHref, startsWithExtraHelp } from "@/lib/benefits/apply-along";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
@@ -255,6 +256,24 @@ export default async function BenefitsResultsPage({
       callScript={firstStep ? buildCallScript(firstStep.shortName, relationship) : null}
       cascade={cascade}
       textTjNumber={meta.sms_consent ? process.env.TWILIO_FROM_NUMBER || null : null}
+      applyHref={firstStep && startsWithExtraHelp(firstStep.name)
+        ? applyAlongHref({
+            stateCode: bundle.token.state_code,
+            programId: firstStep.programId,
+            who: relationshipToWho(relationship),
+            household: meta.household_size === 1 ? "alone" : meta.household_size === 2 ? "couple" : meta.household_size === 3 ? "family" : null,
+            token,
+          })
+        : null}
     />
   );
+}
+
+/** The plan's stored relationship ("my-parent", or the display "My parent") as the apply-along's who. */
+function relationshipToWho(r: string | null): "me" | "parent" | "spouse" | "other" | null {
+  if (!r) return null;
+  if (/my-?self|^me$/i.test(r)) return "me";
+  if (/parent|mother|father|mom|dad/i.test(r)) return "parent";
+  if (/spouse|husband|wife|partner/i.test(r)) return "spouse";
+  return "other";
 }

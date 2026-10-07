@@ -14,6 +14,9 @@ import { readBenefitsCascade, type BenefitsCascadeMeta } from "@/lib/family-comm
  * POST /api/families/benefits-journey
  *   { token, action: "call_made", programId? }
  *   { token, action: "doc_toggle", doc, checked }
+ *   { token, action: "applied", programId?, stateId? } — submitted Social
+ *     Security's Extra Help form through the apply-along, which also starts
+ *     the state's Medicare Savings application (lib/benefits/apply-along.ts)
  *
  * `call_made` deliberately does NOT set cascade.outcome — that field stays the
  * family's check-in self-report; first_step_done_at is the page-observed act.
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (!/^[A-Za-z0-9_-]{16}$/.test(token)) {
       return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
-    if (!["call_made", "doc_toggle"].includes(action)) {
+    if (!["call_made", "doc_toggle", "applied"].includes(action)) {
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
 
@@ -62,6 +65,18 @@ export async function POST(request: NextRequest) {
           (typeof body.programId === "string" ? body.programId : cascade.first_step_program_id),
         application_status: "called",
         application_status_at: now,
+      };
+    } else if (action === "applied") {
+      const programId = typeof body.programId === "string" ? body.programId.slice(0, 120) : cascade.first_step_program_id;
+      const stateId = typeof body.stateId === "string" ? body.stateId.slice(0, 40) : cascade.first_step_state_id;
+      next = {
+        ...cascade,
+        first_step_done_at: cascade.first_step_done_at || now,
+        first_step_done_program_id: cascade.first_step_done_program_id || programId,
+        application_status: "applied",
+        application_status_at: now,
+        // The first submission is the one the check-ins count from.
+        applied: cascade.applied || { at: now, route: "ssa_extra_help", program_id: programId, state_id: stateId },
       };
     } else {
       const doc = typeof body.doc === "string" ? body.doc.slice(0, 200) : "";

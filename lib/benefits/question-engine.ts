@@ -17,7 +17,7 @@
  */
 import { draftMinAge, incomeLimitFromTable, requiresMedicaid, isWaiverPath } from "@/lib/benefits/eligibility.server";
 import thresholds from "@/data/pipeline/federal-thresholds.json";
-import { parseCut, parseCuts, addCut, cutAnswer, MAX_CUTS } from "@/lib/benefits/cut";
+import { parseCut, parseCuts, addCut, cutAnswer, narrowRange, MAX_CUTS } from "@/lib/benefits/cut";
 
 export type DailyHelp = "none" | "some" | "lots";
 export type Savings = "under2000" | "under10000" | "over10000";
@@ -77,20 +77,8 @@ export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
 
 export { parseCut, parseCuts, addCut, cutAnswer };
 
-/**
- * A range narrowed by its follow-up: "or less" caps it at the figure, "more"
- * starts just above. A figure outside the range was asked about another
- * range (the family changed their answer afterwards, e.g. on the form after
- * "Text me this") and says nothing about this one.
- */
-function narrowed(range: [number, number], cut: string | null | undefined): [number, number] {
-  let [lo, hi] = range;
-  for (const c of parseCuts(cut) || []) {
-    if (c.under == null || c.at <= lo || c.at >= hi) continue;
-    [lo, hi] = c.under ? [lo, Math.min(hi, c.at)] : [Math.max(lo, c.at + 1), hi];
-  }
-  return [lo, hi];
-}
+/** A range narrowed by its follow-ups (lib/benefits/cut.ts narrowRange). */
+const narrowed = narrowRange;
 
 const AGE_RANGE: Record<AgeBucket, [number, number]> = { under_60: [0, 59], "60_64": [60, 64], "65_74": [65, 74], "75_84": [75, 84], "85_plus": [85, 120] };
 // Read as today's quiz labels them ("$1,000 to $1,500"). The finder's rule-out

@@ -84,6 +84,11 @@ export interface BenefitsCascadeMeta {
    *  durable status the living plan can show back to the family. */
   application_status?: BenefitsApplicationStatus;
   application_status_at?: string;
+  /** The family said they submitted an application through Olera's
+   *  apply-along (lib/benefits/apply-along.ts). `route` "ssa_extra_help":
+   *  Social Security's Extra Help form, which also starts the state's
+   *  Medicare Savings application. The check-ins about the decision read this. */
+  applied?: { at: string; route: "ssa_extra_help"; program_id?: string; state_id?: string };
   last_sms_reply?: string;
   last_sms_reply_at?: string;
 }

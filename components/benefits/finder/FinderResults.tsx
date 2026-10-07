@@ -12,6 +12,7 @@ import {
 } from "@/lib/benefits/finder-answers";
 import { getOrCreateSessionId, getOrCreateVisitId } from "@/lib/analytics/session";
 import FinderIcon from "@/components/benefits/finder/FinderIcon";
+import { applyAlongHref, startsWithExtraHelp } from "@/lib/benefits/apply-along";
 import type { FinderState } from "@/hooks/use-finder";
 
 /**
@@ -187,7 +188,7 @@ function CallButton({ p }: { p: FinderProgram }) {
   );
 }
 
-function FirstStep({ p, callFor, cardRef }: { p: FinderProgram; callFor: string; cardRef: React.RefObject<HTMLElement | null> }) {
+function FirstStep({ p, callFor, cardRef, applyHref }: { p: FinderProgram; callFor: string; cardRef: React.RefObject<HTMLElement | null>; applyHref?: string | null }) {
   const isAgency = p.id === "local-agency";
   const [sayOpen, setSayOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
@@ -220,6 +221,11 @@ function FirstStep({ p, callFor, cardRef }: { p: FinderProgram; callFor: string;
           <strong className="font-semibold text-gray-900">Why this one:</strong> {p.reason}
         </p>
         <CallButton p={p} />
+        {applyHref ? (
+          <a href={applyHref} className="min-h-[52px] rounded-2xl border-[1.5px] border-primary-800 text-primary-800 text-[16px] font-semibold flex items-center justify-center no-underline">
+            Or apply online with us, about 20 minutes
+          </a>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-4 min-w-0 lg:border-l lg:border-gray-200 lg:pl-8">
@@ -440,7 +446,25 @@ export default function FinderResults({ f }: { f: FinderState }) {
           </div>
         )}
 
-        {r.firstStep && <FirstStep p={r.firstStep} callFor={v.callFor} cardRef={cardRef} />}
+        {r.firstStep && (
+          <FirstStep
+            p={r.firstStep}
+            callFor={v.callFor}
+            cardRef={cardRef}
+            applyHref={r.firstStep.id !== "local-agency" && startsWithExtraHelp(r.firstStep.name)
+              ? applyAlongHref({
+                  stateCode: r.stateCode,
+                  programId: r.firstStep.id,
+                  who: f.answers.who,
+                  household: f.answers.household === "1" ? "alone" : f.answers.household === "2" ? "couple" : f.answers.household === "3" ? "family" : null,
+                  income: f.answers.income,
+                  incomeCut: f.answers.incomeCut,
+                  savings: f.answers.savings,
+                  savingsCut: f.answers.savingsCut,
+                })
+              : null}
+          />
+        )}
 
         {/* Phone: a light line under the card, not a second box. */}
         <div ref={sendRef} className="lg:hidden border-b border-gray-200">

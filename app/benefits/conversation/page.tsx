@@ -7,6 +7,7 @@ import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
 import { addCut } from "@/lib/benefits/cut";
+import { applyAlongHref, startsWithExtraHelp } from "@/lib/benefits/apply-along";
 import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, type FinderProgram, type FinderResult, type FinderWho } from "@/lib/benefits/finder-answers";
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
@@ -465,7 +466,17 @@ export default function BenefitsConversationPage() {
               <button type="button" onClick={() => { setHistory((h) => h.slice(0, -1)); void openResult(); }} className="min-h-[52px] px-5 rounded-2xl bg-gray-900 text-white font-semibold border-none cursor-pointer">Try again</button>
             </div>
           ) : <Thinking text="Putting your first call together…" />
-        ) : <ResultView plan={plan} callFor={v.callFor} onBack={back} onTextMe={textMe} onCall={() => completed("call")} />
+        ) : <ResultView
+            plan={plan}
+            callFor={v.callFor}
+            onBack={back}
+            onTextMe={textMe}
+            onCall={() => completed("call")}
+            applyHref={plan.firstStep && plan.firstStep.id !== "local-agency" && startsWithExtraHelp(plan.firstStep.name)
+              ? applyAlongHref({ stateCode, programId: plan.firstStep.id, who, household: facts.household, income: facts.income, incomeCut: facts.incomeCut, savings: facts.savings, savingsCut: facts.savingsCut })
+              : null}
+            onApply={() => completed("apply_along")}
+          />
       )}
 
       {error && <p role="alert" className="text-[15px] text-red-700 m-0">{error}</p>}
@@ -512,7 +523,7 @@ function Thinking({ text }: { text: string }) {
   );
 }
 
-function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void; onCall: () => void }) {
+function ResultView({ plan, callFor, onBack, onTextMe, onCall, applyHref, onApply }: { plan: FinderResult; callFor: string; onBack: () => void; onTextMe: () => void; onCall: () => void; applyHref: string | null; onApply: () => void }) {
   const [open, setOpen] = useState<"say" | "ready" | "more" | "moreLikely" | null>(null);
   const first: FinderProgram | null = plan.firstStep;
   // Four is a list someone can take in; the rest fold away (a Michigan plan
@@ -541,6 +552,11 @@ function ResultView({ plan, callFor, onBack, onTextMe, onCall }: { plan: FinderR
         {first.phone ? (
           <a href={telHref(first.phone)} onClick={onCall} className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline">
             Call {first.phone}
+          </a>
+        ) : null}
+        {applyHref ? (
+          <a href={applyHref} onClick={onApply} className="min-h-[52px] rounded-2xl border-[1.5px] border-primary-800 text-primary-800 text-[16px] font-semibold flex items-center justify-center no-underline">
+            Or apply online with us, about 20 minutes
           </a>
         ) : null}
         <div className="flex flex-col">
