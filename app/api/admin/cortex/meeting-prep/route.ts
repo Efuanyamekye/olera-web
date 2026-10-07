@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
   if (draftId) {
     const event = await findEvent(db, draftId);
     if (!event) return NextResponse.json({ error: "No upcoming meeting with that id in the next 7 days" }, { status: 404 });
-    const { channel, text } = await draftPrep(db, event);
-    return NextResponse.json({ draft: { channel, text } });
+    const { channel, text, noteUsed, noteSeen } = await draftPrep(db, event);
+    return NextResponse.json({ draft: { channel, text, lastTimeNote: noteUsed, notionFound: noteSeen } });
   }
   const id = request.nextUrl.searchParams.get("post");
   if (id) {

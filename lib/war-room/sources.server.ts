@@ -663,25 +663,67 @@ async function mapWithConcurrency<T, R>(items: T[], limit: number, fn: (item: T)
 }
 
 /**
- * The most recent Notion page whose title contains this meeting title, with
- * its body: the notes from the last time this meeting happened. For meeting
- * prep. Null when Notion is not configured or nothing matches. Only pages the
- * Cortex connection can see (the Meeting Notes database) are searched.
+ * The most recent Notion meeting note for this meeting title, with its body:
+ * the notes from the last time this meeting happened. For meeting prep.
+ *
+ * Queries the configured meeting-notes data sources directly by title (the
+ * same call the sync makes), because Notion's /search did not return the
+ * 6 Oct "Care seeker and provider support (Managed Ads)" note on 7 Oct 2026.
+ * Notion AI notes live in a child page of the database row, so child pages
+ * are read too. Falls back to /search. Null when nothing matches.
  */
-export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; body: string } | null> {
+const notionTitleProps = new Map<string, string>();
+async function notionTitleProperty(dataSourceId: string): Promise<string | null> {
+  if (notionTitleProps.has(dataSourceId)) return notionTitleProps.get(dataSourceId)!;
+  const ds = await notionFetch(`/data_sources/${dataSourceId}`, undefined, 8_000);
+  const props = (ds.properties as Record<string, { type?: string }> | undefined) ?? {};
+  const name = Object.entries(props).find(([, v]) => v?.type === "title")?.[0] ?? null;
+  if (name) notionTitleProps.set(dataSourceId, name);
+  return name;
+}
+
+async function notionPageBodyDeep(pageId: string, timeoutMs = 10_000): Promise<string> {
+  const payload = await notionFetch(`/blocks/${pageId}/children?page_size=100`, undefined, timeoutMs);
+  const blocks = (payload.results as Array<Record<string, unknown>> | undefined) ?? [];
+  const parts: string[] = [blocks.map(notionBlockText).filter(Boolean).join("\n")];
+  for (const block of blocks.filter((b) => b.type === "child_page").slice(0, 2)) {
+    const child = await notionPageBody(String(block.id), timeoutMs).catch(() => "");
+    if (child) parts.push(child);
+  }
+  return bounded(parts.filter(Boolean).join("\n"), 6_000);
+}
+
+export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; body: string; via: string } | null> {
   if (!(process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) return null;
-  const query = title.replace(/[^\p{L}\p{N}&'× ]+/gu, " ").replace(/\s+/g, " ").trim().slice(0, 80);
-  if (query.length < 4) return null;
+  const phrase = title.replace(/\s+/g, " ").trim().slice(0, 100);
+  if (phrase.length < 4) return null;
+  for (const source of notionSources()) {
+    try {
+      const prop = await notionTitleProperty(source.id);
+      if (!prop) continue;
+      const payload = await notionFetch(`/data_sources/${source.id}/query`, {
+        method: "POST",
+        body: JSON.stringify({ filter: { property: prop, title: { contains: phrase } }, sorts: [{ timestamp: "created_time", direction: "descending" }], page_size: 3, result_type: "page" }),
+      }, 10_000);
+      const rows = ((payload.results as Array<Record<string, unknown>> | undefined) ?? []).filter((p) => !p.archived && !p.in_trash);
+      const row = rows[0];
+      if (!row) continue;
+      const body = await notionPageBodyDeep(String(row.id));
+      return { title: notionPageTitle((row.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(row.last_edited_time ?? ""), body, via: "data_source" };
+    } catch {
+      // try the next source, then search
+    }
+  }
   try {
+    const query = phrase.replace(/[^\p{L}\p{N}&'× ]+/gu, " ").replace(/\s+/g, " ").trim();
     const payload = await notionFetch("/search", {
       method: "POST",
       body: JSON.stringify({ query, filter: { property: "object", value: "page" }, sort: { direction: "descending", timestamp: "last_edited_time" }, page_size: 5 }),
     }, 10_000);
-    const pages = ((payload.results as Array<Record<string, unknown>> | undefined) ?? []).filter((page) => !page.archived && !page.in_trash);
-    const page = pages[0];
+    const page = ((payload.results as Array<Record<string, unknown>> | undefined) ?? []).find((p) => !p.archived && !p.in_trash);
     if (!page) return null;
-    const body = await notionPageBody(String(page.id), 10_000);
-    return { title: notionPageTitle((page.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(page.last_edited_time ?? ""), body };
+    const body = await notionPageBodyDeep(String(page.id));
+    return { title: notionPageTitle((page.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(page.last_edited_time ?? ""), body, via: "search" };
   } catch {
     return null;
   }
