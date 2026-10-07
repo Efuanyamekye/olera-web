@@ -76,6 +76,11 @@ export async function contextFor(db: SupabaseClient, person: Person): Promise<st
 
 /** The whole record for one meeting. */
 export async function meetingContext(db: SupabaseClient, event: CalendarEvent): Promise<string> {
+  return (await meetingRecord(db, event)).context;
+}
+
+/** The record plus which Notion note it used, for the draft view. */
+export async function meetingRecord(db: SupabaseClient, event: CalendarEvent): Promise<{ context: string; noteUsed: string | null; noteSeen: string | null }> {
   const people = attendeesOf(event);
   const external = externalAttendees(event);
   const [lastNote, outside] = await Promise.all([
@@ -84,13 +89,15 @@ export async function meetingContext(db: SupabaseClient, event: CalendarEvent): 
   ]);
   const note = lastNote && noteMatchesMeeting(event.summary ?? "", lastNote.title, lastNote.editedAt, new Date()) ? lastNote : null;
   const description = (event.description ?? "").replace(/----\( Video Call \)----[\s\S]*?---===---/g, "").replace(/https?:\/\/\S+/g, "").trim();
-  return [
+  const context = [
     `ATTENDEES: TJ Falohun (Olera founder), ${people.map((p) => `${p.name}${p.team ? " (Olera team)" : " (outside Olera)"}`).join(", ")}`,
     external.length ? "" : "NO OUTSIDE ATTENDEES: everyone on this meeting is Olera.",
     description ? `INVITE DESCRIPTION:\n${description.slice(0, 1_500)}` : "",
     note ? `LAST TIME (Notion note "${note.title}", edited ${note.editedAt.slice(0, 10)}):\n${note.body.slice(0, 3_500)}` : "LAST TIME: no Notion note found for this meeting.",
     outside.length ? `OUTSIDE ATTENDEES:\n${outside.join("\n\n")}` : "",
   ].filter(Boolean).join("\n\n");
+  const seen = lastNote ? `${lastNote.title} (${lastNote.editedAt.slice(0, 10)}, via ${lastNote.via})` : null;
+  return { context, noteUsed: note ? seen : null, noteSeen: seen };
 }
 
 async function writeNote(event: CalendarEvent, context: string): Promise<string | null> {
@@ -110,12 +117,12 @@ async function writeNote(event: CalendarEvent, context: string): Promise<string 
 }
 
 /** The prep text for one event, without posting it: for review before it goes out. */
-export async function draftPrep(db: SupabaseClient, event: CalendarEvent): Promise<{ channel: string; text: string; context: string }> {
+export async function draftPrep(db: SupabaseClient, event: CalendarEvent): Promise<{ channel: string; text: string; context: string; noteUsed: string | null; noteSeen: string | null }> {
   const route = routeMeeting(event);
-  const context = await meetingContext(db, event);
+  const { context, noteUsed, noteSeen } = await meetingRecord(db, event);
   const note = await writeNote(event, context).catch(() => null);
   const header = `*Prep: ${event.summary ?? "(no title)"}*, ${event.start?.dateTime ? whenText(event.start.dateTime) : ""}`;
-  return { channel: route.channel?.name ?? "#cortex", text: `${header}\n${note ?? "(no note written)"}`, context };
+  return { channel: route.channel?.name ?? "#cortex", text: `${header}\n${note ?? "(no note written)"}`, context, noteUsed, noteSeen };
 }
 
 export type PrepOutcome = { key: string; title: string; channel: string; sent: boolean; fallback?: boolean; error?: string };
