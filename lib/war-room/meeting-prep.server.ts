@@ -130,6 +130,17 @@ export async function prepOne(db: SupabaseClient, event: CalendarEvent, opts: { 
   const note = await writeNote(event, await meetingContext(db, event)).catch(() => null);
   const header = `*Prep: ${title}*, ${event.start?.dateTime ? whenText(event.start.dateTime) : ""}`;
   const text = `${header}\n${note ?? "I could not write the prep this time; nothing on file was read."}`;
+  // Beta (TJ, 7 Oct 2026: "let's only post the notes to the Cortex channel as
+  // we're beta testing this"): everything goes to #cortex, labelled with the
+  // channel it would go to. CORTEX_MEETING_PREP_LIVE=1 sends to the real channel.
+  if (process.env.CORTEX_MEETING_PREP_LIVE !== "1") {
+    const betaText = `${text}\n_(Beta: would go to ${route.channel?.name ?? "#cortex"}.)_`;
+    const posted = await postAsCortex(CORTEX_CHANNEL(), betaText);
+    const row = { kind: "meeting_prep", key, channel: posted.ok ? posted.channelId : CORTEX_CHANNEL(), text: betaText, thread_ts: null, slack_ts: posted.ok ? posted.ts : null, error: posted.ok ? null : posted.error };
+    if (done) await db.from("cortex_posts").update(row).eq("id", done.id);
+    else await db.from("cortex_posts").insert(row);
+    return { key, title, channel: `#cortex (beta; for ${route.channel?.name ?? "#cortex"})`, sent: posted.ok, error: posted.ok ? undefined : posted.error };
+  }
   const target = route.channel?.id ?? CORTEX_CHANNEL();
   let posted = await postAsCortex(target, text);
   let fallback = false;
