@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { compareCallPriority } from "@/lib/seeker-touches/call-priority";
 import { ORIGIN_LABEL, EPISODE_WORD } from "@/lib/seeker-touches/present";
 import type { PlanStep, RoutingPlan } from "@/lib/city-ads/plan.server";
 import LogFamilyTouch from "@/components/admin/LogFamilyTouch";
@@ -178,6 +179,7 @@ function FamilyList({ currentId, backQuery }: { currentId: string; backQuery: st
   // Benefits queue opens into benefits families, not the mixed queue.
   const origin = back.get("from");
   const shown = (rows ?? []).filter((r) => matches(r, tab) && (!origin || r.origin === origin));
+  if (tab === "call") shown.sort(compareCallPriority);
   const label = `${TABS.find((t) => t.key === tab)?.label ?? "Families"}${origin && ORIGIN_LABEL[origin as keyof typeof ORIGIN_LABEL] ? ` · ${ORIGIN_LABEL[origin as keyof typeof ORIGIN_LABEL]}` : ""}`;
   const q = backQuery ? `?back=${encodeURIComponent(backQuery)}` : "";
 
@@ -935,6 +937,7 @@ function InquiryComposer({
         <span>
           To: <span className="font-semibold text-gray-900">{readers}</span>, in their inbox and by email
         </span>
+        <span>Replies in Olera appear here. Email replies go to Support Email.</span>
         {conversations.length > 1 && (
           <select
             aria-label="Which conversation"
@@ -953,6 +956,17 @@ function InquiryComposer({
       </div>
     </div>
   );
+}
+
+/** The relationship record holds contact details and the team's provider history. */
+function ProviderCaseLink({ id, name }: { id?: string | null; name: string }) {
+  return id ? (
+    <Link href={`/admin/relationships/${encodeURIComponent(id)}`} target="_blank" rel="noopener noreferrer"
+      className="text-[14px] font-semibold text-teal-800 underline decoration-teal-300 underline-offset-2 hover:text-teal-950"
+      aria-label={`Open ${name}'s provider record (new tab)`}>
+      {name} <span aria-hidden="true">↗</span>
+    </Link>
+  ) : <p className="text-[14px] font-semibold text-gray-900">{name}</p>;
 }
 
 // ── Right: the case ───────────────────────────────────────────────────────────
@@ -1116,6 +1130,7 @@ function FamilyComposer({
             <> by <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span></>
           )}
         </span>
+        {channel === "email" && <span>Email replies go to Support Email and appear here once linked to this family.</span>}
         {channel === "sms" && <span>Outside their hours it waits for their morning.</span>}
         {channel === "sms" && (
           <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
@@ -1559,13 +1574,13 @@ function CasePanel({
           <ul className="mt-2 space-y-2">
             {routing?.handed_at && (
               <li className={`${card} p-3`}>
-                <p className="text-[14px] font-semibold text-gray-900">{routing.campaign_owner ?? "The ad's provider"}</p>
+                <ProviderCaseLink id={routing.campaign_provider_id} name={routing.campaign_owner ?? "The ad's provider"} />
                 <p className="text-[13px] text-gray-500">Their ad found this family · since {shortWhen(routing.handed_at, tz)}</p>
               </li>
             )}
             {offers.map((o) => (
               <li key={o.id} className={`${card} p-3 ${o.state === "expired" || o.state === "declined" ? "opacity-60" : ""}`}>
-                <p className="text-[14px] font-semibold text-gray-900">{o.provider_name}</p>
+                <ProviderCaseLink id={o.provider_id} name={o.provider_name} />
                 <p className="text-[13px] text-gray-500">
                   {OFFER_WORD[o.state]} · {shortWhen(o.offered_at, tz)}
                 </p>
@@ -1583,7 +1598,7 @@ function CasePanel({
             ))}
             {providers.map((p) => (
               <li key={`${p.id}-${p.at}`} className={`${card} p-3`}>
-                <p className="text-[14px] font-semibold text-gray-900">{p.name}</p>
+                <ProviderCaseLink id={p.id} name={p.name} />
                 <p className="text-[13px] text-gray-500">
                   Page inquiry · {p.responded ? "replied" : "no reply on file"} · {shortWhen(p.at, tz)}
                 </p>
@@ -1593,7 +1608,7 @@ function CasePanel({
               !routing?.handed_at &&
               plan.candidates.slice(0, 3).map((c) => (
                 <li key={`cand-${c.providerId}`} className="rounded-2xl border border-dashed border-gray-300 p-3">
-                  <p className="text-[14px] font-semibold text-gray-700">{c.providerName}</p>
+                  <ProviderCaseLink id={c.providerId} name={c.providerName} />
                   <p className="text-[13px] text-gray-500">Next on call once routed</p>
                 </li>
               ))}
@@ -1602,7 +1617,7 @@ function CasePanel({
               .slice(0, 2)
               .map((st) => (
                 <li key={`up-${st.providerId}`} className="rounded-2xl border border-dashed border-gray-300 p-3">
-                  <p className="text-[14px] font-semibold text-gray-700">{st.providerName}</p>
+                  <ProviderCaseLink id={st.providerId} name={st.providerName} />
                   <p className="text-[13px] text-gray-500">
                     {STEP_WORD[st.state]} · {st.projected ? "about " : ""}
                     {timeOf(st.at, tz)}

@@ -20,10 +20,11 @@ export interface CityLeadToolsData {
   lead_id: string;
   status: string;
   closed: boolean;
-  offers: { id: string; provider_name: string; offered_at: string; state: "open" | "accepted" | "declined" | "expired" }[];
+  offers: { id: string; provider_id?: string; provider_name: string; offered_at: string; state: "open" | "accepted" | "declined" | "expired" }[];
   has_provider: boolean;
   handed_at: string | null;
   campaign_owner: string | null;
+  campaign_provider_id?: string | null;
   can_hand: boolean;
   admin_note: string | null;
   has_phone: boolean;
