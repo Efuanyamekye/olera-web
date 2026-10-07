@@ -7645,3 +7645,26 @@ The relay picks one agency at a time, 30 minutes apart, and wrote nothing down i
 2. **Decide whether the board's Archive should also archive a live city lead.** Right now it hides without stopping.
 3. **Drop the call promise on Dallas/Charlotte** if TJ wants text-first end to end — Olera's own copy, ours to change. Pascagoula's is published on Hilda's Meta form and can only change going forward.
 4. Watch the first real placement-check send: 20 families eligible, all in one run, no per-run throttle (the per-family cap is 3/7d and these have had nothing in weeks).
+
+## 2026-10-07 — Three provider Ad Boost Google launches
+
+TJ explicitly approved Google-only, $50/provider ($150 total), Oct 12–25, then said “publish all three.” Published:
+- Preferred Care at Home of Denton — Google `24327645977`, tag `preferred-denton-oct26`.
+- A Rainbow of Care, HC (Upland) — Google `24327642479`, tag `rainbow-upland-oct26`.
+- Caring Senior Service (Jeffersontown) — Google `24322349655`, tag `caring-jeffersontown-oct26`.
+
+All Enabled/Pending future start, exact $50 campaign TOTAL caps; dates Oct12–25 in Google account Central Time. Maximize Clicks, post-publish max CPC $2.50 and AI Max false verified for each. Search only; no Search Partners or Display. 20-mile city radii, presence only, English/Spanish. 16 phrase keywords and 13 headlines/4 descriptions per provider, custom assets verified after reload. Account auto-apply remained 0/7 + 0/14.
+
+Shared negative list `12134249254` now contains 98 terms, including BOTH “caring senior service” and “preferred care at home.” Attached only to Rainbow. Caring and Denton instead received 97 campaign-level negatives copied from the list with each own brand omitted; shared list left unchanged. These campaign-level copies will not inherit later shared-list changes.
+
+Olera admin records mapped to published IDs, exact tags, budget cap and flight; status remains scheduled. No launch email/live transition because none serving yet. ZeroBounce validation remains pending explicit permission to share contact emails; auto-review denied that disclosure, so no validator requests sent. Google identity check caused rollback of draft assets; restored and checked saved text. Separating Done and Next with state checks prevented generic prefill from surviving. Budget total worked after reauthentication; no daily fallback used. React date inputs needed native keyboard events to persist.
+
+Internal fixes completed before launch: Caring caregiving image first, nonmedical description and ZIP40299; Rainbow caregiving image first, Upland directory/address/geocode and ZIP91786, Home Care first; Denton missing claimed coordinates restored. Existing photos retained. Other five providers not launched or contacted.
+
+Appended three Worked Examples and batch lessons to Notion SOP `38d5903a-0ffe-818f-a75b-db0951f7b178`. Evidence/packets/backups at `/tmp/adboost-review-oct7/`. Handoff: confirm serving Oct12 before live status/email; harvest search terms Oct15–17. No follow-up automation created.
+
+Quicksave branch: `codex/adboost-oct7-handoff`. Repository change: `SCRATCHPAD.md` only; no app code changed. Five unlaunched/uncontacted requests remain: Heartstead Home Care Agency, A Place At Home–Merrimack Valley, Perez Health Care Group, Living Angels Caregiving, and Senior Services & Home Care. Reconfirm each photo/readiness issue before sending follow-ups; no new review of those five was performed during the final status recap.
+
+Also copied Claude's `my-move` skill unchanged to personal Codex skills at `~/.codex/skills/my-move/SKILL.md`, added `agents/openai.yaml`, and passed the skill validator. These personal files are installed outside this repository and are not part of the PR. Invoke with `$my-move`.
+
+Validation: documentation diff/whitespace check; operational launch checks recorded above. Next: confirm serving October 12 (Google account Central Time), then update live status/send launch emails; review search terms October 15–17. No reminders scheduled.
