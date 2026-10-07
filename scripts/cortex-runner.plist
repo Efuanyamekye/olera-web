@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The Mac runner (scripts/cortex-runner.ts), nightly at 01:00 Mac time.
+  Install: copy to ~/Library/LaunchAgents/com.olera.cortex.runner.plist, then
+  launchctl load ~/Library/LaunchAgents/com.olera.cortex.runner.plist
+  Off switch: touch ~/cortex-runner/STOP
+  The runner clones the repo into ~/cortex-runner/olera-web on its first run.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.olera.cortex.runner</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-c</string>
+    <string>R="$HOME/cortex-runner/olera-web"; [ -d "$R/.git" ] || git clone --quiet https://github.com/olera-care/olera-web.git "$R"; cd "$R" &amp;&amp; git fetch --quiet origin staging &amp;&amp; git checkout --quiet --detach origin/staging &amp;&amp; npx --yes tsx --env-file="$HOME/Desktop/olera-web/.env.local" scripts/cortex-runner.ts</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- launchd starts with a minimal PATH; the runner shells out to git, npm, gh and claude. -->
+    <key>PATH</key>
+    <string>/Users/tfalohun/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key><string>/Users/tfalohun</string>
+    <key>SSL_CERT_FILE</key><string>/etc/ssl/cert.pem</string>
+  </dict>
+  <key>StartCalendarInterval</key><dict><key>Hour</key><integer>1</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>/Users/tfalohun/cortex-runner/launchd.log</string>
+  <key>StandardErrorPath</key><string>/Users/tfalohun/cortex-runner/launchd.log</string>
+</dict>
+</plist>
