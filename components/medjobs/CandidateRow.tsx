@@ -42,6 +42,8 @@ export interface CandidateData {
   updated_at?: string;
   lat?: number | null;
   lng?: number | null;
+  /** Whether the student has toggled their profile as available */
+  is_active?: boolean;
   /** Placement status with the current provider (if authenticated) */
   placementStatus?: "offered" | "accepted" | "confirmed" | null;
 }
@@ -65,6 +67,7 @@ export default function CandidateRow({
   const certs = meta.certifications || [];
   const videoAvailable = hasVideo(meta);
   const location = [candidate.city, candidate.state].filter(Boolean).join(", ");
+  const isAvailable = candidate.is_active !== false; // Default to available if not specified
 
   const profileUrl = `${basePath}/${candidate.slug}`;
 
@@ -96,13 +99,26 @@ export default function CandidateRow({
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        {/* Name + University */}
-        <div className="flex items-baseline gap-2 flex-wrap">
+        {/* Name + University + Availability */}
+        <div className="flex items-center gap-2 flex-wrap">
           <h3 className="text-[15px] font-semibold text-gray-900 group-hover:text-primary-600 transition-colors truncate">
             {candidate.display_name}
           </h3>
           <span className="text-sm text-gray-400 truncate">
             {meta.university || "University not specified"}
+          </span>
+          {/* Availability indicator */}
+          <span
+            className={`inline-flex items-center gap-1 text-xs ${
+              isAvailable ? "text-emerald-600" : "text-gray-400"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isAvailable ? "bg-emerald-500" : "bg-gray-400"
+              }`}
+            />
+            {isAvailable ? "Available" : "Not Available"}
           </span>
         </div>
 

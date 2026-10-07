@@ -167,11 +167,13 @@ export async function GET(request: NextRequest) {
     // - Filtering by has_interviews (requires join with interviews table)
     const needsClientSideFilter = completeOnly || incompleteOnly || pausedOnly || notLiveOnly || pendingReviewOnly || approvedOnly || rejectedOnly || hasInterviewsOnly || !!search;
 
-    // Fetch pending interview counts per student (proposed or confirmed)
+    // Fetch confirmed interview counts per student (only mutual agreement)
+    // "confirmed" = both parties agreed, "completed" = interview happened
+    // Excludes "proposed" (pending request not yet accepted)
     const { data: interviewCounts } = await db
       .from("interviews")
       .select("student_profile_id, status")
-      .in("status", ["proposed", "confirmed"])
+      .in("status", ["confirmed", "completed"])
       .not("student_profile_id", "is", null);
 
     // Build a map of student_id -> pending interview count

@@ -107,11 +107,13 @@ export async function GET(request: NextRequest) {
     // Fetch all students for counts (need metadata for application_completed)
     const allStudents = await fetchAllStudents(db, fromDate, toDate);
 
-    // Fetch students with pending interviews (proposed or confirmed, not completed/cancelled)
+    // Fetch students with confirmed interviews (mutual agreement only)
+    // "confirmed" = both parties agreed, "completed" = interview happened
+    // Excludes "proposed" (pending request not yet accepted by student)
     const { data: studentsWithInterviews } = await db
       .from("interviews")
       .select("student_profile_id")
-      .in("status", ["proposed", "confirmed"])
+      .in("status", ["confirmed", "completed"])
       .not("student_profile_id", "is", null);
 
     const studentIdsWithInterviews = new Set(

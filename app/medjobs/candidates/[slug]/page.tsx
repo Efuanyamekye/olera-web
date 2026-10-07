@@ -32,6 +32,8 @@ interface ProfileView {
   image_url: string | null;
   metadata: StudentMetadata | null;
   updated_at: string | null;
+  /** Whether the student has toggled their profile as available */
+  is_active?: boolean;
 }
 
 function getSupabase() {
@@ -124,12 +126,14 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const supabase = getSupabase();
+  // Don't filter by is_active - approved students should have accessible profiles
+  // even when they've paused availability
   const { data } = await supabase
     .from("business_profiles")
     .select("display_name, metadata, city, state")
     .eq("slug", slug)
     .eq("type", "student")
-    .eq("is_active", true)
+    .contains("metadata", { application_completed: true })
     .single();
 
   if (!data) return { title: "Candidate Not Found | Olera" };
@@ -194,12 +198,14 @@ export default async function StudentProfilePage({ params }: PageProps) {
     isOwnProfile = await checkIsOwnProfile(slug);
 
     const supabase = getSupabase();
+    // Don't filter by is_active - approved students should have accessible profiles
+    // even when they've paused availability. Only filter by admin approval.
     const { data } = await supabase
       .from("business_profiles")
       .select("*")
       .eq("slug", slug)
       .eq("type", "student")
-      .eq("is_active", true)
+      .contains("metadata", { application_completed: true })
       .single();
 
     if (!data) notFound();
@@ -295,7 +301,22 @@ export default async function StudentProfilePage({ params }: PageProps) {
                     <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900">
                       {displayName}
                     </h1>
-                    {meta.seeking_status === "actively_looking" && (
+                    {/* Availability status - shown for all approved students */}
+                    <span
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold w-fit mx-auto sm:mx-0 ${
+                        profile.is_active !== false
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          profile.is_active !== false ? "bg-emerald-500" : "bg-gray-400"
+                        }`}
+                      />
+                      {profile.is_active !== false ? "Available" : "Not Available"}
+                    </span>
+                    {meta.seeking_status === "actively_looking" && profile.is_active !== false && (
                       <span className="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 w-fit mx-auto sm:mx-0">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         Ready to Start

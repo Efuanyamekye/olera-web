@@ -76,15 +76,17 @@ export async function GET(req: NextRequest) {
     const supabaseAdmin = getSupabaseAdmin();
 
     // Build query
+    // Note: We include ALL approved students regardless of is_active status.
+    // Students who toggled off (is_active=false) still appear but show "Not Available" badge.
+    // Only admin revocation (application_completed=false) removes them from the board.
     let query = supabaseAdmin
       .from("business_profiles")
       .select(
-        "id, slug, display_name, city, state, zip, lat, lng, description, care_types, metadata, image_url, created_at, updated_at" +
+        "id, slug, display_name, city, state, zip, lat, lng, description, care_types, metadata, image_url, created_at, updated_at, is_active" +
         (isProvider ? ", email, phone" : ""),
         { count: "estimated" }
       )
       .eq("type", "student")
-      .eq("is_active", true)
       .contains("metadata", { application_completed: true });
 
     // University filter. The board's University dropdown sends universityId

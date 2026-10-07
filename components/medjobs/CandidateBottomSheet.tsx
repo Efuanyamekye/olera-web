@@ -563,7 +563,22 @@ function ProfileContent({
               .join(" · ")}
           </p>
           <div className="flex flex-wrap items-center gap-2 mt-2">
-            {meta.seeking_status === "actively_looking" && (
+            {/* Availability status */}
+            <span
+              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                candidate.is_active !== false
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  candidate.is_active !== false ? "bg-emerald-500" : "bg-gray-400"
+                }`}
+              />
+              {candidate.is_active !== false ? "Available" : "Not Available"}
+            </span>
+            {meta.seeking_status === "actively_looking" && candidate.is_active !== false && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Ready to Start

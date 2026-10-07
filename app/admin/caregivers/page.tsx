@@ -374,7 +374,7 @@ export default function AdminStudentsPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <p className="text-sm font-medium text-gray-500">Has Interviews</p>
           <p className="text-2xl font-bold text-primary-600 mt-1">{tabCounts?.hasInterviews ?? "—"}</p>
-          <p className="text-xs text-gray-400 mt-1">Pending provider requests</p>
+          <p className="text-xs text-gray-400 mt-1">Confirmed or completed</p>
         </div>
       </div>
 

@@ -30,6 +30,7 @@ export default function CandidateDetailPanel({
   const trackLabel = getTrackLabel(meta);
   const availabilityLabel = formatAvailability(meta);
   const isDemo = candidate.slug.startsWith("sample-");
+  const isAvailable = candidate.is_active !== false; // Default to available if not specified
 
   return (
     <div className="flex flex-col h-full">
@@ -98,17 +99,34 @@ export default function CandidateDetailPanel({
                 Schedule interview
               </button>
             </div>
-            {isDemo && (
-              <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-[11px] font-semibold text-primary-700 mt-1.5">
-                Demo
+            {/* Availability status */}
+            <div className="flex items-center gap-2 mt-1.5">
+              <span
+                className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                  isAvailable
+                    ? "bg-emerald-100 text-emerald-700"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    isAvailable ? "bg-emerald-500" : "bg-gray-400"
+                  }`}
+                />
+                {isAvailable ? "Available" : "Not Available"}
               </span>
-            )}
-            {!isDemo && meta.seeking_status === "actively_looking" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 mt-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Ready to Start
-              </span>
-            )}
+              {isDemo && (
+                <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-[11px] font-semibold text-primary-700">
+                  Demo
+                </span>
+              )}
+              {!isDemo && meta.seeking_status === "actively_looking" && isAvailable && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Ready to Start
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
