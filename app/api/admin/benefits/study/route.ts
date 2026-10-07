@@ -54,11 +54,31 @@ export async function GET() {
   const { data: accounts } = accountIds.length
     ? await db.from("accounts").select("id, session_id").in("id", accountIds)
     : { data: [] as { id: string; session_id: string | null }[] };
-  const sessionOf = new Map((accounts ?? []).map((a) => [a.id, a.session_id as string | null]));
+  // A participant's browsers: the one that created their account, plus the
+  // one behind every plan they saved (a returning family, a second device).
+  const sessionsOf = new Map<string, Set<string>>();
+  const addSession = (profileId: string, s: unknown) => {
+    if (typeof s !== "string" || !s) return;
+    const set = sessionsOf.get(profileId) ?? new Set<string>();
+    set.add(s);
+    sessionsOf.set(profileId, set);
+  };
+  const accountSession = new Map((accounts ?? []).map((a) => [a.id, a.session_id as string | null]));
+  for (const r of rows) if (r.account_id) addSession(r.id, accountSession.get(r.account_id));
+  const profileIds = rows.map((r) => r.id);
+  for (let i = 0; i < profileIds.length; i += 100) {
+    const { data } = await db
+      .from("seeker_activity")
+      .select("profile_id, metadata")
+      .eq("event_type", "benefits_completed")
+      .in("profile_id", profileIds.slice(i, i + 100))
+      .limit(2000);
+    for (const a of data ?? []) addSession(a.profile_id as string, (a.metadata as Meta | null)?.session_id);
+  }
 
   // Every tagged event, plus every benefits event from a participant's own
   // browser (some came before the tag existed).
-  const participantSessions = [...new Set([...sessionOf.values()].filter(Boolean))] as string[];
+  const participantSessions = [...new Set([...sessionsOf.values()].flatMap((set) => [...set]))];
   type Ev = { created_at: string; metadata: Meta | null };
   const events: Ev[] = [];
   {
@@ -98,8 +118,9 @@ export async function GET() {
       const results = (meta.benefits_results as Meta | undefined) ?? {};
       const cascade = (meta.benefits_cascade as Meta | undefined) ?? {};
       const applied = (cascade.applied as { at?: string; decision?: string; decision_at?: string } | undefined) ?? null;
-      const session = r.account_id ? sessionOf.get(r.account_id) ?? null : null;
-      const myEvents = session ? eventsBySession.get(session) ?? [] : [];
+      const myEvents = [...(sessionsOf.get(r.id) ?? [])]
+        .flatMap((s) => eventsBySession.get(s) ?? [])
+        .sort((a, b) => a.created_at.localeCompare(b.created_at));
 
       const sendsQuery = [
         db.from("email_log").select("created_at").eq("channel", "sms").eq("provider_id", r.id).eq("status", "sent"),

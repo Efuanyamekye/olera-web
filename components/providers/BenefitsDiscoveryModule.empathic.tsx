@@ -38,6 +38,7 @@ import {
   tapHaptic,
 } from "@/components/providers/connection-card/MobileUXPrimitives";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { studyCohort } from "@/lib/benefits/study-cohort";
 
 type Relationship = "my-parent" | "my-spouse" | "myself" | "other-family";
 const RELATIONSHIP_PILLS: Array<{ value: Relationship; label: string }> = [
@@ -277,6 +278,8 @@ export default function EmpathicSingleStep({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           careNeed: inferred.careNeed,
+          // CARE-NAV study tag, if this browser carries one.
+          cohort: studyCohort() ?? undefined,
           // Guessed from their question text, not chosen by them.
           careNeedSource: "inferred_from_question",
           age: null,

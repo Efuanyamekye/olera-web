@@ -64,7 +64,7 @@ export function splitArm(): FinderArm | null {
 /**
  * What a visit to /benefits/finder shows, and the arm its events carry
  * (null: not in the comparison). `hasSavedForm` is true when the form found
- * a draft or plan to restore.
+ * a draft or plan to restore; `studyCohort` is the browser's study tag.
  */
 export function finderVisit(params: URLSearchParams, hasSavedForm: boolean, studyCohort: string | null = null): { show: FinderArm; arm: FinderArm | null } {
   const pin = params.get("arm");

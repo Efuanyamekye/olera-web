@@ -52,6 +52,7 @@ import type { WaiverProgram } from "@/data/waiver-library";
 import EmpathicSingleStep from "@/components/providers/BenefitsDiscoveryModule.empathic";
 import ResultsSheet from "@/components/benefits/ResultsSheet";
 import { SmsConsentDisclosure } from "@/components/sms/SmsConsentDisclosure";
+import { studyCohort } from "@/lib/benefits/study-cohort";
 
 /** Minimal program shape passed from the provider page server component. */
 export interface BenefitsProgram {
@@ -411,6 +412,8 @@ export default function BenefitsDiscoveryModule({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           careNeed,
+          // CARE-NAV study tag, if this browser carries one.
+          cohort: studyCohort() ?? undefined,
           careNeedSource: "stated",
           age: null,
           medicaidStatus: null,
