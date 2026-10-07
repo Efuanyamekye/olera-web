@@ -26,6 +26,8 @@ import { readCareAge, AGE_BAND_LABELS, isAgeBand } from "@/lib/benefits/age";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { readCareNeedSource, isInferredCareNeed, type CareNeedSource } from "@/lib/benefits/care-need-source";
 import dataVersion from "@/data/pipeline/VERSION.json";
+import { CURRENT_STUDY_VERSION } from "@/lib/benefits/study-versions";
+import { isCohortId } from "@/lib/benefits/study-cohort";
 
 // ─── Email + SMS body helpers ────────────────────────────────────────────
 //
@@ -539,7 +541,7 @@ export async function POST(req: Request) {
     // Only set when the family arrived through a study link; a later visit
     // without one leaves an existing tag alone.
     study_cohort:
-      typeof cohort === "string" && /^[a-z0-9][a-z0-9_-]{0,23}$/i.test(cohort)
+      isCohortId(cohort)
         ? { id: cohort.toLowerCase(), at: new Date().toISOString(), entry_source: entrySource || null }
         : undefined,
     household_size: householdSize === "1" || householdSize === "2" || householdSize === "3" ? Number(householdSize) : undefined,
@@ -560,6 +562,8 @@ export async function POST(req: Request) {
       // (data/pipeline/VERSION.json), so a study cohort can be read back
       // against the facts it saw.
       data_version: dataVersion.version,
+      // Which version of the product served the plan (lib/benefits/study-versions.ts).
+      product_version: CURRENT_STUDY_VERSION,
       finder_program_ids: Array.isArray(finderProgramIds) && finderProgramIds.length
         ? finderProgramIds.filter((id) => typeof id === "string").slice(0, 30)
         : undefined,

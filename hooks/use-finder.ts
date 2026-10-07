@@ -12,6 +12,7 @@ import {
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { finderVisit } from "@/lib/benefits/finder-split";
+import { captureStudyCohort } from "@/lib/benefits/study-cohort";
 
 /**
  * State for the redesigned finder (/benefits/finder).
@@ -43,8 +44,6 @@ interface Stored {
 }
 
 const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
-/** Short, safe cohort ids only ("v1", "iib-c1"). Anything else is ignored. */
-const COHORT_RE = /^[a-z0-9][a-z0-9_-]{0,23}$/i;
 
 function load(): Stored | null {
   try {
@@ -102,13 +101,21 @@ export function useFinder() {
     const params = new URLSearchParams(window.location.search);
     const whoParam = params.get("who");
     const cohortParam = params.get("cohort");
+    // A study link's tag is stored in this browser and stays (lib/benefits/study-cohort.ts).
+    const tagged = captureStudyCohort(params);
     const who = (WHO_VALUES as readonly string[]).includes(whoParam || "") ? (whoParam as FinderAnswers["who"]) : null;
 
-    // Half of new families get the conversation instead (lib/benefits/finder-split.ts).
-    // Nothing has rendered or been logged yet, so the form never flashes.
-    const visit = finderVisit(params, !!s && !who);
+    // Half of new families get the conversation instead, and study families
+    // always do (lib/benefits/finder-split.ts). Nothing has rendered or been
+    // logged yet, so the form never flashes.
+    const visit = finderVisit(params, !!s && !who, tagged);
     if (visit.show === "conversation") {
-      window.location.replace(`/benefits/conversation${who ? `?who=${who}` : ""}`);
+      const next = new URLSearchParams();
+      if (who) next.set("who", who);
+      // Carried in the link too, for a browser that can't store it.
+      if (tagged) next.set("cohort", tagged);
+      const q = next.toString();
+      window.location.replace(`/benefits/conversation${q ? `?${q}` : ""}`);
       return;
     }
     splitArm.current = visit.arm;
@@ -125,7 +132,7 @@ export function useFinder() {
         setPhase("results");
       }
     }
-    setCohort(cohortParam && COHORT_RE.test(cohortParam) ? cohortParam.toLowerCase() : (s?.cohort ?? null));
+    setCohort(tagged ?? s?.cohort ?? null);
 
     // Drop the params so a reload resumes the draft instead of restarting.
     if (whoParam || cohortParam || params.has("arm")) {

@@ -58,6 +58,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { studyCohort } from "@/lib/benefits/study-cohort";
 import { ArrowRight, CheckCircle, Phone, ShieldCheck, Spinner } from "@phosphor-icons/react";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { isPreviewMode } from "@/lib/analytics/preview-mode";
@@ -432,6 +433,8 @@ export default function ProgramBenefitsCard({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           careNeed,
+          // CARE-NAV study tag, if this browser carries one.
+          cohort: studyCohort() ?? undefined,
           // The card never asks: careNeed is derived from the program page
           // (deriveProgramCareNeed). Say so, so nothing downstream presents
           // it as the family's words (lib/benefits/care-need-source.ts).

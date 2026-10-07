@@ -13,6 +13,7 @@ import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { splitArm } from "@/lib/benefits/finder-split";
+import { captureStudyCohort, studyCohort } from "@/lib/benefits/study-cohort";
 
 /**
  * The benefits conversation (Phase 3, 5 Oct 2026), redesigned the same day
@@ -137,6 +138,8 @@ export default function BenefitsConversationPage() {
       setWhoFromLink(true);
       setStep("need");
     }
+    // A study link straight to the conversation tags this browser too.
+    captureStudyCohort(params);
     setInSplit(splitArm() === "conversation");
     setReady(true);
   }, []);
@@ -283,7 +286,7 @@ export default function BenefitsConversationPage() {
     // turns it into a lead_started growth event.
     completed("contact");
     try {
-      localStorage.setItem(FINDER_KEY, JSON.stringify({ answers: finderAnswers(), stepIndex: 99, phase: "results", result: plan, cohort: null, savedAt: Date.now() }));
+      localStorage.setItem(FINDER_KEY, JSON.stringify({ answers: finderAnswers(), stepIndex: 99, phase: "results", result: plan, cohort: studyCohort(), savedAt: Date.now() }));
     } catch {
       // Storage blocked: the finder opens on its first question instead.
     }

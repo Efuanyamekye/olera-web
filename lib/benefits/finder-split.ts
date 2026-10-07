@@ -13,10 +13,13 @@
  *  - a browser with a saved form draft or plan (this includes the
  *    conversation's own "Text me this", which hands its plan to the form;
  *    a randomized family keeps its tag there);
- *  - a study link (?cohort=), because the conversation doesn't carry the tag;
  *  - crawlers, so search engines keep seeing the indexed form.
+ * Study families (a ?cohort= link, or a browser that once opened one) always
+ * get the conversation, the product the CARE-NAV study evaluates, unless
+ * they have a saved form to come back to (8 Oct 2026; before that they got
+ * the form, because the conversation dropped the tag).
  * A browser that was never randomized (a saved draft from before the split,
- * a study link, a crawler) gets no arm and stays out of the comparison.
+ * a study family, a crawler) gets no arm and stays out of the comparison.
  *
  * ?arm=form or ?arm=conversation pins the page for testing; pinned browsers
  * stay out of the comparison too.
@@ -61,9 +64,9 @@ export function splitArm(): FinderArm | null {
 /**
  * What a visit to /benefits/finder shows, and the arm its events carry
  * (null: not in the comparison). `hasSavedForm` is true when the form found
- * a draft or plan to restore.
+ * a draft or plan to restore; `studyCohort` is the browser's study tag.
  */
-export function finderVisit(params: URLSearchParams, hasSavedForm: boolean): { show: FinderArm; arm: FinderArm | null } {
+export function finderVisit(params: URLSearchParams, hasSavedForm: boolean, studyCohort: string | null = null): { show: FinderArm; arm: FinderArm | null } {
   const pin = params.get("arm");
   if (isSplitArm(pin)) {
     write(PINNED + pin);
@@ -73,8 +76,9 @@ export function finderVisit(params: URLSearchParams, hasSavedForm: boolean): { s
   if (v?.startsWith(PINNED)) {
     return { show: !hasSavedForm && v === `${PINNED}conversation` ? "conversation" : "form", arm: null };
   }
+  if (studyCohort || params.get("cohort")) return { show: hasSavedForm ? "form" : "conversation", arm: null };
   // Off means off, including browsers already given the conversation.
-  if (CONVERSATION_SHARE <= 0 || params.get("cohort")) return { show: "form", arm: null };
+  if (CONVERSATION_SHARE <= 0) return { show: "form", arm: null };
 
   let arm = splitArm();
   if (!arm) {
