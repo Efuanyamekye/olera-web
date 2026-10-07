@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { directoryHealthSummary, type HealthActionRow } from "@/lib/providers/directory-health.server";
 import { loadTuning } from "@/lib/war-room/tuning.server";
+import { providerTractionText } from "@/lib/war-room/provider-traction.server";
 import { shouldSpeakDaily, shouldSpeakWeekly } from "@/lib/war-room/tuning";
 
 /**
@@ -214,6 +215,17 @@ export async function speakMorning(db: SupabaseClient, now: Date = new Date()): 
     : { posted: false, key: `directory:${day}`, skipped: "nothing_to_say" };
   if (now.getUTCDay() === 1 && shouldSpeakWeekly(tuning.cadence)) {
     out.weekly = await postOnce(db, { kind: "directory_weekly", key: `directory-week:${day}`, text: await directoryWeeklyText(db), threadTs: directoryThread });
+  }
+
+  // Providers families acted on that the providers did not: Mondays, in
+  // their own thread, unless the thread has been tuned otherwise.
+  const providersTuning = await loadTuning(db, "providers");
+  if (shouldSpeakDaily(providersTuning.cadence, now)) {
+    const providersThread = await initiativeThread(db, "providers", "*Providers with traction.* Each Monday I list the providers families asked about or wrote to in the last 28 days who did not act: claimed owners who went quiet, and unclaimed listings with demand. Reply \"draft <name>\" for a note; nothing is sent without a person. Reply here to tune me.");
+    const traction = await providerTractionText(db, now).catch((err) => { console.error("[cortex-voice] traction", err); return null; });
+    out.providers = traction
+      ? await postOnce(db, { kind: "providers_traction", key: `providers:${day}`, text: traction, threadTs: providersThread })
+      : { posted: false, key: `providers:${day}`, skipped: "nothing_to_say" };
   }
 
   const prs = await handoffsWaitingText(db);

@@ -42,6 +42,7 @@ export const INITIATIVE_SETTINGS: Record<string, { label: string; cadence: Caden
       archive: { label: "archiving a provider Google marks permanently closed", default: "alone" },
     },
   },
+  providers: { label: "Providers with traction", cadence: "weekly", fences: {} },
   meetings: { label: "Meeting summaries", cadence: "daily", fences: {} },
   product: { label: "Product pull requests", cadence: "daily", fences: {} },
   agents: { label: "Agent readiness", cadence: "weekly", fences: {} },
@@ -104,6 +105,7 @@ export function initiativeFromPostKey(key: string): string | null {
   const m = key.match(/^thread:([a-z]+)$/);
   if (m) return INITIATIVE_SETTINGS[m[1]] ? m[1] : null;
   if (/^directory(-week)?:/.test(key)) return "directory";
+  if (/^providers:/.test(key)) return "providers";
   if (/^meeting:/.test(key)) return "meetings";
   if (/^handoffs:/.test(key)) return "product";
   if (/^agents(-week)?:/.test(key)) return "agents";

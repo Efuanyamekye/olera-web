@@ -44,6 +44,7 @@ assert.ok(!shouldSpeakWeekly("off"));
 assert.equal(initiativeFromPostKey("thread:directory"), "directory");
 assert.equal(initiativeFromPostKey("directory:2026-10-07"), "directory");
 assert.equal(initiativeFromPostKey("directory-week:2026-10-12"), "directory");
+assert.equal(initiativeFromPostKey("providers:2026-10-12"), "providers");
 assert.equal(initiativeFromPostKey("meeting:abc"), "meetings");
 assert.equal(initiativeFromPostKey("handoffs:2026-10-07"), "product");
 assert.equal(initiativeFromPostKey("thread:nonsense"), null);
