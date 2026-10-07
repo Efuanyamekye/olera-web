@@ -43,7 +43,7 @@ const DRY = process.argv.includes("--dry-run");
 // Refused inside every session, whatever the brief says.
 const DENIED_TOOLS = [
   "Bash(gh pr merge:*)",
-  "Bash(gh api:*merge*)",
+  "Bash(gh api*merge*)",
   "Bash(git push origin staging*)",
   "Bash(git push origin main*)",
   "Bash(git push --force*)",
@@ -114,7 +114,7 @@ function prompt(brief: Brief, branch: string) {
 
 /** Pulls the RESULT line the session ends with. */
 export function parseResult(output: string): { status: "done" | "partial"; result: string } {
-  const line = output.split("\n").map((l) => l.trim()).reverse().find((l) => l.startsWith("RESULT:"));
+  const line = output.split("\n").map((l) => l.replace(/[*`_]/g, "").trim()).reverse().find((l) => l.startsWith("RESULT:"));
   const pr = output.match(/https:\/\/github\.com\/olera-care\/olera-web\/pull\/\d+/g)?.pop();
   if (!line) return { status: "partial", result: pr ? `${pr} (session ended without a result line)` : "runner: session ended without a PR or a result line" };
   const rest = line.slice("RESULT:".length).trim();
@@ -156,7 +156,8 @@ async function build(brief: Brief) {
   const branch = `cortex/${slug(brief.title)}-${brief.id.slice(0, 6)}`;
   const dir = join(ROOT, "worktrees", branch.replace("/", "-"));
   log(`building ${brief.id.slice(0, 8)} "${brief.title}" on ${branch}`);
-  if (!existsSync(dir)) git(CLONE, "worktree", "add", "--quiet", "-b", branch, dir, "origin/staging");
+  git(CLONE, "worktree", "prune");
+  if (!existsSync(dir)) git(CLONE, "worktree", "add", "--quiet", "-B", branch, dir, "origin/staging");
   if (!existsSync(join(dir, "node_modules"))) symlinkSync(join(CLONE, "node_modules"), join(dir, "node_modules"));
   if (existsSync(ENV_FILE) && !existsSync(join(dir, ".env.local"))) symlinkSync(ENV_FILE, join(dir, ".env.local"));
 

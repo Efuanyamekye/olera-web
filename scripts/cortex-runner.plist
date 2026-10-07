@@ -14,7 +14,7 @@
   <array>
     <string>/bin/zsh</string>
     <string>-c</string>
-    <string>R="$HOME/cortex-runner/olera-web"; [ -d "$R/.git" ] || git clone --quiet https://github.com/olera-care/olera-web.git "$R"; cd "$R" &amp;&amp; git fetch --quiet origin staging &amp;&amp; git checkout --quiet --detach origin/staging &amp;&amp; npx --yes tsx --env-file="$HOME/Desktop/olera-web/.env.local" scripts/cortex-runner.ts</string>
+    <string>R="$HOME/cortex-runner/olera-web"; [ -d "$R/.git" ] || git clone --quiet https://github.com/olera-care/olera-web.git "$R"; cd "$R" &amp;&amp; git fetch --quiet origin staging &amp;&amp; git checkout --quiet --detach origin/staging &amp;&amp; { [ -d node_modules ] || npm ci --no-audit --no-fund --loglevel=error; } &amp;&amp; npx --yes tsx --env-file="$HOME/Desktop/olera-web/.env.local" scripts/cortex-runner.ts</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
@@ -22,6 +22,9 @@
     <key>PATH</key>
     <string>/Users/tfalohun/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>HOME</key><string>/Users/tfalohun</string>
+    <!-- claude reads its login from the keychain and needs USER to find it. -->
+    <key>USER</key><string>tfalohun</string>
+    <key>LOGNAME</key><string>tfalohun</string>
     <key>SSL_CERT_FILE</key><string>/etc/ssl/cert.pem</string>
   </dict>
   <key>StartCalendarInterval</key><dict><key>Hour</key><integer>1</integer><key>Minute</key><integer>0</integer></dict>
