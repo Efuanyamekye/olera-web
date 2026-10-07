@@ -76,6 +76,9 @@ export interface ApplyAlong {
   next: string[];
   /** Said on the phone to Social Security instead. */
   phoneScript: string;
+  /** The same caution our texts carry (lib/sms/templates.ts), plus who we
+   *  aren't: the page sends people to a government form. */
+  disclaimer: string;
 }
 
 const INCOME: Record<string, [number, number]> = { under1000: [0, 1000], under1500: [1000, 1500], under2500: [1500, 2500], under4000: [2500, 4000], over4000: [4000, Infinity] };
@@ -233,6 +236,7 @@ export function buildApplyAlong(input: ApplyAlongInput): ApplyAlong {
     steps,
     next,
     phoneScript: `Hi, I'd like to apply for Extra Help ${v.callFor}, and have it sent to the state for Medicare Savings too.`,
+    disclaimer: `Olera is a free service and isn't part of Social Security or ${knownState ? `the state of ${a.stateName}` : "your state"}. We share free information and can get things wrong, so please confirm anything important with Social Security or the state. They make every decision.`,
   };
 }
 

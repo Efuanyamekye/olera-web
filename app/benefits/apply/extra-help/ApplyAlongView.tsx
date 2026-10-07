@@ -332,6 +332,8 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
           </div>
         ) : null}
       </section>
+
+      <p className="m-0 text-[13px] leading-relaxed text-gray-500">{sheet.disclaimer}</p>
     </div>
   );
 }
