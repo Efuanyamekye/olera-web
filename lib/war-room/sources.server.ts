@@ -727,7 +727,7 @@ async function notionPageBodyDeep(pageId: string, timeoutMs = 10_000): Promise<s
   return bounded(lines.join("\n"), 6_000);
 }
 
-export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; body: string; via: string } | null> {
+export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; createdAt: string; body: string; via: string } | null> {
   if (!(process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) return null;
   const phrase = title.replace(/\s+/g, " ").trim().slice(0, 100);
   if (phrase.length < 4) return null;
@@ -743,7 +743,7 @@ export async function lastNotionNoteFor(title: string): Promise<{ title: string;
       const row = rows[0];
       if (!row) continue;
       const body = await notionPageBodyDeep(String(row.id));
-      return { title: notionPageTitle((row.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(row.last_edited_time ?? ""), body, via: "data_source" };
+      return { title: notionPageTitle((row.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(row.last_edited_time ?? ""), createdAt: String(row.created_time ?? row.last_edited_time ?? ""), body, via: "data_source" };
     } catch {
       // try the next source, then search
     }
@@ -757,7 +757,7 @@ export async function lastNotionNoteFor(title: string): Promise<{ title: string;
     const page = ((payload.results as Array<Record<string, unknown>> | undefined) ?? []).find((p) => !p.archived && !p.in_trash);
     if (!page) return null;
     const body = await notionPageBodyDeep(String(page.id));
-    return { title: notionPageTitle((page.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(page.last_edited_time ?? ""), body, via: "search" };
+    return { title: notionPageTitle((page.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(page.last_edited_time ?? ""), createdAt: String(page.created_time ?? page.last_edited_time ?? ""), body, via: "search" };
   } catch {
     return null;
   }

@@ -60,6 +60,47 @@ async function supportThreadsFrom(db: SupabaseClient, person: Person): Promise<s
     .map((t) => `- ${t.last_message_at.slice(0, 10)} "${t.subject}" (${t.state}): ${t.agent_summary ?? ""}`).join("\n");
 }
 
+/**
+ * Pull requests merged to staging since a date: what was built since the
+ * last meeting. On 7 Oct 2026 the care-seeker prep called the lead ping and
+ * the check-with-provider tab "unfinished" a day after both shipped, because
+ * it could not see the work. Promotions and session-notes PRs are left out.
+ */
+let shippedCache: { at: number; since: string; lines: string[] } | null = null;
+export async function shippedSince(sinceIso: string): Promise<string[]> {
+  if (shippedCache && shippedCache.since === sinceIso && Date.now() - shippedCache.at < 10 * 60_000) return shippedCache.lines;
+  const token = process.env.WAR_ROOM_GITHUB_TOKEN;
+  const repo = process.env.WAR_ROOM_GITHUB_REPOSITORY;
+  if (!token || !repo || !Number.isFinite(Date.parse(sinceIso))) return [];
+  try {
+    // The repo merges about forty PRs a day, so a week needs several pages.
+    // Pages are by last update, newest first; stop once a page is entirely
+    // older than the window.
+    const since = Date.parse(sinceIso);
+    const pulls: Array<{ number: number; title: string; merged_at: string | null; updated_at: string }> = [];
+    for (let page = 1; page <= 4; page++) {
+      const res = await fetch(`https://api.github.com/repos/${repo}/pulls?state=closed&base=staging&sort=updated&direction=desc&per_page=100&page=${page}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) break;
+      const batch = (await res.json()) as Array<{ number: number; title: string; merged_at: string | null; updated_at: string }>;
+      pulls.push(...batch);
+      if (batch.length < 100 || batch.every((p) => Date.parse(p.updated_at) < since)) break;
+    }
+    const lines = pulls
+      .filter((p) => p.merged_at && Date.parse(p.merged_at) >= since)
+      .filter((p) => !/^promote |session context|handoff$|scratchpad|fact-check|medjobs/i.test(p.title) && !/^Merge main into staging/i.test(p.title))
+      .sort((a, b) => Date.parse(a.merged_at!) - Date.parse(b.merged_at!))
+      .slice(0, 60)
+      .map((p) => `- ${p.merged_at!.slice(0, 10)} #${p.number} ${p.title}`);
+    shippedCache = { at: Date.now(), since: sinceIso, lines };
+    return lines;
+  } catch {
+    return [];
+  }
+}
+
 /** What Olera knows about one outside person. */
 export async function contextFor(db: SupabaseClient, person: Person): Promise<string> {
   const parts: string[] = [`## ${person.name} <${person.email}>`];
@@ -89,15 +130,21 @@ export async function meetingRecord(db: SupabaseClient, event: CalendarEvent): P
   ]);
   const note = lastNote && noteMatchesMeeting(event.summary ?? "", lastNote.title, lastNote.editedAt, new Date()) ? lastNote : null;
   const description = (event.description ?? "").replace(/----\( Video Call \)----[\s\S]*?---===---/g, "").replace(/https?:\/\/\S+/g, "").trim();
-  const context = [
+  const contextParts = [
     `ATTENDEES: TJ Falohun (Olera founder), ${people.map((p) => `${p.name}${p.team ? " (Olera team)" : " (outside Olera)"}`).join(", ")}`,
     external.length ? "" : "NO OUTSIDE ATTENDEES: everyone on this meeting is Olera.",
     description ? `INVITE DESCRIPTION:\n${description.slice(0, 1_500)}` : "",
     note ? `LAST TIME (Notion note "${note.title}", edited ${note.editedAt.slice(0, 10)}):\n${note.body.slice(0, 3_500)}` : "LAST TIME: no Notion note found for this meeting.",
     outside.length ? `OUTSIDE ATTENDEES:\n${outside.join("\n\n")}` : "",
-  ].filter(Boolean).join("\n\n");
+  ].filter(Boolean);
+  const context = contextParts;
+  // From when the note was created (the meeting), not last edited: an edit
+  // the next day would otherwise hide work shipped in between.
+  const shipped = note ? await shippedSince(note.createdAt).catch(() => []) : [];
+  if (shipped.length) context.push(`SHIPPED SINCE LAST TIME (pull requests merged ${note!.createdAt.slice(0, 10)} or later; built, may still await production):\n${shipped.join("\n")}`);
+  else if (note) context.push("SHIPPED SINCE LAST TIME: no pull requests found.");
   const seen = lastNote ? `${lastNote.title} (${lastNote.editedAt.slice(0, 10)}, via ${lastNote.via})` : null;
-  return { context, noteUsed: note ? seen : null, noteSeen: seen };
+  return { context: context.join("\n\n"), noteUsed: note ? seen : null, noteSeen: seen };
 }
 
 async function writeNote(event: CalendarEvent, context: string): Promise<string | null> {
@@ -108,7 +155,7 @@ async function writeNote(event: CalendarEvent, context: string): Promise<string 
     max_tokens: 600,
     system: [
       "You prepare Olera's team for a meeting later today. Olera is a senior-care marketplace and benefits guide. The post goes in the team's Slack channel and is read by everyone attending, not only the founder.",
-      "Plain text, Slack mrkdwn single asterisks for bold, no headers, short lines. In this order: one line on what the meeting is for, from the title and invite only; *Last time:* the decisions and action items from the LAST TIME note, with the owners the note names, marking any that look unfinished, or 'No notes from last time.' when there is no note; *From outside:* one line per OUTSIDE attendee on what they are to Olera and the most recent touch (leave this line out entirely when there are no outside attendees; Olera team members and TJ are never outside); *Open promises:* only promises written in the record, or 'None on file'; *To settle:* two or three questions this meeting should answer, phrased for the attendees.",
+      "Plain text, Slack mrkdwn single asterisks for bold, no headers, short lines. In this order: one line on what the meeting is for, from the title and invite only; *Last time:* the action items from the LAST TIME note with the owners the note names, each marked *done* (with the PR number) only when a SHIPPED SINCE LAST TIME entry clearly does it, otherwise *to check*; never write 'unfinished' or 'in progress', because the record does not say; or 'No notes from last time.' when there is no note; *From outside:* one line per OUTSIDE attendee on what they are to Olera and the most recent touch (leave this line out entirely when there are no outside attendees; Olera team members and TJ are never outside); *Open promises:* only promises written in the record, or 'None on file'; *To settle:* two or three questions this meeting should answer, phrased for the attendees.",
       "Use only the record given. Never invent history, numbers, commitments, action items or owners; never attribute a task to someone the record does not name. When the record is thin, say less. Family members are first name only. No em dashes. Under 160 words.",
     ].join("\n"),
     messages: [{ role: "user", content: `MEETING: ${event.summary ?? "(no title)"}\n\n${context.slice(0, MAX_CONTEXT)}` }],
