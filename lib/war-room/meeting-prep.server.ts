@@ -109,6 +109,15 @@ async function writeNote(event: CalendarEvent, context: string): Promise<string 
   return reply.content.find((b): b is Anthropic.TextBlock => b.type === "text")?.text.trim() || null;
 }
 
+/** The prep text for one event, without posting it: for review before it goes out. */
+export async function draftPrep(db: SupabaseClient, event: CalendarEvent): Promise<{ channel: string; text: string; context: string }> {
+  const route = routeMeeting(event);
+  const context = await meetingContext(db, event);
+  const note = await writeNote(event, context).catch(() => null);
+  const header = `*Prep: ${event.summary ?? "(no title)"}*, ${event.start?.dateTime ? whenText(event.start.dateTime) : ""}`;
+  return { channel: route.channel?.name ?? "#cortex", text: `${header}\n${note ?? "(no note written)"}`, context };
+}
+
 export type PrepOutcome = { key: string; title: string; channel: string; sent: boolean; fallback?: boolean; error?: string };
 
 /** Write and post the prep for one event. Idempotent by key unless forced. */
