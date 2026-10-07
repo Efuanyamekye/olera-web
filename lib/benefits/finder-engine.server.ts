@@ -361,6 +361,10 @@ function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
     (re ? (re.test(s.raw.name) || re.test(s.raw.shortName || "")) && !(re === PAYS_FOR_CARE && drugProgram(s)) : true) && (!category || category.includes(s.category));
 
   const preferences: ((s: Screened) => boolean)[] = [];
+  // A caregiver asking for a break, or a family with something urgent this
+  // week, needs the agency (caregiver support, crisis help), not a Medicare
+  // premium program, when their own preference has nothing likely.
+  const agencyNeeds = (helping && a.caregiverNeeds.some((n) => n === "break" || n === "learn" || n === "talk")) || a.needs.includes("urgent");
   if (helping && a.caregiverNeeds.some((n) => n === "break" || n === "learn" || n === "talk")) {
     preferences.push(wants(null, ["caregiver"]));
   }
@@ -382,7 +386,7 @@ function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   // sent to the agency (answer key, 7 Oct 2026: PA, OH, NC, GA, IL, MI).
   // Someone who already has Medicaid is usually enrolled in it already.
   const medicareFirst = () =>
-    a.medicaid === "alreadyHas" ? null : pool.find((s) => s.program.tier === "likely" && MEDICARE_SAVINGS.test(s.raw.name)) ?? null;
+    a.medicaid === "alreadyHas" || agencyNeeds ? null : pool.find((s) => s.program.tier === "likely" && MEDICARE_SAVINGS.test(s.raw.name)) ?? null;
   // The top preference is what they said would help most. If nothing there
   // is likely, a local benefits counselor is a better first call than a
   // long shot, so return null and let the caller lead with the agency.
