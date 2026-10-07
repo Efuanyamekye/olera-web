@@ -14,6 +14,7 @@ import { withoutStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { handleInboxCommand, parseInboxCommand } from "@/lib/war-room/inbox-operator.server";
 import { applyTuningMessage, initiativeForThread, recordGrade } from "@/lib/war-room/tuning.server";
+import { providerCardReply } from "@/lib/war-room/provider-gaps.server";
 
 export const maxDuration = 90;
 
@@ -137,6 +138,16 @@ export async function POST(request: NextRequest) {
       // Anything that is not an instruction falls through and is answered.
       if (fromFounder && payload.event.thread_ts && payload.event.ts) {
         const thread = await initiativeForThread(db, payload.event.thread_ts).catch(() => null);
+        // In the providers thread a name is a request for the card and a
+        // drafted note (slice 3). Checked before tuning: it is deterministic
+        // and free, and "Bowie Commons" is never an instruction.
+        if (thread?.initiative === "providers") {
+          const card = await providerCardReply(db, { threadTs: payload.event.thread_ts, text }).catch(() => null);
+          if (card) {
+            await say(card);
+            return NextResponse.json({ ok: true, cortexChannel: { providerCard: true } });
+          }
+        }
         if (thread) {
           const tuned = await applyTuningMessage(db, { initiative: thread.initiative, lastPost: thread.lastPost, text, slackTs: payload.event.ts, user: payload.event.user ?? null }).catch(() => null);
           if (tuned) {

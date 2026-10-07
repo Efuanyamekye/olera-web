@@ -3,6 +3,7 @@ import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { directoryHealthSummary, type HealthActionRow } from "@/lib/providers/directory-health.server";
 import { loadTuning } from "@/lib/war-room/tuning.server";
 import { providerTractionText } from "@/lib/war-room/provider-traction.server";
+import { providerGapsText } from "@/lib/war-room/provider-gaps.server";
 import { shouldSpeakDaily, shouldSpeakWeekly } from "@/lib/war-room/tuning";
 
 /**
@@ -231,6 +232,11 @@ export async function speakMorning(db: SupabaseClient, now: Date = new Date()): 
     out.providers = traction
       ? await postOnce(db, { kind: "providers_traction", key: `providers:${day}`, text: traction, threadTs: providersThread })
       : { posted: false, key: `providers:${day}`, skipped: "nothing_to_say" };
+    // Claimed pages families open that are missing things (slice 3), same thread.
+    const gaps = await providerGapsText(db, now).catch((err) => { console.error("[cortex-voice] gaps", err); return null; });
+    out.providerGaps = gaps
+      ? await postOnce(db, { kind: "providers_gaps", key: `providers:gaps:${day}`, text: gaps, threadTs: providersThread })
+      : { posted: false, key: `providers:gaps:${day}`, skipped: "nothing_to_say" };
   }
 
   const prs = await handoffsWaitingText(db);
