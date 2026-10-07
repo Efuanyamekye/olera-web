@@ -662,6 +662,31 @@ async function mapWithConcurrency<T, R>(items: T[], limit: number, fn: (item: T)
   return results;
 }
 
+/**
+ * The most recent Notion page whose title contains this meeting title, with
+ * its body: the notes from the last time this meeting happened. For meeting
+ * prep. Null when Notion is not configured or nothing matches. Only pages the
+ * Cortex connection can see (the Meeting Notes database) are searched.
+ */
+export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; body: string } | null> {
+  if (!(process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) return null;
+  const query = title.replace(/[^\p{L}\p{N}&'× ]+/gu, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+  if (query.length < 4) return null;
+  try {
+    const payload = await notionFetch("/search", {
+      method: "POST",
+      body: JSON.stringify({ query, filter: { property: "object", value: "page" }, sort: { direction: "descending", timestamp: "last_edited_time" }, page_size: 5 }),
+    }, 10_000);
+    const pages = ((payload.results as Array<Record<string, unknown>> | undefined) ?? []).filter((page) => !page.archived && !page.in_trash);
+    const page = pages[0];
+    if (!page) return null;
+    const body = await notionPageBody(String(page.id), 10_000);
+    return { title: notionPageTitle((page.properties as Record<string, unknown> | undefined) ?? {}), editedAt: String(page.last_edited_time ?? ""), body };
+  } catch {
+    return null;
+  }
+}
+
 export async function syncNotionEvidence(db: SupabaseClient) {
   const sources = notionSources();
   const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN;
