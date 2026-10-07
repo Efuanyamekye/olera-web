@@ -682,15 +682,49 @@ async function notionTitleProperty(dataSourceId: string): Promise<string | null>
   return name;
 }
 
+/**
+ * A page's text, descending into nested blocks. Notion AI meeting notes are a
+ * "transcription" (meeting notes) block inside the database row, with the
+ * summary and notes as nested children; on 7 Oct 2026 a top-level read of the
+ * 6 Oct care-seeker note returned nothing. The transcript child is skipped:
+ * it is long and the summary already carries the decisions.
+ */
 async function notionPageBodyDeep(pageId: string, timeoutMs = 10_000): Promise<string> {
-  const payload = await notionFetch(`/blocks/${pageId}/children?page_size=100`, undefined, timeoutMs);
-  const blocks = (payload.results as Array<Record<string, unknown>> | undefined) ?? [];
-  const parts: string[] = [blocks.map(notionBlockText).filter(Boolean).join("\n")];
-  for (const block of blocks.filter((b) => b.type === "child_page").slice(0, 2)) {
-    const child = await notionPageBody(String(block.id), timeoutMs).catch(() => "");
-    if (child) parts.push(child);
-  }
-  return bounded(parts.filter(Boolean).join("\n"), 6_000);
+  const lines: string[] = [];
+  let budget = 40; // block-children requests at most
+  const walk = async (blockId: string, depth: number): Promise<void> => {
+    if (budget-- <= 0 || depth > 4) return;
+    const payload = await notionFetch(`/blocks/${blockId}/children?page_size=100`, undefined, timeoutMs);
+    const blocks = (payload.results as Array<Record<string, unknown>> | undefined) ?? [];
+    for (const block of blocks) {
+      const type = String(block.type || "");
+      const data = (block[type] ?? {}) as { children?: { transcript_block_id?: string } ; transcript_block_id?: string };
+      const skip = new Set([data.children?.transcript_block_id, data.transcript_block_id].filter(Boolean) as string[]);
+      if (skip.has(String(block.id))) continue;
+      const text = notionBlockText(block);
+      if (text) lines.push(text);
+      if (block.has_children && type !== "child_database") {
+        if (type === "transcription" || type === "meeting_notes") {
+          // Read the summary and notes children; leave the transcript.
+          const sub = await notionFetch(`/blocks/${String(block.id)}/children?page_size=100`, undefined, timeoutMs).catch(() => null);
+          budget -= 1;
+          const kids = ((sub?.results as Array<Record<string, unknown>> | undefined) ?? []);
+          for (const kid of kids) {
+            if (skip.has(String(kid.id))) continue;
+            const kidText = notionBlockText(kid);
+            if (/transcript/i.test(kidText) && kidText.length < 40) continue;
+            if (kidText) lines.push(kidText);
+            if (kid.has_children) await walk(String(kid.id), depth + 2).catch(() => undefined);
+          }
+        } else {
+          await walk(String(block.id), depth + 1).catch(() => undefined);
+        }
+      }
+      if (lines.join("\n").length > 6_000) return;
+    }
+  };
+  await walk(pageId, 0);
+  return bounded(lines.join("\n"), 6_000);
 }
 
 export async function lastNotionNoteFor(title: string): Promise<{ title: string; editedAt: string; body: string; via: string } | null> {
