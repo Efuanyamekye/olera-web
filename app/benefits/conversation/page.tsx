@@ -152,12 +152,13 @@ export default function BenefitsConversationPage() {
   const viewName = !ready ? null : step === "engine" ? (turn?.question && !loading && !reward ? turn.question.fact : null) : step === "result" ? (plan ? "results" : null) : step;
   const entryTracked = useRef(false);
   const lastViewed = useRef<string | null>(null);
+  // Waits for the link to be read, so a visit from the finder split logs the
+  // finder as its entry source.
   useEffect(() => {
-    if (!entryTracked.current) {
-      entryTracked.current = true;
-      track("benefits_entry_viewed", "entry", 0);
-    }
-  }, [track]);
+    if (!ready || entryTracked.current) return;
+    entryTracked.current = true;
+    track("benefits_entry_viewed", "entry", 0);
+  }, [ready, track]);
   useEffect(() => {
     if (!viewName || viewName === lastViewed.current) return;
     lastViewed.current = viewName;
