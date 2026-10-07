@@ -392,6 +392,25 @@
 - If she says she needs help at home: rescreen via the Elder Helpline 1-800-963-5337, and get her county.
 - Product gap: `unrelated` triage inside an open STUCK case goes silent. It should route to a person with a draft.
 
+### 2026-09-25 (late) — CARE-NAV study team update on Benefits Finder fixes (`vigilant-morse`, no app code)
+
+**What happened.** We mapped Minh-Nguyet's "CARE-NAV Phase 1 User Feedback Summary 3.0" (Slack F0C2JEXRSKT, 31 caregivers) item by item against the Benefits Finder releases that went to prod on Sep 24 (#2143 #2144 #2145 #2146 #2152 #2153).
+- Result: 8 done, 9 partial, 19 not yet, 5 app-only (iOS prototype: swipe, heart, back nav, truncation, end-of-life onboarding). That is about a third of the way.
+- Posted a short update as TJ in #care-nav-study-team: https://oleraworkspace.slack.com/archives/C09N33RQGTH/p1790331688697699
+- The post covers the first minute, five doc items addressed, the whole-flow cleanup, and what is still open.
+
+**Decisions.**
+- Don't claim "all comments addressed." Most of the doc was about the iOS app, and the researchers who coded it would catch an over-claim.
+- The post stays separate from the "cohort one product is ready" announcement TJ and Logan still owe the channel.
+- TJ cut the tracker link and the ask for percentages/quotes, to keep the post short.
+
+**Artifact (private, not shared):** item-by-item map at https://claude.ai/artifact/KsbZVE86pRsbVwn9Z5KFjk
+
+**Next Up (from the doc's open items).**
+- Fix-before-rollout items still open: ZIP/location search, the insurance filter (the single most requested change), veteran/housing screener filters.
+- Also open: Olera Score explanation, rating counts, font size, photo diversity, voice acting on answers.
+- The three-tap 50/50 test is read on Oct 2 and Oct 9.
+
 ### 2026-09-25 (later) — Four provider Meta arms rebuilt as instant forms and published (`vigilant-morse`, #2177 → staging, hotfix #2179 → main `1f375003`)
 
 **What happened.** Wescastle (Atlanta), Rosemonte (North Phoenix), and HomeWell (Oak Ridge) had been built as Meta *traffic* ads by copying Wescastle's shape. TJ: provider Meta arms are ALWAYS native instant forms linked to the provider (Hoop pattern). Rebuilt all three, and added LumiWell (Fresno, stock photos). All four are published and ACTIVE, scheduled to start 27–28 Sep. Saved as memory `feedback_provider_meta_is_instant_form`.
