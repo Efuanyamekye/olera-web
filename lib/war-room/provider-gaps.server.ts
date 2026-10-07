@@ -50,7 +50,7 @@ async function viewsBySlug(db: SupabaseClient, now: Date): Promise<Map<string, n
   const since = sinceDate(now).toISOString().slice(0, 10);
   const out = new Map<string, number>();
   for (let from = 0; from < 120_000; from += 1000) {
-    const { data, error } = await db.from("provider_page_view_stats").select("provider_id, unique_view_count").gte("date", since).order("provider_id").range(from, from + 999);
+    const { data, error } = await db.from("provider_page_view_stats").select("provider_id, unique_view_count").gte("date", since).order("provider_id").order("date").range(from, from + 999);
     if (error) throw new Error(error.message);
     for (const r of (data ?? []) as Array<{ provider_id: string; unique_view_count: number | null }>) out.set(r.provider_id, (out.get(r.provider_id) ?? 0) + (r.unique_view_count ?? 0));
     if (!data || data.length < 1000) break;

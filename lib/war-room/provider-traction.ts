@@ -12,8 +12,8 @@
  * Two lists come out, because they want different things:
  *   unclaimed      demand on a listing nobody owns  -> a claim invitation
  *   claimed_silent demand on a listing someone owns and has not touched in 28 days -> a nudge
- * Bulk claims made from inside Olera (an olera.care owner) are not "the
- * provider has an account" and are listed as unclaimed.
+ * Claimed is the profile's claim_state; see provider-traction.server.ts for
+ * why a claim event is not required.
  */
 
 export const TRACTION_WINDOW_DAYS = 28;
