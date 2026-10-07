@@ -35,6 +35,9 @@ export interface TrackBenefitsEventPayload {
   /** Program-card flow experiment arm ("control" | "three_tap"). Only the
    *  program-page card sets it; stored as metadata.card_flow. */
   cardFlow?: string | null;
+  /** Finder vs conversation split arm, only on visits that were randomized
+   *  (lib/benefits/finder-split.ts). Stored as metadata.split_arm. */
+  splitArm?: string | null;
 }
 
 export function trackBenefitsEvent(payload: TrackBenefitsEventPayload): void {
