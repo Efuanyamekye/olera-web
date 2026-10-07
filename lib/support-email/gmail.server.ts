@@ -362,10 +362,10 @@ export function batchModifyGmailMessages(
   });
 }
 
-export function createGmailDraft(accessToken: string, raw: string, threadId: string) {
+export function createGmailDraft(accessToken: string, raw: string, threadId?: string) {
   return gmailRequest<{ id: string; message: GmailMessage }>(accessToken, "/drafts", {
     method: "POST",
-    body: JSON.stringify({ message: { raw, threadId } }),
+    body: JSON.stringify({ message: threadId ? { raw, threadId } : { raw } }),
   });
 }
 
