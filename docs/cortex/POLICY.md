@@ -35,6 +35,10 @@ What Cortex may do on its own, what it must ask for, and how it reports. Set wit
 - Delete a row. Soft delete only, with a reason the CHECK allows.
 - Scrape Google Maps with a browser at volume. The free API tier is the volume path; the browser is for the ambiguous hundred a month.
 
+## Tuning is a conversation
+
+Every initiative has a standing thread in `#cortex`. A reply from TJ in that thread is read as an instruction about that initiative and saved scoped to it (`cortex_tuning`, migration 274): how often to speak (`daily`, `weekly`, `off`), which action waits for a person (`renames=ask`, `archive=ask`), or a standing lesson. Cortex acknowledges in the thread with the way back ("say daily here to change it back"). A thumbs up or down on a Cortex post is a grade on that initiative. The activity register (`docs/cortex/ACTIVITIES.md`) is the list of initiatives and their current settings; the thread is how the settings change.
+
 ## Backlog is not a queue
 
 A brief whose `note` starts with `backlog` is parked on purpose (TJ: "not saying we should do it now, but just putting that in the backlog"). The runner skips it and the morning post does not nag about it. It is built when TJ says go, by changing the note.

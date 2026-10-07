@@ -34,6 +34,16 @@ assert.deepEqual(decideHealthActions(open, { status: "OPERATIONAL", googleName: 
 // No status at all (Google returned only a name): still diffs the name.
 assert.deepEqual(decideHealthActions(open, { status: null, googleName: "Brookdale Dallas" }).map((d) => d.kind), ["rename_flagged"]);
 
+// Fences tuned from #cortex: "ask" turns the reversible action into a flag.
+assert.deepEqual(
+  decideHealthActions(open, { status: "CLOSED_PERMANENTLY", googleName: null }, { renames: "alone", archive: "ask" }).map((d) => d.kind),
+  ["closed_flagged"],
+);
+assert.deepEqual(
+  decideHealthActions(open, { status: "OPERATIONAL", googleName: "SUNRISE SENIOR LIVING - DALLAS, LLC" }, { renames: "ask", archive: "alone" }).map((d) => d.kind),
+  ["rename_flagged"],
+);
+
 assert.equal(normalizeProviderName("Bella Vista Apts., Inc."), "bella vista apts");
 assert.equal(normalizeProviderName("A & B Home Care LLC"), "a b home care");
 assert.equal(normalizeProviderName("Sunrise Senior Living of Dallas"), normalizeProviderName("SUNRISE SENIOR LIVING - DALLAS, LLC"));

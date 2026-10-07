@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { directoryHealthSummary, type HealthActionRow } from "@/lib/providers/directory-health.server";
+import { loadTuning } from "@/lib/war-room/tuning.server";
+import { shouldSpeakDaily, shouldSpeakWeekly } from "@/lib/war-room/tuning";
 
 /**
  * Cortex speaking for itself in Slack.
@@ -55,6 +57,7 @@ export async function initiativeThread(db: SupabaseClient, initiative: string, h
 
 const KIND_WORDS: Record<string, string> = {
   closed_archived: "archived as permanently closed",
+  closed_flagged: "marked permanently closed by Google (archive waits for you)",
   rename_applied: "renamed to match Google",
   closed_temporarily: "marked temporarily closed by Google",
   rename_flagged: "named differently on Google",
@@ -201,12 +204,15 @@ export async function speakMorning(db: SupabaseClient, now: Date = new Date()): 
   const since = new Date(now.getTime() - 24 * 3_600_000);
   const out: Record<string, PostOutcome> = {};
 
-  const directoryThread = await initiativeThread(db, "directory", "*Directory health.* I check listings against Google and our own signals, archive what is closed, apply trivial renames, and flag the rest. Daily what I did is in this thread; undo is one click in admin.");
-  const digest = await directoryDigestText(db, since);
+  // How often the directory speaks is tuned from its own thread ("weekly,
+  // not daily"); the Monday state post survives everything but "off".
+  const tuning = await loadTuning(db, "directory");
+  const directoryThread = await initiativeThread(db, "directory", "*Directory health.* I check listings against Google and our own signals, archive what is closed, apply trivial renames, and flag the rest. Daily what I did is in this thread; undo is one click in admin. Reply here to tune me: \"weekly, not daily\", \"ask me first on renames\", or a rule I should keep.");
+  const digest = shouldSpeakDaily(tuning.cadence, now) ? await directoryDigestText(db, tuning.cadence === "weekly" ? new Date(now.getTime() - 7 * 24 * 3_600_000) : since) : null;
   out.directory = digest
     ? await postOnce(db, { kind: "directory_digest", key: `directory:${day}`, text: digest, threadTs: directoryThread })
     : { posted: false, key: `directory:${day}`, skipped: "nothing_to_say" };
-  if (now.getUTCDay() === 1) {
+  if (now.getUTCDay() === 1 && shouldSpeakWeekly(tuning.cadence)) {
     out.weekly = await postOnce(db, { kind: "directory_weekly", key: `directory-week:${day}`, text: await directoryWeeklyText(db), threadTs: directoryThread });
   }
 
