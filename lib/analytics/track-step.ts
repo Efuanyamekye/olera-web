@@ -6,6 +6,7 @@
 
 import { isPreviewMode } from "./preview-mode";
 import { getOrCreateVisitId } from "./session";
+import { studyCohort } from "@/lib/benefits/study-cohort";
 
 export type BenefitsStepEvent =
   | "benefits_entry_viewed"
@@ -38,6 +39,9 @@ export interface TrackBenefitsEventPayload {
   /** Finder vs conversation split arm, only on visits that were randomized
    *  (lib/benefits/finder-split.ts). Stored as metadata.split_arm. */
   splitArm?: string | null;
+  /** CARE-NAV study tag (lib/benefits/study-cohort.ts). Read from this
+   *  browser when not given. Stored as metadata.study_cohort. */
+  studyCohort?: string | null;
 }
 
 export function trackBenefitsEvent(payload: TrackBenefitsEventPayload): void {
@@ -48,7 +52,7 @@ export function trackBenefitsEvent(payload: TrackBenefitsEventPayload): void {
     fetch("/api/benefits/track-step", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, visitId: getOrCreateVisitId() }),
+      body: JSON.stringify({ ...payload, studyCohort: payload.studyCohort ?? studyCohort(), visitId: getOrCreateVisitId() }),
       keepalive: true,
     }).catch((err) => {
       console.error("[trackBenefitsEvent] fetch failed:", err);

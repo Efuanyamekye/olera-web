@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useToast } from "@/components/admin/Toast";
 import BenefitsFamiliesView from "@/components/admin/BenefitsFamiliesView";
@@ -1284,7 +1285,10 @@ export default function AdminBenefitsPage() {
       {/* Header — serif title + view toggle */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-display-xs font-bold text-gray-900 font-serif">Benefits</h1>
+          <div className="flex items-baseline gap-4">
+            <h1 className="text-display-xs font-bold text-gray-900 font-serif">Benefits</h1>
+            <Link href="/admin/benefits/study" className="text-sm text-gray-500 underline underline-offset-2 hover:text-gray-800">CARE-NAV study</Link>
+          </div>
           <div className="flex rounded-lg border border-gray-200 overflow-hidden">
             <button
               onClick={() => setView("families")}

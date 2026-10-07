@@ -5,6 +5,7 @@ import { SSA_EXTRA_HELP_URL, SSA_PHONE, type ApplyAlong, type ApplyHousehold } f
 import { incomeRangeFromFinder, relationshipFromFinder, type FinderIncome, type FinderWho } from "@/lib/benefits/finder-answers";
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
+import { studyCohort } from "@/lib/benefits/study-cohort";
 import { getOrCreateSessionId, getOrCreateVisitId } from "@/lib/analytics/session";
 
 /**
@@ -145,6 +146,7 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
           matchCount: ids.length,
           firstStepProgramId: program.id,
           finderProgramIds: ids,
+          cohort: studyCohort() ?? undefined,
         }),
       });
       const body = await res.json().catch(() => ({}));

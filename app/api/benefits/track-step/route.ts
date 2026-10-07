@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { classifyOrganicPage } from "@/lib/analytics/content-pages";
 import { isProgramCardFlow } from "@/lib/analytics/program-card-variant";
 import { isSplitArm } from "@/lib/benefits/finder-split";
+import { isCohortId } from "@/lib/benefits/study-cohort";
+import { CURRENT_STUDY_VERSION } from "@/lib/benefits/study-versions";
 
 // Per-step funnel events for the embedded benefits intake on provider pages.
 // Mirrors /api/benefits/track-start (sibling route): writes to provider_activity
@@ -60,6 +62,7 @@ export async function POST(request: Request) {
     // client can't write an arbitrary string into the dashboards.
     const cardFlow: string | null = isProgramCardFlow(body.cardFlow) ? body.cardFlow : null;
     const splitArm: string | null = isSplitArm(body.splitArm) ? body.splitArm : null;
+    const studyCohort: string | null = isCohortId(body.studyCohort) ? body.studyCohort.toLowerCase() : null;
 
     const db = getServiceDb();
     const writes: Array<PromiseLike<unknown>> = [];
@@ -80,6 +83,10 @@ export async function POST(request: Request) {
           care_need_selected: careNeedSelected,
           card_flow: cardFlow,
           split_arm: splitArm,
+          // The CARE-NAV study: which participant group, and which version of
+          // the product served this event (lib/benefits/study-versions.ts).
+          study_cohort: studyCohort,
+          product_version: CURRENT_STUDY_VERSION,
           entry_source: entrySource,
           visit_id: visitId,
         },
