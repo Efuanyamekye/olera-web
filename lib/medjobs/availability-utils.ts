@@ -130,10 +130,17 @@ export function getDateOptions(
     const dateStr = addDays(todayStr, i);
     const dayKey = getDayKeyFromDateStr(dateStr);
 
-    // Skip dates where student has no availability
+    // Skip dates where student has no availability that overlaps with TIME_SLOTS
     const windows = availability?.[dayKey];
-    if (availability && (!Array.isArray(windows) || windows.length === 0)) {
-      continue;
+    if (availability) {
+      if (!Array.isArray(windows) || windows.length === 0) {
+        continue;
+      }
+      // Also skip if availability windows don't overlap with any TIME_SLOTS
+      const hasOverlap = TIME_SLOTS.some(slot => isTimeInWindows(slot, windows));
+      if (!hasOverlap) {
+        continue;
+      }
     }
 
     let label: string;
