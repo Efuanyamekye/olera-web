@@ -60,7 +60,7 @@ export async function saveCalendarConnection(db: SupabaseClient, token: { access
   return { email: body.id };
 }
 
-type GoogleEvent = {
+export type GoogleEvent = {
   status?: string;
   summary?: string;
   start?: { dateTime?: string; date?: string };
@@ -71,6 +71,32 @@ type GoogleEvent = {
   conferenceData?: unknown;
   location?: string;
 };
+
+/**
+ * Raw upcoming events WITH attendee emails, for server-side lookups only
+ * (meeting prep matches attendees to providers and support threads). Never
+ * hand these to a model or a page as-is; shapeEvents is the outward form.
+ */
+export async function loadCalendarEvents(db: SupabaseClient, fromIso: string, toIso: string): Promise<{ events: Array<GoogleEvent & { id?: string }> } | { unavailable: string }> {
+  const { data } = await db.from("war_room_source_state").select("metadata").eq("source_key", STATE_KEY).maybeSingle();
+  const meta = (data?.metadata ?? null) as { encrypted_refresh_token?: string } | null;
+  if (!meta?.encrypted_refresh_token) return { unavailable: "calendar not connected" };
+  try {
+    const accessToken = await gmailAccessToken(decryptGmailToken(meta.encrypted_refresh_token));
+    const url = new URL("https://www.googleapis.com/calendar/v3/calendars/primary/events");
+    url.searchParams.set("timeMin", fromIso);
+    url.searchParams.set("timeMax", toIso);
+    url.searchParams.set("singleEvents", "true");
+    url.searchParams.set("orderBy", "startTime");
+    url.searchParams.set("maxResults", "50");
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(10_000) });
+    const body = await res.json() as { items?: Array<GoogleEvent & { id?: string }>; error?: { message?: string } };
+    if (!res.ok) return { unavailable: body.error?.message ?? `Calendar returned ${res.status}` };
+    return { events: body.items ?? [] };
+  } catch (error) {
+    return { unavailable: error instanceof Error ? error.message : String(error) };
+  }
+}
 
 /** A person's name without their email: the display name, else the address before the @. */
 function personName(person: { displayName?: string; email?: string }) {

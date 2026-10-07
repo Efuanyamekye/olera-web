@@ -71,7 +71,7 @@ Tuning is a conversation, not a config. A reply in an activity's `#cortex` threa
 | Activity | Status | Signal | Fence | Cadence | Cost | What is missing |
 |---|---|---|---|---|---|---|
 | Founder priority reminders (grants, managed ads, benefits build-out, Aging in America) | partial | priorities in the brief, assigned-work clock, `docs/crp/living/` for grant dates | report | Monday, and the day before any dated milestone | $0 | A short priorities list with next milestone dates, read by the Monday post. Dates live in the file, not in the model's head. |
-| Meeting preparation | partial | calendar (read-only, tj@olera.care), Wispr Flow meetings, support@ threads, touch log | report | the morning of, for external meetings | Haiku for words | A prep note per external meeting: who, last touches, open promises, the one question to ask. Posted in `#cortex` 2 hours before. |
+| Meeting preparation | built 7 Oct, founder only | calendar (read-only, tj@olera.care), Wispr Flow meetings, support@ threads, touch log | report | the morning of, for external meetings | Haiku for words | A direct message to TJ 3 to 6 hours before each external meeting. Next: other team members, once TJ says so. |
 | Meeting summaries | built, first run pending | Notion Meeting Notes → `war_room_source_items` → Haiku → channel | alone (words) | on each new note | Haiku per note | First Notion sync to land in prod; `CORTEX_MEETING_CHANNELS` mapping per meeting type |
 | Investor prospecting and outreach | blocked | Affinity (MCP configured; connection failed on 7 Oct) | ask (prospects), draft (outreach), never sends | weekly | $0 reads | Confirm Affinity is the CRM of record; reconnect it; decide what "a prospect worth a line" means |
 | Physical mailbox check-in | blocked | — | report | on each scan | $0 | Which service holds the mailbox, and whether scans arrive by email (then this is an inbox-pass category, not a new system) |
@@ -93,7 +93,7 @@ Free and already-measured first. Each row is one slice, one PR, one thread.
 2. **Traction but not engaged.** Built 7 Oct: Monday post in the `providers` thread, two lists (claimed and silent, unclaimed with demand), counts beyond the names. Feeds relationships, hyper-personal comms, and the information-gap row.
 3. **Information gaps on claimed, high-traffic pages.** Built 7 Oct: the 600 most-viewed pages in 28 days, the claimed ones scored by `lib/profile-completeness.ts`, ten names with what each is missing, in the Monday providers thread. A provider's name replied in that thread returns a card (demand, claim, last acted, gaps, email) and a drafted owner note; nothing is sent.
 4. **Press, led by Cortex.** Queries into an inbox Cortex reads, a `press` category with pitch drafts and send-on-approval, a ledger, the first proposed data story. TJ's ask of 7 Oct; the January article is the proof.
-5. **Meeting preparation.** Calendar and touches already exist; only the morning note is new.
+5. **Meeting preparation.** Built 7 Oct: every three hours, each meeting in the next six with someone outside the company gets one direct message to TJ (who, recent touches, open promises, the question to ask), from the provider timeline and support@ threads. Founder only for now ("so we don't blast everybody").
 6. **Founder priorities with dates.** Monday post.
 7. **Social links on the page.** One small PR.
 8. **Technical SEO audit.** GSC plus our own crawl.
