@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { directoryDigestText, directoryWeeklyText, handoffsWaitingText, speakMorning } from "@/lib/war-room/cortex-voice.server";
 import { postMeetingSummaries } from "@/lib/war-room/meeting-summaries.server";
+import { providerTractionText } from "@/lib/war-room/provider-traction.server";
+
+// The traction read walks ~2,000 providers across four tables: about 20 s.
+export const maxDuration = 120;
 
 /**
  * GET /api/admin/cortex/voice            what Cortex would say this morning, without posting
@@ -21,6 +25,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ posted: true, morning, meetings });
   }
   const since = new Date(Date.now() - 24 * 3_600_000);
-  const [digest, weekly, handoffs] = await Promise.all([directoryDigestText(db, since), directoryWeeklyText(db), handoffsWaitingText(db)]);
-  return NextResponse.json({ preview: true, digest, weekly, handoffs });
+  const [digest, weekly, handoffs, providers] = await Promise.all([directoryDigestText(db, since), directoryWeeklyText(db), handoffsWaitingText(db), providerTractionText(db)]);
+  return NextResponse.json({ preview: true, digest, weekly, handoffs, providers });
 }

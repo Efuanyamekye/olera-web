@@ -10,6 +10,7 @@ import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, t
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { splitArm } from "@/lib/benefits/finder-split";
 
 /**
  * The benefits conversation (Phase 3, 5 Oct 2026), redesigned the same day
@@ -37,7 +38,11 @@ const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
 // test is "caregivers complete it at least as often as the form".
 const TRACKING_KEY = "benefits-finder";
 const VARIANT = "conversation_v1";
+// Families sent here by the finder split (lib/benefits/finder-split.ts) log
+// the finder as their entry page and carry their arm; direct visits (tests,
+// shared links) don't, so they stay out of the comparison.
 const ENTRY_SOURCE = "/benefits/conversation";
+const SPLIT_ENTRY_SOURCE = "/benefits/finder";
 type TrackEvent = "benefits_entry_viewed" | "benefits_step_viewed" | "benefits_step_completed";
 
 const WHO: { value: FinderWho; label: string }[] = [
@@ -98,6 +103,7 @@ export default function BenefitsConversationPage() {
   // True once the link's ?who= has been read, so the first screen logged is
   // the one the family actually sees.
   const [ready, setReady] = useState(false);
+  const [inSplit, setInSplit] = useState(false);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
   const v = finderVoice(who);
@@ -115,18 +121,21 @@ export default function BenefitsConversationPage() {
       stepName,
       stepNumber,
       timeOnStepMs: event === "benefits_step_completed" ? Date.now() - stepShownAt.current : undefined,
-      entrySource: ENTRY_SOURCE,
+      entrySource: inSplit ? SPLIT_ENTRY_SOURCE : ENTRY_SOURCE,
+      splitArm: inSplit ? "conversation" : null,
     });
-  }, [stateCode]);
+  }, [stateCode, inSplit]);
 
   // A link from an email or the hub can say who it's for (?who=parent).
   useEffect(() => {
-    const w = new URLSearchParams(window.location.search).get("who");
+    const params = new URLSearchParams(window.location.search);
+    const w = params.get("who");
     if (w && (WHO_VALUES as readonly string[]).includes(w)) {
       setWho(w as FinderWho);
       setWhoFromLink(true);
       setStep("need");
     }
+    setInSplit(splitArm() === "conversation");
     setReady(true);
   }, []);
 
@@ -138,12 +147,13 @@ export default function BenefitsConversationPage() {
   const viewName = !ready ? null : step === "engine" ? (turn?.question && !loading && !reward ? turn.question.fact : null) : step === "result" ? (plan ? "results" : null) : step;
   const entryTracked = useRef(false);
   const lastViewed = useRef<string | null>(null);
+  // Waits for the link and the split arm to be read, so a split visit logs
+  // the finder as its entry source.
   useEffect(() => {
-    if (!entryTracked.current) {
-      entryTracked.current = true;
-      track("benefits_entry_viewed", "entry", 0);
-    }
-  }, [track]);
+    if (!ready || entryTracked.current) return;
+    entryTracked.current = true;
+    track("benefits_entry_viewed", "entry", 0);
+  }, [ready, track]);
   useEffect(() => {
     if (!viewName || viewName === lastViewed.current) return;
     lastViewed.current = viewName;

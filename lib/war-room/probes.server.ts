@@ -432,7 +432,42 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
       return count ?? 0;
     };
 
-    const [now, prior, firstStep, firstStepPrior, checkIn, checkInPrior, firstStepSms, checkInSms, companion, companionPrior] = await Promise.all([
+    // The finder vs conversation split (lib/benefits/finder-split.ts): families
+    // randomized this week, by the arm they got. Browsers never randomized
+    // (study links, crawlers, drafts from before the split) and pinned test
+    // browsers carry no split_arm and stay out.
+    const split = async () => {
+      type Row = { event_type: string; metadata: { session_id?: string; split_arm?: string; step_name?: string } | null };
+      const { rows } = await page<Row>((from, to) => db
+        .from("provider_activity")
+        .select("id, event_type, metadata")
+        .eq("provider_id", "benefits-finder")
+        .in("metadata->>split_arm", ["form", "conversation"])
+        .gte("created_at", weekAgo)
+        .order("id")
+        .range(from, to));
+      const arms: Record<string, { started: Set<string>; plan: Set<string>; sent: Set<string> }> = {};
+      for (const row of rows) {
+        const m = row.metadata ?? {};
+        const variant = m.split_arm === "conversation" || m.split_arm === "form" ? m.split_arm : null;
+        if (!variant || !m.session_id) continue;
+        const arm = (arms[variant] ??= { started: new Set(), plan: new Set(), sent: new Set() });
+        if (row.event_type === "benefits_entry_viewed") arm.started.add(m.session_id);
+        if (m.step_name === "results") arm.plan.add(m.session_id);
+        if (row.event_type === "benefits_step_completed" && m.step_name === "contact") arm.sent.add(m.session_id);
+      }
+      return (["form", "conversation"] as const).map((name) => {
+        const arm = arms[name];
+        const started = arm?.started.size ?? 0;
+        // A plan only counts for a family whose start was seen this week.
+        const plan = arm ? [...arm.plan].filter((id) => arm.started.has(id)).length : 0;
+        const sent = arm ? [...arm.sent].filter((id) => arm.started.has(id)).length : 0;
+        return { name, started, plan, sent, rate: started ? Math.round((plan / started) * 100) : null };
+      });
+    };
+
+    const [arms, now, prior, firstStep, firstStepPrior, checkIn, checkInPrior, firstStepSms, checkInSms, companion, companionPrior] = await Promise.all([
+      split(),
       tokens(weekAgo, null), tokens(twoWeeksAgo, weekAgo),
       emails("benefits_first_step", weekAgo, null), emails("benefits_first_step", twoWeeksAgo, weekAgo),
       emails("benefits_check_in", weekAgo, null), emails("benefits_check_in", twoWeeksAgo, weekAgo),
@@ -440,15 +475,23 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
       texts(weekAgo, null), texts(twoWeeksAgo, weekAgo),
     ]);
 
+    const [form, conversation] = arms;
+    const pct = (rate: number | null) => (rate === null ? "none started" : `${n(rate)}%`);
+    const splitLine = conversation.started
+      ? ` Split: ${pct(conversation.rate)} of ${n(conversation.started)} reached a plan in the conversation, ${pct(form.rate)} of ${n(form.started)} in the form.`
+      : "";
+
     return {
-      headline: `${n(now.families)} families finished the Benefits Finder in the last 7 days, ${n(prior.families)} the week before. ${n(firstStep)} first-step letters and ${n(checkIn)} check-ins went out.`,
-      detail: `${n(now.runs)} finder runs this week (${n(prior.runs)} prior); a family can finish it more than once. Letters the week before: ${n(firstStepPrior)} first-step, ${n(checkInPrior)} check-ins. By text: ${n(firstStepSms)} first-step and ${n(checkInSms)} check-in messages this week, and ${n(companion)} text-companion answers (${n(companionPrior)} prior). A finish is a results page the family could open; it says nothing about whether they applied for anything.`,
+      headline: `${n(now.families)} families finished the Benefits Finder in the last 7 days, ${n(prior.families)} the week before. ${n(firstStep)} first-step letters and ${n(checkIn)} check-ins went out.${splitLine}`,
+      detail: `Finder vs conversation this week: form ${n(form.started)} started, ${n(form.plan)} reached a plan, ${n(form.sent)} asked for it by text or email; conversation ${n(conversation.started)} started, ${n(conversation.plan)} reached a plan, ${n(conversation.sent)} asked for it. Half of new families get the conversation and keep it; only randomized browsers count, so study links, crawlers and drafts from before the split stay out. ${n(now.runs)} finder runs this week (${n(prior.runs)} prior); a family can finish it more than once. Letters the week before: ${n(firstStepPrior)} first-step, ${n(checkInPrior)} check-ins. By text: ${n(firstStepSms)} first-step and ${n(checkInSms)} check-in messages this week, and ${n(companion)} text-companion answers (${n(companionPrior)} prior). A finish is a results page the family could open; it says nothing about whether they applied for anything.`,
       rows: [
         { measure: "Families finished", this_week: now.families, prior_week: prior.families },
         { measure: "Finder runs", this_week: now.runs, prior_week: prior.runs },
         { measure: "First-step letters", this_week: firstStep, prior_week: firstStepPrior },
         { measure: "Check-ins", this_week: checkIn, prior_week: checkInPrior },
         { measure: "Text-companion answers", this_week: companion, prior_week: companionPrior },
+        { measure: "Form: started / reached a plan", this_week: `${form.started} / ${form.plan}`, prior_week: "" },
+        { measure: "Conversation: started / reached a plan", this_week: `${conversation.started} / ${conversation.plan}`, prior_week: "" },
       ],
       caveat: "Counts what Olera sent, not what families did with it. Nothing here measures an application started or an award received.",
     };
@@ -465,7 +508,7 @@ const RUNNERS: Record<Exclude<WarRoomProbeId, "none">, ProbeRunner> = {
     const s = await directoryHealthSummary(db, 7);
     const archived = s.byKind.closed_archived ?? 0;
     const renamed = s.byKind.rename_applied ?? 0;
-    const flagged = (s.byKind.closed_temporarily ?? 0) + (s.byKind.rename_flagged ?? 0) + (s.byKind.website_dead ?? 0) + (s.byKind.category_flagged ?? 0) + (s.byKind.duplicate_flagged ?? 0);
+    const flagged = (s.byKind.closed_temporarily ?? 0) + (s.byKind.closed_flagged ?? 0) + (s.byKind.rename_flagged ?? 0) + (s.byKind.website_dead ?? 0) + (s.byKind.category_flagged ?? 0) + (s.byKind.duplicate_flagged ?? 0);
     const total = s.checked + s.unchecked;
     const coverage = total ? Math.round((s.checked / total) * 100) : 0;
     const sinceLast = s.lastActionAt ? Math.floor((Date.now() - Date.parse(s.lastActionAt)) / DAY) : null;

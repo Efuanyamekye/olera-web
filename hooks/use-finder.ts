@@ -11,6 +11,7 @@ import {
 } from "@/lib/benefits/finder-answers";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { finderVisit } from "@/lib/benefits/finder-split";
 
 /**
  * State for the redesigned finder (/benefits/finder).
@@ -83,6 +84,9 @@ export function useFinder() {
   const [restored, setRestored] = useState(false);
   const [cohort, setCohort] = useState<string | null>(null);
   const stepShownAt = useRef<number>(Date.now());
+  // The split arm this browser was randomized into (lib/benefits/finder-split.ts).
+  // Usually "form"; "conversation" when the conversation handed its plan here.
+  const splitArm = useRef<"form" | "conversation" | null>(null);
   // A second tap during the short pause before advancing would skip a step
   // (or submit twice on the last one).
   const advancing = useRef(false);
@@ -100,6 +104,15 @@ export function useFinder() {
     const cohortParam = params.get("cohort");
     const who = (WHO_VALUES as readonly string[]).includes(whoParam || "") ? (whoParam as FinderAnswers["who"]) : null;
 
+    // Half of new families get the conversation instead (lib/benefits/finder-split.ts).
+    // Nothing has rendered or been logged yet, so the form never flashes.
+    const visit = finderVisit(params, !!s && !who);
+    if (visit.show === "conversation") {
+      window.location.replace(`/benefits/conversation${who ? `?who=${who}` : ""}`);
+      return;
+    }
+    splitArm.current = visit.arm;
+
     if (who) {
       // A fresh start from the hub: they just answered question one.
       setAnswers({ ...emptyFinderAnswers(), who });
@@ -115,9 +128,10 @@ export function useFinder() {
     setCohort(cohortParam && COHORT_RE.test(cohortParam) ? cohortParam.toLowerCase() : (s?.cohort ?? null));
 
     // Drop the params so a reload resumes the draft instead of restarting.
-    if (whoParam || cohortParam) {
+    if (whoParam || cohortParam || params.has("arm")) {
       params.delete("who");
       params.delete("cohort");
+      params.delete("arm");
       const q = params.toString();
       window.history.replaceState(null, "", window.location.pathname + (q ? `?${q}` : "") + window.location.hash);
     }
@@ -145,6 +159,7 @@ export function useFinder() {
         stepNumber,
         timeOnStepMs: event === "benefits_step_completed" ? Date.now() - stepShownAt.current : undefined,
         entrySource: ENTRY_SOURCE,
+        splitArm: splitArm.current,
       });
     },
     [answers.stateCode],

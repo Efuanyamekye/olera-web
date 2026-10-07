@@ -1,6 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { postAsCortex } from "@/lib/war-room/team-messages.server";
 import { directoryHealthSummary, type HealthActionRow } from "@/lib/providers/directory-health.server";
+import { loadTuning } from "@/lib/war-room/tuning.server";
+import { providerTractionText } from "@/lib/war-room/provider-traction.server";
+import { shouldSpeakDaily, shouldSpeakWeekly } from "@/lib/war-room/tuning";
 
 /**
  * Cortex speaking for itself in Slack.
@@ -55,6 +58,7 @@ export async function initiativeThread(db: SupabaseClient, initiative: string, h
 
 const KIND_WORDS: Record<string, string> = {
   closed_archived: "archived as permanently closed",
+  closed_flagged: "marked permanently closed by Google (archive waits for you)",
   rename_applied: "renamed to match Google",
   closed_temporarily: "marked temporarily closed by Google",
   rename_flagged: "named differently on Google",
@@ -73,7 +77,7 @@ function providerLink(a: HealthActionRow): string {
  * nothing happened and nothing is waiting, so a quiet day posts nothing
  * (the weekly state post is where quiet gets said out loud).
  */
-export async function directoryDigestText(db: SupabaseClient, since: Date): Promise<string | null> {
+export async function directoryDigestText(db: SupabaseClient, since: Date, period: "overnight" | "this week" = "overnight"): Promise<string | null> {
   // Read the window directly: the queue's 300-row page truncated a day the
   // website sweep wrote 1,996 rows, and the digest said "300".
   const { data } = await db.from("provider_health_actions")
@@ -107,7 +111,7 @@ export async function directoryDigestText(db: SupabaseClient, since: Date): Prom
   };
   const lines: string[] = [];
   if (applied.length) {
-    lines.push("*Directory, overnight.* What I did:");
+    lines.push(`*Directory, ${period}.* What I did:`);
     for (const [kind, list] of group(applied)) {
       const shown = list.slice(0, 5).map(providerLink).join(", ");
       lines.push(`• ${list.length.toLocaleString("en-US")} ${KIND_WORDS[kind] ?? kind.replace(/_/g, " ")}: ${shown}${list.length > 5 ? `, +${(list.length - 5).toLocaleString("en-US")} more` : ""}`);
@@ -201,13 +205,32 @@ export async function speakMorning(db: SupabaseClient, now: Date = new Date()): 
   const since = new Date(now.getTime() - 24 * 3_600_000);
   const out: Record<string, PostOutcome> = {};
 
-  const directoryThread = await initiativeThread(db, "directory", "*Directory health.* I check listings against Google and our own signals, archive what is closed, apply trivial renames, and flag the rest. Daily what I did is in this thread; undo is one click in admin.");
-  const digest = await directoryDigestText(db, since);
+  // How often the directory speaks is tuned from its own thread ("weekly,
+  // not daily"); the Monday state post survives everything but "off".
+  const tuning = await loadTuning(db, "directory");
+  const directoryThread = await initiativeThread(db, "directory", "*Directory health.* I check listings against Google and our own signals, archive what is closed, apply trivial renames, and flag the rest. Daily what I did is in this thread; undo is one click in admin. Reply here to tune me: \"weekly, not daily\", \"ask me first on renames\", or a rule I should keep.");
+  // The thread already exists in production, so the header's "reply here to
+  // tune me" never shows; say it once, in the thread, the first morning this ships.
+  if (directoryThread) await postOnce(db, { kind: "note", key: "thread:directory:tune", threadTs: directoryThread, text: "You can tune me in this thread. \"Weekly, not daily\" moves the digest to Mondays. \"Ask me first on renames\" or \"don't archive on your own\" makes me flag instead of act. A rule you state here, I keep. I answer with the way back each time." });
+  const digest = shouldSpeakDaily(tuning.cadence, now)
+    ? await directoryDigestText(db, tuning.cadence === "weekly" ? new Date(now.getTime() - 7 * 24 * 3_600_000) : since, tuning.cadence === "weekly" ? "this week" : "overnight")
+    : null;
   out.directory = digest
     ? await postOnce(db, { kind: "directory_digest", key: `directory:${day}`, text: digest, threadTs: directoryThread })
     : { posted: false, key: `directory:${day}`, skipped: "nothing_to_say" };
-  if (now.getUTCDay() === 1) {
+  if (now.getUTCDay() === 1 && shouldSpeakWeekly(tuning.cadence)) {
     out.weekly = await postOnce(db, { kind: "directory_weekly", key: `directory-week:${day}`, text: await directoryWeeklyText(db), threadTs: directoryThread });
+  }
+
+  // Providers families acted on that the providers did not: Mondays, in
+  // their own thread, unless the thread has been tuned otherwise.
+  const providersTuning = await loadTuning(db, "providers");
+  if (shouldSpeakDaily(providersTuning.cadence, now)) {
+    const providersThread = await initiativeThread(db, "providers", "*Providers with traction.* Each Monday I list the providers families asked about or wrote to in the last 28 days who did not act: claimed owners who went quiet, and unclaimed listings with demand. Reply here with a name and I will pull up what I know; nothing is sent to anyone without a person. Reply here to tune me, too.");
+    const traction = await providerTractionText(db, now).catch((err) => { console.error("[cortex-voice] traction", err); return null; });
+    out.providers = traction
+      ? await postOnce(db, { kind: "providers_traction", key: `providers:${day}`, text: traction, threadTs: providersThread })
+      : { posted: false, key: `providers:${day}`, skipped: "nothing_to_say" };
   }
 
   const prs = await handoffsWaitingText(db);

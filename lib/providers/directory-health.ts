@@ -29,6 +29,7 @@ export type ProviderForHealth = {
 
 export type HealthDecision =
   | { kind: "closed_archived"; undo: { deleted: false; deleted_at: null; deletion_reason: null } }
+  | { kind: "closed_flagged" }
   | { kind: "closed_temporarily" }
   | { kind: "rename_applied"; newName: string; undo: { provider_name: string | null } }
   | { kind: "rename_flagged" };
@@ -63,13 +64,30 @@ export function isCosmeticRename(stored: string | null, observed: string): boole
  * repeats the last one (still OPERATIONAL, same name) decides nothing, so a
  * monthly pass over the same provider writes no ledger rows.
  */
-export function decideHealthActions(provider: ProviderForHealth, observed: StatusObservation): HealthDecision[] {
+/**
+ * What the directory may do alone. Tuned from #cortex (lib/war-room/tuning.ts,
+ * initiative "directory"): "ask me first on renames" turns a cosmetic rename
+ * into a flag; "don't archive on your own" turns an archive into a flag.
+ */
+export type DirectoryPolicy = { renames: "alone" | "ask"; archive: "alone" | "ask" };
+export const DEFAULT_DIRECTORY_POLICY: DirectoryPolicy = { renames: "alone", archive: "alone" };
+
+export function decideHealthActions(
+  provider: ProviderForHealth,
+  observed: StatusObservation,
+  policy: DirectoryPolicy = DEFAULT_DIRECTORY_POLICY,
+): HealthDecision[] {
   const out: HealthDecision[] = [];
   if (observed.status === "CLOSED_PERMANENTLY") {
     // Google said closed last time too and the provider is live: a person
-    // restored it (Undo). Their word beats a repeat of Google's.
+    // restored it (Undo), or it was flagged and is waiting. Their word beats
+    // a repeat of Google's.
     const humanRestored = provider.google_status === "CLOSED_PERMANENTLY" && !provider.deleted;
-    if (!provider.deleted && !humanRestored) out.push({ kind: "closed_archived", undo: { deleted: false, deleted_at: null, deletion_reason: null } });
+    if (!provider.deleted && !humanRestored) {
+      out.push(policy.archive === "ask"
+        ? { kind: "closed_flagged" }
+        : { kind: "closed_archived", undo: { deleted: false, deleted_at: null, deletion_reason: null } });
+    }
     return out;
   }
   if (observed.status === "CLOSED_TEMPORARILY" && provider.google_status !== "CLOSED_TEMPORARILY") {
@@ -81,7 +99,7 @@ export function decideHealthActions(provider: ProviderForHealth, observed: Statu
   // rename a person had undone.
   const alreadySeen = !!name && provider.google_name?.trim() === name;
   if (name && !alreadySeen && provider.provider_name && name !== provider.provider_name.trim()) {
-    if (isCosmeticRename(provider.provider_name, name)) {
+    if (isCosmeticRename(provider.provider_name, name) && policy.renames === "alone") {
       out.push({ kind: "rename_applied", newName: name, undo: { provider_name: provider.provider_name } });
     } else {
       out.push({ kind: "rename_flagged" });
