@@ -33,6 +33,7 @@ export default function ConditionalFooter() {
     // pre-footer and footer to go (2026-10-05). It asks for no phone number,
     // so unlike the finder it needs no legal bar.
     pathname.startsWith("/benefits/conversation") ||
+    pathname.startsWith("/benefits/apply") ||
     pathname.match(/^\/portal\/matches\/[^/]+$/)
   ) {
     return null;
