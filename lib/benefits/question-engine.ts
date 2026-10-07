@@ -17,7 +17,7 @@
  */
 import { draftMinAge, incomeLimitFromTable, requiresMedicaid, isWaiverPath } from "@/lib/benefits/eligibility.server";
 import thresholds from "@/data/pipeline/federal-thresholds.json";
-import { parseCut, cutAnswer } from "@/lib/benefits/cut";
+import { parseCut, parseCuts, addCut, cutAnswer, MAX_CUTS } from "@/lib/benefits/cut";
 
 export type DailyHelp = "none" | "some" | "lots";
 export type Savings = "under2000" | "under10000" | "over10000";
@@ -75,7 +75,7 @@ export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
   savingsCut: [],
 };
 
-export { parseCut, cutAnswer };
+export { parseCut, parseCuts, addCut, cutAnswer };
 
 /**
  * A range narrowed by its follow-up: "or less" caps it at the figure, "more"
@@ -83,10 +83,13 @@ export { parseCut, cutAnswer };
  * range (the family changed their answer afterwards, e.g. on the form after
  * "Text me this") and says nothing about this one.
  */
-function narrowed([lo, hi]: [number, number], cut: string | null | undefined): [number, number] {
-  const c = parseCut(cut);
-  if (!c || c.at <= lo || c.at >= hi) return [lo, hi];
-  return c.under ? [lo, Math.min(hi, c.at)] : [Math.max(lo, c.at + 1), hi];
+function narrowed(range: [number, number], cut: string | null | undefined): [number, number] {
+  let [lo, hi] = range;
+  for (const c of parseCuts(cut) || []) {
+    if (c.under == null || c.at <= lo || c.at >= hi) continue;
+    [lo, hi] = c.under ? [lo, Math.min(hi, c.at)] : [Math.max(lo, c.at + 1), hi];
+  }
+  return [lo, hi];
 }
 
 const AGE_RANGE: Record<AgeBucket, [number, number]> = { under_60: [0, 59], "60_64": [60, 64], "65_74": [65, 74], "75_84": [75, 84], "85_plus": [85, 120] };
@@ -165,6 +168,14 @@ const MSP_QI = (() => {
   const at = (annual: number) => Math.round((annual * 1.35) / 12 + 20);
   return { single: at(first), couple: at(first + extra) };
 })();
+/** 100% of the poverty line, monthly: one person and two. SNAP's net-income
+ *  test for an older household. */
+const FPL100 = (() => {
+  const years = Object.keys(thresholds.fpl).sort();
+  const [first, extra] = (thresholds.fpl as Record<string, Record<string, number[]>>)[years[years.length - 1]]["48"];
+  return { single: Math.round(first / 12), couple: Math.round((first + extra) / 12) };
+})();
+
 /** A Medicare Savings program covering every tier, not one named tier (QMB only). */
 const MSP_ALL_TIERS = /medicare savings|\bqi\b|\bqi-1\b/i;
 
@@ -172,6 +183,35 @@ const MSP_ALL_TIERS = /medicare savings|\bqi\b|\bqi-1\b/i;
  *  North Carolina's Special Assistance). */
 const STATE_SUPPLEMENT = /state (ssi )?supplement|ssi supplement|\bssp\b|special assistance|optional state supplement/i;
 const FEDERAL_SSI = /^supplemental security income\b|^ssi\b/i;
+
+const EXTRA_HELP = /extra help|low[- ]income subsidy/i;
+const MSP_NAME = /medicare savings|\bqmb\b|\bslmb\b|qualified medicare|healthy horizons|buy-in/i;
+
+/**
+ * A state's programs as rules, with what one program does to another:
+ *  - a state SSI supplement raises SSI's income limit (rulesOf);
+ *  - Medicare Savings enrolls people in Extra Help automatically, so where
+ *    the state's Medicare Savings is at least as generous as Extra Help
+ *    (New York: $2,494 with no savings test), Extra Help's own limits can
+ *    confirm a fit but not rule one out (answer key, 7 Oct 2026: a New York
+ *    couple at $3,100 was ruled out of Extra Help they get through QI).
+ * Every caller that judges a whole state's list should use this.
+ */
+export function rulesForState<D extends DraftLike>(drafts: D[]): ProgramRules[] {
+  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
+  const rules = drafts.map((d) => rulesOf(d, { stateSupplement }));
+  const msp = rules.filter((r) => MSP_NAME.test(r.name));
+  for (const r of rules) {
+    if (!EXTRA_HELP.test(r.name)) continue;
+    const roomier = msp.some((m) =>
+      (m.incomeLimit == null || (r.incomeLimit != null && m.incomeLimit >= r.incomeLimit)) &&
+      (m.assetLimit == null || (r.assetLimit != null && m.assetLimit >= r.assetLimit)) &&
+      m.incomeLimit != null,
+    );
+    if (roomier) { r.incomeConfirmOnly = true; r.limitsConfirmOnly = true; }
+  }
+  return rules;
+}
 
 /** Does a state's program list hold its own SSI supplement? Pass the result to rulesOf. */
 export function hasStateSupplement(names: string[]): boolean {
@@ -199,6 +239,14 @@ export function rulesOf(d: DraftLike, opts: { stateSupplement?: boolean } = {}):
   if (MSP_ALL_TIERS.test(d.name) && incomeLimit != null) {
     incomeLimit = Math.max(incomeLimit, MSP_QI.single);
     incomeLimitCouple = Math.max(incomeLimitCouple ?? 0, MSP_QI.couple);
+  }
+  // SNAP tables hold the gross screen (often 200% of poverty), but an older
+  // household is judged on net income against 100%. Its limits only confirm,
+  // so confirm only under the net line: gross under it is net under it.
+  // (Answer key, 7 Oct 2026: a Florida couple at $3,100 read "likely".)
+  if (SNAP_PROGRAM.test(d.name)) {
+    if (incomeLimit != null) incomeLimit = Math.min(incomeLimit, FPL100.single);
+    if (incomeLimitCouple != null) incomeLimitCouple = Math.min(incomeLimitCouple, FPL100.couple);
   }
   return {
     id: d.id,
@@ -358,19 +406,39 @@ export function nextQuestion(
     const w = (opts.priors?.weights?.[fact] || {}) as Record<string, number>;
     const sum = answers.reduce((x, a) => x + (w[a] ?? 1), 0);
     let total = 0;
+    let partial = 0;
     const touched = new Set<string>();
     for (const a of answers) {
       const pa = (w[a] ?? 1) / sum;
       const g = { ...f, [fact]: a } as KnownFacts;
       programs.forEach((r, i) => {
         if (now[i] !== "check") return;
-        if (statusOf(r, g) !== "check") { total += pa * weight(r); touched.add(r.name); }
+        if (statusOf(r, g) !== "check") { total += pa * weight(r); touched.add(r.name); return; }
+        // Part of the way: the answer settles one of its rules though others
+        // stay open. Medicare Savings turns on income, savings and who they
+        // live with together, so no single one of those settles it, and a
+        // greedy engine that counted only whole programs never asked any of
+        // them in Pennsylvania or Georgia (answer key, 7 Oct 2026).
+        const open = unknownRules(r, f);
+        if (!open) return;
+        const left = unknownRules(r, g);
+        if (left < open) { partial += pa * weight(r) * PARTIAL * ((open - left) / open); touched.add(r.name); }
       });
     }
-    const settles = total * (1 - (opts.priors?.notSure?.[fact] ?? 0));
+    // Partial progress alone has to add up to about one program's worth.
+    const raw = total + (total > 0 || partial >= MIN_PARTIAL ? partial : 0);
+    const settles = raw * (1 - (opts.priors?.notSure?.[fact] ?? 0));
     if (settles > 0 && (!best || settles > best.settles)) best = { fact, settles, turnsOn: [...touched] };
   }
   return best;
+}
+
+/** Credit for settling some of a program's rules, against 1 for settling it. */
+const PARTIAL = 0.3;
+const MIN_PARTIAL = 0.3;
+
+function unknownRules(r: ProgramRules, f: KnownFacts): number {
+  return checks(r, f).filter((x) => x.result === "unknown").length;
 }
 
 /**
@@ -388,11 +456,17 @@ function cutCandidates(
 ): NextQuestion[] {
   const out: NextQuestion[] = [];
   const kinds: { fact: CutFact; range: [number, number] | null; limits: (r: ProgramRules) => (number | null)[] }[] = [
-    { fact: "incomeCut", range: f.income ? INCOME_RANGE[f.income] : null, limits: (r) => [r.incomeLimit, f.household === "couple" ? r.incomeLimitCouple : null] },
-    { fact: "savingsCut", range: f.savings ? SAVINGS_RANGE[f.savings] : null, limits: (r) => [r.assetLimit, f.household === "couple" ? r.assetLimitCouple : null] },
+    { fact: "incomeCut", range: f.income ? narrowed(INCOME_RANGE[f.income], f.incomeCut) : null, limits: (r) => [r.incomeLimit, f.household === "couple" ? r.incomeLimitCouple : null] },
+    { fact: "savingsCut", range: f.savings ? narrowed(SAVINGS_RANGE[f.savings], f.savingsCut) : null, limits: (r) => [r.assetLimit, f.household === "couple" ? r.assetLimitCouple : null] },
   ];
   for (const k of kinds) {
-    if (!k.range || f[k.fact] != null || asked?.has(k.fact)) continue;
+    if (!k.range) continue;
+    // A second follow-up only while the first was answered and a limit is
+    // still inside what's left of the range (a couple's $1,500 to $2,500 holds
+    // SSI's couple limit, Medicare Savings' $2,455 and more). "Not sure" stops it.
+    const held = parseCuts(f[k.fact]) || [];
+    if (held.length >= MAX_CUTS || held.some((c) => c.under == null)) continue;
+    if (!held.length && (f[k.fact] != null || asked?.has(k.fact))) continue;
     const [lo, hi] = k.range;
     const figures = new Set<number>();
     programs.forEach((r, i) => {
@@ -403,7 +477,7 @@ function cutCandidates(
       let total = 0;
       const touched = new Set<string>();
       for (const under of [true, false]) {
-        const g = { ...f, [k.fact]: cutAnswer(at, under) } as KnownFacts;
+        const g = { ...f, [k.fact]: addCut(f[k.fact], at, under) } as KnownFacts;
         programs.forEach((r, i) => {
           if (now[i] !== "check") return;
           if (statusOf(r, g) !== "check") { total += 0.5 * weight(r); touched.add(r.name); }

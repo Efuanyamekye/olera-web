@@ -15,19 +15,18 @@
  *
  *   npx -y tsx@4 scripts/question-engine-sim.ts
  */
-import { rulesOf, hasStateSupplement, cutAnswer, CUT_FACTS, statusOf, nextQuestion, EMPTY_FACTS, ANSWERS, type KnownFacts, type FactKey, type AnswerPriors } from "@/lib/benefits/question-engine";
+import { rulesForState, type ProgramRules, addCut, CUT_FACTS, statusOf, nextQuestion, EMPTY_FACTS, ANSWERS, type KnownFacts, type FactKey, type AnswerPriors } from "@/lib/benefits/question-engine";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
 import { US_STATES } from "@/lib/us-states";
 
-const perState: Record<string, ReturnType<typeof rulesOf>[]> = {};
+const perState: Record<string, ProgramRules[]> = {};
 for (const s of US_STATES) {
   const slug = getStateSlug(s.value);
   if (!slug) continue;
   const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
-  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
-  perState[s.value] = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0], { stateSupplement }));
+  perState[s.value] = rulesForState(drafts as Parameters<typeof rulesForState>[0]);
 }
 
 const MIX: Required<AnswerPriors>["weights"] = {
@@ -80,7 +79,7 @@ function run(notSure: Record<FactKey, number>, perStateFamilies = 300) {
       for (let q = nextQuestion(rules, f, undefined, { asked: done, priors }); q; q = nextQuestion(rules, f, undefined, { asked: done, priors })) {
         done.add(q.fact);
         if (unsure.has(q.fact)) continue;
-        const value = q.fact === "incomeCut" ? cutAnswer(q.at!, exact.income <= q.at!) : q.fact === "savingsCut" ? cutAnswer(q.at!, exact.savings <= q.at!) : truth[q.fact];
+        const value = q.fact === "incomeCut" ? addCut(f.incomeCut, q.at!, exact.income <= q.at!) : q.fact === "savingsCut" ? addCut(f.savingsCut, q.at!, exact.savings <= q.at!) : truth[q.fact];
         f = { ...f, [q.fact]: value };
       }
       // The truth, told the same follow-ups truthfully, for the safety check.

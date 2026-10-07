@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
-import { rulesOf, hasStateSupplement, explain, nextQuestion, questionsLeft, parseCut, CUT_FACTS, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesForState, explain, nextQuestion, questionsLeft, parseCuts, CUT_FACTS, ANSWERS, DEFAULT_PRIORS, EMPTY_FACTS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine, type ConversationTurn } from "@/lib/benefits/conversation";
 import { isWaiverPath } from "@/lib/benefits/eligibility.server";
 
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   const raw = (body.facts && typeof body.facts === "object" ? body.facts : {}) as Record<string, unknown>;
   for (const k of Object.keys(ANSWERS) as FactKey[]) {
     const v = raw[k];
-    const ok = (CUT_FACTS as readonly string[]).includes(k) ? parseCut(typeof v === "string" ? v : null) != null : (ANSWERS[k] as string[]).includes(v as string);
+    const ok = (CUT_FACTS as readonly string[]).includes(k) ? parseCuts(typeof v === "string" ? v : null) != null : (ANSWERS[k] as string[]).includes(v as string);
     if (typeof v === "string" && ok) (facts as unknown as Record<string, unknown>)[k] = v;
   }
   const asked = new Set<FactKey>(
@@ -38,8 +38,7 @@ export async function POST(request: NextRequest) {
   const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
-  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
-  const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0], { stateSupplement }));
+  const rules = rulesForState(drafts as Parameters<typeof rulesForState>[0]);
 
   // Families read the short name ("STAR+PLUS", "PACE"), not the official one.
   const short = new Map(drafts.map((d) => [d.name, (d as { shortName?: string | null }).shortName || d.name]));

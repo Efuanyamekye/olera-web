@@ -18,7 +18,7 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { rulesOf, explain, parseCut, hasStateSupplement, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesOf, rulesForState, explain, parseCuts, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine } from "@/lib/benefits/conversation";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
@@ -66,6 +66,8 @@ const NEED_CATEGORIES: Record<string, BenefitCategory[]> = {
 
 const PAYS_FOR_CARE = /aid (and|&) attendance|home help|waiver|hcbs|home and community|star\+plus|\bpace\b|all-inclusive|personal care|attendant|in-home|ihss|choices|long[- ]term care|community medicaid/i;
 const MEDICARE_HELP = /medicare savings|\bqmb\b|\bslmb\b|\bmsp\b|extra help|low[- ]income subsidy/i;
+/** Medicare Savings itself (not Extra Help): enrolling in it brings Extra Help. */
+const MEDICARE_SAVINGS = /medicare savings|\bqmb\b|\bslmb\b|qualified medicare|healthy horizons|buy-in/i;
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
@@ -299,8 +301,8 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     savings,
     disability: null,
     household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
-    incomeCut: parseCut(a.incomeCut) ? a.incomeCut : null,
-    savingsCut: parseCut(a.savingsCut) ? a.savingsCut : null,
+    incomeCut: parseCuts(a.incomeCut) ? a.incomeCut : null,
+    savingsCut: parseCuts(a.savingsCut) ? a.savingsCut : null,
   };
 }
 
@@ -373,13 +375,21 @@ function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
 
   const withPhone = list.filter((s) => s.program.phone);
   const pool = withPhone.length ? withPhone : list;
+  // Before handing the family to a counselor: Medicare Savings, when it's
+  // likely, is money now, and it signs them up for Extra Help on
+  // prescriptions automatically, so one call settles two programs. Research
+  // led with it for every lower-income couple without Medicaid that our plan
+  // sent to the agency (answer key, 7 Oct 2026: PA, OH, NC, GA, IL, MI).
+  // Someone who already has Medicaid is usually enrolled in it already.
+  const medicareFirst = () =>
+    a.medicaid === "alreadyHas" ? null : pool.find((s) => s.program.tier === "likely" && MEDICARE_SAVINGS.test(s.raw.name)) ?? null;
   // The top preference is what they said would help most. If nothing there
   // is likely, a local benefits counselor is a better first call than a
   // long shot, so return null and let the caller lead with the agency.
   for (const pref of preferences.slice(0, -1)) {
     const likely = pool.find((s) => pref(s) && s.program.tier === "likely") ?? pool.find((s) => pref(s) && s.fitsButAssess);
     if (likely) return likely;
-    if (pool.some(pref)) return null;
+    if (pool.some(pref)) return medicareFirst();
   }
   return pool.find((s) => s.program.tier === "likely") ?? null;
 }
@@ -448,10 +458,10 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   // the list the family just watched settle: a program those answers rule out
   // leaves the plan, and one they make likely says so.
   const conv = conversationFacts(a);
-  const stateSupplement = hasStateSupplement(programs.map((p) => p.name));
+  const stateRules = conv ? new Map(rulesForState(programs as Parameters<typeof rulesForState>[0]).map((r) => [r.id, r])) : null;
   const convOf = (item: WaiverProgram) => {
-    if (!conv) return null;
-    const rules = rulesOf(item as Parameters<typeof rulesOf>[0], { stateSupplement });
+    if (!conv || !stateRules) return null;
+    const rules = stateRules.get(item.id) ?? rulesOf(item as Parameters<typeof rulesOf>[0]);
     return { rules, e: explain(rules, conv) };
   };
   const convOut = conv ? rankedKept.filter(({ item }) => !alreadyCovered.some((c) => c.item === item) && convOf(item)!.e.status === "out") : [];
@@ -520,6 +530,10 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   });
   screened.splice(0, screened.length, ...unique);
   const first = pickFirstStep(screened, a);
+  // Said on the first call, so the family knows the second program comes with it.
+  if (first && MEDICARE_SAVINGS.test(first.raw.name) && !/extra help/i.test(first.program.reason)) {
+    first.program = { ...first.program, reason: `${first.program.reason} It also signs ${finderVoice(a.who).subject === "you" ? "you" : "them"} up for Extra Help with prescriptions, automatically.`.trim() };
+  }
 
   const leftOut: FinderLeftOut[] = [
     ...ruledOut.map(({ item, verdict }) => ({

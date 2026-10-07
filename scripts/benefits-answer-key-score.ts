@@ -28,7 +28,7 @@ import { buildFinderResult } from "@/lib/benefits/finder-engine.server";
 import { zipToCounty } from "@/lib/benefits/zip-lookup";
 import { emptyFinderAnswers, type FinderAnswers, type FinderIncome } from "@/lib/benefits/finder-answers";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
-import { rulesOf, hasStateSupplement, nextQuestion, cutAnswer, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesForState, nextQuestion, addCut, EMPTY_FACTS, DEFAULT_PRIORS, type FactKey, type KnownFacts } from "@/lib/benefits/question-engine";
 
 for (const p of [resolve(process.cwd(), ".env.local"), resolve(process.env.HOME || "", "Desktop/olera-web/.env.local")]) {
   if (!existsSync(p)) continue;
@@ -94,8 +94,7 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
   const drafts = getPlanProgramIds(slug)
     .map((id) => getEnrichedProgram(slug, id))
     .filter((d): d is NonNullable<typeof d> => !!d && d.programType === "benefit");
-  const stateSupplement = hasStateSupplement(drafts.map((d) => d.name));
-  const rules = drafts.map((d) => rulesOf(d as Parameters<typeof rulesOf>[0], { stateSupplement }));
+  const rules = rulesForState(drafts as Parameters<typeof rulesForState>[0]);
   const truth: KnownFacts = {
     age: ageBand(f.age) as KnownFacts["age"],
     income: band(f.monthlyIncome) as KnownFacts["income"],
@@ -112,8 +111,8 @@ function conversationAnswers(f: Family, county: string | null): FinderAnswers {
   for (let q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS }); q; q = nextQuestion(rules, facts, undefined, { asked, priors: DEFAULT_PRIORS })) {
     asked.add(q.fact);
     // A follow-up asks "$X or less?" of the family's real figure.
-    const value = q.fact === "incomeCut" ? cutAnswer(q.at!, f.monthlyIncome <= q.at!)
-      : q.fact === "savingsCut" ? cutAnswer(q.at!, f.savings <= q.at!)
+    const value = q.fact === "incomeCut" ? addCut(facts.incomeCut, q.at!, f.monthlyIncome <= q.at!)
+      : q.fact === "savingsCut" ? addCut(facts.savingsCut, q.at!, f.savings <= q.at!)
       : truth[q.fact];
     facts = { ...facts, [q.fact]: value };
   }
@@ -189,6 +188,11 @@ async function main() {
     if (showMatches) for (const { kp, id } of keyed) console.log(`${f.id}\t${kp.verdict}\t${kp.name}\t=> ${id === undefined ? "?" : id}`);
     const firstKey = keyed.find((k) => norm(k.kp.name) === norm(kf.firstCall.program))?.id
       ?? match(f.state, { name: kf.firstCall.program, verdict: "likely", reason: "" }, cat);
+    // "Medicare Savings Program (QMB) and Extra Help, through HICAP counseling
+    // at the Bexar AAA": the program named before "through/via" is as right a
+    // first call as the agency (7 Oct 2026; leading with it scored as a miss).
+    const core = kf.firstCall.program.replace(/[,(]?\s*\b(through|via)\b.*$/i, "").replace(/\s+(and|plus|\+)\s+.*$/i, "").trim();
+    const firstCore = core && core !== kf.firstCall.program ? match(f.state, { name: core, verdict: "likely", reason: "" }, cat) : null;
 
     for (const mode of ["form", "conversation"] as const) {
       const res = await buildFinderResult(db, (mode === "conversation" ? conversationAnswers : formAnswers)(f, await zipToCounty(f.zip)));
@@ -218,7 +222,7 @@ async function main() {
       // The key often routes through the local aging agency (SHIP/HICAP
       // counseling, waiver screening), which is the plan's agency step.
       const keyViaAgency = /area agency|\baaa\b|daaa|agency on aging|alliance for aging|empowerline|shine|hicap|mmap/i.test(`${kf.firstCall.program} ${(kf.firstCall as { phoneOrWhere?: string }).phoneOrWhere ?? ""}`);
-      const agree = !!res.firstStep && ((!!firstKey && res.firstStep.id === firstKey) || (res.firstStep.id === "local-agency" && keyViaAgency));
+      const agree = !!res.firstStep && ((!!firstKey && res.firstStep.id === firstKey) || (!!firstCore && res.firstStep.id === firstCore) || (res.firstStep.id === "local-agency" && keyViaAgency));
       s.firstMatch = agree ? 1 : 0;
       s.firstNotHeld = !agree && !firstKey ? 1 : 0;
       s.families = 1;

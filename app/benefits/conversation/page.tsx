@@ -6,7 +6,7 @@ import { zipToCounty, zipToState } from "@/lib/benefits/zip-lookup";
 import { US_STATES } from "@/lib/us-states";
 import { questionCopy, shortName, type ConversationTurn, type ConversationProgram } from "@/lib/benefits/conversation";
 import type { FactKey, KnownFacts } from "@/lib/benefits/question-engine";
-import { cutAnswer } from "@/lib/benefits/cut";
+import { addCut } from "@/lib/benefits/cut";
 import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, type FinderProgram, type FinderResult, type FinderWho } from "@/lib/benefits/finder-answers";
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
@@ -208,8 +208,13 @@ export default function BenefitsConversationPage() {
   const answerFact = (fact: FactKey, value: string | null, at?: number) => {
     completed(value ? fact : `${fact}:not_sure`);
     remember();
-    // A follow-up's answer carries its figure ("under:1796").
-    const stored = value && at != null && (fact === "incomeCut" || fact === "savingsCut") ? cutAnswer(at, value === "under") : value;
+    // A follow-up's answer carries its figure ("under:1796"); a second one on
+    // the same range is added to the first, and "not sure" to a second one is
+    // kept so it isn't asked again.
+    const isCut = (fact === "incomeCut" || fact === "savingsCut") && at != null;
+    const stored = isCut
+      ? value ? addCut(facts[fact], at!, value === "under") : facts[fact] ? addCut(facts[fact], at!, null) : null
+      : value;
     const f = stored ? ({ ...facts, [fact]: stored } as KnownFacts) : facts;
     const a = [...asked, fact];
     setFacts(f);
@@ -295,8 +300,9 @@ export default function BenefitsConversationPage() {
   const done =
     (step === "who" ? 0 : step === "need" ? (whoFromLink ? 0 : 1) : step === "zip" ? opening - 1 : opening) + asked.length;
   // The engine's own "left" starts low, so the bar is anchored on the typical
-  // five engine questions (median 4 to 5 in simulation); it still only rises.
-  const TYPICAL = 5;
+  // count of engine questions (median 7 in simulation since the money
+  // follow-ups and partial credit, 7 Oct 2026; was 5); it still only rises.
+  const TYPICAL = 7;
   const engineTotal = Math.max(TYPICAL, asked.length + (step === "engine" ? (leftShown ?? 1) : TYPICAL));
   const fill = Math.min(0.96, (done + 0.5) / (opening + engineTotal + 0.5));
   const almostDone = step === "engine" && asked.length >= TYPICAL - 1 && (leftShown ?? 3) <= 1;
