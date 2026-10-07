@@ -29,6 +29,7 @@ const SOURCE_CODES: Record<string, string> = {
   benefits_check_in_sms: "c",
   benefits_concierge_reply_sms: "n",
   benefits_companion_opener: "o",
+  benefits_apply_check_sms: "a",
   // Self-check only (/admin/sms-click-test). Deliberately its own type so a
   // verification click lands on a row nobody reports on: it belongs to no cron
   // job's smsTypes, so it can never move a real automation's numbers. Proving

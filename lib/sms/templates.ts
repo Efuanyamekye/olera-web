@@ -82,6 +82,16 @@ export function benefitsCheckInSms(p: {
     : `Olera: Were you able to call ${p.programShortName}? Reply CALLED, NO ANSWER, or STUCK. Your plan: ${p.url} Reply STOP to opt out.`;
 }
 
+/** Apply-along check-ins (lib/benefits/apply-along.ts): after the family
+ *  told us they sent Social Security's Extra Help form, which also starts the
+ *  state's Medicare Savings application. Every reply word is one the inbound
+ *  parser already reads (WAITING, DENIED as not eligible, STUCK) plus APPROVED. */
+export function benefitsApplyCheckSms(p: { stage: "letter" | "decision"; url: string }): string {
+  return p.stage === "letter"
+    ? `Olera: It's been about a week since you sent the Extra Help form. Has a letter come from Social Security? Reply WAITING if not yet, APPROVED or DENIED if it came, or STUCK. Plan: ${p.url} Reply STOP to opt out.`
+    : `Olera: Any word on Extra Help or Medicare Savings? Reply APPROVED, DENIED, WAITING, or STUCK. Plan: ${p.url} Reply STOP to opt out.`;
+}
+
 /** Provider alert: a MedJobs student applied. */
 export function medjobsApplicationSms(p: { studentName: string; university?: string | null; url: string }): string {
   return `New MedJobs application from ${p.studentName} (${p.university || "student"}). View: ${p.url}`;

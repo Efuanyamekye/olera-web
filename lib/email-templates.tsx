@@ -2208,6 +2208,47 @@ export function benefitsCheckInEmail(opts: {
   );
 }
 
+/** Apply-along check-in subjects. No names, no program a stranger could read
+ *  as a diagnosis. */
+export function benefitsApplyCheckSubject(stage: "letter" | "decision"): string {
+  return stage === "letter" ? "Has a letter come from Social Security?" : "Any word on Extra Help or Medicare Savings?";
+}
+
+/**
+ * Apply-along check-in (coordinator rung B3). The family told us they sent
+ * Social Security's Extra Help form, which also starts the state's Medicare
+ * Savings application. One button to their plan page, where a card records
+ * what came back (approved / still waiting / denied / stuck) on a tap: a
+ * GET from a mail scanner records nothing.
+ */
+export function benefitsApplyCheckEmail(opts: {
+  familyName: string;
+  stage: "letter" | "decision";
+  planUrl: string;
+  unsubscribeId?: string;
+}): string {
+  const familyFirstName = firstName(opts.familyName, "there");
+  const btn = `<a href="${opts.planUrl}" style="display:block;text-align:center;padding:13px 24px;background:${BRAND_COLOR};color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:8px;">Tell us what came back</a>`;
+  const body = opts.stage === "letter"
+    ? `It's been about a week since you sent the Extra Help form. Social Security usually mails a decision within a few weeks, and the state writes separately about Medicare Savings. Has anything come yet?`
+    : `It's been about five weeks since you sent the Extra Help form. By now Social Security has usually decided, and the state should have been in touch about Medicare Savings. What did you hear?`;
+  return layout(
+    `
+    <p style="font-size:16px;color:#374151;margin:0 0 20px;line-height:1.5;">
+      Hi ${escapeHtml(familyFirstName)},
+    </p>
+    <p style="font-size:16px;color:#374151;margin:0 0 24px;line-height:1.6;">${body}</p>
+    <div style="margin:0 0 24px;">${btn}</div>
+    <p style="font-size:15px;color:#6b7280;margin:0;line-height:1.6;">
+      One tap on your plan tells us. If they said no, or something's stuck, we'll help with
+      the next step, and a person on our team reads every reply.
+    </p>
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
+  `,
+    opts.stage === "letter" ? "Has a letter come from Social Security yet?" : "What did you hear about Extra Help and Medicare Savings?",
+  );
+}
+
 /** Subject for the archetype first-touch — one question, no PHI. */
 export function archetypeSubject(): string {
   return "Quick question about where you are";

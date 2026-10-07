@@ -112,6 +112,9 @@ export const FAMILY_NUDGE_EMAIL_TYPES = new Set<string>([
   // the check-in that's an offer — governed so the per-family cap applies
   "benefits_first_step",
   "benefits_check_in",
+  // Apply-along check-ins (coordinator B3): a week and five weeks after the
+  // family sent Social Security's Extra Help form through Olera
+  "benefits_apply_check",
   "day_10_awaiting",
   // 7-day outcome check on a researched answer (family-answers cron)
   "family_answer_followup",
@@ -160,7 +163,7 @@ export const MARKETPLACE_PROFILE_NUDGE_TYPES = new Set<string>([
 ]);
 
 /** The benefits cascade's family touches (B1 letter, B2 check-in). */
-export const BENEFITS_CASCADE_EMAIL_TYPES = new Set<string>(["benefits_first_step", "benefits_check_in"]);
+export const BENEFITS_CASCADE_EMAIL_TYPES = new Set<string>(["benefits_first_step", "benefits_check_in", "benefits_apply_check"]);
 
 /**
  * Which sends count against the cap for THIS send. A benefits touch is not

@@ -300,6 +300,15 @@ async function deliverNavigatorLetter(
     };
   }
   /**
+   * The family already applied through the apply-along (benefits_cascade.applied):
+   * a letter telling them to call the program would talk past what they did.
+   * The coordinator's apply-along check-ins (B3) follow them instead. TJ's
+   * button still sends, for a person who has read the case.
+   */
+  if (opts.trigger !== "admin" && readBenefitsCascade(meta).applied) {
+    return { ok: false, conflict: true, error: "This family already applied through the apply-along; its check-ins follow up instead." };
+  }
+  /**
    * Any reply from the family pauses automated sends until a person has read
    * it. The scheduler and the autopilot stop here; TJ's own button does not,
    * because a person clicking Send after reading the reply is the point.

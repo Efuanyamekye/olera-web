@@ -51,7 +51,9 @@ export type BenefitsApplicationStatus =
   | "applied"
   | "waiting"
   | "not_eligible"
-  | "stuck";
+  | "stuck"
+  /** Told us the program said yes (texted APPROVED, or tapped it on the plan). */
+  | "approved";
 
 export interface BenefitsCascadeMeta {
   first_step_sent_at?: string;
@@ -88,7 +90,18 @@ export interface BenefitsCascadeMeta {
    *  apply-along (lib/benefits/apply-along.ts). `route` "ssa_extra_help":
    *  Social Security's Extra Help form, which also starts the state's
    *  Medicare Savings application. The check-ins about the decision read this. */
-  applied?: { at: string; route: "ssa_extra_help"; program_id?: string; state_id?: string };
+  applied?: {
+    at: string;
+    route: "ssa_extra_help";
+    program_id?: string;
+    state_id?: string;
+    /** The coordinator's B3 check-ins: about a week, then about five weeks after `at`. */
+    letter_check_at?: string;
+    decision_check_at?: string;
+    /** What came back, from a text reply or a tap on the plan. */
+    decision?: "approved" | "denied" | "waiting" | "stuck";
+    decision_at?: string;
+  };
   last_sms_reply?: string;
   last_sms_reply_at?: string;
 }
@@ -228,6 +241,9 @@ export function lifecycleStatus(opts: {
   }
   if (cascade.application_status === "no_answer") {
     return { status: "stalled", detail: "could not reach agency" };
+  }
+  if (cascade.application_status === "approved") {
+    return { status: "acting", detail: "approved" };
   }
   if (
     cascade.application_status === "called" ||

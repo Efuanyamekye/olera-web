@@ -3,6 +3,7 @@ import type { WaiverProgram } from "@/data/waiver-library";
 import { CARE_NEED_LABEL, type CareNeed } from "@/lib/benefits/match-care-need";
 import type { FirstStepPick, BenefitsCascadeMeta } from "@/lib/family-comms/benefits-cascade.server";
 import JourneyActions, { type NextStepInfo } from "@/components/benefits/JourneyActions";
+import ApplyStatusCard from "@/components/benefits/ApplyStatusCard";
 import FactChips, { type KnownFacts } from "@/components/benefits/FactChips";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { switchLine } from "@/lib/benefits/switch-line";
@@ -320,7 +321,10 @@ export default function BenefitsHome(props: BenefitsHomeProps) {
             nextStep={nextStepInfo}
           />
         ) : null}
-        {firstStep && applyHref ? (
+        {cascade.applied?.at ? (
+          <ApplyStatusCard token={token} appliedAt={cascade.applied.at} initial={cascade.applied.decision ?? null} />
+        ) : null}
+        {firstStep && applyHref && !cascade.applied ? (
           <a
             href={applyHref}
             className="mt-3 flex min-h-[52px] items-center justify-center rounded-2xl border-[1.5px] border-primary-800 text-[16px] font-semibold text-primary-800 no-underline"

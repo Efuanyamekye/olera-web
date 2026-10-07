@@ -144,7 +144,7 @@ async function matchFamilyProfiles(
  * until a person has read it, so the next automated touch cannot talk over
  * what they just told us.
  */
-const SELF_SERVE_BENEFITS_KEYWORDS = new Set(["CALLED", "NOANSWER", "NEEDDOCS", "APPLIED", "WAITING"]);
+const SELF_SERVE_BENEFITS_KEYWORDS = new Set(["CALLED", "NOANSWER", "NEEDDOCS", "APPLIED", "WAITING", "APPROVED"]);
 
 async function recordInbound(
   phone: string,

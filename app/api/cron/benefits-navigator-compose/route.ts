@@ -106,6 +106,8 @@ export async function GET(request: NextRequest) {
       if (age < BAND_START || age > BAND_END) continue;
       if (meta.nudges_unsubscribed === true) continue;
       if (readBenefitsCascade(meta).first_step_sent_at) continue;
+      // Already applied through the apply-along: the B3 check-ins follow them.
+      if (readBenefitsCascade(meta).applied) continue;
       if (readBenefitsNavigator(meta).composed_at) continue;
       const attempt = readAttempt(meta);
       if (attempt.result === "no_pick" && (attempt.count ?? 0) >= MAX_NO_PICK_ATTEMPTS) {
