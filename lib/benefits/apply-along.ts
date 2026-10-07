@@ -24,6 +24,8 @@ import thresholds from "@/data/pipeline/federal-thresholds.json";
 
 export const SSA_EXTRA_HELP_URL = "https://www.ssa.gov/extrahelp";
 export const SSA_PHONE = "1-800-772-1213";
+/** The 2026 standard Medicare Part B premium (CMS 2026 fact sheet). Update each January. */
+export const PART_B_PREMIUM = 202.9;
 
 export type ApplyHousehold = "alone" | "couple" | "family" | null;
 
@@ -49,10 +51,27 @@ export interface ApplyStep {
   key?: boolean;
 }
 
+/** One of the money questions, with the family's own answer to check against. */
+export interface MoneyRow {
+  icon: "money-bag" | "receipt" | "check-mark";
+  title: string;
+  text: string;
+}
+
 export interface ApplyAlong {
+  /** Small label above the heading: what this is. */
+  eyebrow: string;
   heading: string;
+  /** Why it's worth doing: the state's name for it and what it pays. */
   lede: string;
+  /** Step 1's explanation: where the form lives and what it's called. */
+  formLine: string;
+  /** One line: what to have nearby. */
+  gatherLine: string;
+  /** Step 2: the three money questions, with what the family told us. */
+  money: MoneyRow[];
   gather: string[];
+  /** Every section of Social Security's form, for "See every screen". */
   steps: ApplyStep[];
   next: string[];
   /** Said on the phone to Social Security instead. */
@@ -173,9 +192,39 @@ export function buildApplyAlong(input: ApplyAlongInput): ApplyAlong {
     next.unshift(`If Social Security says no to Extra Help, the form still goes to ${a.stateName} for Medicare Savings, which can reach higher incomes.`);
   }
 
+  const generic = /^the medicare savings/i.test(a.mspName);
+  const knownState = a.stateName !== "your state";
+  const money: MoneyRow[] = [
+    {
+      icon: "money-bag",
+      title: "Savings",
+      text: savings
+        ? `${savings.charAt(0).toUpperCase()}${savings.slice(1)}${couple ? ", both of yours together" : ""}. Enter each account's balance. ${self || couple ? "Your" : "Their"} home and one car don't count.`
+        : `Enter each account's balance. ${self || couple ? "Your" : "Their"} home and one car don't count.`,
+    },
+    {
+      icon: "receipt",
+      title: "Income",
+      text: income
+        ? `${income.charAt(0).toUpperCase()}${income.slice(1)} a month${couple ? " together" : ""}. Enter each source: Social Security, pensions, any wages.`
+        : "Enter each source as a monthly amount: Social Security, pensions, any wages.",
+    },
+    {
+      icon: "check-mark",
+      title: `Let it go to ${knownState ? a.stateName : "your state"}`,
+      text: `When it asks about sending ${self || couple ? "your" : "their"} information to the state, don't choose "do not send". That's what starts ${a.mspName}.`,
+    },
+  ];
+
   return {
-    heading: "Apply for Extra Help, and Medicare Savings with it",
-    lede: `One Social Security form, which you can fill in on a phone. Unless you tell them not to, it also starts ${a.mspName} with ${a.stateName}.`,
+    eyebrow: "Medicare Savings application",
+    heading: "Apply for help paying Medicare costs",
+    lede: `${generic ? "It's called the Medicare Savings Program." : `${knownState ? a.stateName : "Your state"} calls it ${a.mspName}.`} It pays the $${PART_B_PREMIUM.toFixed(2)} Medicare Part B premium every month, and it brings Extra Help with prescriptions too.`,
+    formLine: `You apply on Social Security's website, with a form called Extra Help. Unless you tell them not to, Social Security sends it on to ${knownState ? a.stateName : "your state"}${generic ? "" : ` for ${a.mspName}`}. You can do it on a phone.`,
+    gatherLine: couple
+      ? "Have both Social Security numbers and Medicare cards nearby."
+      : `Have ${self ? "your" : "their"} Social Security number and Medicare card nearby.`,
+    money,
     gather: [
       couple ? `Both Social Security numbers and Medicare cards` : `${self ? "Your" : "Their"} Social Security number and Medicare card`,
       "Latest balances for each bank account and investment",

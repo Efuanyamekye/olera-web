@@ -33,8 +33,8 @@ const FINDER_KEY = "olera-finder-v2";
 type Phase = "sheet" | "contact" | "done";
 
 export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, program, who, household, income }: Props) {
-  const [ticked, setTicked] = useState<Set<number>>(new Set());
-  const [phoneOpen, setPhoneOpen] = useState(false);
+  // The quiet links under the steps: every screen, or the phone route.
+  const [more, setMore] = useState<"screens" | "phone" | null>(null);
   const [phase, setPhase] = useState<Phase>("sheet");
   // What the contact form is for: recording a submission, or sending the sheet for later.
   const [purpose, setPurpose] = useState<"applied" | "later">("applied");
@@ -234,89 +234,103 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
     );
   }
 
+  const Obj = ({ name, size = 40 }: { name: string; size?: number }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={`/images/apply-along/${name}.svg`} alt="" width={size} height={size} style={{ width: size, height: size }} className="shrink-0" />
+  );
+  const Num = ({ n }: { n: number }) => (
+    <span aria-hidden="true" className="mt-0.5 w-[26px] h-[26px] shrink-0 rounded-full border-[1.5px] border-primary-700 text-primary-700 text-[13px] font-bold grid place-items-center">{n}</span>
+  );
+
   return (
-    <div className="flex flex-col gap-7">
-      <header className="flex flex-col gap-3">
-        <span className="text-[13px] font-semibold text-primary-700">Start here</span>
-        <h1 className="font-display text-[32px] leading-[1.08] text-gray-900 m-0">{sheet.heading}</h1>
-        <p className="m-0 text-[17px] text-gray-700">{sheet.lede}</p>
+    <div className="flex flex-col gap-9">
+      <header className="flex flex-col gap-2.5">
+        <span className="text-[13px] font-semibold text-primary-700">{sheet.eyebrow}</span>
+        <h1 className="text-[28px] sm:text-[32px] font-bold tracking-[-0.01em] leading-[1.15] text-gray-900 m-0 [text-wrap:balance]">{sheet.heading}</h1>
+        <p className="m-0 text-[17px] text-gray-600">{sheet.lede}</p>
       </header>
 
-      <section className="flex flex-col">
-        <h2 className="text-[15px] font-semibold text-gray-900 m-0 mb-1">Have these ready</h2>
-        {sheet.gather.map((g, i) => (
-          <label key={g} className="flex items-start gap-3 py-3 border-t border-gray-200 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={ticked.has(i)}
-              onChange={() => setTicked((t) => { const n = new Set(t); if (n.has(i)) n.delete(i); else n.add(i); return n; })}
-              className="mt-1 w-5 h-5 accent-primary-700"
-            />
-            <span className="text-[16px] text-gray-800">{g}</span>
-          </label>
-        ))}
+      <section className="flex flex-col gap-7" aria-label="How it works">
+        <h2 className="m-0 text-[15px] font-semibold text-gray-500">How it works</h2>
+
+        <div className="flex gap-3">
+          <Num n={1} />
+          <div className="flex flex-col gap-3 min-w-0 flex-1">
+            <p className="m-0 text-[18px] font-semibold text-gray-900">Open Social Security&apos;s form</p>
+            <p className="m-0 text-[16px] text-gray-600">{sheet.formLine}</p>
+            <div className="flex items-center gap-3 text-[15px] text-gray-600"><Obj name="id-card" size={32} />{sheet.gatherLine}</div>
+            <a
+              href={SSA_EXTRA_HELP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("benefits_step_completed", "ssa_opened")}
+              className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline"
+            >
+              Open the Social Security form
+            </a>
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <Num n={2} />
+          <div className="flex flex-col min-w-0 flex-1">
+            <p className="m-0 text-[18px] font-semibold text-gray-900">Answer its questions</p>
+            <p className="m-0 mt-2 mb-1 text-[16px] text-gray-600">Three of them are about money. Here&apos;s what you told us, to check against:</p>
+            {sheet.money.map((r) => (
+              <div key={r.title} className="grid grid-cols-[40px_1fr] gap-3.5 py-3.5 border-t border-gray-200 first-of-type:border-t-0 items-start">
+                <Obj name={r.icon} />
+                <div className="min-w-0">
+                  <p className={`m-0 text-[17px] font-semibold ${r.icon === "check-mark" ? "text-primary-800" : "text-gray-900"}`}>{r.title}</p>
+                  <p className="m-0 mt-0.5 text-[15px] text-gray-600">{r.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <Num n={3} />
+          <div className="flex flex-col gap-3 min-w-0 flex-1">
+            <p className="m-0 text-[18px] font-semibold text-gray-900">Send it, then tell us</p>
+            <p className="m-0 text-[16px] text-gray-600">We&apos;ll check in by text or email after about a week, and again after about five.</p>
+            <button
+              type="button"
+              onClick={() => void submitted()}
+              disabled={busy}
+              className="self-start min-h-[48px] px-6 rounded-full border-[1.5px] border-primary-800 bg-white text-primary-800 text-[16px] font-semibold cursor-pointer disabled:opacity-60"
+            >
+              {busy ? "Saving…" : "We sent it"}
+            </button>
+            {error ? <p role="alert" className="m-0 text-[15px] text-red-700">{error}</p> : null}
+          </div>
+        </div>
       </section>
 
-      <div className="flex flex-col gap-3">
-        <a
-          href={SSA_EXTRA_HELP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => track("benefits_step_completed", "ssa_opened")}
-          className="min-h-[56px] rounded-2xl bg-primary-800 text-white text-[17px] font-semibold flex items-center justify-center no-underline"
-        >
-          Open Social Security&apos;s application
-        </a>
-        <p className="m-0 text-[14px] text-gray-500 text-center">It opens in a new tab. Keep this one open beside it.</p>
-        {program ? (
-          <button
-            type="button"
-            onClick={() => { setPurpose("later"); setPhase("contact"); setError(null); track("benefits_step_completed", "later"); }}
-            className="bg-transparent border-none p-0 text-[15px] font-semibold text-primary-800 cursor-pointer"
-          >
-            Not together right now? Send me this for later
-          </button>
+      <section className="flex flex-col gap-3 border-t border-gray-200 pt-5">
+        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[15px] font-medium">
+          <button type="button" onClick={() => setMore(more === "screens" ? null : "screens")} aria-expanded={more === "screens"} className="bg-transparent border-none p-0 text-primary-800 cursor-pointer">See every screen</button>
+          <button type="button" onClick={() => { setMore(more === "phone" ? null : "phone"); if (more !== "phone") track("benefits_step_completed", "phone_opened"); }} aria-expanded={more === "phone"} className="bg-transparent border-none p-0 text-primary-800 cursor-pointer">Rather call?</button>
+          {program ? (
+            <button type="button" onClick={() => { setPurpose("later"); setPhase("contact"); setError(null); track("benefits_step_completed", "later"); }} className="bg-transparent border-none p-0 text-primary-800 cursor-pointer">Do it later</button>
+          ) : null}
+        </div>
+        {more === "screens" ? (
+          <ol className="m-0 p-0 list-none">
+            {sheet.steps.map((st, i) => (
+              <li key={st.title} className="py-3.5 border-t border-gray-200">
+                <p className="m-0 text-[15px] font-semibold text-gray-900">{i + 1}. {st.title}</p>
+                <p className="m-0 mt-0.5 text-[15px] text-gray-700">{st.answer}</p>
+                {st.note ? <p className="m-0 mt-0.5 text-[14px] text-gray-500">{st.note}</p> : null}
+              </li>
+            ))}
+          </ol>
         ) : null}
-      </div>
-
-      <section className="flex flex-col">
-        <h2 className="text-[15px] font-semibold text-gray-900 m-0 mb-1">What to put, screen by screen</h2>
-        <ol className="m-0 p-0 list-none">
-          {sheet.steps.map((s, i) => (
-            <li key={s.title} className={`py-4 border-t border-gray-200 ${s.key ? "pl-3 border-l-[3px] border-l-primary-600" : ""}`}>
-              <p className="m-0 text-[13px] font-semibold text-gray-500">{i + 1}. {s.title}</p>
-              <p className={`m-0 mt-1 text-[17px] ${s.key ? "font-semibold text-gray-900" : "text-gray-900"}`}>{s.answer}</p>
-              {s.note ? <p className="m-0 mt-1 text-[15px] text-gray-600">{s.note}</p> : null}
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="flex flex-col border-t border-gray-200">
-        <button type="button" onClick={() => { setPhoneOpen(!phoneOpen); if (!phoneOpen) track("benefits_step_completed", "phone_opened"); }} aria-expanded={phoneOpen} className="w-full flex justify-between items-center bg-transparent border-none px-0 py-3 text-[15px] text-gray-900 font-medium cursor-pointer text-left">
-          <span>Rather do it by phone?</span>
-          <span className="text-gray-400" aria-hidden="true">{phoneOpen ? "−" : "+"}</span>
-        </button>
-        {phoneOpen ? (
-          <div className="pb-3 flex flex-col gap-2">
+        {more === "phone" ? (
+          <div className="flex flex-col gap-2 pt-1">
             <a href={telHref(SSA_PHONE)} className="text-[17px] font-semibold text-primary-800 no-underline">Call Social Security, {SSA_PHONE}</a>
             <p className="m-0 text-[15px] text-gray-700">&ldquo;{sheet.phoneScript}&rdquo;</p>
           </div>
         ) : null}
-      </section>
-
-      <section className="flex flex-col gap-3 border-t border-gray-200 pt-5">
-        <h2 className="font-display text-[24px] text-gray-900 m-0">Sent it?</h2>
-        <p className="m-0 text-[16px] text-gray-600">Tell us, and we&apos;ll check in after about a week, and again after about five.</p>
-        <button
-          type="button"
-          onClick={() => void submitted()}
-          disabled={busy}
-          className="min-h-[56px] rounded-2xl border-[1.5px] border-primary-800 bg-white text-primary-800 text-[17px] font-semibold cursor-pointer disabled:opacity-60"
-        >
-          {busy ? "Saving…" : "Yes, we submitted it"}
-        </button>
-        {error ? <p role="alert" className="m-0 text-[15px] text-red-700">{error}</p> : null}
       </section>
     </div>
   );
