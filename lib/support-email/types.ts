@@ -3,6 +3,7 @@ export type SupportEmailCategory =
   | "care_seeker"
   | "provider"
   | "partner"
+  | "press"
   | "marketing"
   | "automated"
   | "legal"

@@ -61,6 +61,7 @@ Tuning is a conversation, not a config. A reply in an activity's `#cortex` threa
 | Activity | Status | Signal | Fence | Cadence | Cost | What is missing |
 |---|---|---|---|---|---|---|
 | SEO auditing | built (performance), not built (technical) | daily organic read (GA4 + Search Console, Sonnet 5), deindexing diagnostic | report | daily | ~$0.05/day (organic read) | A technical audit: sitemap vs index coverage, 404s on linked pages, canonical drift, Firewall blocks on Googlebot/AdsBot. All free from GSC + our own crawl. |
+| Press and media, led by Cortex | partial | journalist queries by email (Source of Sources, Qwoted, Featured, free tiers), trade reporters by name, Olera's own data | draft; a person sends; Cortex proposes, drafts, tracks, reminds | queries daily inside the inbox pass; one proposed story a month in a `press` thread | $0 platforms, model for words | `docs/cortex/PRESS.md` has the loop, facts and angles. Missing: the inbox (press@ alias), the `press` category in the inbox pass, a `cortex_press` ledger, the media list. Proof it moves the needle: Senior Housing News 23 Jan 2026 → Ziegler (Jenny Poth) → Magnify and Equitage intros. |
 | Agent readiness (Muse, dots, Grok Bot) | partial | Vercel Observability bot names (chatgpt-user, claude-user, meta-webindexer), Firewall Traffic | report; firewall changes are TJ's | weekly line, Monday | $0 | 7 Oct: AI Bots rule Deny → Log, training crawlers denied by a custom rule. Next: weekly agent-traffic read, label on the inquiry email field, llms.txt aimed at tasks, Personal Agent Protocol when v0.1 ships, a Muse connector once there is a task. |
 | SEO growth activities, identified and executed | partial | the organic read proposes one action a day → handoff brief | ask (the brief), alone to open the PR | daily proposal, build on approval | Sonnet for the read; $0 to build | The Mac runner. Proposals exist; nothing builds them without a person starting a session. |
 | Drafted editorial articles for human review | partial | editorial system, article topics, organic read's page-family findings | draft; a person publishes | one a week | ~$0.30 per draft (Sonnet) | A topic picker fed by Search Console queries with no page, and the draft saved to admin content as unpublished |
@@ -91,11 +92,12 @@ Free and already-measured first. Each row is one slice, one PR, one thread.
 1. **The tuning loop.** Built 7 Oct: a founder reply in an initiative thread sets cadence, a fence, or a lesson (`cortex_tuning`); the directory reads its fences on every observation and its cadence every morning; reactions become grades once the Slack app has `reactions:read` and the `reaction_added` event. This register is in Cortex's written-record allowlist.
 2. **Traction but not engaged.** Built 7 Oct: Monday post in the `providers` thread, two lists (claimed and silent, unclaimed with demand), counts beyond the names. Feeds relationships, hyper-personal comms, and the information-gap row.
 3. **Information gaps on claimed, high-traffic pages.** SQL plus the highlights waterfall.
-4. **Meeting preparation.** Calendar and touches already exist; only the morning note is new.
-5. **Founder priorities with dates.** Monday post.
-6. **Social links on the page.** One small PR.
-7. **Technical SEO audit.** GSC plus our own crawl.
-8. **Gap probes for families** (connections and benefits), posted to the channels Ces reads.
+4. **Press, led by Cortex.** Queries into an inbox Cortex reads, a `press` category with pitch drafts and send-on-approval, a ledger, the first proposed data story. TJ's ask of 7 Oct; the January article is the proof.
+5. **Meeting preparation.** Calendar and touches already exist; only the morning note is new.
+6. **Founder priorities with dates.** Monday post.
+7. **Social links on the page.** One small PR.
+8. **Technical SEO audit.** GSC plus our own crawl.
+9. **Gap probes for families** (connections and benefits), posted to the channels Ces reads.
 
 Then the rows that need something from TJ: the Mac runner, Ads API access, Affinity, the mailbox service, and a sentence each on calibration, "not a staffing agency", and the three agent names.
 

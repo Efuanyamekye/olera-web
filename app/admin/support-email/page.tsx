@@ -106,6 +106,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   care_seeker: "Care seeker",
   provider: "Provider",
   partner: "Partner",
+  press: "Press",
   marketing: "Marketing",
   automated: "Automated",
   legal: "Legal / removal",
@@ -117,7 +118,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_OPTIONS = [
-  "all", "voicemail", "care_seeker", "provider", "partner", "marketing",
+  "all", "voicemail", "care_seeker", "provider", "partner", "press", "marketing",
   "automated", "legal", "security", "billing", "internal", "other",
 ];
 
