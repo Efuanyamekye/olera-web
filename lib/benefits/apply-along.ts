@@ -126,7 +126,10 @@ export function buildApplyAlong(input: ApplyAlongInput): ApplyAlong {
       answer: savings
         ? `You told us ${couple ? "your savings together are" : `${their} savings are`} ${savings}. Enter each account's balance.`
         : "Enter each account's balance: checking, savings, stocks and bonds, retirement accounts, cash at home.",
-      note: `Don't count ${their} home, cars, life insurance or burial plots. Up to $1,500 each set aside for burial can be left out. Other land or a second home does count.`,
+      // Medicare's Extra Help fact sheet (12203): home, one car, burial plot,
+      // furniture and personal items don't count; retirement accounts and
+      // land other than the home do.
+      note: `Don't count ${their} home, one car, a burial plot, or furniture and personal things. Up to $1,500 each set aside for burial can be left out. Retirement accounts, and land or a second home, do count.`,
     },
     {
       title: self ? "Relatives you support" : "Relatives they support",
@@ -146,9 +149,13 @@ export function buildApplyAlong(input: ApplyAlongInput): ApplyAlong {
       answer: "If no one on the application works, answer No.",
     },
     {
-      title: "Sharing with the state for Medicare Savings",
-      answer: `Answer Yes. This is the question that starts ${a.mspName} with ${a.stateName}.`,
-      note: "It's near the end. Saying no here means only Extra Help is decided.",
+      // Opt-out, not opt-in: Social Security sends the application to the
+      // state "unless you tell them not to" (Medicare fact sheet 12203; SSA
+      // POMS HI 03010.038). So the instruction names the meaning, never a
+      // button label: a "Yes" could be the opt-out on some versions of the form.
+      title: "Sending it to the state for Medicare Savings",
+      answer: `Let Social Security send it to ${a.stateName}. Don't choose "do not send". That's what starts ${a.mspName}.`,
+      note: "If you tell them not to send it, only Extra Help is decided.",
       key: true,
     },
     {
@@ -168,7 +175,7 @@ export function buildApplyAlong(input: ApplyAlongInput): ApplyAlong {
 
   return {
     heading: "Apply for Extra Help, and Medicare Savings with it",
-    lede: `One Social Security form, about 20 minutes. It also starts ${a.mspName} with ${a.stateName}, and you can do it on a phone.`,
+    lede: `One Social Security form, which you can fill in on a phone. Unless you tell them not to, it also starts ${a.mspName} with ${a.stateName}.`,
     gather: [
       couple ? `Both Social Security numbers and Medicare cards` : `${self ? "Your" : "Their"} Social Security number and Medicare card`,
       "Latest balances for each bank account and investment",

@@ -223,7 +223,7 @@ function FirstStep({ p, callFor, cardRef, applyHref }: { p: FinderProgram; callF
         <CallButton p={p} />
         {applyHref ? (
           <a href={applyHref} className="min-h-[52px] rounded-2xl border-[1.5px] border-primary-800 text-primary-800 text-[16px] font-semibold flex items-center justify-center no-underline">
-            Or apply online with us, about 20 minutes
+            Or apply online, with us beside you
           </a>
         ) : null}
       </div>

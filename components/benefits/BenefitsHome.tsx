@@ -329,7 +329,7 @@ export default function BenefitsHome(props: BenefitsHomeProps) {
             href={applyHref}
             className="mt-3 flex min-h-[52px] items-center justify-center rounded-2xl border-[1.5px] border-primary-800 text-[16px] font-semibold text-primary-800 no-underline"
           >
-            Or apply online with us, about 20 minutes
+            Or apply online, with us beside you
           </a>
         ) : null}
         {firstStep ? null : (

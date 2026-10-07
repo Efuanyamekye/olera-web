@@ -307,7 +307,7 @@ export default function ApplyAlongView({ sheet, token, stateCode, stateSlug, pro
 
       <section className="flex flex-col gap-3 border-t border-gray-200 pt-5">
         <h2 className="font-display text-[24px] text-gray-900 m-0">Sent it?</h2>
-        <p className="m-0 text-[16px] text-gray-600">Tell us, and we&apos;ll follow it with you until there&apos;s an answer.</p>
+        <p className="m-0 text-[16px] text-gray-600">Tell us, and we&apos;ll check in after about a week, and again after about five.</p>
         <button
           type="button"
           onClick={() => void submitted()}
