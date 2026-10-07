@@ -51,7 +51,8 @@ export function sendToConversation(params: URLSearchParams, hasSavedForm: boolea
     store(pinned);
     return pinned === "conversation";
   }
-  if (hasSavedForm || params.get("cohort")) return false;
+  // Off means off, including browsers already given the conversation.
+  if (CONVERSATION_SHARE <= 0 || hasSavedForm || params.get("cohort")) return false;
   if (typeof navigator !== "undefined" && BOT_RE.test(navigator.userAgent)) return false;
 
   let arm = stored();
