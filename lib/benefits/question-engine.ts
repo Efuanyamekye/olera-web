@@ -77,10 +77,15 @@ export const ANSWERS: { [K in FactKey]: NonNullable<KnownFacts[K]>[] } = {
 
 export { parseCut, cutAnswer };
 
-/** A range narrowed by its follow-up: "or less" caps it at the figure, "more" starts just above. */
+/**
+ * A range narrowed by its follow-up: "or less" caps it at the figure, "more"
+ * starts just above. A figure outside the range was asked about another
+ * range (the family changed their answer afterwards, e.g. on the form after
+ * "Text me this") and says nothing about this one.
+ */
 function narrowed([lo, hi]: [number, number], cut: string | null | undefined): [number, number] {
   const c = parseCut(cut);
-  if (!c) return [lo, hi];
+  if (!c || c.at <= lo || c.at >= hi) return [lo, hi];
   return c.under ? [lo, Math.min(hi, c.at)] : [Math.max(lo, c.at + 1), hi];
 }
 
