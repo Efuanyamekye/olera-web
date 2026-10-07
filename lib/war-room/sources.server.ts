@@ -950,6 +950,8 @@ const DEFAULT_ARCHIVE_PATHS = [
   // Second on purpose: the file bound keeps the first entries, and "is there
   // already a tool for X" must be answerable from the repository.
   "docs/CAPABILITIES-INDEX.md",
+  // What Cortex may do alone, what it must ask, and its activity register.
+  "docs/cortex/",
   "docs/war-room-operating-agent.md",
   "docs/growth/",
   "docs/crp/living/",
