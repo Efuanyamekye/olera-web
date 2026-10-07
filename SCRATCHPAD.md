@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-10-07: Donna case ownership and provider response guidance
+
+- Operations completed: reviewed Donna's case and Ces's notes; TJ's direction was sent in the existing Slack thread, then saved as an internal note and pending next step in the family case. Ces owns budget/payment and move-date clarification, Golden Living follow-up, alternatives if needed, and a brief outcome update. Escalate unresolved blockers with a recommendation; no follow-up outreach was performed in this session.
+- Evidence: [case](https://olera.care/admin/relationships/families/b7d91cee-7439-4c41-bc65-434435750d9c); [sent Slack direction](https://oleraworkspace.slack.com/archives/C05TN1C48BE/p1791356346332459?thread_ts=1791307197.565669&cid=C05TN1C48BE). Verified the saved Note and Next step in the production UI. A follow-up date remains for Ces to set.
+- Zardy reported unsuccessful attempts to reach Cindy and Lisa. Drafted a reply acknowledging that families may find care elsewhere or pause, so not every inquiry converts, and proposing team follow-up. TJ said done; sending that reply was not independently verified. No Zardy system updates or new outreach were made here.
+- Writing preference: avoid em dashes in drafted messages. Be concise, natural, and clear about ownership without promising conversion.
+- Changed file: SCRATCHPAD.md only. Branch: codex/case-followup-session, based on origin/staging. Validation: documentation diff/whitespace check; no code tests needed. Next: Ces executes the case follow-up and records outcomes.
+
 ### 2026-10-06 — Benefits: answer key, federal programs, full catalog, no wrong "likely" (`jolly-ramanujan`; ALL IN PROD via #2382, #2391, #2394, #2408)
 
 **Shipped (production, main 9ee622f0c):**
