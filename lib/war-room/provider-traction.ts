@@ -112,6 +112,7 @@ export function tractionText(lists: TractionLists, now: Date, siteUrl: string): 
     lines.push(`Unclaimed with demand (${n(lists.counts.unclaimed)}): nobody owns the page the families are using.`);
     for (const r of lists.unclaimed) lines.push(`• ${link(r)}: ${demandWords(r)}${r.hasEmail ? "" : "; no email on file"}`);
   }
-  lines.push(`${n(lists.counts.claimed_active)} claimed providers with demand did act this month. Reply "draft <name>" and I will write the note; nothing is sent without a person.`);
+  const active = lists.counts.claimed_active;
+  lines.push(`${n(active)} claimed provider${active === 1 ? "" : "s"} with demand did act this month. Reply here with a name and I will pull up what I know; nothing is sent to anyone without a person.`);
   return lines.join("\n");
 }

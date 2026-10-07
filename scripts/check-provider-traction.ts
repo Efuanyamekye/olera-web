@@ -44,7 +44,8 @@ const text = tractionText(lists, now, "https://olera.care");
 assert.ok(text && text.includes("<https://olera.care/provider/meadows|Meadows At Mitchell Field> (City, ST): 4 inquiries, 65 views; last acted 67 days ago"));
 assert.ok(text && text.includes("Open Listing> (City, ST): 1 inquiry, 1 question; no email on file"));
 assert.ok(text && text.includes("Claimed and silent (2)"));
-assert.ok(text && text.includes("1 claimed providers with demand did act this month"));
+assert.ok(text && text.includes("1 claimed provider with demand did act this month"), "singular");
+assert.ok(tractionText(many, now, "https://olera.care")?.includes("0 claimed providers with demand"), "plural");
 assert.equal(tractionText(buildTractionLists([row({ views: 9 })], now), now, "https://olera.care"), null, "nothing qualifies, nothing said");
 
 console.log("provider traction checks passed");

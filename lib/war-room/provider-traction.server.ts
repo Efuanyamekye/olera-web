@@ -84,10 +84,16 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
   }
 
   // Claims: a claimed profile, and the claim event that says a person did it.
+  // The profile's own email counts too: a claimed provider's contact lives
+  // there, and the directory row may be blank.
   const claimedIds = new Set<string>();
+  const profileEmailIds = new Set<string>();
   for (const part of chunks(ids)) {
-    const { data } = await db.from("business_profiles").select("source_provider_id").in("source_provider_id", part).eq("claim_state", "claimed");
-    for (const bp of (data ?? []) as Array<{ source_provider_id: string }>) claimedIds.add(bp.source_provider_id);
+    const { data } = await db.from("business_profiles").select("source_provider_id, email").in("source_provider_id", part).eq("claim_state", "claimed");
+    for (const bp of (data ?? []) as Array<{ source_provider_id: string; email: string | null }>) {
+      claimedIds.add(bp.source_provider_id);
+      if (bp.email && bp.email.trim()) profileEmailIds.add(bp.source_provider_id);
+    }
   }
 
   // The provider acting, any time: newest event per key, keys are slug or id.
@@ -118,7 +124,7 @@ export async function loadTractionRows(db: SupabaseClient, now: Date = new Date(
       inquiries: inquiriesById.get(p.provider_id) ?? 0,
       claimed: claimedIds.has(p.provider_id) && (claimEventKeys.has(slug) || claimEventKeys.has(p.provider_id)),
       lastActorAt: last,
-      hasEmail: Boolean(p.email && p.email.trim()),
+      hasEmail: Boolean(p.email && p.email.trim()) || profileEmailIds.has(p.provider_id),
     };
   });
 }
