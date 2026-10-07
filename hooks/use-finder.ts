@@ -11,6 +11,7 @@ import {
 } from "@/lib/benefits/finder-answers";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { sendToConversation, SPLIT_PARAM, SPLIT_VALUE } from "@/lib/benefits/finder-split";
 
 /**
  * State for the redesigned finder (/benefits/finder).
@@ -100,6 +101,15 @@ export function useFinder() {
     const cohortParam = params.get("cohort");
     const who = (WHO_VALUES as readonly string[]).includes(whoParam || "") ? (whoParam as FinderAnswers["who"]) : null;
 
+    // Half of new families get the conversation instead (lib/benefits/finder-split.ts).
+    // Nothing has rendered or been logged yet, so the form never flashes.
+    if (sendToConversation(params, !!s && !who)) {
+      const next = new URLSearchParams({ [SPLIT_PARAM]: SPLIT_VALUE });
+      if (who) next.set("who", who);
+      window.location.replace(`/benefits/conversation?${next.toString()}`);
+      return;
+    }
+
     if (who) {
       // A fresh start from the hub: they just answered question one.
       setAnswers({ ...emptyFinderAnswers(), who });
@@ -115,9 +125,10 @@ export function useFinder() {
     setCohort(cohortParam && COHORT_RE.test(cohortParam) ? cohortParam.toLowerCase() : (s?.cohort ?? null));
 
     // Drop the params so a reload resumes the draft instead of restarting.
-    if (whoParam || cohortParam) {
+    if (whoParam || cohortParam || params.has("arm")) {
       params.delete("who");
       params.delete("cohort");
+      params.delete("arm");
       const q = params.toString();
       window.history.replaceState(null, "", window.location.pathname + (q ? `?${q}` : "") + window.location.hash);
     }

@@ -10,6 +10,7 @@ import { emptyFinderAnswers, finderVoice, type FinderAnswers, type FinderNeed, t
 import { telHref } from "@/lib/benefits/call-script";
 import { trackBenefitsEvent } from "@/lib/analytics/track-step";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { SPLIT_PARAM, SPLIT_VALUE } from "@/lib/benefits/finder-split";
 
 /**
  * The benefits conversation (Phase 3, 5 Oct 2026), redesigned the same day
@@ -37,7 +38,10 @@ const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
 // test is "caregivers complete it at least as often as the form".
 const TRACKING_KEY = "benefits-finder";
 const VARIANT = "conversation_v1";
+// Families sent here by the finder split log the finder as their entry, so
+// the comparison leaves out direct visits (tests, shared links).
 const ENTRY_SOURCE = "/benefits/conversation";
+const SPLIT_ENTRY_SOURCE = "/benefits/finder";
 type TrackEvent = "benefits_entry_viewed" | "benefits_step_viewed" | "benefits_step_completed";
 
 const WHO: { value: FinderWho; label: string }[] = [
@@ -98,6 +102,7 @@ export default function BenefitsConversationPage() {
   // True once the link's ?who= has been read, so the first screen logged is
   // the one the family actually sees.
   const [ready, setReady] = useState(false);
+  const [entrySource, setEntrySource] = useState(ENTRY_SOURCE);
 
   const stateName = US_STATES.find((s) => s.value === stateCode)?.label ?? null;
   const v = finderVoice(who);
@@ -115,17 +120,26 @@ export default function BenefitsConversationPage() {
       stepName,
       stepNumber,
       timeOnStepMs: event === "benefits_step_completed" ? Date.now() - stepShownAt.current : undefined,
-      entrySource: ENTRY_SOURCE,
+      entrySource,
     });
-  }, [stateCode]);
+  }, [stateCode, entrySource]);
 
   // A link from an email or the hub can say who it's for (?who=parent).
   useEffect(() => {
-    const w = new URLSearchParams(window.location.search).get("who");
+    const params = new URLSearchParams(window.location.search);
+    const w = params.get("who");
     if (w && (WHO_VALUES as readonly string[]).includes(w)) {
       setWho(w as FinderWho);
       setWhoFromLink(true);
       setStep("need");
+    }
+    if (params.get(SPLIT_PARAM) === SPLIT_VALUE) {
+      setEntrySource(SPLIT_ENTRY_SOURCE);
+      // The address bar says /benefits/conversation; drop the marker so a
+      // shared link doesn't count as a split visit.
+      params.delete(SPLIT_PARAM);
+      const q = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (q ? `?${q}` : ""));
     }
     setReady(true);
   }, []);
