@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/LA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-06T12:32:14.414Z
+ * Last updated: 2026-10-07T04:20:05.288Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -251,11 +251,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2742
+            "monthlyLimit": 2982
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 5484
+            "monthlyLimit": 5964
           }
         ],
         "assetLimits": {
@@ -282,7 +282,14 @@ export const drafts: PipelineStateDrafts = {
           "Louisiana resident",
           "Meet Medicaid long-term care eligibility"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "official"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -417,7 +424,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/page/community-choices-waiver",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07",
+      "lastVerifiedDate": "2026-10-07",
       "reviewQueue": [
         {
           "field": "age",
@@ -429,15 +436,6 @@ export const drafts: PipelineStateDrafts = {
           "flaggedAt": "2026-10-06T12:22:06.255Z"
         },
         {
-          "field": "income_1",
-          "from": 2742,
-          "to": 2199,
-          "source": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
-          "severity": "high",
-          "why": "value fits more than one tier (200% FPL 2026 or 250% FPL 2022 or 300% SSI 2024 or 300% SSI 2023)",
-          "flaggedAt": "2026-10-06T12:22:06.255Z"
-        },
-        {
           "field": "income_2",
           "from": 5484,
           "to": 4398,
@@ -445,6 +443,17 @@ export const drafts: PipelineStateDrafts = {
           "severity": "high",
           "why": "value fits more than one tier (250% FPL 2026 or 250% FPL 2025 or 300% SSI 2026 or 300% SSI 2025)",
           "flaggedAt": "2026-10-06T12:22:06.255Z"
+        }
+      ],
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 2742,
+          "to": 2982,
+          "source": "https://ldh.la.gov/page/community-choices-waiver",
+          "flaggedAt": "2026-10-07",
+          "appliedAt": "2026-10-07",
+          "appliedBy": "hand (answer-key work, 7 Oct 2026): care waiver special income limit, 300% of the 2026 SSI rate"
         }
       ]
     },

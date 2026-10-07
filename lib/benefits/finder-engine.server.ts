@@ -18,7 +18,7 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { rulesOf, explain, type KnownFacts } from "@/lib/benefits/question-engine";
+import { rulesOf, explain, parseCut, hasStateSupplement, type KnownFacts } from "@/lib/benefits/question-engine";
 import { whyLine } from "@/lib/benefits/conversation";
 import type { WaiverProgram } from "@/data/waiver-library";
 import { getEnrichedProgram, getPlanProgramIds, getStateSlug } from "@/lib/program-data";
@@ -299,6 +299,8 @@ function conversationFacts(a: FinderAnswers): KnownFacts | null {
     savings,
     disability: null,
     household: a.household === "1" ? "alone" : a.household === "2" ? "couple" : a.household === "3" ? "family" : null,
+    incomeCut: parseCut(a.incomeCut) ? a.incomeCut : null,
+    savingsCut: parseCut(a.savingsCut) ? a.savingsCut : null,
   };
 }
 
@@ -446,9 +448,10 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   // the list the family just watched settle: a program those answers rule out
   // leaves the plan, and one they make likely says so.
   const conv = conversationFacts(a);
+  const stateSupplement = hasStateSupplement(programs.map((p) => p.name));
   const convOf = (item: WaiverProgram) => {
     if (!conv) return null;
-    const rules = rulesOf(item as Parameters<typeof rulesOf>[0]);
+    const rules = rulesOf(item as Parameters<typeof rulesOf>[0], { stateSupplement });
     return { rules, e: explain(rules, conv) };
   };
   const convOut = conv ? rankedKept.filter(({ item }) => !alreadyCovered.some((c) => c.item === item) && convOf(item)!.e.status === "out") : [];
