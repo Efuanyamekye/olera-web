@@ -73,18 +73,26 @@ export async function shippedSince(sinceIso: string): Promise<string[]> {
   const repo = process.env.WAR_ROOM_GITHUB_REPOSITORY;
   if (!token || !repo || !Number.isFinite(Date.parse(sinceIso))) return [];
   try {
-    const res = await fetch(`https://api.github.com/repos/${repo}/pulls?state=closed&base=staging&sort=updated&direction=desc&per_page=100`, {
-      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!res.ok) return [];
-    const pulls = (await res.json()) as Array<{ number: number; title: string; merged_at: string | null }>;
+    // The repo merges about forty PRs a day, so a week needs several pages.
+    // Pages are by last update, newest first; stop once a page is entirely
+    // older than the window.
     const since = Date.parse(sinceIso);
+    const pulls: Array<{ number: number; title: string; merged_at: string | null; updated_at: string }> = [];
+    for (let page = 1; page <= 4; page++) {
+      const res = await fetch(`https://api.github.com/repos/${repo}/pulls?state=closed&base=staging&sort=updated&direction=desc&per_page=100&page=${page}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) break;
+      const batch = (await res.json()) as Array<{ number: number; title: string; merged_at: string | null; updated_at: string }>;
+      pulls.push(...batch);
+      if (batch.length < 100 || batch.every((p) => Date.parse(p.updated_at) < since)) break;
+    }
     const lines = pulls
       .filter((p) => p.merged_at && Date.parse(p.merged_at) >= since)
-      .filter((p) => !/^promote |session context|handoff$|scratchpad/i.test(p.title) && !/^Merge main into staging/i.test(p.title))
+      .filter((p) => !/^promote |session context|handoff$|scratchpad|fact-check|medjobs/i.test(p.title) && !/^Merge main into staging/i.test(p.title))
       .sort((a, b) => Date.parse(a.merged_at!) - Date.parse(b.merged_at!))
-      .slice(0, 40)
+      .slice(0, 60)
       .map((p) => `- ${p.merged_at!.slice(0, 10)} #${p.number} ${p.title}`);
     shippedCache = { at: Date.now(), since: sinceIso, lines };
     return lines;
@@ -130,8 +138,10 @@ export async function meetingRecord(db: SupabaseClient, event: CalendarEvent): P
     outside.length ? `OUTSIDE ATTENDEES:\n${outside.join("\n\n")}` : "",
   ].filter(Boolean);
   const context = contextParts;
-  const shipped = note ? await shippedSince(note.editedAt).catch(() => []) : [];
-  if (shipped.length) context.push(`SHIPPED SINCE LAST TIME (pull requests merged ${note!.editedAt.slice(0, 10)} or later; built, may still await production):\n${shipped.join("\n")}`);
+  // From when the note was created (the meeting), not last edited: an edit
+  // the next day would otherwise hide work shipped in between.
+  const shipped = note ? await shippedSince(note.createdAt).catch(() => []) : [];
+  if (shipped.length) context.push(`SHIPPED SINCE LAST TIME (pull requests merged ${note!.createdAt.slice(0, 10)} or later; built, may still await production):\n${shipped.join("\n")}`);
   else if (note) context.push("SHIPPED SINCE LAST TIME: no pull requests found.");
   const seen = lastNote ? `${lastNote.title} (${lastNote.editedAt.slice(0, 10)}, via ${lastNote.via})` : null;
   return { context: context.join("\n\n"), noteUsed: note ? seen : null, noteSeen: seen };
