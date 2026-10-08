@@ -136,9 +136,10 @@ export default function ProfileCard({
                           e.stopPropagation();
                           onToggleJobBoard(r.id, r.jobBoardVisible ?? false);
                         }}
-                        className="ml-2 shrink-0"
+                        className="ml-2 flex shrink-0 items-center gap-1.5"
                         title={r.jobBoardVisible ? "Visible on job board" : "Hidden from job board"}
                       >
+                        <span className="text-[10px] font-medium text-gray-400">Live</span>
                         <span
                           className={`inline-flex h-5 w-9 items-center rounded-full transition-colors ${
                             r.jobBoardVisible
