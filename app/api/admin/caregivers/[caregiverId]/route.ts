@@ -195,9 +195,20 @@ export async function PATCH(
     }
 
     // Recalculate profile completeness after any update that might affect it
+    // These fields contribute to section completeness calculations
     const completenessFields = new Set([
-      "why_caregiving", "commitment_statement", "resume_url", "video_intro_url",
-      "certifications", "display_name", "email", "phone", "city", "state", "image_url"
+      // Profile Overview section
+      "display_name", "email", "phone", "city", "state", "image_url", "university",
+      // Why section
+      "why_caregiving",
+      // Availability section
+      "commitment_statement",
+      // Resume section
+      "resume_url",
+      // Video Introduction section
+      "video_intro_url",
+      // Certifications section (0% but still tracked)
+      "certifications",
     ]);
     const affectsCompleteness = [...Object.keys(topUpdates), ...Object.keys(metaUpdates)]
       .some(key => completenessFields.has(key));
