@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import StudentCommsTimeline from "@/components/admin/StudentCommsTimeline";
+import { calculateCompleteness } from "@/lib/medjobs-completeness";
 import type { StudentMetadata } from "@/lib/types";
 
 // Helper to check if a string looks like a storage path vs external URL
@@ -200,6 +201,21 @@ export default function AdminStudentDetailPage() {
     return false;
   }, [formData, originalData]);
 
+  // Calculate actual completeness dynamically (handles null student gracefully)
+  const actualCompleteness = useMemo(() => {
+    if (!student) return 0;
+    const meta = (student.metadata || {}) as StudentMetadata;
+    const hasPhoto = !!student.image_url;
+    const hasBasicInfo = {
+      hasName: !!student.display_name,
+      hasEmail: !!student.email,
+      hasPhone: !!student.phone,
+      hasUniversity: !!meta.university,
+      hasLocation: !!(student.city && student.state),
+    };
+    return calculateCompleteness(meta, hasPhoto, hasBasicInfo);
+  }, [student]);
+
   // Warn on navigation when dirty
   useEffect(() => {
     if (!isDirty) return;
@@ -320,13 +336,27 @@ export default function AdminStudentDetailPage() {
 
       if (res.ok) {
         setOriginalData({ ...formData });
-        // Also update the student object for display
-        setStudent((prev: typeof student) => ({
-          ...prev,
-          ...Object.fromEntries(
-            Object.entries(delta).filter(([k]) => ["display_name", "email", "phone", "city", "state", "is_active"].includes(k))
-          ),
-        }));
+        // Update student object with all saved changes (top-level and metadata)
+        const topLevelFields = new Set(["display_name", "email", "phone", "city", "state", "is_active"]);
+        setStudent((prev: typeof student) => {
+          const updated = { ...prev };
+          const metaUpdates: Record<string, unknown> = {};
+
+          for (const [key, value] of Object.entries(delta)) {
+            if (topLevelFields.has(key)) {
+              updated[key] = value;
+            } else {
+              // It's a metadata field
+              metaUpdates[key] = value;
+            }
+          }
+
+          if (Object.keys(metaUpdates).length > 0) {
+            updated.metadata = { ...updated.metadata, ...metaUpdates };
+          }
+
+          return updated;
+        });
         setSaveMessage({ type: "success", text: "Changes saved successfully." });
         setTimeout(() => setSaveMessage(null), 3000);
       } else {
@@ -445,6 +475,7 @@ export default function AdminStudentDetailPage() {
     approved_at?: string;
     approved_by?: string;
   };
+
   const isGuest = !student.account_id;
   const isPendingReview = !!meta.review_requested_at && !meta.application_completed;
   const isApproved = !!meta.application_completed;
@@ -672,7 +703,7 @@ export default function AdminStudentDetailPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <ReadOnlyField
                 label="Profile Completeness"
-                value={meta.profile_completeness ? `${meta.profile_completeness}%` : null}
+                value={`${actualCompleteness}%`}
               />
               <ReadOnlyField label="Source" value={student.source} />
               <div className="space-y-1.5">
