@@ -44,6 +44,13 @@ assert.deepEqual(dropped[0]?.kind === "rename_applied" ? dropped[0].undo : null,
 const caps = decideHealthActions(named("ALLIANCE HOME CARE"), { status: "OPERATIONAL", googleName: "Alliance Home Care LLC" });
 assert.equal(caps[0]?.kind === "rename_applied" ? caps[0].newName : null, "Alliance Home Care");
 assert.equal(cosmeticRenameTarget("Bright Star Care Inc", "Bright Star Care Inc."), null);
+// All-lowercase Google name is not a fix for ALL CAPS.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE", "alliance home care"), null);
+// ALL CAPS with a suffix: Google's casing, our suffix kept, never swapped for Google's.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE LLC", "Alliance Home Care, Inc."), "Alliance Home Care LLC");
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE LLC", "Alliance Home Care"), "Alliance Home Care");
+// Both ALL CAPS: nothing to improve.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE", "ALLIANCE HOME CARE LLC"), null);
 // A real rename waits for a person.
 assert.deepEqual(decideHealthActions(open, { status: "OPERATIONAL", googleName: "Brookdale Dallas" }).map((d) => d.kind), ["rename_flagged"]);
 // No status at all (Google returned only a name): still diffs the name.

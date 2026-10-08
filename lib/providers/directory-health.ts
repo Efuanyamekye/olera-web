@@ -72,6 +72,11 @@ function isShouting(name: string): boolean {
   return /[A-Z]/.test(name) && name === name.toUpperCase();
 }
 
+/** Real mixed case: "Alliance Home Care", not "ALLIANCE HOME CARE" or "alliance home care". */
+function isMixedCase(name: string): boolean {
+  return /[A-Z]/.test(name) && /[a-z]/.test(name);
+}
+
 /**
  * The name a cosmetic difference should change ours to, or null to keep ours.
  * Google's name wins only when it is better than ours, never just different
@@ -86,7 +91,12 @@ export function cosmeticRenameTarget(stored: string, observed: string): string |
   // Never add a suffix ours does not have; keep one ours already has.
   const candidate = storedBase === ours ? stripLegalSuffix(observed) : observed.trim();
   if (!candidate || candidate === ours) return null;
-  if (isShouting(ours) && !isShouting(candidate)) return candidate;
+  // Ours is ALL CAPS: take Google's casing, but not a suffix ours lacks or a
+  // different one in place of ours ("LLC" → "Inc").
+  if (isShouting(ours) && isMixedCase(candidate)) {
+    const base = stripLegalSuffix(candidate);
+    return storedBase === ours || base === candidate ? base : `${base}${ours.slice(storedBase.length)}`;
+  }
   // Google dropped the suffix and the rest is ours exactly.
   if (storedBase !== ours && stripLegalSuffix(candidate) === candidate && candidate.toLowerCase() === storedBase.toLowerCase()) {
     return storedBase;
