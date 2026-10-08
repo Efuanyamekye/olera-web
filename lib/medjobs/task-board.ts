@@ -371,6 +371,8 @@ export interface BoardRecord {
   tasks: BoardTask[];
   /** Providers only: slug for linking to the admin directory page. */
   directorySlug?: string | null;
+  /** Providers only: whether visible on the student job board. */
+  jobBoardVisible?: boolean;
 }
 
 /**

@@ -835,6 +835,12 @@ export default function UniversityFlow({
             setRunning(false);
             setView({ kind: "new", section });
           }}
+          onToggleJobBoard={(recordId, currentVisible) => {
+            void send(
+              { op: "toggle_job_board_visible", recordId, visible: !currentVisible },
+              currentVisible ? "Hidden from job board" : "Now visible on job board",
+            );
+          }}
         />
       )}
 

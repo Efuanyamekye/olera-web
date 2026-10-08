@@ -218,7 +218,7 @@ export async function GET() {
       db
         .from("student_outreach")
         .select(
-          "id, campus_id, kind, stakeholder_type, organization_name, status, cadence_day, notes, research_data, provider_business_profile_id",
+          "id, campus_id, kind, stakeholder_type, organization_name, status, cadence_day, notes, research_data, provider_business_profile_id, job_board_visible",
         )
         // Alphabetical, and load-bearing. Without an ORDER BY the rows come
         // back in whatever order the scan finds them, and Postgres rewrites
@@ -698,6 +698,7 @@ export async function GET() {
                 ? directorySlugOf.get(row.provider_business_profile_id as string)
                 : null) ?? research.olera_provider_slug ?? research.olera_provider_id ?? null
             : null,
+        jobBoardVisible: row.kind === "provider" ? row.job_board_visible === true : undefined,
       });
     }
 

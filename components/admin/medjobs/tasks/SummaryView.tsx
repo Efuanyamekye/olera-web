@@ -65,6 +65,7 @@ export default function SummaryView({
   people,
   onAssign,
   filterId,
+  onToggleJobBoard,
 }: {
   university: BoardUniversity;
   /**
@@ -93,6 +94,8 @@ export default function SummaryView({
    * your eye.
    */
   filterId: string | null;
+  /** Toggle job board visibility for a provider. */
+  onToggleJobBoard?: (recordId: string, currentVisible: boolean) => void;
 }) {
   // Put the record you were just looking at back under your eyes. Centred
   // rather than at the top, because the rows either side are the context.
@@ -279,6 +282,33 @@ export default function SummaryView({
                           >
                             {n ? n : r.state ? r.state : soon ? dueLabel(soon.dueAt) : ""}
                           </span>
+                          {/* Job board visibility toggle for providers */}
+                          {key === "providers" && onToggleJobBoard && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleJobBoard(r.id, r.jobBoardVisible ?? false);
+                              }}
+                              className="ml-2 flex shrink-0 items-center gap-1.5"
+                              title={r.jobBoardVisible ? "Visible on job board" : "Hidden from job board"}
+                            >
+                              <span className="text-[10px] font-medium text-gray-400">Live</span>
+                              <span
+                                className={`inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+                                  r.jobBoardVisible
+                                    ? "bg-success-500"
+                                    : "bg-gray-300"
+                                }`}
+                              >
+                                <span
+                                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                                    r.jobBoardVisible ? "translate-x-4" : "translate-x-0.5"
+                                  }`}
+                                />
+                              </span>
+                            </button>
+                          )}
                         </div>
                       );
                     })
