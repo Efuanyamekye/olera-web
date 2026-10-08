@@ -276,28 +276,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
           }
           if (seenIds.has(provider.provider_id)) continue;
 
-          // Check if we already have this provider via business_profiles (name-based dedup)
-          // This handles cases where a provider exists in BOTH sources
-          // Only skip if BOTH name AND location match (same city+state)
-          const providerNameLower = provider.provider_name?.toLowerCase() ?? "";
-          if (providerNameLower && provider.city && provider.state) {
-            const providerCity = provider.city.toLowerCase().trim();
-            const providerState = provider.state.toLowerCase().trim();
-            const alreadyFound = cards.some((c) => {
-              const cardNameLower = c.name.toLowerCase();
-              // Name must match (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
-              const nameMatch = cardNameLower.includes(providerNameLower) || providerNameLower.includes(cardNameLower);
-              if (!nameMatch) return false;
-              // Location must also match - exact city and state comparison
-              // Parse "City, ST" format from card address
-              const addressParts = c.address.split(",").map((p) => p.trim().toLowerCase());
-              const cardCity = addressParts[0] ?? "";
-              const cardState = addressParts[1] ?? "";
-              return cardCity === providerCity && cardState === providerState;
-            });
-            if (alreadyFound) continue;
-          }
-
           seenIds.add(provider.provider_id);
 
           const card = toCardFormat(provider) as ProviderCard;
