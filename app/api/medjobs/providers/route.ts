@@ -164,18 +164,20 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       // Look up location data from olera-providers for name+city+state matching
       if (oleraIdsToLookup.length > 0) {
         console.log(`[medjobs/providers] Looking up locations for:`, oleraIdsToLookup);
-        const { data: oleraProviders, error: lookupError } = await db
+        const { data: oleraProvidersRaw, error: lookupError } = await db
           .from("olera-providers")
-          .select("provider_id, city, state")
-          .in("provider_id", oleraIdsToLookup)
-          .or("deleted.is.null,deleted.eq.false");
+          .select("provider_id, city, state, deleted")
+          .in("provider_id", oleraIdsToLookup);
 
         if (lookupError) {
           console.error("[medjobs/providers] Location lookup failed:", lookupError.message);
         }
-        console.log(`[medjobs/providers] Location lookup returned:`, oleraProviders);
 
-        for (const op of oleraProviders ?? []) {
+        // Filter out deleted providers
+        const oleraProviders = (oleraProvidersRaw ?? []).filter(r => r.deleted !== true);
+        console.log(`[medjobs/providers] Location lookup returned ${oleraProvidersRaw?.length ?? 0} raw, ${oleraProviders.length} after filtering:`, oleraProviders);
+
+        for (const op of oleraProviders) {
           const name = oleraIdToName.get(op.provider_id);
           if (name && op.city && op.state) {
             readyByLocation.push({
@@ -258,23 +260,23 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       console.log(`[medjobs/providers] oleraIds to query:`, oleraIds);
       console.log(`[medjobs/providers] cards from business_profiles: ${cards.length}`);
       if (oleraIds.length > 0) {
-        let oleraQuery = db
+        // Fetch all matching provider_ids, filter deleted in JS to avoid .or() syntax issues
+        const { data: oleraRowsRaw, error: oleraError } = await db
           .from("olera-providers")
           .select(
-            "provider_id, provider_name, provider_category, main_category, phone, email, website, google_rating, address, city, state, zipcode, lat, lon, place_id, provider_images, provider_logo, provider_description, hero_image_url, slug, google_reviews_data, cms_data, ai_trust_signals, lower_price, upper_price, contact_for_price, created_at"
+            "provider_id, provider_name, provider_category, main_category, phone, email, website, google_rating, address, city, state, zipcode, lat, lon, place_id, provider_images, provider_logo, provider_description, hero_image_url, slug, google_reviews_data, cms_data, ai_trust_signals, lower_price, upper_price, contact_for_price, created_at, deleted"
           )
-          .in("provider_id", oleraIds)
-          .or("deleted.is.null,deleted.eq.false");
+          .in("provider_id", oleraIds);
 
-        // Note: We don't filter by state here because manually added providers
-        // may have NULL city/state in olera-providers. We filter in JS instead.
-
-        const { data: oleraRows, error: oleraError } = await oleraQuery;
         if (oleraError) {
           console.error("[medjobs/providers] olera-providers query failed:", oleraError.message, { oleraIds });
         }
-        console.log(`[medjobs/providers] olera-providers query returned ${oleraRows?.length ?? 0} rows:`,
-          oleraRows?.map(r => ({ id: r.provider_id, name: r.provider_name, city: r.city, state: r.state, deleted: r.deleted }))
+
+        // Filter out deleted providers in JS (deleted === true means excluded)
+        const oleraRows = (oleraRowsRaw ?? []).filter(r => r.deleted !== true);
+
+        console.log(`[medjobs/providers] olera-providers query returned ${oleraRowsRaw?.length ?? 0} raw, ${oleraRows.length} after filtering deleted:`,
+          oleraRows.map(r => ({ id: r.provider_id, name: r.provider_name, city: r.city, state: r.state, deleted: r.deleted }))
         );
 
         for (const row of oleraRows ?? []) {
