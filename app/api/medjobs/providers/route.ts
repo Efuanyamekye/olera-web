@@ -23,7 +23,7 @@ import { getServiceClient } from "@/lib/admin";
 import { getPartnerUniversity } from "@/lib/medjobs/catchment";
 import { generateProviderSlug } from "@/lib/slugify";
 import { LIVE_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
-import type { ProviderCardData } from "@/lib/types/provider";
+import { parseProviderImages, type ProviderCardData } from "@/lib/types/provider";
 import { readOpportunityProfile, type OpportunityProfile } from "@/lib/medjobs/opportunity";
 
 export type ProviderCard = ProviderCardData & {
@@ -89,8 +89,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       const oleraIds = Array.from(oleraIdMap.keys());
       const oleraDataMap = new Map<string, Record<string, unknown>>();
 
-      console.log("[medjobs/providers] oleraIds extracted:", oleraIds.length, oleraIds);
-
       if (oleraIds.length > 0) {
         const { data: oleraRows, error: oleraError } = await db
           .from("olera-providers")
@@ -101,16 +99,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         if (oleraError) {
           console.error("[medjobs/providers] olera-providers query failed:", oleraError.message);
-        }
-
-        console.log("[medjobs/providers] olera-providers returned:", oleraRows?.length ?? 0, "rows");
-        if (oleraRows && oleraRows.length > 0) {
-          console.log("[medjobs/providers] Sample row images:", {
-            provider_id: oleraRows[0].provider_id,
-            hero_image_url: oleraRows[0].hero_image_url,
-            provider_logo: oleraRows[0].provider_logo,
-            provider_images: oleraRows[0].provider_images,
-          });
         }
 
         // Build lookup map, excluding deleted
@@ -156,16 +144,18 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         if (oleraData) {
           const heroImage = oleraData.hero_image_url as string | undefined;
           const logo = oleraData.provider_logo as string | undefined;
-          const providerImages = oleraData.provider_images as string[] | undefined;
+          // provider_images is a pipe-separated string, not an array
+          const providerImagesRaw = oleraData.provider_images as string | null;
+          const providerImages = parseProviderImages(providerImagesRaw);
 
           if (heroImage) {
             image = heroImage;
+          } else if (providerImages.length > 0) {
+            image = providerImages[0];
           } else if (logo) {
             image = logo;
-          } else if (providerImages && providerImages.length > 0) {
-            image = providerImages[0];
           }
-          images = providerImages ?? [];
+          images = providerImages;
         }
 
         // Rating from olera-providers
