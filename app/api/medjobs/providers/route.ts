@@ -85,8 +85,12 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         .eq("status", "ready_for_students");
 
       if (!readyRows || readyRows.length === 0) {
+        console.log("[medjobs/providers] No ready_for_students providers found");
         return [];
       }
+      console.log(`[medjobs/providers] Found ${readyRows.length} ready_for_students providers:`,
+        readyRows.map(r => ({ name: r.organization_name, oleraId: (r.research_data as Record<string, unknown>)?.olera_provider_id, bpId: r.provider_business_profile_id }))
+      );
 
       // Separate records by their data source
       const bpIds: string[] = [];  // Direct links to business_profiles
@@ -241,6 +245,8 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       }
 
       // 2. Fetch from olera-providers for records with olera_provider_id (no business_profile)
+      console.log(`[medjobs/providers] oleraIds to query:`, oleraIds);
+      console.log(`[medjobs/providers] cards from business_profiles: ${cards.length}`);
       if (oleraIds.length > 0) {
         let oleraQuery = db
           .from("olera-providers")
@@ -253,7 +259,13 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         // Note: We don't filter by state here because manually added providers
         // may have NULL city/state in olera-providers. We filter in JS instead.
 
-        const { data: oleraRows } = await oleraQuery;
+        const { data: oleraRows, error: oleraError } = await oleraQuery;
+        if (oleraError) {
+          console.error("[medjobs/providers] olera-providers query failed:", oleraError.message, { oleraIds });
+        }
+        console.log(`[medjobs/providers] olera-providers query returned ${oleraRows?.length ?? 0} rows:`,
+          oleraRows?.map(r => ({ id: r.provider_id, name: r.provider_name, city: r.city, state: r.state, deleted: r.deleted }))
+        );
 
         for (const row of oleraRows ?? []) {
           const provider = row as unknown as Provider & { created_at?: string };
@@ -362,6 +374,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         cards.push(card);
       }
 
+      console.log(`[medjobs/providers] Final card count: ${cards.length}`, cards.map(c => ({ id: c.id, name: c.name, isProgram: c.isProgram })));
       return cards;
     },
     [`medjobs-providers-${campus || "all"}-${scope}`],
