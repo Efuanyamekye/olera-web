@@ -95,6 +95,7 @@ type Body =
   | { op: "unarchive_record"; recordId: string }
   | { op: "clear_flag"; recordId: string }
   | { op: "revert_status"; recordId: string }
+  | { op: "toggle_job_board_visible"; recordId: string; visible: boolean }
   | { op: "delete_record"; recordId: string; reason?: string }
   | {
       op: "save_fields";
@@ -1034,6 +1035,29 @@ export async function POST(req: Request) {
         .eq("id", outreach.id);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ ok: true });
+    }
+
+    // ── toggle job board visibility ─────────────────────────────────────────
+    // Explicit control over whether a provider appears on the student job board.
+    // Independent of status — admin can make any provider visible or hidden.
+    case "toggle_job_board_visible": {
+      if (outreach.kind !== "provider") {
+        return NextResponse.json(
+          { error: "Only providers can be shown on the job board" },
+          { status: 400 }
+        );
+      }
+      const visible = body.visible === true;
+      const { error } = await db
+        .from("student_outreach")
+        .update({ ...stamp(user.id), job_board_visible: visible })
+        .eq("id", outreach.id);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({
+        ok: true,
+        job_board_visible: visible,
+        provider: outreach.organization_name,
+      });
     }
 
     // ── clear a finished status ──────────────────────────────────────────────

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
 import ChannelCard from "./ChannelCard";
 import ProfileCard from "./ProfileCard";
+import ConfirmModal from "@/components/admin/medjobs/ConfirmModal";
 import type { ActivationUniversity } from "./types";
 import type { Channel } from "@/lib/medjobs/activation";
 
@@ -33,6 +34,14 @@ export default function UniversityDrawer({
   // Writes that have no control of their own to report into. The checklist
   // shows its own errors; everything else surfaces here.
   const [error, setError] = useState<string | null>(null);
+
+  // Job board toggle confirmation modal state
+  const [toggleModal, setToggleModal] = useState<{
+    id: string;
+    name: string;
+    currentVisible: boolean;
+  } | null>(null);
+  const [toggling, setToggling] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -77,6 +86,34 @@ export default function UniversityDrawer({
       await post(path, body, method);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not save that.");
+    }
+  };
+
+  /** Handle job board toggle confirmation. */
+  const handleToggleJobBoard = async () => {
+    if (!toggleModal) return;
+    setToggling(true);
+    try {
+      const res = await fetch("/api/admin/medjobs/tasks-board/actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          op: "toggle_job_board_visible",
+          recordId: toggleModal.id,
+          visible: !toggleModal.currentVisible,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok) {
+        throw new Error(data.error ?? `Could not update visibility (${res.status}).`);
+      }
+      await load();
+      onChanged();
+      setToggleModal(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not update visibility.");
+    } finally {
+      setToggling(false);
     }
   };
 
@@ -133,11 +170,21 @@ export default function UniversityDrawer({
               state: r.state,
               detail: r.detail,
               directorySlug: r.directorySlug,
+              jobBoardVisible: r.jobBoardVisible,
             }))}
             emptyText="No providers for this campus yet."
             onOpenRow={onOpenProvider}
             onOpenDirectory={(slug) => {
               window.open(`/admin/directory/${slug}`, "_blank", "noopener,noreferrer");
+            }}
+            showJobBoardToggle
+            onToggleJobBoard={(id, currentVisible) => {
+              const provider = uni.providers?.rows.find((r) => r.id === id);
+              setToggleModal({
+                id,
+                name: provider?.name ?? "This provider",
+                currentVisible,
+              });
             }}
           />
           <ProfileCard
@@ -204,6 +251,24 @@ export default function UniversityDrawer({
             />
           ))}
         </div>
+      )}
+
+      {/* Job board visibility toggle confirmation */}
+      {toggleModal && (
+        <ConfirmModal
+          open
+          title={toggleModal.currentVisible ? "Hide from job board?" : "Show on job board?"}
+          message={
+            toggleModal.currentVisible
+              ? `${toggleModal.name} will no longer appear on the student job board. Students will not be able to see or apply to this provider.`
+              : `${toggleModal.name} will appear on the student job board. Students will be able to see and apply to this provider.`
+          }
+          confirmLabel={toggleModal.currentVisible ? "Hide" : "Show"}
+          confirmVariant={toggleModal.currentVisible ? "danger" : "primary"}
+          loading={toggling}
+          onConfirm={handleToggleJobBoard}
+          onCancel={() => setToggleModal(null)}
+        />
       )}
     </DrawerShell>
   );

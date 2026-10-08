@@ -3,9 +3,9 @@
  *
  * Returns providers for the student Find Jobs board.
  *
- * A provider appears on the job board ONLY if they are marked "ready for students"
- * in the MedJobs task board (student_outreach.status = "ready_for_students").
- * This is the single canonical signal that a provider is ready to hire students.
+ * A provider appears on the job board ONLY if job_board_visible is explicitly
+ * set to true in student_outreach. This is an admin toggle that gives direct
+ * control over job board visibility, independent of workflow status.
  *
  * Providers are fetched from TWO sources:
  * 1. business_profiles — if the student_outreach record has provider_business_profile_id
@@ -44,14 +44,14 @@ export type ProviderCard = ProviderCardData & {
 const PAGE_SIZE = 12;
 
 /**
- * Build the list of providers marked "ready for students".
- * Only includes providers with student_outreach.status = "ready_for_students".
+ * Build the list of providers visible on the job board.
+ * Only includes providers with student_outreach.job_board_visible = true.
  *
  * Fetches from TWO sources:
  * 1. business_profiles — if student_outreach.provider_business_profile_id is set
  * 2. olera-providers — if student_outreach.research_data.olera_provider_id is set
  *
- * This ensures ALL "ready for students" providers appear on the job board,
+ * This ensures ALL visible providers appear on the job board,
  * regardless of whether they have a business_profiles record.
  *
  * Cached per campus+scope for 5 minutes.
@@ -76,21 +76,17 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         catchmentFilter = { cities: cityKeys, states };
       }
 
-      // Get ALL providers marked "ready for students" in the MedJobs task board
-      // This is the ONLY source for the job board - if they have this status, they appear
+      // Get ALL providers with job_board_visible = true
+      // This is the ONLY source for the job board - if they have this flag, they appear
       const { data: readyRows } = await db
         .from("student_outreach")
         .select("id, provider_business_profile_id, organization_name, research_data")
         .eq("kind", "provider")
-        .eq("status", "ready_for_students");
+        .eq("job_board_visible", true);
 
       if (!readyRows || readyRows.length === 0) {
-        console.log("[medjobs/providers] No ready_for_students providers found");
         return [];
       }
-      console.log(`[medjobs/providers] Found ${readyRows.length} ready_for_students providers:`,
-        readyRows.map(r => ({ name: r.organization_name, oleraId: (r.research_data as Record<string, unknown>)?.olera_provider_id, bpId: r.provider_business_profile_id }))
-      );
 
       // Separate records by their data source
       const bpIds: string[] = [];  // Direct links to business_profiles
@@ -163,7 +159,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
       // Look up location data from olera-providers for name+city+state matching
       if (oleraIdsToLookup.length > 0) {
-        console.log(`[medjobs/providers] Looking up locations for:`, oleraIdsToLookup);
         const { data: oleraProvidersRaw, error: lookupError } = await db
           .from("olera-providers")
           .select("provider_id, city, state, deleted")
@@ -175,7 +170,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         // Filter out deleted providers
         const oleraProviders = (oleraProvidersRaw ?? []).filter(r => r.deleted !== true);
-        console.log(`[medjobs/providers] Location lookup returned ${oleraProvidersRaw?.length ?? 0} raw, ${oleraProviders.length} after filtering:`, oleraProviders);
 
         for (const op of oleraProviders) {
           const name = oleraIdToName.get(op.provider_id);
@@ -217,8 +211,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         }
 
         const { data: bpRows } = await bpQuery;
-        console.log(`[medjobs/providers] business_profiles query returned ${bpRows?.length ?? 0} rows`);
-        console.log(`[medjobs/providers] readyByLocation for matching:`, readyByLocation);
 
         for (const row of (bpRows ?? []) as unknown as (BusinessProfile & { created_at?: string })[]) {
           if (!inCatchment(row.city, row.state)) continue;
@@ -244,7 +236,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
           if (!isReadyForStudents) continue;
 
-          console.log(`[medjobs/providers] Matched business_profile: ${row.display_name} (${row.city}, ${row.state})`);
           seenIds.add(row.id);
           const meta = (row.metadata ?? {}) as Record<string, unknown>;
           const card = businessProfileToCardFormat(row) as ProviderCard;
@@ -257,8 +248,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       }
 
       // 2. Fetch from olera-providers for records with olera_provider_id (no business_profile)
-      console.log(`[medjobs/providers] oleraIds to query:`, oleraIds);
-      console.log(`[medjobs/providers] cards from business_profiles: ${cards.length}`);
       if (oleraIds.length > 0) {
         // Fetch all matching provider_ids, filter deleted in JS to avoid .or() syntax issues
         const { data: oleraRowsRaw, error: oleraError } = await db
@@ -274,10 +263,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         // Filter out deleted providers in JS (deleted === true means excluded)
         const oleraRows = (oleraRowsRaw ?? []).filter(r => r.deleted !== true);
-
-        console.log(`[medjobs/providers] olera-providers query returned ${oleraRowsRaw?.length ?? 0} raw, ${oleraRows.length} after filtering deleted:`,
-          oleraRows.map(r => ({ id: r.provider_id, name: r.provider_name, city: r.city, state: r.state, deleted: r.deleted }))
-        );
 
         for (const row of oleraRows ?? []) {
           const provider = row as unknown as Provider & { created_at?: string };
@@ -386,7 +371,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         cards.push(card);
       }
 
-      console.log(`[medjobs/providers] Final card count: ${cards.length}`, cards.map(c => ({ id: c.id, name: c.name, isProgram: c.isProgram })));
       return cards;
     },
     [`medjobs-providers-${campus || "all"}-${scope}`],

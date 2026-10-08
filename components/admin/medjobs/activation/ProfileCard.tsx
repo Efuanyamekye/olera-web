@@ -26,6 +26,8 @@ export interface ProfileRow {
   due?: boolean;
   /** Slug for linking to the admin directory page. */
   directorySlug?: string | null;
+  /** Whether this provider is visible on the student job board. */
+  jobBoardVisible?: boolean;
 }
 
 export default function ProfileCard({
@@ -40,6 +42,8 @@ export default function ProfileCard({
   onAdd,
   onOpenRow,
   onOpenDirectory,
+  onToggleJobBoard,
+  showJobBoardToggle = false,
 }: {
   title: string;
   /** Null renders a dash — the metric exists but is not instrumented. */
@@ -54,6 +58,10 @@ export default function ProfileCard({
   onOpenRow?: (id: string) => void;
   /** Opens the provider's directory page. Called with the slug. */
   onOpenDirectory?: (slug: string) => void;
+  /** Toggles job board visibility for a provider. Called with (id, currentVisible). */
+  onToggleJobBoard?: (id: string, currentVisible: boolean) => void;
+  /** Whether to show the job board toggle for providers. */
+  showJobBoardToggle?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const n = (v: number | null) => (v == null ? "—" : String(v));
@@ -121,6 +129,31 @@ export default function ProfileCard({
                       ) : null}
                     </span>
                     <span className="shrink-0 text-[11px] text-gray-500">{r.state}</span>
+                    {showJobBoardToggle && onToggleJobBoard && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleJobBoard(r.id, r.jobBoardVisible ?? false);
+                        }}
+                        className="ml-2 shrink-0"
+                        title={r.jobBoardVisible ? "Visible on job board" : "Hidden from job board"}
+                      >
+                        <span
+                          className={`inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+                            r.jobBoardVisible
+                              ? "bg-success-500"
+                              : "bg-gray-300"
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                              r.jobBoardVisible ? "translate-x-4" : "translate-x-0.5"
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    )}
                   </div>
                 </li>
               ))}

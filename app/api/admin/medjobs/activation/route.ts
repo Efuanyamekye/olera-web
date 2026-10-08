@@ -146,6 +146,7 @@ export async function GET(req: NextRequest) {
     status: string;
     research_data: Record<string, unknown> | null;
     provider_business_profile_id: string | null;
+    job_board_visible: boolean | null;
   };
   let providerRows: ProviderRow[] = [];
   let providerSlugs: Map<string, string> = new Map();
@@ -154,7 +155,7 @@ export async function GET(req: NextRequest) {
     const [provRes, studRes] = await Promise.all([
       db
         .from("student_outreach")
-        .select("id, organization_name, status, research_data, provider_business_profile_id")
+        .select("id, organization_name, status, research_data, provider_business_profile_id, job_board_visible")
         .eq("campus_id", wanted[0].id)
         .eq("kind", "provider")
         .order("organization_name"),
@@ -300,6 +301,7 @@ export async function GET(req: NextRequest) {
                     ?.olera_provider_slug
                   ?? (r.research_data as { olera_provider_id?: string } | null)?.olera_provider_id
                   ?? null,
+              jobBoardVisible: r.job_board_visible === true,
             })),
           }
         : undefined,
