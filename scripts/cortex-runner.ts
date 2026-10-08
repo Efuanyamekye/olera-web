@@ -88,15 +88,34 @@ export function buildable(rows: Brief[]): Brief[] {
     && !/\bbacklog\b/i.test(row.note ?? ""));
 }
 
+/**
+ * TJ approved building a product change once the design is agreed: a note that
+ * starts with "build" or "approved" (for example "approved: home care first"). Without one, a brief
+ * that changes what families or providers see gets a proposal, not a PR
+ * (TJ, 8 Oct 2026: merging was "way too premature without some clarification").
+ */
+export function buildApproved(note: string | null): boolean {
+  // Only a note that starts with the word, so "don't build yet" or "not approved" never counts.
+  return /^\s*(build|approved)\b/i.test(note ?? "");
+}
+
 function slug(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "brief";
 }
 
 function prompt(brief: Brief, branch: string) {
+  const approved = buildApproved(brief.note);
   return [
     `You are building one brief that Cortex, Olera's operations agent, handed off and TJ approved. No person is watching this session; finish it or stop at a clean partial.`,
     ``,
-    `Rules (from the /handoff skill and docs/cortex/POLICY.md):`,
+    `First, decide which kind of brief this is:`,
+    `- A FIX: something is wrong or missing and the right result is clear (a bug, a wrong label, broken data, an internal tool, a script). Build it as a PR, following the rules below.`,
+    approved
+      ? `- TJ has approved building this brief (see his note), so build it as a PR even if it changes what families or providers see.`
+      : `- A PRODUCT CHANGE: it changes what families or providers see or do, and there is more than one reasonable design. Do NOT write code or open a PR. Write a proposal instead: pull the relevant data first (read-only queries: who visits, devices, what they do, how many pages each case covers), then build mockups with real data covering the typical and worst cases (not the best provider), on phone and laptop, plus the open questions only TJ can answer. Use the visualize skill and write it as HTML to ${join(ROOT, "review")}/brief-${brief.id.slice(0, 8)}.html. End with: RESULT: proposal <that path>. Once the direction is agreed, the brief is reopened with a note starting "approved" (scripts/cortex-handoffs.ts reopen).`,
+    `If unsure which kind it is, treat it as a product change.`,
+    ``,
+    `Rules for building a PR (from the /handoff skill and docs/cortex/POLICY.md):`,
     `- Read CLAUDE.md and the files the brief points to first. Anything the brief marks decided is decided.`,
     `- You are on branch ${branch}, made from origin/staging. Commit there, push it, and open ONE pull request against staging with gh pr create. Never merge, promote, or push to staging or main.`,
     `- Write a migration file if the work needs one, but never run it; say in the PR body that TJ runs it.`,
@@ -108,6 +127,7 @@ function prompt(brief: Brief, branch: string) {
     `- If the brief needs a decision only TJ can make, build everything that does not depend on it and list the decision first in the PR body.`,
     `- End your final message with one line, exactly one of:`,
     `  RESULT: done <PR URL>`,
+    `  RESULT: proposal <path to the proposal page>`,
     `  RESULT: partial <PR URL or "no PR"> <what is left, one sentence>`,
     ``,
     `Brief ${brief.id} — ${brief.title}${brief.note ? `\nTJ's note: ${brief.note}` : ""}`,
@@ -140,6 +160,8 @@ export function finalText(log: string): string {
 /** Pulls the RESULT line the session ends with. */
 export function parseResult(output: string): { status: "done" | "partial"; result: string } {
   const line = output.split("\n").map((l) => l.replace(/[*`_]/g, "").trim()).reverse().find((l) => l.startsWith("RESULT:"));
+  // A proposal waits for TJ: kept as partial so it is not rebuilt, and named so the morning post says so.
+  if (line && line.slice("RESULT:".length).trim().startsWith("proposal")) return { status: "partial", result: "proposal ready for TJ: " + line.slice("RESULT:".length).trim().replace(/^proposal\s*/, "") };
   const pr = output.match(/https:\/\/github\.com\/olera-care\/olera-web\/pull\/\d+/g)?.pop();
   if (!line) return { status: "partial", result: pr ? `${pr} (session ended without a result line)` : "runner: session ended without a PR or a result line" };
   const rest = line.slice("RESULT:".length).trim();
