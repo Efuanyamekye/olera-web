@@ -163,10 +163,17 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
       // Look up location data from olera-providers for name+city+state matching
       if (oleraIdsToLookup.length > 0) {
-        const { data: oleraProviders } = await db
+        console.log(`[medjobs/providers] Looking up locations for:`, oleraIdsToLookup);
+        const { data: oleraProviders, error: lookupError } = await db
           .from("olera-providers")
           .select("provider_id, city, state")
-          .in("provider_id", oleraIdsToLookup);
+          .in("provider_id", oleraIdsToLookup)
+          .or("deleted.is.null,deleted.eq.false");
+
+        if (lookupError) {
+          console.error("[medjobs/providers] Location lookup failed:", lookupError.message);
+        }
+        console.log(`[medjobs/providers] Location lookup returned:`, oleraProviders);
 
         for (const op of oleraProviders ?? []) {
           const name = oleraIdToName.get(op.provider_id);
@@ -208,6 +215,8 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         }
 
         const { data: bpRows } = await bpQuery;
+        console.log(`[medjobs/providers] business_profiles query returned ${bpRows?.length ?? 0} rows`);
+        console.log(`[medjobs/providers] readyByLocation for matching:`, readyByLocation);
 
         for (const row of (bpRows ?? []) as unknown as (BusinessProfile & { created_at?: string })[]) {
           if (!inCatchment(row.city, row.state)) continue;
@@ -233,6 +242,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
           if (!isReadyForStudents) continue;
 
+          console.log(`[medjobs/providers] Matched business_profile: ${row.display_name} (${row.city}, ${row.state})`);
           seenIds.add(row.id);
           const meta = (row.metadata ?? {}) as Record<string, unknown>;
           const card = businessProfileToCardFormat(row) as ProviderCard;
