@@ -28,6 +28,7 @@ import {
   toCardFormat,
   type ProviderCardData,
   type Provider,
+  type CardImageType,
 } from "@/lib/types/provider";
 import type { BusinessProfile } from "@/lib/types";
 import { readOpportunityProfile, type OpportunityProfile } from "@/lib/medjobs/opportunity";
@@ -90,7 +91,13 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       // Separate records by their data source
       const bpIds: string[] = [];
       const oleraIds: string[] = [];
-      const outreachById = new Map<string, (typeof readyRows)[number]>();
+      // Manual entry providers without olera_provider_id - we'll create cards from outreach data
+      const manualEntries: Array<{
+        name: string;
+        city: string | null;
+        state: string | null;
+        research_data: Record<string, unknown>;
+      }> = [];
 
       for (const row of readyRows) {
         const rd = (row.research_data ?? {}) as Record<string, unknown>;
@@ -99,13 +106,19 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         if (row.provider_business_profile_id) {
           // Has direct link to business_profiles
           bpIds.push(row.provider_business_profile_id as string);
-          outreachById.set(`bp:${row.provider_business_profile_id}`, row);
         } else if (oleraId) {
           // Has link to olera-providers directory
           oleraIds.push(oleraId);
-          outreachById.set(`olera:${oleraId}`, row);
+        } else if (rd.manual_entry === true && row.organization_name) {
+          // Manual entry without olera_provider_id - use outreach data directly
+          const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
+          manualEntries.push({
+            name: row.organization_name as string,
+            city: (gc.city as string) ?? null,
+            state: (gc.state as string) ?? null,
+            research_data: rd,
+          });
         }
-        // Records with neither link cannot be displayed (no provider data)
       }
 
       const inCatchment = (city: string | null, state: string | null) => {
@@ -152,20 +165,26 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         let oleraQuery = db
           .from("olera-providers")
           .select(
-            "provider_id, provider_name, provider_category, main_category, phone, email, website, google_rating, address, city, state, zipcode, lat, lon, place_id, provider_images, provider_logo, provider_description, hero_image_url, slug, google_reviews_data, cms_data, ai_trust_signals, created_at"
+            "provider_id, provider_name, provider_category, main_category, phone, email, website, google_rating, address, city, state, zipcode, lat, lon, place_id, provider_images, provider_logo, provider_description, hero_image_url, slug, google_reviews_data, cms_data, ai_trust_signals, lower_price, upper_price, contact_for_price, created_at"
           )
           .in("provider_id", oleraIds)
           .or("deleted.is.null,deleted.eq.false");
 
-        if (catchmentFilter) {
-          oleraQuery = oleraQuery.in("state", catchmentFilter.states);
-        }
+        // Note: We don't filter by state here because manually added providers
+        // may have NULL city/state in olera-providers. We filter in JS instead.
 
         const { data: oleraRows } = await oleraQuery;
 
         for (const row of oleraRows ?? []) {
           const provider = row as unknown as Provider & { created_at?: string };
-          if (!inCatchment(provider.city, provider.state)) continue;
+          // For catchment filtering, allow providers with null city/state through
+          // if scope is "all", otherwise require valid catchment match
+          if (catchmentFilter && provider.city && provider.state) {
+            if (!inCatchment(provider.city, provider.state)) continue;
+          } else if (catchmentFilter && (!provider.city || !provider.state)) {
+            // Provider has no city/state - skip for "near" scope
+            continue;
+          }
           if (seenIds.has(provider.provider_id)) continue;
           seenIds.add(provider.provider_id);
 
@@ -176,6 +195,38 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
           // No opportunity data for olera-providers (they don't have metadata.medjobs_demand_profile)
           cards.push(card);
         }
+      }
+
+      // 3. Handle manual entry providers without olera_provider_id
+      // These are rare edge cases where the olera-providers insert failed
+      for (const entry of manualEntries) {
+        // For catchment filtering
+        if (catchmentFilter) {
+          if (!entry.city || !entry.state) continue;
+          if (!inCatchment(entry.city, entry.state)) continue;
+        }
+
+        // Create a minimal card from the outreach data
+        const card: ProviderCard = {
+          id: `manual-${entry.name.toLowerCase().replace(/\s+/g, "-")}`,
+          slug: entry.name.toLowerCase().replace(/\s+/g, "-"),
+          name: entry.name,
+          image: "/images/fallback/home-care-01.jpg", // Default fallback
+          imageType: "placeholder",
+          fallbackImage: "/images/fallback/home-care-01.jpg",
+          images: [],
+          address: [entry.city, entry.state].filter(Boolean).join(", "),
+          rating: 0,
+          priceRange: "Contact for pricing",
+          primaryCategory: "Home Care",
+          careTypes: ["Home Care (Non-medical)"],
+          highlights: [],
+          acceptedPayments: [],
+          verified: false,
+          isProgram: false,
+          isReadyForStudents: true,
+        };
+        cards.push(card);
       }
 
       return cards;
