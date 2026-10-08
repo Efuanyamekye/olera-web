@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import StudentCommsTimeline from "@/components/admin/StudentCommsTimeline";
+import { calculateCompleteness } from "@/lib/medjobs-completeness";
 import type { StudentMetadata } from "@/lib/types";
 
 // Helper to check if a string looks like a storage path vs external URL
@@ -168,6 +169,7 @@ export default function AdminStudentDetailPage() {
         certifications: meta.certifications || [],
         skills: meta.skills || [],
         why_caregiving: meta.why_caregiving || "",
+        commitment_statement: meta.commitment_statement || "",
         resume_url: meta.resume_url || "",
         video_intro_url: meta.video_intro_url || "",
       };
@@ -198,6 +200,21 @@ export default function AdminStudentDetailPage() {
     }
     return false;
   }, [formData, originalData]);
+
+  // Calculate actual completeness dynamically (handles null student gracefully)
+  const actualCompleteness = useMemo(() => {
+    if (!student) return 0;
+    const meta = (student.metadata || {}) as StudentMetadata;
+    const hasPhoto = !!student.image_url;
+    const hasBasicInfo = {
+      hasName: !!student.display_name,
+      hasEmail: !!student.email,
+      hasPhone: !!student.phone,
+      hasUniversity: !!meta.university,
+      hasLocation: !!(student.city && student.state),
+    };
+    return calculateCompleteness(meta, hasPhoto, hasBasicInfo);
+  }, [student]);
 
   // Warn on navigation when dirty
   useEffect(() => {
@@ -319,13 +336,27 @@ export default function AdminStudentDetailPage() {
 
       if (res.ok) {
         setOriginalData({ ...formData });
-        // Also update the student object for display
-        setStudent((prev: typeof student) => ({
-          ...prev,
-          ...Object.fromEntries(
-            Object.entries(delta).filter(([k]) => ["display_name", "email", "phone", "city", "state", "is_active"].includes(k))
-          ),
-        }));
+        // Update student object with all saved changes (top-level and metadata)
+        const topLevelFields = new Set(["display_name", "email", "phone", "city", "state", "is_active"]);
+        setStudent((prev: typeof student) => {
+          const updated = { ...prev };
+          const metaUpdates: Record<string, unknown> = {};
+
+          for (const [key, value] of Object.entries(delta)) {
+            if (topLevelFields.has(key)) {
+              updated[key] = value;
+            } else {
+              // It's a metadata field
+              metaUpdates[key] = value;
+            }
+          }
+
+          if (Object.keys(metaUpdates).length > 0) {
+            updated.metadata = { ...updated.metadata, ...metaUpdates };
+          }
+
+          return updated;
+        });
         setSaveMessage({ type: "success", text: "Changes saved successfully." });
         setTimeout(() => setSaveMessage(null), 3000);
       } else {
@@ -444,6 +475,7 @@ export default function AdminStudentDetailPage() {
     approved_at?: string;
     approved_by?: string;
   };
+
   const isGuest = !student.account_id;
   const isPendingReview = !!meta.review_requested_at && !meta.application_completed;
   const isApproved = !!meta.application_completed;
@@ -657,132 +689,91 @@ export default function AdminStudentDetailPage() {
       )}
 
       <div className="space-y-6">
-        {/* Identity */}
-        <Section title="Identity">
+        {/* 1. Profile Overview — matches portal section */}
+        <Section title="Profile Overview">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FieldInput label="Name" value={formData.display_name as string} onChange={(v) => updateField("display_name", v)} />
             <FieldInput label="Email" value={formData.email as string} onChange={(v) => updateField("email", v)} />
             <FieldInput label="Phone" value={formData.phone as string} onChange={(v) => updateField("phone", v)} />
+            <FieldInput label="University" value={formData.university as string} onChange={(v) => updateField("university", v)} />
             <FieldInput label="City" value={formData.city as string} onChange={(v) => updateField("city", v)} />
             <FieldInput label="State" value={formData.state as string} onChange={(v) => updateField("state", v)} />
-            <ReadOnlyField label="Source" value={student.source} />
-            <ReadOnlyField
-              label="Profile Completeness"
-              value={meta.profile_completeness ? `${meta.profile_completeness}%` : null}
-            />
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Visibility</label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.is_active as boolean}
-                  onChange={(e) => updateField("is_active", e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700">Active</span>
-              </label>
-              <p className="text-xs text-gray-400">
-                {isApproved
-                  ? "Uncheck to pause visibility to providers"
-                  : "Profile must be approved before it becomes visible"}
-              </p>
-            </div>
           </div>
-        </Section>
-
-        {/* Education */}
-        <Section title="Education">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FieldInput label="University" value={formData.university as string} onChange={(v) => updateField("university", v)} />
-              <FieldInput label="Major" value={formData.major as string} onChange={(v) => updateField("major", v)} />
-            </div>
-          </Section>
-
-        {/* Experience */}
-        <Section title="Experience">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <FieldInput
-              label="Certifications"
-              value={(formData.certifications as string[])?.join(", ") || ""}
-              onChange={(v) => updateField("certifications", v ? v.split(",").map(s => s.trim()).filter(Boolean) : [])}
-              placeholder="CNA, CPR, BLS (comma-separated)"
-            />
-            <FieldInput
-              label="Skills"
-              value={(formData.skills as string[])?.join(", ") || ""}
-              onChange={(v) => updateField("skills", v ? v.split(",").map(s => s.trim()).filter(Boolean) : [])}
-              placeholder="Patient care, Medication (comma-separated)"
-            />
-          </div>
-          {meta.experience_entries && meta.experience_entries.length > 0 && (
-            <details className="mt-4">
-              <summary className="text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
-                Experience entries ({meta.experience_entries.length})
-              </summary>
-              <div className="mt-3 space-y-3">
-                {meta.experience_entries.map((entry) => (
-                  <div key={entry.id} className="p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-gray-900">{entry.title}</p>
-                      <span className="px-1.5 py-0.5 text-xs bg-gray-200 text-gray-600 rounded">
-                        {entry.tag}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">{entry.description}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {entry.start_date} – {entry.end_date || "Present"}
-                    </p>
-                  </div>
-                ))}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <ReadOnlyField
+                label="Profile Completeness"
+                value={`${actualCompleteness}%`}
+              />
+              <ReadOnlyField label="Source" value={student.source} />
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-gray-700">Visibility</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_active as boolean}
+                    onChange={(e) => updateField("is_active", e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="text-sm text-gray-700">Active</span>
+                </label>
+                <p className="text-xs text-gray-400">
+                  {isApproved
+                    ? "Uncheck to pause visibility to providers"
+                    : "Profile must be approved before it becomes visible"}
+                </p>
               </div>
-            </details>
-          )}
+            </div>
+          </div>
         </Section>
 
-        {/* Why Caregiving */}
-        <Section title="Why I Want to Be a Caregiver">
-          <textarea
-            value={(formData.why_caregiving as string) || ""}
-            onChange={(e) => updateField("why_caregiving", e.target.value)}
-            rows={4}
-            placeholder="Student's motivation for caregiving..."
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-          />
-        </Section>
-
-        {/* Screening Questions (Scenario Responses) */}
-        <Section title="Screening Questions">
-          {meta.scenario_responses && meta.scenario_responses.length > 0 ? (
-            <div className="space-y-4">
-              {meta.scenario_responses.map((response, index) => (
-                <div key={index} className="border-l-2 border-primary-200 pl-4">
-                  <p className="text-sm font-medium text-gray-700 mb-2">{response.question}</p>
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                    {response.answer || <span className="text-gray-400 italic">No answer provided</span>}
-                  </p>
-                </div>
-              ))}
+        {/* 2. Weekly Schedule — matches portal section */}
+        <Section title="Weekly Schedule">
+          {meta.availability_schedule && Object.keys(meta.availability_schedule).length > 0 ? (
+            <div className="divide-y divide-gray-100">
+              {(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const).map((day) => {
+                const slots = meta.availability_schedule?.[day] || [];
+                if (slots.length === 0) return null;
+                const fullDay = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday", Sun: "Sunday" }[day];
+                return (
+                  <div key={day} className="py-2 first:pt-0 last:pb-0 flex items-baseline justify-between gap-4">
+                    <span className="text-sm font-medium text-gray-700">{fullDay}</span>
+                    <span className="text-sm text-gray-500">
+                      {slots.map((slot) => {
+                        const fmt = (t: string) => {
+                          const [hStr, mStr] = t.split(":");
+                          const h = parseInt(hStr, 10);
+                          const hour = h > 12 ? h - 12 : h === 0 ? 12 : h;
+                          const ampm = h >= 12 ? "pm" : "am";
+                          return mStr === "00" ? `${hour}${ampm}` : `${hour}:${mStr}${ampm}`;
+                        };
+                        return typeof slot === "string" ? slot : `${fmt(slot.start)}–${fmt(slot.end)}`;
+                      }).join(", ")}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           ) : (
-            <p className="text-sm text-gray-400 italic">No screening questions answered</p>
+            <p className="text-sm text-gray-400 italic">No schedule provided</p>
           )}
         </Section>
 
-        {/* Availability */}
-        <Section title="Availability">
-          <div className="mt-0">
-            <ReadOnlyField label="Availability Notes" value={meta.availability_notes} />
-          </div>
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium text-gray-500 mb-2">Commitment Statement</p>
-            {meta.commitment_statement ? (
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{meta.commitment_statement}</p>
-            ) : (
-              <p className="text-sm text-gray-400 italic">Not provided</p>
-            )}
+        {/* 3. Availability & Commitment — matches portal section */}
+        <Section title="Availability & Commitment">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Commitment Statement</label>
+            <textarea
+              value={(formData.commitment_statement as string) || ""}
+              onChange={(e) => updateField("commitment_statement", e.target.value)}
+              rows={3}
+              placeholder="Student's commitment to caregiving..."
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+            />
+            <p className="text-xs text-gray-400 mt-1">Minimum 50 characters required for profile completeness</p>
           </div>
           <div className="mt-4">
-            <p className="text-sm font-medium text-gray-500 mb-3">Seasonal Availability</p>
+            <p className="text-sm font-medium text-gray-700 mb-3">Seasonal Availability</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {(["spring", "summer", "fall", "winter"] as const).map((season) => {
                 const data = meta.year_round_availability?.[season];
@@ -806,183 +797,203 @@ export default function AdminStudentDetailPage() {
               })}
             </div>
           </div>
-          <div className="mt-4">
-            <p className="text-sm font-medium text-gray-500 mb-3">Weekly Schedule</p>
-            {meta.availability_schedule && Object.keys(meta.availability_schedule).length > 0 ? (
-              <div className="divide-y divide-gray-100">
-                {(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const).map((day) => {
-                  const slots = meta.availability_schedule?.[day] || [];
-                  if (slots.length === 0) return null;
-                  const fullDay = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday", Sun: "Sunday" }[day];
-                  return (
-                    <div key={day} className="py-2 first:pt-0 last:pb-0 flex items-baseline justify-between gap-4">
-                      <span className="text-sm font-medium text-gray-700">{fullDay}</span>
-                      <span className="text-sm text-gray-500">
-                        {slots.map((slot, i) => {
-                          const fmt = (t: string) => {
-                            const [hStr, mStr] = t.split(":");
-                            const h = parseInt(hStr, 10);
-                            const hour = h > 12 ? h - 12 : h === 0 ? 12 : h;
-                            const ampm = h >= 12 ? "pm" : "am";
-                            return mStr === "00" ? `${hour}${ampm}` : `${hour}:${mStr}${ampm}`;
-                          };
-                          return typeof slot === "string" ? slot : `${fmt(slot.start)}–${fmt(slot.end)}`;
-                        }).join(", ")}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-400 italic">Not provided</p>
-            )}
-          </div>
         </Section>
 
-        {/* Documents & Media */}
-        <Section title="Documents & Media">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Resume URL</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={(formData.resume_url as string) || ""}
-                  onChange={(e) => updateField("resume_url", e.target.value)}
-                  placeholder="https://... or storage path"
-                  className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                />
-                {typeof formData.resume_url === "string" && formData.resume_url && (
-                  isStoragePath(formData.resume_url) ? (
-                    <button
-                      type="button"
-                      onClick={() => viewDocument(formData.resume_url as string, "resume")}
-                      disabled={viewingDoc === "resume"}
-                      className="px-3 py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium disabled:opacity-50"
-                    >
-                      {viewingDoc === "resume" ? "..." : "View →"}
-                    </button>
-                  ) : (
-                    <a
-                      href={formData.resume_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      View →
-                    </a>
-                  )
-                )}
-              </div>
+        {/* 4. Why I Want to Be a Caregiver — matches portal section */}
+        <Section title="Why I Want to Be a Caregiver">
+          <textarea
+            value={(formData.why_caregiving as string) || ""}
+            onChange={(e) => updateField("why_caregiving", e.target.value)}
+            rows={4}
+            placeholder="Student's motivation for caregiving..."
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+          />
+          <p className="text-xs text-gray-400 mt-1">Minimum 100 characters required for profile completeness</p>
+        </Section>
+
+        {/* 5. Screening Questions — matches portal section */}
+        <Section title="Screening Questions">
+          {meta.scenario_responses && meta.scenario_responses.length > 0 ? (
+            <div className="space-y-4">
+              {meta.scenario_responses.map((response, index) => (
+                <div key={index} className="border-l-2 border-primary-200 pl-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">{response.question}</p>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap">
+                    {response.answer || <span className="text-gray-400 italic">No answer provided</span>}
+                  </p>
+                </div>
+              ))}
             </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Video Intro URL</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="url"
-                  value={(formData.video_intro_url as string) || ""}
-                  onChange={(e) => updateField("video_intro_url", e.target.value)}
-                  placeholder="https://..."
-                  className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                />
-                {typeof formData.video_intro_url === "string" && formData.video_intro_url && (
+          ) : (
+            <p className="text-sm text-gray-400 italic">No screening questions answered</p>
+          )}
+        </Section>
+
+        {/* 6. Experience — matches portal section (optional, 0% weight) */}
+        <Section title="Experience">
+          {meta.experience_entries && meta.experience_entries.length > 0 ? (
+            <div className="space-y-3">
+              {meta.experience_entries.map((entry) => (
+                <div key={entry.id} className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900">{entry.title}</p>
+                    <span className="px-1.5 py-0.5 text-xs bg-gray-200 text-gray-600 rounded">
+                      {entry.tag}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{entry.description}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {entry.start_date} – {entry.end_date || "Present"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 italic">No experience entries added (optional section)</p>
+          )}
+        </Section>
+
+        {/* 7. Certifications — matches portal section (optional, 0% weight) */}
+        <Section title="Certifications">
+          <FieldInput
+            label="Certifications"
+            value={(formData.certifications as string[])?.join(", ") || ""}
+            onChange={(v) => updateField("certifications", v ? v.split(",").map(s => s.trim()).filter(Boolean) : [])}
+            placeholder="CNA, CPR, BLS, HHA, MA, EMT (comma-separated)"
+          />
+          <p className="text-xs text-gray-400 mt-1">Optional section — does not affect profile completeness</p>
+        </Section>
+
+        {/* 8. Resume — matches portal section */}
+        <Section title="Resume">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-gray-700">Resume File</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={(formData.resume_url as string) || ""}
+                onChange={(e) => updateField("resume_url", e.target.value)}
+                placeholder="https://... or storage path"
+                className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+              />
+              {typeof formData.resume_url === "string" && formData.resume_url && (
+                isStoragePath(formData.resume_url) ? (
+                  <button
+                    type="button"
+                    onClick={() => viewDocument(formData.resume_url as string, "resume")}
+                    disabled={viewingDoc === "resume"}
+                    className="px-3 py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium disabled:opacity-50"
+                  >
+                    {viewingDoc === "resume" ? "..." : "View →"}
+                  </button>
+                ) : (
                   <a
-                    href={formData.video_intro_url}
+                    href={formData.resume_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
                   >
                     View →
                   </a>
-                )}
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Driver&apos;s License</label>
-              {meta.drivers_license_url ? (
-                <div className="flex items-center justify-between gap-3 p-3 bg-primary-50 border border-primary-200 rounded-lg">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <svg className="w-5 h-5 text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-primary-800">Uploaded</p>
-                      {meta.drivers_license_uploaded_at && (
-                        <p className="text-xs text-primary-600 truncate">
-                          {new Date(meta.drivers_license_uploaded_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                          {meta.drivers_license_expiration && ` · Expires ${meta.drivers_license_expiration}`}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => viewDocument(meta.drivers_license_url!, "license")}
-                    disabled={viewingDoc === "license"}
-                    className="text-xs font-medium text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-100 transition-colors disabled:opacity-50"
-                  >
-                    {viewingDoc === "license" ? "..." : "View"}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-sm font-medium text-amber-700">Not uploaded</p>
-                </div>
-              )}
-            </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Car Insurance</label>
-              {meta.car_insurance_url ? (
-                <div className="flex items-center justify-between gap-3 p-3 bg-primary-50 border border-primary-200 rounded-lg">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <svg className="w-5 h-5 text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-primary-800">Uploaded</p>
-                      {meta.car_insurance_uploaded_at && (
-                        <p className="text-xs text-primary-600 truncate">
-                          {new Date(meta.car_insurance_uploaded_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                          {meta.car_insurance_expiration && ` · Expires ${meta.car_insurance_expiration}`}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => viewDocument(meta.car_insurance_url!, "insurance")}
-                    disabled={viewingDoc === "insurance"}
-                    className="text-xs font-medium text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-100 transition-colors disabled:opacity-50"
-                  >
-                    {viewingDoc === "insurance" ? "..." : "View"}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-sm font-medium text-amber-700">Not uploaded</p>
-                </div>
+                )
               )}
             </div>
           </div>
         </Section>
 
-        {/* Commitments & Pledges */}
-        <Section title="Commitments & Pledges">
-          <div className="flex flex-wrap gap-2">
-            <span className={`px-3 py-1.5 rounded-full text-sm ${meta.advance_notice_pledge ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-400"}`}>
-              {meta.advance_notice_pledge ? "✓" : "○"} Advance Notice Pledge
-            </span>
-            <span className={`px-3 py-1.5 rounded-full text-sm ${meta.prn_willing ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-400"}`}>
-              {meta.prn_willing ? "✓" : "○"} PRN Available
-            </span>
+        {/* 9. Video Introduction — matches portal section */}
+        <Section title="Video Introduction">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-gray-700">Video URL</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="url"
+                value={(formData.video_intro_url as string) || ""}
+                onChange={(e) => updateField("video_intro_url", e.target.value)}
+                placeholder="YouTube or Loom URL..."
+                className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+              />
+              {typeof formData.video_intro_url === "string" && formData.video_intro_url && (
+                <a
+                  href={formData.video_intro_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  View →
+                </a>
+              )}
+            </div>
+          </div>
+          {/* Optional Documents */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <p className="text-xs text-gray-500 mb-3">Optional verification documents</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-gray-700">Driver&apos;s License</label>
+                {meta.drivers_license_url ? (
+                  <div className="flex items-center justify-between gap-3 p-3 bg-primary-50 border border-primary-200 rounded-lg">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <svg className="w-5 h-5 text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-primary-800">Uploaded</p>
+                        {meta.drivers_license_uploaded_at && (
+                          <p className="text-xs text-primary-600 truncate">
+                            {new Date(meta.drivers_license_uploaded_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => viewDocument(meta.drivers_license_url!, "license")}
+                      disabled={viewingDoc === "license"}
+                      className="text-xs font-medium text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-100 transition-colors disabled:opacity-50"
+                    >
+                      {viewingDoc === "license" ? "..." : "View"}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic p-3 bg-gray-50 rounded-lg">Not uploaded</p>
+                )}
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-gray-700">Car Insurance</label>
+                {meta.car_insurance_url ? (
+                  <div className="flex items-center justify-between gap-3 p-3 bg-primary-50 border border-primary-200 rounded-lg">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <svg className="w-5 h-5 text-primary-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-primary-800">Uploaded</p>
+                        {meta.car_insurance_uploaded_at && (
+                          <p className="text-xs text-primary-600 truncate">
+                            {new Date(meta.car_insurance_uploaded_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => viewDocument(meta.car_insurance_url!, "insurance")}
+                      disabled={viewingDoc === "insurance"}
+                      className="text-xs font-medium text-primary-600 hover:text-primary-700 px-2 py-1 rounded hover:bg-primary-100 transition-colors disabled:opacity-50"
+                    >
+                      {viewingDoc === "insurance" ? "..." : "View"}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic p-3 bg-gray-50 rounded-lg">Not uploaded</p>
+                )}
+              </div>
+            </div>
           </div>
         </Section>
+
+        {/* ─── Admin-Only Sections ─── */}
 
         {/* Interview History */}
         {interviews.length > 0 && (
