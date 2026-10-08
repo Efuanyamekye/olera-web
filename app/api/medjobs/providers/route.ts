@@ -169,7 +169,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
           slug,
           name,
           image,
-          imageType: image.includes("fallback") ? "placeholder" : "actual",
+          imageType: image.includes("fallback") ? "placeholder" : "photo",
           fallbackImage: "/images/fallback/home-care-01.jpg",
           images,
           address: [city, state].filter(Boolean).join(", "),
