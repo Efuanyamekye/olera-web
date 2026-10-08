@@ -3,13 +3,12 @@
  *
  * Returns providers for the student Find Jobs board.
  *
- * A provider appears on the job board ONLY if job_board_visible is explicitly
- * set to true in student_outreach. This is an admin toggle that gives direct
- * control over job board visibility, independent of workflow status.
+ * SIMPLE RULE: A provider appears if and only if job_board_visible = true
+ * in student_outreach. That's it. No complex matching, no deduplication.
  *
- * Providers are fetched from TWO sources:
- * 1. business_profiles — if the student_outreach record has provider_business_profile_id
- * 2. olera-providers — if the student_outreach record has research_data.olera_provider_id
+ * Data comes from:
+ * 1. student_outreach row itself (name, location from research_data)
+ * 2. olera-providers (images, ratings) if olera_provider_id is set
  *
  * Parameters:
  * - `campus` — Student's campus slug (for "Near You" catchment scoping)
@@ -24,20 +23,13 @@ import { getServiceClient } from "@/lib/admin";
 import { getPartnerUniversity } from "@/lib/medjobs/catchment";
 import { generateProviderSlug } from "@/lib/slugify";
 import { LIVE_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
-import {
-  businessProfileToCardFormat,
-  toCardFormat,
-  type ProviderCardData,
-  type Provider,
-} from "@/lib/types/provider";
-import type { BusinessProfile } from "@/lib/types";
+import type { ProviderCardData } from "@/lib/types/provider";
 import { readOpportunityProfile, type OpportunityProfile } from "@/lib/medjobs/opportunity";
 
 export type ProviderCard = ProviderCardData & {
   isProgram: boolean;
   createdAt?: string | null;
   opportunity?: OpportunityProfile;
-  /** True if marked "ready for students" in MedJobs task board */
   isReadyForStudents?: boolean;
 };
 
@@ -45,23 +37,14 @@ const PAGE_SIZE = 12;
 
 /**
  * Build the list of providers visible on the job board.
- * Only includes providers with student_outreach.job_board_visible = true.
- *
- * Fetches from TWO sources:
- * 1. business_profiles — if student_outreach.provider_business_profile_id is set
- * 2. olera-providers — if student_outreach.research_data.olera_provider_id is set
- *
- * This ensures ALL visible providers appear on the job board,
- * regardless of whether they have a business_profiles record.
- *
- * Cached per campus+scope for 5 minutes.
+ * SIMPLE: job_board_visible = true means they appear.
  */
 function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<ProviderCard[]> {
   return unstable_cache(
     async (): Promise<ProviderCard[]> => {
       const db = getServiceClient();
 
-      // Determine catchment filter
+      // Determine catchment filter for "near" scope
       let catchmentFilter: { cities: Set<string>; states: string[] } | null = null;
 
       if (scope === "near") {
@@ -76,276 +59,132 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         catchmentFilter = { cities: cityKeys, states };
       }
 
-      // Get ALL providers with job_board_visible = true
-      // This is the ONLY source for the job board - if they have this flag, they appear
-      const { data: readyRows } = await db
+      // Step 1: Get ALL providers with job_board_visible = true
+      const { data: outreachRows, error: outreachError } = await db
         .from("student_outreach")
-        .select("id, provider_business_profile_id, organization_name, research_data")
+        .select("id, organization_name, research_data, created_at")
         .eq("kind", "provider")
         .eq("job_board_visible", true);
 
-      if (!readyRows || readyRows.length === 0) {
+      if (outreachError) {
+        console.error("[medjobs/providers] student_outreach query failed:", outreachError.message);
         return [];
       }
 
-      // Separate records by their data source
-      const bpIds: string[] = [];  // Direct links to business_profiles
-      const oleraIds: string[] = [];  // Direct links to olera-providers
-      // For name+city+state matching (when no direct link exists)
-      type ReadyProviderMatch = { name: string; city: string; state: string };
-      const readyByLocation: ReadyProviderMatch[] = [];
-      const oleraIdsToLookup: string[] = [];
-      const oleraIdToName: Map<string, string> = new Map();
-      // Manual entry fallback for providers without any link
-      const manualEntries: Array<{
-        id: string;  // student_outreach record ID for unique identification
-        name: string;
-        city: string | null;
-        state: string | null;
-      }> = [];
+      if (!outreachRows || outreachRows.length === 0) {
+        return [];
+      }
 
-      for (const row of readyRows) {
+      // Step 2: Extract olera_provider_ids for enrichment
+      const oleraIdMap = new Map<string, string>(); // olera_id -> outreach_id
+      for (const row of outreachRows) {
         const rd = (row.research_data ?? {}) as Record<string, unknown>;
-        const oleraId = (rd.olera_provider_id as string) ?? null;
-        const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
-
-        if (row.provider_business_profile_id) {
-          // Has direct link to business_profiles
-          bpIds.push(row.provider_business_profile_id as string);
-        } else if (oleraId) {
-          // Has link to olera-providers directory - fetch from there
-          oleraIds.push(oleraId);
-        } else if (row.organization_name) {
-          // No direct links - will try name matching, or fall back to manual entry
-          const city = (gc.city as string) ?? null;
-          const state = (gc.state as string) ?? null;
-          if (city && state) {
-            // Has location data - add to name matching
-            readyByLocation.push({
-              name: (row.organization_name as string).toLowerCase(),
-              city: city.toLowerCase(),
-              state,
-            });
-          }
-          // Also add to manual entries as fallback if name matching fails
-          manualEntries.push({
-            id: row.id as string,
-            name: row.organization_name as string,
-            city,
-            state,
-          });
-        }
-
-        // Also build name+city+state matching for business_profiles
-        // This catches cases where student_outreach has olera_provider_id
-        // but there's ALSO a matching business_profile (e.g., Comfort Keepers)
-        if (!row.provider_business_profile_id && oleraId && row.organization_name) {
-          const city = (gc.city as string) ?? null;
-          const state = (gc.state as string) ?? null;
-
-          if (city && state) {
-            readyByLocation.push({
-              name: (row.organization_name as string).toLowerCase(),
-              city: city.toLowerCase(),
-              state,
-            });
-          } else {
-            // Need to look up location from olera-providers
-            oleraIdsToLookup.push(oleraId);
-            oleraIdToName.set(oleraId, (row.organization_name as string).toLowerCase());
-          }
+        const oleraId = rd.olera_provider_id as string | undefined;
+        if (oleraId) {
+          oleraIdMap.set(oleraId, row.id);
         }
       }
 
-      // Look up location data from olera-providers for name+city+state matching
-      if (oleraIdsToLookup.length > 0) {
-        const { data: oleraProvidersRaw, error: lookupError } = await db
-          .from("olera-providers")
-          .select("provider_id, city, state, deleted")
-          .in("provider_id", oleraIdsToLookup);
+      // Step 3: Fetch enrichment data from olera-providers (images, ratings, etc.)
+      const oleraIds = Array.from(oleraIdMap.keys());
+      const oleraDataMap = new Map<string, Record<string, unknown>>();
 
-        if (lookupError) {
-          console.error("[medjobs/providers] Location lookup failed:", lookupError.message);
-        }
-
-        // Filter out deleted providers
-        const oleraProviders = (oleraProvidersRaw ?? []).filter(r => r.deleted !== true);
-
-        for (const op of oleraProviders) {
-          const name = oleraIdToName.get(op.provider_id);
-          if (name && op.city && op.state) {
-            readyByLocation.push({
-              name,
-              city: op.city.toLowerCase(),
-              state: op.state,
-            });
-          }
-        }
-      }
-
-      const inCatchment = (city: string | null, state: string | null) => {
-        if (!catchmentFilter) return true; // "all" scope
-        return !!city && !!state && catchmentFilter.cities.has(`${city.toLowerCase()}|${state}`);
-      };
-
-      const cards: ProviderCard[] = [];
-      const seenIds = new Set<string>(); // Prevent duplicates
-
-      // 1. Fetch from business_profiles
-      // Two paths: direct ID match OR name+city+state match
-      const needsBpQuery = bpIds.length > 0 || readyByLocation.length > 0;
-
-      if (needsBpQuery) {
-        let bpQuery = db
-          .from("business_profiles")
-          .select(
-            "id, slug, display_name, city, state, category, image_url, description, care_types, metadata, claim_state, lat, lng, created_at"
-          )
-          .in("type", ["organization", "caregiver"])
-          .eq("is_active", true);
-
-        // If we have direct IDs, we could filter by them, but we also need
-        // to fetch for name matching. So we filter by state instead for efficiency.
-        if (catchmentFilter) {
-          bpQuery = bpQuery.in("state", catchmentFilter.states);
-        }
-
-        const { data: bpRows } = await bpQuery;
-
-        for (const row of (bpRows ?? []) as unknown as (BusinessProfile & { created_at?: string })[]) {
-          if (!inCatchment(row.city, row.state)) continue;
-          if (seenIds.has(row.id)) continue;
-
-          // Check if this business_profile is "ready for students"
-          // First check direct link, then check by name+city+state match
-          let isReadyForStudents = bpIds.includes(row.id);
-
-          if (!isReadyForStudents && row.display_name && row.city && row.state && readyByLocation.length > 0) {
-            const bpName = row.display_name.toLowerCase();
-            const bpCity = row.city.toLowerCase();
-            const bpState = row.state;
-            isReadyForStudents = readyByLocation.some((r) => {
-              // Name must be included (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
-              const nameMatch = bpName.includes(r.name) || r.name.includes(bpName);
-              // City and state must both match exactly
-              const cityMatch = r.city === bpCity;
-              const stateMatch = r.state === bpState;
-              return nameMatch && cityMatch && stateMatch;
-            });
-          }
-
-          if (!isReadyForStudents) continue;
-
-          seenIds.add(row.id);
-          const meta = (row.metadata ?? {}) as Record<string, unknown>;
-          const card = businessProfileToCardFormat(row) as ProviderCard;
-          card.isProgram = row.claim_state === "claimed";
-          card.createdAt = row.created_at ?? null;
-          card.opportunity = readOpportunityProfile(meta);
-          card.isReadyForStudents = true;
-          cards.push(card);
-        }
-      }
-
-      // 2. Fetch from olera-providers for records with olera_provider_id (no business_profile)
       if (oleraIds.length > 0) {
-        // Fetch all matching provider_ids, filter deleted in JS to avoid .or() syntax issues
-        const { data: oleraRowsRaw, error: oleraError } = await db
+        const { data: oleraRows, error: oleraError } = await db
           .from("olera-providers")
           .select(
-            "provider_id, provider_name, provider_category, main_category, phone, email, website, google_rating, address, city, state, zipcode, lat, lon, place_id, provider_images, provider_logo, provider_description, hero_image_url, slug, google_reviews_data, cms_data, ai_trust_signals, lower_price, upper_price, contact_for_price, created_at, deleted"
+            "provider_id, provider_name, city, state, google_rating, provider_images, provider_logo, hero_image_url, slug, provider_description, provider_category, main_category, deleted"
           )
           .in("provider_id", oleraIds);
 
         if (oleraError) {
-          console.error("[medjobs/providers] olera-providers query failed:", oleraError.message, { oleraIds });
+          console.error("[medjobs/providers] olera-providers query failed:", oleraError.message);
         }
 
-        // Filter out deleted providers in JS (deleted === true means excluded)
-        const oleraRows = (oleraRowsRaw ?? []).filter(r => r.deleted !== true);
-
+        // Build lookup map, excluding deleted
         for (const row of oleraRows ?? []) {
-          const provider = row as unknown as Provider & { created_at?: string };
-          // For catchment filtering, allow providers with null city/state through
-          // if scope is "all", otherwise require valid catchment match
-          if (catchmentFilter && provider.city && provider.state) {
-            if (!inCatchment(provider.city, provider.state)) continue;
-          } else if (catchmentFilter && (!provider.city || !provider.state)) {
-            // Provider has no city/state - skip for "near" scope
-            continue;
-          }
-          if (seenIds.has(provider.provider_id)) continue;
-
-          seenIds.add(provider.provider_id);
-
-          const card = toCardFormat(provider) as ProviderCard;
-          card.isProgram = false; // olera-providers are not claimed accounts
-          card.createdAt = provider.created_at ?? null;
-          card.isReadyForStudents = true;
-          // No opportunity data for olera-providers (they don't have metadata.medjobs_demand_profile)
-          cards.push(card);
+          if (row.deleted === true) continue;
+          oleraDataMap.set(row.provider_id, row as Record<string, unknown>);
         }
       }
 
-      // 3. Handle manual entry providers that didn't match anywhere else
-      // These are rare edge cases - only add if not already found via business_profiles or olera-providers
-      for (const entry of manualEntries) {
-        // Skip if we already processed this exact record (by student_outreach ID)
-        if (seenIds.has(`manual-${entry.id}`)) continue;
+      // Helper: check if location is in catchment
+      const inCatchment = (city: string | null, state: string | null): boolean => {
+        if (!catchmentFilter) return true; // "all" scope
+        if (!city || !state) return false;
+        return catchmentFilter.cities.has(`${city.toLowerCase()}|${state}`);
+      };
 
-        // For catchment filtering
-        if (catchmentFilter) {
-          if (!entry.city || !entry.state) continue;
-          if (!inCatchment(entry.city, entry.state)) continue;
+      // Step 4: Build cards from student_outreach rows
+      const cards: ProviderCard[] = [];
+
+      for (const row of outreachRows) {
+        const rd = (row.research_data ?? {}) as Record<string, unknown>;
+        const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
+        const oleraId = rd.olera_provider_id as string | undefined;
+
+        // Get location from research_data.general_contact
+        const city = (gc.city as string) ?? null;
+        const state = (gc.state as string) ?? null;
+
+        // Catchment filter
+        if (!inCatchment(city, state)) continue;
+
+        // Get enrichment data from olera-providers if available
+        const oleraData = oleraId ? oleraDataMap.get(oleraId) : null;
+
+        // Build the card
+        const name = (row.organization_name as string) || "Unknown Provider";
+        const oleraSlug = rd.olera_provider_slug as string | undefined;
+        const slug = oleraSlug || generateProviderSlug(name, state) || `provider-${(row.id as string).slice(0, 8)}`;
+
+        // Image: prefer olera-providers data, fall back to placeholder
+        let image = "/images/fallback/home-care-01.jpg";
+        let images: string[] = [];
+        if (oleraData) {
+          const heroImage = oleraData.hero_image_url as string | undefined;
+          const logo = oleraData.provider_logo as string | undefined;
+          const providerImages = oleraData.provider_images as string[] | undefined;
+
+          if (heroImage) {
+            image = heroImage;
+          } else if (logo) {
+            image = logo;
+          } else if (providerImages && providerImages.length > 0) {
+            image = providerImages[0];
+          }
+          images = providerImages ?? [];
         }
 
-        // Check if we already found this via name matching in business_profiles or olera-providers
-        // Only skip if BOTH the name matches AND the location matches (same city+state)
-        // This allows multiple "Visiting Angels" or "Home Helpers" locations to appear
-        const entryNameLower = entry.name.toLowerCase();
-        const alreadyFound = cards.some((c) => {
-          const cardNameLower = c.name.toLowerCase();
-          const nameMatch = cardNameLower.includes(entryNameLower) || entryNameLower.includes(cardNameLower);
-          if (!nameMatch) return false;
+        // Rating from olera-providers
+        const rating = oleraData ? ((oleraData.google_rating as number) ?? 0) : 0;
 
-          // For manual entries without location, we can't determine if it's a duplicate
-          // So don't skip - better to show a possible duplicate than hide a valid provider
-          if (!entry.city || !entry.state) return false;
+        // Category from olera-providers or default
+        const category = oleraData
+          ? ((oleraData.main_category as string) || (oleraData.provider_category as string) || "Home Care")
+          : "Home Care";
 
-          // Location must also match - exact city and state comparison
-          // Parse "City, ST" format from card address
-          const entryCity = entry.city.toLowerCase().trim();
-          const entryState = entry.state.toLowerCase().trim();
-          const addressParts = c.address.split(",").map((p) => p.trim().toLowerCase());
-          const cardCity = addressParts[0] ?? "";
-          const cardState = addressParts[1] ?? "";
-          return cardCity === entryCity && cardState === entryState;
-        });
-        if (alreadyFound) continue;
-
-        // Create a minimal card from the outreach data
-        // Use the student_outreach ID as the unique identifier
-        seenIds.add(`manual-${entry.id}`);
-        const entrySlug = generateProviderSlug(entry.name, entry.state);
         const card: ProviderCard = {
-          id: `manual-${entry.id}`,
-          slug: entrySlug || `provider-${entry.id.slice(0, 8)}`,
-          name: entry.name,
-          image: "/images/fallback/home-care-01.jpg",
-          imageType: "placeholder",
+          id: row.id as string,
+          slug,
+          name,
+          image,
+          imageType: image.includes("fallback") ? "placeholder" : "actual",
           fallbackImage: "/images/fallback/home-care-01.jpg",
-          images: [],
-          address: [entry.city, entry.state].filter(Boolean).join(", "),
-          rating: 0,
+          images,
+          address: [city, state].filter(Boolean).join(", "),
+          rating,
           priceRange: "Contact for pricing",
-          primaryCategory: "Home Care",
-          careTypes: ["Home Care (Non-medical)"],
+          primaryCategory: category,
+          careTypes: [category],
           highlights: [],
           acceptedPayments: [],
           verified: false,
           isProgram: false,
+          createdAt: row.created_at as string | null,
           isReadyForStudents: true,
         };
+
         cards.push(card);
       }
 
