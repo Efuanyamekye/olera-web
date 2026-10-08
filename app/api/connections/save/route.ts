@@ -172,6 +172,28 @@ export async function POST(request: Request) {
     if (family) {
       fromProfileId = family.id;
     } else {
+      // Provider accounts stay provider-only. Without this, a provider who
+      // taps the heart on a listing (usually their own) gets a family profile
+      // attached to their account, family nudge emails start, and the navbar
+      // shows "Switch to family".
+      const { data: providerProfile } = await db
+        .from("business_profiles")
+        .select("id")
+        .eq("account_id", account.id)
+        .in("type", ["organization", "caregiver", "student"])
+        .limit(1)
+        .maybeSingle();
+
+      if (providerProfile) {
+        return NextResponse.json(
+          {
+            error: "You're signed in to a provider account. To save providers, sign out and use a family account.",
+            code: "PROVIDER_ACCOUNT",
+          },
+          { status: 409 }
+        );
+      }
+
       const displayName = user.email?.split("@")[0] || "Family";
       const slug = await generateUniqueSlugFromName(db, displayName);
       const { data: newProfile, error: profileError } = await db
