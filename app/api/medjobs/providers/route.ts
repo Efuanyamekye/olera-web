@@ -89,6 +89,8 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       const oleraIds = Array.from(oleraIdMap.keys());
       const oleraDataMap = new Map<string, Record<string, unknown>>();
 
+      console.log("[medjobs/providers] oleraIds extracted:", oleraIds.length, oleraIds);
+
       if (oleraIds.length > 0) {
         const { data: oleraRows, error: oleraError } = await db
           .from("olera-providers")
@@ -99,6 +101,16 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         if (oleraError) {
           console.error("[medjobs/providers] olera-providers query failed:", oleraError.message);
+        }
+
+        console.log("[medjobs/providers] olera-providers returned:", oleraRows?.length ?? 0, "rows");
+        if (oleraRows && oleraRows.length > 0) {
+          console.log("[medjobs/providers] Sample row images:", {
+            provider_id: oleraRows[0].provider_id,
+            hero_image_url: oleraRows[0].hero_image_url,
+            provider_logo: oleraRows[0].provider_logo,
+            provider_images: oleraRows[0].provider_images,
+          });
         }
 
         // Build lookup map, excluding deleted
