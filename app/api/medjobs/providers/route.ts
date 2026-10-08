@@ -93,7 +93,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         const { data: oleraRows, error: oleraError } = await db
           .from("olera-providers")
           .select(
-            "provider_id, provider_name, city, state, google_rating, provider_images, provider_logo, hero_image_url, slug, provider_description, provider_category, main_category, deleted"
+            "provider_id, provider_name, city, state, google_rating, provider_images, provider_logo, slug, provider_description, provider_category, main_category, deleted"
           )
           .in("provider_id", oleraIds);
 
@@ -142,15 +142,12 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         let image = "/images/fallback/home-care-01.jpg";
         let images: string[] = [];
         if (oleraData) {
-          const heroImage = oleraData.hero_image_url as string | undefined;
           const logo = oleraData.provider_logo as string | undefined;
           // provider_images is a pipe-separated string, not an array
           const providerImagesRaw = oleraData.provider_images as string | null;
           const providerImages = parseProviderImages(providerImagesRaw);
 
-          if (heroImage) {
-            image = heroImage;
-          } else if (providerImages.length > 0) {
+          if (providerImages.length > 0) {
             image = providerImages[0];
           } else if (logo) {
             image = logo;
