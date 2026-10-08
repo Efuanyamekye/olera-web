@@ -23,8 +23,10 @@
 
 **THE PLAN: https://claude.ai/artifact/VWEjSvypK1M2h5HYX3UFuJ ("The Home Care Page", project plan + design in one).** Every session: take the top item under "Where to pick up", own branch off staging, pre-test + review page, then update that phase on the plan and republish. Build sources: ~/Desktop/olera-provider-pages-handoff/build-scripts/.
 
+**Plan v1.1 (8 Oct, late):** combined design (my D + Codex D's prefilled ask, honest "Saved" states, "not a quote" budget labels) is the recommendation; Quality checks section + Phase 0 baseline added (25-page fixed set, snapshots + compare script, numbers, test accounts per role); Facebook link on the NEW page only (Phase 3 keeps the #2449 guard). Decisions down to five; schedule form never existed (not a decision); stock caregiving photos OK in photo header; questions count with or without email; no usability study.
+
 **Next Up**
-0. Phase 1 (prices that tell the truth) per the plan.
+0. Phase 0 (baseline), then Phase 1 (prices), per the plan, in a fresh session. Prompt: "Open the project plan (Artifact read, all of it), take the top item under Where to pick up, new branch off origin/staging in its own worktree, /pre-test + review page before TJ reviews, then update the phase on the plan and republish."
 1. TJ's six decisions (RESPONSE §6 / overview page): framework, exclude paid/pilot pages, drop schedule form, B photo allowlist (top ~300), intake freeze, listed price on claimed pages without owner price. Then the approval checkpoint (§7).
 2. Pre-work PR 1 (honest price labels, all categories): TJ said "do those small fixes", paused mid-start on 8 Oct; branch `price-source-labels` exists, no changes yet. Use `git grep` on origin/staging (plain grep hangs on Desktop iCloud files).
 3. Pre-work: freeze intake_variant on home care (TJ to pick the arm); salvage #2449 (Facebook guard + CATEGORY-PAGES.md) and close it.
