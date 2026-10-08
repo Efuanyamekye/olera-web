@@ -5,6 +5,7 @@ import { resolveCoordsFromCity } from "@/lib/profile-coords";
 import type { Account, Profile, ProfileCategory, Membership } from "@/lib/types";
 import { sendLoopsEvent } from "@/lib/loops";
 import { generateUniqueSlug } from "@/lib/slug";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { validateDisplayName, sanitizeCareTypes } from "@/lib/validation";
 import { isBlockedEmailDomain } from "@/lib/email-validation";
 import { scoreClaimTrust, extractDomainFromWebsite } from "@/lib/claim-trust";
@@ -420,7 +421,11 @@ export async function POST(request: Request) {
       // Each account type is now separate - providers only get their provider profile.
     } else {
       // Family intent - check for account type mismatch
-      if (anyExistingProfile && anyExistingProfile.type !== "family") {
+      // Agency team members own no provider profile, so check membership too.
+      const teamProviderIds = anyExistingProfile
+        ? []
+        : await actingProfileIds(db, user, { types: ["organization", "caregiver", "student"] });
+      if ((anyExistingProfile && anyExistingProfile.type !== "family") || teamProviderIds.length > 0) {
         return NextResponse.json(
           {
             error: "This email is already used for a different account type. Please use a different email to create a family account.",
