@@ -310,7 +310,7 @@ async function createFound(
       .ilike("provider_name", `%${nameForSearch}%`)
       .limit(10);
 
-    // Find the best match - exact match preferred, then substring match
+    // Find the best match - only link if we're confident it's correct
     let matchedProvider: { provider_id: string; slug: string } | null = null;
     if (existingProviders && existingProviders.length > 0) {
       // Try exact match first (case-insensitive)
@@ -320,11 +320,21 @@ async function createFound(
       if (exactMatch) {
         matchedProvider = { provider_id: exactMatch.provider_id, slug: exactMatch.slug };
       } else {
-        // Take the first substring match
-        matchedProvider = {
-          provider_id: existingProviders[0].provider_id,
-          slug: existingProviders[0].slug,
-        };
+        // Only accept a substring match if names are very similar
+        // (one contains the other AND lengths are within 50%)
+        // This prevents "Home" from matching "Home Helpers Home Care"
+        for (const p of existingProviders) {
+          const dirName = p.provider_name?.toLowerCase() ?? "";
+          const searchLen = nameForSearch.length;
+          const dirLen = dirName.length;
+          const lenRatio = Math.min(searchLen, dirLen) / Math.max(searchLen, dirLen);
+
+          // Names must be similar length (within 50%) to be considered a match
+          if (lenRatio >= 0.5) {
+            matchedProvider = { provider_id: p.provider_id, slug: p.slug };
+            break;
+          }
+        }
       }
     }
 

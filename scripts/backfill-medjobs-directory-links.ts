@@ -84,12 +84,34 @@ async function main() {
       continue;
     }
 
-    // Find best match
-    let best = matches[0];
+    // Find best match - only accept if we're confident
     const exactMatch = matches.find(
       (m) => m.provider_name?.toLowerCase() === nameForSearch
     );
-    if (exactMatch) best = exactMatch;
+
+    let best: typeof matches[0] | null = null;
+    if (exactMatch) {
+      best = exactMatch;
+    } else {
+      // Only accept substring match if names are similar length (within 50%)
+      for (const m of matches) {
+        const dirName = m.provider_name?.toLowerCase() ?? "";
+        const searchLen = nameForSearch.length;
+        const dirLen = dirName.length;
+        const lenRatio = Math.min(searchLen, dirLen) / Math.max(searchLen, dirLen);
+
+        if (lenRatio >= 0.5) {
+          best = m;
+          break;
+        }
+      }
+    }
+
+    if (!best) {
+      console.log(`  [LOW CONFIDENCE] "${name}" - matches found but not confident enough`);
+      notFound++;
+      continue;
+    }
 
     console.log(
       `  [MATCH] "${name}" -> "${best.provider_name}" (${best.city}, ${best.state})`
