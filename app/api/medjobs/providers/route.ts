@@ -89,35 +89,88 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       }
 
       // Separate records by their data source
-      const bpIds: string[] = [];
-      const oleraIds: string[] = [];
-      // Manual entry providers without olera_provider_id - we'll create cards from outreach data
+      const bpIds: string[] = [];  // Direct links to business_profiles
+      const oleraIds: string[] = [];  // Direct links to olera-providers
+      // For name+city+state matching (when no direct link exists)
+      type ReadyProviderMatch = { name: string; city: string; state: string };
+      const readyByLocation: ReadyProviderMatch[] = [];
+      const oleraIdsToLookup: string[] = [];
+      const oleraIdToName: Map<string, string> = new Map();
+      // Manual entry fallback for providers without any link
       const manualEntries: Array<{
         name: string;
         city: string | null;
         state: string | null;
-        research_data: Record<string, unknown>;
       }> = [];
 
       for (const row of readyRows) {
         const rd = (row.research_data ?? {}) as Record<string, unknown>;
         const oleraId = (rd.olera_provider_id as string) ?? null;
+        const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
 
         if (row.provider_business_profile_id) {
           // Has direct link to business_profiles
           bpIds.push(row.provider_business_profile_id as string);
         } else if (oleraId) {
-          // Has link to olera-providers directory
+          // Has link to olera-providers directory - fetch from there
           oleraIds.push(oleraId);
-        } else if (rd.manual_entry === true && row.organization_name) {
-          // Manual entry without olera_provider_id - use outreach data directly
-          const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
+        } else if (row.organization_name) {
+          // No direct links - will try name matching, or fall back to manual entry
+          const city = (gc.city as string) ?? null;
+          const state = (gc.state as string) ?? null;
+          if (city && state) {
+            // Has location data - add to name matching
+            readyByLocation.push({
+              name: (row.organization_name as string).toLowerCase(),
+              city: city.toLowerCase(),
+              state,
+            });
+          }
+          // Also add to manual entries as fallback if name matching fails
           manualEntries.push({
             name: row.organization_name as string,
-            city: (gc.city as string) ?? null,
-            state: (gc.state as string) ?? null,
-            research_data: rd,
+            city,
+            state,
           });
+        }
+
+        // Also build name+city+state matching for business_profiles
+        // This catches cases where student_outreach has olera_provider_id
+        // but there's ALSO a matching business_profile (e.g., Comfort Keepers)
+        if (!row.provider_business_profile_id && oleraId && row.organization_name) {
+          const city = (gc.city as string) ?? null;
+          const state = (gc.state as string) ?? null;
+
+          if (city && state) {
+            readyByLocation.push({
+              name: (row.organization_name as string).toLowerCase(),
+              city: city.toLowerCase(),
+              state,
+            });
+          } else {
+            // Need to look up location from olera-providers
+            oleraIdsToLookup.push(oleraId);
+            oleraIdToName.set(oleraId, (row.organization_name as string).toLowerCase());
+          }
+        }
+      }
+
+      // Look up location data from olera-providers for name+city+state matching
+      if (oleraIdsToLookup.length > 0) {
+        const { data: oleraProviders } = await db
+          .from("olera-providers")
+          .select("provider_id, city, state")
+          .in("provider_id", oleraIdsToLookup);
+
+        for (const op of oleraProviders ?? []) {
+          const name = oleraIdToName.get(op.provider_id);
+          if (name && op.city && op.state) {
+            readyByLocation.push({
+              name,
+              city: op.city.toLowerCase(),
+              state: op.state,
+            });
+          }
         }
       }
 
@@ -129,16 +182,21 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       const cards: ProviderCard[] = [];
       const seenIds = new Set<string>(); // Prevent duplicates
 
-      // 1. Fetch from business_profiles for records with provider_business_profile_id
-      if (bpIds.length > 0) {
+      // 1. Fetch from business_profiles
+      // Two paths: direct ID match OR name+city+state match
+      const needsBpQuery = bpIds.length > 0 || readyByLocation.length > 0;
+
+      if (needsBpQuery) {
         let bpQuery = db
           .from("business_profiles")
           .select(
             "id, slug, display_name, city, state, category, image_url, description, care_types, metadata, claim_state, lat, lng, created_at"
           )
-          .in("id", bpIds)
+          .in("type", ["organization", "caregiver"])
           .eq("is_active", true);
 
+        // If we have direct IDs, we could filter by them, but we also need
+        // to fetch for name matching. So we filter by state instead for efficiency.
         if (catchmentFilter) {
           bpQuery = bpQuery.in("state", catchmentFilter.states);
         }
@@ -148,8 +206,28 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         for (const row of (bpRows ?? []) as unknown as (BusinessProfile & { created_at?: string })[]) {
           if (!inCatchment(row.city, row.state)) continue;
           if (seenIds.has(row.id)) continue;
-          seenIds.add(row.id);
 
+          // Check if this business_profile is "ready for students"
+          // First check direct link, then check by name+city+state match
+          let isReadyForStudents = bpIds.includes(row.id);
+
+          if (!isReadyForStudents && row.display_name && row.city && row.state && readyByLocation.length > 0) {
+            const bpName = row.display_name.toLowerCase();
+            const bpCity = row.city.toLowerCase();
+            const bpState = row.state;
+            isReadyForStudents = readyByLocation.some((r) => {
+              // Name must be included (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
+              const nameMatch = bpName.includes(r.name) || r.name.includes(bpName);
+              // City and state must both match exactly
+              const cityMatch = r.city === bpCity;
+              const stateMatch = r.state === bpState;
+              return nameMatch && cityMatch && stateMatch;
+            });
+          }
+
+          if (!isReadyForStudents) continue;
+
+          seenIds.add(row.id);
           const meta = (row.metadata ?? {}) as Record<string, unknown>;
           const card = businessProfileToCardFormat(row) as ProviderCard;
           card.isProgram = row.claim_state === "claimed";
@@ -197,22 +275,35 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         }
       }
 
-      // 3. Handle manual entry providers without olera_provider_id
-      // These are rare edge cases where the olera-providers insert failed
+      // 3. Handle manual entry providers that didn't match anywhere else
+      // These are rare edge cases - only add if not already found via business_profiles or olera-providers
       for (const entry of manualEntries) {
+        // Skip if we already have a card for this provider (matched via business_profiles or olera-providers)
+        const entrySlug = generateProviderSlug(entry.name, entry.state);
+        if (seenIds.has(`manual-${entrySlug}`)) continue;
+
         // For catchment filtering
         if (catchmentFilter) {
           if (!entry.city || !entry.state) continue;
           if (!inCatchment(entry.city, entry.state)) continue;
         }
 
+        // Check if we already found this via name matching in business_profiles
+        // Skip if a similar name is already in cards
+        const entryNameLower = entry.name.toLowerCase();
+        const alreadyFound = cards.some((c) => {
+          const cardNameLower = c.name.toLowerCase();
+          return cardNameLower.includes(entryNameLower) || entryNameLower.includes(cardNameLower);
+        });
+        if (alreadyFound) continue;
+
         // Create a minimal card from the outreach data
-        const slug = generateProviderSlug(entry.name, entry.state);
+        seenIds.add(`manual-${entrySlug}`);
         const card: ProviderCard = {
-          id: `manual-${slug}`,
-          slug,
+          id: `manual-${entrySlug}`,
+          slug: entrySlug,
           name: entry.name,
-          image: "/images/fallback/home-care-01.jpg", // Default fallback
+          image: "/images/fallback/home-care-01.jpg",
           imageType: "placeholder",
           fallbackImage: "/images/fallback/home-care-01.jpg",
           images: [],
