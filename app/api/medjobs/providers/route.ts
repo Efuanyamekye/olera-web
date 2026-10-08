@@ -22,13 +22,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 import { getServiceClient } from "@/lib/admin";
 import { getPartnerUniversity } from "@/lib/medjobs/catchment";
+import { generateProviderSlug } from "@/lib/slugify";
 import { LIVE_UNIVERSITIES } from "@/lib/staffing-outreach/partner-universities";
 import {
   businessProfileToCardFormat,
   toCardFormat,
   type ProviderCardData,
   type Provider,
-  type CardImageType,
 } from "@/lib/types/provider";
 import type { BusinessProfile } from "@/lib/types";
 import { readOpportunityProfile, type OpportunityProfile } from "@/lib/medjobs/opportunity";
@@ -207,9 +207,10 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         }
 
         // Create a minimal card from the outreach data
+        const slug = generateProviderSlug(entry.name, entry.state);
         const card: ProviderCard = {
-          id: `manual-${entry.name.toLowerCase().replace(/\s+/g, "-")}`,
-          slug: entry.name.toLowerCase().replace(/\s+/g, "-"),
+          id: `manual-${slug}`,
+          slug,
           name: entry.name,
           image: "/images/fallback/home-care-01.jpg", // Default fallback
           imageType: "placeholder",
