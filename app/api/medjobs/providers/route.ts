@@ -98,6 +98,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       const oleraIdToName: Map<string, string> = new Map();
       // Manual entry fallback for providers without any link
       const manualEntries: Array<{
+        id: string;  // student_outreach record ID for unique identification
         name: string;
         city: string | null;
         state: string | null;
@@ -128,6 +129,7 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
           }
           // Also add to manual entries as fallback if name matching fails
           manualEntries.push({
+            id: row.id as string,
             name: row.organization_name as string,
             city,
             state,
@@ -267,12 +269,22 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
           // Check if we already have this provider via business_profiles (name-based dedup)
           // This handles cases where a provider exists in BOTH sources
+          // Only skip if BOTH name AND location match (same city+state)
           const providerNameLower = provider.provider_name?.toLowerCase() ?? "";
-          if (providerNameLower) {
+          if (providerNameLower && provider.city && provider.state) {
+            const providerCity = provider.city.toLowerCase().trim();
+            const providerState = provider.state.toLowerCase().trim();
             const alreadyFound = cards.some((c) => {
               const cardNameLower = c.name.toLowerCase();
-              // Name must be included (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
-              return cardNameLower.includes(providerNameLower) || providerNameLower.includes(cardNameLower);
+              // Name must match (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
+              const nameMatch = cardNameLower.includes(providerNameLower) || providerNameLower.includes(cardNameLower);
+              if (!nameMatch) return false;
+              // Location must also match - exact city and state comparison
+              // Parse "City, ST" format from card address
+              const addressParts = c.address.split(",").map((p) => p.trim().toLowerCase());
+              const cardCity = addressParts[0] ?? "";
+              const cardState = addressParts[1] ?? "";
+              return cardCity === providerCity && cardState === providerState;
             });
             if (alreadyFound) continue;
           }
@@ -291,9 +303,8 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       // 3. Handle manual entry providers that didn't match anywhere else
       // These are rare edge cases - only add if not already found via business_profiles or olera-providers
       for (const entry of manualEntries) {
-        // Skip if we already have a card for this provider (matched via business_profiles or olera-providers)
-        const entrySlug = generateProviderSlug(entry.name, entry.state);
-        if (seenIds.has(`manual-${entrySlug}`)) continue;
+        // Skip if we already processed this exact record (by student_outreach ID)
+        if (seenIds.has(`manual-${entry.id}`)) continue;
 
         // For catchment filtering
         if (catchmentFilter) {
@@ -301,20 +312,37 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
           if (!inCatchment(entry.city, entry.state)) continue;
         }
 
-        // Check if we already found this via name matching in business_profiles
-        // Skip if a similar name is already in cards
+        // Check if we already found this via name matching in business_profiles or olera-providers
+        // Only skip if BOTH the name matches AND the location matches (same city+state)
+        // This allows multiple "Visiting Angels" or "Home Helpers" locations to appear
         const entryNameLower = entry.name.toLowerCase();
         const alreadyFound = cards.some((c) => {
           const cardNameLower = c.name.toLowerCase();
-          return cardNameLower.includes(entryNameLower) || entryNameLower.includes(cardNameLower);
+          const nameMatch = cardNameLower.includes(entryNameLower) || entryNameLower.includes(cardNameLower);
+          if (!nameMatch) return false;
+
+          // For manual entries without location, we can't determine if it's a duplicate
+          // So don't skip - better to show a possible duplicate than hide a valid provider
+          if (!entry.city || !entry.state) return false;
+
+          // Location must also match - exact city and state comparison
+          // Parse "City, ST" format from card address
+          const entryCity = entry.city.toLowerCase().trim();
+          const entryState = entry.state.toLowerCase().trim();
+          const addressParts = c.address.split(",").map((p) => p.trim().toLowerCase());
+          const cardCity = addressParts[0] ?? "";
+          const cardState = addressParts[1] ?? "";
+          return cardCity === entryCity && cardState === entryState;
         });
         if (alreadyFound) continue;
 
         // Create a minimal card from the outreach data
-        seenIds.add(`manual-${entrySlug}`);
+        // Use the student_outreach ID as the unique identifier
+        seenIds.add(`manual-${entry.id}`);
+        const entrySlug = generateProviderSlug(entry.name, entry.state);
         const card: ProviderCard = {
-          id: `manual-${entrySlug}`,
-          slug: entrySlug,
+          id: `manual-${entry.id}`,
+          slug: entrySlug || `provider-${entry.id.slice(0, 8)}`,
           name: entry.name,
           image: "/images/fallback/home-care-01.jpg",
           imageType: "placeholder",
