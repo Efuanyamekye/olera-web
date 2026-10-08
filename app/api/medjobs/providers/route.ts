@@ -77,14 +77,63 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       // This is the canonical signal that a provider is ready to hire
       const { data: readyRows } = await db
         .from("student_outreach")
-        .select("provider_business_profile_id")
+        .select("provider_business_profile_id, organization_name, research_data")
         .eq("kind", "provider")
-        .eq("status", "ready_for_students")
-        .not("provider_business_profile_id", "is", null);
+        .eq("status", "ready_for_students");
 
+      // Build set of ready provider IDs (directly linked)
       const readyForStudentsIds = new Set<string>(
-        (readyRows ?? []).map((r) => r.provider_business_profile_id as string)
+        (readyRows ?? [])
+          .filter((r) => r.provider_business_profile_id)
+          .map((r) => r.provider_business_profile_id as string)
       );
+
+      // For records without provider_business_profile_id, build a lookup by name+city+state.
+      // We need location data to avoid false positives with franchises (e.g., "Visiting Angels"
+      // has 41 locations). First try research_data.general_contact, then fall back to looking
+      // up the original olera-providers record.
+      type ReadyProviderMatch = { name: string; city: string; state: string };
+      const readyByLocation: ReadyProviderMatch[] = [];
+      const oleraIdsToLookup: string[] = [];
+      const oleraIdToName: Map<string, string> = new Map();
+
+      for (const row of readyRows ?? []) {
+        if (row.provider_business_profile_id) continue; // Already have direct link
+        const rd = (row.research_data ?? {}) as Record<string, unknown>;
+        const gc = (rd.general_contact ?? {}) as Record<string, unknown>;
+        const name = (row.organization_name as string) ?? "";
+        const city = (gc.city as string) ?? null;
+        const state = (gc.state as string) ?? null;
+        const oleraId = (rd.olera_provider_id as string) ?? null;
+
+        if (name && city && state) {
+          // Have location data - use it directly
+          readyByLocation.push({ name: name.toLowerCase(), city: city.toLowerCase(), state });
+        } else if (name && oleraId) {
+          // No location in research_data, but have olera_provider_id - look it up
+          oleraIdsToLookup.push(oleraId);
+          oleraIdToName.set(oleraId, name.toLowerCase());
+        }
+      }
+
+      // Look up location data from olera-providers for records that need it
+      if (oleraIdsToLookup.length > 0) {
+        const { data: oleraProviders } = await db
+          .from("olera-providers")
+          .select("provider_id, city, state")
+          .in("provider_id", oleraIdsToLookup);
+
+        for (const op of oleraProviders ?? []) {
+          const name = oleraIdToName.get(op.provider_id);
+          if (name && op.city && op.state) {
+            readyByLocation.push({
+              name,
+              city: op.city.toLowerCase(),
+              state: op.state,
+            });
+          }
+        }
+      }
 
       // Query business_profiles for MedJobs-interested providers
       let query = db
@@ -134,7 +183,22 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         // Check if marked "ready for students" in MedJobs task board
         // This is the canonical signal from admin workflow
-        const isReadyForStudents = readyForStudentsIds.has(row.id);
+        // First check direct link, then check by name+city+state match
+        let isReadyForStudents = readyForStudentsIds.has(row.id);
+        if (!isReadyForStudents && row.display_name && row.city && row.state && readyByLocation.length > 0) {
+          // Try to match by name + location (requires exact city+state match)
+          const bpName = row.display_name.toLowerCase();
+          const bpCity = row.city.toLowerCase();
+          const bpState = row.state;
+          isReadyForStudents = readyByLocation.some((r) => {
+            // Name must be included (handles "Comfort Keepers" matching "Comfort Keepers of Tallahassee")
+            const nameMatch = bpName.includes(r.name) || r.name.includes(bpName);
+            // City and state must both match exactly
+            const cityMatch = r.city === bpCity;
+            const stateMatch = r.state === bpState;
+            return nameMatch && cityMatch && stateMatch;
+          });
+        }
 
         // Determine if this is a verified/real provider:
         // - Claimed profiles (real person verified ownership), OR
