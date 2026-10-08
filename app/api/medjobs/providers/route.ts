@@ -85,23 +85,9 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         }
       }
 
-      // DIAGNOSTIC: Log what we're working with
-      console.log("[medjobs/providers] DIAGNOSTIC:", {
-        totalOutreachRows: outreachRows.length,
-        rowsWithOleraId: oleraIdMap.size,
-        sampleRow: outreachRows[0] ? {
-          id: outreachRows[0].id,
-          name: outreachRows[0].organization_name,
-          research_data_keys: Object.keys((outreachRows[0].research_data ?? {}) as Record<string, unknown>),
-          olera_provider_id: ((outreachRows[0].research_data ?? {}) as Record<string, unknown>).olera_provider_id,
-        } : null,
-      });
-
       // Step 3: Fetch enrichment data from olera-providers (images, ratings, etc.)
       const oleraIds = Array.from(oleraIdMap.keys());
       const oleraDataMap = new Map<string, Record<string, unknown>>();
-
-      console.log("[medjobs/providers] oleraIds to fetch:", oleraIds);
 
       if (oleraIds.length > 0) {
         const { data: oleraRows, error: oleraError } = await db
@@ -113,17 +99,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
 
         if (oleraError) {
           console.error("[medjobs/providers] olera-providers query failed:", oleraError.message);
-        }
-
-        console.log("[medjobs/providers] olera-providers returned:", oleraRows?.length ?? 0, "rows");
-        if (oleraRows && oleraRows.length > 0) {
-          console.log("[medjobs/providers] First row images:", {
-            provider_id: oleraRows[0].provider_id,
-            provider_name: oleraRows[0].provider_name,
-            hero_image_url: oleraRows[0].hero_image_url,
-            provider_logo: oleraRows[0].provider_logo,
-            provider_images: oleraRows[0].provider_images?.substring?.(0, 100) ?? oleraRows[0].provider_images,
-          });
         }
 
         // Build lookup map, excluding deleted

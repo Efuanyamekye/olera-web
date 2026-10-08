@@ -299,47 +299,80 @@ async function createFound(
   if (provider) {
     research.manual_entry = true;
 
-    // Create a directory entry so the provider is linkable from MedJobs.
-    // This makes manually added providers show up in the directory and
-    // enables the "View in directory" link.
-    const baseSlug = generateProviderSlug(found.name, null);
+    // FIRST: Search for an existing directory entry by name.
+    // This ensures we link to the provider's real entry (with images, ratings, etc.)
+    // rather than creating a blank duplicate.
+    const nameForSearch = found.name.trim().toLowerCase();
+    const { data: existingProviders } = await db
+      .from("olera-providers")
+      .select("provider_id, provider_name, slug")
+      .or("deleted.is.null,deleted.eq.false")
+      .ilike("provider_name", `%${nameForSearch}%`)
+      .limit(10);
 
-    // Only create directory entry if we can generate a valid slug
-    // (names like "!!!" would produce an empty slug)
-    if (baseSlug) {
-      const providerId = crypto.randomUUID();
-
-      // Ensure slug uniqueness
-      let slug = baseSlug;
-      const { data: existing } = await db
-        .from("olera-providers")
-        .select("provider_id")
-        .eq("slug", baseSlug)
-        .limit(1);
-      if (existing && existing.length > 0) {
-        slug = `${baseSlug}-${Math.random().toString(36).slice(2, 7)}`;
+    // Find the best match - exact match preferred, then substring match
+    let matchedProvider: { provider_id: string; slug: string } | null = null;
+    if (existingProviders && existingProviders.length > 0) {
+      // Try exact match first (case-insensitive)
+      const exactMatch = existingProviders.find(
+        (p) => p.provider_name?.toLowerCase() === nameForSearch
+      );
+      if (exactMatch) {
+        matchedProvider = { provider_id: exactMatch.provider_id, slug: exactMatch.slug };
+      } else {
+        // Take the first substring match
+        matchedProvider = {
+          provider_id: existingProviders[0].provider_id,
+          slug: existingProviders[0].slug,
+        };
       }
+    }
 
-      const { error: dirError } = await db.from("olera-providers").insert({
-        provider_id: providerId,
-        provider_name: found.name.slice(0, 200),
-        provider_category: "Home Care (Non-medical)", // Default for MedJobs providers
-        slug,
-        deleted: false,
-        deleted_at: null,
-        phone: found.phone?.trim() ? formatPhone(found.phone) : null,
-        email: found.email?.trim() || null,
-        website: found.website?.trim() || null,
-        address: found.address?.trim() || null,
-      });
+    if (matchedProvider) {
+      // Link to existing directory entry
+      research.olera_provider_id = matchedProvider.provider_id;
+      research.olera_provider_slug = matchedProvider.slug;
+    } else {
+      // No existing entry found - create a new one
+      const baseSlug = generateProviderSlug(found.name, null);
 
-      if (!dirError) {
-        // Store the directory link so the provider can be opened in the directory
-        research.olera_provider_id = providerId;
-        research.olera_provider_slug = slug;
+      // Only create directory entry if we can generate a valid slug
+      // (names like "!!!" would produce an empty slug)
+      if (baseSlug) {
+        const providerId = crypto.randomUUID();
+
+        // Ensure slug uniqueness
+        let slug = baseSlug;
+        const { data: existing } = await db
+          .from("olera-providers")
+          .select("provider_id")
+          .eq("slug", baseSlug)
+          .limit(1);
+        if (existing && existing.length > 0) {
+          slug = `${baseSlug}-${Math.random().toString(36).slice(2, 7)}`;
+        }
+
+        const { error: dirError } = await db.from("olera-providers").insert({
+          provider_id: providerId,
+          provider_name: found.name.slice(0, 200),
+          provider_category: "Home Care (Non-medical)", // Default for MedJobs providers
+          slug,
+          deleted: false,
+          deleted_at: null,
+          phone: found.phone?.trim() ? formatPhone(found.phone) : null,
+          email: found.email?.trim() || null,
+          website: found.website?.trim() || null,
+          address: found.address?.trim() || null,
+        });
+
+        if (!dirError) {
+          // Store the directory link so the provider can be opened in the directory
+          research.olera_provider_id = providerId;
+          research.olera_provider_slug = slug;
+        }
+        // If directory creation fails, continue anyway — the MedJobs record is
+        // still useful, just without a directory link.
       }
-      // If directory creation fails, continue anyway — the MedJobs record is
-      // still useful, just without a directory link.
     }
   }
   if (found.website?.trim()) research.website = found.website.trim();
