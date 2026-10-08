@@ -116,16 +116,25 @@ function prompt(brief: Brief, branch: string) {
   ].join("\n");
 }
 
-/** The session's final message, from the stream-json log (falls back to raw text). */
+/**
+ * The session's final message, from the stream-json log. If the session was cut
+ * off before its result event, falls back to the last thing the agent itself
+ * wrote, never to tool output, which can mention unrelated PR URLs.
+ */
 export function finalText(log: string): string {
+  let lastAssistant = "";
   for (const line of log.split("\n").reverse()) {
     if (!line.startsWith("{")) continue;
     try {
       const event = JSON.parse(line);
       if (event.type === "result" && typeof event.result === "string") return event.result;
+      if (!lastAssistant && event.type === "assistant") {
+        const parts = Array.isArray(event.message?.content) ? event.message.content : [];
+        lastAssistant = parts.filter((p: { type?: string }) => p.type === "text").map((p: { text?: string }) => p.text ?? "").join("\n");
+      }
     } catch { /* a partial line; keep looking */ }
   }
-  return log;
+  return lastAssistant;
 }
 
 /** Pulls the RESULT line the session ends with. */
