@@ -4,6 +4,10 @@
  *   npx tsx --env-file=.env.local scripts/cortex-handoffs.ts list
  *   npx tsx --env-file=.env.local scripts/cortex-handoffs.ts show <id>
  *   npx tsx --env-file=.env.local scripts/cortex-handoffs.ts close <id> done|partial|dropped "<PR URL or what's left>"
+ *   npx tsx --env-file=.env.local scripts/cortex-handoffs.ts reopen <id> "approved: <what TJ agreed>"
+ *
+ * reopen puts a brief back in the runner's queue. A note starting "approved" or
+ * "build" lets the runner build a product change it first answered with a proposal.
  *
  * An id prefix of 8 or more characters is enough. Closing writes the result
  * back, and Cortex reads it into its record, so say what shipped.
@@ -50,7 +54,16 @@ async function find(prefix: string) {
     console.log(`${row.title}: ${status}. ${result}`);
     return;
   }
-  throw new Error(`unknown command "${command}" (list, show, close)`);
+  if (command === "reopen") {
+    const note = [status, ...rest].join(" ").trim();
+    if (!note) throw new Error('say what was agreed, e.g. "approved: home care first, phone layout"');
+    const row = await find(id);
+    const { error } = await db.from("cortex_handoffs").update({ status: "open", note, closed_at: null }).eq("id", row.id);
+    if (error) throw new Error(error.message);
+    console.log(`${row.title}: reopened. ${note}`);
+    return;
+  }
+  throw new Error(`unknown command "${command}" (list, show, close, reopen)`);
 })().catch((error) => {
   console.error(`cortex-handoffs: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
