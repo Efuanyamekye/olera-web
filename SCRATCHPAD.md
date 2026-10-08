@@ -21,7 +21,10 @@
 - Side effect: screenshotting the live Quality Life page triggered the page's own Google review backfill (rating 1.5, 2 reviews, name → "Quality Life Homecare Inc").
 - 12-week pilot can only detect ~±50%; 95% range ≈ 0.72–1.39 if equal; likely inconclusive → TJ decides.
 
+**THE PLAN: https://claude.ai/artifact/VWEjSvypK1M2h5HYX3UFuJ ("The Home Care Page", project plan + design in one).** Every session: take the top item under "Where to pick up", own branch off staging, pre-test + review page, then update that phase on the plan and republish. Build sources: ~/Desktop/olera-provider-pages-handoff/build-scripts/.
+
 **Next Up**
+0. Phase 1 (prices that tell the truth) per the plan.
 1. TJ's six decisions (RESPONSE §6 / overview page): framework, exclude paid/pilot pages, drop schedule form, B photo allowlist (top ~300), intake freeze, listed price on claimed pages without owner price. Then the approval checkpoint (§7).
 2. Pre-work PR 1 (honest price labels, all categories): TJ said "do those small fixes", paused mid-start on 8 Oct; branch `price-source-labels` exists, no changes yet. Use `git grep` on origin/staging (plain grep hangs on Desktop iCloud files).
 3. Pre-work: freeze intake_variant on home care (TJ to pick the arm); salvage #2449 (Facebook guard + CATEGORY-PAGES.md) and close it.
