@@ -21,6 +21,7 @@ import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
 import { getStateSlug } from "@/lib/program-data";
 import { resolveBenefitsProgramEntry } from "@/lib/benefits/program-entry";
 import { calculateFamilyCompleteness } from "@/lib/admin/profile-completeness";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 import { emailReturningUserSignInLink, resolveExistingUserId } from "@/lib/auth/returning-user";
 import { readCareAge, AGE_BAND_LABELS, isAgeBand } from "@/lib/benefits/age";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
@@ -344,15 +345,14 @@ export async function POST(req: Request) {
 
     // Provider accounts stay provider-only. Without this, a provider who runs
     // the finder while signed in gets a family profile attached to their
-    // account, and the navbar starts showing "Switch to family".
-    if (account) {
-      const { data: ownProfiles } = await db
-        .from("business_profiles")
-        .select("type")
-        .eq("account_id", account.id);
-      const types = new Set((ownProfiles || []).map((p: { type: string }) => p.type));
-      const isProviderAccount = ["organization", "caregiver", "student"].some((t) => types.has(t));
-      if (isProviderAccount && !types.has("family")) {
+    // account, and the navbar starts showing "Switch to family". Agency team
+    // members count too: their own account holds no provider profile.
+    const providerIds = await actingProfileIds(db, currentUser, { types: ["organization", "caregiver", "student"] });
+    if (providerIds.length > 0) {
+      const { data: ownFamily } = account
+        ? await db.from("business_profiles").select("id").eq("account_id", account.id).eq("type", "family").limit(1).maybeSingle()
+        : { data: null };
+      if (!ownFamily) {
         return NextResponse.json(
           {
             error: "You're signed in to a provider account. To save benefits results, sign out and use a different email or phone.",

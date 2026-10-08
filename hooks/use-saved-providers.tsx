@@ -548,6 +548,10 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
                 });
                 setDbSaves((prev) => prev.filter((s) => s.providerId !== provider.providerId));
                 setSaveError("Couldn't save. Please try again.");
+                // Provider accounts can't save; show why instead of "try again"
+                res.json().then((data) => {
+                  if (data?.code === "PROVIDER_ACCOUNT" && data.error) setSaveError(data.error);
+                }).catch(() => {});
               }
             })
             .catch(() => {

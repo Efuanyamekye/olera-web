@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { generateUniqueSlugFromName } from "@/lib/slug";
+import { actingProfileIds } from "@/lib/auth/profile-access.server";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getAdminClient(): any {
@@ -172,6 +173,22 @@ export async function POST(request: Request) {
     if (family) {
       fromProfileId = family.id;
     } else {
+      // Provider accounts stay provider-only. Without this, a provider who
+      // taps the heart on a listing (usually their own) gets a family profile
+      // attached to their account, family nudge emails start, and the navbar
+      // shows "Switch to family". Agency team members count too.
+      const providerIds = await actingProfileIds(db, user, { types: ["organization", "caregiver", "student"] });
+
+      if (providerIds.length > 0) {
+        return NextResponse.json(
+          {
+            error: "You're signed in to a provider account. To save providers, sign out and use a family account.",
+            code: "PROVIDER_ACCOUNT",
+          },
+          { status: 409 }
+        );
+      }
+
       const displayName = user.email?.split("@")[0] || "Family";
       const slug = await generateUniqueSlugFromName(db, displayName);
       const { data: newProfile, error: profileError } = await db
