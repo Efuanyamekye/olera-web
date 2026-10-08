@@ -1,11 +1,14 @@
 /**
  * GET /api/medjobs/providers?campus=<slug>&scope=<near|all>
  *
- * Returns providers for the student Find Jobs board.
+ * Returns MedJobs-interested providers for the student Find Jobs board.
+ * Unlike the families endpoint (which shows all non-medical providers),
+ * this returns only providers who have explicitly indicated MedJobs interest:
  *
- * A provider appears on the job board ONLY if they are marked "ready for students"
- * in the MedJobs task board (student_outreach.status = "ready_for_students").
- * This is the single canonical signal that a provider is ready to hire students.
+ * 1. Accepted interview terms (interview_terms_accepted_at in metadata)
+ * 2. Completed MedJobs eligibility (medjobs_eligibility_completed_at in metadata)
+ * 3. Enrolled/activated via staffing outreach
+ * 4. Marked "ready for students" in MedJobs task board (student_outreach.status)
  *
  * Parameters:
  * - `campus` — Student's campus slug (for "Near You" catchment scoping)
@@ -37,8 +40,7 @@ export type ProviderCard = ProviderCardData & {
 const PAGE_SIZE = 12;
 
 /**
- * Build the list of providers marked "ready for students".
- * Only includes providers with student_outreach.status = "ready_for_students".
+ * Build the list of MedJobs-interested providers.
  * Cached per campus+scope for 5 minutes.
  */
 function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<ProviderCard[]> {
@@ -61,8 +63,18 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         catchmentFilter = { cities: cityKeys, states };
       }
 
+      // First, get providers enrolled/activated via staffing_outreach
+      const { data: outreachRows } = await db
+        .from("staffing_outreach")
+        .select("provider_id")
+        .in("status", ["enrolled", "activated"]);
+
+      const outreachProviderIds = new Set<string>(
+        (outreachRows ?? []).map((r) => r.provider_id as string)
+      );
+
       // Get providers marked "ready for students" in the MedJobs task board
-      // This is the ONLY source for the job board
+      // This is the canonical signal that a provider is ready to hire
       const { data: readyRows } = await db
         .from("student_outreach")
         .select("provider_business_profile_id")
@@ -73,11 +85,6 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
       const readyForStudentsIds = new Set<string>(
         (readyRows ?? []).map((r) => r.provider_business_profile_id as string)
       );
-
-      // Early exit if no providers are ready
-      if (readyForStudentsIds.size === 0) {
-        return [];
-      }
 
       // Query business_profiles for MedJobs-interested providers
       let query = db
@@ -106,18 +113,51 @@ function getMedjobsProviders(campus: string, scope: "near" | "all"): Promise<Pro
         // Check catchment filter
         if (!inCatchment(row.city, row.state)) continue;
 
-        // Only include providers marked "ready for students" in MedJobs task board
+        const meta = (row.metadata ?? {}) as Record<string, unknown>;
+
+        // Check MedJobs interest indicators (non-empty strings only)
+        const hasAcceptedTerms =
+          typeof meta.interview_terms_accepted_at === "string" &&
+          meta.interview_terms_accepted_at !== "";
+        const hasCompletedEligibility =
+          typeof meta.medjobs_eligibility_completed_at === "string" &&
+          meta.medjobs_eligibility_completed_at !== "";
+        const sourceProviderId =
+          typeof meta.source_provider_id === "string" && meta.source_provider_id !== ""
+            ? meta.source_provider_id
+            : null;
+
+        // Check if enrolled via staffing outreach (match by source_provider_id only)
+        // Note: staffing_outreach.provider_id references olera-providers.provider_id,
+        // NOT business_profiles.id. The link is via metadata.source_provider_id.
+        const isEnrolledViaOutreach = !!sourceProviderId && outreachProviderIds.has(sourceProviderId);
+
+        // Check if marked "ready for students" in MedJobs task board
+        // This is the canonical signal from admin workflow
         const isReadyForStudents = readyForStudentsIds.has(row.id);
-        if (!isReadyForStudents) {
+
+        // Determine if this is a verified/real provider:
+        // - Claimed profiles (real person verified ownership), OR
+        // - Enrolled via outreach (we vetted them during campaigns), OR
+        // - Marked ready for students (admin verified in task board)
+        const isClaimed = row.claim_state === "claimed";
+        const isVerifiedProvider = isClaimed || isEnrolledViaOutreach || isReadyForStudents;
+
+        // Skip if no MedJobs interest OR not a verified provider
+        // This filters out test accounts and unverified directory listings
+        // Sources: 1) accepted terms, 2) completed eligibility, 3) outreach enrolled, 4) ready for students
+        if (!hasAcceptedTerms && !hasCompletedEligibility && !isEnrolledViaOutreach && !isReadyForStudents) {
+          continue;
+        }
+        if (!isVerifiedProvider) {
           continue;
         }
 
-        const meta = (row.metadata ?? {}) as Record<string, unknown>;
         const card = businessProfileToCardFormat(row) as ProviderCard;
         card.isProgram = row.claim_state === "claimed";
         card.createdAt = row.created_at ?? null;
         card.opportunity = readOpportunityProfile(meta);
-        card.isReadyForStudents = true;
+        card.isReadyForStudents = isReadyForStudents;
         cards.push(card);
       }
 
