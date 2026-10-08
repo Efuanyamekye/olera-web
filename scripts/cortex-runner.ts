@@ -6,7 +6,9 @@
  *
  * Started by launchd (scripts/cortex-runner.plist). For each open brief in
  * `cortex_handoffs`, oldest first, it makes a fresh worktree off staging, runs
- * one headless Claude Code session with the /handoff rules, and closes the
+ * one headless Claude Code session with the /handoff rules (pre-test before
+ * the PR, a review page after it, saved to ~/cortex-runner/review for the
+ * session TJ reviews in to publish), and closes the
  * brief with the PR URL or what is left. Cortex reads the result back and the
  * morning post lists the PR.
  *
@@ -101,6 +103,8 @@ function prompt(brief: Brief, branch: string) {
     `- Do not message anyone, send email, or post to Slack. The PR is the only output.`,
     `- No em dashes in copy. Match the surrounding code.`,
     `- Check your work before the PR: npx --no-install tsc --noEmit on what you touched, and any check script the area has.`,
+    `- Before opening the PR, run the pre-test skill on your diff. Fix every FIX finding and re-run the checks. Put the ASK and NOTE findings in the PR body under "Pre-test".`,
+    `- After opening the PR, use the visualize skill to build one review page for TJ: what the PR changes (before and after where it shows), the pre-test findings, and what he has to decide. Headless sessions cannot publish artifacts, so write it as HTML to ${join(ROOT, "review")}/<PR number>.html and name that path in the PR body; the session TJ reviews in publishes it.`,
     `- If the brief needs a decision only TJ can make, build everything that does not depend on it and list the decision first in the PR body.`,
     `- End your final message with one line, exactly one of:`,
     `  RESULT: done <PR URL>`,
@@ -110,6 +114,27 @@ function prompt(brief: Brief, branch: string) {
     ``,
     brief.body,
   ].join("\n");
+}
+
+/**
+ * The session's final message, from the stream-json log. If the session was cut
+ * off before its result event, falls back to the last thing the agent itself
+ * wrote, never to tool output, which can mention unrelated PR URLs.
+ */
+export function finalText(log: string): string {
+  let lastAssistant = "";
+  for (const line of log.split("\n").reverse()) {
+    if (!line.startsWith("{")) continue;
+    try {
+      const event = JSON.parse(line);
+      if (event.type === "result" && typeof event.result === "string") return event.result;
+      if (!lastAssistant && event.type === "assistant") {
+        const parts = Array.isArray(event.message?.content) ? event.message.content : [];
+        lastAssistant = parts.filter((p: { type?: string }) => p.type === "text").map((p: { text?: string }) => p.text ?? "").join("\n");
+      }
+    } catch { /* a partial line; keep looking */ }
+  }
+  return lastAssistant;
 }
 
 /** Pulls the RESULT line the session ends with. */
@@ -124,6 +149,7 @@ export function parseResult(output: string): { status: "done" | "partial"; resul
 
 function ensureClone() {
   mkdirSync(join(ROOT, "worktrees"), { recursive: true });
+  mkdirSync(join(ROOT, "review"), { recursive: true });
   if (!existsSync(join(CLONE, ".git"))) {
     log(`cloning ${REPO_URL} into ${CLONE}`);
     execFileSync("git", ["clone", "--quiet", REPO_URL, CLONE], { stdio: "inherit" });
@@ -142,7 +168,9 @@ function ensureClone() {
 
 function runSession(cwd: string, text: string): Promise<string> {
   return new Promise((resolve) => {
-    const args = ["-p", "--permission-mode", "auto", "--disallowedTools", ...DENIED_TOOLS, "--", text];
+    // stream-json keeps every tool call in the log, not only the final message,
+    // so a night's run can be audited for what it actually did.
+    const args = ["-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "auto", "--disallowedTools", ...DENIED_TOOLS, "--", text];
     const child = spawn("claude", args, { cwd, env: process.env, stdio: ["ignore", "pipe", "pipe"] });
     let out = "";
     child.stdout.on("data", (chunk) => { out += chunk; });
@@ -163,7 +191,7 @@ async function build(brief: Brief) {
 
   const output = await runSession(dir, prompt(brief, branch));
   appendFileSync(join(ROOT, `${branch.replace("/", "-")}.log`), output);
-  const { status, result } = parseResult(output);
+  const { status, result } = parseResult(finalText(output));
   const { error } = await db.from("cortex_handoffs")
     .update({ status, result: `runner: ${result}`, closed_at: status === "done" ? new Date().toISOString() : null })
     .eq("id", brief.id);
