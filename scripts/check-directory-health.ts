@@ -4,7 +4,7 @@
  *   npx tsx scripts/check-directory-health.ts
  */
 import assert from "node:assert/strict";
-import { decideHealthActions, isCosmeticRename, normalizeProviderName, planStatusPass } from "../lib/providers/directory-health";
+import { cosmeticRenameTarget, decideHealthActions, isCosmeticRename, normalizeProviderName, planStatusPass } from "../lib/providers/directory-health";
 
 const open = { provider_id: "a", provider_name: "Sunrise Senior Living of Dallas", deleted: false, google_status: "OPERATIONAL", google_name: "Sunrise Senior Living of Dallas" };
 
@@ -25,10 +25,32 @@ assert.deepEqual(decideHealthActions(open, { status: "CLOSED_TEMPORARILY", googl
 assert.deepEqual(decideHealthActions({ ...open, google_status: "CLOSED_TEMPORARILY" }, { status: "CLOSED_TEMPORARILY", googleName: null }), []);
 // Same name, still open: no ledger row.
 assert.deepEqual(decideHealthActions(open, { status: "OPERATIONAL", googleName: "Sunrise Senior Living of Dallas" }), []);
-// Cosmetic rename applies itself and carries the old name for undo.
-const cosmetic = decideHealthActions(open, { status: "OPERATIONAL", googleName: "SUNRISE SENIOR LIVING - DALLAS, LLC" });
-assert.equal(cosmetic[0]?.kind, "rename_applied");
-assert.deepEqual(cosmetic[0]?.kind === "rename_applied" ? cosmetic[0].undo : null, { provider_name: "Sunrise Senior Living of Dallas" });
+// Google adding LLC/Inc (or only changing case/punctuation) is the same name: nothing happens.
+assert.deepEqual(decideHealthActions(open, { status: "OPERATIONAL", googleName: "SUNRISE SENIOR LIVING - DALLAS, LLC" }), []);
+const named = (provider_name: string) => ({ ...open, provider_name, google_name: null });
+for (const [stored, google] of [
+  ["Quality Life Homecare", "Quality Life Homecare Inc"],
+  ["ALLIANCE HOME CARE", "ALLIANCE HOME CARE LLC"],
+  ["Lilies of Hope Home Care", "Lilies of Hope Home Care LLC"],
+  ["Alliance Assisted Living", "Alliance assisted living inc"],
+  ["Snavson Senior Care", "Snavson Senior Care, L.L.C."],
+]) assert.deepEqual(decideHealthActions(named(stored), { status: "OPERATIONAL", googleName: google }), [], `${stored} → ${google}`);
+// Google dropping a suffix ours carries applies itself and carries the old name for undo.
+const dropped = decideHealthActions(named("Acme Home Care LLC"), { status: "OPERATIONAL", googleName: "Acme Home Care" });
+assert.equal(dropped[0]?.kind, "rename_applied");
+assert.equal(dropped[0]?.kind === "rename_applied" ? dropped[0].newName : null, "Acme Home Care");
+assert.deepEqual(dropped[0]?.kind === "rename_applied" ? dropped[0].undo : null, { provider_name: "Acme Home Care LLC" });
+// Ours in ALL CAPS, Google's not: take Google's casing, without the suffix it added.
+const caps = decideHealthActions(named("ALLIANCE HOME CARE"), { status: "OPERATIONAL", googleName: "Alliance Home Care LLC" });
+assert.equal(caps[0]?.kind === "rename_applied" ? caps[0].newName : null, "Alliance Home Care");
+assert.equal(cosmeticRenameTarget("Bright Star Care Inc", "Bright Star Care Inc."), null);
+// All-lowercase Google name is not a fix for ALL CAPS.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE", "alliance home care"), null);
+// ALL CAPS with a suffix: Google's casing, our suffix kept, never swapped for Google's.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE LLC", "Alliance Home Care, Inc."), "Alliance Home Care LLC");
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE LLC", "Alliance Home Care"), "Alliance Home Care");
+// Both ALL CAPS: nothing to improve.
+assert.equal(cosmeticRenameTarget("ALLIANCE HOME CARE", "ALLIANCE HOME CARE LLC"), null);
 // A real rename waits for a person.
 assert.deepEqual(decideHealthActions(open, { status: "OPERATIONAL", googleName: "Brookdale Dallas" }).map((d) => d.kind), ["rename_flagged"]);
 // No status at all (Google returned only a name): still diffs the name.
@@ -40,7 +62,7 @@ assert.deepEqual(
   ["closed_flagged"],
 );
 assert.deepEqual(
-  decideHealthActions(open, { status: "OPERATIONAL", googleName: "SUNRISE SENIOR LIVING - DALLAS, LLC" }, { renames: "ask", archive: "alone" }).map((d) => d.kind),
+  decideHealthActions(named("Acme Home Care LLC"), { status: "OPERATIONAL", googleName: "Acme Home Care" }, { renames: "ask", archive: "alone" }).map((d) => d.kind),
   ["rename_flagged"],
 );
 

@@ -44,6 +44,7 @@ export function normalizeProviderName(name: string): string {
     .toLowerCase()
     .replace(/&/g, " and ")
     .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\bl l c\b/g, "llc")
     .replace(/\b(llc|inc|incorporated|corp|corporation|ltd|co|pllc|pc|lp|llp)\b/g, " ")
     // "Sunrise Senior Living of Dallas" and "Sunrise Senior Living - Dallas"
     // are one business; connectives are not a rename.
@@ -56,6 +57,51 @@ export function normalizeProviderName(name: string): string {
 export function isCosmeticRename(stored: string | null, observed: string): boolean {
   if (!stored) return false;
   return stored.trim() !== observed.trim() && normalizeProviderName(stored) === normalizeProviderName(observed);
+}
+
+const LEGAL_SUFFIX = /[\s,.]+(llc|l\.l\.c\.|inc\.?|incorporated|corp\.?|corporation|ltd\.?|co\.?|pllc|pc|lp|llp)\.?\s*$/i;
+
+/** "Quality Life Homecare Inc" → "Quality Life Homecare". Trailing legal suffixes only. */
+export function stripLegalSuffix(name: string): string {
+  let out = name.trim();
+  while (LEGAL_SUFFIX.test(out)) out = out.replace(LEGAL_SUFFIX, "").trim();
+  return out;
+}
+
+function isShouting(name: string): boolean {
+  return /[A-Z]/.test(name) && name === name.toUpperCase();
+}
+
+/** Real mixed case: "Alliance Home Care", not "ALLIANCE HOME CARE" or "alliance home care". */
+function isMixedCase(name: string): boolean {
+  return /[A-Z]/.test(name) && /[a-z]/.test(name);
+}
+
+/**
+ * The name a cosmetic difference should change ours to, or null to keep ours.
+ * Google's name wins only when it is better than ours, never just different
+ * (TJ, 8 Oct 2026: LLC/Inc are not added back when the name is otherwise the
+ * same). It is better when it drops a legal suffix ours carries, or when ours
+ * is ALL CAPS and Google's is not. A suffix Google adds is cut before
+ * comparing, and a casing or punctuation difference alone keeps ours.
+ */
+export function cosmeticRenameTarget(stored: string, observed: string): string | null {
+  const ours = stored.trim();
+  const storedBase = stripLegalSuffix(ours);
+  // Never add a suffix ours does not have; keep one ours already has.
+  const candidate = storedBase === ours ? stripLegalSuffix(observed) : observed.trim();
+  if (!candidate || candidate === ours) return null;
+  // Ours is ALL CAPS: take Google's casing, but not a suffix ours lacks or a
+  // different one in place of ours ("LLC" → "Inc").
+  if (isShouting(ours) && isMixedCase(candidate)) {
+    const base = stripLegalSuffix(candidate);
+    return storedBase === ours || base === candidate ? base : `${base}${ours.slice(storedBase.length)}`;
+  }
+  // Google dropped the suffix and the rest is ours exactly.
+  if (storedBase !== ours && stripLegalSuffix(candidate) === candidate && candidate.toLowerCase() === storedBase.toLowerCase()) {
+    return storedBase;
+  }
+  return null;
 }
 
 /**
@@ -99,8 +145,15 @@ export function decideHealthActions(
   // rename a person had undone.
   const alreadySeen = !!name && provider.google_name?.trim() === name;
   if (name && !alreadySeen && provider.provider_name && name !== provider.provider_name.trim()) {
-    if (isCosmeticRename(provider.provider_name, name) && policy.renames === "alone") {
-      out.push({ kind: "rename_applied", newName: name, undo: { provider_name: provider.provider_name } });
+    if (isCosmeticRename(provider.provider_name, name)) {
+      // Same name in a different dress: change ours only if Google's is
+      // better, and never flag it, since there is nothing to decide.
+      const target = cosmeticRenameTarget(provider.provider_name, name);
+      if (target && policy.renames === "alone") {
+        out.push({ kind: "rename_applied", newName: target, undo: { provider_name: provider.provider_name } });
+      } else if (target) {
+        out.push({ kind: "rename_flagged" });
+      }
     } else {
       out.push({ kind: "rename_flagged" });
     }
