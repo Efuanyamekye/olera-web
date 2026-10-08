@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
+import ConfirmModal from "@/components/admin/medjobs/ConfirmModal";
 import { useSaveState } from "@/components/admin/medjobs/SaveStatus";
 import { LADDERS, SECTION_ORDER, rungAt, type ContactField, type SectionKey } from "@/lib/medjobs/ladders";
 import { sectionsFor, type Person } from "@/lib/medjobs/assignments";
@@ -157,6 +158,12 @@ export default function UniversityFlow({
    * believing every one of them saved.
    */
   const [failed, setFailed] = useState<string | null>(null);
+  /** Job board toggle confirmation modal state. */
+  const [toggleModal, setToggleModal] = useState<{
+    recordId: string;
+    name: string;
+    currentVisible: boolean;
+  } | null>(null);
   const timers = useRef<number[]>([]);
   /** Set when a write that refetches should hand over the next task after. */
   const resume = useRef(false);
@@ -836,10 +843,12 @@ export default function UniversityFlow({
             setView({ kind: "new", section });
           }}
           onToggleJobBoard={(recordId, currentVisible) => {
-            void send(
-              { op: "toggle_job_board_visible", recordId, visible: !currentVisible },
-              currentVisible ? "Hidden from job board" : "Now visible on job board",
-            );
+            const provider = university.records.providers?.find((r) => r.id === recordId);
+            setToggleModal({
+              recordId,
+              name: provider?.name ?? "This provider",
+              currentVisible,
+            });
           }}
         />
       )}
@@ -873,6 +882,29 @@ export default function UniversityFlow({
         </div>
       )}
       {cheer && <Cheer message={cheer} />}
+
+      {/* Job board visibility toggle confirmation */}
+      {toggleModal && (
+        <ConfirmModal
+          open
+          title={toggleModal.currentVisible ? "Hide from job board?" : "Show on job board?"}
+          message={
+            toggleModal.currentVisible
+              ? `${toggleModal.name} will no longer appear on the student job board. Students will not be able to see or apply to this provider.`
+              : `${toggleModal.name} will appear on the student job board. Students will be able to see and apply to this provider.`
+          }
+          confirmLabel={toggleModal.currentVisible ? "Hide" : "Show"}
+          confirmVariant={toggleModal.currentVisible ? "danger" : "primary"}
+          onConfirm={() => {
+            void send(
+              { op: "toggle_job_board_visible", recordId: toggleModal.recordId, visible: !toggleModal.currentVisible },
+              toggleModal.currentVisible ? "Hidden from job board" : "Now visible on job board",
+            );
+            setToggleModal(null);
+          }}
+          onCancel={() => setToggleModal(null)}
+        />
+      )}
     </DrawerShell>
   );
 }
