@@ -12,6 +12,7 @@ import {
   getVerificationItems,
   getSectionCompleteness,
   calculateCompleteness,
+  isRequiredSection,
 } from "@/lib/medjobs-completeness";
 import { useCaregiverGuidedOnboarding } from "@/hooks/useCaregiverGuidedOnboarding";
 import type { CaregiverSectionId } from "@/components/caregiver-portal/edit-modals/types";
@@ -1211,19 +1212,36 @@ function StudentPortalContent({
   const storedCompleteness = typeof meta.profile_completeness === "number" ? meta.profile_completeness : null;
   useEffect(() => {
     if (storedCompleteness !== completenessPercent) {
-      const sb = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-      sb.from("business_profiles")
-        .select("metadata")
-        .eq("id", profile.id)
-        .single()
-        .then(({ data }) => {
+      const syncCompleteness = async () => {
+        try {
+          const sb = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+          const { data, error: fetchError } = await sb
+            .from("business_profiles")
+            .select("metadata")
+            .eq("id", profile.id)
+            .single();
+
+          if (fetchError) {
+            console.error("[medjobs] Failed to fetch profile for completeness sync:", fetchError);
+            return;
+          }
+
           if (data) {
             const currentMeta = data.metadata || {};
-            sb.from("business_profiles")
+            const { error: updateError } = await sb
+              .from("business_profiles")
               .update({ metadata: { ...currentMeta, profile_completeness: completenessPercent } })
               .eq("id", profile.id);
+
+            if (updateError) {
+              console.error("[medjobs] Failed to sync completeness:", updateError);
+            }
           }
-        });
+        } catch (err) {
+          console.error("[medjobs] Unexpected error syncing completeness:", err);
+        }
+      };
+      syncCompleteness();
     }
   }, [completenessPercent, storedCompleteness, profile.id]);
 
@@ -1520,7 +1538,7 @@ function StudentPortalContent({
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900">Profile completeness</p>
                     <p className="text-xs text-gray-500">
-                      {completeSections.filter((s) => s.done).length} of {completeSections.length} sections complete
+                      {completeSections.filter((s) => s.done && isRequiredSection(s.id)).length} of {completeSections.filter((s) => isRequiredSection(s.id)).length} sections complete
                     </p>
                   </div>
                   {/* Chevron */}
@@ -1963,7 +1981,7 @@ function StudentPortalContent({
                     />
                   </div>
                   <p className="text-xs text-gray-400 mt-2">
-                    {completeSections.filter((s) => s.done).length} of {completeSections.length} sections complete
+                    {completeSections.filter((s) => s.done && isRequiredSection(s.id)).length} of {completeSections.filter((s) => isRequiredSection(s.id)).length} sections complete
                   </p>
                 </div>
               )}

@@ -4,17 +4,18 @@ import type { StudentMetadata } from "@/lib/types";
  * MedJobs Profile Completeness — Single Source of Truth
  *
  * Organized into 9 sections that match the portal page structure:
- * 1. Profile Overview (name, email, phone, university, location, photo)
- * 2. Weekly Schedule (schedule grid)
- * 3. Availability & Commitment (statement, seasonal availability)
- * 4. Why I Want to Be a Caregiver
- * 5. Screening Questions (3 scenario questions)
- * 6. Experience (experience timeline entries)
- * 7. Certifications
- * 8. Resume
- * 9. Verification (intro video, driver's license, car insurance)
+ * 1. Profile Overview (name, email, phone, university, location, photo) — 10%
+ * 2. Weekly Schedule (schedule grid) — 10%
+ * 3. Availability & Commitment (statement, seasonal availability) — 10%
+ * 4. Why I Want to Be a Caregiver — 15%
+ * 5. Screening Questions (3 scenario questions) — 14%
+ * 6. Experience (experience timeline entries) — 0% (optional)
+ * 7. Certifications — 0% (optional)
+ * 8. Resume — 20%
+ * 9. Verification (intro video) — 21%
  *
- * Weights: Most sections = 10%, Resume & Verification = 15% each (total 100%)
+ * Optional sections (Experience & Certifications) don't block 100% completion.
+ * Driver's license and car insurance are shown but don't affect completeness.
  */
 
 export const SCENARIO_QUESTIONS = [
@@ -170,20 +171,35 @@ export function getSectionCompleteness(
  * Total adds up to 100%. Resume and Verification are weighted higher
  * as they are most important for provider visibility.
  *
- * Certifications is optional (0%) since not all students have them.
- * The 10% was redistributed to: why(+3), scenarios(+2), resume(+2), verification(+3).
+ * Optional sections (0%):
+ * - Certifications: not all students have them
+ * - Experience (background): not all students have prior caregiving experience
+ *
+ * The 10% from experience was redistributed to:
+ * - why: +2% (13% → 15%)
+ * - scenarios: +2% (12% → 14%)
+ * - resume: +3% (17% → 20%)
+ * - verification: +3% (18% → 21%)
  */
-const SECTION_WEIGHTS: Record<SectionId, number> = {
+export const SECTION_WEIGHTS: Record<SectionId, number> = {
   overview: 10,
   schedule: 10,
   availability: 10,
-  why: 13,           // +3% (from certifications)
-  scenarios: 12,     // +2% (from certifications)
-  background: 10,
-  certifications: 0, // Optional - doesn't affect completeness
-  resume: 17,        // +2% (from certifications)
-  verification: 18,  // +3% (from certifications)
+  why: 15,           // +2% (from experience)
+  scenarios: 14,     // +2% (from experience)
+  background: 0,     // Optional - not all students have experience
+  certifications: 0, // Optional - not all students have certifications
+  resume: 20,        // +3% (from experience)
+  verification: 21,  // +3% (from experience)
 };
+
+/** Section IDs that are optional (0% weight) and don't affect completeness */
+export const OPTIONAL_SECTIONS: SectionId[] = ["background", "certifications"];
+
+/** Check if a section is required for 100% completeness */
+export function isRequiredSection(sectionId: SectionId): boolean {
+  return SECTION_WEIGHTS[sectionId] > 0;
+}
 
 /**
  * Calculate the overall completeness percentage (0-100).

@@ -168,6 +168,7 @@ export default function AdminStudentDetailPage() {
         certifications: meta.certifications || [],
         skills: meta.skills || [],
         why_caregiving: meta.why_caregiving || "",
+        commitment_statement: meta.commitment_statement || "",
         resume_url: meta.resume_url || "",
         video_intro_url: meta.video_intro_url || "",
       };
@@ -773,13 +774,16 @@ export default function AdminStudentDetailPage() {
           <div className="mt-0">
             <ReadOnlyField label="Availability Notes" value={meta.availability_notes} />
           </div>
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium text-gray-500 mb-2">Commitment Statement</p>
-            {meta.commitment_statement ? (
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{meta.commitment_statement}</p>
-            ) : (
-              <p className="text-sm text-gray-400 italic">Not provided</p>
-            )}
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Commitment Statement</label>
+            <textarea
+              value={(formData.commitment_statement as string) || ""}
+              onChange={(e) => updateField("commitment_statement", e.target.value)}
+              rows={3}
+              placeholder="Student's commitment to caregiving..."
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+            />
+            <p className="text-xs text-gray-400 mt-1">Minimum 50 characters required for profile completeness</p>
           </div>
           <div className="mt-4">
             <p className="text-sm font-medium text-gray-500 mb-3">Seasonal Availability</p>

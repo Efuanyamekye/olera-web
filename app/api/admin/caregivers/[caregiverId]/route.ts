@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
+import { calculateCompleteness } from "@/lib/medjobs-completeness";
+import type { StudentMetadata } from "@/lib/types";
 
 // Top-level fields on business_profiles that admins can edit
 const EDITABLE_TOP_FIELDS = new Set([
@@ -190,6 +192,46 @@ export async function PATCH(
     if (updateError) {
       console.error("Admin caregiver update error:", updateError);
       return NextResponse.json({ error: "Failed to update student" }, { status: 500 });
+    }
+
+    // Recalculate profile completeness after any update that might affect it
+    const completenessFields = new Set([
+      "why_caregiving", "commitment_statement", "resume_url", "video_intro_url",
+      "certifications", "display_name", "email", "phone", "city", "state", "image_url"
+    ]);
+    const affectsCompleteness = [...Object.keys(topUpdates), ...Object.keys(metaUpdates)]
+      .some(key => completenessFields.has(key));
+
+    if (affectsCompleteness) {
+      // Fetch the updated record to recalculate completeness
+      const { data: updated } = await db
+        .from("business_profiles")
+        .select("*")
+        .eq("id", studentId)
+        .single();
+
+      if (updated) {
+        const updatedMeta = (updated.metadata || {}) as StudentMetadata;
+        const hasPhoto = !!updated.image_url;
+        const hasBasicInfo = {
+          hasName: !!updated.display_name,
+          hasEmail: !!updated.email,
+          hasPhone: !!updated.phone,
+          hasUniversity: !!updatedMeta.university,
+          hasLocation: !!(updated.city && updated.state),
+        };
+        const newCompleteness = calculateCompleteness(updatedMeta, hasPhoto, hasBasicInfo);
+
+        // Update completeness if it changed
+        if (updatedMeta.profile_completeness !== newCompleteness) {
+          await db
+            .from("business_profiles")
+            .update({
+              metadata: { ...updatedMeta, profile_completeness: newCompleteness }
+            })
+            .eq("id", studentId);
+        }
+      }
     }
 
     // Build audit diff
