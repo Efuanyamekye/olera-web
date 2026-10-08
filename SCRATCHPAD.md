@@ -16,8 +16,13 @@
 - Data (8 Oct, read-only): 13,136 live home care pages; ~875 sessions and ~12 completed inquiries a week; 1.4% inquiry per session; 266 questions in 28d, 27 answered, 9 with email; no directory page has >3 photos; 42% of home care first photos are stock.
 - Bugs found: InquiryForm always says "Area estimate"; directory lower/upper prices labelled "Provider-reported"; "Contact for pricing" rendered as a price; unknown category strings fall back to assisted_living; similar providers match same state not nearest; intake_variant v16 has 100% of provider sessions in multi_provider arms with 0 conversions in 28d.
 
+**Round 3 (8 Oct, later).** Codex round 2 review + header study (A photo-first / B identity-first / C illustrated) + v4. TJ: test today's page vs ONE new system, B or C chosen by photo eligibility (decided before assignment); primary = qualified completed inquiries per assigned eligible visitor; no crawler UA routing; persistent assignment. Claude response: `round2/CLAUDE-ROUND3-RESPONSE.md` (seven v4 changes, revised build plan, measurement spec, six decisions) + overview artifact claude.ai/artifact/VWEjSvypK1M2h5HYX3UFuJ (today vs B vs C, 4 providers, phone/laptop; copy `round2/CLAUDE-OVERVIEW-TODAY-B-C.html`).
+- Verified 8 Oct: answer-notification email exists (email only, no SMS); 206 of 6,061 asks/90d left an email; provider question emails uncapped (4,975/90d); `olera_session` is script-set 30d (Safari ~7d) → plan adds server-set httpOnly cookie; ~1,020 HC sessions/wk, 1.15% inquiry; no-photo pages convert higher than photo pages; ~200 verified claims lose directory price (falls to estimate); claimed prices never imported, services mostly defaults. Round-1 power math understated n (Codex right).
+- Side effect: screenshotting the live Quality Life page triggered the page's own Google review backfill (rating 1.5, 2 reviews, name → "Quality Life Homecare Inc").
+- 12-week pilot can only detect ~±50%; 95% range ≈ 0.72–1.39 if equal; likely inconclusive → TJ decides.
+
 **Next Up**
-1. Read Codex's round 2 review (`round2/codex-round2-review.md`), reconcile with v2, get TJ's six decisions (plan section D).
+1. TJ's six decisions (RESPONSE §6 / overview page): framework, exclude paid/pilot pages, drop schedule form, B photo allowlist (top ~300), intake freeze, listed price on claimed pages without owner price. Then the approval checkpoint (§7).
 2. Pre-work PR 1 (honest price labels, all categories): TJ said "do those small fixes", paused mid-start on 8 Oct; branch `price-source-labels` exists, no changes yet. Use `git grep` on origin/staging (plain grep hangs on Desktop iCloud files).
 3. Pre-work: freeze intake_variant on home care (TJ to pick the arm); salvage #2449 (Facebook guard + CATEGORY-PAGES.md) and close it.
 4. `/pr-merge 2451`; runner check-in 10 Oct.
